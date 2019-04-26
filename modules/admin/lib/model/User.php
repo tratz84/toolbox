@@ -37,6 +37,8 @@ class User extends base\UserBase {
         
         if ($this->getPassword() == self::generatePassword($pass))
             return true;
+        else if ($this->getPassword() == $pass)
+            return true;
         else
             return false;
     }

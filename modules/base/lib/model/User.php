@@ -45,6 +45,9 @@ class User extends base\UserBase {
         if (md5($p) == $this->getPassword()) {
             return true;
         }
+        else if ($p == $this->getPassword()) {
+            return true;
+        }
         
         return false;
     }
