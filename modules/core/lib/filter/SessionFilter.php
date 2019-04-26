@@ -34,7 +34,12 @@ class SessionFilter {
         $ctx = Context::getInstance();
         
         // start session for path
-        session_set_cookie_params(0, BASE_HREF.$ctx->getContextName().'/');
+        if (is_standalone_installation()) {
+            $sessionPath = BASE_HREF;
+        } else {
+            $sessionPath = BASE_HREF.$ctx->getContextName().'/';
+        }
+        session_set_cookie_params(0, $sessionPath);
         
         if (get_var('c') && (strpos(get_var('c'), 'api/') === 0 || strpos(get_var('c'), 'api/') === 0)) {
             // api-calls are stateless
