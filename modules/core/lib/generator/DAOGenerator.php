@@ -23,7 +23,7 @@ class DAOGenerator {
     public function generate() {
         
         
-        $modelDir = ROOT . '/modules/'.$this->moduleName.'/lib/model';
+        $modelDir = module_path($this->moduleName).'/lib/model';
         if (file_exists($modelDir.'/base') == false)
             mkdir($modelDir.'/base');
         
