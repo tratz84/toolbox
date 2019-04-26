@@ -2,6 +2,7 @@
 AddDefaultCharSet UTF-8
 
 php_value memory_limit 256M
+php_value display_errors on
 
 
 RewriteEngine On

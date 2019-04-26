@@ -24,15 +24,15 @@ class ModuleEnablerFilter {
         
         
         // load dynamic modules, old stuff must be rewritten to load this way..
-        $moduleNames = list_files(ROOT . '/modules/');
-        foreach($moduleNames as $moduleName) {
-            if (file_exists(ROOT . '/modules/' . $moduleName . '/meta.php') == false)
+        $modules = module_list();
+        foreach($modules as $moduleName => $path) {
+            if (file_exists($path . '/meta.php') == false)
                 continue;
-            if (file_exists(ROOT . '/modules/' . $moduleName . '/autoload.php') == false)
+            if (file_exists($path . '/autoload.php') == false)
                 continue;
             
             // load meta-info
-            $meta = load_php_file( ROOT . '/modules/' . $moduleName . '/meta.php' );
+            $meta = load_php_file( $path . '/meta.php' );
             
             // invalid response? => skip
             if (is_a($meta, ModuleMeta::class) == false && is_array($meta) == false)
@@ -51,7 +51,7 @@ class ModuleEnablerFilter {
             
             // module enabled? => include autoload.php
             if ($moduleEnabled) {
-                $autoloadfile = ROOT . '/modules/'.$moduleName.'/autoload.php';
+                $autoloadfile = $path.'/autoload.php';
                 load_php_file( $autoloadfile );
             }
         }

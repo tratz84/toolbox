@@ -110,10 +110,9 @@ class ObjectContainer {
         
         
         // include controller class
-        $p = ROOT . '/modules/'.$module.'/controller/'.$controller.'Controller.php';
-        $p = realpath( $p );
+        $p = module_file($module, 'controller/'.$controller.'Controller.php');
         
-        if ($p == false || file_exists($p) == false || strpos($p, ROOT) !== 0)
+        if ($p == false || strpos($p, ROOT) !== 0)
             throw new \Exception('Controller '.$controller.' not found');
         
         require_once $p;

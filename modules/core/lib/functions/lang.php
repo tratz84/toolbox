@@ -11,9 +11,9 @@ function t_loadlang() {
     
     $modules = Context::getInstance()->getEnabledModules();
     foreach($modules as $m) {
-        $f = ROOT . "/modules/$m/lang/nl_NL.php";
-        if (file_exists($f)) {
-            $lang_module = load_php_file($f);
+        $p = module_path( $m ) . "/lang/nl_NL.php";
+        if (file_exists($p)) {
+            $lang_module = load_php_file($p);
             if (is_array($lang_module)) {
                 $lang = array_merge($lang, $lang_module);
             }

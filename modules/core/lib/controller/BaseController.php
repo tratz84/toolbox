@@ -55,10 +55,9 @@ class BaseController {
         $reflector = new \ReflectionObject($this);
         $filenameClass = $reflector->getFileName();
         
-        $module = substr($filenameClass, strlen(ROOT.'/modules/'));
-        $module = substr($module, 0, strpos($module, DIRECTORY_SEPARATOR));
+        $module = module_file2module($filenameClass);
         
-        $templateFile = ROOT . '/modules/base/templates/decorator/handled_error.php';
+        $templateFile = module_file('base', 'templates/decorator/handled_error.php');
         
         $vars = get_object_vars( $this );
         
@@ -71,7 +70,7 @@ class BaseController {
         
         // parse outer template
         if ($this->decoratorFile == null) {
-            $this->decoratorFile = ROOT . '/modules/base/templates/decorator/default.php';
+            $this->decoratorFile = module_file('base', 'templates/decorator/default.php');
         }
         
         $tplMaster = new \core\template\DefaultTemplate($this->decoratorFile);
@@ -93,10 +92,10 @@ class BaseController {
         $reflector = new \ReflectionObject($this);
         $filenameClass = $reflector->getFileName();
         
-        $module = substr($filenameClass, strlen(ROOT.'/modules/'));
-        $module = substr($module, 0, strpos($module, DIRECTORY_SEPARATOR));
+        $module = module_file2module( $filenameClass );
         
-        $controllerDir = substr($reflector->getFileName(), strlen(ROOT.'/modules/'.$module.'/controller/'));
+        $modulePath = module_path( $module );
+        $controllerDir = substr($reflector->getFileName(), strlen($modulePath . '/controller/'));
         $controllerDir = substr($controllerDir, 0, strpos($controllerDir, 'Controller.php'));
         
         if ($this->actionTemplate === null)
@@ -105,8 +104,9 @@ class BaseController {
         $vars = get_object_vars( $this );
         
         // parse (sub)template
-        if ($this->templateFile == null)
-            $this->templateFile = ROOT . '/modules/'.$module.'/templates/'.$controllerDir.'/'.$this->actionTemplate.'.php';
+        if ($this->templateFile == null) {
+            $this->templateFile = module_file($module, 'templates/'.$controllerDir.'/'.$this->actionTemplate.'.php');
+        }
         $tpl = new \core\template\DefaultTemplate($this->templateFile);
         foreach($vars as $key => $val) {
             $tpl->setVar($key, $val);
@@ -135,7 +135,7 @@ class BaseController {
         
         // parse outer template
         if ($this->decoratorFile == null) {
-            $this->decoratorFile = ROOT . '/modules/base/templates/decorator/default.php';
+            $this->decoratorFile = module_file('base', 'templates/decorator/default.php');
         }
         
         $tplMaster = new \core\template\DefaultTemplate($this->decoratorFile);

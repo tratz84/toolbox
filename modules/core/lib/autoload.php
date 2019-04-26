@@ -7,6 +7,7 @@ use core\ObjectContainer;
 use core\template\HtmlScriptLoader;
 
 require_once dirname( __FILE__ ) . '/functions/bootstrap.php';
+require_once dirname( __FILE__ ) . '/functions/module.php';
 require_once dirname( __FILE__ ) . '/functions/misc.php';
 require_once dirname( __FILE__ ) . '/functions/networking.php';
 require_once dirname( __FILE__ ) . '/functions/html.php';
@@ -50,42 +51,39 @@ spl_autoload_register(function($name) {
     
     
     // load by module
-    $modules = list_files( ROOT . '/modules' );
+    $modules = module_list();
     
     $classPath = str_replace('\\', '/', $name);
     
     $moduleClassName = null;
+    $path = null;
     
     // strip module-name @ classname
-    foreach($modules as $m) {
-        if (strpos($classPath, $m.'/') === 0) {
-            $classPath = substr($classPath, strlen($m)+1);
-            $moduleClassName = $m;
+    foreach($modules as $moduleName => $modulePath) {
+        if (strpos($classPath, $moduleName.'/') === 0) {
+            $classPath = substr($classPath, strlen($moduleName)+1);
+            $moduleClassName = $moduleName;
+            $path = $modulePath . '/lib/' . $classPath . '.php';
         }
     }
     
     
-    if ($moduleClassName === null) {
+    if ($path == null) {
         return;
 //         throw new InvalidStateException('Module not found for classname: ' . $name);
     }
     
-    $path = realpath(ROOT . '/modules/' . $moduleClassName);
+    // lib-files
+    $file = realpath( $path );
     
+    if ($file === false) {
+        throw new InvalidStateException('File for class not found, class: ' . $name . ', file: ' . ($path . '/lib/' . $classPath . '.php'));
+    }
     
-    if (is_dir( $path )) {
-        // lib-files
-        $file = realpath( $path . '/lib/' . $classPath . '.php' );
-        
-        if ($file === false) {
-            throw new InvalidStateException('File for class not found, class: ' . $name . ', file: ' . ($path . '/lib/' . $classPath . '.php'));
-        }
-        
-        if ($file && is_file($file)) {
-            // file must be inside lib-dir
-            if (strpos($file, $path) === 0) {
-                require_once $file;
-            }
+    if ($file && is_file($file)) {
+        // file must be inside lib-dir
+        if (strpos($file, $path) === 0) {
+            require_once $file;
         }
     }
     

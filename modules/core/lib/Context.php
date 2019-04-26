@@ -9,6 +9,8 @@ class Context
 {
 
     protected $vars = array();
+    
+    protected $moduleDirs = array();
 
     protected $customer;
     
@@ -32,6 +34,12 @@ class Context
         
     }
     
+    
+    public function addModuleDir($dir) {
+        $this->moduleDirs[] = $dir;
+        module_list(true);
+    }
+    public function getModuleDirs() { return $this->moduleDirs; }
     
     public function getDateFormat() { return $this->dateFormat; }
     public function getDatetimeFormat() { return $this->datetimeFormat; }
@@ -71,9 +79,10 @@ class Context
     }
     
     public function enableModule($name) {
+        $modules = module_list();
+        
         // check if module exists?
-        $path = ROOT . '/modules/'.basename($name);
-        if (is_dir($path) == false)
+        if (isset($modules[$name]) == false)
             throw new InvalidStateException('Module not found ('.$name.')');
         
         if (in_array($name, $this->enabledModules) == false) {

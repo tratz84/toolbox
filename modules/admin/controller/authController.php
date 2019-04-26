@@ -10,7 +10,7 @@ class authController extends AdminBaseController {
     
     public function action_index() {
         
-        $this->setDecoratorFile(ROOT . '/modules/admin/templates/decorator/auth.php');
+        $this->setDecoratorFile(module_file('admin', 'templates/decorator/auth.php'));
         
         if (is_post()) {
             $auService = $this->oc->get(AdminUserService::class);

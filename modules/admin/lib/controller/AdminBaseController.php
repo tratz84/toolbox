@@ -17,7 +17,7 @@ class AdminBaseController extends BaseController {
         // TODO: extra auth check
         
         if (is_standalone_installation() == false) {
-            $this->setDecoratorFile(ROOT . '/modules/admin/templates/decorator/default.php');
+            $this->setDecoratorFile( module_file('admin', 'templates/decorator/default.php') );
         }
     }
 

@@ -93,10 +93,9 @@ class SettingsService extends ServiceBase {
         $objMetas[] = new ModuleMeta('persons',   'Personen module',  'Naast beheer van bedrijven ook particulieren', 20);
         
         
-        $modules = list_files(ROOT . '/modules');
-        foreach($modules as $moduleName) {
-            $meta_file = ROOT . '/modules/'.$moduleName.'/meta.php';
-            
+        $modules = module_list();
+        foreach($modules as $moduleName => $path) {
+            $meta_file = $path . '/meta.php';
             if (file_exists($meta_file)) {
                 $metas = require $meta_file;
                 
