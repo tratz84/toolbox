@@ -30,12 +30,13 @@ define('WEBMAIL_SOLR', 'http://localhost:8984/solr/insights');
 define('DEFAULT_DATABASE_HOST',     'localhost');
 define('DEFAULT_DATABASE_USERNAME', 'root');
 define('DEFAULT_DATABASE_PASSWORD', 'uiz123');
+define('DEFAULT_DATABASE_NAME',     'insights_github');
 
 // master-data database
 $dh = \core\db\DatabaseHandler::getInstance();
-$dh->addServer('admin', 'localhost', 'root', 'uiz123', 'pw_master');
+$dh->addServer('admin', DEFAULT_DATABASE_HOST, DEFAULT_DATABASE_USERNAME, DEFAULT_DATABASE_PASSWORD, DEFAULT_DATABASE_NAME);
 
 if (php_sapi_name() == 'cli') {
-    $dh->addServer('default', 'localhost', 'root', 'uiz', 'insights_dev');
+    $dh->addServer('default', DEFAULT_DATABASE_HOST, DEFAULT_DATABASE_USERNAME, DEFAULT_DATABASE_PASSWORD, DEFAULT_DATABASE_NAME);
 }
 
