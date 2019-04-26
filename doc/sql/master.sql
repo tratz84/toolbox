@@ -88,4 +88,3 @@ CREATE TABLE `insights__user_customer` (
   PRIMARY KEY (`user_customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

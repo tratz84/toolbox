@@ -6,7 +6,7 @@ INSERT INTO `base__setting` VALUES (NULL,NULL,'SQL_VERSION',NULL,NULL,'201904260
 
 -- create user admin, with password test123
 INSERT INTO `base__user` VALUES (2,'admin','demo@demo.itxplain.nl','test123','2018-10-25 09:07:25','2018-10-25 09:04:02','admin','','demo',NULL,NULL);
-INSERT INTO `insights__customer` set contextName='myadministration', databaseName='insights_myadministration', active=true;
+INSERT INTO `insights__customer` set contextName='default', databaseName='insights_github', active=true;
 
 
 
