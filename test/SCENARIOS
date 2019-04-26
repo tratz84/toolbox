@@ -1,0 +1,7 @@
+
+
+== base ==
+
+- login as user in browser 1, delete in browser 2 (other session), refresh browser 1
+
+

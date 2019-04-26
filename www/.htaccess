@@ -1,0 +1,24 @@
+
+AddDefaultCharSet UTF-8
+
+php_value memory_limit 256M
+
+
+RewriteEngine On
+
+#RewriteCond %{HTTPS} off
+#RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+
+RewriteRule ^([a-zA-Z0-9_-]+)$ /$1/ [R=301,L]
+
+
+# management interface administrations
+RewriteRule ^admin/.*$ admin.php [L]
+
+
+# administration
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^[a-z0-9_-]+/.*$ start.php [L]
+

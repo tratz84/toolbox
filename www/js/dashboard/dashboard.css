@@ -1,0 +1,54 @@
+
+
+
+
+/* dashboard */
+.grid-stack .grid-stack-item .grid-stack-item-content {
+	padding: 5px;
+	border: 1px dashed #ccc;
+}
+
+
+.dashboard-widgets .widget-item {
+/* 	border: 1px solid #ccc; */
+	overflow: hidden;
+}
+.dashboard-widgets .widget-item .widget-title {
+	background-color: #ff5245;
+	color: #fff;
+	font-weight: bold;
+	font-size: 14px;
+	padding: 5px 0 5px 10px;
+	margin-top: 0;
+}
+.dashboard-widgets .widget-item .widget-title .toolbox a {
+	font-size: 17px;
+	margin: 1px 5px 0 0;
+}
+
+
+/* settings form */
+.dashboard-widget-settings .widget-item {
+	border: 1px solid #ccc;
+	margin-bottom: 5px;
+	padding: 5px;
+}
+.dashboard-widget-settings .widget-item span.name {
+	display: block;
+	font-weight: bold;
+}
+.dashboard-widget-settings .widget-item span.description {
+	display: block;
+	font-style: italic;
+}
+
+.dashboard-widget-settings .widget-item .widget-toggle {
+	float: right;
+}
+
+.dashboard-widget-settings .widget-item a.widget-toggle.glyphicon-ok {
+	color: #0f0;
+	border-color: #0f0;
+}
+
+

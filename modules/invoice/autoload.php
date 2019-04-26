@@ -1,0 +1,169 @@
+<?php
+
+
+use base\forms\CompanyForm;
+use core\Context;
+use core\ObjectContainer;
+use core\event\CallbackPeopleEventListener;
+use core\event\EventBus;
+use core\event\PeopleEvent;
+use invoice\InvoiceSettings;
+use invoice\model\CompanySetting;
+use invoice\service\InvoiceService;
+
+Context::getInstance()->enableModule('invoice');
+
+$eb = ObjectContainer::getInstance()->get(EventBus::class);
+
+
+$eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($evt) {
+    $ctx = Context::getInstance();
+    
+    $src = $evt->getSource();
+    
+    if ($ctx->getSetting('offerModuleEnabled')) {
+        $src->addItem('Facturatie', 'Offerte statussen',     '/?m=invoice&c=offerStatus');
+    }
+    
+    if ($ctx->getSetting('invoiceModuleEnabled')) {
+        $src->addItem('Facturatie', strOrder(1).' statussen',     '/?m=invoice&c=invoiceStatus');
+    }
+    
+    if ($ctx->getSetting('offerModuleEnabled') || $ctx->getSetting('invoiceModuleEnabled')) {
+        $src->addItem('Facturatie', 'Btw %',     '/?m=invoice&c=vat');
+    }
+    
+    if ($ctx->getSetting('invoiceModuleEnabled') || $ctx->getSetting('offerModuleEnabled')) {
+        $src->addItem('Facturatie', 'Instellingen',     '/?m=invoice&c=settings');
+        
+        $src->addItem('Facturatie', 'Betalingsmogelijkheden',     '/?m=invoice&c=paymentMethod');
+    }
+    
+    $src->addItem('Artikelen', 'Artikelen',     '/?m=invoice&c=article');
+    $src->addItem('Artikelen', 'Artikelgroepen',     '/?m=invoice&c=articleGroup');
+}));
+
+$eb->subscribe('base', 'dashboard', new CallbackPeopleEventListener(function($evt) {
+    $dashboardWidgets = $evt->getSource();
+    
+    $ctx = Context::getInstance();
+    if ($ctx->getSetting('offerModuleEnabled')) {
+        $dashboardWidgets->addWidget('invoice-recent-offers', 'Offerte: Laatst toegevoegde offertes', 'Overzicht van recent toegevoegde offertes', '/?m=invoice&c=dashboardWidgets&a=lastOffers');
+        $dashboardWidgets->addWidget('invoice-recent-changed-offers', 'Offerte: Laatst gewijzigde offertes', 'Overzicht van recent gewijzigde offertes', '/?m=invoice&c=dashboardWidgets&a=lastChangedOffers');
+    }
+    
+    if ($ctx->getSetting('invoiceModuleEnabled')) {
+        $dashboardWidgets->addWidget('invoice-recent-invoices', strOrder(3).': Laatste '.strtolower(strOrder(2)), 'Overzicht recent aangemaakte '.strtolower(strOrder(2)), '/?m=invoice&c=dashboardWidgets&a=lastInvoices');
+    }
+}));
+
+$eb->subscribe('base', 'user-capabilities', new CallbackPeopleEventListener(function($evt) {
+    $ctx = Context::getInstance();
+    
+    if ($ctx->getSetting('invoiceModuleEnabled') || $ctx->getSetting('offerModuleEnabled')) {
+        $evt->getSource()->addCapability('invoice', 'edit-offer', 'Bewerken offertes', 'Aanmaken / bewerken van offertes');
+        $evt->getSource()->addCapability('invoice', 'edit-invoice', 'Bewerken ' . strtolower(strOrder(2)), 'Aanmaken / bewerken ' . strOrder(2));
+    }
+}));
+
+
+
+$eb->subscribe('base', 'company-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+    $ftc = $evt->getSource();
+    
+    if (hasCapability('invoice', 'edit-invoice')) {
+        $companyId = $ftc->getSource()->getWidgetValue('company_id');
+        $orderHtml = get_component('invoice', 'invoiceOverviewController', 'index', array('companyId' => $companyId));
+        if ($orderHtml) {
+            $ftc->addTab(strOrder(2), $orderHtml, 20);
+        }
+    }
+    
+    $offerHtml = get_component('invoice', 'offerOverviewController', 'index', array('form' => $ftc->getSource()));
+    if ($offerHtml) {
+        $ftc->addTab('Offertes', $offerHtml, 30);
+    }
+}));
+    
+    
+$eb->subscribe('base', 'person-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+    $ftc = $evt->getSource();
+    
+    if (hasCapability('invoice', 'edit-invoice')) {
+        $personId = $ftc->getSource()->getWidgetValue('person_id');
+        $orderHtml = get_component('invoice', 'invoiceOverviewController', 'index', array('personId' => $personId));
+        if ($orderHtml) {
+            $ftc->addTab(strOrder(2), $orderHtml, 20);
+        }
+    }
+    
+    $offerHtml = get_component('invoice', 'offerOverviewController', 'index', array('form' => $ftc->getSource()));
+    if ($offerHtml) {
+        $ftc->addTab('Offertes', $offerHtml, 30);
+    }
+}));
+
+
+
+$invoiceSettings = ObjectContainer::getInstance()->get(InvoiceSettings::class);
+
+
+if ($invoiceSettings->getIntracommunautair()) {
+
+    // add tax_excemption-field
+    hook_create_object(CompanyForm::class, function(CompanyForm $form) {
+        $w = new \core\forms\CheckboxField('tax_shift', '', 'Intracommunautair');
+        $w->setInfoText('Diensten/producten worden intracommunautaire geleverd? (buitenlandsbedrijf)');
+        $w->setPrio(76);
+        $form->addWidget($w);
+    });
+    
+    $eb->subscribe('core', 'object-hook-base\\service\\CompanyService::readCompany', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+        list($company, $arguments) = $evt->getSource();
+        
+        if ($company->getCompanyId()) {
+            $invoiceService = ObjectContainer::getInstance()->get(InvoiceService::class);
+            $cs = $invoiceService->readCompanySettings($company->getCompanyId());
+            if ($cs && $cs->getTaxShift()) {
+                $company->setField('tax_shift', true);
+            } else {
+                $company->setField('tax_shift', false);
+            }
+        }
+    }));
+    // handle saveCompany
+    $eb->subscribe('core', 'object-hook-base\\service\\CompanyService::save', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+        list($companyId, $arguments) = $evt->getSource();
+        
+        if ($companyId) {
+            $invoiceService = ObjectContainer::getInstance()->get(InvoiceService::class);
+            $cs = $invoiceService->readCompanySettings($companyId);
+            if ($cs == null) {
+                $cs = new CompanySetting();
+                $cs->setCompanyId($companyId);
+            }
+            
+            $t = $arguments[0]->getWidgetValue('tax_shift');
+            $cs->setTaxShift( $t ? 1 : 0 );
+            $invoiceService->saveCompanySettings($cs);
+        }
+    }));
+        
+        
+}
+
+
+
+$eb->subscribe('report', 'menu-list', new CallbackPeopleEventListener(function($evt) {
+    $ctx = Context::getInstance();
+    
+    /**
+     * report\ReportMenuList
+     */
+    $reportMenuList = $evt->getSource();
+    
+    if ($ctx->getSetting('invoiceModuleEnabled')) {
+        $reportMenuList->addMenuItem(strOrder(3) . ' - totalen',   'invoice', 'report/invoiceTotals');
+    }
+}));
+    

@@ -1,0 +1,16 @@
+{
+	"name" : "itxplain/insights",
+	"description" : "insights crm / erp",
+	"authors" : [{
+			"name" : "itxplain",
+			"email" : "info@itxplain.nl"
+		}
+	],
+	"require" : {
+		"setasign/fpdf" : "^1.8",
+		"swiftmailer/swiftmailer" : "6.0.0",
+		"phpoffice/phpspreadsheet" : "^1.5",
+		"php-mime-mail-parser/php-mime-mail-parser" : "^3.0",
+		"phpunit/phpunit": "^7.5"
+	}
+}

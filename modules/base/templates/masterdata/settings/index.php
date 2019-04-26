@@ -1,0 +1,58 @@
+
+
+<div class="page-header">
+	<div class="toolbox list-toolbox">
+		<a href="<?= appUrl('/?m=base&c=masterdata/index') ?>" class="fa fa-chevron-circle-left"></a>
+		<a href="javascript:void(0);" onclick="$('form').submit()" class="fa fa-save"></a>
+	</div>
+
+	<h1>Basisinstellingen</h1>
+</div>
+
+
+<?php ob_start() ?>
+    <div class="widget text-field-widget">
+    	<label>Page size</label>
+    	<input type="number" name="PAGE_SIZE" step="1" min="10" max="100" value="<?= esc_attr($settings['PAGE_SIZE']) ?>" />
+    </div>
+    
+    <div class="list-available-modules">
+        <?php foreach($availableModules as $m) : ?>
+        <div class="widget text-field-widget module-<?= slugify($m->getName()) ?>">
+        	<label>
+        		<?= esc_html($m->getName()) ?>
+        		<?= infopopup($m->getInfoText()) ?>
+    		</label>
+    		
+    		<?= render_checkbox($m->getTag().'Enabled', ['checked' => @$settings[$m->getTag().'Enabled']]) ?>
+        </div>
+        <?php endforeach; ?>
+    </div>
+    <div class="clear" style="height: 1em;"></div>
+<?php $htmlBaseSettings = ob_get_clean(); ?>
+
+
+<?php ob_start() ?>
+
+        <?= render_colorpicker('master_base_color', 'Basiskleur', @$settings['master_base_color']) ?>
+
+	<div class="clear"></div>
+<?php $htmlColors = ob_get_clean() ?>
+
+
+
+<div class="form-generator">
+    <form method="post" action="">
+        <?php 
+            $tabContainer = generate_tabs('base', 'masterdata-settings', null);
+            $tabContainer->addTab('Basisinstellingen', $htmlBaseSettings, 0);
+            $tabContainer->addTab('Kleuren', $htmlColors);
+            print $tabContainer->render();
+        ?>
+        
+    </form>
+</div>
+
+
+
+

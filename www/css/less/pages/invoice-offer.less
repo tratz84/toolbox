@@ -1,0 +1,112 @@
+
+@import "../settings.less";
+
+
+.form-generator.form-recent-invoice-widget-form {
+	.widget-container-invoice-statuses .checkbox-ui-container {
+		padding-left: 25px;
+	}
+}
+
+
+.module-invoice {
+	&.invoice-offer-controller.action-index {
+
+		.th-offernumbertext {
+			width: 150px;
+		}
+		.th-customer-name {
+			width: 250px;
+		}
+	}
+
+	@media (max-width: @pxMobileBreak) {
+		&.invoice-invoice-controller.action-index, &.invoice-offer-controller.action-index {
+			.th-total-calculated-price { text-align: left; }
+			td:after {
+				content: "\A";
+				white-space: pre;
+			}
+			td.actions {
+				float: none;
+				div { display: inline; }
+			}
+			td {
+				padding: 0;
+				margin: 5px 0;
+			}
+		}
+	}
+
+	.th-total-price-offer, .td-total-price-offer,
+	.th-total-calculated-price, .td-total-calculated-price,
+	.th-total-calculated-price-incl-vat, .td-total-calculated-price-incl-vat {
+		text-align: right;
+		padding-right: 2em;
+		white-space: nowrap;
+	}
+
+	.customer-widget {
+		position: absolute;
+		right: 10px;
+		width: 25%;
+
+		@media (max-width: 1450px) {
+			max-height: 135px;
+			overflow-y: auto;
+		}
+	}
+	@media (max-width: 900px) {
+		.customer-widget {
+			position: inherit;
+			width: auto;
+			max-height: none;
+			right: 0;
+			margin-bottom: 5px;
+		}
+	}
+
+	form {
+	}
+
+	table.sublist {
+		width: auto;
+	}
+	
+	.widget-comment, .widget-note {
+		margin-bottom: 15px;
+	}
+
+
+}
+
+.invoiceform-list-offer-line-widget, .invoiceform-list-invoice-line-widget {
+	margin-bottom: 25px;
+
+	table {
+		width: ~"calc(100% - 320px)";
+		max-width: 1000px;
+	}
+
+	th.th-short-description2 { display: none; }
+
+	td.td-sortable { width: 20px; padding: 0 8px 0 5px; }
+
+	td.input-short-description
+	, td.input-price
+	, td.input-amount {
+		input[type=text] { width: 100%; }
+	}
+	td.input-vat, td.input-vat-percentage {
+		width: 100px;
+	}
+	td.input-short-description { width: 500px; max-width: 80%; }
+	td.input-price { width: 125px; }
+	td.input-amount { width: 50px; }
+	th.price-sum, td.price-sum { text-align: right; }
+	td.action {
+		text-align: center;
+		padding: 5px 10px;
+	}
+
+}

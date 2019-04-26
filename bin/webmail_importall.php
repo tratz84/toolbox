@@ -1,0 +1,48 @@
+#!/usr/bin/php
+<?php
+
+
+use core\ObjectContainer;
+use webmail\mail\ImapConnection;
+use webmail\service\ConnectorService;
+
+if (count($argv) != 2) {
+    print "Usage: {$argv[0]} <contextname>\n";
+    exit;
+}
+
+// move to cwd
+chdir(dirname(__FILE__));
+
+// bootstrap
+include '../config/config.php';
+$contextName = $argv[1];
+bootstrapContext($contextName);
+
+
+$connectorService = ObjectContainer::getInstance()->get(ConnectorService::class);
+
+$cs = $connectorService->readActive();
+
+foreach($cs as $c) {
+    $c = $connectorService->readConnector( $c->getConnectorId() );
+    
+    $ic = ImapConnection::createByConnector($c);
+    
+    if (!$ic->connect()) {
+        print "Unable to connect to " . $c->getDescription() . "\n";
+        continue;
+    }
+        
+    print "Connected to " . $c->getDescription() . "\n";
+    
+    $ic->setCallbackItemImported(function($folderName, $overview, $file) {
+        // TODO: implement
+    });
+    
+    
+    $ic->doImport( $c );
+    
+    
+    $ic->disconnect();
+}

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+
+git pull
+
+./node_modules/.bin/lessc -x www/css/less/base.less  www/css/less/style.css
+
+
+

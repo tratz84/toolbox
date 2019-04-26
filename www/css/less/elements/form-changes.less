@@ -1,0 +1,36 @@
+
+
+.form-changes-container {
+	
+	table {
+		
+		width: 100%;
+		
+		th, td { text-align: left; padding-right: 5px; }
+		
+		thead {
+			background-color: #eee;
+			
+		}
+		tr {
+			border-bottom: 1px solid #e7e7e7;
+		}
+		tbody {
+			tr { background-color: #fbfbfb; }
+			tr:nth-child(even) {
+				background-color: #f5f5f5;
+			}
+		}
+		
+		tr.removed { background-color: #ffc4c4 !important; }
+		
+		td.changed {
+			.old-value { color: #f00; }
+			.new-value { color: #0f0; }
+		}
+		
+		margin-bottom: 25px;
+	}
+	
+	
+}

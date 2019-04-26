@@ -1,0 +1,31 @@
+
+@import "../settings.less";
+
+
+.input-pickadate {
+	width: 100px;
+}
+
+.input-pickatime {
+	width: 65px;
+}
+
+.picker { max-width: 300px; }
+
+
+.picker--time {
+	.picker__holder {
+		overflow-y: scroll;
+		max-height: 250px;
+	}
+
+	&[aria-hidden=true] { display: none; }
+}
+
+@media (max-width: @pxMobileBreak) {
+	.bootstrap-datetimepicker-widget {
+		left: 0px !important;
+		right: auto !important;
+		width: 100% !important;
+	}
+}

@@ -1,0 +1,39 @@
+
+
+
+.info-popup {
+	
+	position: relative;
+	overflow: visible;
+	cursor: pointer;
+	color: #2996ff;
+	
+	.fa.fa-info {
+		padding: 2px 6px 0px;
+		margin-left: 10px;
+		border: 1px solid #2996ff;
+		border-radius: 10px;
+	}
+	
+	.info-popup-text {
+		color: #000;
+		font-weight: normal;
+		text-align: left;
+		display: none;
+		position: absolute;
+		left: 10px;
+		top: 0px;
+		border: 1px solid #2996ff;
+		background-color: #fff;
+		z-index: 10;
+		padding: 5px;
+		width: 275px;
+	}
+	
+	&:hover {
+		.info-popup-text {
+			display: block;
+		}
+	}
+}
+

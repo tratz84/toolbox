@@ -1,0 +1,46 @@
+<?php
+
+namespace core\forms;
+
+class TextField extends BaseWidget {
+    
+    protected $placeholder = false;
+    protected $options;
+    
+    public function __construct($name, $value=null, $label=null, $opts=array()) {
+        
+        $this->setName($name);
+        $this->setLabel($label);
+        $this->setValue($value);
+        
+        $this->options = $opts;
+    }
+    
+    public function setValue($value) {
+        parent::setValue( trim($value) );
+    }
+    
+    public function showPlaceholder() { $this->placeholder = true; }
+    
+    public function render() {
+        $this->setAttribute('type', 'text');
+        
+        if ($this->hasError()) {
+            $this->addContainerClass('error');
+        }
+        
+        if ($this->placeholder) {
+            $this->setAttribute('placeholder', $this->getLabel());
+        }
+        
+        if (isset($this->options['maxlength']) && is_numeric($this->options['maxlength'])) {
+            $this->setAttribute('maxlength', $this->options['maxlength']);
+        }
+        
+        $this->setAttribute('value', $this->getValue());
+        
+        return parent::render();
+    }
+    
+    
+}

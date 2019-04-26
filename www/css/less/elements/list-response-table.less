@@ -1,0 +1,185 @@
+
+@import "../settings.less";
+
+table.sublist {
+	border: 1px solid #e7e7e7;
+	
+	thead, tfoot {
+		background-color: #eee;
+		color: #000;
+		th {
+			padding: 2px 3px;
+		}
+	}
+}
+
+.list-response-table, .tbl-report, .list-form-widget table, .list-widget table, table.list-widget {
+	border: 1px solid #e7e7e7;
+	thead, tfoot {
+		background-color: #eee;
+		color: #000;
+		th {
+			padding: 2px 3px;
+		}
+		
+		a {
+			text-decoration: none;
+			span.field-description {
+				color: #000;
+			}
+		}
+	}
+
+	tbody {
+		td {
+			padding: 5px 0;
+		}
+
+		tr {
+			background-color: #fbfbfb;
+		}
+
+		tr:nth-child(even) {
+			background-color: #f5f5f5;
+		}
+
+		tr:hover {
+			background-color: #EAEAEA ! important;
+//			cursor: pointer;
+		}
+
+		tr.deleted-row {
+			background-color: #ffd3d3;
+		}
+	}
+
+	tr {
+		border-bottom: 1px solid #e7e7e7;
+	}
+
+	td:first-child , th:first-child {
+		padding-left: 5px;
+	}
+
+	td:last-child , th:last-child {
+		padding-right: 5px;
+	}
+
+	td.no-results-found {
+		font-style: italic;
+		padding: 20px 0;
+		text-align: center;
+	}
+
+	border-spacing: 0;
+	width: 100%;
+	th , td {
+	}
+
+	&.no-hover tbody tr:hover {
+		background-color: #fbfbfb;
+	}
+
+	.actions {
+		text-align: right;
+		white-space: nowrap;
+		a {
+			font-size: 1.1em;
+			border: 1px solid #88cbff;
+			border-radius: 2px;
+			padding: 3px;
+			margin-left: 3px;
+		}
+	}
+
+	&.no-hover tbody tr:nth-child(even):hover {
+		background-color: #f5f5f5;
+	}
+
+	td.sort-handle {
+		width: 15px;
+	}
+
+	.record-id {
+		width: 35px;
+	}
+	
+	
+	tr.active-blue,
+	tr:nth-child(even).active-blue {
+		background-color: #ceeeff;
+	}
+	
+
+}
+
+.base-company-controller
+, .base-person-controller
+, .invoice-invoice-controller
+, .invoice-offer-controller
+, .rental-view-controller {
+	@media (max-width: @pxMobileBreak) {
+		thead tr, thead th {
+			display: block;
+		}
+		tbody tr {
+			display: block;
+			clear: both;
+			overflow: auto;
+			padding: 5px 5px;
+
+			td.td-company-id, td.td-person-id, td.td-activity-id {
+				width: 40px;
+				display: inline-block;
+			}
+			td.sortable-cell  {
+				width: 20px;
+				display: inline-block;
+			}
+
+			td.td-lastname { padding-right: 1em; }
+
+			td {
+				display: inline;
+				div { display: inline; }
+
+				&.actions { float: right; }
+			}
+		}
+	}
+}
+
+
+td.no-records {
+	font-style: italic;
+	text-align: center;
+}
+
+td.td-sort {
+	width: 30px;
+}
+
+.tbl-report {
+	tbody tr:hover { cursor: auto; }
+}
+
+
+
+.fht-table-wrapper .fht-thead {
+	overflow: visible ! important;
+}
+
+.fht-table-wrapper .fht-tbody {
+	overflow-x: hidden ! important;
+}
+
+
+
+/* table pager */
+.pager {
+	text-align: center;
+	padding: 25px 0;
+
+	a { font-size: 16px; padding: 10px 5px; }
+	a.active { font-weight: bold;  }
+}

@@ -1,0 +1,100 @@
+
+@import "../settings.less";
+
+
+.calendar-month-view {
+	width: 100%;
+	height: 100%;
+	#dayContainer td , #dayNameContainer td {
+		border: 1px solid #ccc;
+	}
+	
+	font-size: @defaultFontSize;
+
+	#monthNameContainer {
+		td {
+			font-size: 22px;
+			padding: 15px 0 10px;
+		}
+
+		a {
+			font-size: 24px;
+		}
+
+		.month-name {
+			position: relative;
+			top: -2px;
+			display: inline-block;
+			width: 175px;
+			text-align: center;
+		}
+	}
+
+	#dayNameContainer td {
+		text-align: center;
+	}
+
+	#dayContainer td {
+		vertical-align: top;
+		position: relative;
+		height: 100px;
+		width: 14.28%;
+		.item {
+			cursor: pointer;
+			background-color: #ddeeff;
+			border-bottom: 1px solid #ccc;
+		}
+
+		div.item.cancelled {
+			text-decoration: line-through;
+		}
+	}
+
+	span.daynr {
+		color: #616161;
+	}
+
+	.current-date {
+		background-color: rgba(238, 255, 10, 0.11);
+		span.daynr {
+			font-weight: bold;
+			color: #000;
+		}
+	}
+}
+
+.item-editor {
+	position: absolute;
+	z-index: 50;
+	width: 400px;
+	background-color: #fff;
+	padding: 0 10px 10px;
+	left: 50%;
+	margin-left: -200px;
+	margin-top: 100px;
+	border: 3px solid #ccc;
+	h1 {
+		margin: 13px 0 16px;
+		font-size: 22px;
+	}
+
+	.toolbox {
+		display: none;
+	}
+}
+
+#notes-container {
+	thead th:nth-child(2) , #notes-container thead th:nth-child(3) {
+		width: 170px;
+	}
+
+	thead th:nth-child(4) {
+		width: 200px;
+	}
+
+	thead th:nth-child(5) {
+		width: 200px;
+	}
+}
+
+

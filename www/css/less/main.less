@@ -1,0 +1,150 @@
+
+@import "settings.less";
+
+body {
+	font-size: @defaultFontSize;
+	background-color: #fafafa;
+}
+
+h1 { font-size: 30px; }
+h2 { font-size: 25px; }
+h3 { font-size: 20px; }
+
+
+
+.main-content {
+	margin-left: 260px;
+	margin-right: 10px;
+	
+	@media screen and (max-width: 767px) {
+		margin-left: 0px;
+	}
+}
+
+
+.error { font-style: italic; color: #f00; }
+.object-deleted { &:extend(.error); font-weight: bold; }
+
+.clickable { cursor: pointer !important; }
+.not-clickable { cursor: auto !important; }
+
+.clear { clear: both; }
+
+.bold { font-weight: bold; }
+.right { text-align: right; }
+.hidden { display: none; }
+
+input[type=file] { max-width: 280px; }
+
+select {
+	border: 1px solid grey;
+	background-color: #fff;
+	padding: 2px 3px;
+}
+
+label {
+	margin: 4px 0 1px;
+}
+
+textarea, input[type=text], input[type=tel], input[type=email], input[type=number], select {
+	padding: 2px 3px;
+	margin: 2px 0;
+}
+select {
+	padding: 2px 3px 3px;
+}
+
+.checkbox-ui, .checkbox-ui-container > input[type=checkbox] {
+	position: absolute;
+	z-index: -2;
+	margin-top: 10px;
+	opacity: 0;
+}
+.checkbox-ui-placeholder {
+	color: #434343;
+	position: relative;
+	top: 3px;
+	display: inline-block;
+	float: none;
+	border: 1px solid #ccc;
+	width: 18px !important;
+	height: 18px !important;
+	padding-left: 1px;
+	cursor: pointer;
+}
+input[type=checkbox]:checked + .checkbox-ui-placeholder {
+	&:before, &::before {
+		font-family: 'FontAwesome';
+		content: '\f00c';
+		position: absolute;
+		top: -2px;
+		left: 1px;
+	}
+}
+input[type=checkbox]:focus + .checkbox-ui-placeholder {
+	border-color: #007bff;
+}
+
+
+
+.radio-ui {
+	position: absolute;
+	z-index: -2;
+	margin-top: 10px;
+	opacity: 0;
+}
+.radio-ui-placeholder {
+	color: #434343;
+	position: relative;
+	top: 3px;
+	display: inline-block;
+	float: none !important;
+	border: 1px solid #ccc;
+	border-radius: 9px;
+	width: 17px !important;
+	height: 18px !important;
+	padding-left: 1px;
+	cursor: pointer;
+}
+input[type=radio]:checked + .radio-ui-placeholder {
+	&:before, &::before {
+		font-family: 'FontAwesome';
+		content: '\f111';
+		font-size: 10px;
+		position: absolute;
+		//top: 2px;
+		line-height: 18px;
+		left: 3px;
+	}
+}
+input[type=radio]:focus + .radio-ui-placeholder {
+	border-color: #007bff;
+}
+
+
+@media (min-width: 767px) {
+	.main-content { padding-top: 40px; }
+	.nav-side-menu { padding-top: 34px; }
+}
+
+
+fieldset {
+	padding: 5px;
+	border: 1px solid #ccc;
+	position: relative;
+	
+	legend {
+		width: auto;
+		margin-bottom: 0;
+		
+		font-size: 18px;
+		
+		.toolbox {
+			position: absolute;
+			right: 10px;
+			top: 1px;
+			a { font-size: 14px; display: block; background-color: #fff; float: left; }
+		}
+	}
+}
+

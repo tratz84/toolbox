@@ -1,0 +1,68 @@
+<?php
+
+namespace core\forms\lists;
+
+class ListResponse {
+    
+    public $rowCount;
+    public $pageSize;
+    public $start;
+    public $objects;
+    
+    public function __construct($start, $pageSize, $rowCount, $objects) {
+        $this->setStart($start);
+        $this->setPageSize($pageSize);
+        $this->setRowCount($rowCount);
+        $this->setObjects($objects);
+    }
+    
+    public static function fillByCursor($start, $pageSize, $cursor, $fields=array()) {
+        
+        $rowCount = $cursor->numRows();
+        
+        $objects = array();
+        
+        if ($start == 0 || $cursor->moveTo($start)) {
+            
+            for($x=0; $x < $pageSize; $x++) {
+                $row = $cursor->next();
+                
+                if (!$row)
+                    break;
+                
+                $obj = array();
+                foreach($fields as $f) {
+                    
+                    $func = 'get'.dbCamelCase($f);
+                    if (method_exists($row, $func)) {
+                        $val = $row->$func();
+                        $obj[$f] = $val;
+                    } else {
+                        $val = $row->getField($f);
+                        $obj[$f] = $val;
+                    }
+                }
+                
+                $objects[] = $obj;
+            }
+        }
+        
+        $r = new ListResponse($start, $pageSize, $rowCount, $objects);
+        
+        return $r;
+    }
+    
+    
+    public function getRowCount() { return $this->rowCount; }
+    public function setRowCount($p) { $this->rowCount = $p; }
+    
+    public function getPageSize() { return $this->pageSize; }
+    public function setPageSize($p) { $this->pageSize = $p; }
+    
+    public function getStart() { return $this->start; }
+    public function setStart($p) { $this->start = $p; }
+    
+    public function getObjects() { return $this->objects; }
+    public function setObjects($p) { $this->objects = $p; }
+    
+}

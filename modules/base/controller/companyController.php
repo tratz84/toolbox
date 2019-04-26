@@ -1,0 +1,134 @@
+<?php
+
+
+use base\forms\CompanyForm;
+use base\model\Address;
+use base\model\Company;
+use base\model\Email;
+use base\model\Phone;
+use base\service\CompanyService;
+use core\Context;
+use core\container\ActionContainer;
+use core\controller\BaseController;
+use core\db\DatabaseHandler;
+use core\event\ActionValidationEvent;
+use core\event\EventBus;
+use core\exception\InvalidStateException;
+use core\exception\ObjectNotFoundException;
+
+class companyController extends BaseController {
+
+    public function init() {
+        if (Context::getInstance()->isCompaniesEnabled() == false)
+            throw new InvalidStateException('Bedrijven-module niet geactiveerd');
+    }
+    
+    public function action_index() {
+        
+        $this->render();
+    }
+    
+    public function action_search() {
+        $pageNo = isset($_REQUEST['pageNo']) ? (int)$_REQUEST['pageNo'] : 0;
+        $limit = $this->ctx->getPageSize();
+       
+        $companyService = $this->oc->get(CompanyService::class);
+        
+        $r = $companyService->search($pageNo*$limit, $limit, $_REQUEST);
+        
+        $arr = array();
+        $arr['listResponse'] = $r;
+        
+        
+        $this->json($arr);
+    }
+    
+    
+    public function action_edit() {
+        $id = isset($_REQUEST['company_id'])?(int)$_REQUEST['company_id']:0;
+        
+        $companyService = $this->oc->get(CompanyService::class);
+        if ($id) {
+            try {
+                $company = $companyService->readCompany($id);
+                
+                if ($company->getDeleted()) {
+                    throw new ObjectNotFoundException('Company marked as deleted');
+                }
+            } catch (ObjectNotFoundException $ex) {
+                return $this->renderError( $ex->getMessage() );
+            }
+        } else {
+            $company = new Company();
+        }
+        
+        $companyForm = $this->oc->create(CompanyForm::class);
+        $companyForm->bind($company);
+
+        if (is_post()) {
+            
+            $companyForm->bind($_REQUEST);
+            
+            
+            if ($companyForm->validate()) {
+                $companyService->save($companyForm);
+                
+                redirect('/?m=base&c=company');
+            }
+            
+        }
+        
+        
+        
+        $this->isNew = $company->isNew();
+        $this->form = $companyForm;
+        
+        $this->actionContainer = new ActionContainer('company', $company->getCompanyId());
+        hook_eventbus_publish($this->actionContainer, 'company', 'company-edit');
+        
+        $this->render();
+    }
+    
+    
+    public function action_delete() {
+        $id = isset($_REQUEST['company_id'])?(int)$_REQUEST['company_id']:0;
+        
+        $companyService = $this->oc->get(CompanyService::class);
+        $company = $companyService->readCompany($id);
+        
+        /**
+         * @var EventBus $eventBus
+         */
+        $eventBus = $this->oc->get(EventBus::class);
+        $evt = $eventBus->publish(new ActionValidationEvent($company, 'base', 'company-delete'));
+        
+        if ($evt->hasErrors()) {
+            report_user_error($evt->getErrors());
+        } else {
+            $companyService->delete($id);
+        }
+        
+        redirect('/?m=base&c=company');
+    }
+    
+    
+    public function action_widget() {
+        
+        if (isset($this->companyForm)) {
+            $this->company = new Company();
+            $this->companyForm->fill($this->company, array('company_type_id', 'company_name', 'contact_person', 'coc_number', 'vat_number', 'note', 'iban', 'bic'));
+            $this->company->setAddressList( $this->companyForm->getWidget('addressList')->asObjects( Address::class) );
+            $this->company->setEmailList( $this->companyForm->getWidget('emailList')->asObjects( Email::class) );
+            $this->company->setPhoneList( $this->companyForm->getWidget('phoneList')->asObjects( Phone::class) );
+            
+        } else {
+            $companyService = $this->oc->get(CompanyService::class);
+            $this->company = $companyService->readCompany($this->company_id);
+        }
+        
+        $this->render();
+    }
+    
+}
+
+

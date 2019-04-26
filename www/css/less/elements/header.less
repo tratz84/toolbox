@@ -1,0 +1,34 @@
+
+
+header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	background-color: #fff;
+	z-index: 90001;
+	
+	display: none;
+	
+	@media (min-width: 767px) {
+		display: block;
+	}
+	
+
+	/* notifications bar */
+	.notifications-bar {
+		padding: 5px 10px 5px 0px;
+		font-size: 16px;
+		width: 100%;
+		background-color: #f00;
+		
+		 a { color: #fff; font-weight: bold; font-size: 14px; }
+		.administration-name .administration-name a { margin-left: 8px; }
+		a:hover { text-decoration: none; }
+		.current-user { margin-right: 15px; font-size: 14px; font-weight: bold; color: #fff; }
+		.notifications-right {
+			float: right;
+		}
+		
+	}
+}

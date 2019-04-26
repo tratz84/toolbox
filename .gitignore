@@ -1,0 +1,11 @@
+
+config/config-local.php
+
+
+# Eclipse settings
+.project
+.settings
+.buildpath
+
+# Php Composer
+vendor/

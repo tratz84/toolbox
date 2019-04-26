@@ -1,0 +1,91 @@
+
+
+.module-signrequest, .module-webmail {
+	
+	.upload-files-field-widget {
+		padding: 10px;
+		position: absolute;
+		top: 0px;
+		right: 10px;
+		width: 300px;
+		border: 1px solid #ccc;
+		background-color: #fff;
+		z-index: 10;
+		
+		label {
+			float: none;
+			display: block;
+			font-weight: bold;
+		}
+	}
+	
+	.form-generator {
+		position: relative;
+		margin-top: 15px;
+		
+		.webmailform-email-recipient-line-widget {
+			.input-to-type { width: 100px; }
+			.input-to-name { width: 200px; }
+			.input-to-email { width: 200px; }
+		}
+	}
+	
+	
+}
+
+.module-webmail {
+	
+	.text-field-widget.subject-widget {
+		margin-top: 35px;
+		
+		input[type=text] { width: 400px; }
+	}
+	
+	&.webmail-email-controller label { width: 100px !important; }
+	
+	tr.active {
+		background-color: #ceeeff !important;
+	}
+	
+	.td-date {
+		white-space: nowrap;
+	}
+	
+	
+	.form-readonly {
+		.widget-onderwerp {
+			padding-bottom: 15px;
+			margin-bottom: 12px;
+			border-bottom: 1px solid #ccc;
+		}
+		
+		.tinymce-field-widget label.widget-label { display: none; }
+	}
+	
+}
+
+
+.container-mailing-form {
+	.form-generator label {
+		width: 125px;
+	}
+	
+	.signrequestform-signer-email-line-widget {
+		margin-top: 5px;
+		
+		table {
+			width: 50%;
+			input { width: 600px; }
+			
+			td.action { padding-right: 5px; }
+		}
+	}
+	
+	.webmailform-email-recipient-line-widget {
+		margin-top: 5px;
+	}
+	
+	[name=identity_id] { width: 508px; }
+}
+
+
