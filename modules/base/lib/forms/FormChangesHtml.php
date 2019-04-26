@@ -1,13 +1,13 @@
 <?php
 namespace base\forms;
 
-use alfalaval\form\Select2Field;
 use core\forms\BaseForm;
 use core\forms\DatePickerField;
 use core\forms\HiddenField;
 use core\forms\ListEditWidget;
 use core\forms\ListFormWidget;
 use core\forms\ListWidget;
+use core\forms\Select2Field;
 use core\forms\SelectField;
 use core\forms\WidgetContainer;
 
