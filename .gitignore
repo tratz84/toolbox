@@ -9,6 +9,15 @@ config/config-local.php
 
 # Php Composer
 vendor/
+composer.lock
+composer.phar
 
-# Nodejs packages
+# Nodejs
 node_modules/
+bower_components/
+package-lock.json
+
+# generated on deployment
+www/css/less/style.css
+
+
