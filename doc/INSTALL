@@ -17,3 +17,12 @@ basedata.sql contains settings,
 
 Read the instructions in the Php-file
 
+
+-- Composer packages
+
+run in the root of the project: composer install
+
+-- nodejs (only needed for css-generation, see /update.sh)
+
+run in the root of the project: npm install
+
