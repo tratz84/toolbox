@@ -53,7 +53,8 @@ function output_user_messages() {
         
     }
     
-    unset($_SESSION['user_message']);
+    if (isset($_SESSION['user_message']))
+        unset($_SESSION['user_message']);
 }
 
 function report_user_error($msg) {
@@ -79,7 +80,8 @@ function output_user_errors() {
         
     }
     
-    unset($_SESSION['user_errors']);
+    if (isset($_SESSION['user_errors']))
+        unset($_SESSION['user_errors']);
 }
 
 
