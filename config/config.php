@@ -10,7 +10,12 @@ define('SALT', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
 
 require_once dirname(__FILE__).'/../modules/core/lib/Context.php';
 require_once dirname(__FILE__).'/../modules/core/lib/autoload.php';
-require_once dirname(__FILE__).'/../vendor/autoload.php';
+
+if (file_exists(dirname(__FILE__).'/../vendor/autoload.php')) {
+    require_once dirname(__FILE__).'/../vendor/autoload.php';
+} else {
+    die('Composer packages not installed, run: composer install');
+}
 
 
 Context::getInstance()->addModuleDir( ROOT . '/modules' );
