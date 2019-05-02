@@ -59,7 +59,8 @@ if (typeof less != 'undefined') {
 <script>
 
 var t = new IndexTable('#emailheader-table-container', {
-	autoloadNext: true
+	autoloadNext: true,
+	fixedHeader: true
 });
 
 t.setRowClick(function(row, evt) {
@@ -142,6 +143,13 @@ t.addColumn({
 			return record.status;
 		}
 	}
+});
+
+t.addColumn({
+	fieldName: 'created',
+	fieldDescription: 'Aangemaakt op',
+	fieldType: 'datetime',
+	searchable: false
 });
 
 t.addColumn({
