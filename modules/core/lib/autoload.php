@@ -56,19 +56,19 @@ spl_autoload_register(function($name) {
     $classPath = str_replace('\\', '/', $name);
     
     $moduleClassName = null;
-    $path = null;
+    $path = false;
     
     // strip module-name @ classname
     foreach($modules as $moduleName => $modulePath) {
         if (strpos($classPath, $moduleName.'/') === 0) {
             $classPath = substr($classPath, strlen($moduleName)+1);
             $moduleClassName = $moduleName;
-            $path = $modulePath . '/lib/' . $classPath . '.php';
+            $path = realpath( $modulePath . '/lib/' . $classPath . '.php' );
         }
     }
     
     
-    if ($path == null) {
+    if ($path == false) {
         return;
 //         throw new InvalidStateException('Module not found for classname: ' . $name);
     }
