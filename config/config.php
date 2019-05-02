@@ -6,7 +6,8 @@ define('ROOT', realpath( dirname(__FILE__) . '/..' ));
 
 define('SQL_VERSION', 2019042502);
 
-define('SALT', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
+if (!defined('SALT'))
+    define('SALT', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
 
 require_once dirname(__FILE__).'/../modules/core/lib/Context.php';
 require_once dirname(__FILE__).'/../modules/core/lib/autoload.php';
