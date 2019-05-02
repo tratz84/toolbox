@@ -9,3 +9,6 @@ config/config-local.php
 
 # Php Composer
 vendor/
+
+# Nodejs packages
+node_modules/
