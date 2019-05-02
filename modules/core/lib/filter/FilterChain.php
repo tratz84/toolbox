@@ -29,12 +29,19 @@ class FilterChain {
 		if (count($this->filters) == 0)
 			throw new \Exception('No filters');
 		
-		$this->filters[$this->currentFilter++]->doFilter($this);
+		$this->next();
 	}
 	
 	public function next() {
-		if ($this->currentFilter < count($this->filters))
-			$this->filters[$this->currentFilter++]->doFilter($this);
+		if ($this->currentFilter-1 >= 0 && $this->currentFilter-1 < count($this->filters)) {
+			hook_eventbus_publish($this->filters[$this->currentFilter-1], 'core', 'filter-executed');
+		}
+		
+		if ($this->currentFilter < count($this->filters)) {
+			$filterNo = $this->currentFilter;
+			$this->currentFilter++;
+			$this->filters[$filterNo]->doFilter($this);
+		}
 	}
 	
 	
