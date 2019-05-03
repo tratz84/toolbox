@@ -290,7 +290,7 @@ class VEvent extends VEventInstance {
                 }
             }
             
-            if ((int)$dt->format('Ymd') >= $ymdstart && (int)$dt->format('Ymd') <= $ymdstart) {
+            if ((int)$dt->format('Ymd') >= $ymdstart && (int)$dt->format('Ymd') <= $ymdend) {
                 $i = new VEventInstance();
                 $i->setId($this->getId());
                 $i->setStartDate($dt->format('Y-m-d'));
