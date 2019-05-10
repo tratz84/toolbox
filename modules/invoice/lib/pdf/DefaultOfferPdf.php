@@ -57,6 +57,21 @@ class DefaultOfferPdf extends DefaultInvoicePdf {
         $this->Ln();
         $this->Cell(190, $this->lineHeight, 'Handtekening:');
         $this->Ln();
+        
+        if (trim($this->offer->getComment())) {
+            $this->SetFont('Arial', 'I', '8');
+            $this->Ln();
+            $this->Ln();
+            $this->Ln();
+            $this->Ln();
+            $this->Ln();
+//             $this->Cell(190, $this->lineHeight, 'Notitie:');
+            $this->Ln();
+            $this->MultiCell(190, $this->lineHeight, $this->offer->getComment());
+            
+            $this->SetFont('Arial', '', '12');
+        }
+        
         $this->SetTextColor(255, 255, 255);
         $this->Cell(190, $this->lineHeight, '[[ s|1 ]]', 0, 0, '', true);
         $this->SetTextColor(0, 0, 0);
