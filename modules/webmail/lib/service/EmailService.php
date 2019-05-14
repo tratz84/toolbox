@@ -174,7 +174,7 @@ class EmailService extends ServiceBase {
     
     
     
-    public function createDraft(Email $email, $files) {
+    public function createDraft(Email $email, $files=array()) {
         $ctx = Context::getInstance();
         $datadir = $ctx->getDataDir();
         
