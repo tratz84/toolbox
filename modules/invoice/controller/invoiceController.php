@@ -132,7 +132,7 @@ class invoiceController extends BaseController {
         $newInvoice->setPersonId( $invoice->getPersonId() );
         $newInvoice->setInvoiceStatusId( $defaultInvoiceStatus->getInvoiceStatusId() );
         $newInvoice->setCreditInvoice( true );
-        $newInvoice->setSubject('Credit: ' . $invoice->getSubject());
+        $newInvoice->setSubject('Credit: ' . $invoice->getInvoiceNumberText());
         $newInvoice->setComment( $invoice->getComment() );
         $newInvoice->setNote( $invoice->getNote() );
         $newInvoice->setInvoiceDate(date('Y-m-d'));
