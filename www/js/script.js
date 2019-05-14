@@ -933,8 +933,12 @@ function format_price(val, currency, opts) {
 	
 	var s2 = s.substr(pos_decimal);
 	for(var x=1; x <= pos_decimal; x++) {
-		if ((x-1) % 3 == 0 && x != 1)
+		if (s.charAt(0) == '-' && x == pos_decimal) {
+			// negative number & end reached? => never add thousands-char
+		}
+		else if ((x-1) % 3 == 0 && x != 1) {
 			s2 = opts.thousands + s2;
+		}
 		
 		s2 = s.charAt(pos_decimal - x) + s2;
 	}
