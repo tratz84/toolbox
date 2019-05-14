@@ -57,7 +57,7 @@ class ActionContainer {
         
         $html = '<div class="action-box">';
         for($x=0; $x < count($items); $x++) {
-            $html .= '<span>' . $items[$x]['html'] . '</span>';
+            $html .= '<span>' . $items[$x]['html'] . '</span> ';
         }
         $html .= '</div>';
         $html .= '<hr/>';
