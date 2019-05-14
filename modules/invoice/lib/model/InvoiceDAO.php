@@ -46,6 +46,11 @@ class InvoiceDAO extends \core\db\DAOObject {
             $params[] = '%'.$nr;
 	    }
 
+	    if (isset($opts['ref_invoice_id'])) {
+	        $where[] = " i.ref_invoice_id = ? ";
+	        $params[] = $opts['ref_invoice_id'];
+	    }
+	    
 	    if (isset($opts['company_id'])) {
 	        $where[] = " i.company_id = ? ";
 	        $params[] = $opts['company_id'];

@@ -7,15 +7,15 @@ use core\controller\BaseController;
 use core\event\EventBus;
 use core\exception\InvalidStateException;
 use core\exception\ObjectNotFoundException;
+use invoice\InvoiceSettings;
 use invoice\form\InvoiceForm;
 use invoice\model\Invoice;
-use invoice\pdf\LandscapeOfferPdf;
+use invoice\model\InvoiceLine;
+use invoice\pdf\DefaultInvoicePdf;
 use invoice\service\InvoiceService;
 use webmail\model\EmailTo;
 use webmail\service\EmailService;
 use webmail\service\EmailTemplateService;
-use invoice\pdf\DefaultInvoicePdf;
-use invoice\InvoiceSettings;
 
 class invoiceController extends BaseController {
     
@@ -98,10 +98,65 @@ class invoiceController extends BaseController {
         
         $eb = $this->oc->get(EventBus::class);
         $this->actionContainer = new ActionContainer('invoice', $invoice->getInvoiceId());
+        
+        if ($invoice->isNew() == false && $invoice->getCreditInvoice() == false) {
+            $creditInvoiceId = $invoiceService->lookupCreditInvoiceId( $invoice->getInvoiceId() );
+            
+            if ($creditInvoiceId) {
+                $this->actionContainer->addItem('credit-invoice', '<a href="'.appUrl('/?m=invoice&c=invoice&a=edit&id='.$creditInvoiceId).'">Bekijk creditfactuur</a>');
+            } else {
+                $this->actionContainer->addItem('credit-invoice', '<a href="'.appUrl('/?m=invoice&c=invoice&a=create_credit&id='.$invoice->getInvoiceId()).'" onclick="'.esc_attr("showConfirmation('Crediteren', 'Weet u zeker dat u deze factuur wilt crediteren?', function() { window.location=$(this).attr('href'); }.bind(this)); return false;").'">Crediteren</a>');
+            }
+        }
+        
         $eb->publishEvent($this->actionContainer, 'invoice', 'invoice-edit');
         
         
         $this->render();
+    }
+    
+    
+    public function action_create_credit() {
+        
+        $invoiceService = $this->oc->get(InvoiceService::class);
+        
+        $invoice = $invoiceService->readInvoice(get_var('id'));
+        if ($invoice == null)
+            return $this->renderError('Invoice not found');
+        
+        $defaultInvoiceStatus = $invoiceService->readDefaultInvoiceStatus();
+        
+        $newInvoice = new Invoice();
+        $newInvoice->setRefInvoiceId( $invoice->getInvoiceId() );
+        $newInvoice->setCompanyId( $invoice->getCompanyId() );
+        $newInvoice->setPersonId( $invoice->getPersonId() );
+        $newInvoice->setInvoiceStatusId( $defaultInvoiceStatus->getInvoiceStatusId() );
+        $newInvoice->setCreditInvoice( true );
+        $newInvoice->setSubject('Credit: ' . $invoice->getSubject());
+        $newInvoice->setComment( $invoice->getComment() );
+        $newInvoice->setNote( $invoice->getNote() );
+        $newInvoice->setInvoiceDate(date('Y-m-d'));
+        
+        $newLines = array();
+        foreach($invoice->getInvoiceLines() as $il) {
+            $nil = new InvoiceLine();
+            $nil->setFields( $il->getFields() );
+            
+            $nil->setPrice( $nil->getPrice() * -1 );
+            
+            $nil->setInvoiceId(null);
+            $nil->setInvoiceLineId(null);
+            
+            $newLines[] = $nil;
+        }
+        $newInvoice->setInvoiceLines($newLines);
+        
+        $form = new InvoiceForm();
+        $form->bind( $newInvoice );
+        
+        $i = $invoiceService->saveInvoice( $form );
+        
+        redirect('/?m=invoice&c=invoice&a=edit&id=' . $i->getInvoiceId());
     }
     
     

@@ -19,6 +19,7 @@ use core\forms\validator\NotContainsValidator;
 use DateTime;
 use invoice\model\Invoice;
 use invoice\service\InvoiceService;
+use core\forms\CheckboxField;
 
 class InvoiceForm extends BaseForm {
 
@@ -29,11 +30,15 @@ class InvoiceForm extends BaseForm {
         $this->addJavascript('invoice', '/js/invoice/editInvoice.js');
 
         $this->addWidget( new HiddenField('invoice_id', '', 'Id') );
+        $this->addWidget( new HiddenField('ref_invoice_id') );
 
 //         $this->addWidget( new CheckboxField('accepted', '', 'Akkoord') );
 
         $this->addWidget( new HtmlField('invoiceNumberText', '', strOrder(1).'nummer'));
 
+        $this->addWidget(new CheckboxField('credit_invoice', '', 'Creditfactuur'));
+        $this->getWidget('credit_invoice')->setInfoText('Factuur markeren als een credit-factuur?');
+        
         $this->addWidget( new DatePickerField('invoice_date', '', 'Datum') );
 
         $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=base&c=customer&a=select2', 'Klant') );

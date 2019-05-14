@@ -196,6 +196,22 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
 
         return $invoice;
     }
+    
+    
+    /**
+     * lookupCreditInvoiceId() - looks up the credit invoice by given invoice
+     */
+    public function lookupCreditInvoiceId($invoiceId) {
+        $invoiceDao = new InvoiceDAO();
+        $cursor = $invoiceDao->search(['ref_invoice_id' => $invoiceId]);
+        
+        if ($cursor->hasNext()) {
+            $i = $cursor->next();
+            return $i->getInvoiceId();
+        } else {
+            return null;
+        }
+    }
 
     public function deleteInvoice($id) {
         $iDao = new InvoiceDAO();
@@ -248,7 +264,7 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
             return $invoice;
         }
 
-        $form->fill($invoice, array('invoice_id', 'invoice_status_id', 'invoice_date', 'deposit', 'payment_upfront', 'subject', 'comment', 'note'));
+        $form->fill($invoice, array('invoice_id', 'ref_invoice_id', 'invoice_status_id', 'credit_invoice', 'invoice_date', 'deposit', 'payment_upfront', 'subject', 'comment', 'note'));
 
         if ($invoice->getInvoiceStatusId() == 0)
             $invoice->setInvoiceStatusId(null);

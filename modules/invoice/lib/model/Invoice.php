@@ -13,6 +13,7 @@ class Invoice extends base\InvoiceBase {
         parent::__construct($id);
 
         $this->setInvoiceDate(date('Y-m-d'));
+        $this->setCreditInvoice(false);
     }
 
     public function getInvoiceNumberText() {

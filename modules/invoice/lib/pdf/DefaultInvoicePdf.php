@@ -47,7 +47,12 @@ class DefaultInvoicePdf extends BasePdf {
         
         $this->SetFont('Arial', 'B', '16');
         $this->Ln();
-        $this->Cell(190, $this->lineHeight, strOrder(1));
+        
+        if ($this->invoice->getCreditInvoice()) {
+            $this->Cell(190, $this->lineHeight, 'Credit'.strtolower(strOrder(1)));
+        } else {
+            $this->Cell(190, $this->lineHeight, strOrder(1));
+        }
         $this->SetFont('Arial', '', '12');
         $this->Ln();
         $this->Ln();

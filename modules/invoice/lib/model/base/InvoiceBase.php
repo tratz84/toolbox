@@ -20,6 +20,15 @@ class InvoiceBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => 'auto_increment',
   ),
+  'ref_invoice_id' => 
+  array (
+    'Field' => 'ref_invoice_id',
+    'Type' => 'int(11)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
   'company_id' => 
   array (
     'Field' => 'company_id',
@@ -45,6 +54,15 @@ class InvoiceBase extends \core\db\DBObject {
     'Null' => 'YES',
     'Key' => 'MUL',
     'Default' => NULL,
+    'Extra' => '',
+  ),
+  'credit_invoice' => 
+  array (
+    'Field' => 'credit_invoice',
+    'Type' => 'tinyint(1)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => '0',
     'Extra' => '',
   ),
   'tax_shift' => 
@@ -148,6 +166,10 @@ class InvoiceBase extends \core\db\DBObject {
 	public function getInvoiceId() { return $this->getField('invoice_id'); }
 	
 		
+	public function setRefInvoiceId($p) { $this->setField('ref_invoice_id', $p); }
+	public function getRefInvoiceId() { return $this->getField('ref_invoice_id'); }
+	
+		
 	public function setCompanyId($p) { $this->setField('company_id', $p); }
 	public function getCompanyId() { return $this->getField('company_id'); }
 	
@@ -158,6 +180,10 @@ class InvoiceBase extends \core\db\DBObject {
 		
 	public function setInvoiceStatusId($p) { $this->setField('invoice_status_id', $p); }
 	public function getInvoiceStatusId() { return $this->getField('invoice_status_id'); }
+	
+		
+	public function setCreditInvoice($p) { $this->setField('credit_invoice', $p); }
+	public function getCreditInvoice() { return $this->getField('credit_invoice'); }
 	
 		
 	public function setTaxShift($p) { $this->setField('tax_shift', $p); }
