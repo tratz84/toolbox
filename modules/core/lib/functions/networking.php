@@ -1,6 +1,21 @@
 <?php
 
 
+function base_url($url) {
+    $pos1 = strpos($url, '://');
+    if ($pos1 !== false) {
+        $pos1 += 3;
+    } else {
+        $pos1 = 0;
+    }
+    $pos2 = strpos($url, '/', $pos1);
+    
+    if ($pos2 !== false) {
+        $url = substr($url, 0, $pos2);
+    }
+    
+    return $url . '/';
+}
 
 
 function get_url($url, $opts=array()) {
