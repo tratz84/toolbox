@@ -24,6 +24,10 @@
 
 var mailStatus = <?php print json_encode($emailStatus) ?>;
 
+$(document).ready(function() {
+	$('.delete-email').click( handle_deleteConfirmation_event );
+});
+
 function uploadFilesField_Click(obj) {
 	window.open(appUrl('/?m=webmail&c=view&a=file&id=' + $(obj).data('id')), '_blank');
 }
