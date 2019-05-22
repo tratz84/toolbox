@@ -44,6 +44,29 @@ function module_file($module, $path) {
     return false;
 }
 
+/**
+ * public_module_file_by_url() - returns public-module-file by given url
+ */
+function public_module_file_by_url($uri) {
+    $moduleName = null;
+    $modulePath = null;
+    
+    if (strpos($uri, '/module') === 0)
+        $uri = substr($uri, 1);
+    
+    if (strpos($uri, 'module') !== 0)
+        return false;
+    
+    $uri = substr($uri, strlen('module/'));
+    
+    $moduleName = substr($uri, 0, strpos($uri, '/'));
+    $modulePath = substr($uri, strlen($moduleName)+1);
+    
+    if (!$moduleName || !$modulePath)
+        return false;
+    
+    return module_file($moduleName, '/public/'.$modulePath);
+}
 
 function module_file2module($path) {
     $modules = module_list();

@@ -40,6 +40,30 @@ function appUrl($u) {
     return $url;
 }
 
+/**
+ * app_request_uri() - returns (relative) request_uri. Filters BASE_HREF & user-contextName
+ */
+function app_request_uri() {
+    if (is_standalone_installation()) {
+        return '/'.substr($_SERVER['REQUEST_URI'], strlen(BASE_HREF));
+    } else {
+        $uri = '/'.substr($_SERVER['REQUEST_URI'], strlen(BASE_HREF));
+        
+        // '/module/' paths doesn't contain contextNames
+        if (strpos($uri, '/module/') === 0)
+            return $uri;
+        
+        $matches = array();
+        if (preg_match('/^\\/([a-zA-Z0-9_-]+)?\\/.*/', $uri, $matches) == false) {
+            throw new \core\exception\InvalidStateException('context not found');
+        }
+        
+        $uri = substr($uri, strlen($matches[1])+1);
+        return $uri;
+    }
+}
+
+
 function redirect($url) {
     
     // TODO: check if $url is prefixed? & clean up?

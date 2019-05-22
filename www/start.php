@@ -9,6 +9,7 @@ require_once '../config/config.php';
 try {
     $fc = new \core\filter\FilterChain();
     
+    $fc->addFilter( new \core\filter\ModulePublicFilter() );
     $fc->addFilter( new \core\filter\SessionFilter() );
     $fc->addFilter( new \core\filter\DatabaseFilter() );
     $fc->addFilter( new \core\filter\RouteFilter() );

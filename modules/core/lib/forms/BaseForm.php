@@ -275,8 +275,13 @@ class BaseForm extends WidgetContainer {
                 $url = substr($url, 1);
             }
             
+            $jsPath = null;
             // append filetime
-            $jsPath = realpath( WWW_ROOT . '/' . $url );
+            if (strpos($url, 'module/') === 0) {
+                $jsPath = public_module_file_by_url($url);
+            } else {
+                $jsPath = realpath( WWW_ROOT . '/' . $url );
+            }
             if ($jsPath && file_exists($jsPath))
                 $url = $url . '?v='.filemtime($jsPath);
             
