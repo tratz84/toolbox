@@ -158,7 +158,7 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
         $lastInvoiceNumber = $iDao->getLastInvoiceNumber();
 
         $cursor = $iDao->search($opts);
-        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('invoice_id', 'invoice_status_id', 'company_id', 'person_id', 'subject', 'comment', 'accepted', 'total_calculated_price', 'total_calculated_price_incl_vat', 'invoice_date', 'edited', 'created', 'firstname', 'insert_lastname', 'lastname', 'company_name', 'invoice_status_description', 'invoiceNumberText', 'invoice_number'));
+        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('invoice_id', 'invoice_status_id', 'credit_invoice', 'company_id', 'person_id', 'subject', 'comment', 'accepted', 'total_calculated_price', 'total_calculated_price_incl_vat', 'invoice_date', 'edited', 'created', 'firstname', 'insert_lastname', 'lastname', 'company_name', 'invoice_status_description', 'invoiceNumberText', 'invoice_number'));
 
         // orderType == 'invoice'? => only last item deletable
         $invoiceSettings = $this->oc->get(InvoiceSettings::class);

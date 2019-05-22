@@ -4,10 +4,11 @@
     <table class="list-widget">
     	<thead>
     		<tr>
-    			<th><?= strOrder(1) ?> nr</th>
+    			<th style="width: 100px;"><?= strOrder(1) ?> nr</th>
     			<th>Betreft</th>
     			<th style="text-align: right; padding-right: 2em;">Bedrag</th>
     			<th>Status</th>
+    			<th style="width: 80px;">Credit</th>
     			<th><?= strOrder(1) ?>datum</th>
     			<th></th>
     		</tr>
@@ -26,6 +27,11 @@
     				<?php endif; ?>
     			</td>
     			<td><?= esc_html($o['invoice_status_description']) ?></td>
+    			<td>
+    				<?php if ($o['credit_invoice']) : ?>
+    				Credit
+    				<?php endif; ?>
+    			</td>
     			<td><?= format_date($o['invoice_date']) ?></td>
     			<td class="td-invoice">
     				<a href="<?= appUrl('/?m=invoice&c=invoice&a=print&id='.$o['invoice_id']) ?>" class="fa fa-print" target="_blank"></a>
