@@ -26,7 +26,13 @@ class ModulePublicFilter {
             if (strpos($uri, '/module/'.$moduleName.'/') !== 0)
                 continue;
             
-            $moduleFile = substr($uri, strlen('/module/'.$moduleName.'/'));
+            // remove everything after question-mark
+            if (strpos($uri, '?') !== false)
+                $uri = substr($uri, 0, strpos($uri, '?'));
+            
+            // determine path in public/-folder
+            $publicFolderPath = substr($uri, strlen('/module/'.$moduleName.'/'));
+            
             
             // check if module has public folder
             $publicFolder = realpath( $path . '/public/' );
@@ -34,14 +40,15 @@ class ModulePublicFilter {
                 $this->return404('No public folder for module');
             
             // determine path
-            $fullpath = realpath( $publicFolder.'/'.$moduleFile );
+            $fullpath = realpath( $publicFolder.'/'.$publicFolderPath );
             
+            // 404 ?
             if ($fullpath == false)
                 $this->return404('File not found');
-            
-            if (strpos($fullpath, $publicFolder) !== 0) {
+            // outside publicFolder-path?
+            if (strpos($fullpath, $publicFolder) !== 0)
                 $this->return404('File not found');
-            }
+            
             
             // set headers
             header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + (60 * 60 * 24))); // 24 hours
