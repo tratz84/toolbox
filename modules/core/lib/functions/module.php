@@ -88,3 +88,21 @@ function module_path($moduleName) {
     return false;
 }
 
+
+/**
+ * module_less_defaults() - returns list of module-specific default.less
+ */
+function module_less_defaults() {
+    $modules = module_list();
+    $l = array();
+    
+    foreach($modules as $moduleName => $path) {
+        if (file_exists($path . '/public/css/default.less')) {
+            $l[] = '/module/'.$moduleName.'/css/default.less';
+        }
+    }
+    
+    return $l;
+}
+
+

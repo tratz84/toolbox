@@ -63,6 +63,11 @@ $menuItems = $ms->listMainMenu();
 		<?php if (DEBUG || file_exists(WWW_ROOT.'/css/less/style.css') == false) : ?>
 		<link href="<?= BASE_HREF ?>css/less/base.less?v=<?= filemtime(WWW_ROOT.'/css/less/base.less') ?>" rel="stylesheet/less" type="text/css" />
 		<script>less = { env: 'development'};</script>
+		<style type="text/less">
+		<?php foreach(module_less_defaults() as $lessfile) : ?>
+			@import "<?= $lessfile ?>";
+		<?php endforeach; ?>
+		</style>
 		<script src="<?= BASE_HREF ?>lib/less/dist/less.js"></script>
 		<?php else : ?>
 		<link href="<?= BASE_HREF ?>css/less/style.css?v=<?= filemtime(WWW_ROOT.'/css/less/style.css') ?>" rel="stylesheet" type="text/css" />
