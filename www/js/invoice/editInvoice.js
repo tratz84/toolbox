@@ -18,6 +18,10 @@ $(document).ready(function() {
 	$('.invoiceform-list-invoice-line-widget').get(0).lefw.setCallbackAddRecord(function(row) {
 		fix_textLines();
 	});
+	
+	$('.invoiceform-list-invoice-line-widget').get(0).lefw.setCallbackDeleteRecord(function(row) {
+		fix_textLines();
+	});
 
 	// customer-change, change popup upper right
 	$('[name=customer_id]').change(function() {

@@ -188,6 +188,8 @@ function ContractInvoiceLines() {
 				
 				this.lefw.handleCounters();
 			}.bind(this));
+		} else {
+			fix_textLines();
 		}
 	};
 }

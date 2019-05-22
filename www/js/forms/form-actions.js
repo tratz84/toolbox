@@ -337,6 +337,7 @@ function ListEditFormWidget(container) {
 	this.container = container;
 	
 	this.callback_addRecord = null;
+	this.callback_deleteRecord = null;
 	
 	this.init = function() {
 		var me = this;
@@ -355,6 +356,7 @@ function ListEditFormWidget(container) {
 	
 	
 	this.setCallbackAddRecord = function(callback) { this.callback_addRecord = callback; }
+	this.setCallbackDeleteRecord = function(callback) { this.callback_deleteRecord = callback; }
 	
 	
 	this.addRecord = function(callback) {
@@ -391,6 +393,10 @@ function ListEditFormWidget(container) {
 	
 	this.deleteRow = function(node) {
 		$(node).remove();
+		
+		if (this.callback_deleteRecord) {
+			this.callback_deleteRecord( node );
+		}
 	};
 	
 	// set element names for POST
