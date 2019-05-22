@@ -163,8 +163,9 @@ function article_Click(article) {
 		lefw.handleCounters();
 		
 		fix_textLines();
+		
+		$(document).trigger( 'article_Click', { article: article, row: row.get(0) } );
 	});
-
 
 	close_popup();
 
