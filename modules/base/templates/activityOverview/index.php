@@ -30,19 +30,19 @@ atc.addColumn({
 });
 atc.addColumn({
 	fieldName: 'username',
-	fieldDescription: 'Gebruiker',
+	fieldDescription: '<?= t('User') ?>',
 	fieldType: 'text',
 	searchable: false
 });
 atc.addColumn({
 	fieldName: 'short_description',
-	fieldDescription: 'Omschrijving',
+	fieldDescription: '<?= t('Description') ?>',
 	fieldType: 'text',
 	searchable: false
 });
 atc.addColumn({
 	fieldName: 'created',
-	fieldDescription: 'Tijdstip',
+	fieldDescription: '<?= t('Time') ?>',
 	fieldType: 'datetime',
 	searchable: false
 });

@@ -4,6 +4,13 @@
 $lang = array();
 
 
+$lang['Time']                   = 'Tijdstip';
+
+$lang['Fieldname']              = 'Veldnaam';
+$lang['Old value']              = 'Oude waarde';
+$lang['New value']              = 'Nieuwe waarde';
+
+
 // cronList
 $lang['Scheduled tasks']        = 'Ingeplande taken';
 $lang['Title']                  = 'Titel';
@@ -26,6 +33,7 @@ $lang['Companyname']            = 'Bedrijfsnaam';
 $lang['Contact person']         = 'Contactpersoon';
 $lang['Coc number']             = 'Kvk nummer';
 $lang['VAT number']             = 'BTW nummer';
+$lang['Default selected']       = 'Standaard geselecteerd';
 
 
 // person
@@ -71,5 +79,12 @@ $lang['User']            = 'Gebruiker';
 // settings
 $lang['Prefix numbers']  = 'Voorvoegsel nummers';
 $lang['Prefix for offers, invoices and more for department recognition'] = 'Tekst dat voor offerte-, factuur of contractnummers wordt gezet, ter herkenning van de vestiging waarvoor deze gemaakt is.';
+
+
+$lang['Add Company type']  = 'Bedrijfsoort toevoegen';
+$lang['Edit Company type'] = 'Bedrijfsoort bewerken';
+$lang['Company Types']     = 'Bedrijfsoorten';
+$lang['Default selected']  = 'Standaard gekozen';
+
 
 return $lang;

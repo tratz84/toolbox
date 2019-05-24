@@ -70,7 +70,7 @@ class FormChangesHtml
 
         $htmlBase = array('html' => '', 'changes' => 0);
         $htmlBase['html'] = '<table class="form-changes">';
-        $htmlBase['html'] .= '<thead><tr><th>Veldnaam</th><th>Oude waarde</th><th>Nieuwe waarde</th></tr></thead>' . "\n";
+        $htmlBase['html'] .= '<thead><tr><th>'.t('Fieldname').'</th><th>'.t('Old value').'</th><th>'.t('New value').'</th></tr></thead>' . "\n";
 
         $htmlBase['html'] .= '<tbody>';
         foreach ($widgetsNewForm as $w) {

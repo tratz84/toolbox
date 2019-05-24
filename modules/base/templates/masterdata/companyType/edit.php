@@ -6,9 +6,9 @@
 	</div>
 
     <?php if ($isNew) : ?>
-    <h1>Bedrijfsoort toevoegen</h1>
+    <h1><?= t('Add Company type')?></h1>
     <?php else : ?>
-    <h1>Bedrijfsoort bewerken</h1>
+    <h1><?= t('Edit Company type') ?></h1>
     <?php endif; ?>
 </div>
 

@@ -18,8 +18,8 @@ class CompanyTypeForm extends BaseForm {
         
         $this->addWidget( new HiddenField('company_type_id', '', 'Id') );
         
-        $this->addWidget( new TextField('type_name', '', 'Bedrijfsnaam') );
-        $this->addWidget( new CheckboxField('default_selected', '', 'Standaard geselecteerd'));
+        $this->addWidget( new TextField('type_name', '', t('Companyname')) );
+        $this->addWidget( new CheckboxField('default_selected', '', t('Default selected')));
         
         $this->addValidator('type_name', new NotEmptyValidator());
     }

@@ -5,7 +5,7 @@
 		<a href="<?= appUrl('/?m=base&c=masterdata/companyType&a=edit') ?>" class="fa fa-plus"></a>
 	</div>
 	
-    <h1>Bedrijfsoorten</h1>
+    <h1><?= t('Company Types')?></h1>
 </div>
 
 
@@ -51,13 +51,13 @@ t.setConnectorUrl( '/?m=base&c=masterdata/companyType&a=search' );
 // });
 t.addColumn({
 	fieldName: 'type_name',
-	fieldDescription: 'Omschrijving',
+	fieldDescription: '<?= t('Description') ?>',
 	fieldType: 'text',
 	searchable: true
 });
 t.addColumn({
 	fieldName: 'default_selected',
-	fieldDescription: 'Standaard gekozen',
+	fieldDescription: '<?= t('Default selected') ?>',
 	fieldType: 'boolean',
 	searchable: false
 });
