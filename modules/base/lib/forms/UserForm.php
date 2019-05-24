@@ -31,21 +31,21 @@ class UserForm extends BaseForm {
         
         $this->addWidget( new HiddenField('user_id', '', 'Id') );
         
-        $this->addWidget( new TextField('username', '', 'Gebruikersnaam') );
+        $this->addWidget( new TextField('username', '', t('Username')) );
         
-        $this->addWidget( new PasswordField('password', '', 'Wachtwoord') );
+        $this->addWidget( new PasswordField('password', '', t('Password')) );
         
-        $this->addWidget( new SelectField('user_type', '', array('admin' => 'Administrator', 'user' => 'Gebruiker'), 'Gebruikerstype') );
+        $this->addWidget( new SelectField('user_type', '', array('admin' => 'Administrator', 'user' => t('User')), t('Usertype')) );
         
         $this->addUserCapabilities();
         
-        $this->addWidget( new EmailField('email', '', 'E-mail') );
-        $this->addWidget( new TextField('firstname', '', 'Voornaam') );
-        $this->addWidget( new TextField('lastname', '', 'Achternaam') );
+        $this->addWidget( new EmailField('email', '', t('Email')) );
+        $this->addWidget( new TextField('firstname', '', t('Firstname')) );
+        $this->addWidget( new TextField('lastname', '', t('Lastname')) );
         
         
-        $this->addWidget( new HtmlDatetimeField('edited', '', 'Laatst bewerkt', array('hide-when-invalid' => true)) );
-        $this->addWidget( new HtmlDatetimeField('created', '', 'Aangemaakt op', array('hide-when-invalid' => true)) );
+        $this->addWidget( new HtmlDatetimeField('edited', '', t('Last modified'), array('hide-when-invalid' => true)) );
+        $this->addWidget( new HtmlDatetimeField('created', '', t('Created on'), array('hide-when-invalid' => true)) );
         
         $this->addWidget( new ListUserIpLineWidget('ips') );
         $this->getWidget('ips')->setInfoText('Indien hier ip-adressen staan ingevuld, mag de gebruiker alleen vanaf deze adressen zich aanmelden.');
@@ -61,7 +61,7 @@ class UserForm extends BaseForm {
             $userService = ObjectContainer::getInstance()->get(UserService::class);
             $user = $userService->readByUsername($username);
             if ($user != null && $user->getUserId() != $userId) {
-                return 'Gebruikersnaam reeds in gebruik';
+                return t('Username in use');
             }
             
             return null;

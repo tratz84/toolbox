@@ -7,9 +7,9 @@
 	</div>
 
     <?php if ($isNew) : ?>
-    <h1>Gebruiker toevoegen</h1>
+    <h1><?= t('Add user') ?></h1>
     <?php else : ?>
-    <h1>Gebruiker bewerken</h1>
+    <h1><?= t('Edit user') ?></h1>
     <?php endif; ?>
 </div>
 

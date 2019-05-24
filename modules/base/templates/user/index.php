@@ -5,7 +5,7 @@
 		<a href="<?= appUrl('/?m=base&c=user&a=edit') ?>" class="fa fa-plus"></a>
 	</div>
 	
-    <h1>Overzicht gebruikers</h1>
+    <h1><?= t('Overview users') ?></h1>
 </div>
 
 
@@ -34,13 +34,13 @@ t.setConnectorUrl( '/?m=base&c=user&a=search' );
 // });
 t.addColumn({
 	fieldName: 'username',
-	fieldDescription: 'Gebruikersnaam',
+	fieldDescription: '<?= t('Username') ?>',
 	fieldType: 'text',
 	searchable: true
 });
 t.addColumn({
 	fieldName: 'email',
-	fieldDescription: 'E-mailadres',
+	fieldDescription: '<?= t('Email address') ?>',
 	fieldType: 'text',
 	searchable: true
 });

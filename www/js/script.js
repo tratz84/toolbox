@@ -20,10 +20,10 @@ $(document).ready(function() {
 	focusFirstField( $('.main-content form') );
 	
 	var toolbox = $('.page-header .toolbox');
-	toolbox.find('.fa.fa-chevron-circle-left').attr('title', 'Terug');
+	toolbox.find('.fa.fa-chevron-circle-left').attr('title', _('Back'));
 	toolbox.find('.fa.fa-send').attr('title', 'Verstuur per mail');
 	toolbox.find('.fa.fa-print').attr('title', 'Afdrukken');
-	toolbox.find('.fa.fa-save').attr('title', 'Opslaan');
+	toolbox.find('.fa.fa-save').attr('title', _('Save'));
 	toolbox.find('.fa.fa-cog').attr('title', 'Instellingen');
 	
 	$(document).ajaxSend(function(evt, xhr, opts) {
