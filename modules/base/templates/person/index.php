@@ -4,7 +4,7 @@
 		<a href="<?= appUrl('/?m=base&c=person&a=edit') ?>" class="fa fa-plus"></a>
 	</div>
 	
-    <h1>Overzicht personen</h1>
+    <h1><?= t('Overview persons') ?></h1>
 </div>
 
 
@@ -35,7 +35,7 @@ t.addColumn({
 
 t.addColumn({
 	fieldName: 'lastname',
-	fieldDescription: 'Naam',
+	fieldDescription: '<?= t('Name') ?>',
 	fieldType: 'text',
 	render: function(record) {console.log(record);
 		var t = '';
@@ -52,7 +52,7 @@ t.addColumn({
 
 t.addColumn({
 	fieldName: 'firstname',
-	fieldDescription: 'Voornaam',
+	fieldDescription: '<?= t('Firstname') ?>',
 	fieldType: 'text',
 	searchable: true
 });

@@ -15,19 +15,19 @@
 	
     	<table>
     		<tr>
-    			<th>Gebruikersnaam</th>
+    			<th><?= t('Username') ?></th>
     			<td><input type="text" name="username" value="<?= esc_attr($username) ?>" autofocus /></td>
     		</tr>
     		
     		<tr>
-    			<th>Wachtwoord</th>
+    			<th><?= t('Password') ?></th>
     			<td><input type="password" name="p" value="<?= esc_attr($password) ?>" /></td>
     		</tr>
     		<tr>
     			<th></th>
     			<td>
     				<label>
-    					Onthoud mij
+    					<?= t('Remember me') ?>
     					<?= render_checkbox('rememberme', ['checked' => $remembermeChecked]) ?>
 					</label>
     			</td>
@@ -39,7 +39,7 @@
     		<?php endif; ?>
     		<tr>
     			<td colspan="2" align=right>
-    				<input type="submit" value="Aanmelden" />
+    				<input type="submit" value="<?= t('Logon') ?>" />
     			</td>
     		</tr>
     	</table>

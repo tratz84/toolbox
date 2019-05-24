@@ -76,7 +76,7 @@ class authController extends BaseController {
             }
             
             // failed? => set error
-            $this->error = 'Onjuiste gebruikersnaam of wachtwoord opgegeven';
+            $this->error = t('Invalid username or password');
             
             $this->username = get_var('username');
         }

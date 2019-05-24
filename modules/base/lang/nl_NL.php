@@ -3,6 +3,45 @@
 
 $lang = array();
 
+
+// auth
+$lang['Remember me']            = 'Onthoud mij';
+$lang['Logon']                  = 'Aanmelden';
+$lang['Invalid username or password'] = 'Onjuiste gebruikersnaam of wachtwoord opgegeven';
+
+// company
+$lang['Companyname']            = 'Bedrijfsnaam';
+$lang['Contact person']         = 'Contactpersoon';
+$lang['Coc number']             = 'Kvk nummer';
+$lang['VAT number']             = 'BTW nummer';
+
+
+// person
+$lang['Overzicht personen']     = 'Overzicht personen';
+$lang['Name']                   = 'Naam';
+$lang['Firstname']              = 'Voornaam';
+$lang['Middle name']            = 'Tussenvoegsel';
+$lang['Lastname']               = 'Achternaam';
+$lang['Note']                   = 'Notitie';
+$lang['Street']                 = 'Straat';
+$lang['Housenr']                = 'Huisnr';
+$lang['Housenumber']            = 'Huisnummer';
+$lang['Addresses']              = 'Adressen';
+$lang['Zipcode']                = 'Postcode';
+$lang['Hometown']               = 'Woonplaats';
+$lang['City']                   = 'Plaats';
+$lang['Country']                = 'Land';
+$lang['Emailaddresses']         = 'E-mailadressen';
+$lang['Email']                  = 'E-mail';
+$lang['Primary']                = 'Primary';
+$lang['Description']            = 'Omschrijving';
+$lang['Phonenumbers']           = 'Telefoonnummers';
+$lang['Phonenumber']            = 'Telefoonnummer';
+$lang['Add person']             = 'Persoon toevoegen';
+$lang['Personal data']          = 'Persoonsgegevens';
+$lang['This person is deleted'] = 'Deze persoon is verwijderd';
+
+// user
 $lang['Overview users']  = 'Overzicht gebruikers';
 $lang['Username']        = 'Gebruikersnaam';
 $lang['Email address']   = 'E-mailadres';

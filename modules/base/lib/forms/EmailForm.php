@@ -17,9 +17,9 @@ class EmailForm extends BaseForm {
     public function __construct() {
         parent::__construct();
         
-        $this->addWidget(new EmailField('email_address', '', 'E-mail'));
-        $this->addWidget(new TextField('note', '', 'Notitie'));
-        $this->addWidget(new CheckboxField('primary_address', '', 'Primary'));
+        $this->addWidget(new EmailField('email_address', '', t('Email')));
+        $this->addWidget(new TextField('note', '', t('Note')));
+        $this->addWidget(new CheckboxField('primary_address', '', t('Primary')));
         
         $this->addValidator('email_address', new EmailValidator());
     }

@@ -6,7 +6,7 @@
 	</div>
 
     <?php if ($isNew) : ?>
-    <h1>Persoon toevoegen</h1>
+    <h1><?= $t('Add person') ?></h1>
     <?php else : ?>
     <h1><?= esc_html(format_personname($person)) ?></h1>
     <?php endif; ?>
@@ -16,7 +16,7 @@
 
 <?php
     $tabContainer = generate_tabs('base', 'person-edit-footer', $form);
-    $tabContainer->addTab('Persoonsgegevens', $form->render(), 0);
+    $tabContainer->addTab(t('Personal data'), $form->render(), 0);
     print $tabContainer->render();
 ?>
 

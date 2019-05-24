@@ -29,16 +29,16 @@ class CompanyForm extends BaseForm {
         
 //         $this->addCompanyTypes();
         
-        $this->addWidget( new TextField('company_name', '', 'Bedrijfsnaam') );
-        $this->addWidget( new TextField('contact_person', '', 'Contactpersoon') );
-        $this->addWidget( new TextField('coc_number', '', 'Kvk nummer') );
-        $this->addWidget( new TextField('vat_number', '', 'Btw nummer') );
+        $this->addWidget( new TextField('company_name', '', t('Companyname')) );
+        $this->addWidget( new TextField('contact_person', '', t('Contact person')) );
+        $this->addWidget( new TextField('coc_number', '', t('Coc number')) );
+        $this->addWidget( new TextField('vat_number', '', t('VAT number')) );
         $this->addWidget( new TextField('iban', '', 'IBAN') );
         $this->addWidget( new TextField('bic', '', 'BIC') );
         
         
-        $this->addWidget( new HtmlDatetimeField('edited', '', 'Laatst bewerkt', array('hide-when-invalid' => true) ));
-        $this->addWidget( new HtmlDatetimeField('created', '', 'Aangemaakt op', array('hide-when-invalid' => true) ));
+        $this->addWidget( new HtmlDatetimeField('edited', '', t('Last modified'), array('hide-when-invalid' => true) ));
+        $this->addWidget( new HtmlDatetimeField('created', '', t('Created on'), array('hide-when-invalid' => true) ));
         
         $this->addWidget( new TextareaField('note', '', 'Notitie') );
         

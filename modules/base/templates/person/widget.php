@@ -53,7 +53,7 @@
 	
 	<?php if ($person->getDeleted()) : ?>
 	<div class="object-deleted">
-		Deze persoon is verwijderd
+		<?= t('This person is deleted') ?>
 	</div>
 	<?php endif; ?>
 	

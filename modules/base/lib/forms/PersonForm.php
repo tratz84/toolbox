@@ -24,9 +24,9 @@ class PersonForm extends BaseForm {
         
         $this->addWidget( new HiddenField('person_id', '', 'Id') );
         
-        $this->addWidget( new TextField('firstname', '', 'Voornaam') );
-        $this->addWidget( new TextField('insert_lastname', '', 'Tussenvoegsel') );
-        $this->addWidget( new TextField('lastname', '', 'Achternaam') );
+        $this->addWidget( new TextField('firstname', '', t('Firstname')) );
+        $this->addWidget( new TextField('insert_lastname', '', t('Middle name')) );
+        $this->addWidget( new TextField('lastname', '', t('Lastname')) );
         $this->addWidget( new TextField('iban', '', 'IBAN') );
         $this->addWidget( new TextField('bic', '', 'BIC') );
         
@@ -34,13 +34,13 @@ class PersonForm extends BaseForm {
         $this->addWidget( new HtmlDatetimeField('edited', '', 'Laatst bewerkt', array('hide-when-invalid' => true) ));
         $this->addWidget( new HtmlDatetimeField('created', '', 'Aangemaakt op', array('hide-when-invalid' => true) ));
         
-        $this->addWidget( new TextareaField('note', '', 'Notitie') );
+        $this->addWidget( new TextareaField('note', '', t('Note')) );
         
         
         $addressList = new ListFormWidget('\\base\\forms\\AddressForm', 'addressList');
         $addressList->setSortable(true);
-        $addressList->setLabel('Adressen');
-        $addressList->setFieldLabels(array('Straat', 'Huisnr', 'Postcode', 'Woonplaats'));
+        $addressList->setLabel(t('Addresses'));
+        $addressList->setFieldLabels(array(t('Street'), t('Housenr'), t('Zipcode'), t('Hometown')));
         $addressList->setFields(array('street', 'street_no', 'zipcode', 'city'));
         $addressList->setPublicFields(array('person_address_id', 'address_id', 'note', 'country_id'));
         $this->addWidget($addressList);
@@ -48,8 +48,8 @@ class PersonForm extends BaseForm {
         
         $emailList = new ListFormWidget('\\base\\forms\\EmailForm', 'emailList');
         $emailList->setSortable(true);
-        $emailList->setLabel('E-mailadressen');
-        $emailList->setFieldLabels(array('E-mail', 'Omschrijving'));
+        $emailList->setLabel(t('Emailaddresses'));
+        $emailList->setFieldLabels(array(t('Email'), t('Description')));
         $emailList->setFields(array('email_address', 'note'));
         $emailList->setPublicFields(array('email_id', 'person_email_id'));
         $this->addWidget($emailList);
@@ -57,8 +57,8 @@ class PersonForm extends BaseForm {
 
         $phoneList = new ListFormWidget('\\base\\forms\\PhoneForm', 'phoneList');
         $phoneList->setSortable(true);
-        $phoneList->setLabel('Telefoonnummers');
-        $phoneList->setFieldLabels(array('Telefoonnummer', 'Notitie'));
+        $phoneList->setLabel(t('Phonenumbers'));
+        $phoneList->setFieldLabels(array(t('Phonenumber'), t('Note')));
         $phoneList->setFields(array('phonenr', 'note'));
         $phoneList->setPublicFields(array('phone_id', 'person_phone_id'));
         $this->addWidget($phoneList);
