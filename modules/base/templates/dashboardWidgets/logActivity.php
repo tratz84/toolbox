@@ -1,16 +1,16 @@
 
 
 <div class="widget-title">
-	Recente logboek activiteiten
+	<?= t('Recent log activity') ?>
 </div>
 
 <table class="list-widget" style="width: 100%;">
 	<thead>
 		<tr>
-			<th>Gebruiker</th>
-			<th>Klant</th>
-			<th>Omschrijving</th>
-			<th>Uitgevoerd op</th>
+			<th><?= t('User') ?></th>
+			<th><?= t('Customer') ?></th>
+			<th><?= t('Description') ?></th>
+			<th><?= t('Run on') ?></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -28,7 +28,7 @@
     	<tr>
     		<td colspan="4" class="no-records">
             	<?php if (count($activities)==0) : ?>
-                Geen logboek-activiteiten geregistreerd
+                <?= t('No log-activities registered') ?>
                 <?php endif; ?>
     		</td>
     	</tr>

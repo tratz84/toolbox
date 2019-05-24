@@ -4,6 +4,18 @@
 $lang = array();
 
 
+// cronList
+$lang['Scheduled tasks']        = 'Ingeplande taken';
+$lang['Title']                  = 'Titel';
+$lang['Status']                 = 'Status';
+$lang['Run on']                 = 'Uitgevoerd op';
+$lang['Started']                = 'Gestart';
+
+$lang['Recent log activity']    = 'Recente logboek activiteiten';
+$lang['Customer']               = 'Klant';
+$lang['No log-activities registered'] = 'Geen logboek-activiteiten geregistreerd';
+
+
 // auth
 $lang['Remember me']            = 'Onthoud mij';
 $lang['Logon']                  = 'Aanmelden';
@@ -55,5 +67,9 @@ $lang['Lastname']        = 'Achternaam';
 $lang['Username in use'] = 'Gebruikersnaam reeds in gebruik';
 $lang['User']            = 'Gebruiker';
 
+
+// settings
+$lang['Prefix numbers']  = 'Voorvoegsel nummers';
+$lang['Prefix for offers, invoices and more for department recognition'] = 'Tekst dat voor offerte-, factuur of contractnummers wordt gezet, ter herkenning van de vestiging waarvoor deze gemaakt is.';
 
 return $lang;

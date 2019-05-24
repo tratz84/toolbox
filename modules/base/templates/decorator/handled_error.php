@@ -1,16 +1,16 @@
 
 
 <div class="page-header">
-	<h1>Fout opgetreden</h1>
+	<h1>Error occured</h1>
 </div>
 
 <br/>
 
-Er is een fout opgetreden: <?= esc_html($errorMessage) ?>
+An error occured: <?= esc_html($errorMessage) ?>
 
 <br/>
 <br/>
 
 <span style="font-style: italic; font-size: 10px;">
-	Is deze fout onverwacht? Neem dan <a href="https://www.itxplain.nl/contact" target="_blank">contact</a> op
+	Is this error unexpected? Please <a href="https://www.itxplain.nl/contact" target="_blank">contact</a> us
 </span>

@@ -5,7 +5,7 @@
 			class="fa fa-cog"></a>
 	</div>
 
-	<h1>Dashboard</h1>
+	<h1><?= t('Dashboard') ?></h1>
 </div>
 
 

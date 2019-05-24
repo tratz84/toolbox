@@ -3,7 +3,7 @@
 	<div class="toolbox">
 		<a href="<?= appUrl('/?m=base&c=masterdata/index') ?>" class="fa fa-chevron-circle-left"></a>
 	</div>
-	<h1>Ingeplande taken</h1>
+	<h1><?= t('Scheduled tasks')?></h1>
 </div>
 
 
@@ -11,10 +11,10 @@
 	<thead>
 		<tr>
 <!-- 			<th>Naam</th> -->
-			<th>Titel</th>
-			<th>Status</th>
-			<th>Uitgevoerd op</th>
-			<th>Gestart</th>
+			<th><?= t('Title') ?></th>
+			<th><?= t('Status') ?></th>
+			<th><?= t('Run on') ?></th>
+			<th><?= t('Started') ?></th>
 		</tr>
 	</thead>
 	<tbody>

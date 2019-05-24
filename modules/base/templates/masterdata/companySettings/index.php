@@ -13,39 +13,39 @@
 <div class="form-generator">
     <form method="post" action="" enctype="multipart/form-data">
     	<div class="widget text-field-widget">
-        	<label>Bedrijfsnaam</label>
+        	<label><?= t('Companyname') ?></label>
         	<input type="text" name="companyName" value="<?= @esc_attr($settings['companyName']) ?>" />
         </div>
     	<div class="widget text-field-widget">
-        	<label>Straat</label>
+        	<label><?= t('Street') ?></label>
         	<input type="text" name="companyStreet" value="<?= @esc_attr($settings['companyStreet']) ?>" />
         </div>
         <div class="widget text-field-widget">
-        	<label>Postcode</label>
+        	<label><?= t('Zipcode') ?></label>
         	<input type="text" name="companyZipcode" value="<?= @esc_attr($settings['companyZipcode']) ?>" />
         </div>
         <div class="widget text-field-widget">
-        	<label>Plaats</label>
+        	<label><?= t('City') ?></label>
         	<input type="text" name="companyCity" value="<?= @esc_attr($settings['companyCity']) ?>" />
         </div>
         
         <div class="widget text-field-widget">
-        	<label>Telefoonnr</label>
+        	<label><?= t('Phonenumber') ?></label>
         	<input type="text" name="companyPhone" value="<?= @esc_attr($settings['companyPhone']) ?>" />
         </div>
         
         <div class="widget text-field-widget">
-        	<label>E-mail</label>
+        	<label><?= t('Email') ?></label>
         	<input type="text" name="companyEmail" value="<?= @esc_attr($settings['companyEmail']) ?>" />
         </div>
         
         <div class="widget text-field-widget">
-        	<label>Kamer van koophandel nr</label>
+        	<label><?= t('Coc number') ?></label>
         	<input type="text" name="companyCocNumber" value="<?= @esc_attr($settings['companyCocNumber']) ?>" />
         </div>
         
         <div class="widget text-field-widget">
-        	<label>Btw nummer</label>
+        	<label><?= t('VAT number') ?></label>
         	<input type="text" name="companyVat" value="<?= @esc_attr($settings['companyVat']) ?>" />
         </div>
     
@@ -55,7 +55,7 @@
         </div>
     
     	<div class="widget text-field-widget">
-        	<label>Voorvoegsel nummers <?= infopopup('Tekst dat voor offerte-, factuur of contractnummers wordt gezet, ter herkenning van de vestiging waarvoor deze gemaakt is.') ?></label>
+        	<label><?= t('Prefix numbers') ?> <?= infopopup(t('Prefix for offers, invoices and more for department recognition')) ?></label>
         	<input type="text" name="prefixNumbers" value="<?= @esc_attr($settings['prefixNumbers']) ?>" />
         </div>
         
