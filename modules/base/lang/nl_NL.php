@@ -10,6 +10,8 @@ $lang['Fieldname']              = 'Veldnaam';
 $lang['Old value']              = 'Oude waarde';
 $lang['New value']              = 'Nieuwe waarde';
 
+$lang['Company']                = 'Bedrijf';
+$lang['Private']                = 'Particulier';
 
 // cronList
 $lang['Scheduled tasks']        = 'Ingeplande taken';
@@ -57,6 +59,7 @@ $lang['Primary']                = 'Primary';
 $lang['Description']            = 'Omschrijving';
 $lang['Phonenumbers']           = 'Telefoonnummers';
 $lang['Phonenumber']            = 'Telefoonnummer';
+$lang['Phonenr']                = 'Telnr';
 $lang['Add person']             = 'Persoon toevoegen';
 $lang['Personal data']          = 'Persoonsgegevens';
 $lang['This person is deleted'] = 'Deze persoon is verwijderd';

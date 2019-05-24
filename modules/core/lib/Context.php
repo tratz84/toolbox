@@ -16,6 +16,7 @@ class Context
     
     protected $contextName = null;                      // peopleweb__customer.contextName
     protected $user = null;
+    protected $selectedLang = 'nl_NL';
     
     protected $module = 'base';
     protected $controller = 'dashboard';
@@ -65,6 +66,8 @@ class Context
     public function getUser() { return $this->user; }
     
     
+    public function getSelectedLang() { return $this->selectedLang; }
+    public function setSelectedLang($p) { $this->selectedLang = $p; }
 
     public function isModuleEnabled($name) {
         return in_array($name, $this->enabledModules);

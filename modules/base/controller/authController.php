@@ -53,7 +53,11 @@ class authController extends BaseController {
                     $user = $userService->readUser($user->getUserId());
                     
                     if (count($user->getIps()) > 0 && $user->containsIp(remote_addr()) == false) {
-                        ActivityUtil::logActivityUser($user->getUserId(), $user->getUsername(), 'auth-failure', 'Aanmelding vanaf niet toegestaan IP-adres', 'Succesvolle aanmelding, gebruiker: ' .$user->getUsername(). ', ip-adres: ' . remote_addr());
+                        ActivityUtil::logActivityUser(
+                            $user->getUserId(), $user->getUsername(), 
+                            'auth-failure', 
+                            'Aanmelding vanaf niet toegestaan IP-adres', 'Succesvolle aanmelding, gebruiker: ' .$user->getUsername(). ', ip-adres: ' . remote_addr()
+                        );
                         
                         show_error('Het is niet toegestaan vanaf het huidige ip-adres aan te melden. Adres: '.remote_addr());
                     }

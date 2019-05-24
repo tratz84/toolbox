@@ -44,7 +44,7 @@ class customerReportController extends BaseReportController {
         
         $sheet = $spreadsheet->setActiveSheetIndex(0);
         
-        $this->xlsHeader($sheet, array('Type', 'Id', 'Naam', 'Kvk nr', 'Btw nr', 'IBAN', 'BIC', 'Straat 1', 'Huisnr 1', 'Postcode 1', 'Plaats 1', 'E-mail', 'Telnr', 'Laatst bewerkt', 'Aangemaakt op'));
+        $this->xlsHeader($sheet, array('Type', 'Id', t('Name'), t('Coc number'), t('VAT number'), 'IBAN', 'BIC', t('Street').' 1', t('Housenr').' 1', t('Zipcode').' 1', t('City').' 1', t('Email'), t('Phonenr'), t('Last modified'), t('Created on')));
         
         $objs = $listResponse->getObjects();
         
@@ -52,12 +52,12 @@ class customerReportController extends BaseReportController {
             $c = $objs[$rowno];
             
             if ($c['person_id']) {
-                $this->xlsCol($sheet, $rowno+2, 1, 'Particulier');
+                $this->xlsCol($sheet, $rowno+2, 1, t('Private'));
                 $this->xlsCol($sheet, $rowno+2, 2, $c['person_id']);
                 $this->xlsCol($sheet, $rowno+2, 3, format_personname($c));
             }
             if ($c['company_id']) {
-                $this->xlsCol($sheet, $rowno+2, 1, 'Bedrijf');
+                $this->xlsCol($sheet, $rowno+2, 1, t('Company'));
                 $this->xlsCol($sheet, $rowno+2, 2, $c['company_id']);
                 $this->xlsCol($sheet, $rowno+2, 3, $c['company_name']);
             }

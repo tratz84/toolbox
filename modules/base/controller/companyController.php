@@ -20,7 +20,7 @@ class companyController extends BaseController {
 
     public function init() {
         if (Context::getInstance()->isCompaniesEnabled() == false)
-            throw new InvalidStateException('Bedrijven-module niet geactiveerd');
+            throw new InvalidStateException('Company-module not activated');
     }
     
     public function action_index() {

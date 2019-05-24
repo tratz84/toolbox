@@ -27,7 +27,7 @@ class companyReportController extends BaseReportController {
         
         $sheet = $spreadsheet->setActiveSheetIndex(0);//->setCellValue('A1', 'Hello')
         
-        $this->xlsHeader($sheet, array('Id', 'Bedrijfsnaam', 'Kvknr', 'Btw nr', 'Iban', 'Bic', 'Notitie', 'Laatst bewerkt', 'Aangemaakt op'));
+        $this->xlsHeader($sheet, array('Id', t('Companyname'), t('Coc number'), t('VAT number'), 'Iban', 'Bic', t('Note'), t('Last modified'), t('Created on')));
         
         for($rowno=0; $rowno < count($this->companies); $rowno++) {
             $c = $this->companies[$rowno];

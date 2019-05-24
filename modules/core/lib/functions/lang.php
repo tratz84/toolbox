@@ -9,10 +9,13 @@ use core\Context;
 function t_loadlang() {
     $lang = array();
     
+    $selectedLang = Context::getInstance()->getSelectedLang();
+    
     $modules = Context::getInstance()->getEnabledModules();
     foreach($modules as $m) {
-        $p = module_path( $m ) . "/lang/nl_NL.php";
-        if (file_exists($p)) {
+        $langPath = realpath( module_path( $m ) . "/lang/" );
+        $p = realpath( module_path( $m ) . "/lang/".$selectedLang.".php" );
+        if ($p && strpos($p, $langPath) === 0) {
             $lang_module = load_php_file($p);
             if (is_array($lang_module)) {
                 $lang = array_merge($lang, $lang_module);

@@ -20,7 +20,7 @@ class personController extends BaseController {
 
     public function init() {
         if (Context::getInstance()->isPersonsEnabled() == false)
-            throw new InvalidStateException('Personen-module niet geactiveerd');
+            throw new InvalidStateException('Person-module not activated');
     }
 
     public function action_index() {
