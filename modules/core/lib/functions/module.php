@@ -98,7 +98,7 @@ function module_less_defaults() {
     
     foreach($modules as $moduleName => $path) {
         if (file_exists($path . '/public/css/default.less')) {
-            $l[] = '/module/'.$moduleName.'/css/default.less';
+            $l[] = 'module/'.$moduleName.'/css/default.less';
         }
     }
     
