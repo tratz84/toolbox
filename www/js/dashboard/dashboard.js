@@ -141,6 +141,7 @@ function Dashboard( containerId, config ) {
 			
 		}
 
+		c.find('.widget-item-content').addClass('widget-item-content-' + opts.widgetCode);
 		c.find('.widget-item-content').html( html );
 		
 		
