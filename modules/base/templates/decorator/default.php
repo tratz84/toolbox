@@ -91,10 +91,11 @@ $menuItems = $ms->listMainMenu();
                 <span class="current-user"><?= $context->getUser() ?></span>
                 <a href="<?= appUrl('/?m=base&c=auth&a=logoff') ?>" class="fa fa-sign-out" title="Afmelden"></a>
             </div>
-            <div class="administration-name"><a href="<?= appUrl('/') ?>" title="Dashboard">
+            <div class="administration-name">
 	            <a href="javascript:void(0);" class="nav-side-menu-toggle fa fa-caret-left" onclick="navSideMenu_toggle();"></a>
             
             	<div class="administration-name"><a href="<?= appUrl('/') ?>" title="Dashboard"><?= esc_html($context->getCompanyName()) ?></a></div>
+            </div>
         </div>
     </header>
 	<div class="nav-side-menu">

@@ -10,6 +10,8 @@ class DefaultTemplate
 
     var $mSubTpls = array();
     
+    protected $html = null;
+    
     protected $footerHtml = '';
 
     function __construct($templatePath)
@@ -40,28 +42,40 @@ class DefaultTemplate
     {
         return $this->mVars[$aName];
     }
+    
+    public function getTemplateFile() { return $this->mTpl; }
+    
+    public function getHtml() { return $this->html; }
+    public function setHtml($h) { $this->html = $h; }
 
-    function showTemplate()
+    function showTemplate($opts=array())
     {
         foreach ($this->mVars as $k => $v) {
             $$k = $v;
         }
 
+        ob_start();
         include $this->mTpl;
+        
+        if ($this->footerHtml) {
+            print $this->footerHtml;
+        }
+        $buf = ob_get_clean();
+        
+        $this->setHtml( $buf );
+        
+        hook_eventbus_publish($this, 'core', 'template-showTemplate');
+        
+        if (isset($opts['return']) && $opts['return']) {
+            return $this->getHtml();
+        } else {
+            print $this->getHtml();
+        }
     }
 
     function getTemplate()
     {
-        foreach ($this->mVars as $k => &$v) {
-            $$k = $v;
-        }
-
-        ob_start();
-        include $this->mTpl;
-        $buf = ob_get_clean();
-        
-        $buf .= $this->footerHtml;
-
-        return $buf;
+        return $this->showTemplate(['return' => true]);
     }
 }
+
