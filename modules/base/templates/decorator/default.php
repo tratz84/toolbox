@@ -65,7 +65,7 @@ $menuItems = $ms->listMainMenu();
 		<script>less = { env: 'development'};</script>
 		<style type="text/less">
 		<?php foreach(module_less_defaults() as $lessfile) : ?>
-			@import "<?= $lessfile ?>";
+			@import "<?= BASE_HREF . $lessfile ?>";
 		<?php endforeach; ?>
 		</style>
 		<script src="<?= BASE_HREF ?>lib/less/dist/less.js"></script>
