@@ -648,6 +648,7 @@ function showInfo(obj, html) {
 
 function show_popup(url, opts) {
 	opts = opts || {};
+	console.log(opts);
 	
 	$.ajax({
 		type: 'POST',

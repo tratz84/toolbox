@@ -20,7 +20,7 @@
 		</tr>
 	<?php else : ?>
 		<?php foreach($items as $i) : ?>
-		<tr class="not-clickable">
+		<tr class="clickable" onclick="<?= esc_attr("show_popup(appUrl('/?m=calendar&c=view&a=edit'), { data: { calendar_item_id: ".$i->getId() . ", readonly: true }})") ?>">
 			<td><?= esc_html($i->getDescription()) ?></td>
 			<td>
 				
