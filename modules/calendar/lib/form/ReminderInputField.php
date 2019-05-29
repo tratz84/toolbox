@@ -134,6 +134,15 @@ class ReminderInputField extends BaseWidget {
         return $r;
     }
     
+    public function renderAsText() {
+        $html = $this->render();
+        
+        $html = str_replace('<select ', '<select disabled=disabled ', $html);
+        $html = str_replace('<input ', '<input readonly=readonly ', $html);
+        
+        return $html;
+    }
+    
     
     public function render() {
         

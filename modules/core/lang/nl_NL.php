@@ -71,6 +71,10 @@ $lang['Save']          = 'Opslaan';
 $lang['Last modified'] = 'Laatst bewerkt';
 $lang['Created on']    = 'Aangemaakt op';
 
+$lang['Yes']           = 'Ja';
+$lang['No']            = 'Nee';
+
+
 return $lang;
 
 
