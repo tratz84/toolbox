@@ -53,7 +53,7 @@ class CheckboxField extends BaseWidget {
     public function renderAsText() {
         $html = '';
         
-        $html .= '<div class="widget html-field-widget widget-'.slugify($this->getLabel()).'">';
+        $html .= '<div class="widget checkbox-field-widget widget-'.slugify($this->getLabel()).'">';
         $html .= '<label>'.esc_html($this->getLabel()) . infopopup($this->getInfoText()) . '</label>';
         $html .= '<span>'.($this->getValue()?t('Yes'):t('No')).'</span>';
         $html .= '</div>';

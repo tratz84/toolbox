@@ -27,6 +27,17 @@ class TextareaField extends BaseWidget {
         
         return $html;
     }
+ 
+    public function renderAsText() {
+        $html = '';
+        
+        $html .= '<div class="widget textarea-field-widget widget-'.slugify($this->getLabel()).'">';
+        $html .= '<label>'.esc_html($this->getLabel()) . infopopup($this->getInfoText()) . '</label>';
+        $html .= '<div>'.nl2br(esc_html($this->getValue())).'</div>';
+        $html .= '</div>';
+        
+        return $html;
+    }
     
     
 }
