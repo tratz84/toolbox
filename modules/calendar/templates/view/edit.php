@@ -14,7 +14,16 @@
     		<?php endif; ?>
     	</div>
     	
-    	<h1>Agendapunt <?= $isNew ? 'toevoegen' : 'bewerken'?></h1>
+    	<h1>
+    		Agendapunt
+    		<?php if ($readonly) : ?>
+    			bekijken
+    		<?php elseif ($isNew) : ?>
+    			toevoegen
+    		<?php else : ?>
+    			bewerken
+    		<?php endif; ?>
+    	</h1>
     </div>
     
     
