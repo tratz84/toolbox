@@ -89,7 +89,11 @@
 
     		var s = $('<div class="slider"></div>');
     		s.css('position', 'absolute');
-    		s.css('background-color', '#f00');
+    		
+    		var bg = $('header .notifications-bar').css('background-color');
+    		if (!bg) bg = '#f00';
+    		
+    		s.css('background-color', bg);
     		s.css('cursor', 'ns-resize');
     		s.height(5);
     		s.css('width', '100%');
