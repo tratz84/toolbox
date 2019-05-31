@@ -15,13 +15,12 @@
     	</div>
     	
     	<h1>
-    		Agendapunt
     		<?php if ($readonly) : ?>
-    			bekijken
+    			<?= t('View calendaritem') ?>
     		<?php elseif ($isNew) : ?>
-    			toevoegen
+    			<?= t('Add calendaritem') ?>
     		<?php else : ?>
-    			bewerken
+    			<?= t('Edit calendaritem') ?>
     		<?php endif; ?>
     	</h1>
     </div>
