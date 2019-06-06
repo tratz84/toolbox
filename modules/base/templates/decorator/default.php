@@ -119,7 +119,10 @@ $menuItems = $ms->listMainMenu();
     			 }
     			?>
 				<li> 
-					<a class="nav-link <?= $active ? 'active' : '' ?>" href="<?= appUrl($mi->getUrl()) ?>"><i class="fa <?= $mi->getIcon() ?>"></i> <?= esc_html($mi->getLabel()) ?></a>
+					<a class="nav-link <?= $active ? 'active' : '' ?>" href="<?= appUrl($mi->getUrl()) ?>">
+						<i class="fa <?= $mi->getIcon() ?>"></i> 
+						<span class="menu-label"><?= esc_html($mi->getLabel()) ?></span>
+					</a>
 				</li>
     		<?php endforeach; ?>
 			</ul>
