@@ -123,8 +123,14 @@ class MysqlQueryBuilder extends QueryBuilder {
                 $str = '';
                 
                 if ($w->leftIsValue()) {
-                    $this->params[] = $w->getLeft();
-                    $str .= ' ? ';
+                    $v = $w->getLeft();
+                    
+                    if ($v === null || is_bool($v)) {
+                        $str .= $this->sqlVal($v);
+                    } else {
+                        $this->params[] = $v;
+                        $str .= ' ? ';
+                    }
                 } else {
                     $str .= $this->sqlVal( $w->getLeft() );
                 }
@@ -132,8 +138,13 @@ class MysqlQueryBuilder extends QueryBuilder {
                 $str .= ' ' . $w->getComparisonMethod() . ' ';
                 
                 if ($w->rightIsValue()) {
-                    $this->params[] = $w->getRight();
-                    $str .= ' ? ';
+                    $v = $w->getRight();
+                    if ($v === null || is_bool($v)) {
+                        $str .= $this->sqlVal($v);
+                    } else {
+                        $this->params[] = $v;
+                        $str .= ' ? ';
+                    }
                 } else {
                     $str .= $this->sqlVal( $w->getRight() );
                 }
@@ -143,6 +154,7 @@ class MysqlQueryBuilder extends QueryBuilder {
         }
         
         $r = 'WHERE (' . implode(') ' . $c->getJoinMethod() . ' (', $sql) . ')' . PHP_EOL;
+        
         return $r;
     }
     

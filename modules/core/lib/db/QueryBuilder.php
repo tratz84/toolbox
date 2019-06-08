@@ -7,7 +7,7 @@ abstract class QueryBuilder {
     
     protected $resourceName;
     
-    protected $selectFields;
+    protected $selectFields = array();
     protected $fieldValues = array();
     protected $table;
     protected $leftJoin = array();
@@ -35,6 +35,8 @@ abstract class QueryBuilder {
     
     public function setFieldValue($fieldName, $value) {
         $this->fieldValues[$fieldName] = $value;
+        
+        return $this;
     }
     
     public abstract function createSelect();
@@ -66,6 +68,7 @@ abstract class QueryBuilder {
                 $this->selectField($fieldName, $tableName);
             }
         }
+        return $this;
     }
     public function getSelectFields() { return $this->selectFields; }
     public function selectField($fieldName, $tableName=null) {
@@ -73,17 +76,27 @@ abstract class QueryBuilder {
             'field' => $fieldName,
             'tableName' => $tableName
         );
+        return $this;
     }
     public function clearSelectFields() { $this->selectFields = array(); }
     
     
-    public function setTable($table) { $this->table = $table; }
+    public function setTable($table) {
+        $this->table = $table;
+        return $this;
+    }
     public function getTable() { return $this->table; }
     
-    public function setStart($s) { $this->start = (int)$s; }
+    public function setStart($s) {
+        $this->start = (int)$s;
+        return $this;
+    }
     public function getStart() { return $this->start; }
     
-    public function setLimit($l) { $this->limit = $l; }
+    public function setLimit($l) {
+        $this->limit = $l;
+        return $this;
+    }
     public function getLimit() { return $this->limit; }
     
     
@@ -99,6 +112,8 @@ abstract class QueryBuilder {
             'parentTable' => $parentTable,
             'fieldParentTable' => $fieldParentTable
         );
+        
+        return $this;
     }
     
     public function leftJoin($table, $fieldJoinTable, $parentTable=null, $fieldParentTable=null) {
@@ -113,6 +128,8 @@ abstract class QueryBuilder {
             'parentTable' => $parentTable,
             'fieldParentTable' => $fieldParentTable
         );
+        
+        return $this;
     }
     
     public function rightJoin($table, $fieldJoinTable, $parentTable=null, $fieldParentTable=null) {
@@ -127,15 +144,22 @@ abstract class QueryBuilder {
             'parentTable' => $parentTable,
             'fieldParentTable' => $fieldParentTable
         );
+        
+        return $this;
     }
     
     
     public function addWhere(QueryBuilderWhere $qbw) {
         $this->whereContainer->addWhere( $qbw );
+        
+        return $this;
     }
     
     
-    public function setOrderBy($o) { $this->orderBy = $o; }
+    public function setOrderBy($o) {
+        $this->orderBy = $o;
+        return $this;
+    }
     public function getOrderBy() { return $this->orderBy; }
     
     
