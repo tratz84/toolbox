@@ -56,16 +56,47 @@ class MysqlQueryBuilder extends QueryBuilder {
         $sql = 'UPDATE `'.$this->table.'`' . PHP_EOL;
         
         $fields = array();
-        foreach($this->updateFields as $fieldName => $val) {
-            $f = '`'.$fieldName.'` = ?';
-            
-            $fields[] = $f;
-            $this->params[] = $val;
+        foreach($this->fieldValues as $fieldName => $val) {
+
+            if ($val === null) {
+                $fields[] = '`'.$fieldName.'` = NULL';
+            } else if (is_bool($val)) {
+                $fields[] = '`'.$fieldName.'` = ' . ($val?'true':'false');
+            } else {
+                $fields[] = '`'.$fieldName.'` = ?';
+                $this->params[] = $val;
+            }
         }
         
         $sql .= 'SET ' . implode(', ', $fields) . PHP_EOL;
         
         $sql .= $this->buildWhere($this->whereContainer);
+        
+        return $sql;
+    }
+    
+    public function createInsert() {
+        $this->params = array();
+        $marks = array();
+        $fields = array();
+        
+        foreach($this->fieldValues as $fieldName => $val) {
+            $fields[] = '`'.$fieldName.'`';
+            
+            if ($val === null) {
+                $marks[] = 'NULL';
+            } else if (is_bool($val)) {
+                $marks[] = $val ? 'true' : 'false';
+            } else {
+                $this->params[] = $val;
+                $marks[] = '?';
+            }
+        }
+        
+        $sql = 'INSERT INTO `'.$this->table.'`' . PHP_EOL;
+        $sql .= '(' . implode(', ', $fields) . ') ';
+        $sql .= ' VALUES ';
+        $sql .= '(' . implode(', ', $marks) . ')';
         
         return $sql;
     }
@@ -123,6 +154,9 @@ class MysqlQueryBuilder extends QueryBuilder {
                 return 'true';
             }
         }
+        if ($v === null) {
+            return 'NULL';
+        }
         
         return $v;
     }
@@ -145,6 +179,12 @@ class MysqlQueryBuilder extends QueryBuilder {
     
     public function queryDelete() {
         $sql = $this->createDelete();
+        
+        return query($this->resourceName, $sql, $this->params);
+    }
+    
+    public function queryInsert() {
+        $sql = $this->createInsert();
         
         return query($this->resourceName, $sql, $this->params);
     }

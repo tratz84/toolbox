@@ -40,7 +40,7 @@ class CompanyDAO extends \core\db\DAOObject {
 	public function delete($id) {
 	    $qb = $this->createQueryBuilder();
 	    $qb->setTable('customer__company');
-	    $qb->setUpdateField('deleted', true);
+	    $qb->setFieldValue('deleted', true);
 	    $qb->addWhere(QueryBuilderWhere::whereRefByVal('company_id', '=', $id));
 	    
 	    return $qb->queryUpdate();
@@ -51,7 +51,7 @@ class CompanyDAO extends \core\db\DAOObject {
 	public function setCompanyTypeToNULL($companyTypeId) {
 	    $qb = $this->createQueryBuilder();
 	    $qb->setTable('customer__company');
-	    $qb->setUpdateField('company_type_id', null);
+	    $qb->setFieldValue('company_type_id', null);
 	    $qb->addWhere(QueryBuilderWhere::whereRefByVal('company_type_id', '=', $companyTypeId));
 	    
 	    $qb->queryUpdate();

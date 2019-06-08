@@ -37,6 +37,12 @@ class DBObject {
     
     public function trackChanges() { $this->changes = array(); }
     
+    public function createQueryBuilder() {
+        $qb = DatabaseHandler::createQueryBuilder($this->resourceName);
+        $qb->setTable($this->getTableName());
+        
+        return $qb;
+    }
     
     public function isNew() {
         $pk = $this->getField( $this->primaryKey );
@@ -146,7 +152,14 @@ class DBObject {
         if (!$pk)
             return false;
         
-        return $this->readBy('select * from '.$this->tableName.' where '.$this->primaryKey . ' = ?', array($pk));
+        $qb = $this->createQueryBuilder();
+        $qb->selectFields('*');
+        $qb->addWhere(QueryBuilderWhere::whereRefByVal($this->primaryKey, '=', $pk));
+        
+        $sql = $qb->createSelect();
+        $params = $qb->getParams();
+        
+        return $this->readBy($sql, $params);
     }
 
     function readBy($query, $params=array()) {
@@ -182,9 +195,7 @@ class DBObject {
     }
     
     public function insert() {
-        $insertFields = array();
-        $insertMarks = array();
-        $params = array();
+        $qb = $this->createQueryBuilder();
         
         foreach($this->dbFields as $f => $fieldSettings) {
             // don't insert PK
@@ -192,20 +203,13 @@ class DBObject {
                 continue;
             
             $value = $this->getField($f);
-            $insertFields[] = '`'.$f.'`';
             
-            if ($value === null) {
-                $insertMarks[] = 'NULL';
-            } else {
-                $insertMarks[] = '?';
-                $params[] = $value;
-            }
+            $qb->setFieldValue($f, $value);
         }
         
-        $sql = "insert into ".$this->tableName." (".implode(', ', $insertFields).") VALUES (".implode(', ', $insertMarks).")";
+        $res = $qb->queryInsert();
         
-        $this->lastQuery = $sql;
-        query($this->resourceName, $sql, $params);
+        $this->lastQuery = DatabaseHandler::getInstance()->getLastQuery();
         
         $res = DatabaseHandler::getInstance()->getResource($this->resourceName);
         $insert_id = $res->insert_id;
@@ -221,8 +225,7 @@ class DBObject {
     }
     
     public function update() {
-        $updateFields = array();
-        $params = array();
+        $qb = $this->createQueryBuilder();
         
         foreach($this->dbFields as $f => $fieldSettings) {
             // don't update PK
@@ -230,19 +233,14 @@ class DBObject {
                 continue;
             
             $value = $this->getField($f);
-            if ($value === null) {
-                $updateFields[] = '`'.$f.'`'.' = NULL ';
-            } else {
-                $updateFields[] = '`'.$f.'`'.' = ? ';
-                $params[] = $value;
-            }
+            
+            $qb->setFieldValue($f, $value);
         }
         
-        $sql = "update ".$this->tableName." SET ".implode(', ', $updateFields)." WHERE ".$this->primaryKey." = ?";
-        $params[] = $this->getField($this->primaryKey);
+        $qb->addWhere(QueryBuilderWhere::whereRefByVal($this->primaryKey, '=', $this->getField($this->primaryKey)));
         
-        $this->lastQuery = $sql;
-        $result = query($this->resourceName, $sql, $params);
+        $result = $qb->queryUpdate();
+        $this->lastQuery = DatabaseHandler::getInstance()->getLastQuery();
         
         if ($result) {
             return true;
@@ -261,10 +259,11 @@ class DBObject {
         if (!$pk)
             return false;
         
-        $sql = "delete from ".$this->tableName." where ".$this->primaryKey . " = ?";
+        $qb = $this->createQueryBuilder();
+        $qb->addWhere(QueryBuilderWhere::whereRefByVal($this->primaryKey, '=', $pk));
+        $qb->queryDelete();
         
-        $this->lastQuery = $sql;
-        $r = query($this->resourceName, $sql, array($pk));
+        $this->lastQuery = DatabaseHandler::getInstance()->getLastQuery();
         
         // TODO: check affected rows
         

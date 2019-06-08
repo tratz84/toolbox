@@ -8,7 +8,7 @@ abstract class QueryBuilder {
     protected $resourceName;
     
     protected $selectFields;
-    protected $updateFields = array();
+    protected $fieldValues = array();
     protected $table;
     protected $leftJoin = array();
     protected $rightJoin = array();
@@ -33,8 +33,8 @@ abstract class QueryBuilder {
         
     }
     
-    public function setUpdateField($fieldName, $value) {
-        $this->updateFields[$fieldName] = $value;
+    public function setFieldValue($fieldName, $value) {
+        $this->fieldValues[$fieldName] = $value;
     }
     
     public abstract function createSelect();
