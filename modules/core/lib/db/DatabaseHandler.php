@@ -90,6 +90,15 @@ class DatabaseHandler {
 		return $dh->__getResource($aHandlerName);
 	}
 	
+	public static function createQueryBuilder($resourceName) {
+		$dh = DatabaseHandler::getInstance();
+		if ($dh->mSettings[$resourceName]['type'] == 'mysql') {
+			return new MysqlQueryBuilder( $resourceName );
+		}
+		
+		return null;
+	}
+	
 	function __getResource($aHandlerName) {
 		if (array_key_exists($aHandlerName,$this->mDbhResources) === false && array_key_exists($aHandlerName, $this->mSettings) == false)
 		    throw new \core\exception\DatabaseException('Invalid database resource requested ('.$aHandlerName.')');
@@ -117,6 +126,7 @@ class DatabaseHandler {
 	function addServer($aInternalName, $aHost, $aUsername, $aPassword, $aDatabasename) {
 		
 		$this->mSettings[$aInternalName] = array();
+		$this->mSettings[$aInternalName]['type']     = 'mysql';
 		$this->mSettings[$aInternalName]['host']     = $aHost;
 		$this->mSettings[$aInternalName]['username'] = $aUsername;
 		$this->mSettings[$aInternalName]['password'] = $aPassword;

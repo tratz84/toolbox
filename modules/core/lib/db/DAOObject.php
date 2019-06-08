@@ -9,8 +9,13 @@ class DAOObject
     protected $objectName;
 
     public function setResource($name) { $this->resourceName = $name; }
+    
+    public function getObjectName() { return $this->objectName; }
     public function setObjectName($name) { $this->objectName = $name; }
 
+    protected function createQueryBuilder() {
+        return DatabaseHandler::createQueryBuilder($this->resourceName);
+    }
     
     protected function query($query, $params=array()) {
         return query($this->resourceName, $query, $params);
