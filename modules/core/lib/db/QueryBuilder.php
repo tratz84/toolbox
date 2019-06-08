@@ -58,12 +58,12 @@ abstract class QueryBuilder {
                 $tableName = null;
                 
                 if (strpos($b, '.') !== false) {
-                    list($fieldName, $tableName) = explode('.', $b, 2);
+                    list($tableName, $fieldName) = explode('.', $b, 2);
                 } else {
                     $fieldName = $b;
                 }
                 
-                $this->addField($fieldName, $tableName);
+                $this->selectField($fieldName, $tableName);
             }
         }
     }
@@ -90,18 +90,22 @@ abstract class QueryBuilder {
     public function join($table, $fieldJoinTable, $parentTable=null, $fieldParentTable=null) {
         if ($fieldParentTable == null)
             $fieldParentTable = $fieldJoinTable;
-            
-            $this->join[] = array(
-                'table' => $table,
-                'fieldJoinTable' => $fieldJoinTable,
-                'parentTable' => $parentTable,
-                'fieldParentTable' => $fieldParentTable
-            );
+        if ($parentTable == null)
+            $parentTable = $this->table;
+        
+        $this->join[] = array(
+            'table' => $table,
+            'fieldJoinTable' => $fieldJoinTable,
+            'parentTable' => $parentTable,
+            'fieldParentTable' => $fieldParentTable
+        );
     }
     
     public function leftJoin($table, $fieldJoinTable, $parentTable=null, $fieldParentTable=null) {
         if ($fieldParentTable == null)
             $fieldParentTable = $fieldJoinTable;
+        if ($parentTable == null)
+            $parentTable = $this->table;
         
         $this->leftJoin[] = array(
             'table' => $table,
@@ -114,13 +118,15 @@ abstract class QueryBuilder {
     public function rightJoin($table, $fieldJoinTable, $parentTable=null, $fieldParentTable=null) {
         if ($fieldParentTable == null)
             $fieldParentTable = $fieldJoinTable;
-            
-            $this->rightJoin[] = array(
-                'table' => $table,
-                'fieldJoinTable' => $fieldJoinTable,
-                'parentTable' => $parentTable,
-                'fieldParentTable' => $fieldParentTable
-            );
+        if ($parentTable == null)
+            $parentTable = $this->table;
+        
+        $this->rightJoin[] = array(
+            'table' => $table,
+            'fieldJoinTable' => $fieldJoinTable,
+            'parentTable' => $parentTable,
+            'fieldParentTable' => $fieldParentTable
+        );
     }
     
     

@@ -32,10 +32,7 @@ class CompanyDAO extends \core\db\DAOObject {
 	    
 	    $qb->setOrderBy('company_name');
 	    
-	    $sql = $qb->createSelect();
-	    $params = $qb->getParams();
-	    
-	    return $this->queryCursor($sql, $params);
+	    return $qb->queryCursor($this);
 	}
 
 	
@@ -52,7 +49,12 @@ class CompanyDAO extends \core\db\DAOObject {
 	
 	
 	public function setCompanyTypeToNULL($companyTypeId) {
-	    $this->query("update customer__company set company_type_id = NULL where company_type_id = ?", array($companyTypeId));
+	    $qb = $this->createQueryBuilder();
+	    $qb->setTable('customer__company');
+	    $qb->setUpdateField('company_type_id', null);
+	    $qb->addWhere(QueryBuilderWhere::whereRefByVal('company_type_id', '=', $companyTypeId));
+	    
+	    $qb->queryUpdate();
 	}
 	
 }

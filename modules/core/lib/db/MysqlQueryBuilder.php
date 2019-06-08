@@ -6,6 +6,8 @@ class MysqlQueryBuilder extends QueryBuilder {
     
     protected $params = array();
     
+    public function getParams() { return $this->params; }
+    
     
     public function createSelect() {
         $sql = '';
@@ -41,6 +43,11 @@ class MysqlQueryBuilder extends QueryBuilder {
             $sql .= 'ORDER BY '.$this->orderBy . PHP_EOL;
         }
         
+        if (!$this->start && $this->limit > 0) {
+            $sql .= 'LIMIT ' . intval($this->limit) . PHP_EOL;
+        } else if ($this->start && $this->limit > 0) {
+            $sql .= 'LIMIT ' . intval($this->start) . ', ' . intval($this->limit) . PHP_EOL;
+        }
         
         return $sql;
     }
@@ -63,11 +70,23 @@ class MysqlQueryBuilder extends QueryBuilder {
         return $sql;
     }
     
-    protected function buildWhere(QueryBuilderWhereContainer $c) {
+    public function createDelete() {
+        $sql = 'DELETE FROM `'.$this->table.'`' . PHP_EOL;
         
+        $sql .= $this->buildWhere($this->whereContainer);
+        
+        return $sql;
+    }
+    
+    protected function buildWhere(QueryBuilderWhereContainer $c) {
         $sql = array();
         
         $where = $c->getWhere();
+        
+        // no where-clauses?
+        if (count($where) == 0)
+            return '';
+        
         foreach($where as $w) {
             if (is_a($w, QueryBuilderWhere::class)) {
                 $str = '';
@@ -109,7 +128,26 @@ class MysqlQueryBuilder extends QueryBuilder {
     }
     
     
-    public function getParams() { return $this->params; }
+    public function queryCursor(DAOObject $dao) {
+        $sql = $this->createSelect();
+        $params = $this->getParams();
+        
+        return $dao->queryCursor($sql, $params);
+    }
+    
+    public function queryList(DAOObject $dao) {
+        $sql = $this->createSelect();
+        $params = $this->getParams();
+        
+        return $dao->queryList($sql, $params);
+    }
+    
+    
+    public function queryDelete() {
+        $sql = $this->createDelete();
+        
+        return query($this->resourceName, $sql, $this->params);
+    }
     
     public function queryUpdate() {
         $sql = $this->createUpdate();

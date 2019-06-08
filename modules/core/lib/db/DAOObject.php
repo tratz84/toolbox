@@ -22,7 +22,7 @@ class DAOObject
     }
     
     
-    protected function queryList($query, $params = array()) {
+    public function queryList($query, $params = array()) {
         $list = array();
         
         $rows = queryList($this->resourceName, $query, $params);

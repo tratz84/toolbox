@@ -4,6 +4,8 @@
 namespace base\model;
 
 
+use core\db\QueryBuilderWhere;
+
 class ActivityDAO extends \core\db\DAOObject {
 
 	public function __construct() {
@@ -69,23 +71,26 @@ class ActivityDAO extends \core\db\DAOObject {
 	}
 	
 	public function readLatest() {
-	    $sql = "select a.*, c.company_name, p.firstname, p.insert_lastname, p.lastname
-                from base__activity a
-                left join customer__company c using (company_id)
-                left join customer__person p using (person_id)
-                order by activity_id desc limit 100";
+	    $qb = $this->createQueryBuilder();
+	    $qb->selectFields('base__activity.*', 'customer__company.company_name', 'customer__person.firstname', 'customer__person.insert_lastname', 'customer__person.lastname');
+	    $qb->setTable('base__activity');
+	    $qb->leftJoin('customer__company', 'company_id');
+	    $qb->leftJoin('customer__person', 'person_id');
+	    $qb->setOrderBy('activity_id desc');
+	    $qb->setLimit(100);
 	    
-	    return $this->queryList($sql);
+	    return $qb->queryList($this);
 	}
 	
 	public function read($id) {
-	    $sql = "select a.*, c.company_name, p.firstname, p.insert_lastname, p.lastname
-                from base__activity a
-                left join customer__company c using (company_id)
-                left join customer__person p using (person_id)
-                where a.activity_id = ?";
+	    $qb = $this->createQueryBuilder();
+	    $qb->selectFields('base__activity.*', 'customer__company.company_name', 'customer__person.firstname', 'customer__person.insert_lastname', 'customer__person.lastname');
+	    $qb->setTable('base__activity');
+	    $qb->leftJoin('customer__company', 'company_id');
+	    $qb->leftJoin('customer__person', 'person_id');
+	    $qb->addWhere(QueryBuilderWhere::whereRefByVal('base__activity.activity_id', '=', $id));
 	    
-	    $l = $this->queryList($sql, array($id));
+	    $l = $qb->queryList($this);
 	    
 	    if (count($l)) {
 	        return $l[0];
