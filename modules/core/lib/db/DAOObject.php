@@ -2,6 +2,8 @@
 
 namespace core\db;
 
+use core\db\query\QueryBuilder;
+
 class DAOObject
 {
 
@@ -13,6 +15,9 @@ class DAOObject
     public function getObjectName() { return $this->objectName; }
     public function setObjectName($name) { $this->objectName = $name; }
 
+    /**
+     * @return QueryBuilder
+     */
     protected function createQueryBuilder() {
         return DatabaseHandler::getConnection($this->resourceName)->createQueryBuilder();
     }
