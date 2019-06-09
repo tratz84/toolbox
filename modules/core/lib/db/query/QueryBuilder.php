@@ -63,6 +63,14 @@ abstract class QueryBuilder {
             foreach($a as $b) {
                 $fieldName = null;
                 $tableName = null;
+                $label = null;
+                
+                if (strpos($b, ' ') !== false) {
+                    list($left, $right) = preg_split('/\\s+/', $b, 2);
+                    
+                    $b = $left;
+                    $label = $right;
+                }
                 
                 if (strpos($b, '.') !== false) {
                     list($tableName, $fieldName) = explode('.', $b, 2);
@@ -70,16 +78,17 @@ abstract class QueryBuilder {
                     $fieldName = $b;
                 }
                 
-                $this->selectField($fieldName, $tableName);
+                $this->selectField($fieldName, $tableName, $label);
             }
         }
         return $this;
     }
     public function getSelectFields() { return $this->selectFields; }
-    public function selectField($fieldName, $tableName=null) {
+    public function selectField($fieldName, $tableName=null, $label=null) {
         $this->selectFields[$fieldName] = array(
-            'field' => $fieldName,
-            'tableName' => $tableName
+            'field'     => $fieldName,
+            'tableName' => $tableName,
+            'label'     => $label
         );
         return $this;
     }

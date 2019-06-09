@@ -4,7 +4,7 @@
 namespace project\model;
 
 
-use core\db\DatabaseHandler;
+use core\db\query\QueryBuilderWhere;
 
 class ProjectHourDAO extends \core\db\DAOObject {
 
@@ -35,21 +35,25 @@ class ProjectHourDAO extends \core\db\DAOObject {
 	
 	
 	public function search($opts) {
-	    $sql = "select ph.*, c.company_name, person.firstname, person.insert_lastname, person.lastname, p.project_name, pht.description type_description, phs.description status_description, u.username,  ifnull(duration*60, TIMESTAMPDIFF(minute, start_time, end_time)) total_minutes
-                from project__project_hour ph
-                left join project__project p using (project_id)
-                left join project__project_hour_type pht using (project_hour_type_id)
-                left join project__project_hour_status phs using (project_hour_status_id)
-                left join customer__company c using (company_id)
-                left join customer__person person using (person_id)
-                left join base__user u using (user_id) ";
+	    $qb = $this->createQueryBuilder();
 	    
-	    $where = array();
-	    $params = array();
+	    $qb->selectFields('project__project_hour.*', 'customer__company.company_name');
+	    $qb->selectFields('customer__person.firstname', 'customer__person.insert_lastname', 'customer__person.lastname');
+	    $qb->selectFields('project__project.project_name', 'project__project_hour_type.description type_description', 'project__project_hour_status.description status_description');
+	    $qb->selectFields('base__user.username');
+	    $qb->selectFunction("ifnull(duration*60, TIMESTAMPDIFF(minute, start_time, end_time)) total_minutes");
+	    
+	    $qb->setTable('project__project_hour');
+	    $qb->leftJoin('project__project',             'project_id');
+	    $qb->leftJoin('project__project_hour_type',   'project_hour_type_id');
+	    $qb->leftJoin('project__project_hour_status', 'project_hour_status_id');
+	    $qb->leftJoin('customer__company',            'company_id', 'project__project');
+	    $qb->leftJoin('customer__person',             'person_id', 'project__project');
+	    $qb->leftJoin('base__user',                   'user_id');
+	    
 	    
 	    if (isset($opts['project_id']) && $opts['project_id']) {
-	        $where[] = ' ph.project_id = ? ';
-	        $params[] = $opts['project_id'];
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('project__project_hour.project_id', '=', $opts['project_id']));
 	    }
 	    
 	    if (isset($opts['customer_id'])) {
@@ -63,37 +67,30 @@ class ProjectHourDAO extends \core\db\DAOObject {
 	    
 	    
 	    if (isset($opts['company_id']) && $opts['company_id']) {
-	        $where[] = ' p.company_id = ? ';
-	        $params[] = $opts['company_id'];
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('project__project.company_id', '=', $opts['company_id']));
 	    }
 	    
 	    if (isset($opts['person_id']) && $opts['person_id']) {
-	        $where[] = ' p.person_id = ? ';
-	        $params[] = $opts['person_id'];
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('project__project.person_id', '=', $opts['person_id']));
 	    }
 	    
 	    if (isset($opts['project_hour_status_id']) && $opts['project_hour_status_id']) {
-	        $where[] = 'phs.project_hour_status_id = ?';
-	        $params[] = $opts['project_hour_status_id'];
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('project__project_hour_status.project_hour_status_id', '=', $opts['project_hour_status_id']));
 	    }
 	    
 	    if (isset($opts['start']) && $opts['start']) {
-	        $where[] = 'ph.start_time >= ?';
-	        $params[] = format_date($opts['start'], 'Y-m-d 00:00:00');
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('project__project_hour.start_time', '>=', format_date($opts['start'], 'Y-m-d 00:00:00')));
 	    }
 	    if (isset($opts['end']) && $opts['end']) {
-	        $where[] = 'ph.end_time <= ?';
-	        $params[] = format_date($opts['end'], 'Y-m-d 23:59:59');
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('project__project_hour.end_time', '<=', format_date($opts['end'], 'Y-m-d 23:59:59')));
 	    }
 	    
 	    
-	    if (count($where)) {
-	        $sql .= ' where ('.implode(') AND (', $where) . ') ';
-	    }
+	    $qb->setOrderBy('project__project_hour.start_time desc');
 		
-		$sql .= " order by ph.start_time desc ";
+// 	    print $qb->createSelect();exit;
 	    
-	    return $this->queryCursor($sql, $params);
+	    return $qb->queryCursor(ProjectHour::class);
 	}
 	
 	

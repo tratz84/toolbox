@@ -15,9 +15,6 @@ class ActivityDAO extends \core\db\DAOObject {
 	}
 	
 	public function search($opts = array()) {
-	    $where = array();
-	    $params = array();
-	    
 	    $qb = $this->createQueryBuilder();
 	    
 	    $qb->selectFields('base__activity.*', 'customer__company.company_name', 'customer__person.firstname', 'customer__person.insert_lastname', 'customer__person.lastname');
@@ -83,13 +80,9 @@ class ActivityDAO extends \core\db\DAOObject {
 	    $qb->leftJoin('customer__person', 'person_id');
 	    $qb->addWhere(QueryBuilderWhere::whereRefByVal('base__activity.activity_id', '=', $id));
 	    
-	    $l = $qb->queryList(Activity::class);
+	    $a = $qb->queryOne(Activity::class);
 	    
-	    if (count($l)) {
-	        return $l[0];
-	    } else {
-	        return null;
-	    }
+	    return $a;
 	}
 	
 }
