@@ -6,7 +6,7 @@
 	</div>
 
     <?php if ($isNew) : ?>
-    <h1><?= $t('Add person') ?></h1>
+    <h1><?= t('Add person') ?></h1>
     <?php else : ?>
     <h1><?= esc_html(format_personname($person)) ?></h1>
     <?php endif; ?>
