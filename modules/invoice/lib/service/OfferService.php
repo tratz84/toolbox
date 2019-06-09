@@ -2,15 +2,11 @@
 
 namespace invoice\service;
 
-use base\service\CompanyService;
+use base\forms\FormChangesHtml;
 use base\service\CustomerService;
 use base\service\MetaService;
-use base\service\PersonService;
 use base\util\ActivityUtil;
-use core\Context;
 use core\ObjectContainer;
-use core\exception\DatabaseException;
-use core\exception\InvalidStateException;
 use core\exception\ObjectNotFoundException;
 use core\forms\lists\ListResponse;
 use core\service\ServiceBase;
@@ -21,16 +17,9 @@ use invoice\model\Invoice;
 use invoice\model\InvoiceLine;
 use invoice\model\Offer;
 use invoice\model\OfferDAO;
-use invoice\model\OfferLine;
 use invoice\model\OfferLineDAO;
 use invoice\model\OfferStatus;
 use invoice\model\OfferStatusDAO;
-use rental\RentalSettings;
-use rental\forms\ContractWizard;
-use rental\forms\WizardOfferForm;
-use rental\model\RentalOffer;
-use rental\rental\DefaultInvoiceGenerator;
-use base\forms\FormChangesHtml;
 
 class OfferService extends ServiceBase {
     
@@ -241,156 +230,6 @@ class OfferService extends ServiceBase {
         
         // log activity
         ActivityUtil::logActivity($offer->getCompanyId(), $offer->getPersonId(), 'invoice__offer', $offer->getOfferId(), 'offer-deleted', 'Offerte verwijderd '.$offer->getOfferNumberText(), $fch->getHtml());
-    }
-    
-    
-    
-    public function createOfferByContractWizard(ContractWizard $cw) {
-        $ctx = Context::getInstance();
-        
-        // validate article start/end times
-        $errors = $cw->validateArticleSelection();
-        if (count($errors)) {
-            throw new InvalidStateException('Error: ' . implode(', ', $errors));
-        }
-        
-        $companyId = null;
-        $personId = null;
-        
-        // add company or person
-        if ($cw->hasCompany()) {
-            if ($cw->isExisting()) {
-                $companyId = $cw->getSelectedCompanyId();
-            } else {
-                $companyForm = $cw->getCompanyForm();
-                
-                $companyService = ObjectContainer::getInstance()->get(CompanyService::class);
-                $companyId = $companyService->save( $companyForm, false );
-            }
-        }
-        
-        if ($cw->hasPerson()) {
-            if ($cw->isExisting()) {
-                $personId = $cw->getSelectedPersonId();
-            } else {
-                $personForm = $cw->getPersonForm();
-                
-                $personService = ObjectContainer::getInstance()->get(PersonService::class);
-                $personId = $personService->save( $personForm, false );
-            }
-        }
-        
-        // create offer
-        $contracts = $cw->buildContracts();
-        
-        
-        // build offer subject text
-        $unitNames = array();
-        foreach($contracts as $c) {
-            $unitNames[] = $c->getField('article_name');
-        }
-        $offerSubject = 'Offerte voor ';
-        for($x=0; $x < count($unitNames); $x++) {
-            if ($x > 0 && $x+1 == count($unitNames))
-                $offerSubject .= ' & ';
-            else if ($x > 0)
-                $offerSubject .= ', ';
-            
-            $offerSubject .= $unitNames[$x];
-        }
-        
-        
-        // fetch offer_status_id
-        $offerStatus = $this->readDefaultOfferStatus();
-        
-        
-        $offer = new Offer();
-        if ($companyId)
-            $offer->setCompanyId($companyId);
-        if ($personId)
-            $offer->setPersonId($personId);
-        $offer->setOfferDate(date('Y-m-d'));
-        $offer->setSubject($offerSubject);
-        if ($offerStatus) {
-            $offer->setOfferStatusId($offerStatus->getOfferStatusId());
-        }
-        $offer->setComment($ctx->getSetting('offer_defaultNote'));
-        
-        
-        // create offer lines
-        $rentalSettings = object_container_get(RentalSettings::class);
-        if ($rentalSettings->getOfferAutoSummaryTextLines()) {
-            $offerForm = new WizardOfferForm($cw->getFormId());
-            $offerForm->bind($cw->getOfferFormData());
-            $offerForm->addSummaryLines($cw);
-            
-            $offerFormData = $offerForm->asArray();
-        } else {
-            $offerFormData = $cw->getOfferFormData();
-        }
-        
-        if (check_array($offerFormData, 'offerLines', 1)) {
-            $offerLines = array();
-            foreach($offerFormData['offerLines'] as $il) {
-                $ol = new OfferLine();
-                $ol->setFields($il);
-                $ol->setVat($il['vat'] ?? null);
-                $offerLines[] = $ol;
-            }
-        } else {
-            $dig = ObjectContainer::getInstance()->get( DefaultInvoiceGenerator::class );
-            $offerLines = $dig->generateOfferLines( $contracts, $companyId, $personId );
-        }
-        $offer->setOfferLines($offerLines);
-
-        $totalCalculatedAmount = 0;
-        $totalCalculatedAmountInclVat = 0;
-        for($x=0; $x < count($offerLines); $x++) {
-            if ($offerLines[$x]->getPrice()) {
-                $price = strtodouble( $offerLines[$x]->getPrice() );
-                $vatAmount = myround( $price * strtodouble($offerLines[$x]->getAmount()) * $offerLines[$x]->getVat() / 100, 2 );
-                
-                $totalCalculatedAmount += myround( $price * $offerLines[$x]->getAmount(), 2 );
-                $totalCalculatedAmountInclVat += myround( $price * $offerLines[$x]->getAmount(), 2 ) + $vatAmount;
-            }
-        }
-        
-        $offer->setTotalCalculatedPrice( myround($totalCalculatedAmount, 2) );
-        $offer->setTotalCalculatedPriceInclVat( $totalCalculatedAmountInclVat );
-        
-        
-        
-        $offer->setOfferLines($offerLines);
-        $offerForm = new OfferForm();
-        $offerForm->bind($offer);
-        $fch = FormChangesHtml::formNew($offerForm);
-
-        if (!$offer->save())
-            throw new DatabaseException('Unable to create contract');
-        
-            ActivityUtil::logActivity($offer->getCompanyId(), $offer->getPersonId(), 'invoice__offer', $offer->getOfferId(), 'offer-created', 'Offerte aangemaakt '.$offer->getOfferNumberText(), $fch->getHtml());
-        
-        
-        // save offer lines
-        for($x=0; $x < count($offerLines); $x++) {
-            $offerLines[$x]->setOfferId( $offer->getOfferId() );
-        }
-        $olDao = new OfferLineDAO();
-        $olDao->mergeFormListMTO1('offer_id', $offer->getOfferId(), $offerLines);
-        
-        
-        // save wizard state
-        $ro = new RentalOffer();
-        $ro->setOfferId( $offer->getOfferId() );
-        if ($companyId)
-            $ro->setCompanyId( $companyId );
-        if ($personId)
-            $ro->setPersonId( $personId );
-        $ro->setWizardState( $cw->getData() );
-        $ro->save();
-        
-        
-        return $offer->getOfferId();
     }
     
     
