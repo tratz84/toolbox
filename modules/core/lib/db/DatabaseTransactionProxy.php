@@ -21,15 +21,16 @@ class DatabaseTransactionProxy {
             throw new MethodNotFoundException('method not found: ' . get_class($this->obj) . '::' . $name);
         }
         
-        \core\db\DatabaseHandler::getInstance()->beginTransaction();
+        $con = \core\db\DatabaseHandler::getInstance()->getConnection('default');
+        $con->beginTransaction();
         
         try {
             $r = call_user_func_array(array($this->obj, $name), $arguments);
             
-            \core\db\DatabaseHandler::getInstance()->commitTransaction();
+            $con->commitTransaction();
         } catch (\Exception $ex) {
             try {
-                \core\db\DatabaseHandler::getInstance()->rollbackTransaction();
+                $con->rollbackTransaction();
             } catch (\Exception $ex2) { /* not caring about rollbackTransaction-exceptions at the moment */ }
             
             throw $ex;

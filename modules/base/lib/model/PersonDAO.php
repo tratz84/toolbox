@@ -4,6 +4,8 @@
 namespace base\model;
 
 
+use core\db\query\QueryBuilderWhere;
+
 class PersonDAO extends \core\db\DAOObject {
 
 	public function __construct() {
@@ -15,35 +17,28 @@ class PersonDAO extends \core\db\DAOObject {
 	
 	public function search($opts=array()) {
 	    
-	    $sql = "select * from customer__person ";
+	    $qb = $this->createQueryBuilder();
+	    $qb->setTable('customer__person')
+	       ->selectFields('*');
 	    
-	    $where = array();
-	    $params = array();
 	    
-	    $where[] = "customer__person.deleted = false";
+	    $qb->addWhere(QueryBuilderWhere::whereRefByVal('deleted', '=', false));
 	    
 	    if (isset($opts['customername']) && trim($opts['customername']) != '') {
-	        $where[] = " concat(firstname, ' ', insert_lastname, ' ', lastname) LIKE ? ";
-	        $params[] = '%'.$opts['customername'].'%';
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal("concat(firstname, ' ', insert_lastname, ' ', lastname)", 'LIKE', '%'.$opts['customername'].'%'));
 	    }
 	    
 	    if (isset($opts['firstname']) && trim($opts['firstname']) != '') {
-	        $where[] = " firstname LIKE ? ";
-	        $params[] = '%'.$opts['firstname'].'%';
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('firstname', 'LIKE', '%'.$opts['firstname'].'%'));
 	    }
 	    
 	    if (isset($opts['lastname']) && trim($opts['lastname']) != '') {
-	        $where[] = " lastname LIKE ? ";
-	        $params[] = '%'.$opts['lastname'].'%';
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('lastname', 'LIKE', '%'.$opts['lastname'].'%'));
 	    }
 	    
-	    if (count($where)) {
-	        $sql .= "where ( " . implode(") AND (", $where) . ") ";
-	    }
+	    $qb->setOrderBy('lastname');
 	    
-	    $sql .= 'order by lastname';
-	    
-	    return $this->queryCursor($sql, $params);
+	    return $qb->queryCursor(Person::class);
 	}
 
 	

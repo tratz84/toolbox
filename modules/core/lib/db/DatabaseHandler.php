@@ -3,6 +3,7 @@
 namespace core\db;
 
 
+use core\db\connection\MysqlConnection;
 use core\exception\DatabaseException;
 
 class DatabaseHandler {
@@ -26,62 +27,16 @@ class DatabaseHandler {
 	public function getLastQuery() { return $this->lastQuery; }
 	
 	public function beginTransaction($handle='default') {
-	    
-	    if (isset($this->transactionHandles[$handle]) == false)
-	        $this->transactionHandles[$handle] = 0;
-	    
-        $this->transactionHandles[$handle]++;
-        
-        if ($this->transactionHandles[$handle] > 1)
-	        return true;
-	    
-	    $res = $this->getResource($handle);
-	    $r = $res->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
-	    
-	    if (!$r) {
-	        // begin_transaction failed, throw an exception?
-	    }
-	    
-	    return $r;
+        return $this->__getConnection($handle)->beginTransaction();
 	}
 	
 	public function commitTransaction($handle='default') {
-	    $this->transactionHandles[$handle]--;
-	    
-	    if ($this->transactionHandles[$handle] < 0) {
-	        throw new DatabaseException('No transaction for "'.$handle.'"');
-	    }
-	    
-	    
-	    if ($this->transactionHandles[$handle] == 0) {
-    	    $res = $this->getResource($handle);
-    	    return $res->commit();
-	    } else {
-	        return true;
-	    }
+	    return $this->__getConnection($handle)->commitTransaction();
 	}
 	
 	public function rollbackTransaction($handle='default') {
-	    $this->transactionHandles[$handle]--;
-
-	    if ($this->transactionHandles[$handle] < 0) {
-	        throw new DatabaseException('No transaction for "'.$handle.'"');
-	    }
-	    
-	    if ($this->transactionHandles[$handle] == 0) {
-    	    $res = $this->getResource($handle);
-    	    
-    	    return $res->rollback();
-	    } else {
-	        return true;
-	    }
+	    return $this->__getConnection($handle)->rollbackTransaction();
 	}
-	
-// 	public function rollbackAll() {
-// 	    while (count($this->transactionHandles) > 0) {
-// 	        $this->rollbackTransaction($this->transactionHandles[0]);
-// 	    }
-// 	}
 	
 	
 	public static function getResource($aHandlerName) {
@@ -90,33 +45,45 @@ class DatabaseHandler {
 		return $dh->__getResource($aHandlerName);
 	}
 	
+	public static function getConnection($resourceName) {
+	    return self::getInstance()->__getConnection($resourceName);
+	}
+	
+	function __getConnection($aHandlerName) {
+	    if (array_key_exists($aHandlerName,$this->mDbhResources) === false && array_key_exists($aHandlerName, $this->mSettings) == false)
+	        throw new \core\exception\DatabaseException('Invalid database resource requested ('.$aHandlerName.')');
+	        
+        if (array_key_exists($aHandlerName, $this->mDbhResources) == false) {
+            
+            if ($this->mSettings[$aHandlerName]['type'] == 'mysql') {
+                $c = new MysqlConnection();
+                $c->setHost($this->mSettings[$aHandlerName]['host']);
+                $c->setUsername($this->mSettings[$aHandlerName]['username']);
+                $c->setPassword($this->mSettings[$aHandlerName]['password']);
+                $c->setDatabaseName($this->mSettings[$aHandlerName]['dbname']);
+                
+                if ($c->connect() == false) {
+                    throw new \core\exception\DatabaseException('Unable to connect to database ('.$aHandlerName.')');
+                }
+            }
+            
+            $this->mDbhResources[$aHandlerName] = $c;
+        }
+        
+        return $this->mDbhResources[$aHandlerName];
+	}
+	
+	// __getResource() - deprecated, TODO: remove..
 	function __getResource($aHandlerName) {
-		if (array_key_exists($aHandlerName,$this->mDbhResources) === false && array_key_exists($aHandlerName, $this->mSettings) == false)
-		    throw new \core\exception\DatabaseException('Invalid database resource requested ('.$aHandlerName.')');
+		$c = $this->__getConnection($aHandlerName);
 		
-		if (array_key_exists($aHandlerName, $this->mDbhResources) == false) {
-			$host     = $this->mSettings[$aHandlerName]['host'];
-			$username = $this->mSettings[$aHandlerName]['username'];
-			$password = $this->mSettings[$aHandlerName]['password'];
-			$dbname   = $this->mSettings[$aHandlerName]['dbname'];
-			
-			$res = new \mysqli($host, $username, $password, $dbname);
-		  
-			if ($res->connect_errno) {
-			    throw new \core\exception\DatabaseException('Unable to connect to database ('.$aHandlerName.')');
-			}
-			$res->query('SET NAMES utf8');
-			$res->query('SET SQL_MODE=\'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION\'');
-			
-			$this->mDbhResources[$aHandlerName] = $res;
-		}
-		
-		return $this->mDbhResources[$aHandlerName];
+		return $c->getResource();
 	}
 	
 	function addServer($aInternalName, $aHost, $aUsername, $aPassword, $aDatabasename) {
 		
 		$this->mSettings[$aInternalName] = array();
+		$this->mSettings[$aInternalName]['type']     = 'mysql';
 		$this->mSettings[$aInternalName]['host']     = $aHost;
 		$this->mSettings[$aInternalName]['username'] = $aUsername;
 		$this->mSettings[$aInternalName]['password'] = $aPassword;
@@ -126,15 +93,15 @@ class DatabaseHandler {
 	
 	public function closeAll($checkHandles=true) {
 	    // check any open transactions (shouldn't happen, would be a severe bug)
-	    if ($checkHandles) foreach($this->transactionHandles as $handle => $cnt) {
+	    if ($checkHandles) foreach($this->transactionHandles as $resourceName => $cnt) {
 	        if ($cnt > 0) {
-	            throw new DatabaseException('Open transaction for "'.$handle.'"');
+	            throw new DatabaseException('Open transaction for "'.$resourceName.'"');
 	        }
 	    }
 	    
 	    // close connections
-	    foreach($this->mDbhResources as $handle => $mysqli) {
-	        $mysqli->close();
+	    foreach($this->mDbhResources as $resourceName => $dbconnection) {
+	        $dbconnection->disconnect();
 	    }
 	    
 	    $this->mDbhResources = array();
