@@ -45,10 +45,6 @@ class DatabaseHandler {
 		return $dh->__getResource($aHandlerName);
 	}
 	
-	public static function createQueryBuilder($resourceName) {
-	    return self::getInstance()->__getConnection($resourceName)->createQueryBuilder();
-	}
-	
 	public static function getConnection($resourceName) {
 	    return self::getInstance()->__getConnection($resourceName);
 	}

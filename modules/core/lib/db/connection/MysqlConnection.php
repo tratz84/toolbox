@@ -3,6 +3,7 @@
 namespace core\db\connection;
 
 use core\db\DatabaseHandler;
+use core\db\query\MysqlCursor;
 use core\db\query\MysqlQueryBuilder;
 use core\exception\DatabaseException;
 use InvalidArgumentException;
@@ -109,6 +110,10 @@ class MysqlConnection extends DBConnection {
     }
     
     
+    public function getInsertId() {
+        return $this->mysqli->insert_id;
+    }
+    
     
     public function query($sql, $params=array()) {
         if (is_array($params) == false)
@@ -147,6 +152,17 @@ class MysqlConnection extends DBConnection {
         
         return $r;
     }
+
+    function queryOne($sql, $params=array()) {
+        $res = $this->query($sql, $params);
+        
+        while($row = $res->fetch_assoc()) {
+            $res->free();
+            return $row;
+        }
+        
+        return null;
+    }
     
     function queryList($sql, $params=array()) {
         $res = $this->query($sql, $params);
@@ -171,6 +187,14 @@ class MysqlConnection extends DBConnection {
         }
         
         return $rows;
+    }
+    
+    function queryCursor($objectName, $sql, $params = array()) {
+        $res = $this->query($sql, $params);
+        
+        $cursor = new MysqlCursor($objectName, $res);
+        
+        return $cursor;
     }
     
     

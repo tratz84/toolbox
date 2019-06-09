@@ -14,18 +14,21 @@ class DAOObject
     public function setObjectName($name) { $this->objectName = $name; }
 
     protected function createQueryBuilder() {
-        return DatabaseHandler::createQueryBuilder($this->resourceName);
+        return DatabaseHandler::getConnection($this->resourceName)->createQueryBuilder();
     }
     
     protected function query($query, $params=array()) {
-        return query($this->resourceName, $query, $params);
+        $con = DatabaseHandler::getConnection($this->resourceName);
+        
+        return $con->query($query, $params);
     }
     
     
     public function queryList($query, $params = array()) {
+        $con = DatabaseHandler::getConnection($this->resourceName);
         $list = array();
         
-        $rows = queryList($this->resourceName, $query, $params);
+        $rows = $con->queryList($query, $params);
         foreach($rows as $r) {
             $obj = new $this->objectName();
             $obj->setFields($r);
@@ -43,7 +46,9 @@ class DAOObject
      * @return unknown|NULL
      */
     protected function queryOne($query, $params = array()) {
-        $res = query($this->resourceName, $query, $params);
+        $con = DatabaseHandler::getConnection($this->resourceName);
+        $res = $con->query($query, $params);
+        
         $row = $res->fetch_assoc();
         if ($row) {
             $obj = new $this->objectName();
@@ -56,12 +61,14 @@ class DAOObject
     }
     
     protected function queryValue($query, $params=array()) {
-        $res = $this->query($query, $params);
+        $con = DatabaseHandler::getConnection($this->resourceName);
         
-        $r = $res->fetch_array();
+        $r = $con->queryOne($query, $params);
         
-        if ($r) {
-            return $r[0];
+        if ($r && count($r)) {
+            $keys = array_keys($r);
+            
+            return $r[ $keys[0] ];
         } else {
             return null;
         }
@@ -70,9 +77,9 @@ class DAOObject
     
     
     public function queryCursor($query, $params = array()) {
-        $res = query($this->resourceName, $query, $params);
+        $con = DatabaseHandler::getConnection($this->resourceName);
         
-        $cursor = new \core\db\Cursor($this->objectName, $res);
+        $cursor = $con->queryCursor($this->objectName, $query, $params);
         
         return $cursor;
     }

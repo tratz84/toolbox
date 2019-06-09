@@ -40,7 +40,7 @@ class DBObject {
     public function trackChanges() { $this->changes = array(); }
     
     public function createQueryBuilder() {
-        $qb = DatabaseHandler::createQueryBuilder($this->resourceName);
+        $qb = DatabaseHandler::getConnection($this->resourceName)->createQueryBuilder();
         $qb->setTable($this->getTableName());
         
         return $qb;
@@ -165,10 +165,12 @@ class DBObject {
     }
 
     function readBy($query, $params=array()) {
-        $r = query($this->resourceName, $query, $params);
+        $c = DatabaseHandler::getConnection($this->resourceName);
         
-        if ($r && ($row = $r->fetch_assoc())) {
-            foreach($row as $key => $val) {
+        $l = $c->queryList($query, $params);
+        
+        if (count($l)) {
+            foreach($l[0] as $key => $val) {
                 $this->setField($key, $val);
             }
             
@@ -211,10 +213,9 @@ class DBObject {
         
         $res = $qb->queryInsert();
         
-        $this->lastQuery = DatabaseHandler::getInstance()->getLastQuery();
+        $this->lastQuery = $qb->getConnection()->getLastQuery();
         
-        $res = DatabaseHandler::getInstance()->getResource($this->resourceName);
-        $insert_id = $res->insert_id;
+        $insert_id = $qb->getConnection()->getInsertId();
         
         if ($insert_id) {
             $this->setField($this->primaryKey, $insert_id);

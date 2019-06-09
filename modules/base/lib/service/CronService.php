@@ -80,11 +80,12 @@ class CronService {
                     $dbcron->setLastRun(date('Y-m-d H:i:s'));
                     $dbcron->save();
                     
+                    $con = DatabaseHandler::getInstance()->getConnection('default');
                     // commit updated last_run-field, to prevent running cronjob twice
-                    DatabaseHandler::getInstance()->commitTransaction();
+                    $con->commitTransaction();
                     
                     // start transaction again
-                    DatabaseHandler::getInstance()->beginTransaction();
+                    $con->beginTransaction();
                     
                     $c->run();
                     

@@ -35,6 +35,8 @@ abstract class QueryBuilder {
         
     }
     
+    public function getConnection() { return $this->dbconnection; }
+    
     public function setFieldValue($fieldName, $value) {
         $this->fieldValues[$fieldName] = $value;
         
