@@ -4,6 +4,9 @@
 namespace project\model;
 
 
+use core\db\query\QueryBuilderWhere;
+use core\db\query\QueryBuilderWhereContainer;
+
 class ProjectDAO extends \core\db\DAOObject {
 
 	public function __construct() {
@@ -30,35 +33,33 @@ class ProjectDAO extends \core\db\DAOObject {
 	
 	
 	public function search($opts) {
-	    $sql = "select p.*, c.company_id, c.company_name, person.person_id, person.firstname, person.insert_lastname, person.lastname, sum(ifnull(duration*60, TIMESTAMPDIFF(minute, start_time, end_time))) total_minutes
-                from project__project p
-                left join project__project_hour ph using (project_id)
-                left join customer__company c using (company_id)
-                left join customer__person person using (person_id) ";
+	    $qb = $this->createQueryBuilder();
 	    
-	    $where = array();
-	    $params = array();
-	    
+	    $qb->setTable('project__project');
+	    $qb->selectFields('project__project.*', 'customer__company.company_id', 'customer__company.company_name', 'customer__person.person_id', 'customer__person.firstname', 'customer__person.insert_lastname', 'customer__person.lastname');
+	    $qb->selectFunction('sum(ifnull(duration*60, TIMESTAMPDIFF(minute, start_time, end_time))) total_minutes');
+	    $qb->leftJoin('project__project_hour', 'project_id');
+	    $qb->leftJoin('customer__company', 'company_id');
+	    $qb->leftJoin('customer__person', 'person_id');
 	    
 	    if (isset($opts['name']) && $opts['name']) {
-			$where[] = "company_name like ? OR concat(person.firstname, ' ', person.insert_lastname, ' ', person.lastname) like ?";
-			$params[] = '%' . $opts['name'] . '%';
-			$params[] = '%' . $opts['name'] . '%';
-		}
+	        
+	        $qbwc = new QueryBuilderWhereContainer('OR');
+	        $qbwc->addWhere(QueryBuilderWhere::whereRefByVal('company_name', 'LIKE', '%' . $opts['name'] . '%'));
+	        $qbwc->addWhere(QueryBuilderWhere::whereRefByVal("concat(customer__person.firstname, ' ', customer__person.insert_lastname, ' ', customer__person.lastname)", 'LIKE', '%' . $opts['name'] . '%'));
+	        
+	        $qb->addWhere($qbwc);
+	    }
 
 		if (isset($opts['project_name']) && $opts['project_name']) {
-			$where[] = 'project_name like ?';
-			$params[] = '%' . $opts['project_name'] . '%';
+		    $qb->addWhere(QueryBuilderWhere::whereRefByVal('project_name', 'LIKE', '%' . $opts['project_name'] . '%'));
 		}
 	    
-	    if (count($where)) {
-	        $sql .= ' where (' . implode(') AND (', $where) . ")";
-	    }
-	    $sql .= ' group by p.project_id';
-	    
-	    $sql .= ' order by max(ph.project_hour_id) desc ';
-	    
-	    return $this->queryCursor($sql, $params);
+		$qb->setGroupBy('project__project.project_id');
+		
+		$qb->setOrderBy('max(project__project_hour.project_hour_id) desc ');
+		
+		return $qb->queryCursor($this);
 	}
 	
 

@@ -6,12 +6,42 @@ use core\db\DAOObject;
 use core\db\DatabaseHandler;
 use core\exception\DatabaseException;
 use InvalidArgumentException;
+use core\exception\InvalidStateException;
+use core\exception\QueryException;
 
 class MysqlQueryBuilder extends QueryBuilder {
     
     protected $params = array();
     
+    protected $selectFunctions = array();
+    
     public function getParams() { return $this->params; }
+    
+    
+    /**
+     * setFunctions() - set select functions, possible methods,
+     *      setFields(array('sum(col1)'))
+     *      setFields('sum(col1)')
+     */
+    public function selectFunctions() {
+        $arr = func_get_args();
+        foreach($arr as $a) {
+            if (is_array($a) == false)
+                $a = array( $a );
+                
+            foreach($a as $func) {
+                $this->selectFunction($func);
+            }
+        }
+        return $this;
+    }
+    public function getSelectFunctions() { return $this->selectFunctions; }
+    public function selectFunction($func) {
+        $this->selectFunctions[] = $func;
+        return $this;
+    }
+    public function clearSelectFunctions() { $this->selectFunctions= array(); }
+    
     
     
     public function createSelect() {
@@ -25,6 +55,16 @@ class MysqlQueryBuilder extends QueryBuilder {
             $f .= '`'.$arr['field'].'`';
             
             $fields[] = $f;
+        }
+        
+        $fields = array_merge($fields, $this->selectFunctions);
+        
+        if (count($fields) == 0) {
+            throw new QueryException('No fields selected');
+        }
+        
+        if (!$this->table) {
+            throw new QueryException('No table selected');
         }
         
         $sql = 'SELECT ' . implode(', ', $fields) . PHP_EOL;
@@ -42,6 +82,10 @@ class MysqlQueryBuilder extends QueryBuilder {
         
 //         $this->whereContainer
         $sql .= $this->buildWhere($this->whereContainer);
+        
+        if ($this->groupBy) {
+            $sql .= 'GROUP BY ' . $this->groupBy . PHP_EOL;
+        }
         
         if ($this->orderBy) {
             // TODO: filter orderBy to prevent injections
@@ -114,7 +158,7 @@ class MysqlQueryBuilder extends QueryBuilder {
         return $sql;
     }
     
-    protected function buildWhere(QueryBuilderWhereContainer $c) {
+    protected function buildWhere(QueryBuilderWhereContainer $c, $includeWhere=true) {
         $sql = array();
         
         $where = $c->getWhere();
@@ -155,10 +199,21 @@ class MysqlQueryBuilder extends QueryBuilder {
                 }
                 
                 $sql[] = $str;
+            } else if (is_a($w, QueryBuilderWhereContainer::class)) {
+                
+                $sql[] = $this->buildWhere($w, false);
+                
+            } else {
+                throw new InvalidStateException('Invalid where class given');
             }
         }
         
-        $r = 'WHERE (' . implode(') ' . $c->getJoinMethod() . ' (', $sql) . ')' . PHP_EOL;
+        $r = '';
+        if ($includeWhere) {
+            $r .= 'WHERE ';
+        }
+        
+        $r .= '(' . implode(') ' . $c->getJoinMethod() . ' (', $sql) . ')' . PHP_EOL;
         
         return $r;
     }

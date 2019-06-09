@@ -25,6 +25,7 @@ abstract class QueryBuilder {
     protected $limit = -1;
     
     protected $orderBy = null;
+    protected $groupBy = null;
     
     
     
@@ -153,7 +154,7 @@ abstract class QueryBuilder {
     }
     
     
-    public function addWhere(QueryBuilderWhere $qbw) {
+    public function addWhere($qbw) {
         $this->whereContainer->addWhere( $qbw );
         
         return $this;
@@ -165,6 +166,12 @@ abstract class QueryBuilder {
         return $this;
     }
     public function getOrderBy() { return $this->orderBy; }
+    
+    public function setGroupBy($g) {
+        $this->groupBy = $g;
+        return $this;
+    }
+    public function getGroupBy() { return $this->groupBy; }
     
     
 }
