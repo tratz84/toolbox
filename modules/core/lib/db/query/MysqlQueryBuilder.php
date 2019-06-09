@@ -1,6 +1,11 @@
 <?php
 
-namespace core\db;
+namespace core\db\query;
+
+use core\db\DAOObject;
+use core\db\DatabaseHandler;
+use core\exception\DatabaseException;
+use InvalidArgumentException;
 
 class MysqlQueryBuilder extends QueryBuilder {
     
@@ -192,19 +197,19 @@ class MysqlQueryBuilder extends QueryBuilder {
     public function queryDelete() {
         $sql = $this->createDelete();
         
-        return query($this->resourceName, $sql, $this->params);
+        return $this->dbconnection->query($sql, $this->params);
     }
     
     public function queryInsert() {
         $sql = $this->createInsert();
         
-        return query($this->resourceName, $sql, $this->params);
+        return $this->dbconnection->query($sql, $this->params);
     }
     
     public function queryUpdate() {
         $sql = $this->createUpdate();
         
-        return query($this->resourceName, $sql, $this->params);
+        return $this->dbconnection->query($sql, $this->params);
     }
     
 }

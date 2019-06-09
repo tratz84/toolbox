@@ -6,67 +6,22 @@
 use core\db\DatabaseHandler;
 use core\exception\DatabaseException;
 
-function query($dbhandler, $sql, $params=array()) {
+function query($resourceName, $sql, $params=array()) {
+    $conn = DatabaseHandler::getInstance()->getConnection( $resourceName );
     
-    if (is_array($params) == false)
-        throw new InvalidArgumentException('params not an array');
-    
-    $dbh = DatabaseHandler::getInstance()->getResource( $dbhandler );
-    
-    $markCount = 0;
-    $str = '';
-    for($x=0; $x < strlen($sql); $x++) {
-        if ($sql{$x} == '?') {
-            // check if param is available
-            if (count($params) < $markCount+1)
-                throw new \core\exception\QueryException("Invalid ratio marks(?)/params");
-            
-            $str .= "'".$dbh->real_escape_string($params[$markCount])."'";
-            $markCount++;
-        } else {
-            $str .= $sql{$x};
-        }
-    }
-
-    if (count($params) > $markCount)
-        throw new \core\exception\QueryException("Invalid ratio marks(?)/params");
-    
-    DatabaseHandler::getInstance()->setLastQuery($str);
-        
-    $r = $dbh->query($str);
-    
-    if ($r === false) {
-        $ex = new DatabaseException('SQL error: ' . $dbh->error . ' ('.$dbh->errno.')');
-        $ex->setQuery($str);
-        throw $ex;
-    }
-    
-    return $r;
+    return $conn->query( $sql, $params );
 }
 
-function queryList($dbHandler, $sql, $params=array()) {
-    $res = query($dbHandler, $sql, $params);
+function queryList($resourceName, $sql, $params=array()) {
+    $conn = DatabaseHandler::getInstance()->getConnection( $resourceName );
     
-    $rows = array();
-    while($row = $res->fetch_assoc()) {
-        $rows[] = $row;
-    }
-    
-    return $rows;
+    return $conn->queryList( $sql, $params );
 }
 
-function queryListAsArray($dbHandler, $sql, $params=array()) {
-    if (is_array($params) == false)
-        throw new InvalidArgumentException('params not an array');
-        
-    $res = query($dbHandler, $sql, $params);
+function queryListAsArray($resourceName, $sql, $params=array()) {
+    $conn = DatabaseHandler::getInstance()->getConnection( $resourceName );
     
-    $rows = array();
-    while($row = $res->fetch_array()) {
-        $rows[] = $row;
-    }
-    
-    return $rows;
+    return $conn->queryListAsArray( $sql, $params );
 }
 
 

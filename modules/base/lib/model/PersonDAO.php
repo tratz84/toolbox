@@ -4,7 +4,7 @@
 namespace base\model;
 
 
-use core\db\QueryBuilderWhere;
+use core\db\query\QueryBuilderWhere;
 
 class PersonDAO extends \core\db\DAOObject {
 

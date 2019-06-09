@@ -2,6 +2,8 @@
 
 namespace core\db;
 
+use core\db\query\QueryBuilderWhere;
+
 
 class DBObject {
     

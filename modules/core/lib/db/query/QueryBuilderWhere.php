@@ -1,6 +1,6 @@
 <?php
 
-namespace core\db;
+namespace core\db\query;
 
 
 class QueryBuilderWhere {

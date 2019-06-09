@@ -56,7 +56,7 @@ class CronService {
                     
                     // disconnect, connection might be 'dirty'
                     DatabaseHandler::getInstance()->closeAll();
-                    DatabaseHandler::getResource('default');
+                    DatabaseHandler::getConnection('default');
                     
                     $cr = new CronRun();
                     $cr->setCronId($dbcron->getCronId());

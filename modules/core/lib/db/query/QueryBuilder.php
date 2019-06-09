@@ -1,11 +1,13 @@
 <?php
 
-namespace core\db;
+namespace core\db\query;
 
+
+use core\db\connection\DBConnection;
 
 abstract class QueryBuilder {
     
-    protected $resourceName;
+    protected $dbconnection;
     
     protected $selectFields = array();
     protected $fieldValues = array();
@@ -26,8 +28,8 @@ abstract class QueryBuilder {
     
     
     
-    public function __construct($resourceName) {
-        $this->resourceName = $resourceName;
+    public function __construct(DBConnection $dbconnection) {
+        $this->dbconnection = $dbconnection;
         
         $this->whereContainer = new QueryBuilderWhereContainer();
         
