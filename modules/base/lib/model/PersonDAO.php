@@ -38,7 +38,7 @@ class PersonDAO extends \core\db\DAOObject {
 	    
 	    $qb->setOrderBy('lastname');
 	    
-	    return $qb->queryCursor($this);
+	    return $qb->queryCursor(Person::class);
 	}
 
 	

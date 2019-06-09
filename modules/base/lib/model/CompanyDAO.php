@@ -32,7 +32,7 @@ class CompanyDAO extends \core\db\DAOObject {
 	    
 	    $qb->setOrderBy('company_name');
 	    
-	    return $qb->queryCursor($this);
+	    return $qb->queryCursor(Company::class);
 	}
 
 	

@@ -59,7 +59,7 @@ class ProjectDAO extends \core\db\DAOObject {
 		
 		$qb->setOrderBy('max(project__project_hour.project_hour_id) desc ');
 		
-		return $qb->queryCursor($this);
+		return $qb->queryCursor( Project::class );
 	}
 	
 

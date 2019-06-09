@@ -2,10 +2,6 @@
 
 namespace core\db\query;
 
-use core\db\DAOObject;
-use core\db\DatabaseHandler;
-use core\exception\DatabaseException;
-use InvalidArgumentException;
 use core\exception\InvalidStateException;
 use core\exception\QueryException;
 
@@ -60,12 +56,13 @@ class MysqlQueryBuilder extends QueryBuilder {
         $fields = array_merge($fields, $this->selectFunctions);
         
         if (count($fields) == 0) {
-            throw new QueryException('No fields selected');
+            $fields[] = '*';
         }
         
         if (!$this->table) {
             throw new QueryException('No table selected');
         }
+        
         
         $sql = 'SELECT ' . implode(', ', $fields) . PHP_EOL;
         $sql .= 'FROM `'.$this->table.'`' . PHP_EOL;
@@ -234,18 +231,48 @@ class MysqlQueryBuilder extends QueryBuilder {
     }
     
     
-    public function queryCursor(DAOObject $dao) {
+    public function queryCursor($objectName) {
         $sql = $this->createSelect();
         $params = $this->getParams();
         
-        return $dao->queryCursor($sql, $params);
+        $cursor = $this->dbconnection->queryCursor($objectName, $sql, $params);
+        
+        return $cursor;
     }
     
-    public function queryList(DAOObject $dao) {
+    public function queryList($objectName) {
         $sql = $this->createSelect();
         $params = $this->getParams();
         
-        return $dao->queryList($sql, $params);
+        $list = array();
+        
+        $rows = $this->dbconnection->queryList($sql, $params);
+        foreach($rows as $r) {
+            $obj = new $objectName();
+            $obj->setFields($r);
+            
+            $list[] = $obj;
+        }
+        
+        return $list;
+    }
+    
+    public function queryOne($objectName) {
+        $sql = $this->createSelect();
+        $params = $this->getParams();
+        
+        $res = $this->dbconnection->query($sql, $params);
+        
+        $row = $res->fetch_assoc();
+        if ($row) {
+            $obj = new $objectName();
+            $obj->setFields($row);
+            
+            return $obj;
+        }
+        
+        
+        return null;
     }
     
     

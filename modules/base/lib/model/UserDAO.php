@@ -4,6 +4,8 @@
 namespace base\model;
 
 
+use core\db\query\QueryBuilderWhere;
+
 class UserDAO extends \core\db\DAOObject {
 
 	public function __construct() {
@@ -16,50 +18,41 @@ class UserDAO extends \core\db\DAOObject {
 	}
 	
 	public function readAll() {
-	    return $this->queryList("select * from base__user");
+	    $qb = $this->createQueryBuilder();
+	    $qb->setTable('base__user');
+	    
+	    return $qb->queryList( User::class );
 	}
 	
 	public function search($opts=array()) {
 	    
-	    $sql = "select * from base__user ";
-	    
-	    $where = array();
-	    $params = array();
+	    $qb = $this->createQueryBuilder();
+	    $qb->setTable('base__user');
 	    
 	    if (isset($opts['username']) && trim($opts['username']) != '') {
-	        $where[] = "username LIKE ? ";
-	        $params[] = '%'.$opts['username'].'%';
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('username', 'LIKE', '%'.$opts['username'].'%'));
 	    }
 	    
 	    if (isset($opts['email']) && trim($opts['email']) != '') {
-	        $where[] = "email LIKE ? ";
-	        $params[] = '%'.$opts['email'].'%';
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('email', 'LIKE', '%'.$opts['email'].'%'));
 	    }
 	    
 	    if (isset($opts['user_type']) && trim($opts['user_type']) != '') {
-	        $where[] = "user_type LIKE ? ";
-	        $params[] = '%'.$opts['user_type'].'%';
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('user_type', 'LIKE', '%'.$opts['user_type'].'%'));
 	    }
 	    
+	    $qb->setOrderBy('username');
 	    
-	    if (count($where)) {
-	        $sql .= "where ( " . implode(") AND (", $where) . ") ";
-	    }
-	    
-	    $sql .= 'order by username';
-	    
-	    return $this->queryCursor($sql, $params);
+	    return $qb->queryCursor( User::class );
 	}
 	
 	
 	public function read($id) {
-	    $l = $this->queryList("select * from base__user where user_id = ?", array($id));
+	    $qb = $this->createQueryBuilder()
+	               ->setTable('base__user')
+	               ->addWhere(QueryBuilderWhere::whereRefByVal('user_id', '=', $id));
 	    
-	    if (count($l)) {
-	        return $l[0];
-	    } else {
-	        return null;
-	    }
+	    return $qb->queryOne( User::class );
 	}
 
 	public function readByUsername($u) {

@@ -50,7 +50,7 @@ class DAOObject
      * @param array $params
      * @return unknown|NULL
      */
-    protected function queryOne($query, $params = array()) {
+    public function queryOne($query, $params = array()) {
         $con = DatabaseHandler::getConnection($this->resourceName);
         $res = $con->query($query, $params);
         
