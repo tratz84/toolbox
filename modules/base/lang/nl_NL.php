@@ -39,7 +39,7 @@ $lang['Default selected']       = 'Standaard geselecteerd';
 
 
 // person
-$lang['Overzicht personen']     = 'Overzicht personen';
+$lang['Overview persons']       = 'Overzicht personen';
 $lang['Name']                   = 'Naam';
 $lang['Firstname']              = 'Voornaam';
 $lang['Middle name']            = 'Tussenvoegsel';
