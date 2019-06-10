@@ -31,14 +31,12 @@ class MultiuserLock extends base\MultiuserLockBase {
         $params[] = $this->getLockKey();
         $params[] = $this->getCreated();
         
-        $result = query($this->resourceName, $sql, $params);
+        $con = DatabaseHandler::getConnection($this->resourceName);
+        $result = $con->query($sql, $params);
         
         if ($result) {
             return true;
         }
-        
-        $res = DatabaseHandler::getInstance()->getResource($this->resourceName);
-        $this->lastError = $res->error;
         
         return false;
     }
