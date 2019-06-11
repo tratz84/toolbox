@@ -179,7 +179,7 @@ class MysqlConnection extends DBConnection {
         if (is_array($params) == false)
             throw new InvalidArgumentException('params not an array');
             
-        $res = query($sql, $params);
+        $res = $this->query($sql, $params);
         
         $rows = array();
         while($row = $res->fetch_array()) {
