@@ -8,6 +8,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use core\forms\lists\ListResponse;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 
 class ListResponseExcelExport {
     
@@ -87,6 +88,19 @@ class ListResponseExcelExport {
                     
                     $sheet->getStyle($this->colCode($rowno, $colno))->getNumberFormat()->setFormatCode('dd-mm-yyyy');
                 }
+                break;
+            case 'bool' :
+            case 'boolean' :
+                $sheet->setCellValueExplicit($this->colCode($rowno, $colno), $val ? true : false, DataType::TYPE_BOOL);
+                
+                break;
+            case 'numeric' :
+                $sheet->setCellValueExplicit($this->colCode($rowno, $colno), $val, DataType::TYPE_NUMERIC);
+                
+                break;
+            case 'formula' :
+                $sheet->setCellValueExplicit($this->colCode($rowno, $colno), $val, DataType::TYPE_FORMULA);
+                
                 break;
             default :
                 $sheet->setCellValue($this->colCode($rowno, $colno), $val);
