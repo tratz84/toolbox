@@ -53,6 +53,10 @@ class ActivityUtil {
         return self::logActivity(null, $personId, $refObject, $refId, $code, $shortDescription, $longDescription, $changes);
     }
     
+    public static function logActivityRefObject($refObject, $refId, $code, $shortDescription=null, $longDescription=null, $changes=null) {
+        return self::logActivity(null, null, $refObject, $refId, $code, $shortDescription, $longDescription, $changes);
+    }
+    
 }
 
 
