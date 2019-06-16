@@ -233,3 +233,88 @@ if (function_exists('money_format') == false) {
         return $format;
     }
 }
+
+
+
+
+/**
+ * bcmod-function if php-bcmath extension is not available
+ */
+if (!function_exists('bcmod')) {
+    function bcmod($x, $y) {
+        $take = 5;
+        $mod = '';
+    
+        do {
+            $a = (int)$mod . substr($x, 0, $take);
+            $x = substr($x, $take);
+            $mod = $a % $y;
+        } while (strlen($x));
+        
+        return (int)$mod;
+    }
+}
+
+function validate_iban($no) {
+    $char_to_num = array(
+        'A' => 10,
+        'B' => 11,
+        'C' => 12,
+        'D' => 13,
+        'E' => 14,
+        'F' => 15,
+        'G' => 16,
+        'H' => 17,
+        'I' => 18,
+        'J' => 19,
+        'K' => 20,
+        'L' => 21,
+        'M' => 22,
+        'N' => 23,
+        'O' => 24,
+        'P' => 25,
+        'Q' => 26,
+        'R' => 27,
+        'S' => 28,
+        'T' => 29,
+        'U' => 30,
+        'V' => 31,
+        'W' => 32,
+        'X' => 33,
+        'Y' => 34,
+        'Z' => 35
+    );
+    
+    $no = strtoupper($no);
+    $no = preg_replace('/[^A-Z0-9]/', '', $no);
+    
+    $country = substr($no, 0, 2);
+    $verif_code = substr($no, 2, 2);
+    $account_nr = substr($no, 4);
+    
+    
+    $account_nr = $account_nr . $country . '00';
+    $nr = '';
+    for($x=0; $x < strlen($account_nr); $x++) {
+        $c = $account_nr{$x};
+        if (isset($char_to_num[$c])) {
+            $nr .= $char_to_num[$c];
+        } else {
+            $nr .= $c;
+        }
+    }
+    
+    $found_verif_code = 98 - intval(bcmod($nr, 97));
+    
+    return $verif_code == $found_verif_code;
+}
+
+function validate_bic($bic) {
+    $bic = strtoupper($bic);
+    if (preg_match('/[A-Z]{6,6}[A-Z2-9][A-NP-Z0-9]([A-Z0-9]{3,3}){0,1}/', $bic))
+        return true;
+    else
+        return false;
+}
+
+
