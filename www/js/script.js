@@ -224,6 +224,24 @@ if (typeof less != 'undefined') {
  * event handling submit-form-link rechtsboven formulier-pagina's
  */
 $(document).ready(function() {
+	// form locked? => remove submit-button & disable submit-event
+	if ($('.object-locked').val() == '1') {
+		$('.submit-container').remove();
+		
+		$('form').find('input, select, textarea').attr('disabled', 'disabled');
+		$('form').find('input, select, textarea').css('color', '#000');
+		$('form').find('input, select, textarea').css('background-color', '#fff');
+		$('form').find('input, select, textarea').css('border-color', '#ccc');
+		$('form').find('input, select, textarea').css('border-width', '1px');
+		
+		$('form').find('.row-delete').remove();
+		
+		$('form').submit(function() {
+			return false;
+		});
+	}
+	
+	
 	var submitForm = $('.page-header .toolbox .submit-form');
 	
 	if (submitForm.length == 0)

@@ -9,6 +9,8 @@
 			<a href="javascript:void(0);" onclick="print_Click();" class="fa fa-print"></a>
 		<?php endif; ?>
 		
+		<?= render_dbobject_lock($offer, 'Offerte '.$offer->getOfferNumberText()) ?>
+		
 		<?php if (isset($errorMessage) == false && dbobject_is_locked($offer) == false) : ?>
 			<a href="javascript:void(0);" class="fa fa-save submit-form"></a>
 		<?php endif; ?>

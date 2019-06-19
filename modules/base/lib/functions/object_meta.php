@@ -59,20 +59,32 @@ function object_locking_enabled() {
     return $ctx->getSetting('object_locking', false);
 }
 
-function render_dbobject_lock(DBObject $o) {
+function render_dbobject_lock(DBObject $o, $prefix) {
     if ($o->isNew() || object_locking_enabled() == false)
         return '';
     
     $id = $o->getField( $o->getPrimaryKey() );
     
-    return render_object_lock(get_class($o), $id);
+    return render_object_lock(get_class($o), $id, $prefix);
 }
 
-function render_object_lock($objectName, $id) {
+function render_object_lock($objectName, $id, $prefix) {
     if (object_locking_enabled() == false)
         return '';
     
-    return 'lock';
+    if (object_is_locked($objectName, $id)) {
+        $url = appUrl('/?m=base&c=objectlock&a=unlock&objectName='.urlencode($objectName).'&id='.urlencode($id).'&prefix='.urlencode($prefix).'&r='.urlencode($_SERVER['REQUEST_URI']));
+        
+        $html = '<a href="'.esc_attr($url).'" title='.t('Unlock object').'><span class="fa fa-lock"></span></a>';
+        $html .= '<input type="hidden" class="object-locked" name="object-locked" value="1" />';
+        return $html;
+    } else {
+        $url = appUrl('/?m=base&c=objectlock&a=lock&objectName='.urlencode($objectName).'&id='.urlencode($id).'&prefix='.urlencode($prefix).'&r='.urlencode($_SERVER['REQUEST_URI']));
+        
+        $html = '<a href="'.esc_attr($url).'" title='.t('Lock object').'><span class="fa fa-unlock"></span></a>';
+        $html .= '<input type="hidden" class="object-locked" name="object-locked" value="0" />';
+        return $html;
+    }
 }
 
 function dbobject_is_locked(DBObject $o) {
