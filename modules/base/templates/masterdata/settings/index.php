@@ -34,6 +34,16 @@
 
 <?php ob_start() ?>
 
+	<div style="padding: 5px 5px 15px 5px; margin-bottom: 15px;">
+		<?= $checkboxObjectLocking->render() ?>
+	</div>
+
+	<div class="clear"></div>
+<?php $htmlExtra = ob_get_clean() ?>
+
+
+<?php ob_start() ?>
+
         <?= render_colorpicker('master_base_color', 'Basiskleur', @$settings['master_base_color']) ?>
 
 	<div class="clear"></div>
@@ -46,6 +56,7 @@
         <?php 
             $tabContainer = generate_tabs('base', 'masterdata-settings', null);
             $tabContainer->addTab('Basisinstellingen', $htmlBaseSettings, 0);
+            $tabContainer->addTab('Extra', $htmlExtra);
             $tabContainer->addTab('Kleuren', $htmlColors);
             print $tabContainer->render();
         ?>

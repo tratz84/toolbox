@@ -96,6 +96,7 @@ class offerController extends BaseController {
         }
         
         $this->isNew = $offer->isNew();
+        $this->offer = $offer;
         $this->form = $offerForm;
         
         

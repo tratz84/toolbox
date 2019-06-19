@@ -4,6 +4,7 @@
 
 use base\service\SettingsService;
 use core\controller\BaseController;
+use core\forms\CheckboxField;
 
 class settingsController extends BaseController {
     
@@ -45,10 +46,14 @@ class settingsController extends BaseController {
                 }
             }
             
+            $settingsService->updateValue('object_locking', get_var('object_locking')?1:0);
             $settingsService->updateValue('master_base_color', get_var('master_base_color'));
+            
                 
             redirect('/?m=base&c=masterdata/index');
         }
+        
+        $this->checkboxObjectLocking = new CheckboxField('object_locking', @$this->settings['object_locking']?'1':'0', 'Object locking');
         
         $this->render();
     }

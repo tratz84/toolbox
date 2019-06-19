@@ -8,7 +8,7 @@ function render_checkbox($name, $opts) {
     $html = '';
     
     $html .= '<input type="checkbox" class="checkbox-ui" id="'.esc_attr($name).'" name="'.esc_attr($name).'" ' . (isset($opts['checked'])&&$opts['checked']?'checked=checked':'') . ' />';
-    $html .= '<label class="checkbox-ui-placeholder" for="'.esc_attr($name).'"></label>';
+    $html .= '<label class="checkbox-ui-placeholder" for="'.esc_attr($name).'">'.(isset($opts['label'])?esc_html($opts['label']):'').'</label>';
     
     return $html;
 }

@@ -8,7 +8,8 @@
 			<?php endif; ?>
 			<a href="javascript:void(0);" onclick="print_Click();" class="fa fa-print"></a>
 		<?php endif; ?>
-		<?php if (isset($errorMessage) == false) : ?>
+		
+		<?php if (isset($errorMessage) == false && dbobject_is_locked($offer) == false) : ?>
 			<a href="javascript:void(0);" class="fa fa-save submit-form"></a>
 		<?php endif; ?>
 	</div>
