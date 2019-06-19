@@ -49,6 +49,12 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
         return $vDao->readActive();
     }
 
+    public function readDefaultVat() {
+        $vDao = new VatDAO();
+        
+        return $vDao->readDefault();
+    }
+    
     public function readVat($vatId) {
         $vDao = new VatDAO();
 

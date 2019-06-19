@@ -21,6 +21,15 @@ class VatDAO extends \core\db\DAOObject {
 	    return $this->queryList("select * from invoice__vat where visible = true order by sort");
 	}
 	
+	public function readDefault() {
+	    $qb = $this->createQueryBuilder();
+	    $qb->selectFields('*');
+	    $qb->setTable('invoice__vat');
+	    $qb->setLimit(1);
+	    $qb->setOrderBy('default_selected desc, sort');
+	    
+	    return $qb->queryOne( Vat::class );
+	}
 	
 	public function read($id) {
 	    $sql = "select * from invoice__vat where vat_id = ?";
