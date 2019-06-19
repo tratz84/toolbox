@@ -21,6 +21,8 @@ class ArrayContainer {
     
     public function count() { return count($this->items); }
     
+    public function clear() { $this->items = array(); }
+    
     public function add($i) { $this->items[] = $i; }
     public function get($i) {
         if (isset($this->items[$i])) {
