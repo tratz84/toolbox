@@ -700,6 +700,16 @@ function days_between($start, $end) {
     return $dt1->diff($dt2, true)->days;
 }
 
+function months_between($start, $end) {
+    $s = date2unix($start);
+    $e = date2unix($end);
+    
+    $dt1 = new DateTime(date('Y-m-d', $s));
+    $dt2 = new DateTime(date('Y-m-d', $e));
+    
+    return $dt1->diff($dt2, true)->m;
+}
+
 
 if(!function_exists('mime_content_type')) {
     function mime_content_type($filename) {
