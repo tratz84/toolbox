@@ -233,6 +233,7 @@ $(document).ready(function() {
 		$('form').find('input, select, textarea').css('background-color', '#fff');
 		$('form').find('input, select, textarea').css('border-color', '#ccc');
 		$('form').find('input, select, textarea').css('border-width', '1px');
+		$('form').find('input, select, textarea').css('border-style', 'solid');
 		
 		$('form').find('.row-delete').remove();
 		
@@ -240,6 +241,7 @@ $(document).ready(function() {
 			return false;
 		});
 	}
+	
 	
 	
 	var submitForm = $('.page-header .toolbox .submit-form');

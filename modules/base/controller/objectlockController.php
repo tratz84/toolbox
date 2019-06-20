@@ -3,6 +3,7 @@
 
 use core\controller\BaseController;
 use base\util\ActivityUtil;
+use core\event\LookupObject;
 
 class objectlockController extends BaseController {
     
@@ -16,7 +17,21 @@ class objectlockController extends BaseController {
         if ($prefix)
             $prefix = $prefix . ': ';
         
-        ActivityUtil::logActivityRefObject(get_var('objectName'), get_var('id'), 'object-unlock', $prefix.'Object locked');
+
+        // lookup companyId or personId
+        $companyId = null;
+        $personId = null;
+        
+        $lo = new LookupObject(get_var('objectName'), get_var('id'));
+        if ($lo->lookup()) {
+            $obj = $lo->getObject();
+            if (method_exists($obj, 'getCompanyId'))
+                $companyId = $obj->getCompanyId();
+            if (method_exists($obj, 'getPersonId'))
+                $personId = $obj->getPersonId();
+        }
+        
+        ActivityUtil::logActivity($companyId, $personId, get_var('objectName'), get_var('id'), 'object-unlock', $prefix.' locked');
         
         redirect(get_var('r'));
     }
@@ -31,7 +46,22 @@ class objectlockController extends BaseController {
         if ($prefix)
             $prefix = $prefix . ': ';
         
-        ActivityUtil::logActivityRefObject(get_var('objectName'), get_var('id'), 'object-unlock', $prefix.'Object unlocked');
+        
+        // lookup companyId or personId
+        $companyId = null;
+        $personId = null;
+        
+        $lo = new LookupObject(get_var('objectName'), get_var('id'));
+        if ($lo->lookup()) {
+            $obj = $lo->getObject();
+            if (method_exists($obj, 'getCompanyId'))
+                $companyId = $obj->getCompanyId();
+            if (method_exists($obj, 'getPersonId'))
+                $personId = $obj->getPersonId();
+        }
+        
+        
+        ActivityUtil::logActivity($companyId, $personId, get_var('objectName'), get_var('id'), 'object-unlock', $prefix.' unlocked');
         
         redirect(get_var('r'));
     }

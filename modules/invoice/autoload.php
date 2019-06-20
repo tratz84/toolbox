@@ -9,7 +9,9 @@ use core\event\EventBus;
 use core\event\PeopleEvent;
 use invoice\InvoiceSettings;
 use invoice\model\CompanySetting;
+use invoice\model\Offer;
 use invoice\service\InvoiceService;
+use invoice\service\OfferService;
 
 Context::getInstance()->enableModule('invoice');
 
@@ -167,3 +169,30 @@ $eb->subscribe('report', 'menu-list', new CallbackPeopleEventListener(function($
     }
 }));
     
+
+
+$eb->subscribe('core', 'lookupobject', new CallbackPeopleEventListener(function($evt) {
+    /**
+     * @var LookupObject $lookupObject
+     */
+    $lookupObject = $evt->getSource();
+    
+    if ($lookupObject->getObjectName() == Offer::class) {
+        $offerService = object_container_get(OfferService::class);
+        
+        $offer = $offerService->readOffer( $lookupObject->getId() );
+        
+        $lookupObject->setObject( $offer );
+    }
+    
+    if ($lookupObject->getObjectName() == Invoice::class) {
+        $invoiceService = object_container_get(InvoiceService::class);
+        
+        $invoice = $invoiceService->readInvoice( $lookupObject->getId() );
+        
+        $lookupObject->setObject( $invoice );
+    }
+    
+}));
+
+

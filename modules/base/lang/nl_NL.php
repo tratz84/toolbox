@@ -88,6 +88,7 @@ $lang['Add Company type']  = 'Bedrijfsoort toevoegen';
 $lang['Edit Company type'] = 'Bedrijfsoort bewerken';
 $lang['Company Types']     = 'Bedrijfsoorten';
 $lang['Default selected']  = 'Standaard gekozen';
+$lang['Possibility to mark objects as "locked"'] = 'Mogelijkheid om objecten als "locked" te markeren';
 
 
 return $lang;

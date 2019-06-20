@@ -54,6 +54,7 @@ class settingsController extends BaseController {
         }
         
         $this->checkboxObjectLocking = new CheckboxField('object_locking', @$this->settings['object_locking']?'1':'0', 'Object locking');
+        $this->checkboxObjectLocking->setInfoText(t('Possibility to mark objects as "locked"'));
         
         $this->render();
     }
