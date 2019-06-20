@@ -1,12 +1,7 @@
 <?php
 
-
-
-
 use base\model\ObjectMeta;
 use base\service\MetaService;
-use core\Context;
-use core\db\DBObject;
 
 function object_meta_get($objectName, $objectId, $objectKey, $unserialize=true) {
     $metaService = object_container_get(MetaService::class);
@@ -51,93 +46,4 @@ function object_meta_save($objectName, $objectId, $objectKey, $val, $serialize=t
     
     return $metaService->saveObject( $om );
 }
-
-
-function object_locking_enabled() {
-    $ctx = Context::getInstance();
-    
-    return $ctx->getSetting('object_locking', false);
-}
-
-function render_dbobject_lock(DBObject $o, $prefix) {
-    if ($o->isNew() || object_locking_enabled() == false)
-        return '';
-    
-    $id = $o->getField( $o->getPrimaryKey() );
-    
-    return render_object_lock(get_class($o), $id, $prefix);
-}
-
-function render_object_lock($objectName, $id, $prefix) {
-    if (object_locking_enabled() == false)
-        return '';
-    
-    if (object_is_locked($objectName, $id)) {
-        $url = appUrl('/?m=base&c=objectlock&a=unlock&objectName='.urlencode($objectName).'&id='.urlencode($id).'&prefix='.urlencode($prefix).'&r='.urlencode($_SERVER['REQUEST_URI']));
-        
-        $html = '<a class="object-lock-toggle" href="'.esc_attr($url).'" title='.t('Unlock object').'><span class="fa fa-lock"></span></a>';
-        $html .= '<input type="hidden" class="object-locked" name="object-locked" value="1" />';
-        return $html;
-    } else {
-        $url = appUrl('/?m=base&c=objectlock&a=lock&objectName='.urlencode($objectName).'&id='.urlencode($id).'&prefix='.urlencode($prefix).'&r='.urlencode($_SERVER['REQUEST_URI']));
-        
-        $html = '<a class="object-lock-toggle" href="'.esc_attr($url).'" title='.t('Lock object').'><span class="fa fa-unlock"></span></a>';
-        $html .= '<input type="hidden" class="object-locked" name="object-locked" value="0" />';
-        return $html;
-    }
-}
-
-function dbobject_is_locked(DBObject $o) {
-    if ($o->isNew() || object_locking_enabled() == false)
-        return false;
-        
-    $id = $o->getField( $o->getPrimaryKey() );
-    
-    $v = object_meta_get(get_class($o), $id, 'object_locked');
-    
-    if ($v === true) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-
-function object_is_locked($objectName, $id) {
-    if (object_locking_enabled() == false)
-        return false;
-    
-    $v = object_meta_get($objectName, $id, 'object_locked');
-    
-    if ($v === true) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-function lock_object($objectName, $id) {
-    object_meta_save($objectName, $id, 'object_locked', true);
-}
-
-function unlock_object($objectName, $id) {
-    object_meta_save($objectName, $id, 'object_locked', false);
-}
-
-function lock_dbobject(DBObject $o) {
-    if ($o->isNew())
-        return false;
-    
-    $id = $o->getField( $o->getPrimaryKey() );
-    lock_object(get_class($o), $id);
-}
-
-function unlock_dbobject(DBObject $o) {
-    if ($o->isNew())
-        return false;
-        
-    $id = $o->getField( $o->getPrimaryKey() );
-    unlock_object(get_class($o), $id);
-}
-
 

@@ -66,6 +66,8 @@ class offerController extends BaseController {
         $offerForm->bind($offer);
         
         if (is_post()) {
+            check_dbobject_locked($offer);
+            
             $offerForm->bind($_REQUEST);
             
             if ($offerForm->validate()) {
