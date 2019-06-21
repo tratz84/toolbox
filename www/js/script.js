@@ -236,6 +236,7 @@ $(document).ready(function() {
 		$('form').find('input, select, textarea').css('border-style', 'solid');
 		
 		$('form').find('.row-delete').remove();
+		$('form').find('.add-entry-container.action-box').remove();
 		
 		$('form').submit(function() {
 			return false;
