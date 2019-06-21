@@ -13,6 +13,8 @@ class BaseForm extends WidgetContainer {
     
     protected $validators = array();
     
+    protected $objectLocked = false;
+    
     protected $errors = array();
     
     protected $enctype = "application/x-www-form-urlencoded";
@@ -36,6 +38,11 @@ class BaseForm extends WidgetContainer {
         
         return $frm;
     }
+    
+    
+    public function setObjectLocked($bln) { $this->objectLocked = $bln; }
+    public function isObjectLocked() { return $this->objectLocked ? true : false; }
+    
     
     public function addJavascript($name, $script) {
         $this->javascript[$name] = $script;
@@ -258,6 +265,7 @@ class BaseForm extends WidgetContainer {
             $html .= ' ' . esc_attr($key) . '="' . esc_attr($val) . '"';
         }
         $html .= '>';
+        $html .= '<input type="hidden" class="object-locked" name="object-locked" value="'.($this->isObjectLocked()?'1':'0').'" />';
         $html .= '<input type="hidden" name="form-name" value="'.slugify($className).'" />' . "\n";
         $html .= $this->renderKeyFields();
         
