@@ -145,7 +145,7 @@ class SolrUpdate {
             $this->commit();
             
             if (is_object($json) == false) {
-                throw new SolrException( $r );
+                throw new SolrException( 'Invalid Solr response: ' . $r );
             }
             
             if ($json->responseHeader->status != 0) {

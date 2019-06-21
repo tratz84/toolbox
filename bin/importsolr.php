@@ -21,7 +21,12 @@ $ctx = \core\Context::getInstance();
 
 
 
-$su = new SolrUpdate();
-$su->truncate();
-$su->importFolder($ctx->getDataDir().'/email/inbox');
-$su->commit();
+try {
+    $su = new SolrUpdate();
+    $su->truncate();
+    $su->importFolder($ctx->getDataDir().'/email/inbox');
+    $su->commit();
+} catch (\Exception $ex) {
+    print 'Error: ' . $ex->getFile() . ':' . $ex->getLine() . ': ' . $ex->getMessage() . "\n";
+	print $ex->getTraceAsString() . "\n";
+}
