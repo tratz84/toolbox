@@ -71,6 +71,14 @@ class offerController extends BaseController {
                 $url = '/?m=invoice&c=offer&a=print&id=' . $offerForm->getWidgetValue('offer_id');
                 redirect($url);
             }
+            // locked & generate invoice?
+            else if (dbobject_is_locked($offer) && get_var('generateInvoice')) {
+                redirect('/?m=invoice&c=offer&a=generate_invoice&id=' . $offerForm->getWidgetValue('offer_id'));
+            }
+            // locked & sendmail?
+            else if (dbobject_is_locked($offer) && get_var('sendmail')) {
+                redirect('/?m=invoice&c=offer&a=sendmail&id=' . $offerForm->getWidgetValue('offer_id'));
+            }
             
             check_dbobject_locked($offer);
             
