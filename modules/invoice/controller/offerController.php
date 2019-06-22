@@ -66,6 +66,12 @@ class offerController extends BaseController {
         $offerForm->bind($offer);
         
         if (is_post()) {
+            // locked & print? => skip saving
+            if (get_var('print')) {
+                $url = '/?m=invoice&c=offer&a=print&id=' . $offerForm->getWidgetValue('offer_id');
+                redirect($url);
+            }
+            
             check_dbobject_locked($offer);
             
             $offerForm->bind($_REQUEST);
