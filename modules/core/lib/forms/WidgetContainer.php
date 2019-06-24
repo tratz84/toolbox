@@ -99,16 +99,6 @@ class WidgetContainer extends BaseWidget {
     }
     
     
-    public function setNamePrefix($prefix) {
-        $widgets = $this->getWidgetsRecursive();
-        foreach($widgets as $w) {
-            $newName = $prefix . $w->getName();
-            
-            $w->setName( $newName );
-        }
-    }
-    
-    
     
     /**
      * bind($obj) - binds $obj to form
