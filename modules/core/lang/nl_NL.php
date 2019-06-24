@@ -74,6 +74,8 @@ $lang['Created on']    = 'Aangemaakt op';
 $lang['Yes']           = 'Ja';
 $lang['No']            = 'Nee';
 
+$lang['Delete']        = 'Verwijder';
+
 
 return $lang;
 
