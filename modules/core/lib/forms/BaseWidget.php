@@ -105,7 +105,14 @@ class BaseWidget {
     public function render() {
         $this->addContainerClass('widget');
         $this->addContainerClass( slugify(get_class($this)) );
-        $this->addContainerClass( slugify($this->getName()) . '-widget' );
+        
+        // remove var/index
+        $className = $this->getName();
+        $posRightBracket = strrpos($className, ']');
+        if ($posRightBracket !== false)
+            $className = substr($className, $posRightBracket);
+        
+        $this->addContainerClass( slugify($className) . '-widget' );
         
         if ($this->getName()) {
             $this->setAttribute('name', $this->getName());
