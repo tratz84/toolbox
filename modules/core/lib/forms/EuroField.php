@@ -38,16 +38,18 @@ class EuroField extends BaseWidget {
     
     
     public function render() {
+        $this->setAttribute('type', 'text');
+        
+        if ($this->hasError()) {
+            $this->addContainerClass('error');
+        }
+        
+        $this->setAttribute('onchange', 'this.value=format_price(this.value, true)');
+
         $t = format_price($this->getValue());
+        $this->setAttribute('value', $t);
         
-        $html = '';
-        
-        $html .= '<div class="widget html-field-widget">';
-        $html .= '<label>'.esc_html($this->getLabel()).infopopup($this->getInfoText()).' </label>';
-        $html .= '<input type="text" name="'.esc_attr($this->getName()).'" value="'.esc_attr($t).'" onchange="this.value=format_price(this.value, true)" />';
-        $html .= '</div>';
-        
-        return $html;
+        return parent::render();
     }
 }
 

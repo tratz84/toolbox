@@ -40,7 +40,16 @@ class DatePickerField extends BaseWidget {
     }
     
     public function render() {
-        $html = '';
+        $this->setAttribute('type', 'text');
+        
+        if ($this->hasError()) {
+            $this->addContainerClass('error');
+        }
+        
+        $this->addContainerClass('datepicker-field-widget');
+        
+        $this->setAttribute('autocomplete', 'off');
+        $this->setAttribute('class', 'input-pickadate reset-field-button');
         
         $v = '';
         if ($this->getValue()) {
@@ -49,16 +58,9 @@ class DatePickerField extends BaseWidget {
                 $v = date('d-m-Y', $t);
             }
         }
+        $this->setAttribute('value', $v);
         
-        $extraClass = $this->hasError() ? 'error' : '';
-        
-        $html .= '<div class="widget datepicker-field-widget widget-'. slugify($this->getName()) . ' '.$extraClass.'">';
-        $html .= '<label>'.esc_html($this->getLabel()).infopopup($this->getInfoText()).'</label>';
-        $html .= '<input type="text" autocomplete=off class="input-pickadate reset-field-button" name="'.esc_attr($this->getName()).'" value="'.esc_attr($v).'" />';
-        $html .= '</div>';
-        
-        return $html;
+        return parent::render();
     }
-    
     
 }

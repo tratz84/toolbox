@@ -31,30 +31,25 @@ class NumberField extends BaseWidget {
     
     
     public function render() {
-        $html = '';
+        $this->setAttribute('type', 'number');
         
-        $extraClass = $this->hasError() ? 'error' : '';
+        if ($this->hasError()) {
+            $this->addContainerClass('error');
+        }
         
-        $attributes = array();
-        $attributes['type'] = 'number';
-        $attributes['name'] = $this->getName();
-        $attributes['value'] = $this->getValue();
-        if ($this->placeholder)
-            $attributes['placeholder'] = $this->getLabel();
         if ($this->min)
-            $attributes['min'] = $this->min;
+            $this->setAttribute('min', $this->min);
         if ($this->max)
-            $attributes['max'] = $this->max;
-                    
+            $this->setAttribute('max', $this->max);
         
         
+        if ($this->placeholder) {
+            $this->setAttribute('placeholder', $this->getLabel());
+        }
         
-        $html .= '<div class="widget text-field-widget '.slugify($this->getName()).'-widget '.$extraClass.'">';
-        $html .= '<label>'.esc_html($this->getLabel()).infopopup($this->getInfoText()).'</label>';
-        $html .= '<input '.explode_attributes($attributes).' />';
-        $html .= '</div>';
+        $this->setAttribute('value', $this->getValue());
         
-        return $html;
+        return parent::render();
     }
 }
 
