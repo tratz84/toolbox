@@ -430,10 +430,26 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
         ActivityUtil::logActivity($pa->getCompanyId(), $pa->getPersonId(), $pa->getRefObject(), $pa->getRefId(), 'price-adjustment', 'Prijswijziging verwijderd '.$pa->getStartDateFormat('d-m-Y'), $fch->getHtml());
     }
 
-    public function readPriceAdjustments($refObject, $refId) {
+    public function readPriceAdjustments($refObject, $refId, $peildatum=null) {
         $paDao = new PriceAdjustmentDAO();
 
-        return $paDao->readByRef($refObject, $refId);
+        $objs = $paDao->readByRef($refObject, $refId);
+        
+        $peildatum = $peildatum ? (int)format_date($peildatum, 'Ymd') : (int)date('Ymd');
+
+        // set 'active-period' field to 'true'
+        for($x=0; $x < count($objs); $x++) {
+            $pa = $objs[$x];
+            if ($pa->getStartDateFormat('Ymd') <= $peildatum) {
+                if ($x+1 == count($objs) || $objs[$x+1]->getStartDateFormat('Ymd') > $peildatum) {
+                    $pa->setField('active-period', true);
+                }
+            }
+            
+        }
+        
+        
+        return $objs;
     }
 
     public function searchPriceAdjustments($opts) {
