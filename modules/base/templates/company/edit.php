@@ -3,6 +3,10 @@
 <div class="page-header">
 	<div class="toolbox">
 		<a href="<?= appUrl('/?m=base&c=company') ?>" class="fa fa-chevron-circle-left"></a>
+		
+		<?php if (!$isNew) : ?>
+		<a href="javascript:void(0);" onclick="show_object_log('company', <?= $company_id ?>);" class="fa fa-history" title="<?= t('View history') ?>"></a>
+		<?php endif; ?>
 		<a href="javascript:void(0);" class="fa fa-save submit-form"></a>
 	</div>
 

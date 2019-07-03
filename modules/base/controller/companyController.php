@@ -81,6 +81,7 @@ class companyController extends BaseController {
         
         
         $this->isNew = $company->isNew();
+        $this->company_id = $company->getCompanyId();
         $this->form = $companyForm;
         
         $this->actionContainer = new ActionContainer('company', $company->getCompanyId());

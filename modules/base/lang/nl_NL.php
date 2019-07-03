@@ -13,6 +13,13 @@ $lang['New value']              = 'Nieuwe waarde';
 $lang['Company']                = 'Bedrijf';
 $lang['Private']                = 'Particulier';
 
+$lang['View history']           = 'Bekijk geschiedenis';
+
+$lang['object_action.new']      = 'Nieuw';
+$lang['object_action.changed']  = 'Aangepast';
+$lang['object_action.removed']  = 'Verwijderd';
+
+
 // cronList
 $lang['Scheduled tasks']        = 'Ingeplande taken';
 $lang['Title']                  = 'Titel';
@@ -63,6 +70,28 @@ $lang['Phonenr']                = 'Telnr';
 $lang['Add person']             = 'Persoon toevoegen';
 $lang['Personal data']          = 'Persoonsgegevens';
 $lang['This person is deleted'] = 'Deze persoon is verwijderd';
+
+
+// log-fields company
+$lang['fieldname.company_name']    = $lang['Companyname'];
+$lang['fieldname.contact_person']  = $lang['Contact person'];
+$lang['fieldname.coc_number']      = $lang['Coc number'];
+$lang['fieldname.vat_number']      = $lang['VAT number'];
+$lang['fieldname.iban']            = 'IBAN';
+$lang['fieldname.bic']             = 'BIC';
+$lang['fieldname.note']            = 'Notitie';
+$lang['fieldname.tax_shift']       = 'Intracommunautair';
+$lang['fieldname.tax_excemption']  = 'Btw vrijstelling';
+$lang['fieldname.street']          = $lang['Street'];
+$lang['fieldname.street_no']       = $lang['Housenr'];
+$lang['fieldname.zipcode']         = $lang['Zipcode'];
+$lang['fieldname.city']            = $lang['City'];
+$lang['fieldname.country_id']      = $lang['Country'];
+$lang['fieldname.email_address']   = $lang['Email'];
+$lang['fieldname.primary_address'] = $lang['Primary'];
+$lang['fieldname.phonenr']         = $lang['Phonenr'];
+
+
 
 // user
 $lang['Overview users']  = 'Overzicht gebruikers';

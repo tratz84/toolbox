@@ -19,6 +19,7 @@ use core\forms\lists\ListResponse;
 use core\service\ServiceBase;
 use base\forms\FormChangesHtml;
 use base\forms\CompanyForm;
+use base\model\ObjectLogDAO;
 
 class CompanyService extends ServiceBase implements ObjectHookable {
     
@@ -90,6 +91,8 @@ class CompanyService extends ServiceBase implements ObjectHookable {
         $phoneDao = new PhoneDAO();
         $newPhones = $companyForm->getWidget('phoneList')->asArray();
         $phoneDao->mergeFormListMTON('customer__company_phone', 'company_id', $company->getCompanyId(), $newPhones, 'sort');
+        
+        ObjectLogDAO::saveChanges('company', $company->getCompanyId(), $fch->getChanges());
         
         if ($isNew) {
             ActivityUtil::logActivityCompany($company->getCompanyId(), 'customer__company', null, 'company-created', 'Bedrijf aangemaakt', $fch->getHtml());

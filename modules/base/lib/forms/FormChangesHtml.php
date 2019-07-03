@@ -21,11 +21,16 @@ class FormChangesHtml
     
     protected $isNew = false;
     
+    protected $changes = array();
+    
     
     public function __construct($oldForm, $newForm) {
         $this->oldForm = $oldForm;
         $this->newForm = $newForm;
     }
+    
+    public function getChanges() { return $this->changes; }
+    public function setChanges($c) { $this->changes = $c; }
     
     public function getChangeCount() { return $this->changeCount; }
     public function getHtml() {
@@ -108,6 +113,17 @@ class FormChangesHtml
                 $this->changeCount++;
                 $htmlBase['html'] .= '<tr><td>' . esc_html($w->getLabel()) . '</td><td>' . esc_html($oldVal) . '</td><td>' . esc_html($val) . '</td></tr>' . "\n";
                 $htmlBase['changes']++;
+                
+                // log change
+                $this->changes[] = array(
+                    'action' => 'changed',
+                    'name' => $w->getName(),
+                    'key' => $w->getName(),
+                    'label' => $w->getLabel(),
+                    'old' => $oldVal,
+                    'new' => $val
+                );
+                
             }
         }
         $htmlBase['html'] .= '</tbody>';
@@ -217,6 +233,15 @@ class FormChangesHtml
                     $changed = true;
                     $htmlTr.= '<td class="changed"><span class="old-value">'.esc_html($vOld).'</span> =&gt; <span class="new-value">' . esc_html($vNew) . '</span></td>';
                     $htmlList['changes']++;
+                    
+                    $this->changes[] = array(
+                        'action' => 'changed',
+                        'name' => $w2->getName(),
+                        'key' => $w2->getName(),
+                        'label' => $widgetNewForm->getLabel().' - '.$w2->getLabel(),
+                        'old' => $vOld,
+                        'new' => $vNew
+                    );
                 }
             }
             
@@ -242,7 +267,19 @@ class FormChangesHtml
                     $vNew = $w2->getValue();
                     
                     $htmlTr.= '<td>'.esc_html($vNew).'</td>';
+                    
+                    
+                    // new
+                    $this->changes[] = array(
+                        'action' => 'new',
+                        'name' => $w2->getName(),
+                        'key' => $w2->getName(),
+                        'label' => $widgetNewForm->getLabel().' - '.$w2->getLabel(),
+                        'old' => null,
+                        'new' => $vNew
+                    );
                 }
+                
                 
                 $htmlList['html'] .= '<tr class="new">'.$htmlTr.'</tr>';
                 $htmlList['changes']++;
@@ -263,6 +300,16 @@ class FormChangesHtml
                     $vOld = $w2->getValue();
                     
                     $htmlTr.= '<td>'.esc_html($vOld).'</td>';
+                    
+                    
+                    $this->changes[] = array(
+                        'action' => 'removed',
+                        'name' => $w2->getName(),
+                        'key' => $w2->getName(),
+                        'label' => $widgetNewForm->getLabel().' - '.$w2->getLabel(),
+                        'old' => $vOld,
+                        'new' => null
+                    );
                 }
                 
                 $htmlList['html'] .= '<tr class="removed">'.$htmlTr.'</tr>';
@@ -328,6 +375,17 @@ class FormChangesHtml
                     $changed = true;
                     $htmlTr.= '<td class="changed"><span class="old-value">'.esc_html($vOld).'</span> =&gt; <span class="new-value">' . esc_html($vNew) . '</span></td>';
                     $htmlList['changes']++;
+                    
+                    
+                    
+                    $this->changes[] = array(
+                        'action' => 'changed',
+                        'name' => $w2->getName(),
+                        'key' => $w2->getName(),
+                        'label' => $widgetNewForm->getLabel().' - '.$w2->getLabel(),
+                        'old' => $vOld,
+                        'new' => $vNew
+                    );
                 }
             }
             
@@ -353,6 +411,16 @@ class FormChangesHtml
                     $vNew = $w2->getValue();
                     
                     $htmlTr.= '<td>'.esc_html($vNew).'</td>';
+                    
+                    
+                    $this->changes[] = array(
+                        'action' => 'new',
+                        'name' => $w2->getName(),
+                        'key' => $w2->getName(),
+                        'label' => $widgetNewForm->getLabel().' - '.$w2->getLabel(),
+                        'old' => null,
+                        'new' => $vNew
+                    );
                 }
                 
                 $htmlList['html'] .= '<tr class="new">'.$htmlTr.'</tr>';
@@ -374,6 +442,16 @@ class FormChangesHtml
                     $vOld = $w2->getValue();
                     
                     $htmlTr.= '<td>'.esc_html($vOld).'</td>';
+                    
+                    
+                    $this->changes[] = array(
+                        'action' => 'removed',
+                        'name' => $w2->getName(),
+                        'key' => $w2->getName(),
+                        'label' => $widgetNewForm->getLabel().' - '.$w2->getLabel(),
+                        'old' => $vOld,
+                        'new' => null
+                    );
                 }
                 
                 $htmlList['html'] .= '<tr class="removed">'.$htmlTr.'</tr>';
@@ -398,6 +476,14 @@ class FormChangesHtml
     public static function formNew(BaseForm $form) {
         $fch = new FormChangesHtml(null, $form);
         $fch->form2html();
+        
+        // mark all as new
+        $c = $fch->getChanges();
+        for($x=0; $x < count($c); $x++) {
+            $c[$x]['action'] = 'new';
+        }
+        $fch->setChanges($c);
+        
         
         return $fch;
     }
@@ -428,6 +514,15 @@ class FormChangesHtml
                 $val = format_date($val, 'd-m-Y');
 
             $html .= '<tr><td>' . esc_html($w->getLabel()) . '</td><td>' . esc_html($val) . '</td></tr>' . "\n";
+            
+            $this->changes[] = array(
+                'action' => 'new',
+                'name' => $w->getName(),
+                'key' => $w->getName(),
+                'label' => $w->getLabel(),
+                'old' => null,
+                'new' => $val
+            );
         }
         $html .= '</tbody>';
         $html .= '</table>';
@@ -449,7 +544,6 @@ class FormChangesHtml
                 
                 $html .= $lew['html'];
             }
-            
         }
         
         $this->html = $html;
@@ -480,6 +574,14 @@ class FormChangesHtml
     {
         $fch = new FormChangesHtml(null, $form);
         $fch->form2html();
+        
+        // mark all as removed
+        $c = $fch->getChanges();
+        for($x=0; $x < count($c); $x++) {
+            $c[$x]['action'] = 'removed';
+        }
+        $fch->setChanges($c);
+        
         
         return $fch;
     }

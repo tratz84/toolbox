@@ -717,6 +717,16 @@ function close_popup() {
 
 
 
+function show_object_log(objectName, objectId) {
+	show_popup(appUrl('/?m=base&c=objectLog'), {
+		data: {
+			'object_name': objectName,
+			'object_id': objectId
+		}
+	});
+}
+
+
 /**
  * 
  * @param title       - title dialog
