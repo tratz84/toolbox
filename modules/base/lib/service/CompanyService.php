@@ -92,7 +92,9 @@ class CompanyService extends ServiceBase implements ObjectHookable {
         $newPhones = $companyForm->getWidget('phoneList')->asArray();
         $phoneDao->mergeFormListMTON('customer__company_phone', 'company_id', $company->getCompanyId(), $newPhones, 'sort');
         
-        ObjectLogDAO::saveChanges('company', $company->getCompanyId(), $fch->getChanges());
+        // log
+        $logService = $this->oc->get(LogService::class);
+        $logService->saveChangesDBObject($company, $fch);
         
         if ($isNew) {
             ActivityUtil::logActivityCompany($company->getCompanyId(), 'customer__company', null, 'company-created', 'Bedrijf aangemaakt', $fch->getHtml());

@@ -4,7 +4,7 @@
 	<div class="toolbox">
 		<a href="<?= appUrl('/?m=base&c=company') ?>" class="fa fa-chevron-circle-left"></a>
 		
-		<?= render_object_log_button('company', $company_id) ?>
+		<?= render_object_log_button_dbobject($company) ?>
 		
 		<a href="javascript:void(0);" class="fa fa-save submit-form"></a>
 	</div>

@@ -14,6 +14,7 @@ use core\service\ServiceBase;
 use base\model\ObjectMetaDAO;
 use base\forms\FormChangesHtml;
 use base\forms\PersonForm;
+use base\model\ObjectLogDAO;
 
 class PersonService extends ServiceBase {
     
@@ -81,6 +82,9 @@ class PersonService extends ServiceBase {
         $newPhones = $personForm->getWidget('phoneList')->asArray();
         $phoneDao->mergeFormListMTON('customer__person_phone', 'person_id', $person->getPersonId(), $newPhones, 'sort');
         
+        // log
+        $logService = $this->oc->get(LogService::class);
+        $logService->saveChangesDBObject($person, $fch);
         
         if ($isNew) {
             ActivityUtil::logActivityPerson($person->getPersonId(), 'customer__person', null, 'person-created', 'Persoon aangemaakt', $fch->getHtml());

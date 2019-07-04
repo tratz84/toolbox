@@ -2,6 +2,7 @@
 
 
 use core\Context;
+use core\db\DBObject;
 
 function render_object_log_button($objectName, $objectId) {
     if (!$objectId)
@@ -17,3 +18,9 @@ function render_object_log_button($objectName, $objectId) {
     return $html;
 }
 
+function render_object_log_button_dbobject(DBObject $db) {
+    $objectName = get_class($db);
+    $objectId = $db->getField( $db->getPrimaryKey() );
+    
+    return render_object_log_button($objectName, $objectId);
+}

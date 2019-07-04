@@ -6,6 +6,8 @@ namespace base\service;
 use base\model\ObjectLogDAO;
 use core\forms\lists\ListResponse;
 use core\service\ServiceBase;
+use base\forms\FormChangesHtml;
+use core\db\DBObject;
 
 class LogService extends ServiceBase {
     
@@ -19,5 +21,19 @@ class LogService extends ServiceBase {
         
         return $r;
     }
+    
+    public function saveChangesDBObject(DBObject $obj, FormChangesHtml $fch) {
+        $objectId = $obj->getField( $obj->getPrimaryKey() );
+        $objectName = get_class($obj);
+        
+        return $this->saveChanges($objectName, $objectId, $fch);
+    }
+    
+    public function saveChanges($objectName, $objectId, FormChangesHtml $fch) {
+        $olDao = new ObjectLogDAO();
+        return $olDao->saveChanges($objectName, $objectId, $fch->getChanges());
+    }
+    
+    
     
 }

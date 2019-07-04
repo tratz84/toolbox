@@ -2,6 +2,7 @@
 <div class="page-header">
 	<div class="toolbox">
 		<a href="<?= appUrl('/?m=base&c=person') ?>" class="fa fa-chevron-circle-left"></a>
+		<?= render_object_log_button_dbobject($person) ?>
 		<a href="javascript:void(0);" class="fa fa-save submit-form"></a>
 	</div>
 

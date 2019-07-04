@@ -91,6 +91,11 @@ $lang['fieldname.email_address']   = $lang['Email'];
 $lang['fieldname.primary_address'] = $lang['Primary'];
 $lang['fieldname.phonenr']         = $lang['Phonenr'];
 
+// log-fields person
+$lang['fieldname.firstname']       = 'Voornaam';
+$lang['fieldname.insert_lastname'] = 'Tussenvoegsel';
+$lang['fieldname.lastname']        = 'Achternaam';
+
 
 
 // user
