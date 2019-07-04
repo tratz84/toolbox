@@ -18,7 +18,11 @@
 			<th style="text-align: right; padding-right: 10px;">
 				Bedrag
 				
-				<?= infopopup('Bedragen exclusief btw') ?>
+				<?php if ($invoiceSettings->getPricesIncVat()) : ?>
+					<?= infopopup('Bedragen inclusief btw') ?>
+				<?php else : ?>
+					<?= infopopup('Bedragen exclusief btw') ?>
+				<?php endif; ?>
 			</th>
 			<?php endif; ?>
 			<th>Status</th>
