@@ -36,6 +36,14 @@
 
 	<div style="padding: 5px 5px 15px 5px; margin-bottom: 15px;">
 		<?= $checkboxObjectLocking->render() ?>
+		
+		<div class="clear">
+			<label>
+				Object logging
+				<?= infopopup('Log wijzigingen?') ?>
+			</label>
+			<?= render_checkbox('objectLogEnabled', ['checked' => @$settings['objectLogEnabled']] ) ?>
+		</div>
 	</div>
 
 	<div class="clear"></div>

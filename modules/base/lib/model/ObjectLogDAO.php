@@ -4,6 +4,7 @@
 namespace base\model;
 
 
+use core\Context;
 use core\db\query\QueryBuilderWhere;
 
 class ObjectLogDAO extends \core\db\DAOObject {
@@ -15,7 +16,9 @@ class ObjectLogDAO extends \core\db\DAOObject {
 	
 	
 	public static function saveChanges($objectName, $objectId, $changes) {
-	    
+	    if (Context::getInstance()->isObjectLogEnabled() == false)
+	        return false;
+        
 	    for($x=count($changes)-1; $x >= 0; $x--) {
 	        $obj = new ObjectLog();
 	        $obj->setObjectName($objectName);

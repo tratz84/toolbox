@@ -5,6 +5,7 @@ require_once dirname(__FILE__).'/lib/functions/person.php';
 require_once dirname(__FILE__).'/lib/functions/debug.php';
 require_once dirname(__FILE__).'/lib/functions/object_meta.php';
 require_once dirname(__FILE__).'/lib/functions/object_lock.php';
+require_once dirname(__FILE__).'/lib/functions/object_log.php';
 
 
 use core\ObjectContainer;
