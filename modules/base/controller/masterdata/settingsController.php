@@ -48,7 +48,7 @@ class settingsController extends BaseController {
             
             $settingsService->updateValue('object_locking', get_var('object_locking')?1:0);
             $settingsService->updateValue('master_base_color', get_var('master_base_color'));
-            $settingsService->updateValue('objectLogEnabled', get_var('objectLogEnabled'));
+            $settingsService->updateValue('objectLogEnabled', get_var('objectLogEnabled')?1:0);
             
                 
             redirect('/?m=base&c=masterdata/index');

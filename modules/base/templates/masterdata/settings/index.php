@@ -37,6 +37,7 @@
 	<div style="padding: 5px 5px 15px 5px; margin-bottom: 15px;">
 		<?= $checkboxObjectLocking->render() ?>
 		
+		<?php if ($ctx->isExperimental()) : ?>
 		<div class="clear">
 			<label>
 				Object logging
@@ -44,6 +45,7 @@
 			</label>
 			<?= render_checkbox('objectLogEnabled', ['checked' => @$settings['objectLogEnabled']] ) ?>
 		</div>
+		<?php endif; ?>
 	</div>
 
 	<div class="clear"></div>
