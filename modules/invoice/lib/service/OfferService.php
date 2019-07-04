@@ -20,6 +20,7 @@ use invoice\model\OfferDAO;
 use invoice\model\OfferLineDAO;
 use invoice\model\OfferStatus;
 use invoice\model\OfferStatusDAO;
+use base\service\LogService;
 
 class OfferService extends ServiceBase {
     
@@ -178,6 +179,10 @@ class OfferService extends ServiceBase {
         $newOfferLines = $form->getWidget('offerLines')->getObjects();
         $olDao->mergeFormListMTO1('offer_id', $offer->getOfferId(), $newOfferLines);
         
+
+        // log
+        $logService = $this->oc->get(LogService::class);
+        $logService->saveChangesDBObject($offer, $fch);
         
         if ($isNew) {
             ActivityUtil::logActivity($offer->getCompanyId(), $offer->getPersonId(), 'invoice__offer', $offer->getOfferId(), 'offer-created', 'Offerte aangemaakt '.$offer->getOfferNumberText(), $fch->getHtml());

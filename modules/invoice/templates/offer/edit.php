@@ -11,6 +11,8 @@
 		
 		<?= render_dbobject_lock($offer, 'Offerte '.$offer->getOfferNumberText()) ?>
 		
+		<?= render_object_log_button_dbobject($offer) ?>
+		
 		<?php if (isset($errorMessage) == false && dbobject_is_locked($offer) == false) : ?>
 			<a href="javascript:void(0);" class="fa fa-save submit-form"></a>
 		<?php endif; ?>
