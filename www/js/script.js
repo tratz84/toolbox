@@ -1317,6 +1317,9 @@ function text2date(str) {
 	var minuts = 0;
 	var seconds = 0;
 	
+	if (str == null)
+		return null;
+	
 	if (str.match(/^\d{4}-\d{2}-\d{2}$/)) {
 		var tokens = str.split('-');
 		year  = parseInt(tokens[0]);
