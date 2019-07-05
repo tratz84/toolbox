@@ -5,6 +5,7 @@ namespace project\model;
 
 
 use core\db\query\QueryBuilderWhere;
+use core\db\query\QueryBuilderWhereContainer;
 
 class ProjectHourDAO extends \core\db\DAOObject {
 
@@ -82,7 +83,19 @@ class ProjectHourDAO extends \core\db\DAOObject {
 	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('project__project_hour.start_time', '>=', format_date($opts['start'], 'Y-m-d 00:00:00')));
 	    }
 	    if (isset($opts['end']) && $opts['end']) {
-	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('project__project_hour.end_time', '<=', format_date($opts['end'], 'Y-m-d 23:59:59')));
+	        $qbwc = new QueryBuilderWhereContainer('OR');
+	        
+	        // has start time
+	        $qbwc->addWhere(QueryBuilderWhere::whereRefByVal('project__project_hour.end_time', '<=', format_date($opts['end'], 'Y-m-d 23:59:59')));
+	        
+	        // on start time
+	        $qbwcEndTimeNull = new QueryBuilderWhereContainer();
+	        $qbwcEndTimeNull->addWhere(QueryBuilderWhere::whereRefByRef('project__project_hour.end_time', 'IS', 'NULL'));
+	        $qbwcEndTimeNull->addWhere(QueryBuilderWhere::whereRefByVal('project__project_hour.start_time', '<=', format_date($opts['end'], 'Y-m-d 23:59:59')));
+	        $qbwc->addWhere($qbwcEndTimeNull);
+	        
+	        // gogogo
+	        $qb->addWhere( $qbwc );
 	    }
 	    
 	    
