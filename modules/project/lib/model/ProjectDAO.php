@@ -62,6 +62,34 @@ class ProjectDAO extends \core\db\DAOObject {
 		return $qb->queryCursor( Project::class );
 	}
 	
+	/**
+	 * 
+	 * @param string $start - notation, <year>-<month>. For example: 2018-01
+	 * @param string $end
+	 */
+	public function totalsPerMonth($start, $end) {
+		$sql = "select date_format(start_time, '%Y-%m') as month, sum( if (registration_type = 'duration', duration, timestampdiff(minute, start_time, end_time)/60) ) as total
+				from project__project_hour
+				WHERE start_time >= ? AND end_time <= ?
+				group by date_format(start_time, '%Y-%m')
+				order by date_format(start_time, '%Y-%m') desc";
+		
+		list($endYear, $endMonth) = explode('-', $end, 2);
+		$endTime = mktime(12, 0, 0, $endMonth, 12, $endYear);
+		$dtEnd = date('Y-m-t 23:59:59', $endTime);
+		
+		$q = $this->query($sql, array($start.'-01 00:00:00', $dtEnd));
+		
+		$list = array();
+		while($row = $q->fetch_array()) {
+			$list[] = array(
+				'month' => $row[0],
+				'hours' => $row[1]
+			);
+		}
+
+		return $list;
+	}
 
 }
 

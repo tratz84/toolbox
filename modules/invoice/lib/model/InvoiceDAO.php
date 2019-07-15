@@ -173,5 +173,31 @@ class InvoiceDAO extends \core\db\DAOObject {
 		return $this->queryValue('select max(invoice_date) from invoice__invoice');
 	}
 
+	
+	public function totalsPerMonth($start, $end) {
+	    $sql = "select date_format(invoice_date, '%Y-%m') as month, sum(total_calculated_price), sum(total_calculated_price_incl_vat)
+                from invoice__invoice
+                WHERE invoice_date >= ? AND invoice_date <= ?
+                group by date_format(invoice_date, '%Y-%m')
+                order by date_format(invoice_date, '%Y-%m') desc";
+
+	    list($endYear, $endMonth) = explode('-', $end, 2);
+	    $endTime = mktime(12, 0, 0, $endMonth, 12, $endYear);
+	    $dtEnd = date('Y-m-t 23:59:59', $endTime);
+	    
+	    $q = $this->query($sql, array($start.'-01 00:00:00', $dtEnd));
+	    
+	    $list = array();
+	    while($row = $q->fetch_array()) {
+	        $list[] = array(
+	            'month' => $row[0],
+	            'sum_excl_vat' => $row[1],
+	            'sum_incl_vat' => $row[1],
+	        );
+	    }
+	    
+	    return $list;
+	    
+	}
 
 }
