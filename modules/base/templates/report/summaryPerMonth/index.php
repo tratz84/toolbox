@@ -32,7 +32,7 @@
     		<li>
     			<label>
         			<input type="radio" name="ds1" value="<?= esc_attr($ds['url']) ?>" />
-        			<?= esc_html($ds['label']) ?>
+        			<?= $ds['label'] ?>
     			</label>
     		</li>
     		<?php endforeach; ?>
@@ -47,7 +47,7 @@
     		<li>
     			<label>
         			<input type="radio" name="ds2" value="<?= esc_attr($ds['url']) ?>" />
-        			<?= esc_html($ds['label']) ?>
+        			<?= $ds['label'] ?>
     			</label>
     		</li>
     		<?php endforeach; ?>
