@@ -150,6 +150,30 @@ function renderGraph(datasets) {
 	if (currentChart != null) {
 		currentChart.destroy();
 	}
+
+
+	var yAxes = [];
+	yAxes.push({
+		type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+		display: true,
+		position: 'left',
+		id: 'y-axis-1',
+	});
+
+	if (chart_datasets.length > 1) {
+		yAxes.push({
+			type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+			display: true,
+			position: 'right',
+			id: 'y-axis-2',
+
+			// grid line settings
+			gridLines: {
+				drawOnChartArea: false, // only want the grid lines for one axis to show up
+			},
+		});
+	}
+
 	
 	currentChart = new Chart(ctx, {
 	    type: 'line',
@@ -167,22 +191,7 @@ function renderGraph(datasets) {
 	            }]
 	        },
 			scales: {
-				yAxes: [{
-					type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-					display: true,
-					position: 'left',
-					id: 'y-axis-1',
-				}, {
-					type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-					display: true,
-					position: 'right',
-					id: 'y-axis-2',
-
-					// grid line settings
-					gridLines: {
-						drawOnChartArea: false, // only want the grid lines for one axis to show up
-					},
-				}],
+				yAxes: yAxes
 			}
 	    }
 	});
