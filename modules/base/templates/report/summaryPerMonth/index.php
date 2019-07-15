@@ -108,6 +108,7 @@ function updateGraph() {
 }
 
 
+var currentChart = null;
 function renderGraph(datasets) {
 	var c = document.getElementById('chart-container');
 	var ctx = c.getContext('2d');
@@ -145,9 +146,12 @@ function renderGraph(datasets) {
 	}
 	console.log(chart_datasets);
 
+
+	if (currentChart != null) {
+		currentChart.destroy();
+	}
 	
-	
-	new Chart(ctx, {
+	currentChart = new Chart(ctx, {
 	    type: 'line',
 	    data: {
 	        datasets: chart_datasets,
