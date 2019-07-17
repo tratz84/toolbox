@@ -26,7 +26,7 @@ class summaryPerMonthController extends BaseReportController {
             $dtStart = next_month($dtStart);
         }
         
-        $this->periods = array_reverse($this->periods);
+//         $this->periods = array_reverse($this->periods);
         
         return $this->renderToString();
     }

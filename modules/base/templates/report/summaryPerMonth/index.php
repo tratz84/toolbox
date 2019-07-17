@@ -10,13 +10,13 @@
     Periode
     <select name="start">
     	<?php for($x=0; $x < count($periods); $x++) : ?>
-    	<option value="<?= esc_attr($periods[$x]['month']) ?>" <?= ($x==12?'selected=selected':'') ?>><?= esc_html($periods[$x]['label']) ?></option>
+    	<option value="<?= esc_attr($periods[$x]['month']) ?>" <?= ($x==count($periods)-13?'selected=selected':'') ?>><?= esc_html($periods[$x]['label']) ?></option>
     	<?php endfor; ?>
     </select>
     
     <select name="end">
     	<?php for($x=0; $x < count($periods); $x++) : ?>
-    	<option value="<?= esc_attr($periods[$x]['month']) ?>"><?= esc_html($periods[$x]['label']) ?></option>
+    	<option value="<?= esc_attr($periods[$x]['month']) ?>" <?= ($x+1 == count($periods) ? 'selected=selected' : '') ?>><?= esc_html($periods[$x]['label']) ?></option>
     	<?php endfor; ?>
     </select>
 </div>
