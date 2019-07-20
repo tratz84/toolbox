@@ -1478,5 +1478,27 @@ function fill_form(form, obj) {
 	}
 }
 
+function link_input2text(src, dst) {
+	var obj1 = $(src);
+	
+	obj1.on('keyup change', function() {
+		if (typeof dst == 'function') {
+			dst( );
+		} else {
+			var t = '';
+			if (this.nodeName == 'SELECT') {
+				t = $(this).find('option:selected').text();
+				t = $.trim( t );
+			} else {
+				t = this.value;
+			}
+			
+			$(dst).text( t );
+		}
+	});
+}
+
+
+
 
 
