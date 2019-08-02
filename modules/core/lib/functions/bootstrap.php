@@ -12,6 +12,7 @@ function bootstrapContext($contextName) {
         $customer->setContextName('default');
         $customer->setDatabaseName(DEFAULT_DATABASE_NAME);
         $customer->setActive(true);
+        $customer->setExperimental(true);
     } else {
         $contextService = new \admin\service\ContextService();
         $customer = $contextService->readCustomerContext( $contextName );
