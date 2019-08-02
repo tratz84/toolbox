@@ -181,6 +181,27 @@ function delete_data_file($f) {
     return unlink($file);
 }
 
+function delete_data_path($path, $recursive = false) {
+    $fullpath = get_data_file($path);
+    
+    if ($fullpath === false)
+        return false;
+    
+    if (is_file($fullpath)) {
+        return unlink($fullpath);
+    } else if (is_dir($fullpath)) {
+        if ($recursive) {
+            $subfiles = list_data_directory( $path );
+            
+            foreach($subfiles as $subfile) {
+                delete_data_path( $path . '/' . $subfile, true );
+            }
+        }
+        
+        return rmdir( $fullpath );
+    }
+}
+
 /**
  * lists only files (not directories)
  */
@@ -201,6 +222,32 @@ function list_data_files($pathInDataDir) {
         if (is_file($dir . '/' . $f)) {
             $files[] = $f;
         }
+    }
+    closedir($dh);
+    
+    return $files;
+}
+
+/**
+ * lists all files + directories
+ */
+function list_data_directory($pathInDataDir) {
+    $ctx = Context::getInstance();
+    
+    $datadirContext = realpath($ctx->getDataDir());
+    if ($datadirContext == false)
+        return array();
+        
+        $dir = realpath( $datadirContext . '/' . $pathInDataDir );
+    if (strpos($dir, $datadirContext) !== 0)
+        return array();
+    
+    $dh = opendir($dir);
+    $files = array();
+    while ($f = readdir($dh)) {
+        if ($f == '.' || $f == '..') continue;
+        
+        $files[] = $f;
     }
     closedir($dh);
     
