@@ -12,15 +12,17 @@ class WebsiteTemplateService extends ServiceBase {
         $l = array();
         
         $templateDir = Context::getInstance()->getDataDir() . '/fastsite/templates';
+        $datadir = Context::getInstance()->getDataDir();
+        
         if (is_dir($templateDir)) {
-            $files = list_files($path);
+            $files = list_files($templateDir);
             
             foreach($files as $f) {
                 if (is_dir($templateDir.'/'.$f) == false) continue;
                 
                 $fullpath = realpath( $templateDir.'/'.$f );
                 
-                $relativePath = substr($fullpath, strlen(realpath($templateDir))+1);
+                $relativePath = substr($fullpath, strlen(realpath($datadir))+1);
                 
                 $l[$f] = array(
                     'fullpath' => $fullpath,

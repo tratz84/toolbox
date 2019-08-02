@@ -14,7 +14,7 @@ class WebsiteTemplateForm extends BaseForm {
         
         $this->enctypeToMultipartFormdata();
         
-        $this->addWidget(new FileField('file'));
+        $this->addWidget(new FileField('file', null, 'Template'));
     }
     
 }

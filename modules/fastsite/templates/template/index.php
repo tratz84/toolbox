@@ -15,15 +15,19 @@
 		<tr>
 			<th><?= t('Template name') ?></th>
 			<th><?= t('Path') ?></th>
+			<th></th>
 		</tr>
 	</thead>
 	
 	<tbody>
     	<?php foreach($templates as $templateName => $data) : ?>
-    	<tr>
+    	<tr onclick="window.location=appUrl('/?m=fastsite&c=templateEditor&n='+$(this).data('template-name'));" class="clickable" data-template-name="<?= esc_attr($templateName) ?>">
     		<td><?= esc_html($templateName) ?></td>
     		<td>
     			<?= esc_html($data['path']) ?>
+    		</td>
+    		<td>
+    			<a href="<?= appUrl('/?m=fastsite&c=template&a=delete&n='.urlencode($templateName)) ?>" class="fa fa-remove delete"></a>
     		</td>
     	</tr>
     	<?php endforeach; ?>
@@ -35,3 +39,11 @@
 	</tbody>
 
 </table>
+
+<script>
+
+$(document).ready(function() {
+	handle_deleteConfirmation();
+});
+	
+</script>
