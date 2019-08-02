@@ -1,6 +1,8 @@
 
 config/config-local.php
 
+data/
+
 
 # Eclipse settings
 .project
