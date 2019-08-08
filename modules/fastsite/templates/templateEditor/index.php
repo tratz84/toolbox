@@ -21,7 +21,13 @@
 	<tbody>
 		<?php foreach($files as $f) : ?>
 		<tr>
-			<td><?= esc_html( $f ) ?></td>
+			<td>
+				<?php if ($controller->extensionSupported($f)) : ?>
+				<a href="<?= appUrl('/?m=fastsite&c=templateEditor&a=edit&n='.urlencode($templateName).'&f='.urlencode($f)) ?>"><?= esc_html( $f ) ?></a>
+				<?php else : ?>
+				<?= esc_html( $f ) ?>
+				<?php endif; ?>
+			</td>
 			<td>
 				<a href="<?= appUrl('/?m=fastsite&c=templateEditor&a=edit&n='.urlencode($templateName).'&f='.urlencode($f)) ?>" class="fa fa-edit"></a>
 				<a href="<?= appUrl('/?m=fastsite&c=templateEditor&a=delete&n='.urlencode($templateName).'&f='.urlencode($f)) ?>" class="fa fa-remove"></a>

@@ -17,7 +17,7 @@ class templateEditorController extends BaseController {
         
         $this->templateName = get_var('n');
         $this->files = list_files($p, ['recursive' => true]);
-        
+        $this->controller = $this;
         
         
         return $this->render();
@@ -28,8 +28,13 @@ class templateEditorController extends BaseController {
         
     }
     
-    public function action_edit() {
+    public function extensionSupported($file) {
+        $extension = strtolower( substr($file, strrpos($file, '.')+1) );
         
+        return in_array($extension, ['css', 'php', 'js', 'html', 'htm', 'scss', 'sass', 'yml']) ? true : false;
+    }
+    
+    public function action_edit() {
         $this->templateName = $templateName = basename( get_var('n') );
         $this->file = $file = get_var('f');
         
@@ -48,8 +53,7 @@ class templateEditorController extends BaseController {
             return $this->render();
         }
         
-        $extension = strtolower( substr($f, strrpos($f, '.')+1) );
-        if (in_array($extension, ['css', 'php', 'js', 'html', 'htm', 'scss', 'sass', 'yml']) == false) {
+        if ($this->extensionSupported($f) == false) {
             $this->error = t('File extension not supported for editing');
             return $this->render();
         }

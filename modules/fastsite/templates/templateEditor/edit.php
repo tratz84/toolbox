@@ -8,7 +8,7 @@
 	File: <?= esc_html($templateName) ?>: <?= esc_html($file) ?>
 </div>
 
-<?php if ($error) : ?>
+<?php if (isset($error)) : ?>
 
 	<div>
 		An error has occured: <?= $error ?>
@@ -16,6 +16,7 @@
 
 <?php else : ?>
 
+	<textarea style="width: 100%; height: 500px;"></textarea>
 
 <?php endif; ?>
 
