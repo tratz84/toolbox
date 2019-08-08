@@ -80,7 +80,14 @@ function remote_addr() {
 }
 
 
-function list_files($path) {
+function list_files($path, $opts=array()) {
+    $path = realpath( $path );
+    
+    if (!$path)
+        return false;
+    
+    if (isset($opts['basepath']) == false)
+        $opts['basepath'] = $path;
     
     $dh = opendir( $path );
     if (!$dh) return false;
@@ -91,6 +98,24 @@ function list_files($path) {
         if ($f == '.' || $f == '..') continue;
         
         $files[] = $f;
+        
+        if (isset($opts['recursive']) && $opts['recursive'] && is_dir($path.'/'.$f)) {
+            $subfiles = list_files($path . '/' . $f, $opts);
+            
+            for($x=0; $x < count($subfiles); $x++) {
+                $subfile = $subfiles[$x];
+                
+                if (strpos($subfiles[$x], $opts['basepath']) !== false)
+                    $subfile = substr($subfile, strlen($opts['basepath']));
+                
+                $subfile = $f . '/' . $subfiles[$x];
+                
+                $subfiles[$x] = $subfile;
+            }
+            
+            $files = array_merge($files, $subfiles);
+        }
+        
     }
     
     return $files;
