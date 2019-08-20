@@ -1,0 +1,37 @@
+create table fastsite__webmenu (
+	webmenu_id int primary key auto_increment,
+    parent_webmenu_id int,
+    code varchar(64),
+    title varchar(255),
+    url varchar(255),
+    webpage_page_no int default null,
+    description text,
+    sort int,
+    edited datetime,
+    created datetime
+);
+
+create table fastsite__webpage (
+	webpage_id int primary key auto_increment,
+    page_no int,
+    rev int,
+    code varchar(64),
+    module varchar(64),
+    meta_title text,
+    meta_description text,
+    meta_keywords text,
+    content1 text,
+    content2 text,
+    active boolean default true,
+    edited datetime,
+    created datetime
+);
+create table fastsite__webpage_meta (
+	webpage_meta_id int primary key auto_increment,
+    page_no int,
+    meta_key varchar(64),
+    meta_value text,
+    index index_page_no (page_no),
+    index page_no_key (page_no, meta_key)
+)
+

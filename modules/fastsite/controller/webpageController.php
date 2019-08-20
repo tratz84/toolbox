@@ -3,7 +3,7 @@
 
 use core\controller\BaseController;
 
-class websiteController extends BaseController {
+class webpageController extends BaseController {
     
     
     public function action_index() {
