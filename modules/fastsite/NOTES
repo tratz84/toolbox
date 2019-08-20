@@ -17,6 +17,7 @@ create table fastsite__webpage (
     rev int,
     code varchar(64),
     module varchar(64),
+    url varchar(255),
     meta_title text,
     meta_description text,
     meta_keywords text,

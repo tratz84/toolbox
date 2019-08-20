@@ -56,6 +56,15 @@ class WebpageBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'url' => 
+  array (
+    'Field' => 'url',
+    'Type' => 'varchar(255)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
   'meta_title' => 
   array (
     'Field' => 'meta_title',
@@ -153,6 +162,10 @@ class WebpageBase extends \core\db\DBObject {
 		
 	public function setModule($p) { $this->setField('module', $p); }
 	public function getModule() { return $this->getField('module'); }
+	
+		
+	public function setUrl($p) { $this->setField('url', $p); }
+	public function getUrl() { return $this->getField('url'); }
 	
 		
 	public function setMetaTitle($p) { $this->setField('meta_title', $p); }
