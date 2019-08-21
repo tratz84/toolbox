@@ -4,7 +4,7 @@ create table fastsite__webmenu (
     code varchar(64),
     label varchar(255),
     url varchar(255),
-    webpage_page_no int default null,
+    webpage_page_id int default null,
     description text,
     sort int,
     edited datetime,
@@ -37,10 +37,13 @@ create table fastsite__webpage_rev (
 
 create table fastsite__webpage_meta (
 	webpage_meta_id int primary key auto_increment,
-    page_no int,
+    webpage_id int,
     meta_key varchar(64),
     meta_value text,
-    index index_page_no (page_no),
-    index page_no_key (page_no, meta_key)
+    index index_webpage_id (webpage_id),
+    index webpage_id_meta_key (webpage_id, meta_key)
 )
+
+
+
 

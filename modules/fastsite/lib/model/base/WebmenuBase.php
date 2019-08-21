@@ -56,9 +56,9 @@ class WebmenuBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
-  'webpage_page_no' => 
+  'webpage_page_id' => 
   array (
-    'Field' => 'webpage_page_no',
+    'Field' => 'webpage_page_id',
     'Type' => 'int(11)',
     'Null' => 'YES',
     'Key' => '',
@@ -128,8 +128,8 @@ class WebmenuBase extends \core\db\DBObject {
 	public function getUrl() { return $this->getField('url'); }
 	
 		
-	public function setWebpagePageNo($p) { $this->setField('webpage_page_no', $p); }
-	public function getWebpagePageNo() { return $this->getField('webpage_page_no'); }
+	public function setWebpagePageId($p) { $this->setField('webpage_page_id', $p); }
+	public function getWebpagePageId() { return $this->getField('webpage_page_id'); }
 	
 		
 	public function setDescription($p) { $this->setField('description', $p); }

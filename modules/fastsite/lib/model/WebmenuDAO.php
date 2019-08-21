@@ -11,6 +11,18 @@ class WebmenuDAO extends \core\db\DAOObject {
 		$this->setObjectName( '\\fastsite\\model\\Webmenu' );
 	}
 	
+	
+	
+	public function read($id) {
+        return $this->queryOne('select * from fastsite__webmenu where webmenu_id = ?', array($id));
+	}
+	
+	
+	public function delete($id) {
+	    return $this->query('delete from fastsite__webmenu where webmenu_id = ?', array($id));
+	}
+	
+	
 
 }
 

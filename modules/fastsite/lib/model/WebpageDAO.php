@@ -11,6 +11,9 @@ class WebpageDAO extends \core\db\DAOObject {
 		$this->setObjectName( '\\fastsite\\model\\Webpage' );
 	}
 	
+	public function readAll() {
+	    return $this->queryList('select * from fastsite__webpage');
+	}
 	
 	public function read($id) {
 	    return $this->queryOne('select * from fastsite__webpage where webpage_id = ?', array($id));

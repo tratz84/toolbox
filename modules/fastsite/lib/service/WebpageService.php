@@ -97,6 +97,10 @@ class WebpageService extends ServiceBase {
     }
     
     
-    
+    public function readAllWebpages() {
+        $wDao = new WebpageDAO();
+        
+        return $wDao->readAll();
+    }
     
 }
