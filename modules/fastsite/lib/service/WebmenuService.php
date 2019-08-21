@@ -6,6 +6,8 @@ namespace fastsite\service;
 use core\service\ServiceBase;
 use fastsite\model\WebmenuDAO;
 use core\exception\ObjectNotFoundException;
+use fastsite\form\WebmenuForm;
+use fastsite\model\Webmenu;
 
 class WebmenuService extends ServiceBase {
     
@@ -16,6 +18,21 @@ class WebmenuService extends ServiceBase {
         $menus = $wDao->readAll();
         
         return $menus;
+    }
+    
+    
+    public function readByParent($parentWebpageId=null, $recursive=false) {
+        $wDao = new WebmenuDAO();
+        
+        $items = $wDao->readByParent( $parentWebpageId );
+        if ($recursive) for($x=0; $x < count($items); $x++) {
+            $id = $items[$x]->getWebmenuId();
+            
+            $subitems = $this->readByParent($id, true);
+            $items[$x]->setChildren($subitems);
+        }
+        
+        return $items;
     }
     
     
@@ -31,6 +48,25 @@ class WebmenuService extends ServiceBase {
         return $m;
     }
     
+    
+    public function saveWebmenu(WebmenuForm $form) {
+        $wDao = new WebmenuDAO();
+        
+        $id = $form->getWidgetValue('webmenu_id');
+        
+        
+        if ($id) {
+            $webmenu = $wDao->read($id);
+        } else {
+            $webmenu = new Webmenu();
+        }
+        
+        $form->fill($webmenu, array('webmenu_id', 'parent_webmenu_id', 'code', 'label', 'url', 'webpage_id', 'description'));
+        
+        $webmenu->save();
+        
+        return $webmenu;
+    }
     
     
 }
