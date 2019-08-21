@@ -12,6 +12,10 @@ class WebmenuDAO extends \core\db\DAOObject {
 	}
 	
 	
+	public function readAll() {
+	    return $this->queryList('select * from fastsite__webmenu');
+	}
+	
 	
 	public function read($id) {
         return $this->queryOne('select * from fastsite__webmenu where webmenu_id = ?', array($id));

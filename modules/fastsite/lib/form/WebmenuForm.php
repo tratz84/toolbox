@@ -19,6 +19,7 @@ class WebmenuForm extends BaseForm {
         
         $this->addWidget(new HiddenField('webmenu_id'));
         $this->addWidget(new TextField('code', '', 'Code'));
+        $this->addParentWebmenu();
         $this->addWidget(new TextField('label', '', 'Label'));
         $this->addWidget(new TextField('url', '', 'Url'));
         $this->addWebpageSelector();

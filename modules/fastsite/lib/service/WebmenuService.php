@@ -10,6 +10,13 @@ use core\exception\ObjectNotFoundException;
 class WebmenuService extends ServiceBase {
     
     
+    public function readMenus() {
+        $wDao = new WebmenuDAO();
+        
+        $menus = $wDao->readAll();
+        
+        return $menus;
+    }
     
     
     public function readMenu($menuId) {
