@@ -13,20 +13,28 @@ create table fastsite__webmenu (
 
 create table fastsite__webpage (
 	webpage_id int primary key auto_increment,
-    page_no int,
-    rev int,
+	webpage_rev_id int,
     code varchar(64),
-    module varchar(64),
     url varchar(255),
+    module varchar(64),
+    active boolean default true,
+    edited datetime,
+    created datetime,
+    unique(code)
+);
+
+create table fastsite__webpage_rev (
+	webpage_rev_id int primary key auto_increment,
+	webpage_id int,
+	rev int,
     meta_title text,
     meta_description text,
     meta_keywords text,
     content1 text,
     content2 text,
-    active boolean default true,
-    edited datetime,
     created datetime
 );
+
 create table fastsite__webpage_meta (
 	webpage_meta_id int primary key auto_increment,
     page_no int,

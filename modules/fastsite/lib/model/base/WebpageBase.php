@@ -20,18 +20,9 @@ class WebpageBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => 'auto_increment',
   ),
-  'page_no' => 
+  'webpage_rev_id' => 
   array (
-    'Field' => 'page_no',
-    'Type' => 'int(11)',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
-  ),
-  'rev' => 
-  array (
-    'Field' => 'rev',
+    'Field' => 'webpage_rev_id',
     'Type' => 'int(11)',
     'Null' => 'YES',
     'Key' => '',
@@ -43,16 +34,7 @@ class WebpageBase extends \core\db\DBObject {
     'Field' => 'code',
     'Type' => 'varchar(64)',
     'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
-  ),
-  'module' => 
-  array (
-    'Field' => 'module',
-    'Type' => 'varchar(64)',
-    'Null' => 'YES',
-    'Key' => '',
+    'Key' => 'UNI',
     'Default' => NULL,
     'Extra' => '',
   ),
@@ -65,46 +47,10 @@ class WebpageBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
-  'meta_title' => 
+  'module' => 
   array (
-    'Field' => 'meta_title',
-    'Type' => 'text',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
-  ),
-  'meta_description' => 
-  array (
-    'Field' => 'meta_description',
-    'Type' => 'text',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
-  ),
-  'meta_keywords' => 
-  array (
-    'Field' => 'meta_keywords',
-    'Type' => 'text',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
-  ),
-  'content1' => 
-  array (
-    'Field' => 'content1',
-    'Type' => 'text',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
-  ),
-  'content2' => 
-  array (
-    'Field' => 'content2',
-    'Type' => 'text',
+    'Field' => 'module',
+    'Type' => 'varchar(64)',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -148,44 +94,20 @@ class WebpageBase extends \core\db\DBObject {
 	public function getWebpageId() { return $this->getField('webpage_id'); }
 	
 		
-	public function setPageNo($p) { $this->setField('page_no', $p); }
-	public function getPageNo() { return $this->getField('page_no'); }
-	
-		
-	public function setRev($p) { $this->setField('rev', $p); }
-	public function getRev() { return $this->getField('rev'); }
+	public function setWebpageRevId($p) { $this->setField('webpage_rev_id', $p); }
+	public function getWebpageRevId() { return $this->getField('webpage_rev_id'); }
 	
 		
 	public function setCode($p) { $this->setField('code', $p); }
 	public function getCode() { return $this->getField('code'); }
 	
 		
-	public function setModule($p) { $this->setField('module', $p); }
-	public function getModule() { return $this->getField('module'); }
-	
-		
 	public function setUrl($p) { $this->setField('url', $p); }
 	public function getUrl() { return $this->getField('url'); }
 	
 		
-	public function setMetaTitle($p) { $this->setField('meta_title', $p); }
-	public function getMetaTitle() { return $this->getField('meta_title'); }
-	
-		
-	public function setMetaDescription($p) { $this->setField('meta_description', $p); }
-	public function getMetaDescription() { return $this->getField('meta_description'); }
-	
-		
-	public function setMetaKeywords($p) { $this->setField('meta_keywords', $p); }
-	public function getMetaKeywords() { return $this->getField('meta_keywords'); }
-	
-		
-	public function setContent1($p) { $this->setField('content1', $p); }
-	public function getContent1() { return $this->getField('content1'); }
-	
-		
-	public function setContent2($p) { $this->setField('content2', $p); }
-	public function getContent2() { return $this->getField('content2'); }
+	public function setModule($p) { $this->setField('module', $p); }
+	public function getModule() { return $this->getField('module'); }
 	
 		
 	public function setActive($p) { $this->setField('active', $p); }

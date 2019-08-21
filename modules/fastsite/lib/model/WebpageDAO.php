@@ -11,12 +11,32 @@ class WebpageDAO extends \core\db\DAOObject {
 		$this->setObjectName( '\\fastsite\\model\\Webpage' );
 	}
 	
-
+	
+	public function read($id) {
+	    return $this->queryOne('select * from fastsite__webpage where webpage_id = ?', array($id));
+	}
+	
+	
+	public function readByCode($code) {
+	    return $this->queryOne('select * from fastsite__webpage where code = ?', array($code));
+	}
+	
+	public function readByUrl($url) {
+	    return $this->queryOne('select * from fastsite__webpage where url = ?', array($url));
+	}
+	
+	
+	public function updateWebpageRev($webpageId, $webpageRevId) {
+	    $this->query('update fastsite__webpage set webpage_rev_id = ? where webpage_id = ?', array($webpageRevId, $webpageId));
+	}
+	
+	
 	public function search($opts=array()) {
 	    
 	    $qb = $this->createQueryBuilder();
 	    
 	    $qb->setTable('fastsite__webpage');
+	    $qb->join('fastsite__webpage_rev', 'webpage_rev_id');
 	    
 	    $qb->setOrderBy('url');
 	    
