@@ -2,7 +2,7 @@ create table fastsite__webmenu (
 	webmenu_id int primary key auto_increment,
     parent_webmenu_id int,
     code varchar(64),
-    title varchar(255),
+    label varchar(255),
     url varchar(255),
     webpage_page_no int default null,
     description text,

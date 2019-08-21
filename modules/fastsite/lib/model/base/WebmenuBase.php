@@ -38,9 +38,9 @@ class WebmenuBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
-  'title' => 
+  'label' => 
   array (
-    'Field' => 'title',
+    'Field' => 'label',
     'Type' => 'varchar(255)',
     'Null' => 'YES',
     'Key' => '',
@@ -120,8 +120,8 @@ class WebmenuBase extends \core\db\DBObject {
 	public function getCode() { return $this->getField('code'); }
 	
 		
-	public function setTitle($p) { $this->setField('title', $p); }
-	public function getTitle() { return $this->getField('title'); }
+	public function setLabel($p) { $this->setField('label', $p); }
+	public function getLabel() { return $this->getField('label'); }
 	
 		
 	public function setUrl($p) { $this->setField('url', $p); }
