@@ -726,6 +726,7 @@ function slugify($str) {
     
     $str = strtolower($str);
     $str = trim($str);
+    $str = str_replace('\\', '-', $str);
     $str = preg_replace('/[^a-z0-9 \\-\\_]/', '', $str);
     $str = str_replace(' ', '-', $str);
     $str = str_replace('_', '-', $str);
