@@ -16,3 +16,29 @@
 
 
 <?= $form->render() ?>
+
+
+<script>
+
+$(document).ready(function() {
+	renderRoutingInput();
+	$('[name=webpage_id]').change(function() { renderRoutingInput(); });
+});
+
+
+
+function renderRoutingInput() {
+	var webpage_id = $('[name=webpage_id]').val();
+
+	if (webpage_id  == '') {
+		$('.url-widget').show();
+	} else {
+		$('.url-widget').hide();
+	}
+}
+
+
+
+
+</script>
+

@@ -113,7 +113,7 @@ class WebmenuForm extends BaseForm {
         }
         
         
-        $this->addWidget(new SelectField('webpage_page_id', '', $sites, 'Webpage'));
+        $this->addWidget(new SelectField('webpage_id', '', $sites, 'Webpage'));
     }
     
 }

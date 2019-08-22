@@ -4,7 +4,7 @@ create table fastsite__webmenu (
     code varchar(64),
     label varchar(255),
     url varchar(255),
-    webpage_page_id int default null,
+    webpage_id int default null,
     description text,
     sort int,
     edited datetime,
