@@ -18,6 +18,17 @@ function DocumentImageEditor(container, opts) {
 	
 	this.degrees = 0;
 	
+	this.crop = {
+		pos1: { x: 0, y: 0 },
+		pos2: null
+	};
+	
+	
+	this.draw = function() {
+		this.drawImage();
+		
+		this.drawCropContainer();
+	};
 	
 	this.drawImage = function() {
 		var ctx = this.canvas.getContext('2d');
@@ -48,8 +59,34 @@ function DocumentImageEditor(container, opts) {
 	};
 	
 	
-	this.init = function() {
+	this.drawCropContainer = function() {
+		var ctx = this.canvas.getContext('2d');
 		
+		var cw = this.canvas.width;
+		var ch = this.canvas.height;
+		
+		if (this.crop.pos2 == null) {
+			this.crop.pos2 = { x: cw, y: ch };
+		}
+		
+		var pos1 = this.crop.pos1;
+		var pos2 = this.crop.pos2;
+		
+		ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+		
+		var img = ctx.getImageData(pos1.x, pos1.y, pos2.x-pos1.x, pos2.y-pos1.y);
+		ctx.fillRect(0, 0, cw, ch);
+		ctx.putImageData(img, pos1.x, pos1.y);
+		
+		// rectangle
+		ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+		ctx.lineWidth = 3;
+		ctx.rect(this.crop.pos1.x, this.crop.pos1.y, this.crop.pos2.x-this.crop.pos1.x, this.crop.pos2.y-this.crop.pos1.y);
+		ctx.stroke();
+	};
+	
+	
+	this.init = function() {
 		this.range = document.createElement('input');
 		this.range.type = 'range';
 		this.range.min = 0;
@@ -57,7 +94,7 @@ function DocumentImageEditor(container, opts) {
 		this.range.value = 0;
 		$(this.range).on('input change', function(evt) {
 			this.degrees = evt.target.value
-			this.drawImage();
+			this.draw();
 		}.bind(this));
 		$(this.container).append( this.range );
 		
@@ -75,7 +112,7 @@ function DocumentImageEditor(container, opts) {
 		this.img = document.createElement('img');
 		this.img.src = this.opts.image_url;
 		this.img.onload = function() {
-			this.drawImage();
+			this.draw();
 		}.bind(this);
 		
 
