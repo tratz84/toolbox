@@ -96,6 +96,20 @@ function list_files($path) {
     return $files;
 }
 
+function file_extension($file) {
+    $p = strrpos($file, '.');
+    
+    if ($p === false) {
+        return false;
+    }
+    
+    $ext = substr($file, $p+1);
+    $ext = strtolower($ext);
+    
+    return $ext;
+}
+
+
 
 function load_php_file($file) {
     $r = include $file;
