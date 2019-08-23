@@ -19,6 +19,7 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
     
     $miDocs = new Menu();
     $miDocs->setIconLabelUrl('fa-file-archive-o', 'Document queue', '/?m=docqueue&c=list');
+    $miDocs->setWeight(140);
     $ac->add($miDocs);
     
 }));
