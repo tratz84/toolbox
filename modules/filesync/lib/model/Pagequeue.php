@@ -10,6 +10,17 @@ use core\exception\InvalidStateException;
 
 class Pagequeue extends base\PagequeueBase {
 
+    public function __construct($id=null) {
+        parent::__construct( $id );
+        
+        $this->setCropX1(0);
+        $this->setCropY1(0);
+        $this->setCropX2(100);
+        $this->setCropY2(100);
+        $this->setDegreesRotated(0);
+        $this->setPageOrientation('P');
+    }
+    
     
     
     public function getBasenameFile() {
