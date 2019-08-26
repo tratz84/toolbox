@@ -101,7 +101,10 @@ $menuItems = $ms->listMainMenu();
 	<div class="nav-side-menu">
 		<div class="mobile-menu-header d-md-none"><a href="<?= appUrl('/') ?>"><?= esc_html($context->getCompanyName()) ?></a></div>
 		
+		<div class="mobile-icon-container"></div>
+		
 		<div class="menu-mobile-spacer"></div>
+		
 	    <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
 	
 		<div class="menu-list">

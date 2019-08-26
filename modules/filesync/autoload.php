@@ -12,6 +12,10 @@ Context::getInstance()->enableModule('filesync');
 $eb = ObjectContainer::getInstance()->get(EventBus::class);
 
 
+hook_register_javascript('filesync', BASE_HREF.'module/filesync/js/script.js');
+hook_htmlscriptloader_enableGroup('filesync');
+
+
 $eb->subscribe('base', 'company-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
     $ftc = $evt->getSource();
     
