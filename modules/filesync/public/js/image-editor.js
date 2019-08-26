@@ -16,6 +16,8 @@ function DocumentImageEditor(container, opts) {
 	this.resizedImage = null;
 	this.canvas = null;
 	
+	this.canvasSize = 800;
+	
 	this.degrees = 0;
 	
 	this.crop = {
@@ -27,6 +29,13 @@ function DocumentImageEditor(container, opts) {
 		down: false,
 		edge: null
 	};
+	
+	
+	this.getCropX1 = function() { return this.crop.pos1.x / this.canvas.width * 100; };
+	this.getCropY1 = function() { return this.crop.pos1.y / this.canvas.height * 100; };
+	this.getCropX2 = function() { return this.crop.pos2.x / this.canvas.width * 100; };
+	this.getCropY2 = function() { return this.crop.pos2.y / this.canvas.height * 100; };
+	this.getDegreesRotated = function() { return this.degrees == 360 ? 0 : this.degrees; };
 	
 	
 	this.draw = function() {
@@ -113,8 +122,8 @@ function DocumentImageEditor(container, opts) {
 	}
 	
 	this.canvasMousemove = function(evt) {
-		// no images drawn yet
-		if (this.crop.pos2 == null) return;
+		// image not loaded
+		if (this.img.complete == false) return;
 		
 		var mousepos = this.canvasXY(evt);
 		
@@ -260,8 +269,8 @@ function DocumentImageEditor(container, opts) {
 		
 		// create canvas
 		this.canvas = document.createElement('canvas');
-		$(this.canvas).attr('width', '800px');
-		$(this.canvas).attr('height', '800px');
+		$(this.canvas).attr('width', this.canvasSize + 'px');
+		$(this.canvas).attr('height', this.canvasSize + 'px');
 		$(this.canvas).css('border', '1px solid #ccc');
 		$(this.canvas).css('display', 'block');
 		$(this.container).append( this.canvas );
@@ -283,22 +292,14 @@ function DocumentImageEditor(container, opts) {
 		this.img = document.createElement('img');
 		this.img.src = this.opts.image_url;
 		this.img.onload = function() {
-			var me = this;
-			
-		    EXIF.getData(this.img, function() {
-		        var r = EXIF.getTag(this, "Orientation");
-		        
-		        console.log( r );
-		        me.draw();
-		    });
-		    
+	        this.draw();
 		}.bind(this);
 		
 
 	};
 	
 	
-	this.init();
+//	this.init();
 }
 
 

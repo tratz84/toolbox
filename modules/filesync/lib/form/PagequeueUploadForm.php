@@ -24,6 +24,12 @@ class PagequeueUploadForm extends BaseForm {
         $ff->setAttribute('capture', 'capture');
         $this->addWidget($ff);
         
+        $this->addWidget(new HiddenField('crop_x1'));
+        $this->addWidget(new HiddenField('crop_y1'));
+        $this->addWidget(new HiddenField('crop_x2', '100'));
+        $this->addWidget(new HiddenField('crop_y2', '100'));
+        $this->addWidget(new HiddenField('degrees_rotated', '0'));
+        $this->addWidget(new HiddenField('page_orientation', 'P'));
         
         $this->addWidget(new TextField('name', '', 'Naam'));
         $this->addWidget(new TextareaField('description', '', 'Omschrijving'));
@@ -34,7 +40,7 @@ class PagequeueUploadForm extends BaseForm {
             $pagequeueId = $form->getWidgetValue('pagequeue_id');
             
             // just changing name/description ?
-            if ($pagequeueId && isset($_FILES['file']) == false) {
+            if ($pagequeueId && (isset($_FILES['file']) == false || $_FILES['file']['error'] == UPLOAD_ERR_NO_FILE)) {
                 return null;
             }
             

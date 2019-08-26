@@ -28,11 +28,17 @@ class PagequeueService extends ServiceBase {
     public function savePage(PagequeueUploadForm $form) {
         $ctx = Context::getInstance();
         
-        $pag = new Pagequeue();
-        $form->fill($pag, array('pagequeue_id', 'name', 'description'));
+        $id = $form->getWidgetValue('pagequeue_id');
+        if ($id) {
+            $pag = $this->readPagequeue($id);
+        } else {
+            $pag = new Pagequeue();
+        }
+        
+        $form->fill($pag, array('pagequeue_id', 'name', 'description', 'crop_x1', 'crop_y1', 'crop_x2', 'crop_y2', 'degrees_rotated', 'page_orientation'));
         $pag->save();
         
-        if (isset($_FILES['file'])) {
+        if (isset($_FILES['file']) && $_FILES['file']['error'] != UPLOAD_ERR_NO_FILE) {
             $path = $pag->generatePath( $_FILES['file']['name'] );
             
             $fullpath = $ctx->getDataDir() . '/' . $path;
@@ -48,6 +54,22 @@ class PagequeueService extends ServiceBase {
         return $pag;
     }
     
+    public function deletePagequeue($pagequeueId) {
+        $p = $this->readPagequeue($pagequeueId);
+        
+        if (!$p) {
+            throw new \core\exception\ObjectNotFoundException('Page not found');
+        }
+        
+        if ($p->getFilename()) {
+            $path = Context::getInstance()->getDataDir() . $p->getFilename();
+            if ($path && file_exists($path)) {
+                unlink($path);
+            }
+        }
+        
+        return $p->delete();
+    }
     
     
     public function searchPage($start, $limit, $opts = array()) {

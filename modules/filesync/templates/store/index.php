@@ -23,6 +23,16 @@ t.setRowClick(function(row, evt) {
 
 t.setConnectorUrl( '/?m=filesync&c=store&a=search' );
 
+t.setCallbackRenderRows(function() {
+	var tr = $( '<tr><td colspan="3">Page queue</td></tr>' );
+	
+	$('#store-table-container table tbody').prepend( tr );
+	tr.addClass('clickable');
+	tr.click(function() {
+		window.location = appUrl( '/?m=filesync&c=pagequeue' );
+	});
+});
+
 
 // t.addColumn({
 // 	fieldName: 'store_id',

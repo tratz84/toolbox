@@ -51,7 +51,6 @@ class pagequeueController extends BaseController {
         
         $this->form->bind( $pagequeue );
         
-        
         if (is_post()) {
             $this->form->bind( $_REQUEST );
             
@@ -68,6 +67,7 @@ class pagequeueController extends BaseController {
         } else {
             $this->file_extension = false;
         }
+        $this->isNew = $pagequeue->isNew();
         
         return $this->render();
     }
@@ -106,6 +106,15 @@ class pagequeueController extends BaseController {
         header('Content-Disposition: inline; filename="'.$page->getBasenameFile().'"');
         
         readfile($p);
+    }
+    
+    
+    public function action_delete() {
+        $pagequeueService = $this->oc->get(PagequeueService::class);
+        
+        $pagequeueService->deletePagequeue( get_var('id') );
+        
+        redirect('/?m=filesync&c=pagequeue');
     }
     
     
