@@ -3,6 +3,7 @@
 <div class="page-header">
 
 	<div class="toolbox">
+		<a href="<?= appUrl('/?m=filesync&c=pagequeue') ?>" class="fa fa-picture-o"></a>
 		<a href="<?= appUrl('/?m=filesync&c=store&a=edit') ?>" class="fa fa-plus"></a>
 	</div>
 
@@ -22,16 +23,6 @@ t.setRowClick(function(row, evt) {
 });
 
 t.setConnectorUrl( '/?m=filesync&c=store&a=search' );
-
-t.setCallbackRenderRows(function() {
-	var tr = $( '<tr><td colspan="3">Page queue</td></tr>' );
-	
-	$('#store-table-container table tbody').prepend( tr );
-	tr.addClass('clickable');
-	tr.click(function() {
-		window.location = appUrl( '/?m=filesync&c=pagequeue' );
-	});
-});
 
 
 // t.addColumn({
