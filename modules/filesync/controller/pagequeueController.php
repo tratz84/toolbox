@@ -2,15 +2,15 @@
 
 
 
+use core\Context;
 use core\controller\BaseController;
-use docqueue\form\DocumentUploadForm;
-use docqueue\service\DocqueueService;
-use docqueue\model\Document;
 use core\exception\InvalidStateException;
 use core\exception\ObjectNotFoundException;
-use core\Context;
+use filesync\form\PagequeueUploadForm;
+use filesync\service\PagequeueService;
+use filesync\model\Pagequeue;
 
-class listController extends BaseController {
+class pagequeueController extends BaseController {
     
     
     
@@ -24,9 +24,9 @@ class listController extends BaseController {
         $pageNo = isset($_REQUEST['pageNo']) ? (int)$_REQUEST['pageNo'] : 0;
         $limit = $this->ctx->getPageSize();
         
-        $docqueueService = $this->oc->get(DocqueueService::class);
+        $pagequeueService = $this->oc->get(PagequeueService::class);
         
-        $r = $docqueueService->searchDocument($pageNo*$limit, $limit, $_REQUEST);
+        $r = $pagequeueService->searchPage($pageNo*$limit, $limit, $_REQUEST);
         
         $arr = array();
         $arr['listResponse'] = $r;
@@ -39,32 +39,32 @@ class listController extends BaseController {
     
     
     public function action_upload() {
-        $this->form = new DocumentUploadForm();
+        $this->form = new PagequeueUploadForm();
         
-        $docqueueService = $this->oc->get(DocqueueService::class);
+        $pagequeueService = $this->oc->get(PagequeueService::class);
         
         if (get_var('id')) {
-            $document = $docqueueService->readDocument( get_var('id') );
+            $pagequeue = $pagequeueService->readPagequeue( get_var('id') );
         } else {
-            $document = new Document();
+            $pagequeue = new Pagequeue();
         }
         
-        $this->form->bind( $document );
+        $this->form->bind( $pagequeue );
         
         
         if (is_post()) {
             $this->form->bind( $_REQUEST );
             
             if ($this->form->validate()) {
-                $docqueueService->saveDocument( $this->form );
+                $pagequeueService->savePage( $this->form );
                 
-                redirect('/?m=docqueue&c=list');
+                redirect('/?m=filesync&c=pagequeue');
             }
         }
-
-        if ($document->getFilename()) {
-            $this->document_id = $document->getDocumentId();
-            $this->file_extension = file_extension($document->getFilename());
+        
+        if ($pagequeue->getFilename()) {
+            $this->pagequeue_id = $pagequeue->getPagequeueId();
+            $this->file_extension = file_extension($pagequeue->getFilename());
         } else {
             $this->file_extension = false;
         }
@@ -80,15 +80,15 @@ class listController extends BaseController {
             throw new InvalidStateException('id not set');
         }
         
-        $docqueueService = $this->oc->get(DocqueueService::class);
-        $document = $docqueueService->readDocument( get_var('id') );
+        $pagequeueService = $this->oc->get(PagequeueService::class);
+        $page = $pagequeueService->readPagequeue( get_var('id') );
             
-        if (!$document) {
-            throw new ObjectNotFoundException('Document not found');
+        if (!$page) {
+            throw new ObjectNotFoundException('Page not found');
         }
         
         $ctx = Context::getInstance();
-        $p = $ctx->getDataDir() . '/' . $document->getFilename();
+        $p = $ctx->getDataDir() . '/' . $page->getFilename();
         
         // Content-type
         $mimetype = false;
@@ -103,7 +103,7 @@ class listController extends BaseController {
         }
         
         // Content-Disposition
-        header('Content-Disposition: inline; filename="'.$document->getBasenameFile().'"');
+        header('Content-Disposition: inline; filename="'.$page->getBasenameFile().'"');
         
         readfile($p);
     }

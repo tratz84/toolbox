@@ -1,19 +1,19 @@
 <?php
 
 
-namespace docqueue\model\base;
+namespace filesync\model\base;
 
 
-class DocumentBase extends \core\db\DBObject {
+class PagequeueBase extends \core\db\DBObject {
 
 	public function __construct($id=null) {
 		$this->setResource( 'default' );
-		$this->setTableName( 'docqueue__document' );
-		$this->setPrimaryKey( 'document_id' );
+		$this->setTableName( 'filesync__pagequeue' );
+		$this->setPrimaryKey( 'pagequeue_id' );
 		$this->setDatabaseFields( array (
-  'document_id' => 
+  'pagequeue_id' => 
   array (
-    'Field' => 'document_id',
+    'Field' => 'pagequeue_id',
     'Type' => 'int(11)',
     'Null' => 'NO',
     'Key' => 'PRI',
@@ -65,6 +65,60 @@ class DocumentBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'crop_x1' => 
+  array (
+    'Field' => 'crop_x1',
+    'Type' => 'double',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'crop_y1' => 
+  array (
+    'Field' => 'crop_y1',
+    'Type' => 'double',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'crop_x2' => 
+  array (
+    'Field' => 'crop_x2',
+    'Type' => 'double',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'crop_y2' => 
+  array (
+    'Field' => 'crop_y2',
+    'Type' => 'double',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'degrees_rotated' => 
+  array (
+    'Field' => 'degrees_rotated',
+    'Type' => 'int(11)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'page_orientation' => 
+  array (
+    'Field' => 'page_orientation',
+    'Type' => 'enum(\'P\',\'L\')',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => 'P',
+    'Extra' => '',
+  ),
   'edited' => 
   array (
     'Field' => 'edited',
@@ -90,8 +144,8 @@ class DocumentBase extends \core\db\DBObject {
 	}
 	
 		
-	public function setDocumentId($p) { $this->setField('document_id', $p); }
-	public function getDocumentId() { return $this->getField('document_id'); }
+	public function setPagequeueId($p) { $this->setField('pagequeue_id', $p); }
+	public function getPagequeueId() { return $this->getField('pagequeue_id'); }
 	
 		
 	public function setRefId($p) { $this->setField('ref_id', $p); }
@@ -112,6 +166,30 @@ class DocumentBase extends \core\db\DBObject {
 		
 	public function setDescription($p) { $this->setField('description', $p); }
 	public function getDescription() { return $this->getField('description'); }
+	
+		
+	public function setCropX1($p) { $this->setField('crop_x1', $p); }
+	public function getCropX1() { return $this->getField('crop_x1'); }
+	
+		
+	public function setCropY1($p) { $this->setField('crop_y1', $p); }
+	public function getCropY1() { return $this->getField('crop_y1'); }
+	
+		
+	public function setCropX2($p) { $this->setField('crop_x2', $p); }
+	public function getCropX2() { return $this->getField('crop_x2'); }
+	
+		
+	public function setCropY2($p) { $this->setField('crop_y2', $p); }
+	public function getCropY2() { return $this->getField('crop_y2'); }
+	
+		
+	public function setDegreesRotated($p) { $this->setField('degrees_rotated', $p); }
+	public function getDegreesRotated() { return $this->getField('degrees_rotated'); }
+	
+		
+	public function setPageOrientation($p) { $this->setField('page_orientation', $p); }
+	public function getPageOrientation() { return $this->getField('page_orientation'); }
 	
 		
 	public function setEdited($p) { $this->setField('edited', $p); }

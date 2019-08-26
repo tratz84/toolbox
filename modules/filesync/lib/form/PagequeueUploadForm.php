@@ -1,7 +1,7 @@
 <?php
 
 
-namespace docqueue\form;
+namespace filesync\form;
 
 
 use core\forms\BaseForm;
@@ -10,14 +10,14 @@ use core\forms\HiddenField;
 use core\forms\TextField;
 use core\forms\TextareaField;
 
-class DocumentUploadForm extends BaseForm {
+class PagequeueUploadForm extends BaseForm {
     
     public function __construct() {
         parent::__construct();
         
         $this->enctypeToMultipartFormdata();
         
-        $this->addWidget(new HiddenField('document_id'));
+        $this->addWidget(new HiddenField('pagequeue_id'));
         
         $ff = new FileField('file', '', 'Bestand');
         $ff->setAttribute('accept', 'image/*');
@@ -31,10 +31,10 @@ class DocumentUploadForm extends BaseForm {
         
         
         $this->addValidator('file', function($form) {
-            $documentId = $form->getWidgetValue('document_id');
+            $pagequeueId = $form->getWidgetValue('pagequeue_id');
             
             // just changing name/description ?
-            if ($documentId && isset($_FILES['file']) == false) {
+            if ($pagequeueId && isset($_FILES['file']) == false) {
                 return null;
             }
             

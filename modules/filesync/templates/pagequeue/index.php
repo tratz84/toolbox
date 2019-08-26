@@ -2,30 +2,30 @@
 <div class="page-header">
 
 	<div class="toolbox">
-		<a href="<?= appUrl('/?m=docqueue&c=list&a=upload') ?>" class="fa fa-plus"></a>
+		<a href="<?= appUrl('/?m=filesync&c=pagequeue&a=upload') ?>" class="fa fa-plus"></a>
 	</div>
 
-	<h1>Document queue</h1>
+	<h1>Page queue</h1>
 </div>
 
 
-<div id="document-table-container"></div>
+<div id="page-table-container"></div>
 
 
 
 
 <script>
 
-var t = new IndexTable('#document-table-container');
+var t = new IndexTable('#page-table-container');
 
 t.setRowClick(function(row, evt) {
-	window.location = appUrl('/?m=docqueue&c=list&a=upload&id=' + $(row).data('record').document_id);
+	window.location = appUrl('/?m=filesync&c=pagequeue&a=upload&id=' + $(row).data('record').pagequeue_id);
 });
 
-t.setConnectorUrl( '/?m=docqueue&c=list&a=search' );
+t.setConnectorUrl( '/?m=filesync&c=pagequeue&a=search' );
 
 t.addColumn({
-	fieldName: 'document_id',
+	fieldName: 'pagequeue_id',
 	width: 40,
 	fieldDescription: 'Id',
 	fieldType: 'text',
@@ -65,13 +65,13 @@ t.addColumn({
 	fieldDescription: '',
 	fieldType: 'actions',
 	render: function( record ) {
-		var document_id = record['document_id'];
+		var pid = record['pagequeue_id'];
 		
 		var anchEdit = $('<a class="fa fa-pencil" />');
-		anchEdit.attr('href', appUrl('/?m=docqueue&c=document&a=edit&id=' + document_id));
+		anchEdit.attr('href', appUrl('/?m=filesync&c=pagequeue&a=edit&id=' + pid));
 		
 		var anchDel  = $('<a class="fa fa-trash" />');
-		anchDel.attr('href', appUrl('/?m=docqueue&c=document&a=delete&id=' + document_id));
+		anchDel.attr('href', appUrl('/?m=filesync&c=pagequeue&a=delete&id=' + pid));
 		anchDel.click( handle_deleteConfirmation_event );
 		anchDel.data('description', record.company_name);
 

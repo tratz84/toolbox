@@ -1,30 +1,31 @@
 <?php
 
 
-namespace docqueue\model;
+namespace filesync\model;
 
-
-use core\exception\InvalidStateException;
 use core\Context;
 use core\exception\FileException;
+use core\exception\InvalidStateException;
 
-class Document extends base\DocumentBase {
 
+class Pagequeue extends base\PagequeueBase {
+
+    
     
     public function getBasenameFile() {
         return basename($this->getFilename());
     }
-
+    
     
     
     public function generatePath($filename) {
         if (!$this->getCreated()) {
-            throw new InvalidStateException('Document not saved');
+            throw new InvalidStateException('Page not saved');
         }
         
         // build path folder
         $t = date2unix( $this->getCreated() );
-        $dir = 'docqueue/' . date('Y', $t) . '/' . date('n', $t) . '/';
+        $dir = 'pagequeue/' . date('Y', $t) . '/' . date('n', $t) . '/';
         
         // create folder
         $fulldir = Context::getInstance()->getDataDir() . '/' . $dir;
@@ -35,7 +36,7 @@ class Document extends base\DocumentBase {
         }
         
         // create unique filename
-        $file = $this->getDocumentId() . '-' . basename($filename);
+        $file = $this->getPagequeueId() . '-' . basename($filename);
         
         // hoppa
         return $dir . $file;

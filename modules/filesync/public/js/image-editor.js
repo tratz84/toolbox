@@ -283,7 +283,15 @@ function DocumentImageEditor(container, opts) {
 		this.img = document.createElement('img');
 		this.img.src = this.opts.image_url;
 		this.img.onload = function() {
-			this.draw();
+			var me = this;
+			
+		    EXIF.getData(this.img, function() {
+		        var r = EXIF.getTag(this, "Orientation");
+		        
+		        console.log( r );
+		        me.draw();
+		    });
+		    
 		}.bind(this);
 		
 
