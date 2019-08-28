@@ -48,7 +48,11 @@ class MysqlQueryBuilder extends QueryBuilder {
             $f = '';
             if ($arr['tableName'])
                 $f .= '`'.$arr['tableName'].'`.';
-            $f .= '`'.$arr['field'].'`';
+            
+            if ($arr['field'] == '*')
+                $f .= '*';
+            else
+                $f .= '`'.$arr['field'].'`';
             
             if ($arr['label'])
                 $f .= ' ' . $arr['label'];
