@@ -382,6 +382,14 @@ function date2unix($input)
 {
     $input = trim($input);
 
+    if (strpos($input, '/Date(') !== false) {
+        $matches = array();
+        
+        if (preg_match('/\/Date\((\\d+)\\)\\//', $input, $matches) && count($matches) == 2) {
+            return intval($matches[1] / 1000);
+        }
+    }
+    
     if ($input == "0000-00-00") { // ongeldige datum
         return null;
     } else if (preg_match('/^\\d{4}-\\d{1,2}-\\d{1,2} \\d{2}:\\d{2}:\\d{2}$/', $input)) { // jaar-maand-dag uur:minuut:seconde
