@@ -6,10 +6,11 @@
 
 	<div class="toolbox">
 		<a href="<?= appUrl('/?m=filesync&c=store') ?>" class="fa fa-chevron-circle-left"></a>
+		<a href="<?= appUrl('/?m=filesync&c=pagequeue&a=pdf') ?>" class="fa fa-code-fork"></a>
 		<a href="<?= appUrl('/?m=filesync&c=pagequeue&a=upload') ?>" class="fa fa-plus"></a>
 	</div>
 
-	<h1>Page queue</h1>
+	<h1>Page queue - image viewer</h1>
 </div>
 
 

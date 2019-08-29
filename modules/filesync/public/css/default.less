@@ -11,5 +11,31 @@
 		
 		padding: 0 10px;
 	}
+	
+	
+	#page-selection-container {
+		padding: 0 10px;
+		
+		ul.selected-files {
+			width: 300px;
+			margin: 0;
+			padding-left: 0;
+			
+			li {
+				display: block;
+				list-style: none;
+				background-color: #eee;
+				padding: 5px;
+			}
+			li:nth-child(odd) {
+				background-color: #f3f3f3;
+			}
+			
+			.fa-sort { padding: 5px 6px 5px 2px; position: relative; top: 2px; }
+			.fa-remove { float: right; position: relative; top: 6px; }
+		}
+		
+		.action-container { margin-top: 15px; }
+	}
 }
 

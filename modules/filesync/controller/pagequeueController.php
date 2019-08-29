@@ -10,6 +10,7 @@ use filesync\form\PagequeueEditForm;
 use filesync\form\PagequeueUploadForm;
 use filesync\model\Pagequeue;
 use filesync\service\PagequeueService;
+use core\pdf\BasePdf;
 
 class pagequeueController extends BaseController {
     
@@ -125,6 +126,69 @@ class pagequeueController extends BaseController {
         ));
     }
     
+    
+    
+    public function action_pdf() {
+        
+        return $this->render();
+    }
+    
+    public function action_pdf_generate() {
+        $pagequeueService = $this->oc->get(PagequeueService::class);
+        
+        $pqIds = explode(',', $_REQUEST['ids']);
+        
+        $pqs = array();
+        foreach($pqIds as $pqId) {
+            $pagequeue = $pagequeueService->readPagequeue( $pqId );
+            if ($pagequeue) {
+                $pqs[] = $pagequeue;
+            } else {
+                throw new ObjectNotFoundException('Page not found ('.$pqId.')');
+            }
+        }
+        
+        if (count($pqs) == 0) {
+            throw new InvalidStateException('No page selected');
+        }
+        
+//         var_export($pqs);exit;
+        
+        $p = new BasePdf();
+        foreach($pqs as $pq) {
+            $p->AddPage();
+            
+            $path = Context::getInstance()->getDataDir() . '/' . $pq->getFilename();
+            
+            $imgsrc = new Imagick();
+            $imgsrc->readImage( $path );
+            print $imgsrc->getimagewidth();
+            
+            
+            exit;
+            
+            
+            
+//             $imageinfo = getimagesize($path);
+//             $w = $imageinfo[0];
+//             $h = $imageinfo[1];
+//             $canvasSize = $w > $h ? $w : $h;
+//             $original = imagecreatefromjpeg( $path );
+//             // create canvas
+//             $img = imagecreate($canvasSize, $canvasSize);
+//             $background_color = imagecolorallocate($img, 255, 255, 255);
+//             imagecopy($img, $original, $canvasSize/2-$w/2, $canvasSize/2-$h/2, 0, 0, $w, $h);
+//             header('Content-type: image/png');
+//             imagepng($img);
+//             exit;
+            var_export($canvasSize);exit;
+            die($path);
+        }
+        
+        $p->Output('test.pdf', 'I');
+        exit;
+        
+    }
     
     
     public function action_download() {
