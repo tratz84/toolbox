@@ -162,32 +162,62 @@ class pagequeueController extends BaseController {
             
             $imgsrc = new Imagick();
             $imgsrc->readImage( $path );
-            print $imgsrc->getimagewidth();
+            $imgsrc->setimageorientation(imagick::ORIENTATION_UNDEFINED);
             
             
-            exit;
+            if ($imgsrc->getimagewidth() > 1500) {
+                $h = $imgsrc->getimageheight() / $imgsrc->getimagewidth() * 1500;
+                
+                $imgsrc->resizeimage(1500, $h, Imagick::FILTER_LANCZOS, 1);
+            }
             
             
+            $imgsrc_w = $imgsrc->getimagewidth();
+            $imgsrc_h = $imgsrc->getimageheight();
+            $canvasWidth = $imgsrc->getimagewidth() > $imgsrc->getimageheight() ? $imgsrc->getimagewidth() : $imgsrc->getimageheight();
             
-//             $imageinfo = getimagesize($path);
-//             $w = $imageinfo[0];
-//             $h = $imageinfo[1];
-//             $canvasSize = $w > $h ? $w : $h;
-//             $original = imagecreatefromjpeg( $path );
-//             // create canvas
-//             $img = imagecreate($canvasSize, $canvasSize);
-//             $background_color = imagecolorallocate($img, 255, 255, 255);
-//             imagecopy($img, $original, $canvasSize/2-$w/2, $canvasSize/2-$h/2, 0, 0, $w, $h);
-//             header('Content-type: image/png');
-//             imagepng($img);
-//             exit;
-            var_export($canvasSize);exit;
-            die($path);
+            $img = new Imagick();
+            $img->newImage($canvasWidth, $canvasWidth, 'white', 'jpg');
+            $img->compositeimage($imgsrc, Imagick::COMPOSITE_OVER, $canvasWidth/2 - $imgsrc_w/2, $canvasWidth/2 - $imgsrc_h/2);
+            
+            $imgsrc->destroy();
+            
+            $img->rotateimage('#ffffff', $pq->getDegreesRotated());
+            
+            if ($pq->getCropX1() != 0 || $pq->getCropY1() != 0 || $pq->getCropX2() != 100 || $pq->getCropY2() != 100) {
+                $cw = ($pq->getCropX2() - $pq->getCropX1()) * $canvasWidth / 100;
+                $ch = ($pq->getCropY2() - $pq->getCropY1()) * $canvasWidth / 100;
+                
+                $cx = $pq->getCropX1() / 100 * $canvasWidth;
+                $cy = $pq->getCropY1() / 100 * $canvasWidth;
+                
+                $img->cropimage($cw, $ch, $cx, $cy);
+            }
+            
+            $pw = $p->GetPageWidth();
+            $ph = $p->GetPageHeight();
+            
+            
+            $margin = 0.1;
+            $piw = $pw - ($pw * $margin);
+            $pih = $ph - ($ph * $margin);
+            
+            
+            $w = $piw;
+            $h = $pih / $w * $piw;
+            if ($h > $pih) {
+                $h = $pih;
+                $w = $piw / $h * $pih;
+            }
+            
+            $p->ImagickJpeg($pq->getFilename(), $img, $pw/2-$w/2, ($ph*$margin)/4, $w, $h);
+            
+            $img->destroy();
+            
         }
         
+        $p->AliasNbPages();
         $p->Output('test.pdf', 'I');
-        exit;
-        
     }
     
     
