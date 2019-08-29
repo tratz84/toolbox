@@ -20,11 +20,17 @@
 		
 		<div class="action-container" style="display: none;">
 			<a href="javascript:void(0);" onclick="generate_pdf();">Genereer PDF</a>
+			|
+			<a href="javascript:void(0);" onclick="generate_pdf({delete_files: true});">Genereer PDF &amp; verwijder bestanden</a>
 		</div>
+		
+		<br/>
+		<div id="page-sample"></div>
 	</div>
 </div>
 
 
+<script src="<?= appUrl('/module/filesync/js/image-editor.js') ?>"></script>
 
 <script>
 
@@ -43,6 +49,10 @@ t.setRowClick(function(row, evt) {
 	
 	var li = $('<li />');
 	li.data('record', record);
+	li.css('cursor', 'pointer');
+	li.click(function() {
+		showPageSample( $(this).data('record') );
+	});
 	li.addClass('file-' + record.pagequeue_id);
 	li.append($('<a href="javascript:void(0);" class="fa fa-remove" />'));
 	li.append($('<div class="fa fa-sort handler-sortable ui-sortable-handle" />'));
@@ -52,6 +62,7 @@ t.setRowClick(function(row, evt) {
 		$(this).closest('li').remove();
 		
 		toggle_action_container();
+		$('#page-sample').html('');
 	});
 
 	$('.selected-files').append( li );
@@ -98,7 +109,9 @@ function toggle_action_container() {
 }
 
 
-function generate_pdf() {
+function generate_pdf(opts) {
+	opts = opts ? opts : {};
+	
 	var pqIds = new Array();
 	
 	$('.selected-files li').each(function(index, node) {
@@ -113,8 +126,25 @@ function generate_pdf() {
 	}
 
 	formpost('/?m=filesync&c=pagequeue&a=pdf_generate', {
-		ids: pqIds.join(',')
+		ids: pqIds.join(','),
+		delete_files: opts.delete_files?1:0
 	});
+}
+
+
+var ie;
+function showPageSample(pagequeue) {
+	$('#page-sample').html('');
+	var name = pagequeue.name ? pagequeue.name : pagequeue.filename;
+	$('#page-sample').append($('<div style="font-weight: bold; margin-bottom: 3px;" />').text(name));
+	ie = new DocumentImageEditor('#page-sample', { image_url: appUrl('/?m=filesync&c=pagequeue&a=download&id='+pagequeue.pagequeue_id) });
+	ie.readonly = true;
+	
+	ie.crop.pos1 = { x: pagequeue.crop_x1 / 100 * ie.canvasSize, y: pagequeue.crop_y1 / 100 * ie.canvasSize };
+	ie.crop.pos2 = { x: pagequeue.crop_x2 / 100 * ie.canvasSize, y: pagequeue.crop_y2 / 100 * ie.canvasSize };
+	ie.degrees = pagequeue.degrees_rotated;
+	
+	ie.init();
 }
 
 

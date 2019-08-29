@@ -252,6 +252,15 @@ class pagequeueController extends BaseController {
         // remove tempfile
         unlink($pdffile);
         
+        
+        // delete files
+        if (get_var('delete_files')) {
+            foreach($pqs as $pq) {
+                 $pagequeueService->deletePagequeue( $pq->getPagequeueId() );
+            }
+        }
+        
+        
         redirect('/?m=filesync&c=storefile&a=edit_meta&store_file_id='.$storefile->getStoreFileId());
     }
     

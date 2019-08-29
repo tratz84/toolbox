@@ -10,6 +10,8 @@ function DocumentImageEditor(container, opts) {
 	this.container = container;
 	this.opts = opts;
 	
+	this.readonly = false;
+	
 	this.range = null;
 	
 	this.img = null;
@@ -163,6 +165,8 @@ function DocumentImageEditor(container, opts) {
 	};
 	
 	this.determineCursor = function(x, y) {
+		if (this.readonly) return;
+		
 		var spacing = 8;
 		
 		// top left
@@ -212,6 +216,8 @@ function DocumentImageEditor(container, opts) {
 	};
 	
 	this.canvasMousedown = function (evt) {
+		if (this.readonly) return;
+		
 		// only register initial state
 		if (this.mousestate.down) {
 			return;
@@ -286,8 +292,9 @@ function DocumentImageEditor(container, opts) {
 			$(rangeControl).trigger('change');
 			
 		}.bind(this));
-		$(this.container).append( rotationControlContainer );
-		
+		if (this.readonly == false) {
+			$(this.container).append( rotationControlContainer );
+		}
 		
 		
 		// create canvas

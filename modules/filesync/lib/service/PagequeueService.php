@@ -77,7 +77,7 @@ class PagequeueService extends ServiceBase {
         
         $cursor = $pDao->search($opts);
         
-        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('pagequeue_id', 'name', 'description', 'filename', 'basename_file', 'edited', 'created'));
+        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('pagequeue_id', 'name', 'description', 'filename', 'basename_file', 'crop_x1', 'crop_y1', 'crop_x2', 'crop_y2', 'degrees_rotated', 'edited', 'created'));
             
         return $r;
     }
