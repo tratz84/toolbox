@@ -149,6 +149,13 @@ function DocumentImageEditor(container, opts) {
 				this.crop.pos2.y = this.mousestate.crop.pos2.y + diffy;
 			}
 			
+			if (this.crop.pos2.x-10 < this.crop.pos1.x) {
+				this.crop.pos2.x = this.crop.pos1.x + 10;
+			}
+			
+			if (this.crop.pos2.y-10 < this.crop.pos1.y) {
+				this.crop.pos2.y = this.crop.pos1.y + 10;
+			}
 			
 			this.draw();
 		}
@@ -227,7 +234,21 @@ function DocumentImageEditor(container, opts) {
 	};
 	
 	this.canvasMouseup = function (evt) {
+		if (this.mousestate.down) {
+			this.triggerImageChanged();
+		}
+
 		this.mousestate.down = false;
+	};
+	
+	this.triggerImageChanged = function() {
+		$('[name=crop_x1]').val( ie.getCropX1() );
+		$('[name=crop_y1]').val( ie.getCropY1() );
+		$('[name=crop_x2]').val( ie.getCropX2() );
+		$('[name=crop_y2]').val( ie.getCropY2() );
+		$('[name=degrees_rotated]').val( ie.getDegreesRotated() );
+
+		$(document).trigger('image-editor-changed');
 	};
 	
 	
@@ -246,6 +267,8 @@ function DocumentImageEditor(container, opts) {
 		$(this.range).on('input change', function(evt) {
 			this.degrees = evt.target.value
 			this.draw();
+			
+			this.triggerImageChanged();
 		}.bind(this));
 		$(rotationControlContainer).append( this.range );
 

@@ -6,9 +6,10 @@ use core\Context;
 use core\controller\BaseController;
 use core\exception\InvalidStateException;
 use core\exception\ObjectNotFoundException;
+use filesync\form\PagequeueEditForm;
 use filesync\form\PagequeueUploadForm;
-use filesync\service\PagequeueService;
 use filesync\model\Pagequeue;
+use filesync\service\PagequeueService;
 
 class pagequeueController extends BaseController {
     
@@ -71,6 +72,59 @@ class pagequeueController extends BaseController {
         
         return $this->render();
     }
+    
+    
+    public function action_edit() {
+        $pagequeueService = $this->oc->get(PagequeueService::class);
+        
+        $pagequeue = $pagequeueService->readPagequeue( get_var('id') );
+        
+        $this->form = new PagequeueEditForm();
+        $this->form->bind( $pagequeue );
+        
+        $this->pagequeue_id = $pagequeue->getPagequeueId();
+        $this->file_extension = file_extension($pagequeue->getFilename());
+        
+        $this->setShowDecorator(false);
+        $this->render();
+    }
+    
+    public function action_edit_save() {
+        $pagequeueService = $this->oc->get(PagequeueService::class);
+        
+        $pagequeue = $pagequeueService->readPagequeue( get_var('pagequeue_id') );
+        
+        if (!$pagequeue) {
+            return $this->json(array(
+                'error' => true,
+                'message' => 'Page not found'
+            ));
+        }
+        
+        $pagequeue->setName($_REQUEST['name']);
+        $pagequeue->setDescription($_REQUEST['description']);
+        
+        $pagequeue->setCropX1( $_REQUEST['crop_x1'] );
+        $pagequeue->setCropY1( $_REQUEST['crop_y1'] );
+        $pagequeue->setCropX2( $_REQUEST['crop_x2'] );
+        $pagequeue->setCropY2( $_REQUEST['crop_y2'] );
+        $pagequeue->setDegreesRotated( $_REQUEST['degrees_rotated'] );
+        
+        if ($pagequeue->save() == false) {
+            return $this->json(array(
+                'error' => true,
+                'message' => 'Error saving page'
+            ));
+        }
+        
+        $this->json(array(
+            'success' => true,
+            'id' => $pagequeue->getPagequeueId(),
+            'name' => $pagequeue->getName(),
+            'filename' => $pagequeue->getFilename()
+        ));
+    }
+    
     
     
     public function action_download() {
