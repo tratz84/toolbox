@@ -11,6 +11,8 @@ use filesync\form\PagequeueUploadForm;
 use filesync\model\Pagequeue;
 use filesync\service\PagequeueService;
 use core\pdf\BasePdf;
+use core\exception\FileException;
+use filesync\service\StoreService;
 
 class pagequeueController extends BaseController {
     
@@ -178,6 +180,7 @@ class pagequeueController extends BaseController {
             
             $img = new Imagick();
             $img->newImage($canvasWidth, $canvasWidth, 'white', 'jpg');
+//             $img->setcompressionquality(10);     // doesn't do anything?
             $img->compositeimage($imgsrc, Imagick::COMPOSITE_OVER, $canvasWidth/2 - $imgsrc_w/2, $canvasWidth/2 - $imgsrc_h/2);
             
             $imgsrc->destroy();
@@ -194,6 +197,8 @@ class pagequeueController extends BaseController {
                 $img->cropimage($cw, $ch, $cx, $cy);
             }
             
+            
+            // calculate size in pdf
             $pw = $p->GetPageWidth();
             $ph = $p->GetPageHeight();
             
@@ -210,14 +215,44 @@ class pagequeueController extends BaseController {
                 $w = $piw / $h * $pih;
             }
             
+            // add to pdf
             $p->ImagickJpeg($pq->getFilename(), $img, $pw/2-$w/2, ($ph*$margin)/4, $w, $h);
             
+            // destroy image
             $img->destroy();
             
         }
         
         $p->AliasNbPages();
-        $p->Output('test.pdf', 'I');
+
+        
+        // generate file
+        $path = Context::getInstance()->getDataDir() . '/tmp';
+        if (is_dir($path) == false) {
+            if (mkdir($path, 0755) == false) {
+                throw new FileException('Unable to create temp-folder');
+            }
+        }
+        
+        
+        // fetch archivestore
+        // TODO: make configurable
+        $storeService = object_container_get(StoreService::class);
+        $archives = $storeService->readArchiveStores();
+        if (count($archives) == 0) {
+            throw new InvalidStateException('No archive-store found');
+        }
+        
+        $pdffile = $path . '/pq-'.date('Ymd-His') . '.pdf';
+        $p->Output('F', $pdffile);
+        
+        // save to store
+        $storefile = $storeService->syncFile($archives[0]->getStoreId(), basename($pdffile), md5_file($pdffile), filesize($pdffile), date('Y-m-d H:i:s'), false, $pdffile);
+        
+        // remove tempfile
+        unlink($pdffile);
+        
+        redirect('/?m=filesync&c=storefile&a=edit_meta&store_file_id='.$storefile->getStoreFileId());
     }
     
     
