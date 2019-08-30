@@ -48,6 +48,11 @@ class WebmenuService extends ServiceBase {
         return $m;
     }
     
+    public function updateMenuSort($ids) {
+        $mDao = new WebmenuDAO();
+        
+        $mDao->updateSort($ids);
+    }
     
     public function saveWebmenu(WebmenuForm $form) {
         $wDao = new WebmenuDAO();

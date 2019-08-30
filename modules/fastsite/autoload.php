@@ -17,17 +17,23 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
     
     $ac = $evt->getSource();
     
+    $miFastsite = new Menu();
+    $miFastsite->setIconLabelUrl('fa-file-archive-o', 'Fastsite', '/?m=fastsite&c=webpage');
+    $miFastsite->setMenuAsFirstChild(false);
+    $ac->add($miFastsite);
+    
+    
     $miWebpage = new Menu();
     $miWebpage->setIconLabelUrl('fa-file-archive-o', 'Webpages', '/?m=fastsite&c=webpage');
-    $ac->add($miWebpage);
+    $miFastsite->addChildMenu($miWebpage);
     
     $miMenu = new Menu();
     $miMenu->setIconLabelUrl('fa-file-archive-o', 'Webmenu', '/?m=fastsite&c=webmenu');
-    $ac->add($miMenu);
+    $miFastsite->addChildMenu($miMenu);
     
     $miTemplates = new Menu();
     $miTemplates->setIconLabelUrl('fa-file-archive-o', 'Templates', '/?m=fastsite&c=template');
-    $ac->add($miTemplates);
+    $miFastsite->addChildMenu($miTemplates);
     
 }));
 

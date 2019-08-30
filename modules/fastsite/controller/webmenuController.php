@@ -25,9 +25,15 @@ class webmenuController extends BaseController {
         $html = '';
         $html .= '<div class="menu-container">';
         
-        foreach($menus as $m) {
-            $html .= '<div class="menu-item">';
-            $html .= '<a href="/?m=fastsite&c=webmenu&a=edit&id='.$m->getWebmenuId().'"><span>'.esc_html($m->getLabel().' - ' . $m->getUrl()) . '</span></a>';
+        for($x=0; $x < count($menus); $x++) {
+            $m = $menus[$x];
+            
+            $last = $x == count($menus)-1 ? true : false;
+            
+            $html .= '<div class="menu-item menu-item-'.$x.'" data-menu-id="'.$m->getWebmenuId().'">';
+                $html .= '<a href="'.appUrl('/?m=fastsite&c=webmenu&a=edit&id='.$m->getWebmenuId()).'">';
+                $html .= '<span>'.esc_html($m->getLabel()) . '</span>';
+                $html .= '</a>';
             $html .= '</div>';
             
             $children = $m->getChildren();
@@ -39,6 +45,46 @@ class webmenuController extends BaseController {
         $html .= '</div>';
         
         return $html;
+    }
+    
+    
+    public function action_sort_item() {
+        
+        $ids = explode(',', $_REQUEST['ids']);
+        $selectedId = (int)$_REQUEST['selectedId'];
+        
+        $newOrder = array();
+        
+        for($x=0; $x < count($ids); $x++) {
+            
+            if (get_var('direction') == 'up') {
+                // up
+                if ($x+1 < count($ids) && $ids[$x+1] == $selectedId) {
+                    $newOrder[] = $ids[$x+1];
+                    $newOrder[] = $ids[$x];
+                    $x++;
+                } else {
+                    $newOrder[] = $ids[$x];
+                }
+            } else {
+                // down
+                if ($x+1 < count($ids) && $ids[$x] == $selectedId) {
+                    $newOrder[] = $ids[$x+1];
+                    $newOrder[] = $ids[$x];
+                    $x++;
+                } else {
+                    $newOrder[] = $ids[$x];
+                }
+            }
+        }
+        
+        $webmenuService = $this->oc->get(WebmenuService::class);
+        $webmenuService->updateMenuSort( $newOrder );
+        
+        $this->json(array(
+            'status' => 'OK',
+            'success' => true
+        ));
     }
     
     

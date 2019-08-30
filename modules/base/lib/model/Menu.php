@@ -12,11 +12,15 @@ class Menu extends base\MenuBase {
     
     protected $weight = 10;
     
+    protected $menuAsFirstChild = true;
     protected $childMenus = array();
     
     public function __construct() {
         
     }
+    
+    public function setMenuAsFirstChild($bln) { $this->menuAsFirstChild = $bln; }
+    public function menuAsFirstChild() { return $this->menuAsFirstChild; }
     
     public function setIconLabelUrl($icon, $label, $url, $weight=10) {
         $this->setField('icon',  $icon);

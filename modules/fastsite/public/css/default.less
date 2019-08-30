@@ -3,8 +3,28 @@
 
 .module-fastsite {
 	
-	.menu-container .menu-container {
-		padding-left: 15px;
+	
+	.menu-container {
+		.menu-container {
+			padding-left: 15px;
+		}
+		
+		.menu-item a {
+			display: block;
+			padding: 2px 0px 2px 5px;
+			
+			&:hover { text-decoration: none; }
+			&::before {
+				font-family: FontAwesome;
+				content: "\f0da";
+				width: 15px;
+				padding-right: 10px;
+				display: blcok;
+			}
+		}
+		.menu-item.selected {
+			background-color: #eee;
+		}
 	}
 	
 	

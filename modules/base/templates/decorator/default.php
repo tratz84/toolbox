@@ -129,7 +129,7 @@ $menuItems = $ms->listMainMenu();
 					
 					<?php if ($mi->hasChildMenus()) : ?>
 					<?php $childItems = $mi->getChildMenus() ?>
-					<?php $childItems = array_merge(array($mi), $childItems) ?>
+					<?php if ($mi->menuAsFirstChild()) $childItems = array_merge(array($mi), $childItems) ?>
 					<ul class="child-menu">
     					<?php foreach($childItems as $ci) : ?>	
     					<li>
