@@ -34,12 +34,13 @@ class webmenuController extends BaseController {
                 $html .= '<a href="'.appUrl('/?m=fastsite&c=webmenu&a=edit&id='.$m->getWebmenuId()).'">';
                 $html .= '<span>'.esc_html($m->getLabel()) . '</span>';
                 $html .= '</a>';
-            $html .= '</div>';
             
             $children = $m->getChildren();
             if (count($children)) {
                 $html .= $this->renderMenus($children);
             }
+            
+            $html .= '</div>';
         }
         
         $html .= '</div>';
