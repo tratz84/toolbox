@@ -37,7 +37,9 @@ $('.rotation-control [type=range]').val( ie.degrees );
 
 
 $('.form-pagequeue-edit-form').find('[type=text], textarea').on('change', function() {
-	saveEditorData();
+	var formdata = $('.form-pagequeue-edit-form').serialize();
+	
+	ie.saveEditorData( formdata );
 });
 
 </script>
