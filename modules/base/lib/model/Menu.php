@@ -12,6 +12,8 @@ class Menu extends base\MenuBase {
     
     protected $weight = 10;
     
+    protected $childMenus = array();
+    
     public function __construct() {
         
     }
@@ -35,6 +37,13 @@ class Menu extends base\MenuBase {
     
     public function getWeight() { return $this->weight; }
     public function setWeight($p) { $this->weight = $p; }
+    
+    
+    public function addChildMenu($menu) { $this->childMenus[] = $menu; }
+    public function hasChildMenus() { return count($this->childMenus) > 0 ? true : false; }
+    public function getChildMenus() {
+        return $this->childMenus;
+    }
     
     
     public function isActive() {

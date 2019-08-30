@@ -3,6 +3,7 @@
 <div class="page-header">
 
 	<div class="toolbox">
+		<a href="<?= appUrl('/?m=filesync&c=pagequeue') ?>" class="fa fa-picture-o"></a>
 		<a href="<?= appUrl('/?m=filesync&c=store&a=edit') ?>" class="fa fa-plus"></a>
 	</div>
 

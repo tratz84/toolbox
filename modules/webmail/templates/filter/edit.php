@@ -23,7 +23,7 @@
 <script>
 
 $(document).ready(function() {
-    var lefw = $('.webmailform-list-filter-condition-widget').get(0).lefw;
+    var lefw = $('.webmail-form-list-filter-condition-widget').get(0).lefw;
     console.log( lefw );
 
     lefw.setCallbackAddRecord(function(row) {

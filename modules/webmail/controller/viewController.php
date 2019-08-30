@@ -73,6 +73,10 @@ class viewController extends BaseController {
         
         $path = $this->ctx->getDataDir() . '/' . $emailFile->getPath();
         
+        if (file_exists($path) == false) {
+            die('file not found');
+        }
+        
         if (function_exists('mime_content_type')) {
             $type = mime_content_type($path);
         } else {

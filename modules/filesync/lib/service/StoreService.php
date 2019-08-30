@@ -37,6 +37,12 @@ class StoreService extends ServiceBase {
         return $sDao->readAll();
     }
     
+    public function readArchiveStores() {
+        $sDao = new StoreDAO();
+        
+        return $sDao->readArchives();
+    }
+    
     
     public function saveStore(StoreForm $form) {
         $storeId = $form->getWidgetValue('store_id');
@@ -330,6 +336,11 @@ class StoreService extends ServiceBase {
         $sfDao->setRevision($storeFile->getStoreFileId(), $sfr->getRev());
         
         $ctx = \core\Context::getInstance();
+        
+        $destDir = $ctx->getDataDir() . '/filesync/'.$store->getStoreId().'/';
+        if (is_dir($destDir) == false) {
+            mkdir($destDir, 0755, true);
+        }
         
         if (!copy($tmpfile, $ctx->getDataDir() . '/filesync/'.$store->getStoreId().'/'.$storeFile->getStoreFileId().'-'.$sfr->getStoreFileRevId())) {
             throw new FileException('Error saving file');

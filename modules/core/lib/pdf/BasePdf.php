@@ -127,6 +127,58 @@ class BasePdf extends \FPDF {
         }
     }
     
+    function ImagickJpeg($filename, $imagick, $x=null, $y=null, $w=0, $h=0, $link='') {
+        if(!isset($this->images[$filename]))
+        {
+            $info = array('w'=>$imagick->getimagewidth(), 'h'=>$imagick->getimageheight(), 'cs'=>'DeviceRGB', 'bpc'=>8, 'f'=>'DCTDecode', 'data'=>(string)$imagick);
+            
+            $info['i'] = count($this->images)+1;
+            $this->images[$filename] = $info;
+        }
+        else
+            $info = $this->images[$filename];
+        
+        // Automatic width and height calculation if needed
+        if($w==0 && $h==0)
+        {
+            // Put image at 96 dpi
+            $w = -96;
+            $h = -96;
+        }
+        if($w<0)
+            $w = -$info['w']*72/$w/$this->k;
+        if($h<0)
+            $h = -$info['h']*72/$h/$this->k;
+        if($w==0)
+            $w = $h*$info['w']/$info['h'];
+        if($h==0)
+            $h = $w*$info['h']/$info['w'];
+            
+        // Flowing mode
+        if($y===null)
+        {
+            if($this->y+$h>$this->PageBreakTrigger && !$this->InHeader && !$this->InFooter && $this->AcceptPageBreak())
+            {
+                // Automatic page break
+                $x2 = $this->x;
+                $this->AddPage($this->CurOrientation,$this->CurPageSize,$this->CurRotation);
+                $this->x = $x2;
+            }
+            $y = $this->y;
+            $this->y += $h;
+        }
+        
+        if($x===null) {
+            $x = $this->x;
+        }
+        
+        $this->_out(sprintf('q %.2F 0 0 %.2F %.2F %.2F cm /I%d Do Q',$w*$this->k,$h*$this->k,$x*$this->k,($this->h-($y+$h))*$this->k,$info['i']));
+        
+        if($link) {
+            $this->Link($x,$y,$w,$h,$link);
+        }
+    }
+    
     
 }
 

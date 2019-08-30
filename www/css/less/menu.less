@@ -23,16 +23,16 @@ header .notifications-bar {
 // menu @ https://bootsnipp.com/snippets/featured/responsive-navigation-menu
 
 .nav-side-menu {
-	overflow: auto;
+//	overflow: auto;
 	font-family: verdana;
 	font-size: 12px;
 	font-weight: 200;
 	background-color: #f5f5f5;
-	position: fixed;
+	position: absolute;
 	top: 0px;
 	z-index: 1;
 	width: 240px;
-	height: 100%;
+	min-height: 100%;
 	color: #fff;
 	box-shadow: 0px 0px 5px 0px #ccc;
 	
@@ -133,6 +133,41 @@ header .notifications-bar {
 	transition: all 1s ease;
 }
 
+.mobile-icon-container { display: none; }
+
+#menu-content {
+	.menu-item {
+		.child-menu {
+			display: none;
+			position: absolute;
+			margin-top: -52px;
+			left: 100%;
+			width: 200px;
+			a { background-color: #f5f5f5; }
+			a:hover { background-color: #dfdfdf; }
+			
+		}
+		
+		&:hover .child-menu {
+			display: block;
+		}
+	}
+	
+	@media (max-width: 767px) {
+		.menu-item .child-menu {
+			position: inherit;
+			left: 0;
+			width: auto;
+			li a { padding-left: 25px; }
+		}
+		.menu-item.menu-item-open .child-menu {
+			display: block;
+			margin-top: 0;
+		}
+	}
+}
+
+
 @media (max-width: 767px) {
 	.nav-side-menu {
 		position: relative;
@@ -154,6 +189,16 @@ header .notifications-bar {
 		text-align: center;
 	}
 
+	.mobile-icon-container {
+		a { color: #000; }
+		
+		display: block;
+		float: right;
+		margin-right: 80px;
+		line-height: 50px;
+		font-size: 20px;
+	}
+
 	.menu-mobile-spacer { height: 50px; }
 }
 
@@ -161,6 +206,5 @@ header .notifications-bar {
 	.nav-side-menu .menu-list .menu-content {
 		display: block;
 	}
-	
 }
 

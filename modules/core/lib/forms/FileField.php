@@ -3,10 +3,7 @@
 namespace core\forms;
 
 
-
 class FileField extends BaseWidget {
-    
-    
     
     protected $placeholder = false;
     protected $options;
