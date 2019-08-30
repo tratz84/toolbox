@@ -14,7 +14,7 @@ class webmenuController extends BaseController {
     public function action_index() {
         $webmenuService = $this->oc->get(WebmenuService::class);
         
-        $this->menus = $webmenuService->readByParent(null, true);
+        $this->menus = $webmenuService->readMenusByParent(null, true);
         $this->controller = $this;
         
         return $this->render();
@@ -119,7 +119,20 @@ class webmenuController extends BaseController {
     
     public function action_delete() {
         
+        $webmenuService = $this->oc->get(WebmenuService::class);
         
+        $webmenu = $webmenuService->readMenu( get_var('id') );
+        
+        $submenus = $webmenuService->readMenusByParent( $webmenu->getWebmenuId() );
+        
+        if (count($submenus) > 0) {
+            report_user_error('Kan geen menu-item verwijderen dat submenu\'s bevat');
+            redirect('/?m=fastsite&c=webmenu&a=edit&id='.$webmenu->getWebmenuId());
+        }
+        
+        $webmenuService->deleteMenu( $webmenu->getWebmenuId() );
+        
+        redirect('/?m=fastsite&c=webmenu');
     }
     
     

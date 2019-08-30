@@ -3,6 +3,9 @@
 
 	<div class="toolbox">
 		<a href="<?= appUrl('/?m=fastsite&c=webmenu') ?>" class="fa fa-chevron-circle-left"></a>
+		<?php if ($isNew == false) : ?>
+		<a href="<?= appUrl('/?m=fastsite&c=webmenu&a=delete&id='.$form->getWidgetValue('webmenu_id')) ?>" class="fa fa-trash"></a>
+		<?php endif; ?>
 		<a href="javascript:void(0);" class="fa fa-save submit-form"></a>
 	</div>
 
@@ -30,7 +33,7 @@ $(document).ready(function() {
 function renderRoutingInput() {
 	var webpage_id = $('[name=webpage_id]').val();
 
-	if (webpage_id  == '') {
+	if (webpage_id  == '' || webpage_id == undefined) {
 		$('.url-widget').show();
 	} else {
 		$('.url-widget').hide();

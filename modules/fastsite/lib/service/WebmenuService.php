@@ -8,6 +8,7 @@ use fastsite\model\WebmenuDAO;
 use core\exception\ObjectNotFoundException;
 use fastsite\form\WebmenuForm;
 use fastsite\model\Webmenu;
+use core\exception\InvalidStateException;
 
 class WebmenuService extends ServiceBase {
     
@@ -21,14 +22,14 @@ class WebmenuService extends ServiceBase {
     }
     
     
-    public function readByParent($parentWebpageId=null, $recursive=false) {
+    public function readMenusByParent($parentMenuId=null, $recursive=false) {
         $wDao = new WebmenuDAO();
         
-        $items = $wDao->readByParent( $parentWebpageId );
+        $items = $wDao->readByParent( $parentMenuId );
         if ($recursive) for($x=0; $x < count($items); $x++) {
             $id = $items[$x]->getWebmenuId();
             
-            $subitems = $this->readByParent($id, true);
+            $subitems = $this->readMenusByParent($id, true);
             $items[$x]->setChildren($subitems);
         }
         
@@ -53,6 +54,19 @@ class WebmenuService extends ServiceBase {
         
         $mDao->updateSort($ids);
     }
+    
+    public function deleteMenu($menuId) {
+        $webmenu = $this->readMenu( $menuId );
+        
+        $submenus = $this->readMenusByParent( $webmenu->getWebmenuId() );
+        
+        if (count($submenus) > 0) {
+            throw new InvalidStateException('Menu-item contains submenus');
+        }
+        
+        return $webmenu->delete();
+    }
+    
     
     public function saveWebmenu(WebmenuForm $form) {
         $wDao = new WebmenuDAO();

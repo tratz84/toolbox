@@ -52,7 +52,7 @@ class WebmenuForm extends BaseForm {
     protected function addParentWebmenu( ){
         $webmenuService = object_container_get(WebmenuService::class);
         
-        $items = $webmenuService->readByParent(null, true);
+        $items = $webmenuService->readMenusByParent(null, true);
         
         $l = $this->fillWebmenuArray($items);
         
@@ -72,7 +72,7 @@ class WebmenuForm extends BaseForm {
             
             $children = $wi->getChildren();
             if (count($children)) {
-                $arr2 = $this->fillWebmenuArray($children, '--');
+                $arr2 = $this->fillWebmenuArray($children, $spaces.'--');
                 
                 foreach($arr2 as $key => $val) {
                     $arr[$key] = $val;
