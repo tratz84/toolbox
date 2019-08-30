@@ -24,7 +24,6 @@ $(document).ready(function() {
 				mi.addClass('menu-item-open');
 			}
 			
-			
 			return false;
 		}
 	});
@@ -335,7 +334,14 @@ $(document).ready(function() {
 		}
 		
 		if ($('.nav-side-menu').css('display') == 'block') {
-			if (evt.clientX >= $('.nav-side-menu').width()) {
+			var w = $('.nav-side-menu').width();
+			
+			// childmenu support
+			var cmw = $('.nav-side-menu .child-menu:visible').width();
+			if (isNaN(cmw) == false)
+				w += cmw;
+			
+			if (evt.clientX >= w) {
 				$('.nav-side-menu').css('display', 'none');
 			}
 		} else {
