@@ -121,11 +121,26 @@ $menuItems = $ms->listMainMenu();
         			 $active = false;
     			 }
     			?>
-				<li> 
-					<a class="nav-link <?= $active ? 'active' : '' ?>" href="<?= appUrl($mi->getUrl()) ?>">
+				<li class="menu-item">
+					<a class="nav-link <?= $active ? 'active' : '' ?> weight-<?= $mi->getWeight() ?>" href="<?= appUrl($mi->getUrl()) ?>">
 						<i class="fa <?= $mi->getIcon() ?>"></i> 
 						<span class="menu-label"><?= esc_html($mi->getLabel()) ?></span>
 					</a>
+					
+					<?php if ($mi->hasChildMenus()) : ?>
+					<?php $childItems = $mi->getChildMenus() ?>
+					<?php $childItems = array_merge(array($mi), $childItems) ?>
+					<ul class="child-menu">
+    					<?php foreach($childItems as $ci) : ?>	
+    					<li>
+    						<a class="nav-link weight-<?= $ci->getWeight() ?>" href="<?= appUrl($ci->getUrl()) ?>">
+        						<i class="fa <?= $ci->getIcon() ?>"></i> 
+        						<span class="menu-label"><?= esc_html($ci->getLabel()) ?></span>
+        					</a>
+    					</li>
+    					<?php endforeach; ?>
+					</ul>
+					<?php endif; ?>
 				</li>
     		<?php endforeach; ?>
 			</ul>

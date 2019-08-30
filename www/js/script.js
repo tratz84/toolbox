@@ -12,6 +12,24 @@ $(document).ready(function() {
 	}, 60 * 1000);
 	
 	
+	$('.nav-side-menu .menu-list .menu-item > a.nav-link').on('touchend click', function() {
+		
+		if ($(window).width( ) < 767) {
+			var mi = $(this).closest('li.menu-item');
+			var isOpen = mi.hasClass('menu-item-open');
+			
+			$(this).closest('div.menu-list').find('li.menu-item-open').removeClass('menu-item-open');
+			
+			if (isOpen == false) {
+				mi.addClass('menu-item-open');
+			}
+			
+			
+			return false;
+		}
+	});
+
+	
 	
 	applyWidgetFields(document.body);
 	
