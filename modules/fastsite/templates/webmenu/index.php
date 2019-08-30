@@ -23,19 +23,19 @@
 <script>
 
 $(document).ready(function() {
-	$('.menu-item a').click(function() {
+	$('.webmenu-container .menu-item a').click(function() {
 		menuitem_Click(this);
 		
 		return false;
 	});
 
-	$('.menu-item a').dblclick(function() {
+	$('.webmenu-container .menu-item a').dblclick(function() {
 		window.location = $(this).attr('href');
 	});
 });
 
-$('.menu-item-up').click(function() { webmenuitemSortUpdate('up'); });
-$('.menu-item-down').click(function() { webmenuitemSortUpdate('down'); });
+$('.main-content .menu-item-up').click(function() { webmenuitemSortUpdate('up'); });
+$('.main-content .menu-item-down').click(function() { webmenuitemSortUpdate('down'); });
 
 
 function webmenuitemSortUpdate( direction ) {
@@ -72,8 +72,8 @@ function webmenuitemSortUpdate( direction ) {
 
 
 function menuitem_Click(anchor) {
-	$('.menu-item').removeClass('selected');
-	$(anchor).closest('.menu-item').addClass('selected');
+	$('.webmenu-container .menu-item').removeClass('selected');
+	$(anchor).closest('.webmenu-container .menu-item').addClass('selected');
 
 
 	return false;
