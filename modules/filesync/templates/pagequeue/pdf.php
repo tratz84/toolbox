@@ -95,6 +95,10 @@ t.addColumn({
 		} else {
 			c.append($('<span class="pagequeue-name-'+row.pagequeue_id+'" />').text(row.filename));
 		}
+
+		var t = $('<div />');
+		t.append( format_datetime(str2datetime(row.created)) );
+		c.append(t);
 		
 		return c;
 	}

@@ -30,6 +30,10 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
     $menuPq = new Menu();
     $menuPq->setIconLabelUrl('fa-file', 'Pagequeue', '/?m=filesync&c=pagequeue', 20);
     $menuFilesync->addChildMenu( $menuPq );
+
+    $menuPdf = new Menu();
+    $menuPdf->setIconLabelUrl('fa-file', 'PDF creator', '/?m=filesync&c=pagequeue&a=pdf', 20);
+    $menuFilesync->addChildMenu( $menuPdf );
     
 }));
 
