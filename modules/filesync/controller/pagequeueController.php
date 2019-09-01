@@ -43,6 +43,7 @@ class pagequeueController extends BaseController {
     
     
     public function action_upload() {
+        $ctx = Context::getInstance();
         $this->form = new PagequeueUploadForm();
         
         $pagequeueService = $this->oc->get(PagequeueService::class);
@@ -51,6 +52,8 @@ class pagequeueController extends BaseController {
             $pagequeue = $pagequeueService->readPagequeue( get_var('id') );
         } else {
             $pagequeue = new Pagequeue();
+            $defaultRotation = $ctx->getSetting('filesync__pagequeue_default_rotation');
+            $pagequeue->setDegreesRotated($defaultRotation);
         }
         
         $this->form->bind( $pagequeue );
@@ -236,18 +239,19 @@ class pagequeueController extends BaseController {
         
         
         // fetch archivestore
-        // TODO: make configurable
+        $ctx = Context::getInstance();
+        $storeId = $ctx->getSetting('filesync__pagequeue_archive_store');
         $storeService = object_container_get(StoreService::class);
-        $archives = $storeService->readArchiveStores();
-        if (count($archives) == 0) {
-            throw new InvalidStateException('No archive-store found');
+        $storeArchive= $storeService->readStore($storeId);
+        if ($storeArchive == null || $storeArchive->getStoreType() != 'archive') {
+            throw new InvalidStateException('No archive-store configured');
         }
         
         $pdffile = $path . '/pq-'.date('Ymd-His') . '.pdf';
         $p->Output('F', $pdffile);
         
         // save to store
-        $storefile = $storeService->syncFile($archives[0]->getStoreId(), basename($pdffile), md5_file($pdffile), filesize($pdffile), date('Y-m-d H:i:s'), false, $pdffile);
+        $storefile = $storeService->syncFile($storeArchive->getStoreId(), basename($pdffile), md5_file($pdffile), filesize($pdffile), date('Y-m-d H:i:s'), false, $pdffile);
         
         // remove tempfile
         unlink($pdffile);

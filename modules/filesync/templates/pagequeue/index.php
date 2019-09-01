@@ -75,25 +75,9 @@ t.load();
 
 
 $(document).on('image-editor-changed', function() {
-	saveEditorData();
-});
-
-function saveEditorData() {
 	var formdata = $('.form-pagequeue-edit-form').serialize();
-	
-	$.ajax({
-		url: appUrl('/?m=filesync&c=pagequeue&a=edit_save'),
-		type: 'POST',
-		data: formdata,
-		success: function(data, xhr, textStatus){
-			name = data.name ? data.name : data.filename;
-			$('.pagequeue-name-' + data.id).text( name );
-			console.log( data );
-		}
-	});
-}
-
-
+	ie.saveEditorData( formdata );
+});
 
 
 </script>

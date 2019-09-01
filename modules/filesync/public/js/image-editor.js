@@ -33,6 +33,21 @@ function DocumentImageEditor(container, opts) {
 	};
 	
 	
+	this.saveEditorData = function( formdata ) {
+		
+		$.ajax({
+			url: appUrl('/?m=filesync&c=pagequeue&a=edit_save'),
+			type: 'POST',
+			data: formdata,
+			success: function(data, xhr, textStatus){
+				name = data.name ? data.name : data.filename;
+				$('.pagequeue-name-' + data.id).text( name );
+				console.log( data );
+			}
+		});
+	};
+	
+	
 	this.getCropX1 = function() { return this.crop.pos1.x / this.canvas.width * 100; };
 	this.getCropY1 = function() { return this.crop.pos1.y / this.canvas.height * 100; };
 	this.getCropX2 = function() { return this.crop.pos2.x / this.canvas.width * 100; };

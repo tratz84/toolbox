@@ -1,0 +1,18 @@
+
+CREATE TABLE `filesync__pagequeue` (
+  `pagequeue_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ref_id` int(11) DEFAULT NULL,
+  `ref_object` varchar(255) DEFAULT NULL,
+  `filename` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `description` text,
+  `crop_x1` double DEFAULT NULL,
+  `crop_y1` double DEFAULT NULL,
+  `crop_x2` double DEFAULT NULL,
+  `crop_y2` double DEFAULT NULL,
+  `degrees_rotated` int(11) DEFAULT NULL,
+  `page_orientation` enum('P','L') DEFAULT 'P',
+  `edited` datetime DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  PRIMARY KEY (`pagequeue_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
