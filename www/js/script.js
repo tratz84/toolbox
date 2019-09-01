@@ -15,6 +15,11 @@ $(document).ready(function() {
 	$('.nav-side-menu .menu-list .menu-item > a.nav-link').on('touchend click', function() {
 		
 		if ($(window).width( ) < 767) {
+			// no child menu's? -> nothing to expand
+			if ($(this).closest('.menu-item').find('.child-menu').length == 0) {
+				return true;
+			}
+
 			var mi = $(this).closest('li.menu-item');
 			var isOpen = mi.hasClass('menu-item-open');
 			
