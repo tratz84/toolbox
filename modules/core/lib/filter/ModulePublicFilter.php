@@ -54,9 +54,7 @@ class ModulePublicFilter {
             header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + (60 * 60 * 24))); // 24 hours
             header("Pragma: cache");
             header("Cache-Control: max-age=3600");
-            $contentType = mime_content_type($fullpath);
-            if (!$contentType)
-                $contentType = 'application/octet-stream';
+            $contentType = file_mime_type($fullpath);
             header('Content-type: '.$contentType);
             
             // output file

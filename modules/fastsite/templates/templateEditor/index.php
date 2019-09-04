@@ -31,8 +31,8 @@
 			<td>
 				<?php if ($controller->extensionSupported($f)) : ?>
 				<a href="<?= appUrl('/?m=fastsite&c=templateEditor&a=edit&n='.urlencode($templateName).'&f='.urlencode($f)) ?>" class="fa fa-edit"></a>
-				<?php endif; ?>
 				<a href="<?= appUrl('/?m=fastsite&c=templateEditor&a=delete&n='.urlencode($templateName).'&f='.urlencode($f)) ?>" class="fa fa-remove"></a>
+				<?php endif; ?>
 			</td>
 		</tr>
 		<?php endforeach; ?>

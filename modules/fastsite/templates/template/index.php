@@ -33,7 +33,7 @@
     	<?php endforeach; ?>
     	<?php if (count($templates) == 0) : ?>
     	<tr>
-    		<td colspan="2" style="font-style: italic; text-align: center;"><?= t('No templates available') ?></td>
+    		<td colspan="3" style="font-style: italic; text-align: center;"><?= t('No templates available') ?></td>
     	</tr>
     	<?php endif; ?>
 	</tbody>

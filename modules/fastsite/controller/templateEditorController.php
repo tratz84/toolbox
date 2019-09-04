@@ -38,9 +38,28 @@ class templateEditorController extends BaseController {
         return in_array($extension, ['css', 'php', 'js', 'json', 'html', 'htm', 'scss', 'sass', 'yml']) ? true : false;
     }
     
+    public function editorMode($file) {
+        
+        $ext = file_extension($file);
+        
+        if ($ext == 'css') {
+            return 'css';
+        } else if ($ext == 'js') {
+            return 'javascript';
+        } else if ($ext == 'xml') {
+            return 'xml';
+        } else if ($ext == 'yml' || $ext == 'yaml') {
+            return 'yaml';
+        }
+    
+        
+        return 'htmlmixed';
+    }
+    
     public function action_edit() {
         $this->templateName = $templateName = basename( get_var('n') );
         $this->file = $file = get_var('f');
+        $this->controller = $this;
         
         $templateDir = get_data_file('fastsite/templates');
         
