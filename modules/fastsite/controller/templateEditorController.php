@@ -29,9 +29,13 @@ class templateEditorController extends BaseController {
     }
     
     public function extensionSupported($file) {
-        $extension = strtolower( substr($file, strrpos($file, '.')+1) );
+        $p = strrpos($file, '.');
         
-        return in_array($extension, ['css', 'php', 'js', 'html', 'htm', 'scss', 'sass', 'yml']) ? true : false;
+        if ($p === false) return false;
+        
+        $extension = strtolower( substr($file, $p+1) );
+        
+        return in_array($extension, ['css', 'php', 'js', 'json', 'html', 'htm', 'scss', 'sass', 'yml']) ? true : false;
     }
     
     public function action_edit() {
@@ -58,6 +62,8 @@ class templateEditorController extends BaseController {
             return $this->render();
         }
         
+//         $this->setShowDecorator(false);
+        $this->content = file_get_contents( $f );
         
         return $this->render();
     }
