@@ -8,13 +8,13 @@ define('MODULE_FASTSITE', 1);
 
 
 
+use base\model\Menu;
+use core\Context;
 use core\ObjectContainer;
 use core\event\CallbackPeopleEventListener;
 use core\event\EventBus;
-use core\event\PeopleEvent;
-use core\Context;
-use base\model\Menu;
 use core\filter\FilterChain;
+use fastsite\filter\FastsiteTemplateFilter;
 
 Context::getInstance()->enableModule('fastsite');
 
@@ -45,12 +45,20 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
     
 }));
 
-
 $eb->subscribe('core', 'pre-call-'.FilterChain::class.'::execute', new CallbackPeopleEventListener(function($evt) {
     
-//     print 'jojo';
-//     exit;
     
+    // module-variable set? => skip
+    if (get_var('m')) {
+        return;
+    }
+    return;
+    
+    $src = $evt->getSource();
+    $filterChain = $src[0];
+    $filterChain->clearFilters();
+   
+    $filterChain->addFilter( new FastsiteTemplateFilter() );
 }));
 
 

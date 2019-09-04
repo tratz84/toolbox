@@ -17,6 +17,22 @@ class FilterChain implements ObjectHookable {
 	    
 	}
 	
+	public function removeFilterNo($no) {
+	    $newFilters = array();
+	    
+	    for($x=0; $x < count($this->filters); $x++) {
+	        if ($x == $no) {
+	            continue;
+	        }
+	        
+	        $newFilters[] = $this->filters[$x];
+	    }
+	    
+	    $this->filters = $newFilters;
+	}
+	
+	public function clearFilters() { $this->filters = array(); }
+	
 	public function addFilter($filter) {
 		$this->filters[] = $filter;
 	}
