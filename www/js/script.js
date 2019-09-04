@@ -406,11 +406,7 @@ function format_customername(record) {
 
 
 function appUrl(u) {
-	if (appSettings.standalone_installation) {
-		return appSettings.base_href + u.substr(1);
-	} else {
-		return appSettings.base_href + appSettings.contextName + u;
-	}
+	return appSettings.appRootUrl + u.substr(1);
 }
 
 function formpost(url, data, opts) {

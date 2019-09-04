@@ -21,6 +21,7 @@ $menuItems = $ms->listMainMenu();
 			 print json_encode([
 			     'base_href' => BASE_HREF,
 			     'contextName' => $context->getContextName(),
+			     'appRootUrl' => appUrl('/'),
 			     'username' => $context->getUser() ? $context->getUser()->getUsername() : '',
 			     'multiuser_check_interval' => MULTIUSER_CHECK_INTERVAL,
 			     'standalone_installation' => is_standalone_installation(),

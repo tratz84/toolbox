@@ -35,7 +35,7 @@ class templateEditorController extends BaseController {
         
         $extension = strtolower( substr($file, $p+1) );
         
-        return in_array($extension, ['css', 'php', 'js', 'json', 'html', 'htm', 'scss', 'sass', 'yml']) ? true : false;
+        return in_array($extension, ['css', 'map', 'php', 'js', 'json', 'html', 'htm', 'scss', 'sass', 'yml']) ? true : false;
     }
     
     public function editorMode($file) {
@@ -45,7 +45,7 @@ class templateEditorController extends BaseController {
             return 'css';
         } else if ($ext == 'scss') {
             return 'text/x-less';
-        } else if ($ext == 'js') {
+        } else if ($ext == 'js' || $ext == 'json' || $ext == 'map') {
             return 'javascript';
         } else if ($ext == 'xml') {
             return 'xml';

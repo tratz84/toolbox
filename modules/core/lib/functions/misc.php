@@ -37,6 +37,8 @@ function appUrl($u) {
         $url = BASE_HREF . $contextName . $u;
     }
     
+    $url = apply_filter('appUrl', [$u, $url]);
+    
     return $url;
 }
 

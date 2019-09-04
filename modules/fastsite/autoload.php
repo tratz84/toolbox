@@ -47,12 +47,12 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
 
 $eb->subscribe('core', 'pre-call-'.FilterChain::class.'::execute', new CallbackPeopleEventListener(function($evt) {
     
-    
-    // module-variable set? => skip
-    if (get_var('m')) {
+    if (strpos($_SERVER['REQUEST_URI'], '/backend/') !== false) {
         return;
     }
-    return;
+    if (strpos($_SERVER['REQUEST_URI'], BASE_HREF.'module/') !== false) {
+        return;
+    }
     
     $src = $evt->getSource();
     $filterChain = $src[0];
@@ -60,5 +60,14 @@ $eb->subscribe('core', 'pre-call-'.FilterChain::class.'::execute', new CallbackP
    
     $filterChain->addFilter( new FastsiteTemplateFilter() );
 }));
+
+add_filter('appUrl', function($url) {
+    list($startUrl, $rewrittenUrl) = $url;
+    
+    $base = substr($rewrittenUrl, 0, strlen($rewrittenUrl) - strlen($startUrl));
+    $base .= '/backend';
+    
+    return $base . $startUrl;
+});
 
 
