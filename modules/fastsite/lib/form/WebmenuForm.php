@@ -40,7 +40,7 @@ class WebmenuForm extends BaseForm {
                 return 'Parent gelijk aan huidig menu-item';
             }
             
-            // 
+            // TODO: check if parent_webmenu_id is submenu of current item
             
             
         });

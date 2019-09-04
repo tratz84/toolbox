@@ -3,7 +3,9 @@
 namespace core\filter;
 
 
-class FilterChain {
+use core\container\ObjectHookable;
+
+class FilterChain implements ObjectHookable {
 	
 	
 	protected $filters = array();
