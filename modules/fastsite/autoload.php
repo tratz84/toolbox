@@ -1,5 +1,10 @@
 <?php
 
+use core\exception\InvalidStateException;
+
+if (is_standalone_installation() == false) {
+    throw new InvalidStateException('fastsite-module not supported in multi-administration-mode');
+}
 
 if (defined('MODULE_FASTSITE'))
     return;
@@ -62,12 +67,9 @@ $eb->subscribe('core', 'pre-call-'.FilterChain::class.'::execute', new CallbackP
 }));
 
 add_filter('appUrl', function($url) {
-    list($startUrl, $rewrittenUrl) = $url;
+    $url = substr($url, strlen(BASE_HREF));
     
-    $base = substr($rewrittenUrl, 0, strlen($rewrittenUrl) - strlen($startUrl));
-    $base .= '/backend';
-    
-    return $base . $startUrl;
+    return BASE_HREF . 'backend/' . $url;
 });
 
 

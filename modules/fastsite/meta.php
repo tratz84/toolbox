@@ -1,5 +1,9 @@
 <?php
 
+// standalone version only
+if (is_standalone_installation() == false) {
+    return;
+}
 
 use core\Context;
 use core\module\ModuleMeta;
