@@ -39,7 +39,6 @@ class templateEditorController extends BaseController {
     }
     
     public function editorMode($file) {
-        
         $ext = file_extension($file);
         
         if ($ext == 'css') {
@@ -79,6 +78,17 @@ class templateEditorController extends BaseController {
         if ($this->extensionSupported($f) == false) {
             $this->error = t('File extension not supported for editing');
             return $this->render();
+        }
+        
+        if (is_post()) {
+            $content = get_var('tacontent');
+            if (file_put_contents($f, $content)) {
+                report_user_message('File saved');
+            } else {
+                report_user_error('Error saving file');
+            }
+            
+            redirect('/?m=fastsite&c=templateEditor&a=edit&n='.urlencode($this->templateName).'&f='.urlencode($this->file));
         }
         
 //         $this->setShowDecorator(false);
