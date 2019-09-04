@@ -17,7 +17,7 @@ class Pagequeue extends base\PagequeueBase {
         $this->setCropY1(0);
         $this->setCropX2(100);
         $this->setCropY2(100);
-        $this->setDegreesRotated(90);
+        $this->setDegreesRotated(0);
         $this->setPageOrientation('P');
     }
     

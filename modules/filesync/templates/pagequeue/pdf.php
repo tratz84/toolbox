@@ -68,6 +68,8 @@ t.setRowClick(function(row, evt) {
 	$('.selected-files').append( li );
 
 	toggle_action_container();
+
+	showPageSample( record );
 });
 
 t.setConnectorUrl( '/?m=filesync&c=pagequeue&a=search' );
@@ -93,6 +95,10 @@ t.addColumn({
 		} else {
 			c.append($('<span class="pagequeue-name-'+row.pagequeue_id+'" />').text(row.filename));
 		}
+
+		var t = $('<div />');
+		t.append( format_datetime(str2datetime(row.created)) );
+		c.append(t);
 		
 		return c;
 	}
@@ -132,20 +138,34 @@ function generate_pdf(opts) {
 }
 
 
-var ie;
+var ie, currentPagequeue;
 function showPageSample(pagequeue) {
+	currentPagequeue = pagequeue;
+	
 	$('#page-sample').html('');
 	var name = pagequeue.name ? pagequeue.name : pagequeue.filename;
 	$('#page-sample').append($('<div style="font-weight: bold; margin-bottom: 3px;" />').text(name));
 	ie = new DocumentImageEditor('#page-sample', { image_url: appUrl('/?m=filesync&c=pagequeue&a=download&id='+pagequeue.pagequeue_id) });
-	ie.readonly = true;
+// 	ie.readonly = true;
 	
 	ie.crop.pos1 = { x: pagequeue.crop_x1 / 100 * ie.canvasSize, y: pagequeue.crop_y1 / 100 * ie.canvasSize };
 	ie.crop.pos2 = { x: pagequeue.crop_x2 / 100 * ie.canvasSize, y: pagequeue.crop_y2 / 100 * ie.canvasSize };
 	ie.degrees = pagequeue.degrees_rotated;
 	
 	ie.init();
+	
+	$('.rotation-control [type=range]').val( ie.degrees );
 }
+
+$(document).on('image-editor-changed', function() {
+	currentPagequeue.crop_x1 = ie.getCropX1();
+	currentPagequeue.crop_y1 = ie.getCropY1();
+	currentPagequeue.crop_x2 = ie.getCropX2();
+	currentPagequeue.crop_y2 = ie.getCropY2();
+	currentPagequeue.degrees_rotated = ie.getDegreesRotated();
+	
+	ie.saveEditorData( currentPagequeue );
+});
 
 
 

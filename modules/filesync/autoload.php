@@ -27,10 +27,22 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
     $src->add($menuFilesync);
     
     
+    $menuPdf = new Menu();
+    $menuPdf->setIconLabelUrl('fa-file', 'PDF creator', '/?m=filesync&c=pagequeue&a=pdf', 20);
+    $menuFilesync->addChildMenu( $menuPdf );
+    
     $menuPq = new Menu();
     $menuPq->setIconLabelUrl('fa-file', 'Pagequeue', '/?m=filesync&c=pagequeue', 20);
     $menuFilesync->addChildMenu( $menuPq );
+}));
+
+
+$eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($evt) {
+    $ctx = Context::getInstance();
     
+    $src = $evt->getSource();
+    
+    $src->addItem('Filesync', 'Pagequeue instellingen',     '/?m=filesync&c=pagequeueSettings');
 }));
 
 
