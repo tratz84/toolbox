@@ -43,6 +43,8 @@ class templateEditorController extends BaseController {
         
         if ($ext == 'css') {
             return 'css';
+        } else if ($ext == 'scss') {
+            return 'text/x-less';
         } else if ($ext == 'js') {
             return 'javascript';
         } else if ($ext == 'xml') {
@@ -53,6 +55,18 @@ class templateEditorController extends BaseController {
     
         
         return 'htmlmixed';
+    }
+    
+    public function codemirrorOptions($file) {
+        $ext = file_extension( $file );
+        
+        $opts = array();
+        
+        $opts['lineNumbers'] = true;
+        $opts['mode'] = $this->editorMode( $file );
+        $opts['matchBrackets'] = in_array($ext, array('css', 'js', 'scss'));
+        
+        return $opts;
     }
     
     public function action_edit() {

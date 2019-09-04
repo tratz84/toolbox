@@ -65,12 +65,10 @@
 		var sn = document.styleSheets.length-1;
     	document.styleSheets[ sn ].addRule('.CodeMirror', 'height: ' + (h-260) + 'px');
 
+    	var codemirrorOptions = <?= json_encode($controller->codemirrorOptions( $file ), JSON_PRETTY_PRINT) ?>;
     	
 		var taContent = $('#tacontent');
-    	CodeMirror.fromTextArea(taContent.get(0), {
-        	lineNumbers: true,
-        	mode: <?= json_encode($controller->editorMode($file)) ?>
-    	});
+    	CodeMirror.fromTextArea( taContent.get(0), codemirrorOptions );
 
 	}
 	</script>
