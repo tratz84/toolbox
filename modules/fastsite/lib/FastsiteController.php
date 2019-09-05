@@ -18,13 +18,15 @@ class FastsiteController extends BaseController {
         // TODO set 404 template
         $this->content = 'Page not found';
         
-        $this->render();
+        print $this->content;
+        
+//         $this->render();
     }
     
     public function render() {
         $fth = object_container_get( FastsiteTemplateHelper::class );
         
-        readfile( $fth->getFile('/index.html') );
+        readfile( $fth->getFile('/startbootstrap-business-casual-gh-pages/index.html') );
         
 //         print 'todo: render thingie..';
     }

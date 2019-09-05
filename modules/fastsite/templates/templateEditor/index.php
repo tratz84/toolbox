@@ -8,6 +8,11 @@
     <h1><?= t('Editing template ') ?> </h1>
 </div>
 
+<div>
+	Templatename: <?= esc_html($templateName) ?>
+</div>
+
+<br/>
 
 <table>
 
