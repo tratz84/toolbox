@@ -3,9 +3,11 @@
 namespace fastsite\filter;
 
 use core\Context;
+use fastsite\FastsiteTemplateHelper;
 
 
 class FastsiteTemplateFilter {
+    
     
     public function __construct() {
         
@@ -13,9 +15,16 @@ class FastsiteTemplateFilter {
     
     
     public function doFilter($filterChain) {
-        $ctx = Context::getInstance();
+        $uri = request_uri_no_params();
         
-        print 'jo';
+        $fth = object_container_get(FastsiteTemplateHelper::class);
+        $fth->setTemplateName( 'startbootstrap-creative-gh-pages' );
+        
+        // template file?
+        if ($fth->serveFile( $uri )) {
+            return;
+        }
+        
         
         $filterChain->next();
     }

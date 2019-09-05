@@ -1,6 +1,17 @@
 <?php
 
+use base\model\Menu;
+use core\Context;
+use core\ObjectContainer;
+use core\event\CallbackPeopleEventListener;
+use core\event\EventBus;
 use core\exception\InvalidStateException;
+use core\filter\FilterChain;
+use fastsite\filter\FastsiteTemplateFilter;
+use fastsite\filter\FastsiteSessionFilter;
+use fastsite\filter\FastsiteRouteFilter;
+use core\filter\DispatchFilter;
+
 
 if (is_standalone_installation() == false) {
     throw new InvalidStateException('fastsite-module not supported in multi-administration-mode');
@@ -13,13 +24,6 @@ define('MODULE_FASTSITE', 1);
 
 
 
-use base\model\Menu;
-use core\Context;
-use core\ObjectContainer;
-use core\event\CallbackPeopleEventListener;
-use core\event\EventBus;
-use core\filter\FilterChain;
-use fastsite\filter\FastsiteTemplateFilter;
 
 Context::getInstance()->enableModule('fastsite');
 
@@ -63,7 +67,11 @@ $eb->subscribe('core', 'pre-call-'.FilterChain::class.'::execute', new CallbackP
     $filterChain = $src[0];
     $filterChain->clearFilters();
    
+    $filterChain->addFilter( new FastsiteSessionFilter() );
+    $filterChain->addFilter( new \core\filter\ModulePublicFilter() );
     $filterChain->addFilter( new FastsiteTemplateFilter() );
+    $filterChain->addFilter( new FastsiteRouteFilter() );
+    $filterChain->addFilter( new DispatchFilter() );
 }));
 
 add_filter('appUrl', function($url) {

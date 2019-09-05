@@ -65,6 +65,17 @@ function app_request_uri() {
     }
 }
 
+function request_uri_no_params() {
+    $uri = $_SERVER['REQUEST_URI'];
+    $p = strrpos($uri, '?');
+    
+    if ($p !== false) {
+        $uri = substr($uri, 0, $p);
+    }
+    
+    return $uri;
+}
+
 
 function redirect($url) {
     
