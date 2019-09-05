@@ -20,9 +20,9 @@ class WebpageMetaBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => 'auto_increment',
   ),
-  'page_no' => 
+  'webpage_id' => 
   array (
-    'Field' => 'page_no',
+    'Field' => 'webpage_id',
     'Type' => 'int(11)',
     'Null' => 'YES',
     'Key' => 'MUL',
@@ -58,8 +58,8 @@ class WebpageMetaBase extends \core\db\DBObject {
 	public function getWebpageMetaId() { return $this->getField('webpage_meta_id'); }
 	
 		
-	public function setPageNo($p) { $this->setField('page_no', $p); }
-	public function getPageNo() { return $this->getField('page_no'); }
+	public function setWebpageId($p) { $this->setField('webpage_id', $p); }
+	public function getWebpageId() { return $this->getField('webpage_id'); }
 	
 		
 	public function setMetaKey($p) { $this->setField('meta_key', $p); }
