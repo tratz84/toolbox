@@ -48,6 +48,15 @@ class WebpageDAO extends \core\db\DAOObject {
 	    return $this->queryCursor($sql);
 	}
 	
+	public function readRevByUrl($url) {
+	    $sql = "select w.*, r.*
+                from fastsite__webpage w
+                left join fastsite__webpage_rev r on (w.webpage_rev_id = w.webpage_rev_id)
+                where w.url = ?";
+	    
+	    return $this->queryList($sql, array($url));
+	}
+	
 	
 }
 

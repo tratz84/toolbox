@@ -103,4 +103,28 @@ class WebpageService extends ServiceBase {
         return $wDao->readAll();
     }
     
+    
+    public function readByUrl($url) {
+        $wDao = new WebpageDAO();
+        $pages = $wDao->readRevByUrl($url);
+        
+        if (count($pages)) {
+            return $pages[0];
+        }
+        
+        $p = strpos($url, '?');
+        if ($p !== false) {
+            $url = substr($url, 0, $p);
+            
+            $pages = $wDao->readByUrl($url);
+            
+            if (count($pages)) {
+                return $pages[0];
+            }
+        }
+        
+        return null;
+    }
+    
+    
 }

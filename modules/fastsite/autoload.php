@@ -1,5 +1,6 @@
 <?php
 
+
 use base\model\Menu;
 use core\Context;
 use core\ObjectContainer;
@@ -7,9 +8,6 @@ use core\event\CallbackPeopleEventListener;
 use core\event\EventBus;
 use core\exception\InvalidStateException;
 use core\filter\FilterChain;
-use fastsite\filter\FastsiteTemplateFilter;
-use fastsite\filter\FastsiteSessionFilter;
-use fastsite\filter\FastsiteRouteFilter;
 use core\filter\DispatchFilter;
 
 
@@ -67,10 +65,11 @@ $eb->subscribe('core', 'pre-call-'.FilterChain::class.'::execute', new CallbackP
     $filterChain = $src[0];
     $filterChain->clearFilters();
    
-    $filterChain->addFilter( new FastsiteSessionFilter() );
+    $filterChain->addFilter( new \fastsite\filter\FastsiteSessionFilter() );
     $filterChain->addFilter( new \core\filter\ModulePublicFilter() );
-    $filterChain->addFilter( new FastsiteTemplateFilter() );
-    $filterChain->addFilter( new FastsiteRouteFilter() );
+    $filterChain->addFilter( new \fastsite\filter\FastsiteTemplateFilter() );
+    $filterChain->addFilter( new \core\filter\DatabaseFilter() );
+    $filterChain->addFilter( new \fastsite\filter\FastsiteRouteFilter() );
     $filterChain->addFilter( new DispatchFilter() );
 }));
 

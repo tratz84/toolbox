@@ -12,13 +12,21 @@ class FastsiteController extends BaseController {
         parent::__construct();
     }
     
+    public function render404() {
+        http_response_code(404);
+        
+        // TODO set 404 template
+        $this->content = 'Page not found';
+        
+        $this->render();
+    }
     
     public function render() {
-        
         $fth = object_container_get( FastsiteTemplateHelper::class );
         
-        print 'todo: render thingie..';
+        readfile( $fth->getFile('/index.html') );
         
+//         print 'todo: render thingie..';
     }
     
     

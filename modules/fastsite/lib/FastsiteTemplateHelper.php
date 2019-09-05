@@ -16,8 +16,7 @@ class FastsiteTemplateHelper {
     public function setTemplateName($n) { $this->templateName = $n; }
     public function getTemplateName() { return $this->templateName; }
     
-    
-    public function serveFile($f) {
+    public function getFile($f) {
         $templateDir = get_data_file('fastsite/templates/'.$this->templateName);
         
         $file = get_data_file('fastsite/templates/'.$this->templateName.$f);
@@ -27,6 +26,17 @@ class FastsiteTemplateHelper {
         }
         
         if (is_dir($file)) {
+            return false;
+        }
+        
+        return $file;
+    }
+    
+    public function serveFile($f) {
+        
+        $file = $this->getFile($f);
+        
+        if ($file == false) {
             return false;
         }
         

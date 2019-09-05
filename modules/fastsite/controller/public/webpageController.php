@@ -1,8 +1,8 @@
 <?php
 
 
-use core\controller\BaseController;
 use fastsite\FastsiteController;
+use fastsite\service\WebpageService;
 
 class webpageController extends FastsiteController {
     
@@ -15,9 +15,13 @@ class webpageController extends FastsiteController {
     
     
     public function action_index() {
+        $webpageService = $this->oc->get(WebpageService::class);
+        $webpage = $webpageService->readByUrl($_SERVER['REQUEST_URI']);
         
-        // TODO: ...
-        print 'webpage index public';
+        if (!$webpage) {
+            return $this->render404();
+        }
+        
         
         $this->render();
     }
