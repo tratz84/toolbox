@@ -389,6 +389,18 @@ function date2unix($input)
             return intval($matches[1] / 1000);
         }
     }
+
+    if (preg_match('/^\\d{8}+$/', $input)) {
+        $d2uy = (int)substr($input, 0, 4);
+        $d2um = (int)substr($input, 4, 2);
+        $d2ud = (int)substr($input, 6, 2);
+
+        if ($d2uy > 1850 && $d2uy < 2500 && $d2um >= 1 && $d2um <= 12 && $d2ud >= 1 && $d2ud <= 31) {
+            return mktime(12, 0, 0, $d2um, $d2ud, $d2uy);
+        }
+    }
+
+
     
     if ($input == "0000-00-00") { // ongeldige datum
         return null;
