@@ -84,13 +84,15 @@ function invoice_calc_totals() {
 	var totalExclVat = 0;
 	var totalInclVat = 0;
 	var totalsByVat = {  };
-
+	var totalAmount = 0;
 	
 	$('.invoice-form-list-invoice-line-widget tbody tr').each(function(index, row) {
 		if ($(row).find('.hidden-field-widget-line-type input').val() == 'text')
 			return;
 		
 		var amount = strtodouble( $(row).find('.input-amount input[type=text]').val() );
+		totalAmount += amount;
+		
 		var price = strtodouble( $(row).find('.input-price input[type=text]').val() );
 		var vatPercentage = strtodouble( $(row).find('.input-vat-percentage select').val() );
 		vatPercentage = parseInt( vatPercentage * 100 );
@@ -110,8 +112,9 @@ function invoice_calc_totals() {
 	var tfoot = $('.invoice-form-list-invoice-line-widget tfoot');
 	tfoot.empty();
 	
-	var trTotalExclVat = $('<tr><td colspan="6" align=right></td><td></td></tr>');
-	trTotalExclVat.find('td:first-child').text('Totaal excl. btw ' + format_price(totalExclVat/100, true, {'thousands': '.'}));
+	var trTotalExclVat = $('<tr><td></td><td></td><td class="td-foot-amount"></td><td class="td-foot-total-excl-vat" colspan="3" align=right></td><td></td></tr>');
+	trTotalExclVat.find('.td-foot-amount').text( format_number(totalAmount) );
+	trTotalExclVat.find('td.td-foot-total-excl-vat').text('Totaal excl. btw ' + format_price(totalExclVat/100, true, {'thousands': '.'}));
 	tfoot.append( trTotalExclVat );
 	
 	var keys = Object.keys( totalsByVat );
