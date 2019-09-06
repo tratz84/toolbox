@@ -103,6 +103,55 @@ t.addColumn({
 		return c;
 	}
 });
+
+t.addColumn({
+	fieldName: '',
+	fieldDescription: '',
+	fieldType: 'actions',
+	render: function( record ) {
+		var pagequeue_id = record['pagequeue_id'];
+		
+		var anchDel  = $('<a class="fa fa-trash" />');
+		anchDel.attr('href', 'javascript:void(0);');
+		anchDel.data('id', pagequeue_id);
+		anchDel.click( function() {
+			var id = $(this).data('id');
+
+			$.ajax({
+				url: appUrl('/?m=filesync&c=pagequeue&a=delete'),
+				data: {
+					id: id
+				},
+				success: function() {
+        			$('#page-selection-container .selected-files .file-' + id).remove();
+        
+        			if (currentPagequeue && currentPagequeue.pagequeue_id == id) {
+        				$('#page-sample').html('');
+        				currentPagequeue = null;
+        			}
+        
+        			$(this).closest('tr').remove();
+
+        			toggle_action_container();
+				}.bind(this),
+				error: function() {
+					showAlert('Error', 'Error deleting page');
+				}
+			});
+			
+			
+			return false;
+		} );
+
+		
+		var container = $('<div />');
+		container.append(anchDel);
+		
+		return container;
+	}
+});
+
+
 t.load();
 
 
