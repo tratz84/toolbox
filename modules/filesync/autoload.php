@@ -31,9 +31,9 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
     $menuPdf->setIconLabelUrl('fa-file', 'PDF creator', '/?m=filesync&c=pagequeue&a=pdf', 20);
     $menuFilesync->addChildMenu( $menuPdf );
     
-    $menuPq = new Menu();
-    $menuPq->setIconLabelUrl('fa-file', 'Pagequeue', '/?m=filesync&c=pagequeue', 20);
-    $menuFilesync->addChildMenu( $menuPq );
+//     $menuPq = new Menu();
+//     $menuPq->setIconLabelUrl('fa-file', 'Pagequeue', '/?m=filesync&c=pagequeue', 20);
+//     $menuFilesync->addChildMenu( $menuPq );
 }));
 
 
