@@ -1,7 +1,7 @@
 
 <div class="page-header">
 	<div class="toolbox">
-		<a href="<?= appUrl('/?m=filesync&c=pagequeue') ?>" class="fa fa-chevron-circle-left"></a>
+		<a href="<?= appUrl('/?m=filesync&c=pagequeue&a=pdf') ?>" class="fa fa-chevron-circle-left"></a>
 		<?php if ($isNew) : ?>
 		<a href="javascript:void(0);" class="fa fa-upload submit-form"></a>
 		<?php else : ?>
