@@ -29,7 +29,7 @@
 	</div>
     
     <div id="snippet-container"></div>
-    <a href="javascript:void(0);" onclick="add_snippet();">Snippet toevoegen</a>
+    <a href="javascript:void(0);" onclick="add_snippet();" class="fa fa-plus"> Snippet toevoegen</a>
     
 </form>
 
