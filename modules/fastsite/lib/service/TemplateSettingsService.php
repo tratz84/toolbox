@@ -1,0 +1,53 @@
+<?php
+
+namespace fastsite\service;
+
+
+use core\service\ServiceBase;
+use fastsite\model\TemplateSettingDAO;
+use fastsite\form\TemplateSettingsForm;
+use fastsite\model\TemplateSetting;
+use core\exception\InvalidStateException;
+
+class TemplateSettingsService extends ServiceBase {
+    
+    
+    public function readTemplateSettingsByName($name) {
+        $tsDao = new TemplateSettingDAO();
+        
+        $t = $tsDao->readByName($name);
+        
+        return $t;
+    }
+    
+    
+    public function saveTemplateSettings(TemplateSettingsForm $form) {
+        
+        $name = $form->getWidgetValue('template_name');
+        
+        $ts = $this->readTemplateSettingsByName($name);
+        if ($ts === null) {
+            $f = get_data_file('fastsite/templates/'.basename($name));
+            if (!$f) {
+                throw new InvalidStateException('Invalid template');
+            }
+            
+            $ts = new TemplateSetting();
+            $ts->setTemplateName($name);
+        }
+        
+        $form->fill($ts, ['active']);
+        
+        // max 1 marked as active
+        if ($ts->getActive()) {
+            $tsDao = new TemplateSettingDAO();
+            $tsDao->allActiveToFalse();
+        }
+        
+        $ts->save();
+        
+        return $ts;
+    }
+    
+    
+}

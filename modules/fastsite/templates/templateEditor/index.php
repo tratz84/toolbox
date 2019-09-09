@@ -2,6 +2,7 @@
 
 <div class="page-header">
 	<div class="toolbox list-toolbox">
+		<a href="<?= appUrl('/?m=fastsite&c=templateEditor&a=edit&n='.urlencode($templateName)) ?>" class="fa fa-pencil"></a>
 		<a href="<?= appUrl('/?m=fastsite&c=template') ?>" class="fa fa-chevron-circle-left"></a>
 	</div>
 	
@@ -28,14 +29,14 @@
 		<tr>
 			<td>
 				<?php if ($controller->extensionSupported($f)) : ?>
-				<a href="<?= appUrl('/?m=fastsite&c=templateEditor&a=edit&n='.urlencode($templateName).'&f='.urlencode($f)) ?>"><?= esc_html( $f ) ?></a>
+				<a href="<?= appUrl('/?m=fastsite&c=templateEditor&a=editfile&n='.urlencode($templateName).'&f='.urlencode($f)) ?>"><?= esc_html( $f ) ?></a>
 				<?php else : ?>
 				<?= esc_html( $f ) ?>
 				<?php endif; ?>
 			</td>
 			<td>
 				<?php if ($controller->extensionSupported($f)) : ?>
-				<a href="<?= appUrl('/?m=fastsite&c=templateEditor&a=edit&n='.urlencode($templateName).'&f='.urlencode($f)) ?>" class="fa fa-edit"></a>
+				<a href="<?= appUrl('/?m=fastsite&c=templateEditor&a=editfile&n='.urlencode($templateName).'&f='.urlencode($f)) ?>" class="fa fa-edit"></a>
 				<?php if (in_array(file_extension($f), ['htm', 'html'])) : ?>
 				<a href="<?= appUrl('/?m=fastsite&c=templatePage&n='.urlencode($templateName).'&f='.urlencode($f)) ?>" class="fa fa-file-text"></a>
 				<?php endif; ?>

@@ -42,7 +42,17 @@ create table fastsite__webpage_meta (
     meta_value text,
     index index_webpage_id (webpage_id),
     index webpage_id_meta_key (webpage_id, meta_key)
+);
+
+create table fastsite__template_setting (
+	template_setting_id int primary key auto_increment,
+    template_name varchar(255),
+    active boolean default false,
+    edited datetime,
+    created datetime,
+    unique key key_template_name (template_name)
 )
+
 
 
 
