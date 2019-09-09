@@ -36,6 +36,9 @@
 			<td>
 				<?php if ($controller->extensionSupported($f)) : ?>
 				<a href="<?= appUrl('/?m=fastsite&c=templateEditor&a=edit&n='.urlencode($templateName).'&f='.urlencode($f)) ?>" class="fa fa-edit"></a>
+				<?php if (in_array(file_extension($f), ['htm', 'html'])) : ?>
+				<a href="<?= appUrl('/?m=fastsite&c=templatePage&n='.urlencode($templateName).'&f='.urlencode($f)) ?>" class="fa fa-file-text"></a>
+				<?php endif; ?>
 				<a href="<?= appUrl('/?m=fastsite&c=templateEditor&a=delete&n='.urlencode($templateName).'&f='.urlencode($f)) ?>" class="fa fa-remove"></a>
 				<?php endif; ?>
 			</td>

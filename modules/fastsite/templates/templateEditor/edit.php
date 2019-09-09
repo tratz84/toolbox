@@ -29,7 +29,6 @@
     <script src="<?= BASE_HREF ?>module/fastsite/lib/codemirror/lib/codemirror.js" type="text/javascript"></script>
 	<script src="<?= BASE_HREF ?>module/fastsite/lib/codemirror/mode/javascript/javascript.js"></script>
 	<script src="<?= BASE_HREF ?>module/fastsite/lib/codemirror/mode/xml/xml.js"></script>
-	<script src="<?= BASE_HREF ?>module/fastsite/lib/codemirror/mode/javascript/javascript.js"></script>
 	<script src="<?= BASE_HREF ?>module/fastsite/lib/codemirror/mode/css/css.js"></script>
 	<script src="<?= BASE_HREF ?>module/fastsite/lib/codemirror/mode/vbscript/vbscript.js"></script>
 	<script src="<?= BASE_HREF ?>module/fastsite/lib/codemirror/mode/htmlmixed/htmlmixed.js"></script>
