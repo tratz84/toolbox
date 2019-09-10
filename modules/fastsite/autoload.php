@@ -48,7 +48,7 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
     $miFastsite->addChildMenu($miMenu);
     
     $miTemplates = new Menu();
-    $miTemplates->setIconLabelUrl('fa-file-archive-o', 'Templates', '/?m=fastsite&c=template');
+    $miTemplates->setIconLabelUrl('fa-file-archive-o', 'Templates', '/?m=fastsite&c=template/template');
     $miFastsite->addChildMenu($miTemplates);
     
 }));

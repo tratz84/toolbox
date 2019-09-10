@@ -26,37 +26,6 @@ class templateEditorController extends BaseController {
     }
     
     
-    public function action_edit() {
-        
-        $this->form = object_container_create(TemplateSettingsForm::class);
-        
-        $tsService = object_container_get(TemplateSettingsService::class);
-        $ts = $tsService->readTemplateSettingsByName(get_var('n'));
-        if ($ts === null) {
-            $f = get_data_file('fastsite/templates/'.basename(get_var('n')));
-            if (!$f) {
-                throw new InvalidStateException('Template not found');
-            }
-            
-            $ts = new TemplateSetting();
-            $ts->setTemplateName(basename(get_var('n')));
-        }
-        $this->form->bind($ts);
-        
-        if (is_post()) {
-            $this->form->bind($_REQUEST);
-            
-            if ($this->form->validate()) {
-                $tsService->saveTemplateSettings($this->form);
-                
-                redirect('/?m=fastsite&c=templateEditor&n='.urlencode($ts->getTemplateName()));
-            }
-        }
-        
-        
-        
-        return $this->render();
-    }
     
     
     public function action_delete() {
@@ -137,7 +106,7 @@ class templateEditorController extends BaseController {
                 report_user_error('Error saving file');
             }
             
-            redirect('/?m=fastsite&c=templateEditor&a=editfile&n='.urlencode($this->templateName).'&f='.urlencode($this->file));
+            redirect('/?m=fastsite&c=template/templateEditor&a=editfile&n='.urlencode($this->templateName).'&f='.urlencode($this->file));
         }
         
 //         $this->setShowDecorator(false);

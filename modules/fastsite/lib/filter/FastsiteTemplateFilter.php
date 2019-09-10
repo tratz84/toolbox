@@ -2,8 +2,7 @@
 
 namespace fastsite\filter;
 
-use core\Context;
-use fastsite\FastsiteTemplateHelper;
+use fastsite\template\FastsiteTemplateHelper;
 
 
 class FastsiteTemplateFilter {

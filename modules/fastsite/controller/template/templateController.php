@@ -2,10 +2,13 @@
 
 
 use core\controller\BaseController;
-use fastsite\WebsiteTemplateService;
-use fastsite\form\WebsiteTemplateForm;
-use core\exception\InvalidStateException;
 use core\exception\FileException;
+use core\exception\InvalidStateException;
+use fastsite\form\TemplateSettingsForm;
+use fastsite\form\WebsiteTemplateForm;
+use fastsite\model\TemplateSetting;
+use fastsite\service\TemplateSettingsService;
+use fastsite\service\WebsiteTemplateService;
 
 class templateController extends BaseController {
     
@@ -73,7 +76,7 @@ class templateController extends BaseController {
                     }
                 }
                 
-                redirect('/?m=fastsite&c=template');
+                redirect('/?m=fastsite&c=template/template');
             }
             
             if (isset($_FILES['file']) && isset($_FILES['file']['error'])) {
@@ -89,6 +92,39 @@ class templateController extends BaseController {
         return $this->render();
     }
     
+    
+    
+    public function action_edit() {
+        
+        $this->form = object_container_create(TemplateSettingsForm::class);
+        
+        $tsService = object_container_get(TemplateSettingsService::class);
+        $ts = $tsService->readTemplateSettingsByName(get_var('n'));
+        if ($ts === null) {
+            $f = get_data_file('fastsite/templates/'.basename(get_var('n')));
+            if (!$f) {
+                throw new InvalidStateException('Template not found');
+            }
+            
+            $ts = new TemplateSetting();
+            $ts->setTemplateName(basename(get_var('n')));
+        }
+        $this->form->bind($ts);
+        
+        if (is_post()) {
+            $this->form->bind($_REQUEST);
+            
+            if ($this->form->validate()) {
+                $tsService->saveTemplateSettings($this->form);
+                
+                redirect('/?m=fastsite&c=template/templateEditor&n='.urlencode($ts->getTemplateName()));
+            }
+        }
+        
+        
+        
+        return $this->render();
+    }
     
     public function action_delete() {
         
@@ -106,7 +142,7 @@ class templateController extends BaseController {
             }
         }
         
-        redirect('/?m=fastsite&c=template');
+        redirect('/?m=fastsite&c=template/template');
     }
     
 }

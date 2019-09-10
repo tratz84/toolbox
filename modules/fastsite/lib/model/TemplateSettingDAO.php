@@ -11,6 +11,10 @@ class TemplateSettingDAO extends \core\db\DAOObject {
 		$this->setObjectName( '\\fastsite\\model\\TemplateSetting' );
 	}
 	
+	public function readActive() {
+	    return $this->queryOne('select * from fastsite__template_setting where active=true');
+	}
+	
 	
 	public function readByName($name) {
 	    return $this->queryOne('select * from fastsite__template_setting where template_name = ?', array($name));

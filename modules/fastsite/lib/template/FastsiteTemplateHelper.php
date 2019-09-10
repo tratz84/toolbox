@@ -1,7 +1,7 @@
 <?php
 
 
-namespace fastsite;
+namespace fastsite\template;
 
 class FastsiteTemplateHelper {
     

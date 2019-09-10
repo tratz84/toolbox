@@ -2,7 +2,7 @@
 <div class="page-header">
 
 	<div class="toolbox">
-		<a href="<?= appUrl('/?m=fastsite&c=templateEditor&n'.urlencode($templateName)) ?>" class="fa fa-circle-chevron-left"></a>
+		<a href="<?= appUrl('/?m=fastsite&c=template/templateEditor&n'.urlencode($templateName)) ?>" class="fa fa-circle-chevron-left"></a>
 		<a href="javascript:void(0);" class="fa fa-save submit-form"></a>
 	</div>
 	

@@ -4,7 +4,7 @@ namespace fastsite;
 
 
 use core\controller\BaseController;
-use fastsite\FastsiteTemplateHelper;
+use fastsite\template\FastsiteTemplateHelper;
 
 class FastsiteController extends BaseController {
     

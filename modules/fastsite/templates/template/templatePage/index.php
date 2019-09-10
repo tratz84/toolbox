@@ -14,7 +14,7 @@
 
 <div class="page-header">
 	<div class="toolbox">
-		<a href="/?m=fastsite&c=templateEditor&n=business-casual-gh-pages" class="fa fa-chevron-circle-left"></a>
+		<a href="/?m=fastsite&c=template/templateEditor&n=business-casual-gh-pages" class="fa fa-chevron-circle-left"></a>
 		<a href="javascript:void(0);" onclick="$('#frm').submit();" class="fa fa-save"></a>
 	</div>
 

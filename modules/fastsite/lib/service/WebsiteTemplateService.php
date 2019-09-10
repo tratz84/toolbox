@@ -1,6 +1,6 @@
 <?php
 
-namespace fastsite;
+namespace fastsite\service;
 
 use core\service\ServiceBase;
 use core\Context;

@@ -11,6 +11,17 @@ use core\exception\InvalidStateException;
 
 class TemplateSettingsService extends ServiceBase {
     
+    public function readActiveTemplate() {
+        $tsDao = new TemplateSettingDAO();
+        
+        $ts = $tsDao->readActive();
+        
+        if ($ts == null) {
+            throw new InvalidStateException('No active template');
+        }
+        
+        return $ts;
+    }
     
     public function readTemplateSettingsByName($name) {
         $tsDao = new TemplateSettingDAO();
