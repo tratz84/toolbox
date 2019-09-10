@@ -4,11 +4,15 @@ namespace fastsite;
 
 use core\service\ServiceBase;
 use core\Context;
+use fastsite\service\TemplateSettingsService;
 
 class WebsiteTemplateService extends ServiceBase {
     
     
     public function getTemplates() {
+        $tsService = object_container_get(TemplateSettingsService::class);
+        
+        
         $l = array();
         
         $templateDir = Context::getInstance()->getDataDir() . '/fastsite/templates';
@@ -24,10 +28,16 @@ class WebsiteTemplateService extends ServiceBase {
                 
                 $relativePath = substr($fullpath, strlen(realpath($datadir))+1);
                 
-                $l[$f] = array(
+                $ts = $tsService->readTemplateSettingsByName( $f );
+                
+                $settings = array(
                     'fullpath' => $fullpath,
-                    'path' => $relativePath
+                    'path' => $relativePath,
+                    'active' => $ts && $ts->getActive() ? true : false
                 );
+                
+                
+                $l[$f] = $settings;
             }
         }
         

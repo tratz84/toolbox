@@ -27,8 +27,7 @@
     		<td>
     			<?= esc_html($data['path']) ?>
     		</td>
-    		<td>
-    		</td>
+    		<td><?= $data['active'] ? t('Yes') : t('No') ?></td>
     		<td>
     			<a href="<?= appUrl('/?m=fastsite&c=template&a=delete&n='.urlencode($templateName)) ?>" class="fa fa-remove delete"></a>
     		</td>
