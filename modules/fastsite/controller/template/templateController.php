@@ -117,7 +117,7 @@ class templateController extends BaseController {
             if ($this->form->validate()) {
                 $tsService->saveTemplateSettings($this->form);
                 
-                redirect('/?m=fastsite&c=template/templateEditor&n='.urlencode($ts->getTemplateName()));
+                redirect('/?m=fastsite&c=template/fileEditor&n='.urlencode($ts->getTemplateName()));
             }
         }
         

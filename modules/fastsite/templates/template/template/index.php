@@ -22,7 +22,7 @@
 	
 	<tbody>
     	<?php foreach($templates as $templateName => $data) : ?>
-    	<tr onclick="window.location=appUrl('/?m=fastsite&c=template/templateEditor&n='+$(this).data('template-name'));" class="clickable" data-template-name="<?= esc_attr($templateName) ?>">
+    	<tr onclick="window.location=appUrl('/?m=fastsite&c=template/fileEditor&n='+$(this).data('template-name'));" class="clickable" data-template-name="<?= esc_attr($templateName) ?>">
     		<td><?= esc_html($templateName) ?></td>
     		<td>
     			<?= esc_html($data['path']) ?>

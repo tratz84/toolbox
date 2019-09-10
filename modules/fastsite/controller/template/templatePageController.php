@@ -27,6 +27,7 @@ class templatePageController extends BaseController {
         $this->tpd->load();
         
         
+        
         if (is_post()) {
             
             $this->tpd->setName( get_var('template_name') );
@@ -35,9 +36,24 @@ class templatePageController extends BaseController {
             report_user_message('Changes saved');
         }
         
-        
-        
         return $this->render();
+    }
+    
+    protected function listSnippets( $template ) {
+        $t = get_data_file('fastsite/templates/'.$template.'/fastsite/');
+        
+        $files = list_files($t);
+        
+        $arr = array();
+        foreach($files as $f) {
+            if (strpos($f, 'snippet-') === 0 && file_extension($f) == 'php') {
+                $snippetName = substr($f, 8, -4);
+                
+                $arr[] = $snippetName;
+            }
+        }
+        
+        return $arr;
     }
     
     

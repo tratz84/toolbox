@@ -47,7 +47,7 @@ tc.init();
 function add_snippet(opts) {
 	opts = opts || {};
 	
-	var htmlTab = <?= json_encode(get_component('fastsite', 'templatePage', 'snippet')) ?>;
+	var htmlTab = <?= json_encode(get_component('fastsite', 'template/templatePage', 'snippet')) ?>;
 	var t = tc.addTab('snippet1', htmlTab);
 
 	var ta = t.contentContainer.find('textarea');

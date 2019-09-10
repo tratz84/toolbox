@@ -7,7 +7,7 @@ use fastsite\form\TemplateSettingsForm;
 use fastsite\service\TemplateSettingsService;
 use fastsite\model\TemplateSetting;
 
-class templateEditorController extends BaseController {
+class fileEditorController extends BaseController {
     
     
     public function action_index() {
@@ -29,6 +29,8 @@ class templateEditorController extends BaseController {
     
     
     public function action_delete() {
+        
+        // TODO: delete file/directory
         
     }
     
@@ -106,7 +108,7 @@ class templateEditorController extends BaseController {
                 report_user_error('Error saving file');
             }
             
-            redirect('/?m=fastsite&c=template/templateEditor&a=editfile&n='.urlencode($this->templateName).'&f='.urlencode($this->file));
+            redirect('/?m=fastsite&c=template/fileEditor&a=editfile&n='.urlencode($this->templateName).'&f='.urlencode($this->file));
         }
         
 //         $this->setShowDecorator(false);
