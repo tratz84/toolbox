@@ -8,10 +8,10 @@ function TabContainer(container) {
 	
 	this._buildSkeleton = function() {
 		var nav = $('<nav class="tab-container-navigation" />');
-		nav.append('<div class="nav nav-tabs" id="nav-tab" role="tablist" />');
+		nav.append('<ul class="nav nav-tabs" id="nav-tab" role="tablist" />');
 		
         // content
-        var cont = $('<div class="tab-content tab-container-content" />');
+        var cont = $('<div id="nav-tabContent" class="nav-tab-content tab-content tab-container-content" />');
         
         $(this.container).append( nav );
         $(this.container).append( cont );
@@ -54,17 +54,28 @@ function TabContainerItem(tabContainer, title, content) {
 		var t = new Date().getTime();
 		
 		var firstItem = $(this.tabContainer.container).find('.nav.nav-tabs a').length == 0 ? true : false;
-		
-		this.menuItem = $('<a class="nav-item nav-link" id="nav-'+t+'-tab" data-toggle="tab" role="tab" aria-controls="'+t+'" href="#nav-'+t+'" aria-selected="false"></a>');
-		this.menuItem.text( this.title );
+		this.menuItem = $('<li class="nav-item"></li>');
+		this.menuItem.append('<a class="nav-item nav-link" id="nav-'+t+'-tab" href="#nav-'+t+'" role="tab" data-toggle="tab" aria-controls="nav-'+t+'-tab" aria-selected="false"></a>');
+		this.menuItem.find('a').text( this.title );
 		if ( firstItem ) {
-			this.menuItem.addClass('active show');
-			this.menuItem.attr('aria-selected', 'true');
+			this.menuItem.find('a').addClass('active');
+			this.menuItem.find('a').attr('aria-selected', 'true');
 		}
-		$(this.tabContainer.container).find('nav.tab-container-navigation > div.nav').append( this.menuItem );
+		
+		$(this.menuItem).prepend( '<a href="#" class="fa fa-close btn-remove-tab" />' );
+		$(this.menuItem).find('.btn-remove-tab').click(function() {
+			var ni = $(this).closest('.nav-item');
+			var idContainer = $(ni).find('.nav-item').attr('href');
+			
+			$(ni).remove();
+			$(idContainer).remove();
+		});
+
+		
+		$(this.tabContainer.container).find('nav.tab-container-navigation > ul.nav').append( this.menuItem );
 		
 		
-        this.contentContainer = $('<div class="tab-pane fade" id="nav-'+t+'" role="tabpanel" aria-labelledby="'+t+'-tab">');
+        this.contentContainer = $('<div class="tab-pane fade" id="nav-'+t+'" role="tabpanel" aria-labelledby="nav-'+t+'-tab">');
         this.contentContainer.html( this.content );
         if (firstItem) {
         	this.contentContainer.addClass('active show');

@@ -59,6 +59,7 @@ function add_snippet(opts) {
 }
 
 add_snippet();
+add_snippet();
 
 function templatePage_Submit() {
 	
