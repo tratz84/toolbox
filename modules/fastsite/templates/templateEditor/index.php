@@ -15,12 +15,13 @@
 
 <br/>
 
-<table>
+<table class="list-response-table">
 
 	<thead>
 		<tr>
 			<th><?= t('File') ?></th>
-			<th></th>
+			<th><?= t('Active') ?></th>
+			<th class="actions"></th>
 		</tr>
 	</thead>
 	
@@ -35,6 +36,8 @@
 				<?php endif; ?>
 			</td>
 			<td>
+			</td>
+			<td class="actions">
 				<?php if ($controller->extensionSupported($f)) : ?>
 				<a href="<?= appUrl('/?m=fastsite&c=templateEditor&a=editfile&n='.urlencode($templateName).'&f='.urlencode($f)) ?>" class="fa fa-edit"></a>
 				<?php if (in_array(file_extension($f), ['htm', 'html'])) : ?>

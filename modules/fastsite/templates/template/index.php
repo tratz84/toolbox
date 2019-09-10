@@ -15,6 +15,7 @@
 		<tr>
 			<th><?= t('Template name') ?></th>
 			<th><?= t('Path') ?></th>
+			<th><?= t('Active') ?></th>
 			<th></th>
 		</tr>
 	</thead>
@@ -27,13 +28,15 @@
     			<?= esc_html($data['path']) ?>
     		</td>
     		<td>
+    		</td>
+    		<td>
     			<a href="<?= appUrl('/?m=fastsite&c=template&a=delete&n='.urlencode($templateName)) ?>" class="fa fa-remove delete"></a>
     		</td>
     	</tr>
     	<?php endforeach; ?>
     	<?php if (count($templates) == 0) : ?>
     	<tr>
-    		<td colspan="3" style="font-style: italic; text-align: center;"><?= t('No templates available') ?></td>
+    		<td colspan="4" style="font-style: italic; text-align: center;"><?= t('No templates available') ?></td>
     	</tr>
     	<?php endif; ?>
 	</tbody>
