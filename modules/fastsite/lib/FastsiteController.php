@@ -32,12 +32,24 @@ class FastsiteController extends BaseController {
         // get fastsite settings
         $ts = $fastsiteSettings->getActiveTemplateSettings();
         
-        // get template settings
-        $templateFile = $ts->getDefaultTemplateFile();
+        // TemplateFileSettings
+        $tfs = null;
         
-        $tfs = $ts->getTemplateFileSettings( $templateFile );
+        // get Website-Template-File for current webpage
+        $wtf = $this->webpage->getFastsiteTemplateFile();
+        if ($wtf) {
+            $tfs = $ts->getTemplateFileSettings( $wtf );
+        }
+        
+        // fallback to default template
+        if ($tfs == null) {
+            $templateFile = $ts->getDefaultTemplateFile();
+            
+            $tfs = $ts->getTemplateFileSettings( $templateFile );
+        }
         
         
+        // execute template builder
         $parser = new FastsiteTemplateParser( $ts, $tfs );
         
         $parser->addVars( get_object_vars($this) );

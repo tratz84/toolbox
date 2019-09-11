@@ -186,7 +186,7 @@ function applyWidgetFields(container) {
 	
 	if (typeof $(document).tinymce == 'function') {
 		$('.input-tinymce').tinymce({
-			plugins: 'paste',
+			plugins: 'paste,code',
 			paste_data_images: true
 		});
 	}

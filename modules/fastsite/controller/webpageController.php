@@ -35,8 +35,9 @@ class webpageController extends BaseController {
             $this->form->bind( $_REQUEST );
             
             if ($this->form->validate()) {
-                $webpageService->saveWebpage( $this->form );
-                redirect('/?m=fastsite&c=webpage');
+                $webpage = $webpageService->saveWebpage( $this->form );
+                report_user_message(t('Changes saved'));
+                redirect('/?m=fastsite&c=webpage&a=edit&id='.$webpage->getWebpageId());
             }
         }
         
