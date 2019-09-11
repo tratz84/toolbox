@@ -115,13 +115,19 @@ class templateController extends BaseController {
             $this->form->bind($_REQUEST);
             
             if ($this->form->validate()) {
-                $tsService->saveTemplateSettings($this->form);
+                $ts = $tsService->saveTemplateSettings($this->form);
+                
+                
+                if ($ts->getActive()) {
+                    // TODO: mark template as active
+                }
+                
                 
                 redirect('/?m=fastsite&c=template/fileEditor&n='.urlencode($ts->getTemplateName()));
             }
         }
         
-        
+        $this->templateName = $ts->getTemplateName();
         
         return $this->render();
     }

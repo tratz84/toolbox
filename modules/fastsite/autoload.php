@@ -22,6 +22,7 @@ define('MODULE_FASTSITE', 1);
 
 
 require_once dirname(__FILE__).'/lib/functions/webpage_helper.php';
+require_once dirname(__FILE__).'/lib/functions/template_helper.php';
 
 
 Context::getInstance()->enableModule('fastsite');

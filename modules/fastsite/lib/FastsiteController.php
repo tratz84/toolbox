@@ -26,7 +26,7 @@ class FastsiteController extends BaseController {
     public function render() {
         $fth = object_container_get( FastsiteTemplateHelper::class );
         
-        readfile( $fth->getFile('/startbootstrap-business-casual-gh-pages/index.html') );
+        readfile( $fth->getFile('/index.html') );
         
 //         print 'todo: render thingie..';
     }

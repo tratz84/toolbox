@@ -8,7 +8,14 @@
     
     <div>
     	<label>Snippet naam</label>
-    	<input type="text" name="snippet_name" class="snippet-name" />
+    	<select name="snippet_name" class="snippet-name">
+    		<option value="">Make your choice</option>
+    		<?php foreach($snippets as $s) : ?>
+    		<option value="<?= esc_attr($s) ?>"><?= esc_html($s) ?></option>
+    		<?php endforeach; ?>
+    		<option value="" data-new="1">New snippet</option>
+    	</select>
+    	
     </div>
     
     <div>

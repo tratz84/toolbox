@@ -8,13 +8,13 @@
 <script src="<?= BASE_HREF ?>module/fastsite/lib/codemirror/mode/css/css.js"></script>
 <script src="<?= BASE_HREF ?>module/fastsite/lib/codemirror/mode/clike/clike.js"></script>
 <script src="<?= BASE_HREF ?>module/fastsite/lib/codemirror/mode/php/php.js"></script>
-
+<script src="<?= BASE_HREF ?>module/fastsite/lib/templatePage/SnippetController.js"></script>
 
 
 
 <div class="page-header">
 	<div class="toolbox">
-		<a href="/?m=fastsite&c=template/templateEditor&n=business-casual-gh-pages" class="fa fa-chevron-circle-left"></a>
+		<a href="<?= appUrl('/?m=fastsite&c=template/fileEditor&n='.urlencode($template)) ?>" class="fa fa-chevron-circle-left"></a>
 		<a href="javascript:void(0);" onclick="$('#frm').submit();" class="fa fa-save"></a>
 	</div>
 
@@ -23,9 +23,11 @@
 
 <form method="post" id="frm" class="form-generator" onsubmit="templatePage_Submit();">
 
+	<input type="hidden" id="template_name" name="template_name" value="<?= esc_attr($template) ?>" />
+
 	<div class="widget">
 	    <label>Template name</label>
-	    <input type="text" name="template_name" value="<?= esc_attr($tpd->getName()) ?>" />
+	    <input type="text" name="template_page_name" value="<?= esc_attr($tpd->getPageName()) ?>" />
 	</div>
     
     <div id="snippet-container"></div>
@@ -47,23 +49,47 @@ tc.init();
 function add_snippet(opts) {
 	opts = opts || {};
 	
-	var htmlTab = <?= json_encode(get_component('fastsite', 'template/templatePage', 'snippet')) ?>;
-	var t = tc.addTab('snippet1', htmlTab);
+	var htmlTab = <?php
+	   print json_encode(get_component('fastsite'
+	       , 'template/templatePage'
+	       , 'snippet'
+	       , array(
+	           'template' => $template
+	       )))
+	?>;
+	
+	var t = tc.addTab('Snippet', htmlTab);
+	var sc = new SnippetController(t);
 
-	var ta = t.contentContainer.find('textarea');
-
-	CodeMirror.fromTextArea( ta.get(0), {
-		lineNumbers: true,
-		mode: 'php',
-	});
+	if (opts.xpath) {
+		sc.setXPath( opts.xpath );
+	}
+	if (opts.snippet_name) {
+		sc.setSnippetName( opts.snippet_name );
+	}
+	if (opts.code) {
+		sc.setCode( opts.code );
+	}
 }
 
-add_snippet();
-add_snippet();
+<?php foreach($snippets as $s) : ?>
+add_snippet(  <?= json_encode($s) ?> );
+<?php endforeach; ?>
+
 
 function templatePage_Submit() {
-	
+	$('#snippet-container .snippet-container').each(function(index, node) {
+		$(node).find('select, input, textarea').each(function(index2, node2) {
+			var n = $(node2).attr('name');
+			n = 'snippets['+index+'][' + n + ']';
+
+			$(node2).attr('name', n);
+		});
+	});
+
+	return false;
 }
+
 
 
 </script>

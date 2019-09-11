@@ -17,7 +17,7 @@ class FastsiteTemplateFilter {
         $uri = request_uri_no_params();
         
         $fth = object_container_get(FastsiteTemplateHelper::class);
-        $fth->setTemplateName( 'business-casual-gh-pages' );
+        $fth->setTemplateName( 'startbootstrap-creative-gh-pages' );
         
         // template file?
         if ($fth->serveFile( $uri )) {

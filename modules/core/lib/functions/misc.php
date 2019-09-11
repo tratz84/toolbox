@@ -110,7 +110,12 @@ function list_files($path, $opts=array()) {
     while ($f = readdir($dh)) {
         if ($f == '.' || $f == '..') continue;
         
-        $files[] = $f;
+        if (isset($opts['append-slash']) && $opts['append-slash'] && is_dir( $path . '/' . $f )) {
+            $files[] = $f . '/';
+        } else {
+            $files[] = $f;
+        }
+        
         
         if (isset($opts['recursive']) && $opts['recursive'] && is_dir($path.'/'.$f)) {
             $subfiles = list_files($path . '/' . $f, $opts);
@@ -372,6 +377,25 @@ function list_data_directory($pathInDataDir) {
     return $files;
 }
 
+
+function get_data_file_safe($basePath, $subPath) {
+    // get fullpath for base
+    $basePath = get_data_file( $basePath );
+    if (!$basePath) {
+        return false;
+    }
+    
+    $fullpath = realpath( $basePath . '/' . $subPath);
+    if ($fullpath == false) {
+        return false;
+    }
+    
+    if (strpos($fullpath, $basePath) === 0) {
+        return $fullpath;
+    }
+    
+    return false;
+}
 
 function get_data_file($f) {
     $ctx = Context::getInstance();

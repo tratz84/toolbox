@@ -43,7 +43,7 @@ function TabContainerItem(tabContainer, title, content) {
 	
 	this.setTitle = function(t) {
 		this.title = t;
-		$(this.menuItem).text( t );
+		$(this.menuItem).find('.nav-item').text( t );
 	};
 	
 	this.setContent = function(c) {

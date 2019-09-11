@@ -18,8 +18,8 @@ class TemplatePageData {
 
     
     
-    public function setName($n) { $this->setValue('name', $n); }
-    public function getName() { return $this->getValue('name'); }
+    public function setPageName($n) { $this->setValue('page_name', $n); }
+    public function getPageName() { return $this->getValue('page_name'); }
     
     
     
@@ -41,6 +41,45 @@ class TemplatePageData {
         }
         
         return $defaultValue;
+    }
+    
+    
+    public function getTemplateSettings($filenameTemplate) {
+        if (isset($this->data[$filenameTemplate])) {
+            return $this->data[$filenameTemplate];
+        }
+        
+        return array();
+    }
+    
+    public function setTemplateSettings($filenameTemplate, $settings) {
+        $this->data[$filenameTemplate] = $settings;
+    }
+    
+    public function setTemplateSetting($filenameTemplate, $key, $value) {
+        if (isset($this->data[$filenameTemplate]) == false) {
+            $this->data[$filenameTemplate] = array();
+        }
+        
+        $this->data[$filenameTemplate][$key] = $value;
+    }
+    
+    public function getTemplateSetting($filenameTemplate, $key, $defaultValue=null) {
+        if (isset($this->data[$filenameTemplate]) == false || isset($this->data[$filenameTemplate][$key]) == false) {
+            return $defaultValue;
+        }
+        
+        return $this->data[$filenameTemplate][$key];
+    }
+    
+    
+    public function setSnippets($snippets) {
+        return $this->setTemplateSetting($this->filename, 'snippets', $snippets);
+    }
+    
+    
+    public function getSnippets() {
+        return $this->getTemplateSetting($this->filename, 'snippets', array());
     }
     
     

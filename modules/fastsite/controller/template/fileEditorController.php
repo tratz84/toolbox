@@ -18,7 +18,21 @@ class fileEditorController extends BaseController {
         
         
         $this->templateName = get_var('n');
-        $this->files = list_files($p, ['recursive' => true]);
+        $this->files = list_files($p, ['recursive' => true, 'append-slash' => true]);
+        
+        usort($this->files, function($o1, $o2) {
+            $cnt1 = substr_count($o1, '/');
+            $cnt2 = substr_count($o2, '/');
+            if (strpos($o1, '/') === false && strpos($o2, '/') !== false) {
+                return -1;
+            } else if (strpos($o1, '/') !== false && strpos($o2, '/') === false) {
+                return 1;
+            }
+            
+            
+            return strcmp($o1, $o2);
+        });
+        
         $this->controller = $this;
         
         
