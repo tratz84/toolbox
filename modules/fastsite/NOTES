@@ -1,3 +1,8 @@
+
+alter table fastsite__webpage add column fastsite_template_file varchar(255) after url;
+drop table fastsite__template_setting;
+
+
 create table fastsite__webmenu (
 	webmenu_id int primary key auto_increment,
     parent_webmenu_id int,
@@ -16,6 +21,7 @@ create table fastsite__webpage (
 	webpage_rev_id int,
     code varchar(64),
     url varchar(255),
+    fastsite_template_file varchar(255),
     module varchar(64),
     active boolean default true,
     edited datetime,

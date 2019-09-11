@@ -80,6 +80,7 @@ class WebpageService extends ServiceBase {
         $webpageForm->fill($webpage, ['active', 'module', 'webpage_id']);
         $webpage->setCode( trim($webpageForm->getWidgetValue('code')) );
         $webpage->setUrl( trim($webpageForm->getWidgetValue('url')) );
+        $webpage->setFastsiteTemplateFile( $webpageForm->getWidgetValue('fastsite_template_file') );
         $webpage->save();
         
         $webpageRev = new WebpageRev();

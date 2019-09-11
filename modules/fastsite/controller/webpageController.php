@@ -2,6 +2,7 @@
 
 
 use core\controller\BaseController;
+use fastsite\data\FastsiteSettings;
 use fastsite\form\WebpageForm;
 use fastsite\model\Webpage;
 use fastsite\model\WebpageDAO;
@@ -38,6 +39,7 @@ class webpageController extends BaseController {
                 redirect('/?m=fastsite&c=webpage');
             }
         }
+        
         
         return $this->render();
     }

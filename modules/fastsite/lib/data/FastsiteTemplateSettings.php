@@ -51,6 +51,8 @@ class FastsiteTemplateSettings extends FileDataBase {
         }
         
         $templatefiles[$filename][$key] = $value;
+        
+        $this->setValue('templatefiles', $templatefiles);
     }
     
     public function registerTemplateFile($filename, $description) {
@@ -63,7 +65,9 @@ class FastsiteTemplateSettings extends FileDataBase {
             $this->setValue('templatefiles', $templatefiles);
         }
     }
-    
+    public function getTemplateFiles() {
+        return $this->getValue('templatefiles', array());
+    }
     
     public function saveSnippet($name, $phpcode) {
         $name = basename($name);

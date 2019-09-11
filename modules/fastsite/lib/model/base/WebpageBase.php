@@ -47,6 +47,15 @@ class WebpageBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'fastsite_template_file' => 
+  array (
+    'Field' => 'fastsite_template_file',
+    'Type' => 'varchar(255)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
   'module' => 
   array (
     'Field' => 'module',
@@ -104,6 +113,10 @@ class WebpageBase extends \core\db\DBObject {
 		
 	public function setUrl($p) { $this->setField('url', $p); }
 	public function getUrl() { return $this->getField('url'); }
+	
+		
+	public function setFastsiteTemplateFile($p) { $this->setField('fastsite_template_file', $p); }
+	public function getFastsiteTemplateFile() { return $this->getField('fastsite_template_file'); }
 	
 		
 	public function setModule($p) { $this->setField('module', $p); }

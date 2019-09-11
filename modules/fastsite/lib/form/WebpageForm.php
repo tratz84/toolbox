@@ -6,12 +6,12 @@ namespace fastsite\form;
 use core\forms\BaseForm;
 use core\forms\CheckboxField;
 use core\forms\HiddenField;
+use core\forms\HtmlField;
 use core\forms\SelectField;
 use core\forms\TextField;
-use core\forms\TextareaField;
-use fastsite\service\WebpageService;
-use core\forms\HtmlField;
 use core\forms\TinymceField;
+use fastsite\data\FastsiteSettings;
+use fastsite\service\WebpageService;
 
 class WebpageForm extends BaseForm {
     
@@ -27,6 +27,7 @@ class WebpageForm extends BaseForm {
         $this->addWidget(new TextField('code', '', 'Code'));
         $this->getWidget('code')->setInfoText('Code gebruikt wordt vanuit de programmeercode om aan deze pagina te refereren');
         
+        $this->addTemplateSelection();
         $this->addWidget(new SelectField('module', '', array('' => 'Default'), 'Module'));
         $this->addWidget(new TextField('url', '', 'Url'));
         
@@ -70,5 +71,24 @@ class WebpageForm extends BaseForm {
         });
         
     }
+    
+    
+    protected function addTemplateSelection() {
+        $fastsiteSettings = object_container_get( FastsiteSettings::class );
+        $templateSettings = $fastsiteSettings->getActiveTemplateSettings();
+        $templateFiles = $templateSettings->getTemplateFiles();
+        
+        $map = array();
+        $map[''] = 'Default template';
+        foreach($templateFiles as $filename => $settings) {
+            $map[$filename] = $settings['description'];
+        }
+        
+        $this->addWidget(new SelectField('fastsite_template_file', '', $map, 'Template'));
+        
+        
+    }
+    
+    
     
 }
