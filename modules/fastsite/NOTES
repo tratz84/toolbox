@@ -1,6 +1,5 @@
 
 alter table fastsite__webpage add column fastsite_template_file varchar(255) after url;
-drop table fastsite__template_setting;
 
 
 create table fastsite__webmenu (

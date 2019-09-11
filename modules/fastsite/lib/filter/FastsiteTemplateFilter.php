@@ -18,6 +18,11 @@ class FastsiteTemplateFilter {
     public function doFilter($filterChain) {
         $uri = request_uri_no_params();
 
+        // don't allow requests to fastsite-folder
+        if (strpos($uri, '/fastsite/') === 0) {
+            return $filterChain->next();
+        }
+        
         
         $rawtpl = get_var('rawtpl') || (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'rawtpl=1') !== false);
         $authenticated = isset($_SESSION['user_id']) && $_SESSION['user_id'];
