@@ -60,7 +60,7 @@ class fileEditorController extends BaseController {
         }
         
         if (!unlink($f)) {
-            throw new FileException('Error deleting file');
+            report_user_error('Error deleting file or directory');
         }
         
         redirect('/?m=fastsite&c=template/fileEditor&n=' . $tn);

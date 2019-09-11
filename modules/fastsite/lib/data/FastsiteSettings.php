@@ -6,7 +6,7 @@
 namespace fastsite\data;
 
 
-use fastsite\template\TemplatePageData;
+use core\exception\InvalidStateException;
 
 class FastsiteSettings extends FileDataBase {
     
@@ -19,6 +19,21 @@ class FastsiteSettings extends FileDataBase {
     
     public function setActiveTemplate($n) { $this->setValue('active_template', $n); }
     public function getActiveTemplate() { return $this->getValue('active_template', null); }
+    
+    public function getActiveTemplateSettings() {
+        $n = $this->getActiveTemplate();
+        
+        if (!$n) {
+            throw new InvalidStateException('No template active');
+        }
+        
+        $ts = new FastsiteTemplateSettings($n);
+        if (!$ts->load()) {
+            throw new InvalidStateException('Settings not found for active template');
+        }
+        
+        return $ts;
+    }
     
     
     public function save($f=null) {

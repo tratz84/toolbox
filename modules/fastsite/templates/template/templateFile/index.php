@@ -47,7 +47,7 @@
 </form>
 
 
-<iframe src="<?= BASE_HREF . $file ?>" style="width: 100%; height: 600px;"></iframe>
+<iframe src="<?= BASE_HREF . $file ?>?rawtpl=1" style="width: 100%; height: 600px;"></iframe>
 
 
 

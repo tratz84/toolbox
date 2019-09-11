@@ -5,6 +5,7 @@ namespace fastsite;
 
 use core\controller\BaseController;
 use fastsite\template\FastsiteTemplateLoader;
+use fastsite\data\FastsiteSettings;
 
 class FastsiteController extends BaseController {
     
@@ -24,11 +25,15 @@ class FastsiteController extends BaseController {
     }
     
     public function render() {
+        
+        $fastsiteSettings = object_container_get(FastsiteSettings::class);
+        
+        $ts = $fastsiteSettings->getActiveTemplateSettings();
+        
         $fth = object_container_get( FastsiteTemplateLoader::class );
         
-        readfile( $fth->getFile('/index.html') );
+        readfile( $fth->getFile($ts->getDefaultTemplateFile()) );
         
-//         print 'todo: render thingie..';
     }
     
     

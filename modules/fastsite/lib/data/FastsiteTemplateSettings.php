@@ -19,6 +19,19 @@ class FastsiteTemplateSettings extends FileDataBase {
     public function setDefaultTemplateFile($f) { $this->setValue('default_template_file', $f); }
     public function getDefaultTemplateFile() { return $this->getValue('default_template_file'); }
     
+    /**
+     * getBaseTemplateFolder() - returns basefolder for template
+     * 
+     * @return string
+     */
+    public function getBaseTemplateFolder() {
+        $f = $this->getDefaultTemplateFile();
+        if (strpos($f, '/') !== false) {
+            return dirname($f);
+        }
+        
+        return '';
+    }
     
 
     public function setTemplateFileProperty($filename, $key, $value) {
