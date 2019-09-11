@@ -23,8 +23,8 @@ class FastsiteTemplateFileSettings extends FileDataBase {
     public function setDescription($n) { $this->setValue('description', trim($n)); }
     public function getDescription() { return $this->getValue('description'); }
     
-    public function setFilename($n) { $this->setValue('filename', $n); }
-    public function getFilename() { return $this->getValue('filename'); }
+    public function setFilename($n) { $this->filename = $n; }
+    public function getFilename() { return $this->filename; }
     
     
     public function setSnippets($snippets) {

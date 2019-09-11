@@ -33,6 +33,15 @@ class FastsiteTemplateSettings extends FileDataBase {
         return '';
     }
     
+    
+    
+    public function getTemplateFileSettings($filename) {
+        $tfs = new FastsiteTemplateFileSettings($this->templateName, $filename);
+        $tfs->load();
+        return $tfs;
+    }
+    
+    
 
     public function setTemplateFileProperty($filename, $key, $value) {
         $templatefiles = $this->getValue('templatefiles', array());
@@ -63,11 +72,17 @@ class FastsiteTemplateSettings extends FileDataBase {
         return file_put_contents($path, $phpcode) !== false;
     }
     
-    public function getSnippet($name) {
+    public function getSnippetPath($name) {
         $name = basename($name);
         $path = $this->getTemplatesDir() . '/' . $this->templateName . '/fastsite/snippet-'.$name.'.php';
         
-        return file_get_contents($path) !== false;
+        return $path;
+    }
+    
+    public function getSnippet($name) {
+        $path = $this->getSnippetPath($name);
+        
+        return file_get_contents($path);
     }
     
     

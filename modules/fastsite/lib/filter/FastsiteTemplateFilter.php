@@ -17,10 +17,16 @@ class FastsiteTemplateFilter {
     
     public function doFilter($filterChain) {
         $uri = request_uri_no_params();
+
         
+        $rawtpl = get_var('rawtpl') || (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'rawtpl=1') !== false);
+        $authenticated = isset($_SESSION['user_id']) && $_SESSION['user_id'];
         
+        if ($rawtpl && $authenticated) {
+            // always try to serve
+        }
         // don't service html files
-        if (strpos($uri, '.htm') !== false || strpos($uri, '.html') !== false) {
+        else if (strpos($uri, '.htm') !== false || strpos($uri, '.html') !== false) {
             return $filterChain->next();
         }
         
@@ -36,7 +42,6 @@ class FastsiteTemplateFilter {
         $tplBaseFolder = $ts->getBaseTemplateFolder();
         
         // show raw template? used @ fastsite template/templateFile's iframe
-        $rawtpl = get_var('rawtpl') || (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'rawtpl=1') !== false);
         if ($rawtpl && isset($_SESSION['user_id']) && $_SESSION['user_id']) {
             $tplBaseFolder = '';
         }

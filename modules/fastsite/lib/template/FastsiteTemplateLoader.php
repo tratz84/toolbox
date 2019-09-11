@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * FastsiteTemplateLoader - handling template files
+ * 
+ */
 
 namespace fastsite\template;
 

@@ -6,6 +6,7 @@ namespace fastsite;
 use core\controller\BaseController;
 use fastsite\template\FastsiteTemplateLoader;
 use fastsite\data\FastsiteSettings;
+use fastsite\template\FastsiteTemplateParser;
 
 class FastsiteController extends BaseController {
     
@@ -28,12 +29,20 @@ class FastsiteController extends BaseController {
         
         $fastsiteSettings = object_container_get(FastsiteSettings::class);
         
+        // get fastsite settings
         $ts = $fastsiteSettings->getActiveTemplateSettings();
         
-        $fth = object_container_get( FastsiteTemplateLoader::class );
+        // get template settings
+        $templateFile = $ts->getDefaultTemplateFile();
         
-        readfile( $fth->getFile($ts->getDefaultTemplateFile()) );
+        $tfs = $ts->getTemplateFileSettings( $templateFile );
         
+        
+        $parser = new FastsiteTemplateParser( $ts, $tfs );
+        
+        $parser->addVars( get_object_vars($this) );
+        
+        $parser->render();
     }
     
     
