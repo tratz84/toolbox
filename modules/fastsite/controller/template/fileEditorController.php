@@ -6,6 +6,7 @@ use core\exception\InvalidStateException;
 use fastsite\form\TemplateSettingsForm;
 use fastsite\service\TemplateSettingsService;
 use fastsite\model\TemplateSetting;
+use core\exception\FileException;
 
 class fileEditorController extends BaseController {
     
@@ -43,9 +44,26 @@ class fileEditorController extends BaseController {
     
     
     public function action_delete() {
+        $tn = basename(get_var('n'));
         
-        // TODO: delete file/directory
+        // delete file/directory
+        $templateFolder = get_data_file_safe('fastsite/templates', $tn);
         
+        if (!$templateFolder) {
+            throw new FileException('Template folder not found');
+        }
+        
+        $f = get_data_file_safe('fastsite/templates/'.$tn, get_var('f'));
+        
+        if (!$f) {
+            throw new FileException('File not found');
+        }
+        
+        if (!unlink($f)) {
+            throw new FileException('Error deleting file');
+        }
+        
+        redirect('/?m=fastsite&c=template/fileEditor&n=' . $tn);
     }
     
     public function extensionSupported($file) {

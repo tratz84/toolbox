@@ -4,7 +4,7 @@ namespace fastsite;
 
 
 use core\controller\BaseController;
-use fastsite\template\FastsiteTemplateHelper;
+use fastsite\template\FastsiteTemplateLoader;
 
 class FastsiteController extends BaseController {
     
@@ -24,7 +24,7 @@ class FastsiteController extends BaseController {
     }
     
     public function render() {
-        $fth = object_container_get( FastsiteTemplateHelper::class );
+        $fth = object_container_get( FastsiteTemplateLoader::class );
         
         readfile( $fth->getFile('/index.html') );
         

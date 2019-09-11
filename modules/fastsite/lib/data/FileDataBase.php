@@ -6,6 +6,7 @@ namespace fastsite\data;
 
 use core\Context;
 use core\exception\FileException;
+use core\exception\ResourceException;
 
 class FileDataBase {
 
@@ -53,18 +54,27 @@ class FileDataBase {
         
         $data = serialize($this->data);
         
-        $r = file_put_contents( $path, $data );
+        $r = file_put_contents( $fullpath, $data );
         
         return $r !== false;
     }
     
-    public function load() {
-        $d = $this->getTemplatedir() . '/fastsite';
-        $filename = slugify($this->filename);
+    public function load($path) {
         
-        $p = $d . '/page-' . $filename;
-        if (file_exists($p)) {
-            $data = @unserialize( file_get_contents( $p ));
+        $templatesDir = $this->getTemplatesDir();
+        $fullpath = realpath($templatesDir . '/' . $path);
+        
+        // doesn't exist?
+        if ($fullpath === false) {
+            return false;
+        }
+        
+        if (strpos($fullpath, $templatesDir) === false) {
+            throw new ResourceException('Invalid location');
+        }
+        
+        if (file_exists($fullpath)) {
+            $data = @unserialize( file_get_contents( $fullpath ));
             if ($data) {
                 $this->data = $data;
                 return true;

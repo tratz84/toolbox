@@ -9,6 +9,7 @@ use fastsite\form\WebsiteTemplateForm;
 use fastsite\model\TemplateSetting;
 use fastsite\service\TemplateSettingsService;
 use fastsite\service\WebsiteTemplateService;
+use fastsite\data\FastsiteSettings;
 
 class templateController extends BaseController {
     
@@ -117,9 +118,12 @@ class templateController extends BaseController {
             if ($this->form->validate()) {
                 $ts = $tsService->saveTemplateSettings($this->form);
                 
+                $fastsiteSettings = FastsiteSettings::getInstance();
                 
                 if ($ts->getActive()) {
-                    // TODO: mark template as active
+                    // mark template as active
+                    $fastsiteSettings->setActiveTemplate($ts->getTemplateName());
+                    $r = $fastsiteSettings->save();
                 }
                 
                 

@@ -8,7 +8,7 @@
 <script src="<?= BASE_HREF ?>module/fastsite/lib/codemirror/mode/css/css.js"></script>
 <script src="<?= BASE_HREF ?>module/fastsite/lib/codemirror/mode/clike/clike.js"></script>
 <script src="<?= BASE_HREF ?>module/fastsite/lib/codemirror/mode/php/php.js"></script>
-<script src="<?= BASE_HREF ?>module/fastsite/lib/templatePage/SnippetController.js"></script>
+<script src="<?= BASE_HREF ?>module/fastsite/lib/templateFile/SnippetController.js"></script>
 
 
 
@@ -21,14 +21,25 @@
 	<h1>Template configureren</h1>
 </div>
 
-<form method="post" id="frm" class="form-generator" onsubmit="templatePage_Submit();">
+<form method="post" id="frm" class="form-generator" onsubmit="templateFile_Submit();">
 
 	<input type="hidden" id="template_name" name="template_name" value="<?= esc_attr($template) ?>" />
 
 	<div class="widget">
-	    <label>Template name</label>
-	    <input type="text" name="template_page_name" value="<?= esc_attr($tpd->getPageName()) ?>" />
+	    <label>Template file</label>
+	    <?= esc_html($file) ?>
 	</div>
+	
+	<div class="widget">
+	    <label>Template name</label>
+	    <input type="text" name="description" value="<?= esc_attr($tfs->getDescription()) ?>" />
+	</div>
+	<div class="widget">
+	    <label>Default template</label>
+	    <input type="checkbox" name="default_template" <?= $file == $ftSettings->getDefaultTemplateFile() ? 'checked=checked' : '' ?> />
+	</div>
+	
+	<div class="clear"></div>
     
     <div id="snippet-container"></div>
     <a href="javascript:void(0);" onclick="add_snippet();" class="fa fa-plus"> Snippet toevoegen</a>
@@ -51,7 +62,7 @@ function add_snippet(opts) {
 	
 	var htmlTab = <?php
 	   print json_encode(get_component('fastsite'
-	       , 'template/templatePage'
+	       , 'template/templateFile'
 	       , 'snippet'
 	       , array(
 	           'template' => $template
@@ -77,7 +88,7 @@ add_snippet(  <?= json_encode($s) ?> );
 <?php endforeach; ?>
 
 
-function templatePage_Submit() {
+function templateFile_Submit() {
 	$('#snippet-container .snippet-container').each(function(index, node) {
 		$(node).find('select, input, textarea').each(function(index2, node2) {
 			var n = $(node2).attr('name');

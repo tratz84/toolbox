@@ -3,11 +3,23 @@
 
 namespace fastsite\template;
 
-class FastsiteTemplateHelper {
+use fastsite\data\FastsiteSettings;
+use fastsite\exception\TemplateException;
+
+class FastsiteTemplateLoader {
     
     protected $templateName;
     
     public function __construct($templateName=null) {
+        if ($templateName == null) {
+            $fs = object_container_get( FastsiteSettings::class );
+            $templateName = $fs->getActiveTemplate();
+        }
+        
+        if ($templateName == null) {
+            throw new TemplateException('No template set');
+        }
+        
         $this->templateName = $templateName;
         
     }
@@ -19,7 +31,13 @@ class FastsiteTemplateHelper {
     public function getFile($f) {
         $templateDir = get_data_file('fastsite/templates/'.$this->templateName);
         
-        $file = get_data_file('fastsite/templates/'.$this->templateName.$f);
+        // template not found?
+        if ($templateDir == false) {
+            return false;
+        }
+        
+        // get file
+        $file = get_data_file('fastsite/templates/'.$this->templateName.'/'.$f);
         
         if (strpos($file, $templateDir) !== 0) {
             return false;

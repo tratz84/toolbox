@@ -35,7 +35,7 @@ function SnippetController( tabContainerItem ) {
 		
 		$.ajax({
 			type: 'POST',
-			url: appUrl('/?m=fastsite&c=template/templatePage'),
+			url: appUrl('/?m=fastsite&c=template/templateFile'),
 			data: {
 				a: 'load_snippet',
 				template: $('#template_name').val(),

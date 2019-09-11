@@ -4,10 +4,10 @@
 
 use core\controller\BaseController;
 use core\exception\InvalidStateException;
-use fastsite\template\TemplatePageData;
-use core\exception\FileException;
+use fastsite\data\FastsiteTemplateFileSettings;
+use fastsite\data\FastsiteTemplateSettings;
 
-class templatePageController extends BaseController {
+class templateFileController extends BaseController {
     
     
     public function __construct() {
@@ -24,27 +24,24 @@ class templatePageController extends BaseController {
             throw new InvalidStateException('Template not found');
         }
         
-        $this->tpd = new TemplatePageData($this->template, $this->file);
-        $this->tpd->load();
+        $this->tfs = new FastsiteTemplateFileSettings($this->template, $this->file);
+        $this->tfs->load();
         
-        $this->snippets = $this->tpd->getSnippets();
+        
+        $this->snippets = $this->tfs->getSnippets();
         for($x=0; $x < count($this->snippets); $x++) {
             $this->snippets[$x]['code'] = tpl_load_snippet( $this->template, $this->snippets[$x]['snippet_name'] );
         }
         
         
+        $ftSettings = new FastsiteTemplateSettings($this->template);
+        $ftSettings->load();
         if (is_post()) {
-            $settings_dir = $t . '/fastsite';
-            if (is_dir($settings_dir) == false) {
-                if (mkdir($settings_dir)) {
-                    throw new FileException('Unable to create settings-directory');
-                }
-            }
             
             // save snippet code
             $snippets = is_array($_REQUEST['snippets']) ? $_REQUEST['snippets'] : array();
             foreach($snippets as $s) {
-                file_put_contents($settings_dir.'/snippet-'.$s['snippet_name'].'.php', $s['snippet_code']);
+                $ftSettings->saveSnippet( $s['snippet_name'], $s['snippet_code']);
             }
             
             // save snippets linked to tempalte
@@ -55,18 +52,30 @@ class templatePageController extends BaseController {
                     'snippet_name' => $s['snippet_name']
                 );
             }
-            $this->tpd->setSnippets( $snippet_links );
+            $this->tfs->setSnippets( $snippet_links );
+            $this->tfs->setDescription( get_var('description') );
+            $this->tfs->save();
             
             
+            // global settings
+            if (get_var('default_template')) {
+                $ftSettings->setDefaultTemplateFile($this->file);
+            }
+            if ($this->tfs->getDescription()) {
+                $ftSettings->registerTemplateFile($this->file, $this->tfs->getDescription());
+            } else {
+                $ftSettings->unregisterTemplateFile($this->file);
+            }
             
-            $this->tpd->setPageName( get_var('template_page_name') );
-            $this->tpd->save();
+            $ftSettings->save();
             
             
             report_user_message('Changes saved');
             
-            redirect('/?m=fastsite&c=template/templatePage&n='.urlencode($this->template).'&f='.urlencode($this->file));
+            redirect('/?m=fastsite&c=template/templateFile&n='.urlencode($this->template).'&f='.urlencode($this->file));
         }
+        
+        $this->ftSettings = $ftSettings;
         
         return $this->render();
     }
@@ -112,9 +121,10 @@ class templatePageController extends BaseController {
         $resp['success'] = false;
         
         $f = get_data_file_safe('fastsite/templates', $template.'/fastsite/snippet-'.$snippet.'.php');
+        
         if ($f) {
             $data = file_get_contents( $f );
-            if ($data != false) {
+            if ($data !== false) {
                 $resp['data'] = $data;
                 $resp['success'] = true;
             } else {
