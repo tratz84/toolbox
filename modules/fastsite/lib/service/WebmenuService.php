@@ -21,6 +21,18 @@ class WebmenuService extends ServiceBase {
         return $menus;
     }
     
+
+    public function readMenusByParentCode($parentMenuCode=null) {
+        $wDao = new WebmenuDAO();
+        
+        $item = $wDao->readByCode( $parentMenuCode );
+        $id = $item->getWebmenuId();
+        
+        $subitems = $this->readMenusByParent($id, true);
+        $item->setChildren($subitems);
+        
+        return $item->getChildren();
+    }
     
     public function readMenusByParent($parentMenuId=null, $recursive=false) {
         $wDao = new WebmenuDAO();

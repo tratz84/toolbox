@@ -20,6 +20,14 @@ class WebmenuDAO extends \core\db\DAOObject {
 	public function read($id) {
         return $this->queryOne('select * from fastsite__webmenu where webmenu_id = ?', array($id));
 	}
+
+	public function readByCode($webmenuCode) {
+	    $params = array();
+        $sql = 'select * from fastsite__webmenu where code = ?';
+        $params[] = $webmenuCode;
+	    
+	    return $this->queryOne($sql, $params);
+	}
 	
 	public function readByParent($webmenuParentId) {
 	    $webmenuParentId = (int)$webmenuParentId;
