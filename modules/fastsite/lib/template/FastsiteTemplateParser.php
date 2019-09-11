@@ -51,13 +51,9 @@ class FastsiteTemplateParser {
         
     }
     
-    public function render() {
-        $fth = object_container_get( FastsiteTemplateLoader::class );
-        
-        $html = file_get_contents( $fth->getFile($this->tfs->getFilename()) );
-        $dom = new \DOMDocument();
-        @$dom->loadHTML($html);
-        
+    
+    protected function handleSnippets(\DOMDocument $dom) {
+        // handle snippets
         $snippets = $this->tfs->getSnippets();
         foreach($snippets as $s) {
             $xpath = new \DOMXPath($dom);
@@ -75,6 +71,22 @@ class FastsiteTemplateParser {
                 $elements->item(0)->appendChild( $frag );
             }
         }
+    }
+    
+    
+    public function render() {
+        $fth = object_container_get( FastsiteTemplateLoader::class );
+        
+        $html = file_get_contents( $fth->getFile($this->tfs->getFilename()) );
+        $dom = new \DOMDocument();
+        @$dom->loadHTML($html);
+        
+        // like it says :)
+        $this->handleSnippets($dom);
+        
+        
+        // TODO: handle default meta-stuff
+        
         
         print $dom->saveHTML();
     }
