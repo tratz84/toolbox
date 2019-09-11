@@ -22,6 +22,12 @@ class webpageController extends FastsiteController {
             return $this->render404();
         }
         
+        $this->title            = $this->webpage->getRevision()->getMetaTitle();
+        $this->meta_description = $this->webpage->getRevision()->getMetaDescription();
+        $this->meta_keywords    = $this->webpage->getRevision()->getMetaKeywords();
+        $this->content          = $this->webpage->getRevision()->getContent1();
+        $this->content1         = $this->webpage->getRevision()->getContent1();
+        $this->content2         = $this->webpage->getRevision()->getContent2();
         
         $this->render();
     }

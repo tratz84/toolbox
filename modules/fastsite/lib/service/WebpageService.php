@@ -32,6 +32,7 @@ class WebpageService extends ServiceBase {
         $r = new Webpage();
         $r->setFields( $wr->getFields() );
         $r->setFields( $w->getFields() );
+        $w->setRevision($wr);
         
         return $r;
     }
@@ -39,7 +40,18 @@ class WebpageService extends ServiceBase {
     public function readWebpageByUrl($url) {
         $wDao = new WebpageDAO();
         
-        return $wDao->readByUrl($url);
+        $w = $wDao->readByUrl($url);
+        
+        if ($w) {
+            $wrDao = new WebpageRevDAO();
+            $wr = $wrDao->read($w->getWebpageRevId());
+            
+            if ($wr) {
+                $w->setRevision($wr);
+            }
+        }
+        
+        return $w;
     }
     
     public function readWebpageByCode($code) {
@@ -106,20 +118,32 @@ class WebpageService extends ServiceBase {
     
     public function readByUrl($url) {
         $wDao = new WebpageDAO();
-        $pages = $wDao->readRevByUrl($url);
         
-        if (count($pages)) {
-            return $pages[0];
+        $wrDao = new WebpageRevDAO();
+        
+        // find by url?
+        $page = $wDao->readByUrl($url);
+        if ($page) {
+            $wr = $wrDao->read($page->getWebpageRevId());
+            if ($wr)
+                $page->setRevision($wr);
+            
+            return $page;
         }
         
+        // remove questionmark & retry
         $p = strpos($url, '?');
         if ($p !== false) {
             $url = substr($url, 0, $p);
             
-            $pages = $wDao->readByUrl($url);
+            $page = $wDao->readByUrl($url);
             
-            if (count($pages)) {
-                return $pages[0];
+            if ($page) {
+                $wr = $wrDao->read($page->getWebpageRevId());
+                if ($wr)
+                    $page->setRevision($wr);
+                
+                return $page;
             }
         }
         
