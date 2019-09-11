@@ -16,9 +16,9 @@ class webpageController extends FastsiteController {
     
     public function action_index() {
         $webpageService = $this->oc->get(WebpageService::class);
-        $webpage = $webpageService->readByUrl($_SERVER['REQUEST_URI']);
+        $this->webpage = $webpageService->readByUrl($_SERVER['REQUEST_URI']);
         
-        if (!$webpage) {
+        if (!$this->webpage) {
             return $this->render404();
         }
         
