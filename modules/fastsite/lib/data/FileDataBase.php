@@ -7,6 +7,7 @@ namespace fastsite\data;
 use core\Context;
 use core\exception\FileException;
 use core\exception\ResourceException;
+use core\exception\InvalidStateException;
 
 class FileDataBase {
 
@@ -51,6 +52,14 @@ class FileDataBase {
         $templatesDir = $this->getTemplatesDir();
         $fullpath = $this->getTemplatesDir() . '/' . $path;
         
+        $dir = dirname($fullpath);
+        if (strpos($dir, $templatesDir) !== 0) {
+            throw new ResourceException('File outside template dir requested');
+        }
+        
+        if (file_exists($dir) == false) {
+            mkdir($dir, 0755, true);
+        }
         
         $data = serialize($this->data);
         

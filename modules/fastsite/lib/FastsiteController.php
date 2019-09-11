@@ -39,6 +39,11 @@ class FastsiteController extends BaseController {
         $wtf = $this->webpage->getFastsiteTemplateFile();
         if ($wtf) {
             $tfs = $ts->getTemplateFileSettings( $wtf );
+            
+            // check if configured template-file is available in current template
+            if ($ts->hasTemplateFile($tfs->getFilename()) == false) {
+                $tfs = null;
+            }
         }
         
         // fallback to default template

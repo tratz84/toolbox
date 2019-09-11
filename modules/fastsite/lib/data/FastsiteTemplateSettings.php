@@ -69,6 +69,12 @@ class FastsiteTemplateSettings extends FileDataBase {
         return $this->getValue('templatefiles', array());
     }
     
+    public function hasTemplateFile($filename) {
+        $templatefiles = $this->getValue('templatefiles');
+        
+        return isset($templatefiles[$filename]) ? true : false;
+    }
+    
     public function saveSnippet($name, $phpcode) {
         $name = basename($name);
         $path = $this->getTemplatesDir() . '/' . $this->templateName . '/fastsite/snippet-'.$name.'.php';
