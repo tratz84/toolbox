@@ -44,6 +44,10 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
     $miWebpage->setIconLabelUrl('fa-file-archive-o', 'Webpages', '/?m=fastsite&c=webpage');
     $miFastsite->addChildMenu($miWebpage);
     
+    $miMedia = new Menu();
+    $miMedia->setIconLabelUrl('fa-image', 'Media', '/?m=fastsite&c=media');
+    $miFastsite->addChildMenu($miMedia);
+    
     $miMenu = new Menu();
     $miMenu->setIconLabelUrl('fa-file-archive-o', 'Webmenu', '/?m=fastsite&c=webmenu');
     $miFastsite->addChildMenu($miMenu);
@@ -56,7 +60,7 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
 
 $eb->subscribe('core', 'pre-call-'.FilterChain::class.'::execute', new CallbackPeopleEventListener(function($evt) {
     
-    if (strpos($_SERVER['REQUEST_URI'], '/backend/') !== false) {
+    if (strpos($_SERVER['REQUEST_URI'], BASE_HREF.'backend/') !== false) {
         return;
     }
     if (strpos($_SERVER['REQUEST_URI'], BASE_HREF.'module/') !== false) {

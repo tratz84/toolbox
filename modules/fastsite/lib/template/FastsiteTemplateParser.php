@@ -65,7 +65,7 @@ class FastsiteTemplateParser {
             $xpath = new \DOMXPath($this->dom);
             $elements = $xpath->query($s['xpath']);
             
-            if ($elements->count()) {
+            if ($elements && $elements->count()) {
                 $snippetpath = @$this->templateSettings->getSnippetPath($s['snippet_name']);
                 
                 $html = $this->loadSnippet( $snippetpath );
