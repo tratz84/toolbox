@@ -6,10 +6,16 @@ namespace fastsite\template;
 
 use fastsite\data\FastsiteTemplateFileSettings;
 use fastsite\data\FastsiteTemplateSettings;
+use fastsite\model\Webpage;
 
 class FastsiteTemplateParser {
     
     protected $vars = array();
+    
+    /**
+     * @var \DOMDocument
+     */
+    protected $dom;
     
     /**
      * @var FastsiteTemplateSettings
@@ -52,11 +58,11 @@ class FastsiteTemplateParser {
     }
     
     
-    protected function handleSnippets(\DOMDocument $dom) {
+    protected function handleSnippets() {
         // handle snippets
         $snippets = $this->tfs->getSnippets();
         foreach($snippets as $s) {
-            $xpath = new \DOMXPath($dom);
+            $xpath = new \DOMXPath($this->dom);
             $elements = $xpath->query($s['xpath']);
             
             if ($elements->count()) {
@@ -64,11 +70,9 @@ class FastsiteTemplateParser {
                 
                 $html = $this->loadSnippet( $snippetpath );
                 
-                $frag = $dom->createDocumentFragment();
+                $frag = $this->dom->createDocumentFragment();
                 
-                $html = str_replace('&nbsp;', '&#160;', $html);
-                
-                $frag->appendXML( $html );
+                $frag->appendXML( $this->escapeFragment($html) );
                 
                 $elements->item(0)->nodeValue = '';
                 $elements->item(0)->appendChild( $frag );
@@ -76,16 +80,45 @@ class FastsiteTemplateParser {
         }
     }
     
-    protected function setDefaultMeta(\DOMDocument $dom) {
+    protected function setDefaultMeta() {
         
-        $this->setTagContent($dom, '/html/head/title', $this->getVar('title'));
+        // header meta
+        $this->setTagContent('/html/head/title', $this->getVar('title'));
+        $this->setAttributeValue("/html/head/meta[@name='description']", 'content', $this->getVar('meta_description'));
+        $this->setAttributeValue("/html/head/meta[@name='keywords']", 'content', $this->getVar('meta_keywords'));
         
-        $this->setAttributeValue($dom, "/html/head/meta[@name='description']", 'content', $this->getVar('meta_description'));
-        $this->setAttributeValue($dom, "/html/head/meta[@name='keywords']", 'content', $this->getVar('meta_keywords'));
+        // page stuff
+        if (($w = $this->getVar('webpage')) && is_a($w, Webpage::class)) {
+            $c = $this->getAttributeValue('/html/body', 'class');
+            $c = $c . ' webpage-'.$w->getWebpageId();
+            
+            $templateFile = basename($this->tfs->getFilename());
+            $templateFile = substr($templateFile, 0, strrpos($templateFile, '.'));
+            $c = $c . ' tpl-' . slugify($templateFile);
+            $this->setAttributeValue('/html/body', 'class', $c);
+        }
+        
     }
     
-    protected function setAttributeValue(\DOMDocument $dom, $xpath, $attributeName, $attributeValue) {
-        $xpq = new \DOMXPath($dom);
+    protected function getAttributeValue( $xpath, $attributeName, $defaultValue=null ) {
+        $xpq = new \DOMXPath($this->dom);
+        $els = $xpq->query( $xpath );
+        
+        if ($els->count() == 0) {
+            return $defaultValue;
+        }
+        
+        $el = $els->item(0);
+        
+        if ($el->hasAttribute($attributeName)) {
+            return $el->getAttribute($attributeName);
+        } else {
+            return $defaultValue;
+        }
+    }
+    
+    protected function setAttributeValue( $xpath, $attributeName, $attributeValue) {
+        $xpq = new \DOMXPath($this->dom);
         $els = $xpq->query( $xpath );
         
         if ($els->count()) {
@@ -95,7 +128,7 @@ class FastsiteTemplateParser {
         } else {
             // fetch parent
             $parentXpath = substr($xpath, 0, strrpos($xpath, '/'));
-            $xpq = new \DOMXPath( $dom );
+            $xpq = new \DOMXPath( $this->dom );
             $els = $xpq->query( $parentXpath );
             if ($els->count() == 0) {
                 return false;
@@ -123,7 +156,7 @@ class FastsiteTemplateParser {
             
             
             // create element, set values & append
-            $node = $dom->createElement($nodeName);
+            $node = $this->dom->createElement($nodeName);
             if ($attrName2) {
                 $node->setAttribute($attrName2, $attrValue2);
             }
@@ -135,9 +168,30 @@ class FastsiteTemplateParser {
         }
     }
     
+    protected function insertFragment($xpath, $html) {
+        $xp = new \DOMXPath($this->dom);
+        
+        $p = $xp->query($xpath);
+        if ($p->count() == 0) {
+            return false;
+        }
+        
+        $frag = $this->dom->createDocumentFragment();
+        $frag->appendXML( $this->escapeFragment($html) );
+        
+        $p->item(0)->appendChild($frag);
+        
+        return true;
+    }
     
-    protected function setTagContent(\DOMDocument $dom, $xpath, $content) {
-        $xpq = new \DOMXPath($dom);
+    protected function escapeFragment($html) {
+        $html = str_replace('&nbsp;', '&#160;', $html);
+        return $html;
+    }
+    
+    
+    protected function setTagContent($xpath, $content) {
+        $xpq = new \DOMXPath($this->dom);
         $elements = $xpq->query( $xpath );
         
         if ($elements->count() == 0) {
@@ -146,11 +200,11 @@ class FastsiteTemplateParser {
             if ($parentXpath == '') $parentXpath = '/';
             
             // lookup parent
-            $xpq = new \DOMXPath($dom);
+            $xpq = new \DOMXPath($this->dom);
             $elements = $xpq->query( $parentXpath );
             if ($elements->count()) {
                 // append
-                $elTitle = $dom->createElement('title');
+                $elTitle = $this->dom->createElement('title');
                 $elTitle->nodeValue = $content;
                 $elements->item(0)->appendChild( $elTitle );
             }
@@ -168,19 +222,17 @@ class FastsiteTemplateParser {
         $fth = object_container_get( FastsiteTemplateLoader::class );
         
         $html = file_get_contents( $fth->getFile($this->tfs->getFilename()) );
-        $dom = new \DOMDocument();
-        @$dom->loadHTML($html);
+        $this->dom = new \DOMDocument();
+        @$this->dom->loadHTML($html);
         
-        $this->setDefaultMeta($dom);
+        // handle default meta-stuff
+        $this->setDefaultMeta();
         
         // like it says :)
-        $this->handleSnippets($dom);
+        $this->handleSnippets();
         
         
-        // TODO: handle default meta-stuff
-        
-        
-        print $dom->saveHTML();
+        print $this->dom->saveHTML();
     }
     
 }
