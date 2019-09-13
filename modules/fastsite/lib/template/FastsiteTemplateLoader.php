@@ -61,7 +61,11 @@ class FastsiteTemplateLoader {
             return false;
         }
         
+        header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + (60 * 60 * 24))); // 24 hours
+        header("Pragma: cache");
+        header("Cache-Control: max-age=3600");
         header('Content-type: ' . file_mime_type($file));
+        
         readfile( $file );
         
         return true;
