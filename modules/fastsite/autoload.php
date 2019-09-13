@@ -45,7 +45,7 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
     $miFastsite->addChildMenu($miWebpage);
     
     $miMedia = new Menu();
-    $miMedia->setIconLabelUrl('fa-image', 'Media', '/?m=fastsite&c=media');
+    $miMedia->setIconLabelUrl('fa-image', 'Media', '/?m=fastsite&c=media/files');
     $miFastsite->addChildMenu($miMedia);
     
     $miMenu = new Menu();
