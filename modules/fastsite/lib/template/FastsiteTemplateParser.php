@@ -185,7 +185,28 @@ class FastsiteTemplateParser {
     }
     
     protected function escapeFragment($html) {
+        $html = str_replace('&quot;', '&#34;', $html);
+        $html = str_replace('&amp;',  '&#38;', $html);
+        $html = str_replace('&apos;', '&#39;', $html);
+        $html = str_replace('&lt;', '&#60;', $html);
+        $html = str_replace('&gt;', '&#62;', $html);
         $html = str_replace('&nbsp;', '&#160;', $html);
+        $html = str_replace('&iexcl;', '&#161;', $html);
+        $html = str_replace('&cent;', '&#162;', $html);
+        $html = str_replace('&pound;', '&#163;', $html);
+        $html = str_replace('&curren;', '&#164;', $html);
+        $html = str_replace('&yen;', '&#165;', $html);
+        $html = str_replace('&brvbar;', '&#166;', $html);
+        $html = str_replace('&sect;', '&#167;', $html);
+        $html = str_replace('&uml;', '&#168;', $html);
+        $html = str_replace('&copy;', '&#169;', $html);
+        $html = str_replace('&ordf;', '&#170;', $html);
+        $html = str_replace('&laquo;', '&#171;', $html);
+        $html = str_replace('&not;', '&#172;', $html);
+        $html = str_replace('&shy;', '&#173;', $html);
+        $html = str_replace('&reg;', '&#174;', $html);
+        
+        
         return $html;
     }
     
