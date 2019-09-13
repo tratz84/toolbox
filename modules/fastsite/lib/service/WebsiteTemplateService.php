@@ -4,13 +4,13 @@ namespace fastsite\service;
 
 use core\service\ServiceBase;
 use core\Context;
-use fastsite\service\TemplateSettingsService;
+use fastsite\service\FastsiteSettingsService;
 
 class WebsiteTemplateService extends ServiceBase {
     
     
     public function getTemplates() {
-        $tsService = object_container_get(TemplateSettingsService::class);
+        $tsService = object_container_get(FastsiteSettingsService::class);
         
         
         $l = array();

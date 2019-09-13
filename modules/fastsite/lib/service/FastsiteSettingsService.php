@@ -9,7 +9,7 @@ use fastsite\form\TemplateSettingsForm;
 use fastsite\model\TemplateSetting;
 use core\exception\InvalidStateException;
 
-class TemplateSettingsService extends ServiceBase {
+class FastsiteSettingsService extends ServiceBase {
     
     public function readActiveTemplate() {
         $tsDao = new TemplateSettingDAO();
@@ -23,10 +23,10 @@ class TemplateSettingsService extends ServiceBase {
         return $ts;
     }
     
-    public function readTemplateSettingsByName($name) {
+    public function readTemplateSettingsByName($templateName) {
         $tsDao = new TemplateSettingDAO();
         
-        $t = $tsDao->readByName($name);
+        $t = $tsDao->readByName($templateName);
         
         return $t;
     }

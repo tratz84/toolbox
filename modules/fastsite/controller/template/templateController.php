@@ -4,12 +4,12 @@
 use core\controller\BaseController;
 use core\exception\FileException;
 use core\exception\InvalidStateException;
+use fastsite\data\FastsiteSettings;
 use fastsite\form\TemplateSettingsForm;
 use fastsite\form\WebsiteTemplateForm;
 use fastsite\model\TemplateSetting;
-use fastsite\service\TemplateSettingsService;
+use fastsite\service\FastsiteSettingsService;
 use fastsite\service\WebsiteTemplateService;
-use fastsite\data\FastsiteSettings;
 
 class templateController extends BaseController {
     
@@ -99,7 +99,7 @@ class templateController extends BaseController {
         
         $this->form = object_container_create(TemplateSettingsForm::class);
         
-        $tsService = object_container_get(TemplateSettingsService::class);
+        $tsService = object_container_get(FastsiteSettingsService::class);
         $ts = $tsService->readTemplateSettingsByName(get_var('n'));
         if ($ts === null) {
             $f = get_data_file('fastsite/templates/'.basename(get_var('n')));
