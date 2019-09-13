@@ -34,13 +34,22 @@
 			<?= esc_attr(BASE_HREF . 'fs-media/' . $filename) ?>
 		</a>
 	</div>
+	
+	<?php if (in_array(file_extension($filename), ['jpg', 'png', 'jpeg', 'gif'])) : ?>
+	<div class="widget">
+		<label>Afbeelding bewerken</label>
+		<a href="<?= appUrl('/?m=fastsite&c=media/editImage&f='.urlencode($f)) ?>">Bewerken</a>
+	</div>
+	<?php endif; ?>
 
 </div>
 
 <?php if (in_array(file_extension($filename), ['jpg', 'png', 'jpeg', 'gif'])) : ?>
 <div class="clear">
 	<hr/>
-	<img src="/fs-media/<?= esc_attr($path) ?>" style="max-width: 50%; height: auto;" />
+	<a href="<?= esc_attr(BASE_HREF . 'fs-media/' . $filename) ?>" target="_blank">
+		<img src="/fs-media/<?= esc_attr($path) ?>" style="max-width: 50%; height: auto;" />
+	</a>
 </div>
 <?php endif; ?>
 
