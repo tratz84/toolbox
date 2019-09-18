@@ -8,7 +8,6 @@ class editImageController extends BaseController {
     
     
     public function action_index() {
-        
         $f = get_var('f');
         $fullpath = get_data_file_safe('fastsite/fs-media/', $f);
         $basepath = get_data_file_safe('fastsite/fs-media/', '/');
@@ -31,17 +30,79 @@ class editImageController extends BaseController {
     }
     
     
-    public function action_resize() {
+    public function action_save() {
+        $f = get_var('f');
+        $fullpath = get_data_file_safe('fastsite/fs-media/', $f);
+        
+        if (!$fullpath) {
+            throw new FileException('File not found');
+        }
         
         
-        return $this->render();
+        if (class_exists('Imagick')) {
+            $this->handle_imagick($fullpath, $_REQUEST);
+        } else {
+            $this->handle_gd($fullpath, $_REQUEST);
+        }
+        
+        redirect('/?m=fastsite&c=media/info&f='.urlencode($f));
     }
     
-    public function action_croprotate() {
+    public function handle_imagick($path, $opts) {
+        $imgsrc = new Imagick();
+        $imgsrc->readImage( $path );
+        $imgsrc->setimageorientation(imagick::ORIENTATION_UNDEFINED);
+        
+        $imgsrc_w = $imgsrc->getimagewidth();
+        $imgsrc_h = $imgsrc->getimageheight();
         
         
-        return $this->render();
+        $img = new Imagick();
+        $canvasSize = $imgsrc_w > $imgsrc_h ? $imgsrc_w : $imgsrc_h;
+        $img->newImage($canvasSize, $canvasSize, 'white', 'jpg');
+        //             $img->setcompressionquality(10);     // doesn't do anything?
+        $img->compositeimage($imgsrc, Imagick::COMPOSITE_OVER, $canvasSize/2 - $imgsrc_w/2, $canvasSize/2 - $imgsrc_h/2);
+        
+        $imgsrc->destroy();
+        
+        if ($opts['degrees'] != '0' && $opts['degrees'] != '360') {
+            $img->rotateimage('#ffffff', $opts['degrees']);
+            
+            $pos = ($img->getimagewidth()-$canvasSize)/2;
+            $pos = (int)$pos;
+            $img->cropimage($canvasSize, $canvasSize, 0, 0);
+        }
+        
+        
+        $cropx1 = (int)$opts['cropx1'];
+        $cropy1 = (int)$opts['cropy1'];
+        $cropx2 = (int)$opts['cropx2'];
+        $cropy2 = (int)$opts['cropy2'];
+        
+        $img->cropimage($cropx2-$cropx1, $cropy2-$cropy1, $cropx1, $cropy1);
+        
+        // resize?
+        $imgWidth = (int)$opts['img_width'];
+        $imgHeight = (int)$opts['img_height'];
+        if ($img->getImageWidth() != $imgWidth || $img->getImageHeight() != $imgHeight) {
+            $img->resizeimage($opts['img_width'], $opts['img_height'], Imagick::FILTER_LANCZOS, 1);
+        }
+        
+        
+        $img->writeImage( $path );
+        
+        // destroy image
+        $img->destroy();
+        
+        
     }
+    
+    
+    public function handle_gd($path, $opts) {
+        
+    }
+    
+    
     
     
 }
