@@ -17,6 +17,7 @@ require_once dirname( __FILE__ ) . '/functions/lang.php';
 require_once dirname( __FILE__ ) . '/functions/db.php';
 require_once dirname( __FILE__ ) . '/functions/auth.php';
 require_once dirname( __FILE__ ) . '/functions/forms.php';
+require_once dirname( __FILE__ ) . '/functions/image.php';
 require_once dirname( __FILE__ ) . '/functions/hook-helper.php';
 
 
