@@ -1,7 +1,7 @@
 
 config/config-local.php
 
-data/
+/data/
 
 
 # Eclipse settings
@@ -17,7 +17,6 @@ composer.phar
 # Nodejs
 node_modules/
 bower_components/
-package-lock.json
 
 # generated on deployment
 www/css/less/style.css

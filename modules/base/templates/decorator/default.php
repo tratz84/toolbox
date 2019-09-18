@@ -21,6 +21,7 @@ $menuItems = $ms->listMainMenu();
 			 print json_encode([
 			     'base_href' => BASE_HREF,
 			     'contextName' => $context->getContextName(),
+			     'appRootUrl' => appUrl('/'),
 			     'username' => $context->getUser() ? $context->getUser()->getUsername() : '',
 			     'multiuser_check_interval' => MULTIUSER_CHECK_INTERVAL,
 			     'standalone_installation' => is_standalone_installation(),
@@ -129,7 +130,7 @@ $menuItems = $ms->listMainMenu();
 					
 					<?php if ($mi->hasChildMenus()) : ?>
 					<?php $childItems = $mi->getChildMenus() ?>
-					<?php $childItems = array_merge(array($mi), $childItems) ?>
+					<?php if ($mi->menuAsFirstChild()) $childItems = array_merge(array($mi), $childItems) ?>
 					<ul class="child-menu">
     					<?php foreach($childItems as $ci) : ?>	
     					<li>

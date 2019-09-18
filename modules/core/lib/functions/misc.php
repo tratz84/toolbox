@@ -37,6 +37,8 @@ function appUrl($u) {
         $url = BASE_HREF . $contextName . $u;
     }
     
+    $url = apply_filter('appUrl', $url);
+    
     return $url;
 }
 
@@ -63,6 +65,17 @@ function app_request_uri() {
     }
 }
 
+function request_uri_no_params() {
+    $uri = $_SERVER['REQUEST_URI'];
+    $p = strrpos($uri, '?');
+    
+    if ($p !== false) {
+        $uri = substr($uri, 0, $p);
+    }
+    
+    return $uri;
+}
+
 
 function redirect($url) {
     
@@ -80,7 +93,14 @@ function remote_addr() {
 }
 
 
-function list_files($path) {
+function list_files($path, $opts=array()) {
+    $path = realpath( $path );
+    
+    if (!$path)
+        return false;
+    
+    if (isset($opts['basepath']) == false)
+        $opts['basepath'] = $path;
     
     $dh = opendir( $path );
     if (!$dh) return false;
@@ -90,7 +110,30 @@ function list_files($path) {
     while ($f = readdir($dh)) {
         if ($f == '.' || $f == '..') continue;
         
-        $files[] = $f;
+        if (isset($opts['append-slash']) && $opts['append-slash'] && is_dir( $path . '/' . $f )) {
+            $files[] = $f . '/';
+        } else {
+            $files[] = $f;
+        }
+        
+        
+        if (isset($opts['recursive']) && $opts['recursive'] && is_dir($path.'/'.$f)) {
+            $subfiles = list_files($path . '/' . $f, $opts);
+            
+            for($x=0; $x < count($subfiles); $x++) {
+                $subfile = $subfiles[$x];
+                
+                if (strpos($subfiles[$x], $opts['basepath']) !== false)
+                    $subfile = substr($subfile, strlen($opts['basepath']));
+                
+                $subfile = $f . '/' . $subfiles[$x];
+                
+                $subfiles[$x] = $subfile;
+            }
+            
+            $files = array_merge($files, $subfiles);
+        }
+        
     }
     
     return $files;
@@ -107,6 +150,72 @@ function file_extension($file) {
     $ext = strtolower($ext);
     
     return $ext;
+}
+
+function file_mime_type($file) {
+    
+    $mime_types = array(
+        'txt' => 'text/plain',
+        'htm' => 'text/html',
+        'html' => 'text/html',
+        'php' => 'text/html',
+        'css' => 'text/css',
+        'js' => 'application/javascript',
+        'json' => 'application/json',
+        'xml' => 'application/xml',
+        'swf' => 'application/x-shockwave-flash',
+        'flv' => 'video/x-flv',
+        
+        // images
+        'png' => 'image/png',
+        'jpe' => 'image/jpeg',
+        'jpeg' => 'image/jpeg',
+        'jpg' => 'image/jpeg',
+        'gif' => 'image/gif',
+        'bmp' => 'image/bmp',
+        'ico' => 'image/vnd.microsoft.icon',
+        'tiff' => 'image/tiff',
+        'tif' => 'image/tiff',
+        'svg' => 'image/svg+xml',
+        'svgz' => 'image/svg+xml',
+        
+        // archives
+        'zip' => 'application/zip',
+        'rar' => 'application/x-rar-compressed',
+        'exe' => 'application/x-msdownload',
+        'msi' => 'application/x-msdownload',
+        'cab' => 'application/vnd.ms-cab-compressed',
+        
+        // audio/video
+        'mp3' => 'audio/mpeg',
+        'qt' => 'video/quicktime',
+        'mov' => 'video/quicktime',
+        
+        // adobe
+        'pdf' => 'application/pdf',
+        'psd' => 'image/vnd.adobe.photoshop',
+        'ai' => 'application/postscript',
+        'eps' => 'application/postscript',
+        'ps' => 'application/postscript',
+        
+        // ms office
+        'doc' => 'application/msword',
+        'rtf' => 'application/rtf',
+        'xls' => 'application/vnd.ms-excel',
+        'ppt' => 'application/vnd.ms-powerpoint',
+        
+        // open office
+        'odt' => 'application/vnd.oasis.opendocument.text',
+        'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
+    );
+    
+    $ext = file_extension($file);
+    
+    if (isset($mime_types[$ext])) {
+        return $mime_types[$ext];
+    }
+    
+    return 'application/octet-stream';
 }
 
 
@@ -268,6 +377,25 @@ function list_data_directory($pathInDataDir) {
     return $files;
 }
 
+
+function get_data_file_safe($basePath, $subPath) {
+    // get fullpath for base
+    $basePath = get_data_file( $basePath );
+    if (!$basePath) {
+        return false;
+    }
+    
+    $fullpath = realpath( $basePath . '/' . $subPath);
+    if ($fullpath == false) {
+        return false;
+    }
+    
+    if (strpos($fullpath, $basePath) === 0) {
+        return $fullpath;
+    }
+    
+    return false;
+}
 
 function get_data_file($f) {
     $ctx = Context::getInstance();

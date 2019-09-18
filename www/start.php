@@ -7,7 +7,7 @@ require_once '../config/config.php';
 
 
 try {
-    $fc = new \core\filter\FilterChain();
+    $fc = object_container_create( \core\filter\FilterChain::class );
     
     $fc->addFilter( new \core\filter\ModulePublicFilter() );
     $fc->addFilter( new \core\filter\SessionFilter() );

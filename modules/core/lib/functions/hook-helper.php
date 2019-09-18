@@ -7,6 +7,7 @@ use core\event\CallbackPeopleEventListener;
 use core\event\EventBus;
 use core\event\PeopleEvent;
 use core\template\HtmlScriptLoader;
+use core\event\VariableFilter;
 
 function hook_create_object($className, $callback) {
     $eb = ObjectContainer::getInstance()->get( EventBus::class );
@@ -92,5 +93,23 @@ function object_container_create($className) {
     return ObjectContainer::getInstance()->create($className);
 }
 
+
+function add_filter($filterName, $callback, $prio=10) {
+    $vf = object_container_get(VariableFilter::class);
+    
+    return $vf->addFilter($filterName, $callback, $prio);
+}
+
+/**
+ * $filterName - parameter = name of filter
+ * $variable   - variable to filter
+ * 
+ * @return mixed
+ */
+function apply_filter($filterName, $value) {
+    $vf = object_container_get(VariableFilter::class);
+    
+    return $vf->applyFilter($filterName, $value);
+}
 
 
