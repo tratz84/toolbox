@@ -56,6 +56,39 @@ create table fastsite__template_setting (
     edited datetime,
     created datetime,
     unique key key_template_name (template_name)
+);
+
+create table fastsite__webform (
+	webform_id int primary key auto_increment,
+    webform_name varchar(255),
+    webform_code varchar(32),
+    confirmation_message text,
+    active boolean default true,
+    edited datetime,
+    created datetime
+);
+create table fastsite__webform_field (
+	webform_field_id int primary key auto_increment,
+    webform_id int,
+    input_field varchar(255),
+    input_options text,
+    label varchar(255),
+    default_value varchar(255),
+    validator varchar(255),
+    sort int
+    );
+    
+create table fastsite__webform_submit (
+	webform_submit_id int primary key auto_increment,
+    webform_id int,
+    raw_request text,
+    raw_server text,
+    field_list text,
+    field_values text,
+    ip varchar(40),
+    deleted boolean default false,
+    completed boolean default true,
+    created datetime
 )
 
 
