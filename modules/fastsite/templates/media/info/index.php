@@ -28,6 +28,13 @@
 		<?= format_filesize( $filesize ) ?>
 	</div>
 	
+	<?php if (isset($img_width)) : ?>
+	<div class="widget">
+		<label>Resolution</label>
+		<?= $img_width ?>x<?=$img_height?>
+	</div>
+	<?php endif; ?>
+	
 	<div class="widget">
 		<label>Url</label>
 		<a href="<?= esc_attr(BASE_HREF . 'fs-media/' . $filename) ?>" target="_blank">

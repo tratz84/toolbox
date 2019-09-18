@@ -25,6 +25,13 @@ class infoController extends BaseController {
         $this->filesize = filesize($fullpath);
         
         
+        if (gd_image_supported($this->filename)) {
+            $img = gd_load_image($fullpath);
+            $this->img_width = imagesx($img);
+            $this->img_height= imagesy($img);
+        }
+        
+        
         return $this->render();
     }
     
