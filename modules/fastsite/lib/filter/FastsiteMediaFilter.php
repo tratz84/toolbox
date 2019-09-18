@@ -34,9 +34,10 @@ class FastsiteMediaFilter {
                 die('File not found');
             }
             
-            header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + (60 * 60 * 24))); // 24 hours
-            header("Pragma: cache");
-            header("Cache-Control: max-age=3600");
+//             header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + (60 * 60 * 24))); // 24 hours
+//             header("Pragma: cache");
+//             header("Cache-Control: max-age=3600");
+            header("Keep-Alive: timeout=5, max=100");
             header('Content-type: ' . file_mime_type($f));
             
             readfile( $f );
