@@ -121,8 +121,8 @@ if ($invoiceSettings->getIntracommunautair()) {
         $form->addWidget($w);
     });
     
-    $eb->subscribe('core', 'object-hook-base\\service\\CompanyService::readCompany', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
-        list($company, $arguments) = $evt->getSource();
+    $eb->subscribe('core', 'post-call-base\\service\\CompanyService::readCompany', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+        list($companyService, $company, $arguments) = $evt->getSource();
         
         if ($company->getCompanyId()) {
             $invoiceService = ObjectContainer::getInstance()->get(InvoiceService::class);
@@ -135,8 +135,10 @@ if ($invoiceSettings->getIntracommunautair()) {
         }
     }));
     // handle saveCompany
-    $eb->subscribe('core', 'object-hook-base\\service\\CompanyService::save', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
-        list($companyId, $arguments) = $evt->getSource();
+    $eb->subscribe('core', 'post-call-base\\service\\CompanyService::save', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+        list($companyService, $returnValue, $arguments) = $evt->getSource();
+        
+        $companyId = $returnValue;
         
         if ($companyId) {
             $invoiceService = ObjectContainer::getInstance()->get(InvoiceService::class);

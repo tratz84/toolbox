@@ -28,7 +28,7 @@ function hook_create_object($className, $callback) {
 function hook_object($className, $function, $callback) {
     $eb = ObjectContainer::getInstance()->get( EventBus::class );
     
-    $eb->subscribe('core', 'object-hook-'.$className.'::'.$function, new CallbackPeopleEventListener(function(PeopleEvent $evt) use ($callback) {
+    $eb->subscribe('core', 'post-call-'.$className.'::'.$function, new CallbackPeopleEventListener(function(PeopleEvent $evt) use ($callback) {
         list($result, $arguments) = $evt->getSource();
         
         $callback( $result, $arguments );

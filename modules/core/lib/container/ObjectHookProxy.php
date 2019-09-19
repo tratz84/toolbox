@@ -29,7 +29,7 @@ class ObjectHookProxy {
         $r = call_user_func_array(array($this->obj, $name), $arguments);
         
         // TODO: deprecate this one
-        $eb->publishEvent(array($r, $arguments), 'core', 'object-hook-'.get_class($this->obj).'::'.$name);
+//         $eb->publishEvent(array($r, $arguments), 'core', 'object-hook-'.get_class($this->obj).'::'.$name);
         
         $eb->publishEvent(array($this->obj, $r, $arguments), 'core', 'post-call-'.get_class($this->obj).'::'.$name);
         
