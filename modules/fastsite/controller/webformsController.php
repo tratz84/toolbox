@@ -5,8 +5,19 @@ use core\controller\BaseController;
 use fastsite\service\WebformService;
 use fastsite\model\Webform;
 use fastsite\form\WebformForm;
+use core\forms\TextField;
 
 class webformsController extends BaseController {
+    
+    protected $inputTypes = array();
+    
+    
+    public function init() {
+        $this->inputTypes[] = array(
+            'class' => TextField::class,
+            'name' => 'Textfield'
+        );
+    }
     
     
     public function action_index() {
@@ -52,7 +63,6 @@ class webformsController extends BaseController {
 //                 $webformService->saveWebform($this->form);
                 
             }
-            
         }
         
         

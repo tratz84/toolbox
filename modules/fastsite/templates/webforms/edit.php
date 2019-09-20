@@ -15,3 +15,13 @@
 
 
 <?= $form->render() ?>
+
+
+<a href="javascript:void(0);">Add widget</a>
+
+
+<script>
+
+
+
+</script>

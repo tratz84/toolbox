@@ -8,6 +8,8 @@ use core\forms\BaseForm;
 use core\forms\TextField;
 use core\forms\CheckboxField;
 use core\forms\TinymceField;
+use core\forms\WidgetContainer;
+use core\forms\HtmlField;
 
 class WebformForm extends BaseForm {
     
@@ -21,6 +23,8 @@ class WebformForm extends BaseForm {
         
         $this->addWidget(new TinymceField('confirmation_message', '', 'Bevestigingsbericht'));
         
+        $this->addWidget(new HtmlField('', '', 'Form fields'));
+        $this->addWidget(new WidgetContainer('webform-fields'));
     }
     
 }
