@@ -3,6 +3,8 @@
 
 use core\controller\BaseController;
 use fastsite\service\WebformService;
+use fastsite\model\Webform;
+use fastsite\form\WebformForm;
 
 class webformsController extends BaseController {
     
@@ -30,16 +32,43 @@ class webformsController extends BaseController {
     
     
     public function action_edit() {
+        $webformService = $this->oc->get(WebformService::class);
+        
+        $webformId = get_var('id');
+        
+        if ($webformId) {
+            $this->webform = $webformService->readWebform( $webformId );
+        } else {
+            $this->webform = new Webform();
+        }
+        
+        $this->form = object_container_create(WebformForm::class);
+        $this->form->bind( $this->webform );
+        
+        if (is_post()) {
+            $this->form->bind($this->form);
+            
+            if ($this->form->validate()) {
+//                 $webformService->saveWebform($this->form);
+                
+            }
+            
+        }
+        
+        
+        $this->isNew = $this->webform->isNew();
         
         return $this->render();
     }
     
     
     public function action_delete() {
+        $webformService = $this->oc->get(WebformService::class);
         
+        $webformService->deleteWebform( get_var('id') );
         
+        redirect('/?m=fastsite&c=webforms');
     }
-    
     
 }
 

@@ -11,6 +11,10 @@ class WebformFieldDAO extends \core\db\DAOObject {
 		$this->setObjectName( '\\fastsite\\model\\WebformField' );
 	}
 	
+	
+	public function readByForm($webformId) {
+	    return $this->queryList('select * from fastsite__webform_field where webform_id = ? order by sort', array($webformId));
+	}
 
 }
 

@@ -14,6 +14,10 @@ class WebformDAO extends \core\db\DAOObject {
 	}
 
 	
+	public function read($id) {
+	    return $this->queryOne('select * from fastsite__webform where webform_id=?', array($id));
+	}
+	
 	
 	public function search($opts=array()) {
 	    
