@@ -18,28 +18,28 @@ use core\exception\InvalidStateException;
 
 class webformsController extends BaseController {
     
-    protected $inputTypes = array();
+    protected $fieldTypes = array();
     protected $validators = array();
     
     
     public function init() {
-        $this->inputTypes[] = array(
+        $this->fieldTypes[] = array(
             'class' => TextField::class,
             'label' => 'Tekstregel'
         );
-        $this->inputTypes[] = array(
+        $this->fieldTypes[] = array(
             'class' => TextareaField::class,
             'label' => 'Tekstveld (multi-line)'
         );
-        $this->inputTypes[] = array(
+        $this->fieldTypes[] = array(
             'class' => EmailField::class,
             'label' => 'E-mail'
         );
-        $this->inputTypes[] = array(
+        $this->fieldTypes[] = array(
             'class' => SelectField::class,
             'label' => 'Select-field'
         );
-        $this->inputTypes[] = array(
+        $this->fieldTypes[] = array(
             'class' => RadioField::class,
             'label' => 'Radio buttons'
         );
@@ -120,7 +120,7 @@ class webformsController extends BaseController {
         
         // lookup if requested widget exists
         $found = false;
-        foreach($this->inputTypes as $it) {
+        foreach($this->fieldTypes as $it) {
             if ($it['class'] == $class) {
                 $found = true;
             }

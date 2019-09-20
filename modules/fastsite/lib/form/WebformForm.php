@@ -24,7 +24,7 @@ class WebformForm extends BaseForm {
         $this->addWidget(new TinymceField('confirmation_message', '', 'Bevestigingsbericht'));
         $this->getWidget('confirmation_message')->setInfoText('Getoond bericht na versturen formulier');
         
-        $this->addWidget(new HtmlField('', '', 'Form fields'));
+        $this->addWidget(new HtmlField('form-fields', '', 'Input fields'));
         $this->addWidget(new WidgetContainer('webform-fields'));
     }
     

@@ -17,14 +17,36 @@
 <?= $form->render() ?>
 
 
-<a href="javascript:void(0);" onclick="add_webform_field();">Add widget</a>
-
+<div class="" style="float: right; width: 300px;">
+    <?php foreach($fieldTypes as $ft) : ?>
+    	<div>
+    		<a href="javascript:void(0);" onclick="<?= esc_attr('add_webform_field('.json_encode($ft['class']).');') ?>">Add <?= esc_html($ft['label']) ?> widget</a>
+    	</div>
+    <?php endforeach; ?>
+</div>
 
 <script>
 
-function add_webform_field() {
+var fieldTypes = <?= json_encode($fieldTypes) ?>;
 
-	
+function add_webform_field(t) {
+// 	.widget-container-webform-fields
+
+	$.ajax({
+		url: appUrl('/?m=fastsite&c=webforms'),
+		data: {
+			'a': 'load_widget',
+			'class': t
+		},
+		success: function(data, xhr, textStatus) {
+			var d = $('<div />');
+			d.html( data );
+
+			$('.widget-container-webform-fields').append(d);
+		},
+		error: function() {
+		}
+	});
 	
 }
 
