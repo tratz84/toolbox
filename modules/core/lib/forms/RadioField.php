@@ -16,6 +16,9 @@ class RadioField extends BaseWidget {
         $this->opts = $opts;
         
     }
+
+    public function setOptionItems($i) { $this->optionItems = $i; }
+    public function getOptionItems() { return $this->optionItems; }
     
     public function renderAsText() {
         $val = $this->getValue();

@@ -6,22 +6,65 @@ use fastsite\service\WebformService;
 use fastsite\model\Webform;
 use fastsite\form\WebformForm;
 use core\forms\TextField;
+use core\forms\SelectField;
+use core\forms\RadioField;
+use core\forms\validator\EmailValidator;
+use core\forms\validator\NotEmptyValidator;
+use core\forms\validator\IbanValidator;
+use core\forms\validator\NotFirstOptionValidator;
+use core\forms\TextareaField;
+use core\forms\EmailField;
+use core\exception\InvalidStateException;
 
 class webformsController extends BaseController {
     
     protected $inputTypes = array();
+    protected $validators = array();
     
     
     public function init() {
         $this->inputTypes[] = array(
             'class' => TextField::class,
-            'name' => 'Textfield'
+            'label' => 'Tekstregel'
+        );
+        $this->inputTypes[] = array(
+            'class' => TextareaField::class,
+            'label' => 'Tekstveld (multi-line)'
+        );
+        $this->inputTypes[] = array(
+            'class' => EmailField::class,
+            'label' => 'E-mail'
+        );
+        $this->inputTypes[] = array(
+            'class' => SelectField::class,
+            'label' => 'Select-field'
+        );
+        $this->inputTypes[] = array(
+            'class' => RadioField::class,
+            'label' => 'Radio buttons'
+        );
+        
+        
+        $this->validators[] = array(
+            'class' => NotEmptyValidator::class,
+            'label' => 'Waarde verplicht'
+        );
+        $this->validators[] = array(
+            'class' => NotFirstOptionValidator::class,
+            'label' => 'Eerste waarde niet toegestaan (radio/select veld)'
+        );
+        $this->validators[] = array(
+            'class' => EmailValidator::class,
+            'label' => 'E-mail validation'
+        );
+        $this->validators[] = array(
+            'class' => IbanValidator::class,
+            'label' => 'IBAN validation'
         );
     }
     
     
     public function action_index() {
-        
         
         return $this->render();
     }
@@ -70,6 +113,31 @@ class webformsController extends BaseController {
         
         return $this->render();
     }
+    
+    public function action_load_widget() {
+        
+        $class = isset($this->class) ? $this->class : get_var('class');
+        
+        // lookup if requested widget exists
+        $found = false;
+        foreach($this->inputTypes as $it) {
+            if ($it['class'] == $class) {
+                $found = true;
+            }
+        }
+        
+        if ($found == false) {
+            throw new InvalidStateException('Field not found');
+        }
+        
+        
+        $fieldtype = substr($class, strrpos($class, '\\'));
+        
+        $f = module_file('fastsite', 'templates/webforms/fieldtype/'.$fieldtype.'.php');
+        
+        
+    }
+    
     
     
     public function action_delete() {

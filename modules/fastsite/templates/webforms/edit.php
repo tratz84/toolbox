@@ -17,10 +17,16 @@
 <?= $form->render() ?>
 
 
-<a href="javascript:void(0);">Add widget</a>
+<a href="javascript:void(0);" onclick="add_webform_field();">Add widget</a>
 
 
 <script>
+
+function add_webform_field() {
+
+	
+	
+}
 
 
 
