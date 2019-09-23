@@ -19,6 +19,7 @@ use core\forms\validator\EmailValidator;
 use core\forms\validator\IbanValidator;
 use core\forms\validator\NotEmptyValidator;
 use core\forms\validator\NotFirstOptionValidator;
+use fastsite\model\Webform;
 
 class WebformForm extends BaseForm {
     
@@ -66,6 +67,12 @@ class WebformForm extends BaseForm {
         
         if (is_array($obj) && isset($obj['wf'])) {
             $this->webformFields = $obj['wf'];
+        }
+        if (is_a($obj, Webform::class)) {
+            $wfs = $obj->getWebformFields();
+            foreach($wfs as $wf) {
+                $this->webformFields[] = $wf->getFields();
+            }
         }
         
         

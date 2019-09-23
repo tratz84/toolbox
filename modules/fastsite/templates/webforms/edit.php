@@ -25,7 +25,13 @@
         <?php endforeach; ?>
     </div>
     
-    <div class="webform-fields form-generator" style="width: calc(100% - 320px); float: left;"></div>
+    <div class="webform-fields form-generator" style="width: calc(100% - 320px); float: left;">
+    
+    	<?php foreach($form->getWebformFields() as $wf) : ?>
+    		<?php include_component('fastsite', 'webforms', 'load_widget', array('webformField' => $wf)) ?>
+    	<?php endforeach; ?>
+    
+    </div>
 </div>
 
 
@@ -40,6 +46,11 @@ $(document).ready(function() {
 	$('.webform-fields').sortable({
 		handle: '.move-handle'
 	});
+
+	$('.widget-options').sortable({
+		handle: '.option-move-handler'
+	});
+	
 
 	$('form.form-webform-form').append( $('#webform-fields-container') );
 
@@ -92,8 +103,8 @@ function add_keyval_option(obj) {
 	var optionsContainer = $(container).find('.widget-options');
 
 
-	var ik = $('<input type="text" name="wf[x][weboption][y][key]" placeholder="Key" />');
-	var iv = $('<input type="text" name="wf[x][weboption][y][value]" placeholder="Value" />');
+	var ik = $('<input type="text" name="wf[x][inputoptions][y][key]" placeholder="Key" />');
+	var iv = $('<input type="text" name="wf[x][inputoptions][y][value]" placeholder="Value" />');
 
 	var r = $('<a class="fa fa-remove" href="javascript:void(0);" onclick="remove_keyval_option(this);"></a>');
 

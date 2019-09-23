@@ -18,19 +18,19 @@
 		<select name="wf[x][validator]">
 			<option value="">Maak uw keuze</option>
 			<?php foreach($validators as $v) : ?>
-				<option value="<?= esc_attr($v['class']) ?>"><?= esc_html($v['label']) ?></option>
+				<option value="<?= esc_attr($v['class']) ?>" <?= $selected_validator == $v['class'] ? 'selected=selected':'' ?>><?= esc_html($v['label']) ?></option>
 			<?php endforeach; ?>
 		</select>
 	</div>
 	
 	<div class="widget">
 		<label>Veldnaam</label>
-		<input type="text" name="wf[x][fieldname]" />
+		<input type="text" name="wf[x][fieldname]" value="<?= esc_attr($fieldname) ?>" />
 	</div>
 	
 	<div class="widget">
 		<label>Placeholder</label>
-		<input type="text" name="wf[x][placeholder]" />
+		<input type="text" name="wf[x][placeholder]" value="<?= esc_attr($placeholder) ?>" />
 	</div>
 	
 	

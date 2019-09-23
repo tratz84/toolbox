@@ -79,6 +79,25 @@ class webformsController extends BaseController {
     public function action_load_widget() {
 
         $form = new WebformForm();
+        $jsonRequest = true;
+        
+        $this->selected_validator = null;
+        $this->fieldname = '';
+        $this->placeholder = '';
+        $this->inputoptions = null;
+
+        // include_component() used from edit.php?
+        if (isset($this->webformField)) {
+            $this->class = $this->webformField['input_field'];
+            $jsonRequest = false;
+            
+            $this->selected_validator = $this->webformField['validator'];
+            $this->fieldname = $this->webformField['label'];
+            $this->placeholder = $this->webformField['default_value'];
+            if ($this->webformField['input_options']) {
+                $this->inputoptions = @json_decode($this->webformField['input_options']);
+            }
+        }
         
         $class = isset($this->class) ? $this->class : get_var('class');
         
@@ -106,13 +125,21 @@ class webformsController extends BaseController {
         $r['success'] = true;
         $r['html'] = get_template($f, 
             array(
-                'class' => $class,
-                'fieldtype' => $fieldtype,
-                'validators' => $form->getWebformValidators()
+                'class'              => $class,
+                'fieldtype'          => $fieldtype,
+                'validators'         => $form->getWebformValidators(),
+                'selected_validator' => $this->selected_validator,
+                'fieldname'          => $this->fieldname,
+                'placeholder'        => $this->placeholder,
+                'inputoptions'       => $this->inputoptions
             )
         );
         
-        $this->json($r);
+        if ($jsonRequest) {
+            $this->json($r);
+        } else {
+            print $r['html'];
+        }
     }
     
     
