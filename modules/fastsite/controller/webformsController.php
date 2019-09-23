@@ -18,49 +18,8 @@ use core\exception\InvalidStateException;
 
 class webformsController extends BaseController {
     
-    protected $fieldTypes = array();
-    protected $validators = array();
-    
-    
     public function init() {
-        $this->fieldTypes[] = array(
-            'class' => TextField::class,
-            'label' => 'Tekstregel'
-        );
-        $this->fieldTypes[] = array(
-            'class' => TextareaField::class,
-            'label' => 'Tekstveld (multi-line)'
-        );
-        $this->fieldTypes[] = array(
-            'class' => EmailField::class,
-            'label' => 'E-mail'
-        );
-        $this->fieldTypes[] = array(
-            'class' => SelectField::class,
-            'label' => 'Select-field'
-        );
-        $this->fieldTypes[] = array(
-            'class' => RadioField::class,
-            'label' => 'Radio buttons'
-        );
-        
-        
-        $this->validators[] = array(
-            'class' => NotEmptyValidator::class,
-            'label' => 'Waarde verplicht'
-        );
-        $this->validators[] = array(
-            'class' => NotFirstOptionValidator::class,
-            'label' => 'Eerste waarde niet toegestaan (radio/select veld)'
-        );
-        $this->validators[] = array(
-            'class' => EmailValidator::class,
-            'label' => 'E-mail validation'
-        );
-        $this->validators[] = array(
-            'class' => IbanValidator::class,
-            'label' => 'IBAN validation'
-        );
+
     }
     
     
@@ -100,11 +59,14 @@ class webformsController extends BaseController {
         $this->form->bind( $this->webform );
         
         if (is_post()) {
-            $this->form->bind($this->form);
+            $this->form->bind($_REQUEST);
             
             if ($this->form->validate()) {
-//                 $webformService->saveWebform($this->form);
+                $webform = $webformService->saveWebform($this->form);
                 
+                report_user_message('Wijzigingen opgeslagen');
+                
+                redirect('/?m=fastsite&c=webforms&a=edit&id='.$webform->getWebformId());
             }
         }
         
@@ -115,12 +77,14 @@ class webformsController extends BaseController {
     }
     
     public function action_load_widget() {
+
+        $form = new WebformForm();
         
         $class = isset($this->class) ? $this->class : get_var('class');
         
         // lookup if requested widget exists
         $found = false;
-        foreach($this->fieldTypes as $it) {
+        foreach($form->getWebformFieldTypes() as $it) {
             if ($it['class'] == $class) {
                 $found = true;
             }
@@ -142,8 +106,9 @@ class webformsController extends BaseController {
         $r['success'] = true;
         $r['html'] = get_template($f, 
             array(
+                'class' => $class,
                 'fieldtype' => $fieldtype,
-                'validators' => $this->validators
+                'validators' => $form->getWebformValidators()
             )
         );
         
