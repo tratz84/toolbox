@@ -51,7 +51,12 @@ class FastsiteTemplateParser {
             $$key = $val;
         }
         
-        include $file;
+        try {
+            include $file;
+        } catch (\Error $err) {
+            // catch error
+            print $err->getFile() . ':'.$err->getLine().': ' . $err->getMessage() . ' ('.$err->getCode().')';
+        }
         
         return ob_get_clean();
         
