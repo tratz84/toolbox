@@ -131,11 +131,23 @@ class webformsController extends BaseController {
         }
         
         
-        $fieldtype = substr($class, strrpos($class, '\\'));
+        $fieldtype = substr($class, strrpos($class, '\\')+1);
         
         $f = module_file('fastsite', 'templates/webforms/fieldtype/'.$fieldtype.'.php');
+        if (!$f) {
+            $f = module_file('fastsite', 'templates/webforms/fieldtype/default.php');
+        }
         
+        $r = array();
+        $r['success'] = true;
+        $r['html'] = get_template($f, 
+            array(
+                'fieldtype' => $fieldtype,
+                'validators' => $this->validators
+            )
+        );
         
+        $this->json($r);
     }
     
     

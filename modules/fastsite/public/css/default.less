@@ -50,6 +50,29 @@
 	}
 	
 	
+	.webform-fields .webform-field {
+		position: relative;
+		
+		background-color: #fafafa;
+		border-bottom: 1px solid #ccc;
+		margin-bottom: 10px;
+		padding-bottom: 10px;
+		
+		&:last-child { border-bottom: 0; }
+		
+		.toolbox {
+			display: none;
+			a { font-size: 20px; }
+			a.move-handle { color: #000; }
+			a.fa-remove { color: #f00; }
+			position: absolute;
+			right: 0px;
+		}
+		&:hover .toolbox { display: block; }
+		
+		
+		.option-move-handler { cursor: pointer; }
+	}
 	
 	
 	.filelist-container {
