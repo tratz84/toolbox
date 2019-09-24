@@ -9,6 +9,7 @@ use core\event\EventBus;
 use core\exception\InvalidStateException;
 use core\filter\FilterChain;
 use core\filter\DispatchFilter;
+use core\container\ObjectHookCall;
 
 
 if (is_standalone_installation() == false) {
@@ -71,8 +72,11 @@ $eb->subscribe('core', 'pre-call-'.FilterChain::class.'::execute', new CallbackP
         return;
     }
     
-    $src = $evt->getSource();
-    $filterChain = $src[0];
+    /**
+     * @var ObjectHookCall $ohc
+     */
+    $ohc = $evt->getSource();
+    $filterChain = $ohc->getObject();
     $filterChain->clearFilters();
    
     $filterChain->addFilter( new \fastsite\filter\FastsiteSessionFilter() );

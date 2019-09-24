@@ -122,7 +122,8 @@ if ($invoiceSettings->getIntracommunautair()) {
     });
     
     $eb->subscribe('core', 'post-call-base\\service\\CompanyService::readCompany', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
-        list($companyService, $company, $arguments) = $evt->getSource();
+        $ohc = $evt->getSource();
+        $company = $ohc->getReturnValue();
         
         if ($company->getCompanyId()) {
             $invoiceService = ObjectContainer::getInstance()->get(InvoiceService::class);
@@ -136,9 +137,10 @@ if ($invoiceSettings->getIntracommunautair()) {
     }));
     // handle saveCompany
     $eb->subscribe('core', 'post-call-base\\service\\CompanyService::save', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
-        list($companyService, $returnValue, $arguments) = $evt->getSource();
+        $ohc = $evt->getSource();
+        $arguments = $ohc->getArguments();
         
-        $companyId = $returnValue;
+        $companyId = $ohc->getReturnValue();
         
         if ($companyId) {
             $invoiceService = ObjectContainer::getInstance()->get(InvoiceService::class);
