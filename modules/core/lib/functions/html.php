@@ -143,6 +143,17 @@ function get_component($module, $controller, $action, $vars=array()) {
     return ob_get_clean();
 }
 
+function get_template($file, $vars=array()) {
+    foreach($vars as $key => $val) {
+        $$key = $val;
+    }
+    
+    ob_start();
+    include $file;
+    
+    return ob_get_clean();
+}
+
 
 
 function include_footer_tabs($moduleName, $actionName, $source) {

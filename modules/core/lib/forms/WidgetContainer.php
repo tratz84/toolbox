@@ -17,7 +17,7 @@ class WidgetContainer extends BaseWidget {
     protected $blnDoBinding = false;
     protected $bindHooks = array();
     
-    public function __construct($name='widget-containre') {
+    public function __construct($name='widget-container') {
         $this->setName($name);
     }
     

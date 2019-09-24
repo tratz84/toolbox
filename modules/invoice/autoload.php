@@ -9,6 +9,7 @@ use core\event\EventBus;
 use core\event\PeopleEvent;
 use invoice\InvoiceSettings;
 use invoice\model\CompanySetting;
+use invoice\model\Invoice;
 use invoice\model\Offer;
 use invoice\service\InvoiceService;
 use invoice\service\OfferService;
@@ -120,8 +121,9 @@ if ($invoiceSettings->getIntracommunautair()) {
         $form->addWidget($w);
     });
     
-    $eb->subscribe('core', 'object-hook-base\\service\\CompanyService::readCompany', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
-        list($company, $arguments) = $evt->getSource();
+    $eb->subscribe('core', 'post-call-base\\service\\CompanyService::readCompany', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+        $ohc = $evt->getSource();
+        $company = $ohc->getReturnValue();
         
         if ($company->getCompanyId()) {
             $invoiceService = ObjectContainer::getInstance()->get(InvoiceService::class);
@@ -134,8 +136,11 @@ if ($invoiceSettings->getIntracommunautair()) {
         }
     }));
     // handle saveCompany
-    $eb->subscribe('core', 'object-hook-base\\service\\CompanyService::save', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
-        list($companyId, $arguments) = $evt->getSource();
+    $eb->subscribe('core', 'post-call-base\\service\\CompanyService::save', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+        $ohc = $evt->getSource();
+        $arguments = $ohc->getArguments();
+        
+        $companyId = $ohc->getReturnValue();
         
         if ($companyId) {
             $invoiceService = ObjectContainer::getInstance()->get(InvoiceService::class);
@@ -195,4 +200,13 @@ $eb->subscribe('core', 'lookupobject', new CallbackPeopleEventListener(function(
     
 }));
 
+$eb->subscribe('base', 'report-summaryPerMonth', new CallbackPeopleEventListener(function($evt) {
+    $datasources = $evt->getSource();
+    
+    $datasources->add([
+        'label' => 'Factuur bedragen',
+        'url' => '/?m=invoice&c=report/summaryPerMonth'
+    ]);
+    
+}));
 

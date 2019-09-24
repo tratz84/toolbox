@@ -13,7 +13,7 @@ class fileController extends BaseController {
         }
         
         header('Content-Disposition: attachment; filename="' . basename($f) . '"');
-        header('Content-type: '.mime_content_type($f));
+        header('Content-type: '.file_mime_type($f));
         
         readfile($f);
         

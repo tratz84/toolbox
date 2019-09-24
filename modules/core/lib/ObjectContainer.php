@@ -81,6 +81,12 @@ class ObjectContainer {
         
         $obj = new $className(...$params);
         
+        $isObjectHookable = is_a($obj, ObjectHookable::class);
+        
+        if (defined('ADMIN_CONTEXT') == false && $isObjectHookable) {
+            $obj = new ObjectHookProxy( $obj );
+        }
+        
         $eb = ObjectContainer::getInstance()->get(EventBus::class);
         $eb->publishEvent($obj, 'core', 'create-'.$className);
         

@@ -4,6 +4,7 @@
 namespace core\forms;
 
 use core\db\DBObject;
+use core\exception\InvalidStateException;
 
 class BaseWidget {
     
@@ -71,8 +72,10 @@ class BaseWidget {
         
         if (is_a($obj, DBObject::class)) {
             $arr = $obj->getFields();
-        } else {
+        } else if (is_array($obj)) {
             $arr = $obj;
+        } else {
+            throw new InvalidStateException('Invalid object given');
         }
         
         $fieldCount=0;

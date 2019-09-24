@@ -10,9 +10,9 @@
 	</div>
 
     <?php if ($isNew) : ?>
-    <h1>Bedrijf toevoegen</h1>
+    <h1>Bedrijf toevoegen: <span id="h1-company-name"></span></h1>
     <?php else : ?>
-    <h1><?= esc_html($form->getWidgetValue('company_name')) ?></h1>
+    <h1><span id="h1-company-name"><?= esc_html($form->getWidgetValue('company_name')) ?></span></h1>
     <?php endif; ?>
 </div>
 
@@ -26,3 +26,13 @@
 ?>
 
 <br/>
+
+
+<script>
+
+$(document).ready(function() {
+	link_input2text('[name=company_name]', '#h1-company-name');
+});
+
+</script>
+

@@ -3,7 +3,9 @@
 namespace core\filter;
 
 
-class FilterChain {
+use core\container\ObjectHookable;
+
+class FilterChain implements ObjectHookable {
 	
 	
 	protected $filters = array();
@@ -14,6 +16,22 @@ class FilterChain {
 	public function __construct() {
 	    
 	}
+	
+	public function removeFilterNo($no) {
+	    $newFilters = array();
+	    
+	    for($x=0; $x < count($this->filters); $x++) {
+	        if ($x == $no) {
+	            continue;
+	        }
+	        
+	        $newFilters[] = $this->filters[$x];
+	    }
+	    
+	    $this->filters = $newFilters;
+	}
+	
+	public function clearFilters() { $this->filters = array(); }
 	
 	public function addFilter($filter) {
 		$this->filters[] = $filter;

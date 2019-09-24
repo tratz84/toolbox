@@ -227,13 +227,15 @@ class ImapConnection {
         if (is_cli()) {
             print "Saving e-mail to file: $file\n";
         }
-        $r = file_put_contents($file, $str);
         
-        if ($r !== false) {
-            return true;
-        }
+        $fh = fopen($file, 'w');
+        if (!$fh)
+            return false;
         
-        return false;
+        $r = fwrite($fh, $str);
+        fclose($fh);
+        
+        return $r;
     }
     
     public function importInbox(Connector $connector) {

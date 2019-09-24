@@ -25,6 +25,8 @@ $eb->subscribe('report', 'menu-list', new CallbackPeopleEventListener(function($
      */
     $reportMenuList = $evt->getSource();
     
+    $reportMenuList->addMenuItem('Algemeen - Maandoverzicht', 'base', 'report/summaryPerMonthController');
+    
     $reportMenuList->addMenuItem('Klantenoverzicht', 'base', 'report/customerReportController', '/?m=base&c=report/customerReport&a=xls');
     
     if (hasCapability('base', 'list-activity')) {

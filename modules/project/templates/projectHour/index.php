@@ -66,7 +66,7 @@ t.addColumn({
 t.addColumn({
 	fieldName: 'end_time',
 	fieldDescription: 'Eind',
-	fieldType: 'text',
+	fieldType: 'datetime',
 	searchable: false
 });
 

@@ -115,7 +115,7 @@ class SignRequestService extends ServiceBase {
         $offerService = $oc->get(OfferService::class);
         $offer = $offerService->readOffer( $f->getWidget('ref_id')->getValue() );
         
-        ActivityUtil::logActivity($offer->getCompanyId(), $offer->getPersonId(), 'offer', $f->getWidget('offer_id')->getValue(), 'signrequest', 'SignRequest verstuurt voor offerte ' . $offer->getOfferNumberText());
+        ActivityUtil::logActivity($offer->getCompanyId(), $offer->getPersonId(), 'offer', $offer->getOfferId(), 'signrequest', 'SignRequest verstuurt voor offerte ' . $offer->getOfferNumberText());
         
         return $message;
     }

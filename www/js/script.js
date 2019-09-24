@@ -12,6 +12,28 @@ $(document).ready(function() {
 	}, 60 * 1000);
 	
 	
+	$('.nav-side-menu .menu-list .menu-item > a.nav-link').on('touchend click', function() {
+		
+		if ($(window).width( ) < 767) {
+			// no child menu's? -> nothing to expand
+			if ($(this).closest('.menu-item').find('.child-menu').length == 0) {
+				return true;
+			}
+
+			var mi = $(this).closest('li.menu-item');
+			var isOpen = mi.hasClass('menu-item-open');
+			
+			$(this).closest('div.menu-list').find('li.menu-item-open').removeClass('menu-item-open');
+			
+			if (isOpen == false) {
+				mi.addClass('menu-item-open');
+			}
+			
+			return false;
+		}
+	});
+
+	
 	
 	applyWidgetFields(document.body);
 	
@@ -164,7 +186,7 @@ function applyWidgetFields(container) {
 	
 	if (typeof $(document).tinymce == 'function') {
 		$('.input-tinymce').tinymce({
-			plugins: 'paste',
+			plugins: 'paste,code,link,fullpage,media,paste,table,textcolor,wordcount,contextmenu,colorpicker',
 			paste_data_images: true
 		});
 	}
@@ -317,7 +339,14 @@ $(document).ready(function() {
 		}
 		
 		if ($('.nav-side-menu').css('display') == 'block') {
-			if (evt.clientX >= $('.nav-side-menu').width()) {
+			var w = $('.nav-side-menu').width();
+			
+			// childmenu support
+			var cmw = $('.nav-side-menu .child-menu:visible').width();
+			if (isNaN(cmw) == false)
+				w += cmw;
+			
+			if (evt.clientX >= w) {
 				$('.nav-side-menu').css('display', 'none');
 			}
 		} else {
@@ -377,11 +406,7 @@ function format_customername(record) {
 
 
 function appUrl(u) {
-	if (appSettings.standalone_installation) {
-		return appSettings.base_href + u.substr(1);
-	} else {
-		return appSettings.base_href + appSettings.contextName + u;
-	}
+	return appSettings.appRootUrl + u.substr(1);
 }
 
 function formpost(url, data, opts) {
@@ -1327,6 +1352,9 @@ function text2date(str) {
 	var minuts = 0;
 	var seconds = 0;
 	
+	if (str == null)
+		return null;
+	
 	if (str.match(/^\d{4}-\d{2}-\d{2}$/)) {
 		var tokens = str.split('-');
 		year  = parseInt(tokens[0]);
@@ -1484,6 +1512,28 @@ function fill_form(form, obj) {
 		}
 	}
 }
+
+function link_input2text(src, dst) {
+	var obj1 = $(src);
+	
+	obj1.on('keyup change', function() {
+		if (typeof dst == 'function') {
+			dst( );
+		} else {
+			var t = '';
+			if (this.nodeName == 'SELECT') {
+				t = $(this).find('option:selected').text();
+				t = $.trim( t );
+			} else {
+				t = this.value;
+			}
+			
+			$(dst).text( t );
+		}
+	});
+}
+
+
 
 
 

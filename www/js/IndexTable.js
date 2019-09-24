@@ -544,7 +544,10 @@ function IndexTable( container, opts ) {
 							fieldText = '';
 						} else {
 							dt = text2date(fieldText);
-							fieldText = format_datetime(dt);
+							if (dt != null)
+								fieldText = format_datetime(dt);
+							else
+								fieldText = '';
 						}
 					}
 

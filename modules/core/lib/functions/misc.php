@@ -37,6 +37,8 @@ function appUrl($u) {
         $url = BASE_HREF . $contextName . $u;
     }
     
+    $url = apply_filter('appUrl', $url);
+    
     return $url;
 }
 
@@ -63,6 +65,17 @@ function app_request_uri() {
     }
 }
 
+function request_uri_no_params() {
+    $uri = $_SERVER['REQUEST_URI'];
+    $p = strrpos($uri, '?');
+    
+    if ($p !== false) {
+        $uri = substr($uri, 0, $p);
+    }
+    
+    return $uri;
+}
+
 
 function redirect($url) {
     
@@ -80,7 +93,14 @@ function remote_addr() {
 }
 
 
-function list_files($path) {
+function list_files($path, $opts=array()) {
+    $path = realpath( $path );
+    
+    if (!$path)
+        return false;
+    
+    if (isset($opts['basepath']) == false)
+        $opts['basepath'] = $path;
     
     $dh = opendir( $path );
     if (!$dh) return false;
@@ -90,11 +110,114 @@ function list_files($path) {
     while ($f = readdir($dh)) {
         if ($f == '.' || $f == '..') continue;
         
-        $files[] = $f;
+        if (isset($opts['append-slash']) && $opts['append-slash'] && is_dir( $path . '/' . $f )) {
+            $files[] = $f . '/';
+        } else {
+            $files[] = $f;
+        }
+        
+        
+        if (isset($opts['recursive']) && $opts['recursive'] && is_dir($path.'/'.$f)) {
+            $subfiles = list_files($path . '/' . $f, $opts);
+            
+            for($x=0; $x < count($subfiles); $x++) {
+                $subfile = $subfiles[$x];
+                
+                if (strpos($subfiles[$x], $opts['basepath']) !== false)
+                    $subfile = substr($subfile, strlen($opts['basepath']));
+                
+                $subfile = $f . '/' . $subfiles[$x];
+                
+                $subfiles[$x] = $subfile;
+            }
+            
+            $files = array_merge($files, $subfiles);
+        }
+        
     }
     
     return $files;
 }
+
+function file_extension($file) {
+    $p = strrpos($file, '.');
+    
+    if ($p === false) {
+        return false;
+    }
+    
+    $ext = substr($file, $p+1);
+    $ext = strtolower($ext);
+    
+    return $ext;
+}
+
+function file_mime_type($file) {
+    
+    $mime_types = array(
+        'txt' => 'text/plain',
+        'htm' => 'text/html',
+        'html' => 'text/html',
+        'php' => 'text/html',
+        'css' => 'text/css',
+        'js' => 'application/javascript',
+        'json' => 'application/json',
+        'xml' => 'application/xml',
+        'swf' => 'application/x-shockwave-flash',
+        'flv' => 'video/x-flv',
+        
+        // images
+        'png' => 'image/png',
+        'jpe' => 'image/jpeg',
+        'jpeg' => 'image/jpeg',
+        'jpg' => 'image/jpeg',
+        'gif' => 'image/gif',
+        'bmp' => 'image/bmp',
+        'ico' => 'image/vnd.microsoft.icon',
+        'tiff' => 'image/tiff',
+        'tif' => 'image/tiff',
+        'svg' => 'image/svg+xml',
+        'svgz' => 'image/svg+xml',
+        
+        // archives
+        'zip' => 'application/zip',
+        'rar' => 'application/x-rar-compressed',
+        'exe' => 'application/x-msdownload',
+        'msi' => 'application/x-msdownload',
+        'cab' => 'application/vnd.ms-cab-compressed',
+        
+        // audio/video
+        'mp3' => 'audio/mpeg',
+        'qt' => 'video/quicktime',
+        'mov' => 'video/quicktime',
+        
+        // adobe
+        'pdf' => 'application/pdf',
+        'psd' => 'image/vnd.adobe.photoshop',
+        'ai' => 'application/postscript',
+        'eps' => 'application/postscript',
+        'ps' => 'application/postscript',
+        
+        // ms office
+        'doc' => 'application/msword',
+        'rtf' => 'application/rtf',
+        'xls' => 'application/vnd.ms-excel',
+        'ppt' => 'application/vnd.ms-powerpoint',
+        
+        // open office
+        'odt' => 'application/vnd.oasis.opendocument.text',
+        'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
+    );
+    
+    $ext = file_extension($file);
+    
+    if (isset($mime_types[$ext])) {
+        return $mime_types[$ext];
+    }
+    
+    return 'application/octet-stream';
+}
+
 
 
 function load_php_file($file) {
@@ -181,6 +304,27 @@ function delete_data_file($f) {
     return unlink($file);
 }
 
+function delete_data_path($path, $recursive = false) {
+    $fullpath = get_data_file($path);
+    
+    if ($fullpath === false)
+        return false;
+    
+    if (is_file($fullpath)) {
+        return unlink($fullpath);
+    } else if (is_dir($fullpath)) {
+        if ($recursive) {
+            $subfiles = list_data_directory( $path );
+            
+            foreach($subfiles as $subfile) {
+                delete_data_path( $path . '/' . $subfile, true );
+            }
+        }
+        
+        return rmdir( $fullpath );
+    }
+}
+
 /**
  * lists only files (not directories)
  */
@@ -207,6 +351,51 @@ function list_data_files($pathInDataDir) {
     return $files;
 }
 
+/**
+ * lists all files + directories
+ */
+function list_data_directory($pathInDataDir) {
+    $ctx = Context::getInstance();
+    
+    $datadirContext = realpath($ctx->getDataDir());
+    if ($datadirContext == false)
+        return array();
+        
+        $dir = realpath( $datadirContext . '/' . $pathInDataDir );
+    if (strpos($dir, $datadirContext) !== 0)
+        return array();
+    
+    $dh = opendir($dir);
+    $files = array();
+    while ($f = readdir($dh)) {
+        if ($f == '.' || $f == '..') continue;
+        
+        $files[] = $f;
+    }
+    closedir($dh);
+    
+    return $files;
+}
+
+
+function get_data_file_safe($basePath, $subPath) {
+    // get fullpath for base
+    $basePath = get_data_file( $basePath );
+    if (!$basePath) {
+        return false;
+    }
+    
+    $fullpath = realpath( $basePath . '/' . $subPath);
+    if ($fullpath == false) {
+        return false;
+    }
+    
+    if (strpos($fullpath, $basePath) === 0) {
+        return $fullpath;
+    }
+    
+    return false;
+}
 
 function get_data_file($f) {
     $ctx = Context::getInstance();
@@ -321,6 +510,26 @@ function date2unix($input)
 {
     $input = trim($input);
 
+    if (strpos($input, '/Date(') !== false) {
+        $matches = array();
+        
+        if (preg_match('/\/Date\((\\d+)\\)\\//', $input, $matches) && count($matches) == 2) {
+            return intval($matches[1] / 1000);
+        }
+    }
+
+    if (preg_match('/^\\d{8}+$/', $input)) {
+        $d2uy = (int)substr($input, 0, 4);
+        $d2um = (int)substr($input, 4, 2);
+        $d2ud = (int)substr($input, 6, 2);
+
+        if ($d2uy > 1850 && $d2uy < 2500 && $d2um >= 1 && $d2um <= 12 && $d2ud >= 1 && $d2ud <= 31) {
+            return mktime(12, 0, 0, $d2um, $d2ud, $d2uy);
+        }
+    }
+
+
+    
     if ($input == "0000-00-00") { // ongeldige datum
         return null;
     } else if (preg_match('/^\\d{4}-\\d{1,2}-\\d{1,2} \\d{2}:\\d{2}:\\d{2}$/', $input)) { // jaar-maand-dag uur:minuut:seconde
@@ -654,6 +863,7 @@ function slugify($str) {
     
     $str = strtolower($str);
     $str = trim($str);
+    $str = str_replace('\\', '-', $str);
     $str = preg_replace('/[^a-z0-9 \\-\\_]/', '', $str);
     $str = str_replace(' ', '-', $str);
     $str = str_replace('_', '-', $str);

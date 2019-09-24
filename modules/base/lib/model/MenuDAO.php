@@ -46,8 +46,6 @@ class MenuDAO extends \core\db\DAOObject {
 	    if (hasCapability('webmail', 'send-mail'))
 	        $arr[] = array('menu_code' => 'webmail',      'sort' => 1500, 'visible' => 1, 'icon' => 'fa-send',    'label' => 'E-mail',   'url' => '/?m=webmail&c=email');
 	        
-	    $arr[] = array('menu_code' => 'filesync',        'sort' => 1600, 'visible' => 1, 'icon' => 'fa-file',      'label' => 'Filesync',       'url' => '/?m=filesync&c=store');
-	    
 	    if (hasCapability('report', 'show-reports'))
 	        $arr[] = array('menu_code' => 'report',          'sort' => 1700, 'visible' => 1, 'icon' => 'fa-signal',    'label' => 'Rapportage',     'url' => '/?m=report&c=report');
 	    $arr[] = array('menu_code' => 'support',         'sort' => 1800, 'visible' => 1, 'icon' => 'fa-support', 'label' => 'Support', 'url' => '/?m=support&c=ticketList');

@@ -33,6 +33,9 @@ class StoreDAO extends \core\db\DAOObject {
 	    $this->query('update filesync__store set last_file_change = ? where store_id = ?', array($time, $storeId));
 	}
 	
+	public function readArchives() {
+	    return $this->queryList("select * from filesync__store where store_type='archive' order by store_name");
+	}
 	
 }
 

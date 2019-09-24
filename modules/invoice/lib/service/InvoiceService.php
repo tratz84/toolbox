@@ -3,20 +3,27 @@
 
 namespace invoice\service;
 
+use base\forms\FormChangesHtml;
 use base\service\CustomerService;
 use base\util\ActivityUtil;
 use core\ObjectContainer;
+use core\container\ObjectHookable;
+use core\exception\InvalidStateException;
 use core\exception\ObjectNotFoundException;
 use core\forms\lists\ListResponse;
 use core\service\ServiceBase;
+use function format_date;
+use function next_month;
 use invoice\InvoiceSettings;
 use invoice\form\InvoiceForm;
+use invoice\form\PriceAdjustmentForm;
 use invoice\form\ToBillForm;
 use invoice\form\VatForm;
 use invoice\model\CompanySetting;
 use invoice\model\CompanySettingDAO;
 use invoice\model\Invoice;
 use invoice\model\InvoiceDAO;
+use invoice\model\InvoiceLine;
 use invoice\model\InvoiceLineDAO;
 use invoice\model\InvoiceStatus;
 use invoice\model\InvoiceStatusDAO;
@@ -26,10 +33,7 @@ use invoice\model\ToBill;
 use invoice\model\ToBillDAO;
 use invoice\model\Vat;
 use invoice\model\VatDAO;
-use core\container\ObjectHookable;
-use invoice\model\InvoiceLine;
-use base\forms\FormChangesHtml;
-use invoice\form\PriceAdjustmentForm;
+use project\model\ProjectDAO;
 
 class InvoiceService extends ServiceBase implements ObjectHookable {
 
@@ -601,6 +605,52 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
         $tbDao->delete($toBillId);
 
         ActivityUtil::logActivity($tobill->getCompanyId(), $tobill->getPersonId(), 'to_bill', $tobill->getToBillId(), 'to-bill-deleted', 'Billable verwijderd', null, $changes);
+    }
+    
+    
+    public function totalsPerMonth($startPeriod, $endPeriod) {
+        if (preg_match('/^\\d{4}-\\d{2}$/', $startPeriod) == false) {
+            throw new InvalidStateException('Startperiod not valid');
+        }
+        if (preg_match('/^\\d{4}-\\d{2}$/', $endPeriod) == false) {
+            throw new InvalidStateException('Endperiod not valid');
+        }
+        
+        $iDao = new InvoiceDAO();
+        
+        $totals = $iDao->totalsPerMonth($startPeriod, $endPeriod);
+        
+        $list = array();
+        $start = format_date($startPeriod.'-15', 'Y-m-15');
+        $end = format_date($endPeriod.'-15', 'Y-m-15');
+        
+        $ymStart = (int)format_date($start, 'Ym');
+        $ymEnd = (int)format_date($end, 'Ym');
+        while($ymStart <= $ymEnd) {
+            $month = format_date($start, 'Y-m');
+            $sum_excl_vat=0;
+            $sum_incl_vat = 0;
+            
+            foreach($totals as $t) {
+                if ($t['month'] == $month) {
+                    $sum_excl_vat = $t['sum_excl_vat'];
+                    $sum_incl_vat = $t['sum_incl_vat'];
+                    break;
+                }
+            }
+            
+            $list[] = array(
+                'month' => $month,
+                'amount' => $sum_excl_vat,
+                'sum_excl_vat' => $sum_excl_vat,
+                'sum_incl_vat' => $sum_incl_vat
+            );
+            
+            $start = next_month($start);
+            $ymStart = (int)format_date($start, 'Ym');
+        }
+        
+        return $list;
     }
 
 
