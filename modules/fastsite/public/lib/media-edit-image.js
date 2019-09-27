@@ -322,8 +322,17 @@ function MediaEditImage(container, url, opts) {
 	this.setZoom = function(val) {
 		val = parseInt(val);
 		
+		var oldZoom = this.zoom;
+		
 		if (!isNaN(val)) {
 			this.zoom = val;
+		}
+		
+		if (this.zoom != oldZoom) {
+			this.crop.pos1.x = this.crop.pos1.x / oldZoom * this.zoom;
+			this.crop.pos1.y = this.crop.pos1.y / oldZoom * this.zoom;
+			this.crop.pos2.x = this.crop.pos2.x / oldZoom * this.zoom;
+			this.crop.pos2.y = this.crop.pos2.y / oldZoom * this.zoom;
 		}
 		
 		this.drawImage();
