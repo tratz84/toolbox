@@ -3,6 +3,7 @@
 namespace core\filter;
 
 
+use core\Context;
 
 class ModulePublicFilter {
     
@@ -12,6 +13,27 @@ class ModulePublicFilter {
     
     
     public function doFilter($filterChain) {
+        
+        // /apple-
+        if (strpos($_SERVER['REQUEST_URI'], '/apple-touch-icon-') !== false || $_SERVER['REQUEST_URI'] == '/favicon.ico') {
+            http_response_code(404);
+            print 'File not found';
+            exit;
+        }
+        if ($_SERVER['REQUEST_URI'] == '/robots.txt') {
+            if (Context::getInstance()->isModuleEnabled('fastsite') == false) {
+                header('Content-type: text/plain');
+                print "User-agent: *\n";
+                print "Disallow: /\n";
+                exit;
+            } else {
+                header('Content-type: text/plain');
+                print "User-agent: *\n";
+                print "Disallow: /backend/\n";
+                exit;
+            }
+        }
+        
         
         $uri = app_request_uri();
         
