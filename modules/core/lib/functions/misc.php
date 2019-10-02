@@ -57,7 +57,7 @@ function app_request_uri() {
         
         $matches = array();
         if (preg_match('/^\\/([a-zA-Z0-9_-]+)?\\/.*/', $uri, $matches) == false) {
-            throw new \core\exception\InvalidStateException('context not found');
+            throw new \core\exception\ContextNotFoundException('context not found');
         }
         
         $uri = substr($uri, strlen($matches[1])+1);
