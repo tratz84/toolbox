@@ -29,7 +29,33 @@
 
 $(document).ready(function() {
 	link_input2text('[name=company_name]', '#h1-company-name');
+
+
+	$('[name=vat_number]').change(function() {
+		var v = $.trim(this.value);
+		if (v == '') {
+			$(this).css('border', '');
+			return;
+		}
+		
+		$.ajax({
+			url: appUrl('/?m=base&c=company'),
+			data: {
+				a: 'check_vat_number',
+				vat_number: this.value
+			},
+			success: function(xhr, data, textStatus) {
+				if (xhr.success) {
+					$('[name=vat_number]').css('border', '');
+				} else {
+					$('[name=vat_number]').css('border', '1px solid #f00');
+					showInlineWarning('Let op, btw-nummer verificatie mislukt', { timeout: 2000 });
+				}
+			}
+		});
+	});
 });
+
 
 </script>
 

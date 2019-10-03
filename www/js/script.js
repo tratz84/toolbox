@@ -609,13 +609,21 @@ function showAlert(title, body, callback_ok) {
 }
 
 
-function showInlineWarning(message) {
+function showInlineWarning(message, opts) {
+	opts = opts ? opts : {};
+	
 	$('.js-inline-warning').remove();
 	
 	var html = $('<div  class="js-inline-warning alert alert-warning" />');
 	html.append(message);
 	
 	$('.main-content').prepend(html);
+	
+	if (opts.timeout) {
+		setTimeout(function() {
+			$(html).slideUp(function() { $(this).remove(); });
+		}, opts.timeout);
+	}
 }
 
 function showInlineSecondary(message) {
