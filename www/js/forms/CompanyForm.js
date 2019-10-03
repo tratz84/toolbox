@@ -10,9 +10,25 @@ $(document).ready(function() {
 	});
 	
 	
-	$('.form-generator.form-company-form [name=vat_number]').change(function() {
+	var objVatnr = $('.form-generator.form-company-form [name=vat_number]');
+	objVatnr.change(function() {
 		cf_validateVatNumber();
 	});
+	
+	var anchLookup = $('<a href="javascript:void(0);" class="fa fa-search"></a>');
+	anchLookup.click(function() {
+		var nr = $('[name=vat_number]').val();
+		
+		if ($.trim(nr) == '') {
+			showAlert('Geen nummmer ingevoerd', 'Geen BTW nummer ingevoerd');
+			return;
+		}
+		
+		window.open( appUrl('/?m=base&c=company&a=view_vat_number&nr=' + encodeURI(nr)), '_blank' );
+	});
+	objVatnr.parent().append('&nbsp;');
+	objVatnr.parent().append( anchLookup );
+	
 });
 
 

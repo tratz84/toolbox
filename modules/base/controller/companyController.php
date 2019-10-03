@@ -130,6 +130,21 @@ class companyController extends BaseController {
     }
     
     
+    public function action_view_vat_number() {
+        $vcaService = object_container_get(VatCheckApiService::class);
+        
+        $this->nr = get_var('nr');
+        
+        try {
+            $this->response = $vcaService->checkVat( $this->nr );
+//             var_export($this->response);exit;
+        } catch (\Exception $ex) {
+            $this->error = $ex->getMessage();
+        }
+        
+        $this->render();
+    }
+    
     public function action_check_vat_number() {
         $vcaService = object_container_get(VatCheckApiService::class);
         
