@@ -136,7 +136,8 @@ class companyController extends BaseController {
         $this->nr = get_var('nr');
         
         try {
-            $this->response = $vcaService->checkVat( $this->nr );
+            $this->validVat = $vcaService->validateVat( $this->nr );
+            $this->vatInfo = $vcaService->vatInfo( $this->nr );
 //             var_export($this->response);exit;
         } catch (\Exception $ex) {
             $this->error = $ex->getMessage();
@@ -152,10 +153,10 @@ class companyController extends BaseController {
         $r['success'] = false;
         
         try {
-            $result = $vcaService->checkVat( get_var('vat_number') );
-            if (is_object($result) && isset($result->valid) && $result->valid) {
+            $validVat = $vcaService->validateVat( get_var('vat_number') );
+            if ($validVat) {
                 $r['success'] = true;
-                $r['data'] = (array)$result;
+                $r['data'] = (array)$vcaService->vatInfo( get_var('vat_number') );;
             }
         } catch (\Exception $ex) {
             $r['error'] = $ex->getMessage();

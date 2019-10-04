@@ -5,18 +5,32 @@ namespace base\externalapi;
 
 class VatCheckApiService {
     
+    protected $soapCache = array();
+    
     
     /**
-     * checkVat() - checks a vatnumber with the 'VIES' service
+     * validateVat() - checks a vatnumber with the 'VIES' service
      * 
-     * if valid, returns an object with vat-information
-     * else false
-     * 
-     * might throw an Exception if soap-call fails
+     * @return true or false
      */
-    public function checkVat($nr) {
+    public function validateVat($nr) {
+        $r = $this->vatInfo($nr);
+        
+        if (is_object($r) && isset($r) && $r->valid) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    public function vatInfo($nr, $cacheEnabled=true) {
         $nr = strtoupper($nr);
         $nr = preg_replace('/[^A-Z0-9]/', '', $nr);
+        
+        // cached?
+        if ($cacheEnabled && isset($this->soapCache[$nr])) {
+            return $this->soapCache[$nr];
+        }
         
         // regexp source, https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s21.html
         $regexp = "^((AT)?U[0-9]{8}|(BE)?0[0-9]{9}|(BG)?[0-9]{9,10}|(CY)?[0-9]{8}L|(CZ)?[0-9]{8,10}|(DE)?[0-9]{9}|(DK)?[0-9]{8}|(EE)?[0-9]{9}|"
@@ -29,7 +43,7 @@ class VatCheckApiService {
         // check regexp
         $r = preg_match('/'.$regexp.'/', $nr);
         if (!$r) {
-            return false;
+            return null;
         }
         
         
@@ -37,15 +51,22 @@ class VatCheckApiService {
         $countryCode = substr($nr, 0, 2);
         $vatNumber = substr($nr, 2);
         
-        $soapClient = new \SoapClient('http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl');
-        $r = $soapClient->checkVat(array('countryCode' => $countryCode, 'vatNumber' => $vatNumber));
+        try {
+            $soapClient = new \SoapClient('http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl');
+            $r = $soapClient->checkVat(array('countryCode' => $countryCode, 'vatNumber' => $vatNumber));
+        } catch (\Exception $ex) {
+            return null;
+        }
         
-        if (is_object($r) && isset($r) && $r->valid) {
+        if (is_object($r)) {
+            $this->soapCache[$nr] = $r;
             return $r;
         }
         
-        return false;
+        return null;
     }
+    
+    
     
 }
 
