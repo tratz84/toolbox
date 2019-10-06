@@ -1,6 +1,0 @@
-
-add the following to your config/config-local.php
-
-	// frontload module, for catching events FilterChain
-	load_php_file(module_file('fastsite', 'autoload.php'));
-
