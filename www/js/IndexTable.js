@@ -594,7 +594,7 @@ function IndexTable( container, opts ) {
 			$(tbody).sortable({
 				handle: '.sort-handle',
 				update: function(evt) {
-					me.callback_sortUpdate(evt);
+					me.callback_sortUpdate.bind(me)(evt);
 				}
 			})
 		}
