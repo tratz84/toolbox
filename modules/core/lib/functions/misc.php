@@ -900,6 +900,13 @@ function guidv4()
 }
 
 
+function valid_regexp($pattern) {
+    @preg_match('/'.$pattern.'/', '');
+    
+    return preg_last_error() === PREG_NO_ERROR ? true : false;
+}
+
+
 function days_between($start, $end) {
     $s = date2unix($start);
     $e = date2unix($end);
