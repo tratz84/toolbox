@@ -60,6 +60,9 @@ class VatCheckApiService {
         
         if (is_object($r)) {
             $this->soapCache[$nr] = $r;
+            
+            // TODO: wrap response in a class?
+            
             return $r;
         }
         

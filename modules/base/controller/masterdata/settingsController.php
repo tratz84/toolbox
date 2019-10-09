@@ -5,6 +5,7 @@
 use base\service\SettingsService;
 use core\controller\BaseController;
 use core\forms\CheckboxField;
+use core\exception\InvalidStateException;
 
 class settingsController extends BaseController {
     
@@ -36,16 +37,6 @@ class settingsController extends BaseController {
             if ($pageSize >= 10 && $_REQUEST['PAGE_SIZE'] < 100)
                 $settingsService->updateValue('PAGE_SIZE', $pageSize);
 
-            foreach($this->availableModules as $m) {
-                $tag = $m->getTag();
-                
-                if (get_var($tag.'Enabled')) {
-                    $settingsService->updateValue($tag.'Enabled', 1);
-                } else {
-                    $settingsService->updateValue($tag.'Enabled', 0);
-                }
-            }
-            
             $settingsService->updateValue('object_locking', get_var('object_locking')?1:0);
             $settingsService->updateValue('master_base_color', get_var('master_base_color'));
             
@@ -58,5 +49,50 @@ class settingsController extends BaseController {
         
         $this->render();
     }
+    
+    
+    protected function lookupModuleName() {
+        $mod = get_var('mod');
+        $tag = null;
+        
+        $settingsService = $this->oc->get(SettingsService::class);
+        $availableModules = $settingsService->getModuleList();
+        
+        foreach($availableModules as $m) {
+            if ($m->getTag() == $mod) {
+                $tag = $m->getTag();
+            }
+        }
+        
+        if ($tag == null) {
+            throw new InvalidStateException('Module not found');
+        }
+        
+        return $tag;
+    }
+    
+    public function action_activate_module() {
+        $mod = $this->lookupModuleName();
+        
+        $settingsService = $this->oc->get(SettingsService::class);
+        $settingsService->updateValue($mod.'Enabled', 1);
+    
+        report_user_message('Module "'.$mod.'" enabled');
+        
+        redirect('/?m=base&c=masterdata/settings');
+    }
+    
+    public function action_deactivate_module() {
+        $mod = $this->lookupModuleName();
+        
+        $settingsService = $this->oc->get(SettingsService::class);
+        $settingsService->updateValue($mod.'Enabled', 0);
+        
+        report_user_message('Module "'.$mod.'" disabled');
+   
+        redirect('/?m=base&c=masterdata/settings');
+    }
+    
+    
     
 }
