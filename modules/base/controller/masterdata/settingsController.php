@@ -74,6 +74,15 @@ class settingsController extends BaseController {
     public function action_activate_module() {
         $mod = $this->lookupModuleName();
         
+        $moduleName = substr($mod, 0, strrpos($mod, 'Module'));
+        
+        // activation script?
+        $activationFile = module_file($moduleName, 'activate.php');
+        if ($activationFile) {
+            include $activationFile;
+        }
+        
+        // mark as enabled
         $settingsService = $this->oc->get(SettingsService::class);
         $settingsService->updateValue($mod.'Enabled', 1);
     
@@ -85,6 +94,15 @@ class settingsController extends BaseController {
     public function action_deactivate_module() {
         $mod = $this->lookupModuleName();
         
+        $moduleName = substr($mod, 0, strrpos($mod, 'Module'));
+        
+        // de-activation script?
+        $deactivationFile = module_file($moduleName, 'deactivate.php');
+        if ($deactivationFile) {
+            include $deactivationFile;
+        }
+        
+        // mark as disabled
         $settingsService = $this->oc->get(SettingsService::class);
         $settingsService->updateValue($mod.'Enabled', 0);
         
