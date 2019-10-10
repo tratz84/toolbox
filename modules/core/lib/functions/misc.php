@@ -19,6 +19,15 @@ function is_cli() {
 }
 
 
+function is_admin_context() {
+    if (defined('ADMIN_CONTEXT') && ADMIN_CONTEXT == true) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
 function appUrl($u) {
     
     if (defined('ADMIN_CONTEXT')) {

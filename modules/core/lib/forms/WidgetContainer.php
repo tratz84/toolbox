@@ -109,7 +109,7 @@ class WidgetContainer extends BaseWidget {
     public function bind($obj) {
         $fieldCount = 0;
         
-        if (is_a($this, BaseForm::class) && is_a($obj, DBObject::class)) {
+        if (is_admin_context() == false && is_a($this, BaseForm::class) && is_a($obj, DBObject::class)) {
             $this->setObjectLocked( dbobject_is_locked($obj) ? true : false );
         }
         
