@@ -14,6 +14,7 @@ $lang['Company']                = 'Bedrijf';
 $lang['Private']                = 'Particulier';
 
 $lang['Settings']               = 'Instellingen';
+$lang['Cancel']                 = 'Annuleer';
 
 // cronList
 $lang['Scheduled tasks']        = 'Ingeplande taken';

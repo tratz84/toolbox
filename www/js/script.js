@@ -535,7 +535,7 @@ function showConfirmation(title, body, callback_ok) {
 //	html += '        <p>One fine body&hellip;</p>';
 	html += '      </div>';
 	html += '      <div class="modal-footer">';
-	html += '        <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>';
+	html += '        <button type="button" class="btn btn-default" data-dismiss="modal">'+_('Cancel')+'</button>';
 	html += '        <button type="button" class="btn btn-primary">Ok</button>';
 	html += '      </div>';
 	html += '    </div>';	// <!-- /.modal-content -->
