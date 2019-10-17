@@ -50,9 +50,9 @@ class MasterDataMenu {
         $me = $this;
         
         usort($sections, function($n1, $n2) use ($me) {
-            if ($n1 == 'Instellingen')
+            if ($n1 == t('Settings'))
                 return -1;
-            if ($n2 == 'Instellingen')
+                if ($n2 == t('Settings'))
                 return 1;
             
             $prio1 = $me->getSectionPrio($n1);
@@ -85,9 +85,9 @@ class MasterDataMenu {
     
     public static function generate() {
         $mdm = new MasterDataMenu();
-        $mdm->addItem('Instellingen', 'Gebruikersbeheer', '/?m=base&c=user');
-        $mdm->addItem('Instellingen', 'Bedrijfsgegevens', '/?m=base&c=masterdata/companySettings');
-        $mdm->addItem('Instellingen', 'Programma instellingen', '/?m=base&c=masterdata/settings');
+        $mdm->addItem(t('Settings'), t('User Management'), '/?m=base&c=user');
+        $mdm->addItem(t('Settings'), t('Company settings'), '/?m=base&c=masterdata/companySettings');
+        $mdm->addItem(t('Settings'), t('Application settings'), '/?m=base&c=masterdata/settings');
         
         $eb = ObjectContainer::getInstance()->get(\core\event\EventBus::class);
         $eb->publishEvent($mdm, 'masterdata', 'menu');

@@ -95,7 +95,7 @@ $menuItems = $ms->listMainMenu();
             <div class="administration-name">
 	            <a href="javascript:void(0);" class="nav-side-menu-toggle fa fa-caret-left" onclick="navSideMenu_toggle();"></a>
             
-            	<div class="administration-name"><a href="<?= appUrl('/') ?>" title="Dashboard"><?= esc_html($context->getCompanyName()) ?></a></div>
+            	<div class="administration-name"><a href="<?= appUrl('/') ?>" title="Dashboard"><?= apply_filter('base-decorator-administration-name', esc_html($context->getCompanyName())) ?></a></div>
             </div>
         </div>
     </header>

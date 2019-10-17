@@ -1,7 +1,7 @@
 
 
 <div class="page-header">
-	<h1>Stamgegevens</h1>
+	<h1><?= t('Masterdata') ?></h1>
 </div>
 
 

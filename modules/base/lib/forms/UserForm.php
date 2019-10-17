@@ -48,7 +48,7 @@ class UserForm extends BaseForm {
         $this->addWidget( new HtmlDatetimeField('created', '', t('Created on'), array('hide-when-invalid' => true)) );
         
         $this->addWidget( new ListUserIpLineWidget('ips') );
-        $this->getWidget('ips')->setInfoText('Indien hier ip-adressen staan ingevuld, mag de gebruiker alleen vanaf deze adressen zich aanmelden.');
+        $this->getWidget('ips')->setInfoText(t('If IP addresses are entered, the user can only log in from these addresses'));
         
         
         $this->addValidator('username', new NotEmptyValidator());
