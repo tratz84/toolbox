@@ -94,7 +94,11 @@ class settingsController extends BaseController {
     public function action_deactivate_module() {
         $mod = $this->lookupModuleName();
         
-        $moduleName = substr($mod, 0, strrpos($mod, 'Module'));
+        $moduleName = $mod;
+        
+        if (strrpos($moduleName, 'Module') !== false) {
+            $moduleName = substr($moduleName, 0, strrpos($moduleName, 'Module'));
+        }
         
         // de-activation script?
         $deactivationFile = module_file($moduleName, 'deactivate.php');
