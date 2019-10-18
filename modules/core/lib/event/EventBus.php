@@ -34,6 +34,18 @@ class EventBus {
     }
     
     public function publish(PeopleEvent $evt) {
+        if (DEBUG && get_var('c') != 'multiuser') {
+            // TODO: log event
+            $_SESSION['debug']['eventbus-publish'] = $_SESSION['debug']['eventbus-publish'] ?? array();
+            $_SESSION['debug']['eventbus-publish'][] = array(
+                'method' => $_SERVER['REQUEST_METHOD'],
+                'url' => $_SERVER['REQUEST_URI'],
+                'moduleName' => $evt->getModuleName(),
+                'actionName' => $evt->getActionName(),
+                'message'    => $evt->getMessage()
+            );
+        }
+        
         $mn = $evt->getModuleName();
         $an = $evt->getActionName();
         

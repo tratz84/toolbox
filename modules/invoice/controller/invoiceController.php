@@ -66,7 +66,7 @@ class invoiceController extends BaseController {
         }
         
         
-        $invoiceForm = new InvoiceForm();
+        $invoiceForm = $this->oc->create(InvoiceForm::class);
         $invoiceForm->bind($invoice);
         
         if (is_post()) {
