@@ -90,12 +90,15 @@ $menuItems = $ms->listMainMenu();
         <div class="notifications-bar">
             <div class="notifications-right">
                 <span class="current-user"><?= $context->getUser() ?></span>
+            	<?php if (DEBUG) : ?>
+                <a href="javascript:void(0);" onclick="show_debug_info();" class="fa fa-bug" title="Debug info"></a>
+                <?php endif; ?>
                 <a href="<?= appUrl('/?m=base&c=auth&a=logoff') ?>" class="fa fa-sign-out" title="Afmelden"></a>
             </div>
             <div class="administration-name">
 	            <a href="javascript:void(0);" class="nav-side-menu-toggle fa fa-caret-left" onclick="navSideMenu_toggle();"></a>
             
-            	<div class="administration-name"><a href="<?= appUrl('/') ?>" title="Dashboard"><?= esc_html($context->getCompanyName()) ?></a></div>
+            	<div class="administration-name"><a href="<?= appUrl('/') ?>" title="Dashboard"><?= apply_filter('base-decorator-administration-name', esc_html($context->getCompanyName())) ?></a></div>
             </div>
         </div>
     </header>
@@ -157,6 +160,31 @@ $menuItems = $ms->listMainMenu();
 	</div>
 
 	<?php print_htmlScriptLoader_bottom() ?>
+	
+	<?php if (DEBUG) : ?>
+	<script>
+		function show_debug_info() {
+			var eventbusEvents = <?= json_encode(@$_SESSION['debug']['eventbus-publish']) ?>;
+			var serverData = <?= json_encode($_SERVER) ?>;
+			var getData = <?= json_encode($_GET) ?>;
+			var postData = <?= json_encode($_POST) ?>;
+			var requestData = <?= json_encode($_REQUEST) ?>;
+			
+			<?php unset($_SESSION['debug']['eventbus-publish']); ?>
+
+			
+			show_popup( appUrl('/?m=base&c=debug&a=show_debug_info'), {
+				data: {
+					eventbus: eventbusEvents,
+					server:   serverData,
+					get:      getData,
+					post:     postData,
+					request:  requestData
+				}
+			});
+		}
+	</script>
+	<?php endif; ?>
 	
 </body>
 </html>

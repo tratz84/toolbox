@@ -13,11 +13,15 @@ class ModulePublicFilter {
     
     
     public function doFilter($filterChain) {
-        
-        try {
-            $uri = app_request_uri();
-        } catch (InvalidStateException $ex) {
-            return $filterChain->next();
+        // support for files by 'mpf'-parameter. Used in cases where rewrites are not working
+        if (isset($_GET['mpf'])) {
+            $uri = $_GET['mpf'];
+        } else {
+            try {
+                $uri = app_request_uri();
+            } catch (InvalidStateException $ex) {
+                return $filterChain->next();
+            }
         }
         
         // non-module path?

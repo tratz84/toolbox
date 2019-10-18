@@ -13,6 +13,9 @@ $lang['New value']              = 'Nieuwe waarde';
 $lang['Company']                = 'Bedrijf';
 $lang['Private']                = 'Particulier';
 
+$lang['Settings']               = 'Instellingen';
+$lang['Cancel']                 = 'Annuleer';
+
 // cronList
 $lang['Scheduled tasks']        = 'Ingeplande taken';
 $lang['Title']                  = 'Titel';
@@ -77,9 +80,13 @@ $lang['Firstname']       = 'Voornaam';
 $lang['Lastname']        = 'Achternaam';
 $lang['Username in use'] = 'Gebruikersnaam reeds in gebruik';
 $lang['User']            = 'Gebruiker';
-
+$lang['If IP addresses are entered, the user can only log in from these addresses'] = 'Indien hier ip-adressen staan ingevuld, mag de gebruiker alleen vanaf deze adressen zich aanmelden';
 
 // settings
+$lang['Masterdata']             = 'Stamgegevens';
+$lang['User Management']        = 'Gebruikersbeheer';
+$lang['Company settings']       = 'Bedrijfsgegevens';
+$lang['Application settings']   = 'Programma instellingen';
 $lang['Prefix numbers']  = 'Voorvoegsel nummers';
 $lang['Prefix for offers, invoices and more for department recognition'] = 'Tekst dat voor offerte-, factuur of contractnummers wordt gezet, ter herkenning van de vestiging waarvoor deze gemaakt is.';
 
