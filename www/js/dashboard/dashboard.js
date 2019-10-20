@@ -65,7 +65,7 @@ function Dashboard( containerId, config ) {
 		
 		// no widgets? => show message
 		if (jQuery.isEmptyObject( this.config.userWidgets )) {
-			var c = $('<div class="widgets-empty-note" style="font-style: italic;"><br/>Je hebt nog geen widgets op je dashboard. Klik rechtsboven op het wieltje om widgets toe te voegen.</div>');
+			var c = $('<div class="widgets-empty-note" style="font-style: italic;"><br/>'+_('You don\'t have any widgets on your dashboard yet. Click the wheel at the top right to add widgets.')+'</div>');
 			$('.dashboard-widgets').prepend( c );
 		} else {
 			$('.dashboard-widgets .widgets-empty-note').remove();

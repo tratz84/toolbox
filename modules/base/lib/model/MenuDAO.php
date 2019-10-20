@@ -51,7 +51,7 @@ class MenuDAO extends \core\db\DAOObject {
 	    $arr[] = array('menu_code' => 'support',         'sort' => 1800, 'visible' => 1, 'icon' => 'fa-support', 'label' => 'Support', 'url' => '/?m=support&c=ticketList');
 	    
 	    if (hasCapability('base', 'edit-masterdata'))
-	       $arr[] = array('menu_code' => 'masterdata',      'sort' => 1900, 'visible' => 1, 'icon' => 'fa-wrench',    'label' => 'Stamgegevens',   'url' => '/?m=base&c=masterdata/index');
+	       $arr[] = array('menu_code' => 'masterdata',      'sort' => 1900, 'visible' => 1, 'icon' => 'fa-wrench',    'label' => t('Masterdata'),   'url' => '/?m=base&c=masterdata/index');
 	    
 	    $weight = 10;
 	    $menus = array();

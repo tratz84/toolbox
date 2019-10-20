@@ -535,7 +535,7 @@ function showConfirmation(title, body, callback_ok) {
 //	html += '        <p>One fine body&hellip;</p>';
 	html += '      </div>';
 	html += '      <div class="modal-footer">';
-	html += '        <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>';
+	html += '        <button type="button" class="btn btn-default" data-dismiss="modal">'+_('Cancel')+'</button>';
 	html += '        <button type="button" class="btn btn-primary">Ok</button>';
 	html += '      </div>';
 	html += '    </div>';	// <!-- /.modal-content -->
@@ -1498,6 +1498,14 @@ function fill_form(form, obj) {
 	for(var i in obj) {
 		var inp = form.find('[name=' + i + ']');
 		
+		// input is <select>? make sure <option> is visible
+		if (inp.is('select')) {
+			inp.find('option').each(function(index, node) {
+			if ($(node).attr('value') == obj[i])
+				$(node).css('display', '');
+			});
+		}
+
 		if (inp.is(':checkbox')) {
 			var bln = false;
 			if (obj[i] || obj[i] == 't' || obj[i] == 'T' || obj[i] == 'y' || obj[i] == 'Y' || obj[i] == '1') {

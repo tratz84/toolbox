@@ -692,6 +692,48 @@ function IndexTable( container, opts ) {
 		// add new
 		$(this.container).append(pager);
 	};
+	
+	
+	this.createColumnSelection = function() {
+		var me = this;
+		
+		for(var i in this.columns) {
+			var c = this.columns[i];
+			
+			var lbl = $('<label />');
+			
+			var inp = $('<input type="checkbox" />');
+			inp.attr('name', 'columnSelection['+c.fieldName+']');
+			inp.addClass('index-table-column-selector');
+			inp.prop('checked', true);
+			inp.data('column', c);
+			lbl.append(inp);
+			
+			var spanDesc = $('<span />');
+			spanDesc.text( c.fieldDescription );
+			lbl.append(spanDesc);
+			
+			$(this.opts.columnSelection).append(lbl);
+			
+			inp.change(function() {
+				me.updateColumnselection();
+			});
+		}
+	};
+	
+	this.updateColumnselection = function() {
+		$('.index-table-column-selector').each(function(index, node) {
+			var c = $(node).data('column');
+			
+			if ($(this).prop('checked')) {
+				$('.th-'+slugify(c.fieldName)).show();
+				$('.td-'+slugify(c.fieldName)).show();
+			} else {
+				$('.th-'+slugify(c.fieldName)).hide();
+				$('.td-'+slugify(c.fieldName)).hide();
+			}
+		});
+	};
 
 
 	this.init();

@@ -38,7 +38,7 @@ $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($e
     $src = $evt->getSource();
 //     $src->addItem('Klanten', 'Bedrijfsoorten',     '/?m=base&c=masterdata/companyType');
 
-    $src->addItem('Instellingen', 'Ingeplande taken',     '/?m=base&c=cronList');
+    $src->addItem(t('Settings'), t('Scheduled tasks'),     '/?m=base&c=cronList');
 }));
 
 

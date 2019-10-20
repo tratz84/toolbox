@@ -169,6 +169,7 @@ function file_mime_type($file) {
         'html' => 'text/html',
         'php' => 'text/html',
         'css' => 'text/css',
+        'less' => 'text/css',
         'js' => 'application/javascript',
         'json' => 'application/json',
         'xml' => 'application/xml',
@@ -747,7 +748,7 @@ function week_list($year, $timezone='Europe/Amsterdam') {
             }
             
             $r[] = array(
-                'weekno' => $dt->format('W'),
+                'weekno' => (int)$dt->format('W'),
                 'year' => $dt->format('Y'),
                 'monday' => $dt->format('Y-m-d')
             );
