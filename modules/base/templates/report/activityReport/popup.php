@@ -3,7 +3,7 @@
 	<div class="toolbox">
 		<a href="javascript:void(0);" class="fa fa-times-circle popup-close-link"></a>
 	</div>
-	<h1>Activiteit</h1>
+	<h1><?= t('Activity') ?></h1>
 </div>
 
 
@@ -14,13 +14,13 @@
 		<td><?= $activity->getActivityId() ?></td>
 	</tr>
 	<tr class="tr-username">
-		<th>Gebruiker</th>
+		<th><?= t('Username') ?></th>
 		<td>
 			<?= esc_html($activity->getUsername()) ?>
 		</td>
 	</tr>
 	<tr class="tr-customer-name">
-		<th>Naam</th>
+		<th><?= t('Name') ?></th>
 		<td>
 			<?= esc_html($activity->getField('company_name')) ?>
 			<?= esc_html(format_personname($activity)) ?>
@@ -39,28 +39,28 @@
 		<td><?= esc_html($activity->getCode()) ?></td>
 	</tr>
 	<tr class="tr-short-description">
-		<th>Korte omschrijving</th>
+		<th><?= t('Short description') ?></th>
 		<td><?= esc_html($activity->getShortDescription()) ?></td>
 	</tr>
 	<?php if ($activity->getLongDescription()) : ?>
 	<tr class="tr-long-description">
-		<th>Lange omschrijving</th>
+		<th><?= t('Long description') ?></th>
 		<td><?= $activity->getLongDescription() ?></td>
 	</tr>
 	<?php endif; ?>
 	<?php if ( $activity->getNote() ) : ?>
 	<tr class="tr-note">
-		<th>Notitie</th>
+		<th><?= t('Note') ?></th>
 		<td><?= esc_html($activity->getNote()) ?></td>
 	</tr>
 	<?php endif; ?>
 	<tr class="tr-created">
-		<th>Uitgevoerd op</th>
+		<th><?= t('Run on') ?></th>
 		<td><?= esc_html($activity->getCreatedFormat()) ?></td>
 	</tr>
 	<?php if ($changes !== null) : ?>
 	<tr class="tr-dump-changes">
-		<th>Dump wijzigingen</th>
+		<th><?= t('Dump changes') ?></th>
 	</tr>
 	<tr class="tr-dump-changes-content">
 		<td colspan="2">

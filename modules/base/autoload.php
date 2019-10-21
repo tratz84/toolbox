@@ -29,7 +29,7 @@ $eb->subscribe('report', 'menu-list', new CallbackPeopleEventListener(function($
     $reportMenuList->addMenuItem('Klantenoverzicht', 'base', 'report/customerReportController', '/?m=base&c=report/customerReport&a=xls');
     
     if (hasCapability('base', 'list-activity')) {
-        $reportMenuList->addMenuItem('Logboek', 'base', 'report/activityReportController');
+        $reportMenuList->addMenuItem(t('Event viewer'), 'base', 'report/activityReportController');
     }
 }));
 
@@ -46,7 +46,7 @@ $eb->subscribe('base', 'dashboard', new CallbackPeopleEventListener(function($ev
     $dashboardWidgets = $evt->getSource();
     
     if (hasCapability('base', 'list-activity')) {
-        $dashboardWidgets->addWidget('log-activity', 'Algemeen: Laatste logboek activiteiten', 'Laatste 100 activiteiten die in het logboek zijn gezet', '/?m=base&c=dashboardWidgets&a=logActivity');
+        $dashboardWidgets->addWidget('log-activity', t('General: Last event viewer items'), t('Last 100 activities event viewer'), '/?m=base&c=dashboardWidgets&a=logActivity');
     }
 }));
     

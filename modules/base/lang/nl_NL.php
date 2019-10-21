@@ -95,6 +95,13 @@ $lang['Username in use'] = 'Gebruikersnaam reeds in gebruik';
 $lang['User']            = 'Gebruiker';
 $lang['If IP addresses are entered, the user can only log in from these addresses'] = 'Indien hier ip-adressen staan ingevuld, mag de gebruiker alleen vanaf deze adressen zich aanmelden';
 
+
+// activity report
+$lang['Activity']          = 'Activiteit';
+$lang['Short description'] = 'Korte omschrijving';
+$lang['Long description']  = 'Lange omschrijving';
+$lang['Dump changes']      = 'Dump wijzigingen';
+
 // settings
 $lang['Masterdata']             = 'Stamgegevens';
 $lang['User Management']        = 'Gebruikersbeheer';
@@ -105,6 +112,8 @@ $lang['Prefix for offers, invoices and more for department recognition'] = 'Teks
 $lang['Event viewer']           = 'Logboek';
 $lang['Show events system']     = 'Logboek gegevens tonen';
 
+$lang['Last 100 activities event viewer'] = 'Laatste 100 activiteiten die in het logboek zijn gezet';
+$lang['General: Last event viewer items'] = 'Algemeen: Laatste logboek activiteiten';
 
 $lang['Add Company type']  = 'Bedrijfsoort toevoegen';
 $lang['Edit Company type'] = 'Bedrijfsoort bewerken';
