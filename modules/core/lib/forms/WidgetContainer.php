@@ -4,6 +4,7 @@
 namespace core\forms;
 
 
+use core\container\ObjectHookCall;
 use core\db\DBObject;
 use core\exception\InvalidStateException;
 
@@ -107,6 +108,10 @@ class WidgetContainer extends BaseWidget {
      * @return number of fields set
      */
     public function bind($obj) {
+        $ohc = new ObjectHookCall($this, 'bind', array($obj));
+        hook_eventbus_publish($ohc, 'core', 'pre-call-'.get_class($this).'::bind');
+        
+        
         $fieldCount = 0;
         
         if (is_admin_context() == false && is_a($this, BaseForm::class) && is_a($obj, DBObject::class)) {
@@ -136,6 +141,7 @@ class WidgetContainer extends BaseWidget {
             $this->blnDoBinding = false;
         }
         
+        hook_eventbus_publish($ohc, 'core', 'post-call-'.get_class($this).'::bind');
         
         return $fieldCount;
     }

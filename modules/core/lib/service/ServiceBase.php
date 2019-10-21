@@ -5,8 +5,9 @@ namespace core\service;
 
 
 use core\db\DatabaseTransactionObject;
+use core\container\ObjectHookable;
 
-class ServiceBase implements DatabaseTransactionObject {
+class ServiceBase implements DatabaseTransactionObject, ObjectHookable {
     
     protected $oc;
     
