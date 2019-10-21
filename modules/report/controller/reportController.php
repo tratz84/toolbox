@@ -34,6 +34,10 @@ class reportController extends BaseController {
                     break;
                 }
             }
+            
+            if (!$this->report) {
+                $this->reportNotFound = true;
+            }
         }
         
         if ($this->report) {
