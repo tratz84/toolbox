@@ -16,12 +16,12 @@ class generatedjsController extends BaseController {
         $lang = t_loadlang();
         
         
-        print 'var lang_insights = ' . json_encode($lang) . ';' . PHP_EOL;
+        print 'var lang_toolbox = ' . json_encode($lang) . ';' . PHP_EOL;
         
         print '
             function _(str) {
-                if (typeof lang_insights[str] != \'undefined\') {
-                    return lang_insights[str];
+                if (typeof lang_toolbox[str] != \'undefined\') {
+                    return lang_toolbox[str];
                 } else {
                     return str;
                 }
