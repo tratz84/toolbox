@@ -43,10 +43,10 @@ $(document).ready(function() {
 	
 	var toolbox = $('.page-header .toolbox');
 	toolbox.find('.fa.fa-chevron-circle-left').attr('title', _('Back'));
-	toolbox.find('.fa.fa-send').attr('title', 'Verstuur per mail');
-	toolbox.find('.fa.fa-print').attr('title', 'Afdrukken');
+	toolbox.find('.fa.fa-send').attr('title', _('Send by mail'));
+	toolbox.find('.fa.fa-print').attr('title', _('Print'));
 	toolbox.find('.fa.fa-save').attr('title', _('Save'));
-	toolbox.find('.fa.fa-cog').attr('title', 'Instellingen');
+	toolbox.find('.fa.fa-cog').attr('title', _('Settings'));
 	
 	$(document).ajaxSend(function(evt, xhr, opts) {
 		// don't show progress on ping
@@ -274,7 +274,7 @@ $(document).ready(function() {
 	var form = $('.main-content form');
 	
 	if (form.length != 1) {
-		alert('Fout: submit-form button geplaatst, echter is het aantal forms op de huidige pagina != 1');
+		alert('Error: submit-form button found, but number of forms on current page != 1');
 		return;
 	}
 	
@@ -488,7 +488,7 @@ function handle_deleteConfirmation_event(evt) {
 	var me = this;
 	
 	
-	var deleteText = 'Weet u zeker dat u dit record wilt verwijderen?';
+	var deleteText = _('Are you sure to delete this record?');
 	if ($(this).data('confirmationMessage')) {
 		deleteText = $(this).data('confirmationMessage');
 	} else if ($(this).data('description')) {
@@ -496,7 +496,7 @@ function handle_deleteConfirmation_event(evt) {
 	}
 	
 	
-	showConfirmation('Weet je het zeker?', deleteText, function() {
+	showConfirmation(_('Are you sure?'), deleteText, function() {
 		window.location = $(me).attr('href');
 	});
 	
@@ -790,9 +790,9 @@ function showDialog(opts) {
 	
 	// cancel/save buttons
 	if (opts.showCancelSave) {
-		var btnCancel = $('<input type="button" value="Annuleer" />');
+		var btnCancel = $('<input type="button" value="'+_('Cancel')+'" />');
 		btnCancel.click(function() { closeDialog(); });
-		var btnOk = $('<input type="button" value="Opslaan" />');
+		var btnOk = $('<input type="button" value="'+_('Save')+'" />');
 		btnOk.click(function() {
 			if (opts.callback_ok) {
 				var objDialog = $('.pwdialog-container');
@@ -1473,10 +1473,8 @@ function uuidv4() {
 }
 
 
-
+// TODO: move to invoice module!!!
 function component_deletePayment_Click(payment_id) {
-	
-	
 	showConfirmation('Betaling verwijderen', 'Weet u zeker dat u deze betaling wilt verwijderen?', function() {
 		var l = window.location;
 		var back_url = l.pathname + l.search;

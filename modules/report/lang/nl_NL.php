@@ -3,6 +3,7 @@
 
 $lang = array();
 
-$lang['report.Reports'] = 'Rapportages';
+$lang['Access to reports']      = 'Toegang tot rapportages';
+$lang['report.Reports']         = 'Rapportages';
 
 return $lang;

@@ -12,6 +12,6 @@ Context::getInstance()->enableModule('report');
 $eventBus = ObjectContainer::getInstance()->get(EventBus::class);
 
 $eventBus->subscribe('base', 'user-capabilities', new CallbackPeopleEventListener(function($evt) {
-    $evt->getSource()->addCapability('report', 'show-reports', 'Rapportages', 'Toegang tot rapportages');
+    $evt->getSource()->addCapability('report', 'show-reports', t('Reports'), t('Access to reports'));
 }));
 

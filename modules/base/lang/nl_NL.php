@@ -18,7 +18,15 @@ $lang['Company']                = 'Bedrijf';
 $lang['Private']                = 'Particulier';
 
 $lang['Settings']               = 'Instellingen';
+$lang['Save']                   = 'Opslaan';
 $lang['Cancel']                 = 'Annuleer';
+$lang['Print']                  = 'Afdrukken';
+$lang['Send by mail']           = 'Verstuur per mail';
+
+$lang['Choose Widgets']         = 'Widgets kiezen';
+
+$lang['Are you sure to delete this record?'] = 'Weet u zeker dat u dit record wilt verwijderen?';
+$lang['Are you sure?']          = 'Weet je het zeker?';
 
 // cronList
 $lang['Scheduled tasks']        = 'Ingeplande taken';
@@ -31,6 +39,7 @@ $lang['Recent log activity']    = 'Recente logboek activiteiten';
 $lang['Customer']               = 'Klant';
 $lang['No log-activities registered'] = 'Geen logboek-activiteiten geregistreerd';
 
+$lang['No scheduled tasks executed'] = 'Geen ingeplande taken uitgevoerd';
 
 // auth
 $lang['Remember me']            = 'Onthoud mij';
@@ -93,6 +102,8 @@ $lang['Company settings']       = 'Bedrijfsgegevens';
 $lang['Application settings']   = 'Programma instellingen';
 $lang['Prefix numbers']  = 'Voorvoegsel nummers';
 $lang['Prefix for offers, invoices and more for department recognition'] = 'Tekst dat voor offerte-, factuur of contractnummers wordt gezet, ter herkenning van de vestiging waarvoor deze gemaakt is.';
+$lang['Event viewer']           = 'Logboek';
+$lang['Show events system']     = 'Logboek gegevens tonen';
 
 
 $lang['Add Company type']  = 'Bedrijfsoort toevoegen';

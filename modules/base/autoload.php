@@ -56,7 +56,7 @@ $eb->subscribe('base', 'user-capabilities', new CallbackPeopleEventListener(func
     // with masterdata permission, user can give itself admin-rights :s
 //     $evt->getSource()->addCapability('base', 'edit-masterdata', 'Stamgegevens', 'Toegang tot stamgegevenspagina');
     
-    $evt->getSource()->addCapability('base', 'list-activity', 'Logboek', 'Logboek gegevens tonen');
+    $evt->getSource()->addCapability('base', 'list-activity', t('Event viewer'), t('Show events system'));
 }));
 
 

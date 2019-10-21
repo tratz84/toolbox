@@ -234,7 +234,7 @@ function Dashboard( containerId, config ) {
 		
 		
 		showDialog({
-			title: 'Widgets kiezen',
+			title: _('Choose Widgets'),
 			html: container,
 			callback_ok: function(objDialog) {
 				$('.dashboard-widget-settings .widget-item').each(function(index, node) {
