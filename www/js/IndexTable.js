@@ -243,7 +243,7 @@ function IndexTable( container, opts ) {
 		
 		if (this.opts.autoloadNext && this.listResponse && this.listResponse.objects.length >= this.listResponse.pageSize) {
 			var me = this;
-			var tr = $('<tr class="load-more"><td><a style="display: block;text-align: center;" href="javascript:void(0);">Laad meer</a></td></tr>');
+			var tr = $('<tr class="load-more"><td><a style="display: block;text-align: center;" href="javascript:void(0);">'+_('Load more')+'</a></td></tr>');
 			$(tr).find('td').attr('colspan', this.columns.length);
 			$(this.table).find('tbody:last-child').append(tr);
 			$(tr).find('a').click(function() {
@@ -522,11 +522,11 @@ function IndexTable( container, opts ) {
 
 					if (col.fieldType == 'boolean') {
 						if (typeof fieldText == 'string')
-							fieldText = (fieldText == '0' || fieldText == 'false') ? 'Nee' : 'Ja';
+							fieldText = (fieldText == '0' || fieldText == 'false') ? _('No') : _('Yes');
 						else if (typeof fieldText == 'boolean')
-							fieldText = fieldText ? 'Ja' : 'Nee';
+							fieldText = fieldText ? _('Yes') : _('No');
 						else if (typeof fieldText == 'number')
-							fieldText = fieldText == 0 ? 'Nee' : 'Ja';
+							fieldText = fieldText == 0 ? _('No') : _('Yes');
 					}
 					
 					if (col.fieldType == 'date') {

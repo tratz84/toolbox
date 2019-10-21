@@ -4,6 +4,10 @@
 $lang = array();
 
 
+$lang['Yes']                    = 'Ja';
+$lang['No']                     = 'Nee';
+$lang['Load more']              = 'Laad meer';
+
 $lang['Time']                   = 'Tijdstip';
 
 $lang['Fieldname']              = 'Veldnaam';
