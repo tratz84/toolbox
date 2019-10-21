@@ -10,7 +10,7 @@
 	</div>
 	
     <h1>
-    	Rapportages
+    	<?= t('report.Reports') ?>
     	<?php if (isset($report)) : ?>
     	- <?= esc_html($report->getName()) ?>
     	<?php endif; ?>
