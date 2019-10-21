@@ -141,6 +141,7 @@ class WidgetContainer extends BaseWidget {
             $this->blnDoBinding = false;
         }
         
+        $ohc->setReturnValue($fieldCount);
         hook_eventbus_publish($ohc, 'core', 'post-call-'.get_class($this).'::bind');
         
         return $fieldCount;
