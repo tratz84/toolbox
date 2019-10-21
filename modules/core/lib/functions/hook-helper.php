@@ -89,6 +89,36 @@ function hook_add_inline_css( $cssText ) {
     $hsl->addInlineCss( $cssText );
 }
 
+function hook_loader($folder, $opts=array()) {
+    $cnt=0;
+    
+    $dh = opendir($folder);
+    if (!$dh) {
+        return $cnt;
+    }
+    
+    $files = array();
+    while($f = readdir($dh)) {
+        if (strrpos($f, '.php') === strlen($f)-4 && preg_match('/^\\d+-/', $f)) {
+            $files[] = $f;
+        }
+    }
+    closedir($dh);
+    
+    
+    usort($files, function($o1, $o2) {
+        $n1 = (int)substr($o1, 0, strpos($o1, '-'));
+        $n2 = (int)substr($o2, 0, strpos($o2, '-'));
+        
+        return $n1-$n2;
+    });
+    
+    foreach($files as $f) {
+        load_php_file($folder . '/' . $f);
+    }
+}
+
+
 function object_container_get($className) {
     return ObjectContainer::getInstance()->get($className);
 }
