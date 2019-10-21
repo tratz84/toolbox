@@ -14,6 +14,11 @@ function module_list($forceReload=false) {
         foreach($moduleDirs as $md) {
             $moduleFiles = list_files($md);
             
+            if ($moduleFiles === false) {
+                trigger_error('Invalid module directory: '.$md, E_USER_NOTICE);
+                continue;
+            }
+            
             foreach($moduleFiles as $mf) {
                 $path = realpath( $md . '/' . $mf );
                 
