@@ -152,6 +152,8 @@ class WidgetContainer extends BaseWidget {
      * @param $obj
      */
     public function fill($obj, $fields=array()) {
+        $ohc = new ObjectHookCall($this, 'bind', array($obj, $fields));
+        hook_eventbus_publish($ohc, 'core', 'pre-call-'.get_class($this).'::bind');
         
         foreach($fields as $f) {
             $widget = $this->getWidget($f);
@@ -175,6 +177,7 @@ class WidgetContainer extends BaseWidget {
             }
         }
         
+        hook_eventbus_publish($ohc, 'core', 'post-call-'.get_class($this).'::bind');
     }
     
     
