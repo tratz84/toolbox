@@ -1473,17 +1473,6 @@ function uuidv4() {
 }
 
 
-// TODO: move to invoice module!!!
-function component_deletePayment_Click(payment_id) {
-	showConfirmation('Betaling verwijderen', 'Weet u zeker dat u deze betaling wilt verwijderen?', function() {
-		var l = window.location;
-		var back_url = l.pathname + l.search;
-
-		window.location = appUrl('/?m=invoice&c=payment&a=delete&id=' + payment_id + '&back_url=' + encodeURIComponent(back_url));
-	});
-	
-}
-
 /**
  * fill_form() - fills a form by given object
  * 
