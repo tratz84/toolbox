@@ -67,6 +67,22 @@ class UserForm extends BaseForm {
             return null;
         });
         
+        $this->addValidator('user_type', function($form) {
+            $user_id = $form->getWidgetValue('user_id');
+            
+            $ctx = \core\Context::getInstance();
+            $current_user = $ctx->getUser();
+            
+            if ($user_id == $current_user->getUserId() && $current_user->getUserType() == 'admin' && $form->getWidgetValue('user_type') != 'admin') {
+                $userService = ObjectContainer::getInstance()->get(UserService::class);
+                $listResponse = $userService->search(0, 1, array('user_type' => 'admin'));
+                
+                if ($listResponse->getRowCount() == 1) {
+                    return t('Unable to change user-type to normal user. You\'re the last admin standing!');
+                }
+            }
+        });
+        
     }
     
     public function bind($obj) {
