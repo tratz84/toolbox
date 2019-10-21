@@ -208,7 +208,7 @@ class ListFormWidget extends ListWidget {
         $html .= '</tbody>';
         $html .= '</table>';
         
-        $html .= '<div class="add-entry-container"><a class="add-record" href="javascript:void(0);">Nieuwe regel</a></div>';
+        $html .= '<div class="add-entry-container"><a class="add-record" href="javascript:void(0);">'.t('Add line').'</a></div>';
         
         $html .= '</div>';
         
