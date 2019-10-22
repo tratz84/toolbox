@@ -5,7 +5,7 @@ $menuItems = $ms->listMainMenu();
 
 
 ?><!doctype html>
-<html lang="nl">
+<html lang="<?= $context->getSelectedLang() ?>">
 	<head>
 		<meta charset="utf-8">
 		<title>Toolbox - <?= esc_html($context->getCompanyName()) ?></title>
