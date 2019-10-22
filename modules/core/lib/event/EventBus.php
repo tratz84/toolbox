@@ -34,7 +34,7 @@ class EventBus {
     }
     
     public function publish(PeopleEvent $evt) {
-        if (DEBUG && in_array(get_var('c'), array('multiuser', 'ping')) == false) {
+        if (DEBUG && php_sapi_name() != 'cli' && in_array(get_var('c'), array('multiuser', 'ping')) == false) {
             // TODO: log event
             $_SESSION['debug']['eventbus-publish'] = $_SESSION['debug']['eventbus-publish'] ?? array();
             $_SESSION['debug']['eventbus-publish'][] = array(
