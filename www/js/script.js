@@ -685,6 +685,7 @@ function showInfo(obj, html) {
 	d.css('background-color', '#fff');
 	d.css('padding', '5px 5px');
 	d.css('box-shadow', '0px 0px 5px #000')
+	d.css('white-space', 'nowrap');
 	
 	$(document.body).prepend(d);
 
