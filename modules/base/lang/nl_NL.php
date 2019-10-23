@@ -13,6 +13,7 @@ $lang['Time']                   = 'Tijdstip';
 $lang['Fieldname']              = 'Veldnaam';
 $lang['Old value']              = 'Oude waarde';
 $lang['New value']              = 'Nieuwe waarde';
+$lang['Value']                  = 'Waarde';
 
 $lang['Company']                = 'Bedrijf';
 $lang['Private']                = 'Particulier';

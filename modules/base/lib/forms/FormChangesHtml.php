@@ -409,7 +409,7 @@ class FormChangesHtml
         $widgets = $this->getWidgets($this->newForm);
 
         $html = '<table class="form-changes list-widget-changes">';
-        $html .= '<thead><tr><th>Veldnaam</th><th>Waarde</th></tr></thead>' . "\n";
+        $html .= '<thead><tr><th class="th-fieldname">'.t('Fieldname').'</th><th class="th-value">'.t('Value').'</th></tr></thead>' . "\n";
 
         $html .= '<tbody>';
         foreach ($widgets as $w) {
@@ -459,7 +459,7 @@ class FormChangesHtml
     public static function tableFromArray($arr) {
         $html = '<div class="form-changes-container">';
         $html .= '<table class="form-changes">';
-        $html .= '<thead><tr><th>Veldnaam</th><th>Oude waarde</th><th>Nieuwe waarde</th></tr></thead>' . "\n";
+        $html .= '<thead><tr><th class="th-fieldname">'.t('Fieldname').'</th><th class="th-old-value">'.t('Old value').'</th><th class="th-new-value">'.t('New value').'</th></tr></thead>' . "\n";
         
         $html .= '<tbody>';
         foreach($arr as $row) {
