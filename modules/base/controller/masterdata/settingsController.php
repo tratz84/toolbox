@@ -74,7 +74,10 @@ class settingsController extends BaseController {
     public function action_activate_module() {
         $mod = $this->lookupModuleName();
         
-        $moduleName = substr($mod, 0, strrpos($mod, 'Module'));
+        if (strpos($mod, 'Module') !== false)
+            $moduleName = substr($mod, 0, strrpos($mod, 'Module'));
+        else
+            $moduleName = $mod;
         
         // activation script?
         $activationFile = module_file($moduleName, 'activate.php');
