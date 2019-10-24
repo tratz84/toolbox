@@ -61,7 +61,7 @@
     	<?php endforeach; ?>
         <?php if (count($invoices->getObjects())==0) : ?>
         <tr>
-        	<td colspan="4" class="no-records">Geen facturen aangemaakt</td>
+        	<td colspan="100" class="no-records"><?= t('No invoices found') ?></td>
         </tr>
         <?php endif; ?>
     </tbody>
