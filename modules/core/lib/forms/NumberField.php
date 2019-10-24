@@ -41,9 +41,9 @@ class NumberField extends BaseWidget {
         $attributes['value'] = $this->getValue();
         if ($this->placeholder)
             $attributes['placeholder'] = $this->getLabel();
-        if ($this->min)
+        if (is_numeric($this->min))
             $attributes['min'] = $this->min;
-        if ($this->max)
+        if (is_numeric($this->max))
             $attributes['max'] = $this->max;
                     
         
