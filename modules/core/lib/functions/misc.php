@@ -5,6 +5,7 @@
 use core\Context;
 use core\exception\FileException;
 use core\exception\NotForLiveException;
+use core\exception\InvalidStateException;
 
 function is_get() {
     return $_SERVER['REQUEST_METHOD'] == 'GET';
@@ -693,22 +694,12 @@ function next_day($date, $no=1) {
 }
 
 function weeks_in_year($year, $timezone='Europe/Amsterdam') {
-    $dt = new DateTime($year . '-12-30');
+    $dt = new DateTime($year . '-12-30', new DateTimeZone($timezone));
     
-    $weekno = 52;
+    // ISO-8601 specification, 28 dec always last week
+    $dt->setDate($year, 12, 28);
     
-    while (true) {
-        $dt->modify('+1 day');
-        $new_weekno = $dt->format('W');
-        
-        if ($new_weekno >= $weekno) {
-            $weekno = $new_weekno;
-        } else {
-            break;
-        }
-    }
-    
-    return $weekno;
+    return $dt->format('W');
 }
 
 /**
@@ -758,6 +749,70 @@ function week_list($year, $timezone='Europe/Amsterdam') {
     }
     
     return $r;
+}
+
+/**
+ * week_diff() - returnweeks between start & end
+ */
+function week_diff($p_startYear, $p_startWeek, $p_endYear, $p_endWeek) {
+
+    $startYear = (int)$p_startYear;
+    $startWeek = (int)$p_startWeek;
+    $endYear = (int) $p_endYear;
+    $endWeek = (int)$p_endWeek;
+    
+    if ($startYear == $endYear && $startWeek == $endWeek) {
+        return 0;
+    }
+    
+    $negative = false;
+    if ($startYear > $endYear || ($startYear == $endYear && $startWeek > $endWeek)) {
+        $negative = true;
+    }
+    
+    $startDate = null;
+    $weeklistStart = week_list($startYear);
+    if ($startWeek < 1 || $startWeek > count($weeklistStart)) {
+        throw new InvalidStateException('Invalid start week/year ('.$p_startWeek.'/'.$p_startYear.')');
+    }
+    $startDate = $weeklistStart[$startWeek-1]['monday'];
+    
+    $endDate = null;
+    $weeklistEnd = week_list($endYear);
+    if ($endWeek < 1 || $endWeek > count($weeklistEnd)) {
+        throw new InvalidStateException('Invalid end week/year ('.$p_endWeek.'/'.$p_endYear.')');
+    }
+    $endDate = $weeklistEnd[$endWeek-1]['monday'];
+    
+    $weeknos = 0;
+    if ($endYear > $startYear) {
+        // add weeks for this year
+        $weeknos += (weeks_in_year($startYear) - $startWeek);
+        
+        // add weeks for years in between
+        for($x=$startYear+1; $x < $endYear; $x++) {
+            $weeknos += weeks_in_year($x);
+        }
+        
+        // add weeks for last year
+        $weeknos += $endWeek;
+    }
+    if ($endYear < $startYear) {
+        // subtract weeks this year
+        $weeknos -= $startWeek;
+        
+        for($x=$startYear-1; $x > $endYear; $x--) {
+            $weeknos -= weeks_in_year($x);
+        }
+        
+        $weeknos -= (weeks_in_year($endYear) - $endWeek);
+    }
+    if ($startYear == $endYear) {
+        return $endWeek - $startWeek;
+    }
+    
+    
+    return $weeknos;
 }
 
 
