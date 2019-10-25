@@ -97,7 +97,7 @@ class UserForm extends BaseForm {
                 $user = $userService->readUser($user_id);
                 
                 foreach($user->getCapabilities() as $c) {
-                    $widget = $this->getWidget('capability_'.$c->getCapabilityCode());
+                    $widget = $this->getWidget('capability_'.$c->getModuleName().'-'.$c->getCapabilityCode());
                     if ($widget)
                         $widget->setValue(true);
                 }
@@ -117,7 +117,7 @@ class UserForm extends BaseForm {
         $wc->addWidget(new HtmlField('', '', 'Permissies'));
         
         foreach($capabilities as $c) {
-            $w = new CheckboxField('capability_' . $c['capability_code'], '', t('modulename.'.$c['module_name']) . ' - ' . $c['short_description']);
+            $w = new CheckboxField('capability_' . $c['module_name'].'-'.$c['capability_code'], '', t('modulename.'.$c['module_name']) . ' - ' . $c['short_description']);
             $w->setInfoText($c['infotext']);
             $w->setField('module_name', $c['module_name']);
             $w->setField('capability_code', $c['capability_code']);
