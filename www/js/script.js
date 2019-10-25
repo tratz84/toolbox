@@ -791,9 +791,9 @@ function showDialog(opts) {
 	
 	// cancel/save buttons
 	if (opts.showCancelSave) {
-		var btnCancel = $('<input type="button" value="'+_('Cancel')+'" />');
+		var btnCancel = $('<input type="button" class="btn-cancel" value="'+_('Cancel')+'" />');
 		btnCancel.click(function() { closeDialog(); });
-		var btnOk = $('<input type="button" value="'+_('Save')+'" />');
+		var btnOk = $('<input type="button" class="btn-save" value="'+_('Save')+'" />');
 		btnOk.click(function() {
 			if (opts.callback_ok) {
 				var objDialog = $('.pwdialog-container');
