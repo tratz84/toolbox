@@ -31,6 +31,8 @@ class TextField extends BaseWidget {
         
         if ($this->placeholder) {
             $this->setAttribute('placeholder', $this->getLabel());
+        } else if (isset($this->options['placeholder']) && $this->options['placeholder']) {
+            $this->setAttribute('placeholder', $this->options['placeholder']);
         }
         
         if (isset($this->options['maxlength']) && is_numeric($this->options['maxlength'])) {
