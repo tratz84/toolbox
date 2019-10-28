@@ -36,6 +36,9 @@ class TextField extends BaseWidget {
         if (isset($this->options['maxlength']) && is_numeric($this->options['maxlength'])) {
             $this->setAttribute('maxlength', $this->options['maxlength']);
         }
+        if (isset($this->options['readonly'])&&$this->options['readonly']) {
+            $this->setAttribute('readonly', 'readonly');
+        }
         
         $this->setAttribute('value', $this->getValue());
         
