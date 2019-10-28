@@ -23,7 +23,8 @@ foreach($modules as $moduleName => $path) {
 $css = '';
 foreach($lessFiles as $lf) {
     $cmd = './node_modules/.bin/lessc -x '.$lf;
-    
+
+    print "Executing command: {$cmd}\n";
     $css .= `$cmd`;
     $css .= "\n\n";
 }
