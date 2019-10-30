@@ -17,7 +17,9 @@ class PhpCodeParser {
     
     
     public function parseString($str) {
-        $sql = trim($sql);
+        
+        $blocks = $this->stringToBlocks($str);
+        var_export($blocks);exit;
         
         $x=0;
         $len = strlen($sql);
@@ -164,6 +166,126 @@ class PhpCodeParser {
         }
 
     }
+    
+    
+    /**
+     * stringToBlocks() - parses string to html- & php-blocks
+     */
+    protected function stringToBlocks($str) {
+        $buf = '';
+        
+        $state = array();
+        $state['pos'] = 0;
+        $state['len'] = strlen($str);
+        $state['phpcode'] = false;
+        $state['prev'] = null;
+        $state['escape'] = false;
+        $state['in_string'] = false;
+        $state['in_datablock'] = false;
+        
+        while ($state['pos'] < $state['len']) {
+            $c = $str{$state['pos']};
+            
+            // skip carriage returns
+            if ($c == "\r") {
+                $state['pos']++;
+                continue;
+            }
+            
+            
+            if ($state['phpcode']) {
+                
+                if ($state['escape']) {
+                    $state['escape'] = false;
+                } else if ($c == '\\') {
+                    $state['escape'] = true;
+                } else if ($state['in_string'] == false && ($c == '"' || $c == "'")) {
+                    $state['in_string'] = $c;
+                } else if ($state['in_string'] !== false && $state['in_string'] == $c) {
+                    $state['in_string'] = false;
+                } else if ($state['in_string'] !== false) {
+                    // in string? => just add to buf..
+                } else if ($state['in_datablock'] !== false) {
+                    // in_datablock? => check end
+                    
+                    if ($c == "\n") {
+                        $lastline = substr($buf, strrpos($buf, "\n")+1);
+                        
+                        // check if lastline doesn't start with a whitespace
+                        if ($lastline{0} != ' ' && $lastline{0} != "\t") {
+                            // spaces/tabs are ignored
+                            $lastline = str_replace(array(' ', "\t"), '', $lastline);
+                            
+                            // check for code end of datablock
+                            if ($lastline == $state['in_datablock'].';') {
+                                $state['in_datablock'] = false;
+                            }
+                        }
+                    }
+                    
+                } else if ($c == "\n") {
+                    $buflen = strlen($buf);
+                    
+                    $lastline = null;
+                    $lastPosEnter = strrpos($buf, "\n");
+                    if ($lastPosEnter !== false) {
+                        $lastline = substr($buf, $lastPosEnter+1);
+                    } else {
+                        $lastline = $buf;
+                    }
+                    
+                    $lastline = str_replace(array(' ', "\t"), '', $lastline);
+                    $blocknamepos = strpos($lastline, '<<<');
+                    if ($blocknamepos !== false) {
+                        $state['in_datablock'] = substr($lastline, $blocknamepos+3);
+                    }
+                } else if ($state['prev'] == '?' && $c == '>') {
+                    $state['phpcode'] = false;
+                    $buf .= $c;
+                    
+                    $blocks[] = array(
+                        'type' => 'php',
+                        'content' => $buf,
+                    );
+                    
+                    $state['pos']++;
+                    $state['prev'] = null;
+                    $buf = '';
+                    continue;
+                }
+                
+            } else {
+                if ($state['prev'] == '<' && $c == '?') {
+                    $state['phpcode'] = true;
+                    $buf = substr($buf, 0, -1);
+                    
+                    $blocks[] = array(
+                        'type' => 'html',
+                        'content' => $buf
+                    );
+                    
+                    $state['pos']++;
+                    $state['prev'] = null;
+                    $buf = '<?';
+                    continue;
+                }
+            }
+            
+            $buf .= $c;
+            $state['prev'] = $c;
+            $state['pos']++;
+        }
+        
+        if ($buf != '') {
+            $blocks[] = array(
+                'type' => $state['phpcode'] ? 'php' : 'html',
+                'content' => $buf,
+            );
+        }
+        
+        return $blocks;
+    }
+    
     
     
     protected function addPart($state, $token) {
