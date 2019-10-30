@@ -7,9 +7,9 @@ class testController extends BaseController {
     
     
     public function action_index() {
-        $p = new \codegen\SqlQueryParser();
+        $p = new \codegen\PhpCodeParser();
         
-        $p->test();
+        $p->parse(dirname(__FILE__).'/interesting.php');
         
     }
     
