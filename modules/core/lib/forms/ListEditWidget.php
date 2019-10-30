@@ -14,11 +14,13 @@ abstract class ListEditWidget extends ListWidget {
     protected $widgets = array();
 
     protected $tableHeader = true;
-    protected $strNewEntry = 'Nieuwe regel';
+    protected $strNewEntry = 'Add line';
     protected $sortable = true;
 
 
     public function __construct($methodObjectList) {
+        $this->strNewEntry = t('Add line');
+        
         $this->setName($methodObjectList);
 
         $this->methodObjectList = $methodObjectList;

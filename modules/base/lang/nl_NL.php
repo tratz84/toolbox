@@ -4,17 +4,30 @@
 $lang = array();
 
 
+$lang['Yes']                    = 'Ja';
+$lang['No']                     = 'Nee';
+$lang['Load more']              = 'Laad meer';
+
 $lang['Time']                   = 'Tijdstip';
 
 $lang['Fieldname']              = 'Veldnaam';
 $lang['Old value']              = 'Oude waarde';
 $lang['New value']              = 'Nieuwe waarde';
+$lang['Value']                  = 'Waarde';
 
 $lang['Company']                = 'Bedrijf';
 $lang['Private']                = 'Particulier';
 
 $lang['Settings']               = 'Instellingen';
+$lang['Save']                   = 'Opslaan';
 $lang['Cancel']                 = 'Annuleer';
+$lang['Print']                  = 'Afdrukken';
+$lang['Send by mail']           = 'Verstuur per mail';
+
+$lang['Choose Widgets']         = 'Widgets kiezen';
+
+$lang['Are you sure to delete this record?'] = 'Weet u zeker dat u dit record wilt verwijderen?';
+$lang['Are you sure?']          = 'Weet je het zeker?';
 
 // cronList
 $lang['Scheduled tasks']        = 'Ingeplande taken';
@@ -27,6 +40,7 @@ $lang['Recent log activity']    = 'Recente logboek activiteiten';
 $lang['Customer']               = 'Klant';
 $lang['No log-activities registered'] = 'Geen logboek-activiteiten geregistreerd';
 
+$lang['No scheduled tasks executed'] = 'Geen ingeplande taken uitgevoerd';
 
 // auth
 $lang['Remember me']            = 'Onthoud mij';
@@ -82,6 +96,13 @@ $lang['Username in use'] = 'Gebruikersnaam reeds in gebruik';
 $lang['User']            = 'Gebruiker';
 $lang['If IP addresses are entered, the user can only log in from these addresses'] = 'Indien hier ip-adressen staan ingevuld, mag de gebruiker alleen vanaf deze adressen zich aanmelden';
 
+
+// activity report
+$lang['Activity']          = 'Activiteit';
+$lang['Short description'] = 'Korte omschrijving';
+$lang['Long description']  = 'Lange omschrijving';
+$lang['Dump changes']      = 'Dump wijzigingen';
+
 // settings
 $lang['Masterdata']             = 'Stamgegevens';
 $lang['User Management']        = 'Gebruikersbeheer';
@@ -89,7 +110,11 @@ $lang['Company settings']       = 'Bedrijfsgegevens';
 $lang['Application settings']   = 'Programma instellingen';
 $lang['Prefix numbers']  = 'Voorvoegsel nummers';
 $lang['Prefix for offers, invoices and more for department recognition'] = 'Tekst dat voor offerte-, factuur of contractnummers wordt gezet, ter herkenning van de vestiging waarvoor deze gemaakt is.';
+$lang['Event viewer']           = 'Logboek';
+$lang['Show events system']     = 'Logboek gegevens tonen';
 
+$lang['Last 100 activities event viewer'] = 'Laatste 100 activiteiten die in het logboek zijn gezet';
+$lang['General: Last event viewer items'] = 'Algemeen: Laatste logboek activiteiten';
 
 $lang['Add Company type']  = 'Bedrijfsoort toevoegen';
 $lang['Edit Company type'] = 'Bedrijfsoort bewerken';

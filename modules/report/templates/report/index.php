@@ -10,7 +10,7 @@
 	</div>
 	
     <h1>
-    	Rapportages
+    	<?= t('report.Reports') ?>
     	<?php if (isset($report)) : ?>
     	- <?= esc_html($report->getName()) ?>
     	<?php endif; ?>
@@ -31,6 +31,11 @@
 </div>
 
 <div id="report-html">
+
+<?php if (isset($reportNotFound) && $reportNotFound) : ?>
+	<?= t('Error: requested report report not found') ?>
+<?php endif; ?>
+
 <?php if (isset($reportHtml)) : ?>
 	<?= $reportHtml ?>
 <?php endif; ?>

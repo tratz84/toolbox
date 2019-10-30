@@ -47,7 +47,7 @@ class userController extends BaseController {
         }
         
         $this->isNew = $u->isNew();
-        $this->userForm = new UserForm();
+        $this->userForm = object_container_create(UserForm::class);
         $this->userForm->bind( $u );
         
         

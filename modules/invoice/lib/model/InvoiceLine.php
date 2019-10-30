@@ -8,7 +8,7 @@ class InvoiceLine extends base\InvoiceLineBase {
 
     /*
      * NOTE about vat_amount field, this field has 2 purposes
-     *      - rounding vat for migrating other system to insights
+     *      - rounding vat for migrating other system to Toolbox
      *      - support for articles costing €10,- incl. vat, to support both article prices of "8.26 + 1.74-vat" and "8.27 + 1.73-vat" <= this has to be implemented..
      */
 

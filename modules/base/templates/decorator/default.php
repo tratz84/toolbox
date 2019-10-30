@@ -5,10 +5,10 @@ $menuItems = $ms->listMainMenu();
 
 
 ?><!doctype html>
-<html lang="nl">
+<html lang="<?= $context->getSelectedLang() ?>">
 	<head>
 		<meta charset="utf-8">
-		<title>Insights - <?= esc_html($context->getCompanyName()) ?></title>
+		<title>Toolbox - <?= esc_html($context->getCompanyName()) ?></title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 

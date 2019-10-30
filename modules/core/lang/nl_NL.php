@@ -66,6 +66,8 @@ $lang['modulename.webmail'] = 'E-mail';
 $lang['modulename.invoice'] = 'Facturatie';
 $lang['modulename.calendar'] = 'Kalender';
 
+$lang['Add line']      = 'Nieuwe regel';
+
 $lang['Back']          = 'Terug';
 $lang['Save']          = 'Opslaan';
 $lang['Last modified'] = 'Laatst bewerkt';

@@ -111,6 +111,7 @@ class UserService extends ServiceBase {
         $newIps = $form->getWidget('ips')->getObjects();
         $upDao->mergeFormListMTO1('user_id', $user->getUserId(), $newIps);
         
+        return $user;
     }
     
     public function deleteUser($userId) {
