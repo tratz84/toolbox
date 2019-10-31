@@ -9,6 +9,13 @@ jojojo
 
 <?php
 
+// hee hooo test enzo :)
+
+
+/*
+ * hmmprf
+ */
+
 class interestingController extends BaseController {
     
     
@@ -25,16 +32,26 @@ DATA;
     
     public function action_index() {
         
+        blabla();test123();
+        
+        usort($arr, function ($a1, $a2) {
+            
+        });
     }
     
 }
-
 
 ?>
 
 
 blabla <?= $cnt ?>
 
+<?php 
+
+function blablatest( ){
+    
+}
+?>
 
 
 klaar
