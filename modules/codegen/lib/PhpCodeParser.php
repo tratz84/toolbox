@@ -22,7 +22,6 @@ class PhpCodeParser {
         var_export($blocks);exit;
         
         $x=0;
-        $len = strlen($sql);
         
         $escapeChars = array('\\');
         $whiteChars = array(" ", "\t", "\n", "\r", "\i");
@@ -32,16 +31,32 @@ class PhpCodeParser {
         $subPart = array('(', ')');     // start = (, end = )
         
         $state = array();
-        $state['pos'] = 0;
-        $state['escape'] = false;
-        $state['in_string'] = false;
-        $state['in_comment'] = false;
-        $state['prev_char'] = null;
         $state['depth'] = 0;
         
         
         $parts = array();
         $token = '';
+        
+        for($x=0; $x < count($blocks); $x++) {
+            $block = $blocks[$x];
+            $state['pos'] = 0;
+            $state['escape'] = false;
+            $state['in_string'] = false;
+            $state['in_comment'] = false;
+            $state['prev_char'] = null;
+            
+            if ($block['type'] == 'html') {
+                
+            }
+            
+            if ($block['type'] == 'php') {
+                $content = $block['content'];
+                
+                
+                
+                
+            }
+        }
         
         while($state['pos'] < $len) {
             $p = $state['pos'];         // current pos`
@@ -182,6 +197,7 @@ class PhpCodeParser {
         $state['escape'] = false;
         $state['in_string'] = false;
         $state['in_datablock'] = false;
+        $state['in_comment'] = false;
         
         while ($state['pos'] < $state['len']) {
             $c = $str{$state['pos']};
@@ -195,16 +211,28 @@ class PhpCodeParser {
             
             if ($state['phpcode']) {
                 
+                $in_something = $state['in_string'] !== false || $state['in_datablock'] !== false || $state['in_comment'] !== false;
+                
                 if ($state['escape']) {
                     $state['escape'] = false;
                 } else if ($c == '\\') {
                     $state['escape'] = true;
-                } else if ($state['in_string'] == false && ($c == '"' || $c == "'")) {
+                } else if ($in_something == false && $state['in_string'] == false && ($c == '"' || $c == "'")) {
                     $state['in_string'] = $c;
                 } else if ($state['in_string'] !== false && $state['in_string'] == $c) {
                     $state['in_string'] = false;
                 } else if ($state['in_string'] !== false) {
                     // in string? => just add to buf..
+                } else if ($state['in_comment'] == '//' && $c == "\n") {
+                    $state['in_comment'] = false;
+                } else if ($state['in_comment'] == '/*' && $state['prev'] == '*' && $c == '/') {
+                    $state['in_comment'] = false;
+                } else if ($state['in_comment'] != false) {
+                    // in comment => just add to buf..
+                } else if ($in_something == false && $state['in_comment'] == false && $state['prev'] == '/' && $c == '/') {
+                    $state['in_comment'] = '//';
+                } else if ($in_something == false && $state['in_comment'] == false && $state['prev'] == '/' && $c == '*') {
+                    $state['in_comment'] = '/*';
                 } else if ($state['in_datablock'] !== false) {
                     // in_datablock? => check end
                     
@@ -222,7 +250,6 @@ class PhpCodeParser {
                             }
                         }
                     }
-                    
                 } else if ($c == "\n") {
                     $buflen = strlen($buf);
                     
