@@ -20,7 +20,183 @@ class PhpCodeParser {
 //         $c = $this->listClasses(); var_export($c); exit;
 //         $c = $this->listFunctions(); var_export($c); exit;
         
+//         $str = $this->getFunctionParameters('interestingController::action_index');
+//         var_export($str);exit;
+
+//         $this->setFunction('interestingController::action_index', '$x', "print 'hi';");
+        
+//         print $this->partsToString();exit;
     }
+    
+    
+    public function setFunction($p_functionname, $params, $code, &$parts=null, $currentClass = null) {
+        if ($parts === null) {
+            $parts = &$this->parts;
+        }
+        
+        $classname = null;
+        $functionname = $p_functionname;
+        if (strpos($functionname, '::') !== false) {
+            list($classname, $functionname) = explode('::', $functionname, 2);
+        }
+        
+        $accoCount = 0;
+        $resetClassNameOnAcco = null;
+        
+        for($x=0; $x < count($parts); $x++) {
+            if ($x+2 < count($parts)) {
+                if ($parts[$x]['type'] == 'php' && $parts[$x]['string'] == '{') {
+                    $accoCount++;
+                }
+                if ($parts[$x]['type'] == 'php' && $parts[$x]['string'] == '}') {
+                    // outside 'currentClass' ?
+                    if ($resetClassNameOnAcco !== null && $accoCount-1 == $resetClassNameOnAcco) {
+                        $resetClassNameOnAcco = null;
+                        $currentClass = null;
+                    }
+                    
+                    $accoCount--;
+                }
+                
+                if ($parts[$x]['type'] == 'php' && $parts[$x]['string'] == 'class') {
+                    $currentClass = $parts[$x+2]['string'];
+                    $resetClassNameOnAcco = $accoCount;
+                }
+                
+                if ($currentClass == $classname && $parts[$x]['type'] == 'php' && $parts[$x]['string'] == 'function') {
+                    $funcname = $parts[$x+2]['string'];
+                    if (strpos($funcname, '(') !== false)
+                        $funcname = substr($funcname, 0, strpos($funcname, '('));
+                    
+                    if ($funcname == $functionname) {
+                        $str = '';
+                        
+                        $preLines = $currentClass ? "\t\t" : "\t";
+                        
+                        if ($params === null) {
+                            $params = implode(', ', $this->getFunctionParameters( $p_functionname ));
+                        }
+                        
+                        $parts[$x+2]['string'] = $functionname . '('.$params.') {' . PHP_EOL;
+                        $codeLines = explode("\n", $code);
+                        foreach($codeLines as $cl) {
+                            $parts[$x+2]['string'] .= $preLines . $cl . PHP_EOL;
+                        }
+                        
+                        $parts[$x+2]['string'] .= ($currentClass ? "\t" : "") . "}" . PHP_EOL;
+                        
+                        
+                        // clean old stuff
+                        for($z=$x+3; $z < count($parts); $z++) {
+                            $parts[$z]['string'] = '';
+                            
+                            if (isset($parts[$z]['subs']) && count($parts[$z]['subs'])) {
+                                $parts[$z]['subs'] = array();
+                                break;
+                            }
+                        }
+                        
+                        return true;
+                    }
+                }
+            }
+            
+            
+            if (isset($parts[$x]['subs']) && count($parts[$x]['subs'])) {
+                $r = $this->setFunction( $p_functionname, $params, $code, $parts[$x]['subs'], $currentClass );
+                
+                if ($r)
+                    return true;
+            }
+            
+        }
+        
+        
+        // TODO: add?
+        
+        
+        return false;
+    }
+    
+    
+    public function getFunctionParameters($p_functionName, $parts=null, $currentClass=null) {
+        if ($parts === null) {
+            $parts = $this->parts;
+        }
+        
+        $classname = null;
+        $functionname = $p_functionName;
+        if (strpos($functionname, '::') !== false) {
+            list($classname, $functionname) = explode('::', $functionname, 2);
+        }
+        
+        $accoCount = 0;
+        $resetClassNameOnAcco = null;
+        
+        for($x=0; $x < count($parts); $x++) {
+            if ($x+2 < count($parts)) {
+                if ($parts[$x]['type'] == 'php' && $parts[$x]['string'] == '{') {
+                    $accoCount++;
+                }
+                if ($parts[$x]['type'] == 'php' && $parts[$x]['string'] == '}') {
+                    // outside 'currentClass' ?
+                    if ($resetClassNameOnAcco !== null && $accoCount-1 == $resetClassNameOnAcco) {
+                        $resetClassNameOnAcco = null;
+                        $currentClass = null;
+                    }
+                    
+                    $accoCount--;
+                }
+                
+                if ($parts[$x]['type'] == 'php' && $parts[$x]['string'] == 'class') {
+                    $currentClass = $parts[$x+2]['string'];
+                    $resetClassNameOnAcco = $accoCount;
+                }
+                
+                
+                if ($currentClass == $classname && $parts[$x]['type'] == 'php' && $parts[$x]['string'] == 'function') {
+                    $funcname = $parts[$x+2]['string'];
+                    if (strpos($funcname, '(') !== false)
+                        $funcname = substr($funcname, 0, strpos($funcname, '('));
+                    
+                    if ($funcname == $functionname) {
+                        $str = '';
+                        
+                        for($y=$x; $y < count($parts) && strpos($str, ')') === false; $y++) {
+                            $str .= $parts[$y]['string'];
+                        }
+                        
+                        $str = substr($str, strpos($str, '(')+1);
+                        $str = substr($str, 0, strpos($str, ')'));
+                        
+                        $params = explode(',', $str);
+                        for($z=0; $z < count($params); $z++) {
+                            $params[$z] = trim($params[$z]);
+                        }
+                        
+                        // no params?
+                        if (count($params) == 1 && $params[0] == '') {
+                            return array();
+                        }
+                        
+                        return $params;
+                    }
+                }
+            }
+            
+            
+            if (isset($parts[$x]['subs']) && count($parts[$x]['subs'])) {
+                $r = $this->getFunctionParameters( $p_functionName, $parts[$x]['subs'], $currentClass );
+                
+                if ($r !== null)
+                    return $r;
+            }
+            
+        }
+        
+        return null;
+    }
+    
     
 
     public function listFunctions($parts=null, $currentClass=null, $state=null) {
@@ -185,19 +361,22 @@ class PhpCodeParser {
                         $buf = '';
                     }
                     
-                    if ($in_something == false && in_array($c, array('{', '}', ';'))) {
-                        $buf .= $c;
-                        $this->addPart('php', $state, $buf);
-                        $buf = '';
-                        continue;
-                    }
                     
                     if ($in_something == false && $c == '{') {
                         $state['depth']++;
                     }
                     
-                    if ($in_something == false && $c == '}') {
-                        $state['depth']--;
+                    
+                    if ($in_something == false && in_array($c, array('{', '}', ';'))) {
+                        $buf .= $c;
+                        $this->addPart('php', $state, $buf);
+                        $buf = '';
+                        
+                        if ($c == '}') {
+                            $state['depth']--;
+                        }
+                        
+                        continue;
                     }
                     
                     
