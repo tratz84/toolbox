@@ -30,7 +30,7 @@ DATA;
     }
     
     
-    public function action_index() {
+    public function action_index($str=null) {
         
         blabla();test123();
         
@@ -48,8 +48,8 @@ blabla <?= $cnt ?>
 
 <?php 
 
-function blablatest( ){
-    
+function blablatest( $y=5 ){
+    print 'hi';
 }
 ?>
 

@@ -10,8 +10,6 @@ class PhpCodeParser {
     public function parse($file) {
         $data = file_get_contents( $file );
         
-        $this->parts = array();
-        
         $this->parseString( $data );
         
 //         var_export($this->parts);exit;
@@ -24,9 +22,9 @@ class PhpCodeParser {
 //         $str = $this->getFunctionCode('blablatest');
 //         var_export($str);exit;
 
-        $this->setFunction('blablatest', '$x', "print 'blabla';");
+//         $this->setFunction('interestingController::ho', '', "print 'blabla';");
         
-        print $this->partsToString();exit;
+//         print $this->partsToString();exit;
     }
     
     public function reparse( ){
@@ -51,27 +49,13 @@ class PhpCodeParser {
             list($classname, $functionname) = explode('::', $functionname, 2);
         }
         
-        $accoCount = 0;
-        $resetClassNameOnAcco = null;
+        $blnCurrentClassSet = false;
         
         for($x=0; $x < count($parts); $x++) {
             if ($x+2 < count($parts)) {
-                if ($parts[$x]['type'] == 'php' && $parts[$x]['string'] == '{') {
-                    $accoCount++;
-                }
-                if ($parts[$x]['type'] == 'php' && $parts[$x]['string'] == '}') {
-                    // outside 'currentClass' ?
-                    if ($resetClassNameOnAcco !== null && $accoCount-1 == $resetClassNameOnAcco) {
-                        $resetClassNameOnAcco = null;
-                        $currentClass = null;
-                    }
-                    
-                    $accoCount--;
-                }
-                
                 if ($parts[$x]['type'] == 'php' && $parts[$x]['string'] == 'class') {
                     $currentClass = $parts[$x+2]['string'];
-                    $resetClassNameOnAcco = $accoCount;
+                    $blnCurrentClassSet = true;
                 }
                 
                 if ($currentClass == $classname && $parts[$x]['type'] == 'php' && $parts[$x]['string'] == 'function') {
@@ -107,6 +91,8 @@ class PhpCodeParser {
                             }
                         }
                         
+                        $this->reparse();
+                        
                         return true;
                     }
                 }
@@ -118,6 +104,11 @@ class PhpCodeParser {
                 
                 if ($r)
                     return true;
+                
+                if ($blnCurrentClassSet) {
+                    $blnCurrentClassSet = false;
+                    $currentClass = null;
+                }
             }
             
         }
@@ -182,6 +173,8 @@ class PhpCodeParser {
                                 'string' => '}'
                             );
                             
+                            $this->reparse();
+                            
                             return true;
                         }
                         
@@ -221,6 +214,8 @@ class PhpCodeParser {
                     else
                         $parts[$x]['string'] .= $str;
                     
+                    $this->reparse();
+                    
                     return true;
                 }
             }
@@ -238,28 +233,14 @@ class PhpCodeParser {
         if (strpos($functionname, '::') !== false) {
             list($classname, $functionname) = explode('::', $functionname, 2);
         }
-        
-        $accoCount = 0;
-        $resetClassNameOnAcco = null;
+
+        $blnCurrentClassSet = false;
         
         for($x=0; $x < count($parts); $x++) {
             if ($x+2 < count($parts)) {
-                if ($parts[$x]['type'] == 'php' && $parts[$x]['string'] == '{') {
-                    $accoCount++;
-                }
-                if ($parts[$x]['type'] == 'php' && $parts[$x]['string'] == '}') {
-                    // outside 'currentClass' ?
-                    if ($resetClassNameOnAcco !== null && $accoCount-1 == $resetClassNameOnAcco) {
-                        $resetClassNameOnAcco = null;
-                        $currentClass = null;
-                    }
-                    
-                    $accoCount--;
-                }
-                
                 if ($parts[$x]['type'] == 'php' && $parts[$x]['string'] == 'class') {
                     $currentClass = $parts[$x+2]['string'];
-                    $resetClassNameOnAcco = $accoCount;
+                    $blnCurrentClassSet = true;
                 }
                 
                 
@@ -299,6 +280,11 @@ class PhpCodeParser {
                 
                 if ($r !== null)
                     return $r;
+                
+                if ($blnCurrentClassSet) {
+                    $blnCurrentClassSet = false;
+                    $currentClass = null;
+                }
             }
             
         }
@@ -379,26 +365,13 @@ class PhpCodeParser {
         
         $funcs = array();
         
-        $accoCount = 0;
-        $resetClassNameOnAcco = null;
+        $blnCurrentClassSet = false;
+        
         for($x=0; $x < count($parts); $x++) {
             if ($x+2 < count($parts)) {
-                if ($parts[$x]['type'] == 'php' && $parts[$x]['string'] == '{') {
-                    $accoCount++;
-                }
-                if ($parts[$x]['type'] == 'php' && $parts[$x]['string'] == '}') {
-                    // outside 'currentClass' ?
-                    if ($resetClassNameOnAcco !== null && $accoCount-1 == $resetClassNameOnAcco) {
-                        $resetClassNameOnAcco = null;
-                        $currentClass = null;
-                    }
-                    
-                    $accoCount--;
-                }
-                
                 if ($parts[$x]['type'] == 'php' && $parts[$x]['string'] == 'class') {
                     $currentClass = $parts[$x+2]['string'];
-                    $resetClassNameOnAcco = $accoCount;
+                    $blnCurrentClassSet = true;
                 }
                 
                 
@@ -422,6 +395,11 @@ class PhpCodeParser {
                 $fc = $this->listFunctions( $parts[$x]['subs'], $currentClass, $state );
                 if (count($fc))
                     $funcs = array_merge($funcs, $fc);
+                
+                if ($blnCurrentClassSet) {
+                    $blnCurrentClassSet = false;
+                    $currentClass = null;
+                }
             }
         }
         
