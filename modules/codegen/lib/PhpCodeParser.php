@@ -21,11 +21,12 @@ class PhpCodeParser {
 //         $c = $this->listFunctions(); var_export($c); exit;
         
 //         $str = $this->getFunctionParameters('interestingController::action_index');
+//         $str = $this->getFunctionCode('blablatest');
 //         var_export($str);exit;
 
-//         $this->setFunction('action_some', '$x', "print 'hi';");
+        $this->setFunction('blablatest', '$x', "print 'blabla';");
         
-//         print $this->partsToString();exit;
+        print $this->partsToString();exit;
     }
     
     public function reparse( ){
@@ -306,6 +307,64 @@ class PhpCodeParser {
     }
     
     
+    public function getFunctionCode($p_functionName, $p_parts=null, $currentClass=null) {
+        $parts = $p_parts !== null ? $p_parts : $this->parts;
+        
+        $classname = null;
+        $functionname = $p_functionName;
+        if (strpos($functionname, '::') !== false) {
+            list($classname, $functionname) = explode('::', $functionname, 2);
+        }
+        
+        $blnCurrentClassSet = false;
+        
+        for($x=0; $x < count($parts); $x++) {
+            if ($parts[$x]['type'] == 'php' && $parts[$x]['string'] == 'class') {
+                $currentClass = $parts[$x+2]['string'];
+                $blnCurrentClassSet = true;
+            }
+            
+            if ($currentClass == $classname && $parts[$x]['type'] == 'php' && $parts[$x]['string'] == 'function') {
+                $funcname = $parts[$x+2]['string'];
+                
+                if (strpos($funcname, '(') !== false)
+                    $funcname = substr($funcname, 0, strpos($funcname, '('));
+                    
+                if ($funcname == $functionname) {
+                    for($z=$x; $z < count($parts); $z++) {
+                        if (count($parts[$z]['subs'])) {
+                            $str = $this->partsToString($parts[$z]['subs']);
+                            
+                            // trim it
+                            $str = trim($str, '{} ');
+                            if (strpos($str, "\n") === 0)
+                                $str = substr($str, 1);
+                            
+                            return $str;
+                        }
+                    }
+                }
+            }
+            
+            
+            if (isset($parts[$x]['subs']) && count($parts[$x]['subs'])) {
+                $r = $this->getFunctionCode( $p_functionName, $parts[$x]['subs'], $currentClass );
+                
+                if ($r !== null)
+                    return $r;
+                
+                if ($blnCurrentClassSet) {
+                    $blnCurrentClassSet = false;
+                    $currentClass = null;
+                }
+            }
+            
+        }
+        
+        return null;
+    }
+    
+    
 
     public function listFunctions($parts=null, $currentClass=null, $state=null) {
         if ($parts === null) {
@@ -471,7 +530,13 @@ class PhpCodeParser {
                     
                     
                     if ($in_something == false && $c == '{') {
+                        $this->addPart('php', $state, $buf);
+                        $buf = '';
                         $state['depth']++;
+                        $this->addPart('php', $state, '{');
+                        
+                        continue;
+                        
                     }
                     
                     
