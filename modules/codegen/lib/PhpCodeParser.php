@@ -23,13 +23,23 @@ class PhpCodeParser {
 //         $str = $this->getFunctionParameters('interestingController::action_index');
 //         var_export($str);exit;
 
-//         $this->setFunction('interestingController::action_index', '$x', "print 'hi';");
+//         $this->setFunction('action_some', '$x', "print 'hi';");
         
 //         print $this->partsToString();exit;
     }
     
+    public function reparse( ){
+        $str = $this->partsToString();
+
+        $this->parts = array();
+        
+        $this->parseString( $str );
+    }
+    
     
     public function setFunction($p_functionname, $params, $code, &$parts=null, $currentClass = null) {
+        $firstCall = $parts === null ? true : false;
+        
         if ($parts === null) {
             $parts = &$this->parts;
         }
@@ -111,11 +121,109 @@ class PhpCodeParser {
             
         }
         
-        
-        // TODO: add?
-        
+        // add?
+        if ($firstCall) {
+            return $this->addFunction($p_functionname, $params, $code);
+        }
         
         return false;
+    }
+    
+    
+    public function addFunction($p_functionname, $params, $code, &$parts=null, $currentClass = null) {
+        if ($parts === null) {
+            $parts = &$this->parts;
+        }
+        
+        $classname = null;
+        $functionname = $p_functionname;
+        if (strpos($functionname, '::') !== false) {
+            list($classname, $functionname) = explode('::', $functionname, 2);
+        }
+        
+        $accoCount = 0;
+        $resetClassNameOnAcco = null;
+        
+        if ($classname) {
+            for($x=0; $x < count($parts); $x++) {
+                if ($x+2 < count($parts)) {
+                    if ($parts[$x]['type'] == 'php' && $parts[$x]['string'] == 'class') {
+                        $currentClass = $parts[$x+2]['string'];
+                    }
+                    
+                    if ($classname == $currentClass) {
+                        // add
+                        
+                        for($z=$x; $z < count($parts); $z++) {
+                            if (isset($parts[$z]['subs']) == false || count($parts[$z]['subs']) == 0)
+                                continue;
+                            
+                            $codeLines = explode("\n", $code);
+                            $str = PHP_EOL;
+                            $str .= "\tfunction ".$functionname.'('.$params.') {'.PHP_EOL;
+                            foreach($codeLines as $cl) {
+                                $str .= "\t\t".$cl.PHP_EOL;
+                            }
+                            $str .= "\t}".PHP_EOL.PHP_EOL;
+                            
+                            $subCount = count($parts[$z]['subs']);
+                            // '}' always last subs-element
+                            $parts[$z]['subs'][$subCount-1] = array(
+                                'type' => 'php',
+                                'subs' => array(),
+                                'string' => $str
+                            );
+                            
+                            // add new '}' element
+                            $parts[$z]['subs'][] = array(
+                                'type' => 'php',
+                                'subs' => array(),
+                                'string' => '}'
+                            );
+                            
+                            return true;
+                        }
+                        
+                    }
+                }
+                
+                
+                if (isset($parts[$x]['subs']) && count($parts[$x]['subs'])) {
+                    $r = $this->addFunction( $p_functionname, $params, $code, $parts[$x]['subs'], $currentClass );
+                    
+                    if ($r)
+                        return true;
+                }
+                
+            }
+        } else {
+            for($x=count($parts)-1; $x >= 0; $x--) {
+                if ($parts[$x]['type'] == 'php') {
+                    $codeLines = explode("\n", $code);
+                    $str = PHP_EOL;
+                    $str .= "function ".$functionname.'('.$params.') {'.PHP_EOL;
+                    foreach($codeLines as $cl) {
+                        $str .= "\t".$cl.PHP_EOL;
+                    }
+                    $str .= "}".PHP_EOL.PHP_EOL;
+                    
+                    $subCount = count($parts[$x]['subs']);
+                    $arr = array(
+                        'type' => 'php',
+                        'subs' => array(),
+                        'string' => $str
+                    );
+                    
+                    
+                    if ($parts[$x]['string'] == '?>')
+                        $parts[$x]['string'] = $str . PHP_EOL . '?>';
+                    else
+                        $parts[$x]['string'] .= $str;
+                    
+                    return true;
+                }
+            }
+        }
     }
     
     
