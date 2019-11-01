@@ -128,10 +128,21 @@ function list_files($path, $opts=array()) {
     while ($f = readdir($dh)) {
         if ($f == '.' || $f == '..') continue;
         
-        if (isset($opts['append-slash']) && $opts['append-slash'] && is_dir( $path . '/' . $f )) {
-            $files[] = $f . '/';
-        } else {
-            $files[] = $f;
+        if (isset($opts['dironly']) && $opts['dironly'] && is_dir($path.'/'.$f) == false) {
+            continue;
+        }
+
+        $skipFile = false;
+        if (isset($opts['fileonly']) && $opts['fileonly'] && is_dir($path.'/'.$f) == true) {
+            $skipFile = true;
+        }
+        
+        if ($skipFile == false) {
+            if (isset($opts['append-slash']) && $opts['append-slash'] && is_dir( $path . '/' . $f )) {
+                $files[] = $f . '/';
+            } else {
+                $files[] = $f;
+            }
         }
         
         
