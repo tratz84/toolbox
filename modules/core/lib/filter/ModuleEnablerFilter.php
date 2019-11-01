@@ -4,6 +4,7 @@ namespace core\filter;
 
 use core\Context;
 use core\module\ModuleMeta;
+use core\module\ModuleLoader;
 
 
 class ModuleEnablerFilter {
@@ -63,7 +64,8 @@ class ModuleEnablerFilter {
         
         // load autoload.php for modules
         foreach($modulesToLoad as $m) {
-            load_php_file( $m['autoload'] );
+            $ml = new ModuleLoader($m['meta'], $m['autoload']);
+            $ml->load();
         }
         
         
