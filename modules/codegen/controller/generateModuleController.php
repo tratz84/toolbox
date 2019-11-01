@@ -37,10 +37,9 @@ class generateModuleController extends BaseController {
         mkdir($module_dir . '/' . $module_code . '/lib');
         mkdir($module_dir . '/' . $module_code . '/templates');
         
-        touch($module_dir . '/' . $module_code . '/autoload.php');
+        file_put_contents($module_dir . '/' . $module_code . '/autoload.php', "<?php\n\n");
         
-        
-        file_put_contents($module_dir . '/meta.php', "<?php\n\nreturn new ModuleMeta(".var_export($module_code, true).", ".var_export($module_name, true).", ".var_export($module_desc, true).");\n");
+        file_put_contents($module_dir . '/' . $module_code . '/meta.php', "<?php\n\nreturn new core\\module\\ModuleMeta(".var_export($module_code, true).", ".var_export($module_name, true).", ".var_export($module_desc, true).");\n");
         
     }
     
