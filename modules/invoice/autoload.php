@@ -2,6 +2,7 @@
 
 
 use base\forms\CompanyForm;
+use base\model\Menu;
 use core\Context;
 use core\ObjectContainer;
 use core\event\CallbackPeopleEventListener;
@@ -69,6 +70,34 @@ $eb->subscribe('base', 'user-capabilities', new CallbackPeopleEventListener(func
     }
 }));
 
+
+    
+$eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListener(function($evt) {
+    $ctx = \core\Context::getInstance();
+    $src = $evt->getSource();
+    
+    if (hasCapability('invoice', 'edit-offer')) {
+        $menuOffers = new Menu();
+        $menuOffers->setIconLabelUrl('fa-share-alt', 'Offertes', '/?m=invoice&c=offer');
+        $menuOffers->setWeight(35);
+        $src->add($menuOffers);
+    }
+
+    if (hasCapability('invoice', 'edit-invoice')) {
+        $menuInvoice = new Menu();
+        $menuInvoice->setIconLabelUrl('fa-file-archive-o', strOrder(3), '/?m=invoice&c=invoice');
+        $menuInvoice->setWeight(35.1);
+        $src->add($menuInvoice);
+    }
+
+    if ($ctx->isExperimental()) {
+        $menuBillable = new Menu();
+        $menuBillable->setIconLabelUrl('fa-money', 'Billable', '/?m=invoice&c=tobill');
+        $menuBillable->setWeight(35.2);
+        $src->add($menuBillable);
+    }
+    
+}));
 
 
 $eb->subscribe('base', 'company-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {

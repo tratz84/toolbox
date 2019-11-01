@@ -1,5 +1,9 @@
 <?php
 
+// only available in debug-mode
+if (!DEBUG)
+    return;
+
 
 use core\Context;
 use core\module\ModuleMeta;
