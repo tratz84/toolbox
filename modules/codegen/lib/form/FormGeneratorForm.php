@@ -9,6 +9,9 @@ use core\forms\CheckboxField;
 use core\forms\ColorPickerField;
 use core\forms\SelectField;
 use core\forms\TextField;
+use codegen\form\widgetoptions\SelectOptionsForm;
+use core\forms\WidgetContainer;
+use core\forms\HiddenField;
 
 class FormGeneratorForm extends BaseForm {
     
@@ -21,14 +24,25 @@ class FormGeneratorForm extends BaseForm {
         
         hook_htmlscriptloader_enableGroup('jstree');
         
-        
         $this->addModuleSelection();
         $this->addWidget(new TextField('form_name', '', 'Form name'));
+        $this->addWidget(new HiddenField('treedata'));
+    }
+    
+    
+    public function getFormWidgets() {
+        return $this->formWidgets;
     }
     
     protected function initFormWidgets() {
         
         $this->formWidgets = array();
+        
+        $this->formWidgets[] = array(
+            'type' => 'container',
+            'class' => WidgetContainer::class,
+            'label' => 'container'
+        );
         
         $this->formWidgets[] = array(
             'class' => TextField::class,
@@ -40,6 +54,7 @@ class FormGeneratorForm extends BaseForm {
         );
         $this->formWidgets[] = array(
             'class' => SelectField::class,
+            'editor' => SelectOptionsForm::class, 
             'label' => 'Select'
         );
         $this->formWidgets[] = array(
@@ -49,6 +64,12 @@ class FormGeneratorForm extends BaseForm {
         
         
         $this->formWidgets = apply_filter('form-generator-form-widgets', $this->formWidgets);
+        
+        for($x=0; $x < count($this->formWidgets); $x++) {
+            if (isset($this->formWidgets[$x]['type']) == false)
+                $this->formWidgets[$x]['type'] = 'widget';
+        }
+        
     }
     
     protected function addModuleSelection() {

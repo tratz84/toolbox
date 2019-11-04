@@ -22,11 +22,14 @@
 	</div>
 	
 	<div class="col-xs-12 col-sm-4 col-lg-3 setting-menu-tag-container">
-		<h2>Formulieren</h2>
+		<h2>Forms</h2>
 		
 		<ul>
 			<li>
-				<a href="<?= appUrl('/?m=codegen&c=formgenerator') ?>">Formulier aanmaken</a>
+				<a href="<?= appUrl('/?m=codegen&c=formgenerator&a=list') ?>">List forms</a>
+			</li>
+			<li>
+				<a href="<?= appUrl('/?m=codegen&c=formgenerator') ?>">Create form</a>
 			</li>
 		</ul>
 	</div>
