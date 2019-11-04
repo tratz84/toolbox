@@ -55,9 +55,8 @@ $(document).ready(function() {
 	}).bind("loaded.jstree", function (event, data) {
         $(this).jstree("open_all");
     }).on('changed.jstree', function(e, data) {
-        console.log(data.node);
         if (data && data.node && data.node.data) {
-        	console.log(data.node.data);
+            widget_properties( data.node );
         }
     });
 });
@@ -82,10 +81,10 @@ function parse_tree(tree_json) {
 		console.log(tree_json[x]);
 		i.type = tree_json[x].type;
 		i.text = tree_json[x].text;
+		i.data = {};
 		if (tree_json[x].data) for(var y in tree_json[x].data) {
-			i[y] = tree_json[x].data[y];
+			i.data[y] = tree_json[x].data[y];
 		}
-		
 		
 		if (tree_json[x].children && tree_json[x].children.length) {
 			var childdata = parse_tree(tree_json[x].children);
@@ -111,6 +110,8 @@ function btnAddWidget_Click() {
 }
 
 function add_widget(w) {
+// 	console.log('add_widget: ' + w);
+// 	console.log(w);
 	$('#tree').jstree(true).settings.core.data.push({
 		'text': w.label,
 		'type': w.type,
@@ -121,6 +122,18 @@ function add_widget(w) {
 	close_popup();
 }
 
+function widget_properties(node) {
+	var data = node.data;
+
+	$.ajax({
+		url: appUrl('/?m=codegen&c=formgenerator&a=widget_properties'),
+		type: 'POST',
+		data: data,
+		success: function( data, xhr, textStatus) {
+			$('#widget-info').html( data );
+		}
+	});
+}
 
 
 
