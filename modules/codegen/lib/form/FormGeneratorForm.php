@@ -69,7 +69,20 @@ class FormGeneratorForm extends BaseForm {
             if (isset($this->formWidgets[$x]['type']) == false)
                 $this->formWidgets[$x]['type'] = 'widget';
         }
+    }
+    
+    public function getEditorClass($widgetClass) {
+        for($x=0; $x < count($this->formWidgets); $x++) {
+            if ($this->formWidgets[$x]['class'] == $widgetClass) {
+                if (isset($this->formWidgets[$x]['editor'])) {
+                    return $this->formWidgets[$x]['editor'];
+                } else {
+                    return \codegen\form\widgetoptions\DefaultWidgetOptionsForm::class;
+                }
+            }
+        }
         
+        return null;
     }
     
     protected function addModuleSelection() {

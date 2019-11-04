@@ -2,9 +2,8 @@
 
 
 use core\controller\BaseController;
-use codegen\form\FormGeneratorForm;
-use core\exception\InvalidStateException;
 use core\exception\FileException;
+use codegen\form\FormGeneratorForm;
 
 class formgeneratorController extends BaseController {
     
@@ -78,7 +77,6 @@ class formgeneratorController extends BaseController {
     
     public function action_select_widget() {
         $form = new FormGeneratorForm();
-        
         $this->formWidgets = $form->getFormWidgets();
         
         $this->setShowDecorator( false );
@@ -89,6 +87,16 @@ class formgeneratorController extends BaseController {
     
     public function action_widget_properties() {
 
+        $form = new FormGeneratorForm();
+        $editorClass = $form->getEditorClass( get_var('class') );
+        
+        if ($editorClass == null)
+            die('Widget not found');
+        
+        
+        $this->form = new $editorClass();
+        $this->form->bind( $_REQUEST );
+        
         
         $this->setShowDecorator( false );
         

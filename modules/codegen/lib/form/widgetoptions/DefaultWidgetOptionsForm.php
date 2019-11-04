@@ -4,6 +4,7 @@ namespace codegen\form\widgetoptions;
 
 
 use core\forms\BaseForm;
+use core\forms\TextField;
 
 class DefaultWidgetOptionsForm extends BaseForm {
     
