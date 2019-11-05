@@ -10,8 +10,11 @@ use core\forms\ColorPickerField;
 use core\forms\SelectField;
 use core\forms\TextField;
 use codegen\form\widgetoptions\SelectOptionsForm;
+use codegen\form\widgetoptions\CheckboxOptionsForm;
+use codegen\form\widgetoptions\ContainerOptionsForm;
 use core\forms\WidgetContainer;
 use core\forms\HiddenField;
+use core\forms\validator\NotEmptyValidator;
 
 class FormGeneratorForm extends BaseForm {
     
@@ -27,6 +30,10 @@ class FormGeneratorForm extends BaseForm {
         $this->addModuleSelection();
         $this->addWidget(new TextField('form_name', '', 'Form name'));
         $this->addWidget(new HiddenField('treedata'));
+        
+        
+        
+        $this->addValidator('module_name', new NotEmptyValidator());
     }
     
     
@@ -41,6 +48,7 @@ class FormGeneratorForm extends BaseForm {
         $this->formWidgets[] = array(
             'type' => 'container',
             'class' => WidgetContainer::class,
+            'editor' => ContainerOptionsForm::class,
             'label' => 'container'
         );
         
@@ -50,6 +58,7 @@ class FormGeneratorForm extends BaseForm {
         );
         $this->formWidgets[] = array(
             'class' => CheckboxField::class,
+            'editor' => CheckboxOptionsForm::class,
             'label' => 'Checkbox'
         );
         $this->formWidgets[] = array(

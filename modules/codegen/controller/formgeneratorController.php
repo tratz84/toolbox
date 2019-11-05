@@ -4,6 +4,7 @@
 use core\controller\BaseController;
 use core\exception\FileException;
 use codegen\form\FormGeneratorForm;
+use core\exception\InvalidStateException;
 
 class formgeneratorController extends BaseController {
     
@@ -12,10 +13,10 @@ class formgeneratorController extends BaseController {
         
         $this->form = new FormGeneratorForm();
         
-        if (is_get()) {
-            
+        if (is_get() && get_var('fm') && get_var('ff')) {
             $form_module = get_var('fm');
             $form_file = get_var('ff');
+            
             $codegen_path = module_file($form_module, '/config/codegen');
             $fullpath = realpath($codegen_path. '/' . $form_file);
             
@@ -36,17 +37,22 @@ class formgeneratorController extends BaseController {
             $this->form->validate();
             
             // save
-            $f = module_file(get_var('module_name'), '/');
-            if ($f !== false) {
-                if (file_exists($f . '/config/codegen') == false) {
-                    if (mkdir($f . '/config/codegen', 0755, true) == false) {
-                        throw new FileException('Unable to create save-dir');
-                    }
-                }
-                
-                $form = slugify($_REQUEST['form_name']);
-                file_put_contents($f.'/config/codegen/form-'.$form.'.php', "<?php\n\nreturn ".var_export($_REQUEST, true) . ";\n\n");
+            $module_name = $this->form->getWidgetValue('module_name');
+            $f = module_file($module_name, '/');
+            if ($f === false) {
+                throw new InvalidStateException('Module not found');
             }
+            if (file_exists($f . '/config/codegen') == false) {
+                if (mkdir($f . '/config/codegen', 0755, true) == false) {
+                    throw new FileException('Unable to create save-dir');
+                }
+            }
+            
+            $form = slugify($_REQUEST['form_name']);
+            $formfile = 'form-'.$form.'.php';
+            file_put_contents($f.'/config/codegen/'.$formfile, "<?php\n\nreturn ".var_export($_REQUEST, true) . ";\n\n");
+            
+            redirect( '/?m=codegen&c=formgenerator&fm='.urlencode($module_name).'&ff='.urlencode($formfile) );
         }
         
         return $this->render();
@@ -103,6 +109,15 @@ class formgeneratorController extends BaseController {
         return $this->render();
     }
     
+    
+    
+    public function action_example_form() {
+        
+        
+        $this->setShowDecorator( false );
+        
+        return $this->render();
+    }
     
     
 }

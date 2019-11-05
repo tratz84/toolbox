@@ -22,12 +22,12 @@
 	<div id="widget-info"></div>
 </div>
 <div id="form-preview" class="form-preview"></div>
-<input type="button" value="test" onclick="test()" />
 
 <script>
-var tree;
-$(document).ready(function() {
 
+var selectedNode = null;
+
+$(document).ready(function() {
 	var treedata = [];
 	if ($('[name=treedata]').val() != '') {
 		treedata = JSON.parse( $('[name=treedata]').val() );
@@ -55,10 +55,16 @@ $(document).ready(function() {
 	}).bind("loaded.jstree", function (event, data) {
         $(this).jstree("open_all");
     }).on('changed.jstree', function(e, data) {
+    	if (data.action && data.action == 'delete_node')
+        	return;
+        
         if (data && data.node && data.node.data) {
+        	selectedNode = data.node;
             widget_properties( data.node );
         }
     });
+
+	update_form();
 });
 
 $('.form-form-generator-form').submit(function() {
@@ -98,13 +104,6 @@ function parse_tree(tree_json) {
 }
 
 
-function test() {
-	var td = treedata('tree');
-	
-	console.log(td);
-}
-
-
 function btnAddWidget_Click() {
 	show_popup( appUrl('/?m=codegen&c=formgenerator&a=select_widget') );
 }
@@ -120,6 +119,8 @@ function add_widget(w) {
 	$('#tree').jstree(true).refresh();
 	
 	close_popup();
+
+	update_form();
 }
 
 function widget_properties(node) {
@@ -131,6 +132,59 @@ function widget_properties(node) {
 		data: data,
 		success: function( data, xhr, textStatus) {
 			$('#widget-info').html( data );
+
+			$('#widget-info').find('input, select').change(function() {
+				var name = $(this).attr('name');
+				var val = $(this).val();
+				selectedNode.data[name] = val;
+
+				if (name == 'name' || name == 'label') {
+					var t = '';
+					t += $('#widget-info').find('[name=name]').val();
+
+					console.log('test::: ' + t);
+					var lbl = $('#widget-info').find('[name=label]').val();
+					if (lbl != '' && typeof lbl != 'undefined') {
+    					if (t != '')
+    						t = t + ': ';
+    					
+    					t = t + lbl;
+					}
+
+					selectedNode.text = t;
+					var n = $('#tree').jstree(true).redraw( true );
+					update_form();
+				}
+			});
+		}
+	});
+}
+
+function delete_selected_widget() {
+	$('#tree').jstree(true).delete_node( selectedNode );
+	
+	$('#widget-info').html('');
+	selectedNode = null;
+}
+
+var ajx_update_form = null;
+function update_form() {
+
+	if (ajx_update_form) {
+		ajx_update_form.abort();
+	}
+
+	var json_treedata = JSON.stringify( treedata('tree') );
+	
+	ajx_update_form = $.ajax({
+		type: 'POST',
+		url: appUrl('/?m=codegen&c=formgenerator&a=example_form'),
+		data: {
+			json_treedata: json_treedata
+		},
+		success: function(data, xhr, textStatus) {
+			$('#form-preview').html( data );
+			
 		}
 	});
 }
@@ -138,3 +192,6 @@ function widget_properties(node) {
 
 
 </script>
+
+
+

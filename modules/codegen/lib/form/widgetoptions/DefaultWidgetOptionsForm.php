@@ -11,6 +11,8 @@ class DefaultWidgetOptionsForm extends BaseForm {
     public function __construct() {
         parent::__construct();
         
+        $this->disableSubmit();
+        
         $this->addWidget(new TextField('name', '', 'Name'));
         $this->addWidget(new TextField('label', '', 'Label'));
         $this->addWidget(new TextField('defaultValue', '', 'Default value'));
