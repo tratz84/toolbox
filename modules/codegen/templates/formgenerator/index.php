@@ -13,15 +13,22 @@
 
 <?= $form->render() ?>
 
-<div class="">
-	<div>
-		<a href="javascript:void(0);" onclick="btnAddWidget_Click();">Add widget</a>
+<hr/>
+
+<div class="row">
+    <div class="col-xs-3">
+    	<div>
+    		<a href="javascript:void(0);" onclick="btnAddWidget_Click();">Add widget</a>
+    	</div>
+    	<div id="tree"></div>
+    	
+    	<div id="widget-info"></div>
+    </div>
+    
+    <div class="col-xs-9">
+		<div id="form-preview" class="form-preview"></div>
 	</div>
-	<div id="tree"></div>
-	
-	<div id="widget-info"></div>
 </div>
-<div id="form-preview" class="form-preview"></div>
 
 <script>
 

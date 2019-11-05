@@ -10,7 +10,6 @@ class formgeneratorController extends BaseController {
     
     
     public function action_index() {
-        
         $this->form = new FormGeneratorForm();
         
         if (is_get() && get_var('fm') && get_var('ff')) {
