@@ -61,6 +61,8 @@ $(document).ready(function() {
 		
 	}).bind("loaded.jstree", function (event, data) {
         $(this).jstree("open_all");
+        
+    	update_form();
     }).on('changed.jstree', function(e, data) {
     	if (data.action && data.action == 'delete_node')
         	return;
@@ -71,7 +73,6 @@ $(document).ready(function() {
         }
     });
 
-	update_form();
 });
 
 $('.form-form-generator-form').submit(function() {
@@ -140,7 +141,7 @@ function widget_properties(node) {
 		success: function( data, xhr, textStatus) {
 			$('#widget-info').html( data );
 
-			$('#widget-info').find('input, select').change(function() {
+			$('#widget-info').find('input, select, textarea').change(function() {
 				var name = $(this).attr('name');
 				var val = $(this).val();
 				selectedNode.data[name] = val;
@@ -149,7 +150,6 @@ function widget_properties(node) {
 					var t = '';
 					t += $('#widget-info').find('[name=name]').val();
 
-					console.log('test::: ' + t);
 					var lbl = $('#widget-info').find('[name=label]').val();
 					if (lbl != '' && typeof lbl != 'undefined') {
     					if (t != '')
@@ -160,8 +160,9 @@ function widget_properties(node) {
 
 					selectedNode.text = t;
 					var n = $('#tree').jstree(true).redraw( true );
-					update_form();
 				}
+				
+				update_form();
 			});
 		}
 	});

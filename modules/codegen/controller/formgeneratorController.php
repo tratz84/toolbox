@@ -5,6 +5,7 @@ use core\controller\BaseController;
 use core\exception\FileException;
 use codegen\form\FormGeneratorForm;
 use core\exception\InvalidStateException;
+use core\forms\CodegenBaseForm;
 
 class formgeneratorController extends BaseController {
     
@@ -108,14 +109,12 @@ class formgeneratorController extends BaseController {
         return $this->render();
     }
     
-    
-    
     public function action_example_form() {
+        $data = @json_decode($_REQUEST['json_treedata']);
         
+        $form = \core\forms\CodegenBaseForm::createForm( $data );
         
-        $this->setShowDecorator( false );
-        
-        return $this->render();
+        print $form->render();
     }
     
     

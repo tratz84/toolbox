@@ -11,7 +11,7 @@ class SelectOptionsForm extends DefaultWidgetOptionsForm {
         parent::__construct();
         
         
-        $this->addWidget(new TextareaField('options', '', 'Options'));
+        $this->addWidget(new TextareaField('optionItems', '', 'Options'));
     }
     
 }
