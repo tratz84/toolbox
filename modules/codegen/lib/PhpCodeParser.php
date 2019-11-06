@@ -450,6 +450,11 @@ class PhpCodeParser {
     }
     
     
+    public function toString() {
+        return $this->partsToString();
+    }
+    
+    
     public function parseString($str) {
         
         $blocks = $this->stringToBlocks($str);

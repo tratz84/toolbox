@@ -52,6 +52,11 @@ class formgeneratorController extends BaseController {
             $formfile = 'form-'.$form.'.php';
             file_put_contents($f.'/config/codegen/'.$formfile, "<?php\n\nreturn ".var_export($_REQUEST, true) . ";\n\n");
             
+            $generator = new codegen\generator\FormGenerator();
+            if ($generator->loadData( $module_name, $formfile )) {
+                $generator->generate();
+            }
+            
             redirect( '/?m=codegen&c=formgenerator&fm='.urlencode($module_name).'&ff='.urlencode($formfile) );
         }
         
@@ -115,21 +120,6 @@ class formgeneratorController extends BaseController {
         $form = \core\forms\CodegenBaseForm::createForm( $data );
         
         print $form->render();
-    }
-    
-    
-    
-    public function action_test() {
-        $d = <<<DATA
-[{"type":"container","text":"container","data":{"type":"container","class":"core\\\\forms\\\\WidgetContainer","label":"container","name":"container"},"children":[{"type":"widget","text":"firstname: Firstname","data":{"class":"core\\\\forms\\\\TextField","label":"Firstname","type":"widget","name":"firstname"}},{"type":"widget","text":"lastname: Lastname","data":{"class":"core\\\\forms\\\\CheckboxField","editor":"codegen\\\\form\\\\widgetoptions\\\\CheckboxOptionsForm","label":"Lastname","type":"widget","name":"lastname"}}]},{"type":"widget","text":"Color picker","data":{"class":"core\\\\forms\\\\ColorPickerField","label":"Color picker","type":"widget"}},{"type":"widget","text":"Checkbox","data":{"class":"core\\\\forms\\\\CheckboxField","editor":"codegen\\\\form\\\\widgetoptions\\\\CheckboxOptionsForm","label":"Checkbox","type":"widget"}}]
-DATA;
-//         print $d;exit;
-        $x = json_decode( $d );
-
-//         var_export( $x );
-        
-        $form = \core\forms\CodegenBaseForm::createForm( $x );
-        
     }
     
     

@@ -60,7 +60,10 @@ class CodegenBaseForm extends BaseForm {
             foreach($cm->getParameters() as $func_param) {
                 // optionItems? (SelectField etc)
                 if ($func_param->name == 'optionItems') {
-                    $params[] = $this->optionsToArray( $item->data->optionItems);
+                    if (isset($item->data->optionItems))
+                        $params[] = $this->optionsToArray( $item->data->optionItems );
+                    else
+                        $params[] = array();
                 }
                 // value found?
                 else if (isset($item->data->{$func_param->name})) {
