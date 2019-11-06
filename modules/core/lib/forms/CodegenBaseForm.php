@@ -53,7 +53,7 @@ class CodegenBaseForm extends BaseForm {
                 $item->data->name = $name . $no;
             }
             
-//             print "Name: " . $item->data->name . "\n";
+            $this->usedWidgetNames[] = $item->data->name;
             
             // build params-array for constructor parameters
             $params = array();
@@ -80,6 +80,7 @@ class CodegenBaseForm extends BaseForm {
             $obj = $rf->newInstanceArgs( $params );
             
             // add
+//             print "Widgetname: " . $obj->getName() . "\n";
             $parentWidget->addWidget($obj);
             
             

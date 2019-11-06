@@ -118,5 +118,21 @@ class formgeneratorController extends BaseController {
     }
     
     
+    
+    public function action_test() {
+        $d = <<<DATA
+[{"type":"container","text":"container","data":{"type":"container","class":"core\\\\forms\\\\WidgetContainer","label":"container","name":"container"},"children":[{"type":"widget","text":"firstname: Firstname","data":{"class":"core\\\\forms\\\\TextField","label":"Firstname","type":"widget","name":"firstname"}},{"type":"widget","text":"lastname: Lastname","data":{"class":"core\\\\forms\\\\CheckboxField","editor":"codegen\\\\form\\\\widgetoptions\\\\CheckboxOptionsForm","label":"Lastname","type":"widget","name":"lastname"}}]},{"type":"widget","text":"Color picker","data":{"class":"core\\\\forms\\\\ColorPickerField","label":"Color picker","type":"widget"}},{"type":"widget","text":"Checkbox","data":{"class":"core\\\\forms\\\\CheckboxField","editor":"codegen\\\\form\\\\widgetoptions\\\\CheckboxOptionsForm","label":"Checkbox","type":"widget"}}]
+DATA;
+//         print $d;exit;
+        $x = json_decode( $d );
+
+//         var_export( $x );
+        
+        $form = \core\forms\CodegenBaseForm::createForm( $x );
+        
+    }
+    
+    
+    
 }
 

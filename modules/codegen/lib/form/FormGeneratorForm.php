@@ -15,6 +15,7 @@ use codegen\form\widgetoptions\ContainerOptionsForm;
 use core\forms\WidgetContainer;
 use core\forms\HiddenField;
 use core\forms\validator\NotEmptyValidator;
+use core\forms\HtmlField;
 
 class FormGeneratorForm extends BaseForm {
     

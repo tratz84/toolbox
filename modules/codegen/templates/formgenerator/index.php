@@ -65,12 +65,15 @@ $(document).ready(function() {
     	update_form();
     }).on('changed.jstree', function(e, data) {
     	if (data.action && data.action == 'delete_node')
-        	return;
-        
+        	return true;
+
         if (data && data.node && data.node.data) {
         	selectedNode = data.node;
             widget_properties( data.node );
         }
+    }).on('move_node.jstree', function(obj, parent) {
+        
+        update_form();
     });
 
 });
@@ -117,14 +120,11 @@ function btnAddWidget_Click() {
 }
 
 function add_widget(w) {
-// 	console.log('add_widget: ' + w);
-// 	console.log(w);
-	$('#tree').jstree(true).settings.core.data.push({
+	$('#tree').jstree(true).create_node(null, {
 		'text': w.label,
 		'type': w.type,
 		data: w
 	});
-	$('#tree').jstree(true).refresh();
 	
 	close_popup();
 
@@ -173,6 +173,8 @@ function delete_selected_widget() {
 	
 	$('#widget-info').html('');
 	selectedNode = null;
+
+	update_form();
 }
 
 var ajx_update_form = null;
