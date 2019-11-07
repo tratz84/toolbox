@@ -38,18 +38,23 @@ class PhpCodeMeta {
             return;
         }
         
-        $this->meta[] = array(
+        $m = array(
             'file' => $file,
-            'class' => $pcp->getFullClassPath( $class['name'] ),
-            'baseclass' => $pcp->getFullClassPath( $class['base'] )
+            'class' => $pcp->getFullClassPath( $class['name'] )
         );
+        
+        if (isset($class['base'])) {
+            $m['baseclass'] = $pcp->getFullClassPath( $class['base'] );
+        }
+        
+        $this->meta[] = $m;
     }
     
     public function classesWithBaseClass($baseclassName, $opts=array()) {
         $arr = array();
         
         foreach($this->meta as $m) {
-            if ($m['baseclass'] == $baseclassName) {
+            if (isset($m['baseclass']) && $m['baseclass'] == $baseclassName) {
                 $arr[] = $m;
                 
                 if (isset($opts['recursive']) && $opts['recursive']) {

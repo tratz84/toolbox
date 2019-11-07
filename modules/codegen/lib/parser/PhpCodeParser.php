@@ -433,7 +433,7 @@ class PhpCodeParser {
     public function getFullClassPath($classname) {
         // already full path given?!
         if (strpos($classname, '\\') !== false) {
-            return $classname;
+            return trim($classname, '\\;');
         }
         
         // loop through uses

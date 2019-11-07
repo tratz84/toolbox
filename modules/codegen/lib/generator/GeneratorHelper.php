@@ -13,7 +13,7 @@ use codegen\form\widgetoptions\CheckboxOptionsForm;
 use codegen\form\widgetoptions\ContainerOptionsForm;
 use codegen\form\widgetoptions\SelectOptionsForm;
 use codegen\form\widgetoptions\HiddenOptionsForm;
-
+use codegen\form\widgetoptions\ListEditWidgetsOptionsForm;
 
 class GeneratorHelper {
     
@@ -63,6 +63,17 @@ class GeneratorHelper {
         return $map;
     }
     
+
+    public static function getListEditWidgetClasses() {
+        $pcm = new \codegen\parser\PhpCodeMeta();
+        $pcm->parseFiles(['filter' => function($f ){
+            return endsWith($f, 'List.php');
+        }]);
+            
+        $classes = $pcm->classesWithBaseClass( \core\forms\ListEditWidget::class, ['recursive' => false] );
+        
+        return $classes;
+    }
     
     
     public static function getWidgets() {
@@ -99,6 +110,16 @@ class GeneratorHelper {
             'class' => ColorPickerField::class,
             'label' => 'Color picker'
         );
+        
+        
+        $lewClasses = self::getListEditWidgetClasses();
+        foreach($lewClasses as $lew) {
+            $formWidgets[] = array(
+                'class' => $lew['class'],
+                'editor' => ListEditWidgetsOptionsForm::class,
+                'label' => $lew['class']                        // TODO.. set to description or something?
+            );
+        }
         
         
         $formWidgets = apply_filter('form-generator-form-widgets', $formWidgets);
