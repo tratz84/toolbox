@@ -34,6 +34,24 @@ class FormGenerator {
         return true;
     }
     
+    public function delete($moduleName, $filename) {
+        
+        $this->loadData($moduleName, $filename);
+        
+        $classname = $this->getClassName();
+        
+        $path = module_file($moduleName, '/lib/form/'.$classname.'.php');
+        
+        if ($path) {
+            unlink($path);
+        }
+
+        $f = module_file($moduleName, '/config/codegen/'.$filename);
+        if ($f) {
+            unlink($f);
+        }
+    }
+    
     public function setData() {
         
     }

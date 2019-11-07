@@ -19,6 +19,7 @@
 			<th>Module</th>
 			<th>File</th>
 			<th>Description</th>
+			<th></th>
 		</tr>
 	</thead>
 	
@@ -28,6 +29,9 @@
 			<td><?= esc_html($f['module']) ?></td>
 			<td><?= esc_html($f['file']) ?></td>
 			<td><?= esc_html($f['short_description']) ?></td>
+			<td class="actions">
+				<a href="<?= appUrl('/?m=codegen&c=formgenerator&a=delete&fm='.urlencode($f['module']).'&ff='.urlencode($f['file'])) ?>" class="fa fa-remove"></a>
+			</td>
 		</tr>
 		<?php endforeach; ?>
 	</tbody>

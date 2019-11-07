@@ -127,10 +127,13 @@ class formgeneratorController extends BaseController {
     }
     
     
-    public function action_test() {
-        $this->form = new codegen\form\TestForm();
+    public function action_delete() {
         
-        return $this->render();
+        $generator = new codegen\generator\FormGenerator();
+        $generator->delete( get_var('fm'), get_var('ff') );
+        
+        
+        redirect('/?m=codegen&c=formgenerator&a=list');
     }
     
     
