@@ -86,14 +86,14 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
     if (hasCapability('invoice', 'edit-invoice')) {
         $menuInvoice = new Menu();
         $menuInvoice->setIconLabelUrl('fa-file-archive-o', strOrder(3), '/?m=invoice&c=invoice');
-        $menuInvoice->setWeight(35.1);
+        $menuInvoice->setWeight(36);
         $src->add($menuInvoice);
     }
 
     if ($ctx->isExperimental()) {
         $menuBillable = new Menu();
         $menuBillable->setIconLabelUrl('fa-money', 'Billable', '/?m=invoice&c=tobill');
-        $menuBillable->setWeight(35.2);
+        $menuBillable->setWeight(37);
         $src->add($menuBillable);
     }
     
