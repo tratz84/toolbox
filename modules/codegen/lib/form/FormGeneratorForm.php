@@ -5,17 +5,10 @@ namespace codegen\form;
 
 
 use core\forms\BaseForm;
-use core\forms\CheckboxField;
-use core\forms\ColorPickerField;
+use core\forms\HiddenField;
 use core\forms\SelectField;
 use core\forms\TextField;
-use codegen\form\widgetoptions\SelectOptionsForm;
-use codegen\form\widgetoptions\CheckboxOptionsForm;
-use codegen\form\widgetoptions\ContainerOptionsForm;
-use core\forms\WidgetContainer;
-use core\forms\HiddenField;
 use core\forms\validator\NotEmptyValidator;
-use core\forms\HtmlField;
 
 class FormGeneratorForm extends BaseForm {
     
@@ -44,41 +37,8 @@ class FormGeneratorForm extends BaseForm {
     
     protected function initFormWidgets() {
         
-        $this->formWidgets = array();
+        $this->formWidgets = \codegen\generator\GeneratorHelper::getWidgets();
         
-        $this->formWidgets[] = array(
-            'type' => 'container',
-            'class' => WidgetContainer::class,
-            'editor' => ContainerOptionsForm::class,
-            'label' => 'container'
-        );
-        
-        $this->formWidgets[] = array(
-            'class' => TextField::class,
-            'label' => 'Textfield'
-        );
-        $this->formWidgets[] = array(
-            'class' => CheckboxField::class,
-            'editor' => CheckboxOptionsForm::class,
-            'label' => 'Checkbox'
-        );
-        $this->formWidgets[] = array(
-            'class' => SelectField::class,
-            'editor' => SelectOptionsForm::class, 
-            'label' => 'Select'
-        );
-        $this->formWidgets[] = array(
-            'class' => ColorPickerField::class,
-            'label' => 'Color picker'
-        );
-        
-        
-        $this->formWidgets = apply_filter('form-generator-form-widgets', $this->formWidgets);
-        
-        for($x=0; $x < count($this->formWidgets); $x++) {
-            if (isset($this->formWidgets[$x]['type']) == false)
-                $this->formWidgets[$x]['type'] = 'widget';
-        }
     }
     
     public function getEditorClass($widgetClass) {

@@ -1,7 +1,8 @@
 
 
 
-.codegen-formgenerator-controller {
+.codegen-formgenerator-controller
+, .codegen-listeditgenerator-controller {
 	
 	.row {
 		margin-left: 0;
@@ -35,7 +36,17 @@
 		}
 		
 	}
-	
-	
 }
+
+
+.codegen-listeditgenerator-controller {
+	#widgets-container {
+		list-style-position: inside;
+		li.selected {
+			background-color: #f1f1f1;
+		}
+	}
+}
+
+
 

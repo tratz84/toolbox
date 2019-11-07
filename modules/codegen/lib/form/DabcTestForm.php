@@ -1,11 +1,10 @@
-<?= "<?php" ?>
+<?php
+
+namespace codegen\form;
 
 
-namespace <?= $namespace ?>;
 
-
-
-class <?= $classname ?> extends \core\forms\CodegenBaseForm {
+class DabcTestForm extends CodegenBaseForm {
 
 	public function __construct() {
 		

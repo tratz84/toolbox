@@ -123,6 +123,13 @@ class formgeneratorController extends BaseController {
     }
     
     
+    public function action_test() {
+        $this->form = new codegen\form\TestForm();
+        
+        return $this->render();
+    }
+    
+    
     
 }
 

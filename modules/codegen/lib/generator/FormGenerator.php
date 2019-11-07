@@ -161,7 +161,7 @@ class FormGenerator {
             $varname = '$w'.$this->widgetNo;
             $this->widgetNo++;
             
-            $html .= $varname.' = new ' . $classname . '(';
+            $html .= $varname.' = new \\' . $classname . '(';
             for($z=0; $z < count($params) && $z <= $lastNonDefaultParam; $z++) {
                 if ($z > 0) $html .= ', ';
                 $html .= $params[$z];
