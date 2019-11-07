@@ -3,8 +3,6 @@
 
 namespace <?= $namespace ?>;
 
-
-
 class <?= $classname ?> extends \core\forms\CodegenBaseForm {
 
 	public function __construct() {

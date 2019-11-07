@@ -6,11 +6,13 @@ use core\forms\CheckboxField;
 use core\forms\ColorPickerField;
 use core\forms\SelectField;
 use core\forms\TextField;
+use core\forms\HiddenField;
 use core\forms\WidgetContainer;
 use codegen\form\widgetoptions\DefaultWidgetOptionsForm;
 use codegen\form\widgetoptions\CheckboxOptionsForm;
 use codegen\form\widgetoptions\ContainerOptionsForm;
 use codegen\form\widgetoptions\SelectOptionsForm;
+use codegen\form\widgetoptions\HiddenOptionsForm;
 
 
 class GeneratorHelper {
@@ -24,6 +26,12 @@ class GeneratorHelper {
             'class' => WidgetContainer::class,
             'editor' => ContainerOptionsForm::class,
             'label' => 'container'
+        );
+
+        $formWidgets[] = array(
+            'class' => HiddenField::class,
+            'editor' => HiddenOptionsForm::class,
+            'label' => 'Hidden field'
         );
         
         $formWidgets[] = array(

@@ -21,9 +21,10 @@ class FormGeneratorForm extends BaseForm {
         
         hook_htmlscriptloader_enableGroup('jstree');
         
+        $this->addWidget(new HiddenField('treedata'));
         $this->addModuleSelection();
         $this->addWidget(new TextField('form_name', '', 'Form name'));
-        $this->addWidget(new HiddenField('treedata'));
+        $this->addWidget(new TextField('short_description', '', 'Description'));
         
         
         

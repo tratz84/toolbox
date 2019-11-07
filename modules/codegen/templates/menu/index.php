@@ -26,17 +26,13 @@
 		
 		<ul>
 			<li>
-				<a href="<?= appUrl('/?m=codegen&c=formgenerator&a=list') ?>">List forms</a>
+				<a href="<?= appUrl('/?m=codegen&c=formgenerator&a=list') ?>">Forms generator</a>
 			</li>
 			<li>
-				<a href="<?= appUrl('/?m=codegen&c=formgenerator') ?>">Create form</a>
-			</li>
-			
-			<li>
-				<a href="<?= appUrl('/?m=codegen&c=listeditgenerator') ?>">Create ListEditWidget</a>
+				<a href="<?= appUrl('/?m=codegen&c=listeditgenerator&a=list') ?>">ListEditWidget generator</a>
 			</li>
 			<li>
-				<a href="<?= appUrl('/?m=codegen&c=listformgenerator') ?>">Create ListFormWidget</a>
+				<a href="<?= appUrl('/?m=codegen&c=listformgenerator&a=list') ?>">ListFormWidget generator</a>
 			</li>
 			
 		</ul>

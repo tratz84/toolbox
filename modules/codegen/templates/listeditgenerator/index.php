@@ -2,7 +2,8 @@
 <div class="page-header">
 	
 	<div class="toolbox">
-		<a href="<?= appUrl('/?m=codegen&c=menu') ?>" class="fa fa-chevron-circle-left"></a>
+		<a href="<?= appUrl('/?m=codegen&c=listeditgenerator&a=list') ?>" class="fa fa-chevron-circle-left"></a>
+		<a href="javascript:void(0);" class="fa fa-save submit-form"></a>
 	</div>
 	
 
@@ -28,8 +29,26 @@
 
 $(document).ready(function() {
 
-	$('#widgets-container').sortable({
+	$('#widgets-container').sortable({ });
+
+
+	$('form.form-list-edit-generator-form').submit(function() {
+		var data = [];
+		$('#widgets-container').find('li').each(function(index, node) {
+			var w = $(node).data('widget');
+			data.push( w );
+		});
+
+		$('[name=data]').val( JSON.stringify(data) );
 	});
+
+	var data = $('[name=data]').val();
+	if (data != '') {
+		var widgets = JSON.parse( data );
+		for(var i in widgets) {
+			add_widget( widgets[i] );
+		}
+	}
 	
 });
 
@@ -44,7 +63,12 @@ function add_widget(w) {
 	li.data('widget', w);
 
 	var a = $('<a href="javascript:void(0);" />');
-	a.text( w.label );
+	console.log(w);
+	if ($.trim(w['text']) == '') {
+		a.text( w['class'] );
+	} else {
+		a.text( w['text'] );
+	}
 	li.append(a);
 
 	a.click(function() {
@@ -91,6 +115,8 @@ function widget_properties( data ) {
     					
     					t = t + lbl;
 					}
+
+					data['text'] = t;
 
 					selectedLi.find('a').text( t );
 				}

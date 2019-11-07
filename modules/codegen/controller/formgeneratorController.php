@@ -50,7 +50,9 @@ class formgeneratorController extends BaseController {
             
             $form = slugify($_REQUEST['form_name']);
             $formfile = 'form-'.$form.'.php';
-            file_put_contents($f.'/config/codegen/'.$formfile, "<?php\n\nreturn ".var_export($_REQUEST, true) . ";\n\n");
+            
+            $data = $this->form->asArray();
+            file_put_contents($f.'/config/codegen/'.$formfile, "<?php\n\nreturn ".var_export($data, true) . ";\n\n");
             
             $generator = new codegen\generator\FormGenerator();
             if ($generator->loadData( $module_name, $formfile )) {
@@ -72,10 +74,12 @@ class formgeneratorController extends BaseController {
             $files = list_files($path . '/config/codegen/');
             if ($files) foreach($files as $f) {
                 if (strpos($f, 'form-') === 0 && strpos($f, '.php') !== false) {
+                    $data = include realpath($path . '/config/codegen/' . $f);
                     $this->forms[] = array(
                         'module' => $modulename,
                         'path' => realpath($path . '/config/codegen/' . $f),
-                        'file' => $f
+                        'file' => $f,
+                        'short_description' => isset($data['short_description']) ? $data['short_description'] : ''
                     );
                 }
             }

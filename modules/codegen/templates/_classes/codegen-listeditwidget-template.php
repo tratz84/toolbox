@@ -1,10 +1,9 @@
-<?php
-
-namespace codegen\form;
+<?= "<?php" ?>
 
 
+namespace <?= $namespace ?>;
 
-class DabcTestForm extends CodegenBaseForm {
+class <?= $classname ?> extends \core\forms\ListEditWidget {
 
 	public function __construct() {
 		
