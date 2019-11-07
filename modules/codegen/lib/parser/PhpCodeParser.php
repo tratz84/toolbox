@@ -1,11 +1,14 @@
 <?php
 
-namespace codegen;
+namespace codegen\parser;
 
 
 class PhpCodeParser {
     
     protected $parts;
+    
+    protected $namespaceCache = null;
+    protected $usesCache = null;
     
     public function parse($file) {
         $data = file_get_contents( $file );
@@ -406,7 +409,98 @@ class PhpCodeParser {
         return $funcs;
     }
     
-    public function listClasses($parts=null) {
+    public function getNamespace() {
+        if ($this->namespaceCache !== null) {
+            return $this->namespaceCache;
+        }
+        
+        for($x=0; $x < count($this->parts); $x++) {
+            if ($x+2 < count($this->parts)) {
+                if ($this->parts[$x]['type'] == 'php' && $this->parts[$x]['string'] == 'namespace') {
+                    $ns = $this->parts[$x+2]['string'];
+                    $ns = trim($ns, '\\;');
+                    
+                    $this->namespaceCache = $ns;
+                    
+                    return $ns;
+                }
+            }
+        }
+        
+        return null;
+    }
+    
+    public function getFullClassPath($classname) {
+        // already full path given?!
+        if (strpos($classname, '\\') !== false) {
+            return $classname;
+        }
+        
+        // loop through uses
+        $uses = $this->getUses();
+        foreach($uses as $u) {
+            $lastSep = strrpos($u, '\\');
+            
+            $start = strrpos($u, $classname);
+            
+            if ($lastSep+1 === $start) {
+                return $u;
+            }
+        }
+        
+        // current namespace + classname;
+        return $this->getNamespace() . '\\' . $classname;
+    }
+    
+    public function getClass() {
+        $c = $this->listClasses(null, ['return_first' => true]);
+        
+        if (count($c))
+            return $c[0];
+        else
+            return null;
+    }
+    
+    public function getUses($parts=null) {
+        if ($this->usesCache !== null) {
+            return $this->usesCache;
+        }
+        
+        if ($parts === null) {
+            $parts = $this->parts;
+        }
+        
+        $uses = array();
+        
+        for($x=0; $x < count($parts); $x++) {
+            if ($x+2 < count($parts)) {
+                if ($parts[$x]['type'] == 'php' && $parts[$x]['string'] == 'use') {
+                    $use = $parts[$x+2]['string'];
+                    $use = trim($use, ';\\');
+                    
+                    $uses[] = $use;
+                }
+            }
+            
+            if (isset($parts[$x]['subs']) && count($parts[$x]['subs'])) {
+                $uss = $this->getUses($parts[$x]['subs']);
+                
+                if (count($uss)) {
+                    $uses = array_merge($uses, $uss);
+                }
+            }
+        }
+        
+        if ($parts === null) {
+            $this->usesCache = $uses;
+        }
+        
+        return $uses;
+    }
+    
+    
+    
+    public function listClasses($parts=null, $opts=array()) {
         if ($parts === null) {
             $parts = $this->parts;
         }
@@ -416,14 +510,48 @@ class PhpCodeParser {
         for($x=0; $x < count($parts); $x++) {
             if ($x+2 < count($parts)) {
                 if ($parts[$x]['type'] == 'php' && $parts[$x]['string'] == 'class') {
-                    $classes[] = $parts[$x+2]['string'];
+                    $cl = array('name' => $parts[$x+2]['string']);
+                    
+                    $blnImplements = false;
+                    $strImplements = '';
+                    
+                    for($z=$x+2; $z < count($parts); $z++) {
+                        if ($blnImplements) {
+                            $strImplements .= $parts[$z]['string'];
+                        }
+                        
+                        if ($parts[$z]['string'] == 'extends') {
+                            $cl['base'] = $parts[$z+2]['string'];
+                        }
+                        
+                        if ($parts[$z]['string'] == 'implements') {
+                            $blnImplements = true;
+                        }
+                    }
+                    
+                    $cl['interfaces'] = array();
+                    if ($blnImplements) {
+                        $arrImplements = explode(',', $strImplements);
+                        foreach($arrImplements as $intf) {
+                            if (trim($intf) != '') {
+                                $cl['interfaces'][] = trim($intf);
+                            }
+                        }
+                    }
+                    
+                    $classes[] = $cl;
                 }
             }
             
             if (isset($parts[$x]['subs']) && count($parts[$x]['subs'])) {
-                $sc = $this->listClasses($parts[$x]['subs']);
-                if (count($sc))
+                $sc = $this->listClasses($parts[$x]['subs'], $opts);
+                if (count($sc)) {
                     $classes = array_merge($classes, $sc);
+                    
+                    if (isset($opts['return_first']) && $opts['return_first']) {
+                        return $classes;
+                    }
+                }
             }
         }
         

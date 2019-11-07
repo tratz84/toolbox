@@ -18,6 +18,53 @@ use codegen\form\widgetoptions\HiddenOptionsForm;
 class GeneratorHelper {
     
     
+    public static function getFormClasses() {
+        $pcm = new \codegen\parser\PhpCodeMeta();
+        $pcm->parseFiles(['filter' => function($f ){
+            return endsWith($f, 'Form.php');
+        }]);
+            
+        $classes = $pcm->classesWithBaseClass( \core\forms\BaseForm::class, ['recursive' => true] );
+        
+        return $classes;
+    }
+    
+    public static function getFormClassesMap() {
+        $classes = self::getFormClasses();
+        
+        $map = array();
+        foreach($classes as $cl) {
+            $map[$cl['class']] = $cl['class'];
+        }
+        
+        return $map;
+    }
+    
+
+    public static function getFieldClasses() {
+        $pcm = new \codegen\parser\PhpCodeMeta();
+        $pcm->parseFiles(['filter' => function($f ){
+            return endsWith($f, 'Field.php');
+        }]);
+            
+        $classes = $pcm->classesWithBaseClass( \core\forms\BaseWidget::class, ['recursive' => true] );
+        
+        return $classes;
+    }
+    
+    public static function getFieldClassesMap() {
+        $classes = self::getFieldClasses();
+        
+        $map = array();
+        foreach($classes as $cl) {
+            $map[$cl['class']] = $cl['class'];
+        }
+        
+        return $map;
+    }
+    
+    
+    
     public static function getWidgets() {
         $formWidgets = array();
         

@@ -5,7 +5,7 @@ namespace codegen\generator;
 
 
 use core\exception\FileException;
-use codegen\PhpCodeParser;
+use codegen\parser\PhpCodeParser;
 
 class FormGenerator {
     

@@ -91,8 +91,8 @@ class formgeneratorController extends BaseController {
     
     
     public function action_select_widget() {
-        $form = new FormGeneratorForm();
-        $this->formWidgets = $form->getFormWidgets();
+        
+        $this->formWidgets = \codegen\generator\GeneratorHelper::getWidgets();
         
         $this->setShowDecorator( false );
         

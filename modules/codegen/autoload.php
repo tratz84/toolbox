@@ -4,6 +4,9 @@
 if (!DEBUG)
     return;
 
+require_once dirname(__FILE__).'/lib/functions/codegen_helper.php';
+
+
 $ctx = \core\Context::getInstance();
 
 $ctx->enableModule('codegen');
