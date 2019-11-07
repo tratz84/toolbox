@@ -30,11 +30,18 @@
 			<td><?= esc_html($f['file']) ?></td>
 			<td><?= esc_html($f['short_description']) ?></td>
 			<td class="actions">
-				<a href="<?= appUrl('/?m=codegen&c=formgenerator&a=delete&fm='.urlencode($f['module']).'&ff='.urlencode($f['file'])) ?>" class="fa fa-remove"></a>
+				<a href="<?= appUrl('/?m=codegen&c=formgenerator&a=delete&fm='.urlencode($f['module']).'&ff='.urlencode($f['file'])) ?>" class="fa fa-remove delete"></a>
 			</td>
 		</tr>
 		<?php endforeach; ?>
 	</tbody>
-	
-
 </table>
+
+
+
+<script>
+
+$(document).ready(function() {
+	handle_deleteConfirmation();
+});
+</script>
