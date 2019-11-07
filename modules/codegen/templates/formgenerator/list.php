@@ -44,4 +44,6 @@
 $(document).ready(function() {
 	handle_deleteConfirmation();
 });
+
 </script>
+

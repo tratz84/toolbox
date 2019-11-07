@@ -93,5 +93,15 @@ class listeditgeneratorController extends BaseController {
     }
     
     
+    public function action_delete() {
+        
+        $generator = new codegen\generator\ListEditGenerator();
+        $generator->delete( get_var('fm'), get_var('ff') );
+        
+        
+        redirect('/?m=codegen&c=listeditgenerator&a=list');
+    }
+    
+    
     
 }

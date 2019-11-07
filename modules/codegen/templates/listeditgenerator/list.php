@@ -20,6 +20,7 @@
 			<th>Module</th>
 			<th>File</th>
 			<th>Description</th>
+			<th></th>
 		</tr>
 	</thead>
 	
@@ -29,9 +30,21 @@
 			<td><?= esc_html($li['module']) ?></td>
 			<td><?= esc_html($li['file']) ?></td>
 			<td><?= esc_html($li['short_description']) ?></td>
+			<td class="actions">
+				<a href="<?= appUrl('/?m=codegen&c=listeditgenerator&a=delete&fm='.urlencode($li['module']).'&ff='.urlencode($li['file'])) ?>" class="fa fa-remove delete"></a>
+			</td>
+			
 		</tr>
 		<?php endforeach; ?>
 	</tbody>
-	
-
 </table>
+
+<script>
+
+$(document).ready(function() {
+	handle_deleteConfirmation();
+});
+
+</script>
+
+
