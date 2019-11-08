@@ -3,8 +3,16 @@
 return array (
   'daotables' => 
   array (
-    0 => 'signrequest__message',
-    1 => 'signrequest__message_signer',
+    0 => 
+    array (
+      'resource_name' => 'default',
+      'table_name' => 'signrequest__message',
+    ),
+    1 => 
+    array (
+      'resource_name' => 'default',
+      'table_name' => 'signrequest__message_signer',
+    ),
   ),
 );
 
