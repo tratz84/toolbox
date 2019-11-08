@@ -116,6 +116,10 @@ class ListEditGenerator {
     
     
     public function insertCodegen() {
+        
+        $objectsGetter = @$this->data['objects_getter']?$this->data['objects_getter']:'objects';
+        
+        
         $module = $this->data['module_name'];
         $classname = $this->getClassName();
         
@@ -128,6 +132,7 @@ class ListEditGenerator {
         
         $pcp = new PhpCodeParser();
         $pcp->parse( $path );
+        $pcp->setClassVar($classname.'::$getterName', var_export($objectsGetter, true));
         $pcp->setFunction($classname.'::codegen', null, $code);
         
         $phpcode = $pcp->toString();

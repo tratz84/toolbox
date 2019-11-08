@@ -31,7 +31,7 @@ class WidgetContainer extends BaseWidget {
         
         // check duplicates
         if (isset($this->widgetNames[$widgetName])) {
-            throw new InvalidStateException('Duplicate widget name');
+            throw new InvalidStateException('Duplicate widget name: "'.$widgetName.'"');
         }
         
         $this->widgets[] = $w;

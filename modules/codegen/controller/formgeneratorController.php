@@ -121,9 +121,13 @@ class formgeneratorController extends BaseController {
     public function action_example_form() {
         $data = @json_decode($_REQUEST['json_treedata']);
         
-        $form = \core\forms\CodegenBaseForm::createForm( $data );
-        
-        print $form->render();
+        try {
+            $form = \core\forms\CodegenBaseForm::createForm( $data );
+            
+            print $form->render();
+        } catch (\Exception $ex) {
+            print "Error: " . $ex->getMessage();
+        }
     }
     
     

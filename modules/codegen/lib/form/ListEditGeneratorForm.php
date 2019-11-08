@@ -41,8 +41,11 @@ class ListEditGeneratorForm extends \core\forms\CodegenBaseForm {
 		$this->addWidget( $w3 );
 		$w4 = new \core\forms\TextField('short_description', NULL, 'Short description');
 		$this->addWidget( $w4 );
+		$w5 = new \core\forms\TextField('objects_getter', NULL, 'Objects getter-name');
+		$this->addWidget( $w5 );
 		
 	}
+
 
 
 

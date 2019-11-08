@@ -30,8 +30,13 @@ class ListFormGeneratorForm extends \core\forms\CodegenBaseForm {
 		$this->addWidget( $w5 );
 		$w6 = new \core\forms\CheckboxField('sortable', NULL, 'Sortable');
 		$this->addWidget( $w6 );
+		$w7 = new \codegen\form\ListFormWidgetFieldList();
+		$this->addWidget( $w7 );
+		$w8 = new \codegen\form\ListFormWidgetPublicFieldList();
+		$this->addWidget( $w8 );
 		
 	}
+
 
 
 
