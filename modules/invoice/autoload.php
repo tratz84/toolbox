@@ -61,16 +61,6 @@ $eb->subscribe('base', 'dashboard', new CallbackPeopleEventListener(function($ev
     }
 }));
 
-$eb->subscribe('base', 'user-capabilities', new CallbackPeopleEventListener(function($evt) {
-    $ctx = Context::getInstance();
-    
-    if ($ctx->getSetting('invoiceModuleEnabled') || $ctx->getSetting('offerModuleEnabled')) {
-        $evt->getSource()->addCapability('invoice', 'edit-offer', 'Bewerken offertes', 'Aanmaken / bewerken van offertes');
-        $evt->getSource()->addCapability('invoice', 'edit-invoice', 'Bewerken ' . strtolower(strOrder(2)), 'Aanmaken / bewerken ' . strOrder(2));
-    }
-}));
-
-
     
 $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListener(function($evt) {
     $ctx = \core\Context::getInstance();

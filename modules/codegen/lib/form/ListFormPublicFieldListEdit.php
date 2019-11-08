@@ -23,5 +23,6 @@ class ListFormPublicFieldListEdit extends \core\forms\ListEditWidget {
 	}
 
 
+
 }
 
