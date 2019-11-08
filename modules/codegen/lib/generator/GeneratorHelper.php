@@ -67,7 +67,7 @@ class GeneratorHelper {
     public static function getListEditWidgetClasses() {
         $pcm = new \codegen\parser\PhpCodeMeta();
         $pcm->parseFiles(['filter' => function($f ){
-            return endsWith($f, 'List.php');
+            return endsWith($f, 'ListEdit.php');
         }]);
             
         $classes = $pcm->classesWithBaseClass( \core\forms\ListEditWidget::class, ['recursive' => false] );

@@ -2,8 +2,8 @@
 
 namespace codegen\form;
 
-class ListFormWidgetPublicFieldList extends \core\forms\ListEditWidget {
-    
+class ListFormPublicFieldListEdit extends \core\forms\ListEditWidget {
+
     protected static $getterName = 'publicFields';
 
 	public function __construct() {
@@ -21,9 +21,6 @@ class ListFormWidgetPublicFieldList extends \core\forms\ListEditWidget {
 		$this->addWidget( $w1 );
 		
 	}
-
-
-
 
 
 }

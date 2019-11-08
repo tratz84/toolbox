@@ -49,12 +49,14 @@ class ListFormGeneratorForm extends \core\forms\CodegenBaseForm {
 		$w6->setInfoText( 'Label shown in form where widget is used' );
 		$w7 = new \core\forms\CheckboxField('sortable', NULL, 'Sortable');
 		$this->addWidget( $w7 );
-		$w8 = new \codegen\form\ListFormWidgetFieldList();
+		$w8 = new \codegen\form\ListFormFieldListEdit();
 		$this->addWidget( $w8 );
-		$w9 = new \codegen\form\ListFormWidgetPublicFieldList();
+		$w9 = new \codegen\form\ListFormPublicFieldListEdit();
 		$this->addWidget( $w9 );
 		
 	}
+
+
 
 
 

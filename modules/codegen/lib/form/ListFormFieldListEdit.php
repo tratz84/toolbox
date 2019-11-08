@@ -2,10 +2,10 @@
 
 namespace codegen\form;
 
-class ListFormWidgetFieldList extends \core\forms\ListEditWidget {
+class ListFormFieldListEdit extends \core\forms\ListEditWidget {
 
     protected static $getterName = 'fields';
-    
+
 	public function __construct() {
 		parent::__construct( self::$getterName );
 		
@@ -23,7 +23,6 @@ class ListFormWidgetFieldList extends \core\forms\ListEditWidget {
 		$this->addWidget( $w2 );
 		
 	}
-
 
 
 }

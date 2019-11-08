@@ -71,8 +71,8 @@ class ListEditGenerator {
         $classname = preg_replace_callback('/(-.)/', function($word) { return strtoupper(substr($word[0], 1)); }, $classname);
         $classname = ucfirst($classname);
         
-        if (endsWith($classname, 'List') == false) {
-            $classname = $classname . 'List';
+        if (endsWith($classname, 'ListEdit') == false) {
+            $classname = $classname . 'ListEdit';
         }
         
         return $classname;

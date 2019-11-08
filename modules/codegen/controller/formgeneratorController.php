@@ -105,8 +105,11 @@ class formgeneratorController extends BaseController {
         $form = new FormGeneratorForm();
         $editorClass = $form->getEditorClass( get_var('class') );
         
-        if ($editorClass == null)
-            die('Widget not found');
+        if ($editorClass == null) {
+            print 'Widget not found';
+            print "<br/><input type=\"button\" onclick=\"delete_selected_widget();\" value=\"Delete\" />";
+            exit;
+        }
         
         
         $this->form = new $editorClass();
