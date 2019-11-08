@@ -188,6 +188,9 @@ class FormGenerator {
             
             $html .= ($parentVariable?$parentVariable:'$this').'->addWidget( '.$varname.' );' . PHP_EOL;
             
+            if (@$item->data->info_text) {
+                $html .= $varname.'->setInfoText( '.var_export($item->data->info_text, true).' );' . PHP_EOL;
+            }
             
             if (isset($item->children) && count($item->children)) {
                 $html .= "\n";

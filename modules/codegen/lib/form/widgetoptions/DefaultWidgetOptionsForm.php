@@ -19,6 +19,7 @@ class DefaultWidgetOptionsForm extends BaseForm {
         $this->addWidget(new TextField('name', '', 'Name'));
         $this->addWidget(new TextField('label', '', 'Label'));
         $this->addWidget(new TextField('defaultValue', '', 'Default value'));
+        $this->addWidget(new TextField('info_text', '', 'Info-text'));
     }
     
 }
