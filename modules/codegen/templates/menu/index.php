@@ -28,6 +28,9 @@
 			<li>
 				<a href="<?= appUrl('/?m=codegen&c=formgenerator&a=list') ?>">Forms generator</a>
 			</li>
+		</ul>
+		<h2>Lists</h2>
+		<ul>
 			<li>
 				<a href="<?= appUrl('/?m=codegen&c=listeditgenerator&a=list') ?>">ListEditWidget generator</a>
 			</li>
