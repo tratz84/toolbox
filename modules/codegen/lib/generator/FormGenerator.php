@@ -192,6 +192,10 @@ class FormGenerator {
                 $html .= $varname.'->setInfoText( '.var_export($item->data->info_text, true).' );' . PHP_EOL;
             }
             
+            if (@$item->data->defaultValue) {
+                $html .= $varname.'->setValue( '.to_php_string($item->data->defaultValue).' );' . PHP_EOL;
+            }
+            
             if (isset($item->children) && count($item->children)) {
                 $html .= "\n";
                 $html .= $this->addJsonItems($item->children, $varname);

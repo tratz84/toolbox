@@ -958,6 +958,19 @@ function slugify($str) {
     return $str;
 }
 
+/**
+ * to_php_string() - escapes a string for insertion in php-code
+ * 
+ * TODO: check this for security issues!! watch it before using this
+ */
+function to_php_string($str) {
+    $str = (string)$str;
+    $str = str_replace("\n", "\\n", $str);
+    $str = str_replace('"', '\"', $str);
+    $str = '"'.$str.'"';
+    return $str;
+}
+
 
 function endsWith($haystack, $val) {
     $p = strrpos($haystack, $val);

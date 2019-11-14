@@ -15,6 +15,9 @@
 				<a href="<?= appUrl('/?m=codegen&c=generateModule') ?>">Generate module</a>
 			</li>
 			<li>
+				<a href="<?= appUrl('/?m=codegen&c=base/controllerGenerator') ?>">Generate controller</a>
+			</li>
+			<li>
 				<a href="<?= appUrl('/?m=codegen&c=daoGenerator') ?>">DAO Generator</a>
 			</li>
 		</ul>

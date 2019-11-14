@@ -90,8 +90,11 @@ class WidgetContainer extends BaseWidget {
         $widgets = array();
         
         foreach($this->widgets as $w) {
-            if ($w->getName() == $name)
+            if ($w->getName() == $name) {
+                // found?
+                unset( $this->widgetNames[$name] );
                 continue;
+            }
             
             $widgets[] = $w;
         }
