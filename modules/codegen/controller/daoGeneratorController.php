@@ -51,10 +51,13 @@ class daoGeneratorController extends BaseController {
                 
                 foreach($arr as $key => $val) {
                     $w = $this->form->getWidget($key);
-                    if (!$val || !$w->getField('tablename'))
+                    if (!$val || !$w->getField('table_name'))
                         continue;
                     
-                    $daotables[] = $w->getField('tablename');
+                    $daotables[] = array(
+                        'resource_name' => $w->getField('resource_name'),
+                        'table_name' => $w->getField('table_name')
+                    );
                 }
                 $cms->setVar('daotables', $daotables);
                 $cms->save();
@@ -81,10 +84,13 @@ class daoGeneratorController extends BaseController {
         
         ob_start();
         foreach($daotables as $t) {
-            print "Generating DAO & model for: $t\n";
-            $columns = queryList('default', 'describe '.$t);
+            $table_name = $t['table_name'];
+            $resource_name = $t['resource_name'];
             
-            $gen = new \core\generator\DAOGenerator('default', $this->mod, $t, $columns);
+            print "Generating DAO & model for: $table_name\n";
+            $columns = queryList($resource_name, 'describe '.$table_name);
+            
+            $gen = new \core\generator\DAOGenerator($resource_name, $this->mod, $table_name, $columns);
             $gen->generate();
         }
         print "\nDone\n";

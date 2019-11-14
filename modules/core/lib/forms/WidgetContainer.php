@@ -31,7 +31,7 @@ class WidgetContainer extends BaseWidget {
         
         // check duplicates
         if (isset($this->widgetNames[$widgetName])) {
-            throw new InvalidStateException('Duplicate widget name');
+            throw new InvalidStateException('Duplicate widget name: "'.$widgetName.'"');
         }
         
         $this->widgets[] = $w;
@@ -90,8 +90,11 @@ class WidgetContainer extends BaseWidget {
         $widgets = array();
         
         foreach($this->widgets as $w) {
-            if ($w->getName() == $name)
+            if ($w->getName() == $name) {
+                // found?
+                unset( $this->widgetNames[$name] );
                 continue;
+            }
             
             $widgets[] = $w;
         }

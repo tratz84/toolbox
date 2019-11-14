@@ -15,12 +15,28 @@
 				<a href="<?= appUrl('/?m=codegen&c=generateModule') ?>">Generate module</a>
 			</li>
 			<li>
+				<a href="<?= appUrl('/?m=codegen&c=base/controllerGenerator') ?>">Generate controller</a>
+			</li>
+			<li>
 				<a href="<?= appUrl('/?m=codegen&c=daoGenerator') ?>">DAO Generator</a>
 			</li>
-	
 		</ul>
 	</div>
-	
+
+	<div class="col-xs-12 col-sm-4 col-lg-3 setting-menu-tag-container">
+		<h2>Module</h2>
+		
+		<ul>
+			<li>
+				<a href="<?= appUrl('/?m=codegen&c=daoGenerator') ?>">DAO Generator</a>
+			</li>
+			
+			<li>
+				<a href="<?= appUrl('/?m=codegen&c=config/usercapability') ?>">User capabilities</a>
+			</li>
+		</ul>
+	</div>
+		
 	<div class="col-xs-12 col-sm-4 col-lg-3 setting-menu-tag-container">
 		<h2>Forms</h2>
 		

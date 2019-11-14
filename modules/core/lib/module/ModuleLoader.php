@@ -23,6 +23,8 @@ class ModuleLoader {
         
         
         $this->loadMenus();
+        
+        $this->loadUserCapabilities();
     }
     
     protected function loadMenus() {
@@ -45,6 +47,30 @@ class ModuleLoader {
         });
     }
     
+    
+    protected function loadUserCapabilities() {
+        $file = $this->modulePath . '/config/usercapabilities.php';
+        if (file_exists($file) == false)
+            return;
+        
+        $moduleName = basename($this->modulePath);
+        
+        hook_eventbus_subscribe('base', 'user-capabilities', function($ucc) use ($file, $moduleName) {
+            /**
+             * @var $ucc base\user\UserCapabilityContainer
+             */
+            
+            $capabilities = include $file;
+            
+            foreach($capabilities as $cap) {
+                $ucc->addCapability($moduleName, $cap['capability_code'], $cap['short_description'], $cap['infotext']);
+            }
+            
+        });
+            
+        
+        
+    }
     
     
 }

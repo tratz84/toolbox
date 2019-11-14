@@ -5,8 +5,10 @@ namespace <?= $namespace ?>;
 
 class <?= $classname ?> extends \core\forms\ListEditWidget {
 
+    protected static $getterName = "objects";
+
 	public function __construct() {
-		parent::__construct('objects');
+		parent::__construct( self::$getterName );
 		
 		$this->codegen();
 	}

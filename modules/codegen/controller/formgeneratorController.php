@@ -105,8 +105,11 @@ class formgeneratorController extends BaseController {
         $form = new FormGeneratorForm();
         $editorClass = $form->getEditorClass( get_var('class') );
         
-        if ($editorClass == null)
-            die('Widget not found');
+        if ($editorClass == null) {
+            print 'Widget not found';
+            print "<br/><input type=\"button\" onclick=\"delete_selected_widget();\" value=\"Delete\" />";
+            exit;
+        }
         
         
         $this->form = new $editorClass();
@@ -121,9 +124,13 @@ class formgeneratorController extends BaseController {
     public function action_example_form() {
         $data = @json_decode($_REQUEST['json_treedata']);
         
-        $form = \core\forms\CodegenBaseForm::createForm( $data );
-        
-        print $form->render();
+        try {
+            $form = \core\forms\CodegenBaseForm::createForm( $data );
+            
+            print $form->render();
+        } catch (\Exception $ex) {
+            print "Error: " . $ex->getMessage();
+        }
     }
     
     

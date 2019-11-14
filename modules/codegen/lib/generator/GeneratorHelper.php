@@ -14,6 +14,8 @@ use codegen\form\widgetoptions\ContainerOptionsForm;
 use codegen\form\widgetoptions\SelectOptionsForm;
 use codegen\form\widgetoptions\HiddenOptionsForm;
 use codegen\form\widgetoptions\ListEditWidgetsOptionsForm;
+use codegen\form\widgetoptions\TextareaOptionsForm;
+use core\forms\TextareaField;
 
 class GeneratorHelper {
     
@@ -67,7 +69,7 @@ class GeneratorHelper {
     public static function getListEditWidgetClasses() {
         $pcm = new \codegen\parser\PhpCodeMeta();
         $pcm->parseFiles(['filter' => function($f ){
-            return endsWith($f, 'List.php');
+            return endsWith($f, 'ListEdit.php');
         }]);
             
         $classes = $pcm->classesWithBaseClass( \core\forms\ListEditWidget::class, ['recursive' => false] );
@@ -87,26 +89,38 @@ class GeneratorHelper {
         );
 
         $formWidgets[] = array(
+            'type' => 'widget',
             'class' => HiddenField::class,
             'editor' => HiddenOptionsForm::class,
             'label' => 'Hidden field'
         );
         
         $formWidgets[] = array(
+            'type' => 'widget',
             'class' => TextField::class,
             'label' => 'Textfield'
         );
+        
         $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => TextareaField::class,
+            'editor' => TextAreaOptionsForm::class,
+            'label' => 'Textarea-field'
+        );
+        $formWidgets[] = array(
+            'type' => 'widget',
             'class' => CheckboxField::class,
             'editor' => CheckboxOptionsForm::class,
             'label' => 'Checkbox'
         );
         $formWidgets[] = array(
+            'type' => 'widget',
             'class' => SelectField::class,
             'editor' => SelectOptionsForm::class,
             'label' => 'Select'
         );
         $formWidgets[] = array(
+            'type' => 'widget',
             'class' => ColorPickerField::class,
             'label' => 'Color picker'
         );
@@ -115,6 +129,7 @@ class GeneratorHelper {
         $lewClasses = self::getListEditWidgetClasses();
         foreach($lewClasses as $lew) {
             $formWidgets[] = array(
+                'type' => 'widget',
                 'class' => $lew['class'],
                 'editor' => ListEditWidgetsOptionsForm::class,
                 'label' => $lew['class']                        // TODO.. set to description or something?

@@ -39,6 +39,79 @@ class PhpCodeParser {
     }
     
     
+    public function setClassVar($p_classvarname, $p_varvalue, $p_type = 'protected') {
+        list($classname, $varname) = explode('::', $p_classvarname, 2);
+        
+        $parts = &$this->lookupClass($classname);
+        
+        if (strpos($varname, '$') !== 0) $varname = '$'.$varname;
+        
+        $found = false;
+        for($x=0; $x < count($parts); $x++) {
+            if ($parts[$x]['type'] != 'php') continue;
+            
+            if ($parts[$x]['string'] == $varname) {
+                $parts[$x]['string'] = $varname . ' = ' . $p_varvalue . ';';
+                
+                // empty out everything after it
+                for($z=$x+1; $z < count($parts); $z++) {
+                    $str = $parts[$z]['string'];
+                    $parts[$z]['string'] = '';
+                    
+                    if ($str == ';')
+                        break;
+                }
+                
+                $found = true;
+                $this->reparse();
+            }
+        }
+        
+        // not found? => add variable
+        if ($found == false) {
+            for($x=0; $x < count($parts); $x++) {
+                if ($parts[$x]['type'] == 'php-white') {
+                    $parts[$x]['string'] = "\n\n    {$p_type} ".$varname." = " . $p_varvalue . ";\n";
+                    $this->reparse();
+                    break;
+                }
+            }
+        }
+        
+    }
+    
+    
+    public function &lookupClass($classname, &$parts=null) {
+        if ($parts === null) {
+            $parts = &$this->parts;
+        }
+        
+        $blnCurrentClassSet = false;
+        
+        for($x=0; $x < count($parts); $x++) {
+            if ($x+2 < count($parts) && $parts[$x]['type'] == 'php' && $parts[$x]['string'] == 'class') {
+                // found?
+                if ($parts[$x+2]['string'] == $classname) {
+                    // lookup first 'subs'. it contains the content of found class
+                    for($z=$x; $z < count($parts); $z++) {
+                        if (isset($parts[$z]['subs']) && count($parts[$z]['subs'])) {
+                            return $parts[$z]['subs'];
+                        }
+                    }
+                    
+                    return null;
+                }
+            }
+            
+            if (isset($parts[$x]['subs']) && count($parts[$x]['subs'])) {
+                return $this->lookupClass($classname, $parts[$x]['subs']);
+            }
+        }
+        
+        
+    }
+    
+    
     public function setFunction($p_functionname, $params, $code, &$parts=null, $currentClass = null) {
         $firstCall = $parts === null ? true : false;
         
@@ -313,6 +386,7 @@ class PhpCodeParser {
                 $blnCurrentClassSet = true;
             }
             
+            // $classname might be NULL, if function is outside a class
             if ($currentClass == $classname && $parts[$x]['type'] == 'php' && $parts[$x]['string'] == 'function') {
                 $funcname = $parts[$x+2]['string'];
                 
@@ -638,6 +712,15 @@ class PhpCodeParser {
                         $this->addPart('php', $state, $buf);
                         $buf = '';
                     }
+
+                    
+                    if ($in_something == false && in_array($c, array('=', ';'))) {
+                        $this->addPart('php', $state, $buf);
+                        $buf = '';
+                        $this->addPart('php', $state, $c);
+                        
+                        continue;
+                    }
                     
                     
                     if ($in_something == false && $c == '{') {
@@ -647,7 +730,6 @@ class PhpCodeParser {
                         $this->addPart('php', $state, '{');
                         
                         continue;
-                        
                     }
                     
                     

@@ -1,4 +1,11 @@
 
+<style type="text/css">
+
+.form-generator label { width: 350px; }
+
+</style>
+
+
 <div class="page-header">
 
 	<div class="toolbox">

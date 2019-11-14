@@ -82,6 +82,10 @@ class CodegenBaseForm extends BaseForm {
             // initiate
             $obj = $rf->newInstanceArgs( $params );
             
+            if (@$item->data->info_text) {
+                $obj->setInfoText( $item->data->info_text );
+            }
+            
             // add
 //             print "Widgetname: " . $obj->getName() . "\n";
             $parentWidget->addWidget($obj);
