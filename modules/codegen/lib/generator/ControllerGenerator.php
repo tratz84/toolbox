@@ -49,8 +49,12 @@ class ControllerGenerator {
         
         $c_path = '/';
         $c_name = $this->controllerName;
+        $c_name = substr($c_name, 0, strrpos($c_name, 'Controller'));
+        
         if (strpos($this->controllerName, '/') !== false) {
             $c_name = substr($this->controllerName, strrpos($this->controllerName, '/')+1);
+            $c_name = substr($c_name, 0, strrpos($c_name, 'Controller'));
+            
             $c_path = '/'.substr($this->controllerName, 0, strrpos($this->controllerName, '/')+1);
         }
         

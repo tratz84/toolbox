@@ -27,6 +27,9 @@ class ControllerGeneratorForm extends \core\forms\CodegenBaseForm {
 		    if (strpos($cn, '/') === 0 || endsWith($cn, '/') == true) {
 		        return 'name can\'t start/end with a slash';
 		    }
+		    if (endsWith($cn, 'Controller') == false) {
+		        return 'name must end with Controller';
+		    }
 		    
 		    $module_name = $form->getWidgetValue('module_name');
 		    if ($module_name) {
