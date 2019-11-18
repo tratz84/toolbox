@@ -17,6 +17,13 @@ class ListEditGeneratorForm extends \core\forms\CodegenBaseForm {
 		
 		$this->addValidator('module_name', new NotEmptyValidator());
 		$this->addValidator('name', new NotEmptyValidator());
+		$this->addValidator('name', function($form) {
+		    $n = $form->getWidgetValue('name');
+		    
+		    if (endsWidth($n, 'ListEdit') == false) {
+		        return 'name must end with ListEdit';
+		    }
+		});
 	}
 	
 	

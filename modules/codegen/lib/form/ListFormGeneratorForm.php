@@ -15,7 +15,13 @@ class ListFormGeneratorForm extends \core\forms\CodegenBaseForm {
 		
 		$this->addValidator('module_name', new NotEmptyValidator());
 		$this->addValidator('name', new NotEmptyValidator());
-		
+		$this->addValidator('name', function($form) {
+		    $n = $form->getWidgetValue('name');
+		    
+		    if (endsWith($n, 'ListForm') == false) {
+		        return 'name must end with ListForm';
+		    }
+		});
 	}
 	
 	
