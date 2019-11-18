@@ -25,6 +25,8 @@ class ModuleLoader {
         $this->loadMenus();
         
         $this->loadUserCapabilities();
+        
+        $this->loadMenuItems();
     }
     
     protected function loadMenus() {
@@ -67,8 +69,24 @@ class ModuleLoader {
             }
             
         });
-            
+    }
+    
+    protected function loadMenuItems() {
+        $menufile = $this->modulePath . '/config/codegen/menu.php';
+        if (file_exists($menufile) == false)
+            return;
         
+        hook_eventbus_subscribe('base', 'MenuService::listMainMenu', function($src) use ($menufile) {
+            $data = include $menufile;
+            
+            foreach($data['menu'] as $menu) {
+                $data = @$menu['data'];
+                
+                $m = new Menu();
+                $m->setIconLabelUrl(@$data['icon'], @$data['label'], @$data['url']);
+                $src->add( $m );
+            }
+        });
         
     }
     

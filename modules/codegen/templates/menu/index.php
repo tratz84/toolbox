@@ -20,6 +20,9 @@
 			<li>
 				<a href="<?= appUrl('/?m=codegen&c=daoGenerator') ?>">DAO Generator</a>
 			</li>
+			<li>
+				<a href="<?= appUrl('/?m=codegen&c=menugeneratorController') ?>">Menu Generator</a>
+			</li>
 		</ul>
 	</div>
 

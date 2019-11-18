@@ -237,7 +237,11 @@ class FormGenerator {
                 $l = trim($l);
                 if ($l == '') continue;
                 
-                list($key, $val) = explode(':', $l, 2);
+                if (strpos($l, ':') !== false) {
+                    list($key, $val) = explode(':', $l, 2);
+                } else {
+                    $key = $val = $l;
+                }
                 $key = trim($key);
                 $val = trim($val);
                 $map[$key] = $val;

@@ -13,6 +13,18 @@ function codegen_map_field_classes() {
     return \codegen\generator\GeneratorHelper::getFieldClassesMap();
 }
 
+function codegen_map_modules() {
+    $module_list = module_list();
+    
+    $map = array();
+    $map[''] = 'Make your choice';
+    foreach($module_list as $m => $p) {
+        $map[$m] = $m;
+    }
+    
+    return $map;
+}
+
 
 function codegen_save_config($moduleName, $configfile, $data) {
     $configfile = basename($configfile);

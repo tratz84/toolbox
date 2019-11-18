@@ -17,6 +17,7 @@
 	<thead>
 		<tr>
 			<th>Module</th>
+			<th>Name</th>
 			<th>File</th>
 			<th>Description</th>
 			<th></th>
@@ -27,6 +28,7 @@
 		<?php foreach($forms as $f) : ?>
 		<tr class="clickable" onclick="window.open( appUrl('/?m=codegen&c=formgenerator&fm=<?= $f['module'] ?>&ff=' + <?= esc_attr(json_encode(urlencode($f['file']))) ?>), '_self' );">
 			<td><?= esc_html($f['module']) ?></td>
+			<td><?= esc_html($f['form_name']) ?></td>
 			<td><?= esc_html($f['file']) ?></td>
 			<td><?= esc_html($f['short_description']) ?></td>
 			<td class="actions">

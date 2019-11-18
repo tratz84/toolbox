@@ -77,6 +77,7 @@ class formgeneratorController extends BaseController {
                     $data = include realpath($path . '/config/codegen/' . $f);
                     $this->forms[] = array(
                         'module' => $modulename,
+                        'form_name' => $data['form_name'],
                         'path' => realpath($path . '/config/codegen/' . $f),
                         'file' => $f,
                         'short_description' => isset($data['short_description']) ? $data['short_description'] : ''
@@ -84,6 +85,10 @@ class formgeneratorController extends BaseController {
                 }
             }
         }
+        
+        usort($this->forms, function($f1, $f2) {
+            return strcmp($f1['form_name'], $f2['form_name']);
+        });
         
         return $this->render();
     }

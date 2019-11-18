@@ -49,6 +49,23 @@ function module_file($module, $path) {
     return false;
 }
 
+function module_file_safe($module, $path, $subpath) {
+    $p1 = module_file($module, $path);
+    if (!$p1)
+        return false;
+    
+    $p2 = module_file($module, $path . '/' . $subpath);
+    if (!$p2)
+        return false;
+    
+    if (strpos($p2, $p1) !== 0)
+        return false;
+    
+    return $p2;
+}
+
+
+
 /**
  * public_module_file_by_url() - returns public-module-file by given url
  */

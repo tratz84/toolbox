@@ -27,16 +27,7 @@ class ListFormGeneratorForm extends \core\forms\CodegenBaseForm {
 	
 	
 	public function codegen() {
-		$func1 = function() {  
-		
-		$map = array();
-		$map[''] = 'Make your choice';
-		foreach(module_list() as $m => $p) {
-		$map[$m] = $m;
-		}
-		
-		return $map;
-		 }; 
+		$func1 = function() {  return codegen_map_modules(); }; 
 		$func2 = function() {  return array_merge(array('' => 'Make your choice'), codegen_map_form_classes());
 		 }; 
 		
@@ -61,6 +52,7 @@ class ListFormGeneratorForm extends \core\forms\CodegenBaseForm {
 		$this->addWidget( $w9 );
 		
 	}
+
 
 
 

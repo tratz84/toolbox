@@ -7,6 +7,7 @@ use core\forms\ColorPickerField;
 use core\forms\SelectField;
 use core\forms\TextField;
 use core\forms\HiddenField;
+use core\forms\NumberField;
 use core\forms\WidgetContainer;
 use codegen\form\widgetoptions\DefaultWidgetOptionsForm;
 use codegen\form\widgetoptions\CheckboxOptionsForm;
@@ -15,6 +16,7 @@ use codegen\form\widgetoptions\SelectOptionsForm;
 use codegen\form\widgetoptions\HiddenOptionsForm;
 use codegen\form\widgetoptions\ListEditWidgetsOptionsForm;
 use codegen\form\widgetoptions\TextareaOptionsForm;
+use codegen\form\widgetoptions\NumberOptionsForm;
 use core\forms\TextareaField;
 
 class GeneratorHelper {
@@ -95,6 +97,12 @@ class GeneratorHelper {
             'label' => 'Hidden field'
         );
         
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => \core\forms\NumberField::class,
+            'editor' => \codegen\form\widgetoptions\NumberOptionsForm::class,
+            'label' => 'Number field'
+        );
         $formWidgets[] = array(
             'type' => 'widget',
             'class' => TextField::class,
