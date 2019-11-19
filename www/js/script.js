@@ -218,6 +218,9 @@ function handle_resetFieldButton(objParent) {
 		if (!$(this).hasClass('reset-field-cross'))
 			return;
 		
+		if ($(this).prop('readonly'))
+			return;
+		
 		if (evt.offsetX >= $(this).width()) {
 			$(this).val('');
 			$(this).removeClass('reset-field-cross');
