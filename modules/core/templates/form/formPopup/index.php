@@ -6,9 +6,9 @@
 	</div>
 
 	<?php if ($isNew) : ?>
-	   <h1>Toevoegen</h1>
+	   <h1><?= t('Add') ?></h1>
 	<?php else : ?>
-		<h1>Bewerken</h1>
+		<h1><?= t('Edit2') ?></h1>
 	<?php endif; ?>
 </div>
 

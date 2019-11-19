@@ -203,7 +203,7 @@ class ListFormWidget extends ListWidget {
             }
             
         } else {
-            $html .= '<tr class="empty-list"><td colspan="'.(count($this->fieldLabels)+2).'">Leeg</td></tr>';
+            $html .= '<tr class="empty-list"><td colspan="'.(count($this->fieldLabels)+2).'">'.t('Empty').'</td></tr>';
         }
         $html .= '</tbody>';
         $html .= '</table>';

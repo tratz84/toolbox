@@ -9,5 +9,6 @@ $lang['modulename.webmail'] = 'Email';
 $lang['modulename.invoice'] = 'Invoice';
 $lang['modulename.calendar'] = 'Calender';
 
+$lang['Edit2']              = 'Edit';
 
 return $lang;
