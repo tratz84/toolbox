@@ -56,7 +56,7 @@ copy_release_files($files, $targetDir);
 // copy modules
 $modules = module_list();
 foreach($modules as $module_name => $path) {
-    if ($ctx->isModuleEnabled( $module_name )) {
+    if ($ctx->isModuleEnabled( $module_name ) || in_array($module_name, ['admin'])) {
         $path = realpath($path);
         
         print "Copying module: $module_name\n";
