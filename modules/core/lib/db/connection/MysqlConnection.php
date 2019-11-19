@@ -152,6 +152,12 @@ class MysqlConnection extends DBConnection {
         
         return $r;
     }
+    
+    function escape($str) {
+        $dbh = $this->getResource();
+        
+        return $dbh->real_escape_string($str);
+    }
 
     function queryOne($sql, $params=array()) {
         $res = $this->query($sql, $params);

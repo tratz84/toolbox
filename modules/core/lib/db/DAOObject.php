@@ -43,6 +43,13 @@ class DAOObject
         
         return $list;
     }
+    
+    public function escape($str) {
+        $con = DatabaseHandler::getConnection($this->resourceName);
+        return $con->escape($str);
+    }
+    
+    
 
     /**
      * queryOne() - return's first result or NULL

@@ -36,6 +36,14 @@ class PersonDAO extends \core\db\DAOObject {
 	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('lastname', 'LIKE', '%'.$opts['lastname'].'%'));
 	    }
 	    
+	    if (isset($opts['object_meta']) && is_array($opts['object_meta']) && count($opts['object_meta'])) {
+	        foreach($opts['object_meta'] as $om) {
+	            $subsql = "(select object_id from base__object_meta where object_name='".$this->escape(Person::class)."' and object_key='".$this->escape($om['object_key'])."' and object_value='".$this->escape($om['object_value'])."')";
+	            $qb->addWhere(QueryBuilderWhere::whereRefByRef('person_id', 'IN', $subsql));
+	        }
+	    }
+	    
+	    
 	    $qb->setOrderBy('lastname');
 	    
 	    return $qb->queryCursor(Person::class);
