@@ -16,6 +16,12 @@ class ModuleEnablerFilter {
     
     
     public function doFilter($filterChain) {
+        $this->enableModules();
+        
+        $filterChain->next();
+    }
+    
+    public function enableModules() {
         $ctx = Context::getInstance();
         
         
@@ -68,9 +74,6 @@ class ModuleEnablerFilter {
             $ml->load();
         }
         
-        
-        
-        $filterChain->next();
     }
     
 }
