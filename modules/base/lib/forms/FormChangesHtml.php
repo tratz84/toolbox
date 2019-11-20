@@ -87,6 +87,12 @@ class FormChangesHtml
             }
 
             $w_old = $this->oldForm->getWidget($w->getName());
+            
+            // widget not found? => skip. Might happen if confirmation-checkbox or other temp-widgets are added to new-form
+            if (!$w_old) {
+                continue;
+            }
+            
             if ($w_old->getValue() && (is_a($w_old, SelectField::class) || is_a($w_old, Select2Field::class))) {
                 $oldVal = $w_old->getValueLabel();
             } else {
