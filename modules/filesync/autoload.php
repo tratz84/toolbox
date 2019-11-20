@@ -23,7 +23,7 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
     $src = $evt->getSource();
     
     $menuFilesync = new Menu();
-    $menuFilesync->setIconLabelUrl('fa-file', 'Filesync', '/?m=filesync&c=store', 145);
+    $menuFilesync->setIconLabelUrl('fa-file', 'Filesync', '/?m=filesync&c=store', 115);
     $src->add($menuFilesync);
     
     
