@@ -3,26 +3,28 @@
 
 include dirname(__FILE__).'/../config/config.php';
 
-if (is_standalone_installation() && count($argv) != 2) {
-    print "Config is in standalone mode\n";
-    print "Usage: {$argv[0]} <target-dir>\n";
-    exit;
-}
-if (is_standalone_installation() == false && count($argv) != 3) {
-    print "Config is NOT in standalone mode\n";
-    print "Usage: {$argv[0]} <context> <target-dir>\n";
+// validate arguments
+if (count($argv) != 3) {
+    print "Usage: {$argv[0]} <context|'default'> <target-dir>\n";
     exit;
 }
 
-bootstrapContext( is_standalone_installation() ? 'default' : $argv[1] );
+$contextName = $argv[1];
+if (is_standalone_installation() && $contextName != 'default') {
+    die('Invalid contextname given. In standalone-mode context must be "default"');
+}
 
-$targetDir = is_standalone_installation() ? $argv[1] : $argv[2];
+
+$targetDir = $argv[2];
 $targetDir = realpath($targetDir);
-
 if ($targetDir == false || is_dir($targetDir) == false) {
     die('Invalid target dir');
 }
 
+
+// bootstrap
+bootstrapContext( $contextName );
+// enable modules
 $ctx = \core\Context::getInstance();
 $mef = new \core\filter\ModuleEnablerFilter();
 $mef->enableModules();
