@@ -52,7 +52,7 @@ function IndexTable( container, opts ) {
 
 		if (!this.opts.autoloadNext) {
 			$(window).on('unload', function() {
-				var fields = serialize2object(me.container);
+				var fields = serialize2object(me.opts.searchContainer ? me.opts.searchContainer : me.container);
 				fields.pageNo = me.pageNo;
 				
 				var url = window.location.toString();
@@ -150,7 +150,7 @@ function IndexTable( container, opts ) {
 		var searchOpts = { };
 
 		// searchopts
-		searchOpts = serialize2object(this.container);
+		searchOpts = serialize2object(this.opts.searchContainer ? this.opts.searchContainer : this.container);
 
 		searchOpts['pageNo'] = this.pageNo - 1;
 		
@@ -440,6 +440,12 @@ function IndexTable( container, opts ) {
 		$(this.container).find('input, select').change(function() {
 			me.filterChanged();
 		});
+		
+		if (this.opts.searchContainer) {
+			$(this.opts.searchContainer).find('input, select').change(function() {
+				me.filterChanged();
+			});
+		}
 	};
 
 
