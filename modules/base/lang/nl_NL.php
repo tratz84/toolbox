@@ -8,6 +8,9 @@ $lang['Yes']                    = 'Ja';
 $lang['No']                     = 'Nee';
 $lang['Load more']              = 'Laad meer';
 
+$lang['Activate']               = 'Activeer';
+$lang['Deactivate']             = 'Deactiveer';
+
 $lang['Time']                   = 'Tijdstip';
 
 $lang['Fieldname']              = 'Veldnaam';
@@ -108,6 +111,7 @@ $lang['Masterdata']             = 'Stamgegevens';
 $lang['User Management']        = 'Gebruikersbeheer';
 $lang['Company settings']       = 'Bedrijfsgegevens';
 $lang['Application settings']   = 'Programma instellingen';
+$lang['Colors']                 = 'Kleuren';
 $lang['Prefix numbers']  = 'Voorvoegsel nummers';
 $lang['Prefix for offers, invoices and more for department recognition'] = 'Tekst dat voor offerte-, factuur of contractnummers wordt gezet, ter herkenning van de vestiging waarvoor deze gemaakt is.';
 $lang['Event viewer']           = 'Logboek';

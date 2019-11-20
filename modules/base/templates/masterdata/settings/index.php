@@ -26,9 +26,9 @@
     		</label>
     		
     		<?php if ($moduleEnabled) : ?>
-    			<a href="<?= appUrl('/?m=base&c=masterdata/settings&a=deactivate_module&mod='.urlencode($m->getTag())) ?>">Deactiveer</a>
+    			<a href="<?= appUrl('/?m=base&c=masterdata/settings&a=deactivate_module&mod='.urlencode($m->getTag())) ?>"><?= t('Deactivate') ?></a>
     		<?php else : ?>
-    			<a href="<?= appUrl('/?m=base&c=masterdata/settings&a=activate_module&mod='.urlencode($m->getTag())) ?>">Activeer</a>
+    			<a href="<?= appUrl('/?m=base&c=masterdata/settings&a=activate_module&mod='.urlencode($m->getTag())) ?>"><?= t('Activate') ?></a>
     		<?php endif; ?>
         </div>
         <?php endforeach; ?>
@@ -62,7 +62,7 @@
             $tabContainer = generate_tabs('base', 'masterdata-settings', null);
             $tabContainer->addTab('Basisinstellingen', $htmlBaseSettings, 0);
             $tabContainer->addTab('Extra', $htmlExtra);
-            $tabContainer->addTab('Kleuren', $htmlColors);
+            $tabContainer->addTab(t('Colors'), $htmlColors);
             print $tabContainer->render();
         ?>
         
