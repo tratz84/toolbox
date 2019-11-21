@@ -24,6 +24,11 @@ if ($targetDir == false || is_dir($targetDir) == false) {
 
 // bootstrap
 bootstrapContext( $contextName );
+
+// connect to db
+$dh = \core\db\DatabaseHandler::getInstance();
+$dh->addServer('default', DEFAULT_DATABASE_HOST, DEFAULT_DATABASE_USERNAME, DEFAULT_DATABASE_PASSWORD, \core\Context::getInstance()->getCustomer()->getDatabaseName());
+
 // enable modules
 $ctx = \core\Context::getInstance();
 $mef = new \core\filter\ModuleEnablerFilter();
