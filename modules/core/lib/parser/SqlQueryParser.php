@@ -1,6 +1,6 @@
 <?php
 
-namespace codegen\parser;
+namespace core\parser;
 
 
 class SqlQueryParser {

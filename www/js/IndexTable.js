@@ -578,7 +578,11 @@ function IndexTable( container, opts ) {
 					if (fieldText == null || fieldText == 'null')
 						fieldText = '';
 
-					td.text(fieldText);
+					if (col.fieldType == 'html') {
+						td.html(fieldText);
+					} else {
+						td.text(fieldText);
+					}
 				}
 
 				tr.append(td);

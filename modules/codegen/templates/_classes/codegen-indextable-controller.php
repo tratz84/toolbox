@@ -14,7 +14,7 @@ class <?= $controller_name ?> extends IndexTableBaseController {
     
     public function action_index() {
         
-        return this->render();
+        return $this->render();
     }
     
     public function renderRow($row) {
