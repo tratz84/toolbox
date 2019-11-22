@@ -23,7 +23,10 @@ class <?= $controller_name ?> extends IndexTableBaseController {
     
     public function action_search() {
         
-        parent::search();
+        $this->json([
+            'listResponse' => parent::search()
+        ]);
+        
     }
     
     

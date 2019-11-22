@@ -55,9 +55,43 @@ class IndexTableControllerGenerator {
         file_put_contents($dir.'/'.$controller_name.'.php', $tpl);
     }
     
+    public function generateTemplateFile() {
+        $module_name = $this->data['module_name'];
+        
+        $template_path = $this->data['controller_name'];
+        
+        $path = module_file_safe($module_name, '/templates/', $template_path);
+        if ($path != false) {
+            return true;
+        }
+        
+        $path = '/'.substr($template_path, 0, strlen($template_path)-strlen('Controller'));
+        
+        $vars = array();
+        $tpl = get_template(module_file('codegen', 'templates/_classes/codegen-indextable-index.php'), $vars);
+        
+        $tdir = module_file($module_name, 'templates');
+        if ($tdir == false) {
+            throw new \core\exception\InvalidStateException('template dir not found for module '.$module_name);
+        }
+        
+        if (is_dir($tdir.$path) == false) {
+            if (mkdir($tdir.$path, 0755, true) == false) {
+                throw new FileException('Unable to create controller dir, module, ' . $module);
+            }
+        }
+        
+        $dir = $tdir.$path;
+        
+        file_put_contents($dir.'/index.php', $tpl);
+    }
+    
     public function generate() {
         // generate controller-file
          $this->generateControllerFile();
+         
+         // generate index template-fiel
+         $this->generateTemplateFile();
         
         $path = module_file_safe($this->data['module_name'], 'controller', $this->data['controller_name'].'.php');
         if (!$path) {
@@ -71,6 +105,7 @@ class IndexTableControllerGenerator {
          if (strpos($controller_name, '/') !== false) {
              $controller_name = substr($controller_name, strrpos($controller_name, '/')+1);
          }
+         
          
         // set DAO class
         $pcp->setClassVar($controller_name.'::$daoClass', $this->data['dao_class'].'::class');
