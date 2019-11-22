@@ -9,6 +9,8 @@ use core\forms\CodegenBaseForm;
 
 class formgeneratorController extends BaseController {
     
+    /** @var FormGeneratorForm */
+    protected $form;
     
     public function action_index() {
         $this->form = new FormGeneratorForm();

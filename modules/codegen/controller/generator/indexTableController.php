@@ -2,6 +2,7 @@
 
 use core\controller\BaseController;
 use codegen\form\IndexTableForm;
+use codegen\generator\IndexTableControllerGenerator;
 
 
 class indexTableController extends BaseController {
@@ -70,6 +71,11 @@ class indexTableController extends BaseController {
                 $data = $this->form->asArray();
                 file_put_contents($f.'/config/codegen/'.$formfile, "<?php\n\nreturn ".var_export($data, true) . ";\n\n");
                 
+                
+                $itcGenerator = new IndexTableControllerGenerator();
+                if ($itcGenerator->loadData( $module_name, $formfile )) {
+                    $itcGenerator->generate();
+                }
                 
                 report_user_message('IndexTable page saved');
                 
