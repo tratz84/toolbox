@@ -60,11 +60,7 @@ class FormGeneratorForm extends BaseForm {
         $modules = module_list();
         
         
-        $map = array();
-        $map[''] = 'Make your choice';
-        foreach($modules as $key => $path) {
-            $map[$key] = $key;
-        }
+        $map = codegen_map_modules();
         
         $this->addWidget(new SelectField('module_name', '', $map, 'Module'));
         

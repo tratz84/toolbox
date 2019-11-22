@@ -49,14 +49,7 @@ class ControllerGeneratorForm extends \core\forms\CodegenBaseForm {
 	
 	public function codegen() {
 		$func1 = function() {  
-		
-		$map = array();
-		$map[''] = 'Make your choice';
-		foreach(module_list() as $m => $p) {
-		$map[$m] = $m;
-		}
-		
-		return $map;
+		return codegen_map_modules();
 		 }; 
 		
 		$w1 = new \core\forms\SelectField('module_name', NULL, $func1(), 'Module');
@@ -70,6 +63,7 @@ class ControllerGeneratorForm extends \core\forms\CodegenBaseForm {
 		$w3->setValue( "index\nsearch\nedit\ndelete" );
 		
 	}
+
 
 
 

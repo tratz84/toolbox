@@ -15,6 +15,10 @@ function esc_attr($str) {
     return htmlentities($str, ENT_QUOTES, 'UTF-8');
 }
 
+function esc_json_attr($str) {
+    return htmlentities(json_encode($str), ENT_QUOTES, 'UTF-8');
+}
+
 
 function infopopup($t) {
     if ($t == null) return '';

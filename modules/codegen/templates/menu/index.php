@@ -7,7 +7,6 @@
 <div class="functions-menu-page">
 
 	<div class="col-xs-12 col-sm-4 col-lg-3 setting-menu-tag-container">
-	
 		<h2>Base</h2>
 		
 		<ul>
@@ -39,7 +38,7 @@
 			</li>
 		</ul>
 	</div>
-		
+	
 	<div class="col-xs-12 col-sm-4 col-lg-3 setting-menu-tag-container">
 		<h2>Forms</h2>
 		
@@ -56,9 +55,17 @@
 			<li>
 				<a href="<?= appUrl('/?m=codegen&c=listformgenerator&a=list') ?>">ListFormWidget generator</a>
 			</li>
-			
 		</ul>
 	</div>
-	
+
+	<div class="col-xs-12 col-sm-4 col-lg-3 setting-menu-tag-container">
+		<h2>Pages</h2>
+		
+		<ul>
+			<li>
+				<a href="<?= appUrl('/?m=codegen&c=generator/indexTable') ?>">IndexTable generator</a>
+			</li>
+		</ul>
+	</div>
 
 </div>

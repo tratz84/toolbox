@@ -69,6 +69,9 @@ class CodegenBaseForm extends BaseForm {
                 else if (isset($item->data->{$func_param->name})) {
                     $params[] = $item->data->{$func_param->name};
                 }
+                else if ($func_param->name == 'value' && isset($item->data->defaultValue)) {
+                    $params[] = $item->data->defaultValue;
+                }
                 // default parameter-value?
                 else if ($func_param->isOptional()) {
                     $params[] = $func_param->getDefaultValue();
@@ -88,6 +91,8 @@ class CodegenBaseForm extends BaseForm {
             
             // add
 //             print "Widgetname: " . $obj->getName() . "\n";
+            $obj->setName($item->data->name);
+            
             $parentWidget->addWidget($obj);
             
             

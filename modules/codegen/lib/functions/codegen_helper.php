@@ -13,6 +13,22 @@ function codegen_map_field_classes() {
     return \codegen\generator\GeneratorHelper::getFieldClassesMap();
 }
 
+function codegen_map_dao_classes() {
+    $daoclasses = codegen\generator\GeneratorHelper::getDAOClasses();
+    
+    usort($daoclasses, function($d1, $d2) {
+        return strcmp($d1['class'], $d2['class']);
+    });
+    
+    $map = array();
+    $map[''] = 'Make your choice';
+    foreach($daoclasses as $key => $val) {
+        $map[$val['class']] = $val['class'];
+    }
+    
+    return $map;
+}
+
 function codegen_map_modules() {
     $module_list = module_list();
     
@@ -21,6 +37,12 @@ function codegen_map_modules() {
     foreach($module_list as $m => $p) {
         $map[$m] = $m;
     }
+    
+    $keys = array_keys($map);
+    $oldMap = $map;
+    $map = array();
+    sort($keys);
+    foreach($keys as $key) { $map[$key] = $oldMap[$key]; }
     
     return $map;
 }

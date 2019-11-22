@@ -9,6 +9,7 @@ use core\forms\TextField;
 use core\forms\HiddenField;
 use core\forms\NumberField;
 use core\forms\WidgetContainer;
+use core\forms\HtmlField;
 use codegen\form\widgetoptions\DefaultWidgetOptionsForm;
 use codegen\form\widgetoptions\CheckboxOptionsForm;
 use codegen\form\widgetoptions\ContainerOptionsForm;
@@ -17,6 +18,7 @@ use codegen\form\widgetoptions\HiddenOptionsForm;
 use codegen\form\widgetoptions\ListEditWidgetsOptionsForm;
 use codegen\form\widgetoptions\TextareaOptionsForm;
 use codegen\form\widgetoptions\NumberOptionsForm;
+use codegen\form\widgetoptions\HtmlOptionsForm;
 use core\forms\TextareaField;
 
 class GeneratorHelper {
@@ -65,6 +67,18 @@ class GeneratorHelper {
         }
         
         return $map;
+    }
+    
+    
+    public static function getDAOClasses() {
+        $pcm = new \codegen\parser\PhpCodeMeta();
+        $pcm->parseFiles(['filter' => function($f ){
+            return endsWith($f, 'DAO.php');
+        }]);
+            
+        $classes = $pcm->classesWithBaseClass( \core\db\DAOObject::class, ['recursive' => true] );
+        
+        return $classes;
     }
     
 
@@ -131,6 +145,13 @@ class GeneratorHelper {
             'type' => 'widget',
             'class' => ColorPickerField::class,
             'label' => 'Color picker'
+        );
+
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => HtmlField::class,
+//             'editor' => HtmlOptionsForm::class,
+            'label' => 'Html-field'
         );
         
         

@@ -6,6 +6,7 @@ namespace codegen\generator;
 
 use core\exception\FileException;
 use codegen\parser\PhpCodeParser;
+use core\forms\ListWidget;
 
 class FormGenerator {
     
@@ -149,6 +150,7 @@ class FormGenerator {
             $params = array();
             $lastNonDefaultParam = 0;
             $cnt=0;
+            $nameSet = false;
             foreach($cm->getParameters() as $func_param) {
                 // optionItems? (SelectField etc)
                 if ($func_param->name == 'optionItems') {
@@ -170,6 +172,10 @@ class FormGenerator {
                     $lastNonDefaultParam = $cnt;
                 }
                 
+                if ($func_param->name == 'name') {
+                    $nameSet = true;
+                }
+                
                 $cnt++;
             }
             
@@ -185,6 +191,15 @@ class FormGenerator {
                 $html .= $params[$z];
             }
             $html .= ');' . PHP_EOL;
+            
+            // name not set in constructor? => call setName()
+            if ($nameSet == false) {
+                $html .= $varname.'->setName( '.var_export($item->data->name, true).' );' . PHP_EOL;
+            }
+            if (is_subclass_of($classname, ListWidget::class)) {
+                $html .= $varname.'->setMethodObjectList( '.var_export($item->data->name, true).' );' . PHP_EOL;
+            }
+            
             
             $html .= ($parentVariable?$parentVariable:'$this').'->addWidget( '.$varname.' );' . PHP_EOL;
             
