@@ -39,29 +39,6 @@ class SqlQueryParser {
     }
     
     
-    public function test() {
-        $sql = <<<DATA
-select c.company_id, `c`.`company_name` as company_name, `c` . vat_number vatnr
-from customer__company c
-left join customer__company_address cca on (cca.company_id = c.company_id)          # hmz
-left join customer__address ca on cca.company_address_id = ca.address_id			-- blabla
-where 
-        c.company_id in (select company_id from customer__company where company_name like '%@%' or company_name like "% ; enzo ' \" @%")
-        or c.company_name like "%'%" or c.company_name like "\"%"
-        order by c.company_name
-limit 10
-DATA;
-        
-        $this->parseQuery($sql);
-        
-        $this->addWhere('c.company_name like \'%blalba%\'');
-//         $this->removeLimit();
-        
-        print $this->toString();
-        
-//         print 'done';
-    }
-    
     public function toString() {
         $sql = '';
         
