@@ -1,7 +1,15 @@
 
 <style type="text/css">
 
-.form-generator label { width: 350px; }
+.form-generator label { width: 350px; margin-top: 0px; }
+
+.checkbox-ui-container.widget.core-forms-checkbox-field {
+    overflow: auto;
+    padding: 2px 0 4px;
+}
+.checkbox-ui-container.widget.core-forms-checkbox-field:hover {
+    background-color: #eee;
+}
 
 </style>
 
