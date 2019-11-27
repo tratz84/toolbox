@@ -23,6 +23,9 @@ class daoGeneratorController extends BaseController {
                 );
             }
         }
+        usort($this->modules, function($o1, $o2) {
+            return strcmp($o1['module'], $o2['module']);
+        });
         
         
         

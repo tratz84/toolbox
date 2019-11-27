@@ -30,8 +30,8 @@ class DAOTableSelectorForm extends BaseForm {
             
             // add first selected tables
             foreach($tables as $t) {
-                if ($this->daotable_in_array($t, $selected_daotables)) {
-                    $chk = new \core\forms\CheckboxField('tbl_'.$t, '', $rn.' - '.$t);
+                if ($this->daotable_in_array($rn, $t, $selected_daotables)) {
+                    $chk = new \core\forms\CheckboxField($rn.'_tbl_'.$t, '', $rn.' - '.$t);
                     $chk->setField('resource_name', $rn);
                     $chk->setField('table_name', $t);
                     $chk->setValue('1');
@@ -41,8 +41,8 @@ class DAOTableSelectorForm extends BaseForm {
             
             // add other tables
             foreach($tables as $t) {
-                if ($this->daotable_in_array($t, $selected_daotables) == false) {
-                    $chk = new \core\forms\CheckboxField('tbl_'.$t, '', $rn.' - '.$t);
+                if ($this->daotable_in_array($rn, $t, $selected_daotables) == false) {
+                    $chk = new \core\forms\CheckboxField($rn.'_tbl_'.$t, '', $rn.' - '.$t);
                     $chk->setField('resource_name', $rn);
                     $chk->setField('table_name', $t);
                     
@@ -57,13 +57,15 @@ class DAOTableSelectorForm extends BaseForm {
         }
     }
     
-    protected function daotable_in_array($table_name, $daotables) {
+    protected function daotable_in_array($resource_name, $table_name, $daotables) {
         foreach($daotables as $dt) {
+            // hmz.. remove?
             if (is_string($dt)) {
                 if ($dt == $table_name) return true;
                 continue;
             }
-            if ($table_name == $dt['table_name'])
+            
+            if ($resource_name == $dt['resource_name'] && $table_name == $dt['table_name'])
                 return true;
         }
         return false;
