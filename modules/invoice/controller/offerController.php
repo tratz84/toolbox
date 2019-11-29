@@ -226,6 +226,7 @@ class offerController extends BaseController {
         $vars = array();
         $vars['naam'] = '';
         $vars['betreft'] = $offer->getSubject();
+        $vars['document_no'] = $offer->getOfferNumberText();
         $vars = array_merge($offer->getFields(), $vars);
         if ($offer->getCustomer()) {
             if ($offer->getCustomer()->getType() == 'company')
