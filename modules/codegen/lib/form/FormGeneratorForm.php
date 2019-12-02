@@ -29,6 +29,17 @@ class FormGeneratorForm extends BaseForm {
         
         
         $this->addValidator('module_name', new NotEmptyValidator());
+        $this->addValidator('form_name', function($form) {
+            $n = $form->getWidgetValue('form_name');
+            
+            if (preg_match('/^[a-zA-Z0-9_\\\\]+$/', $n) == false) {
+                return 'invalid name';
+            }
+            if (endsWith($n, 'Form') == false) {
+                return 'name must end with "Form"';
+            }
+            
+        });
     }
     
     

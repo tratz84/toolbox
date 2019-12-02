@@ -36,32 +36,32 @@ class formgeneratorController extends BaseController {
         if (is_post()) {
             $this->form->bind( $_REQUEST );
             
-            $this->form->validate();
-            
-            // save
-            $module_name = $this->form->getWidgetValue('module_name');
-            $f = module_file($module_name, '/');
-            if ($f === false) {
-                throw new InvalidStateException('Module not found');
-            }
-            if (file_exists($f . '/config/codegen') == false) {
-                if (mkdir($f . '/config/codegen', 0755, true) == false) {
-                    throw new FileException('Unable to create save-dir');
+            if ($this->form->validate()) {
+                // save
+                $module_name = $this->form->getWidgetValue('module_name');
+                $f = module_file($module_name, '/');
+                if ($f === false) {
+                    throw new InvalidStateException('Module not found');
                 }
+                if (file_exists($f . '/config/codegen') == false) {
+                    if (mkdir($f . '/config/codegen', 0755, true) == false) {
+                        throw new FileException('Unable to create save-dir');
+                    }
+                }
+                
+                $form = slugify($this->form->getWidgetValue('form_name'));
+                $formfile = 'form-'.$form.'.php';
+                
+                $data = $this->form->asArray();
+                file_put_contents($f.'/config/codegen/'.$formfile, "<?php\n\nreturn ".var_export($data, true) . ";\n\n");
+                
+                $generator = new codegen\generator\FormGenerator();
+                if ($generator->loadData( $module_name, $formfile )) {
+                    $generator->generate();
+                }
+                
+                redirect( '/?m=codegen&c=formgenerator&fm='.urlencode($module_name).'&ff='.urlencode($formfile) );
             }
-            
-            $form = slugify($_REQUEST['form_name']);
-            $formfile = 'form-'.$form.'.php';
-            
-            $data = $this->form->asArray();
-            file_put_contents($f.'/config/codegen/'.$formfile, "<?php\n\nreturn ".var_export($data, true) . ";\n\n");
-            
-            $generator = new codegen\generator\FormGenerator();
-            if ($generator->loadData( $module_name, $formfile )) {
-                $generator->generate();
-            }
-            
-            redirect( '/?m=codegen&c=formgenerator&fm='.urlencode($module_name).'&ff='.urlencode($formfile) );
         }
         
         return $this->render();

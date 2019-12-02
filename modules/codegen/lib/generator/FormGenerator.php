@@ -39,9 +39,10 @@ class FormGenerator {
         
         $this->loadData($moduleName, $filename);
         
+        $ns = $this->getNamespace();
         $classname = $this->getClassName();
         
-        $path = module_file($moduleName, '/lib/form/'.$classname.'.php');
+        $path = module_file($module, '/lib/form/'.($ns?str_replace('\\','/',$ns).'/':'').$classname.'.php');
         
         if ($path) {
             unlink($path);
@@ -65,24 +66,41 @@ class FormGenerator {
         $this->insertCodegen();
     }
     
-    public function getClassName() {
-        $classname = slugify( $this->data['form_name'] );
-        $classname = preg_replace_callback('/(-.)/', function($word) { return strtoupper(substr($word[0], 1)); }, $classname);
-        $classname = ucfirst($classname);
+    public function getNamespace() {
+        $ns = '';
+        $name = $this->data['form_name'];
         
-        if (endsWith($classname, 'Form') == false) {
-            $classname = $classname . 'Form';
+        if (strpos($name, '\\') !== false) {
+            $ns = substr($name, 0, strrpos($name, '\\'));
         }
         
-        return $classname;
+        return $ns;
+        
+    }
+    
+    public function getClassName() {
+        $name = $this->data['form_name'];
+        
+        if (strpos($name, '\\') !== false) {
+            $name = substr($name, strrpos($name, '\\')+1);
+        }
+        
+        return $name;
     }
     
     public function generateFormFile() {
         $module = $this->data['module_name'];
         
+        $ns = $this->getNamespace();
         $classname = $this->getClassName();
         
-        $path = module_file($module, '/lib/form/'.$classname.'.php');
+        $formdir = module_file($module, '/lib/form') . '/' . str_replace('\\', '/', $ns);
+        if (is_dir($formdir) == false) {
+            if (!mkdir($formdir, 0755, true))
+                throw new FileException('Unable to create form-dir');
+        }
+        
+        $path = module_file($module, '/lib/form/'.str_replace('\\', '/', $ns).'/'.$classname.'.php');
         
         // file already exists?
         if ($path !== false) {
@@ -92,7 +110,7 @@ class FormGenerator {
         $classname = $this->getClassName();
         
         $vars = array();
-        $vars['namespace'] = $module.'\\form';
+        $vars['namespace'] = $module.'\\form'.($ns?'\\'.$ns:'');
         $vars['classname'] = $classname;
         $tpl = get_template(module_file('codegen', 'templates/_classes/codegenform-template.php'), $vars);
         
@@ -107,7 +125,7 @@ class FormGenerator {
             }
         }
 
-        $formdir = module_file($module, 'lib/form');
+//         $formdir = module_file($module, 'lib/form');
         
         file_put_contents($formdir.'/'.$classname.'.php', $tpl);
     }
@@ -116,9 +134,11 @@ class FormGenerator {
     
     public function insertCodegen() {
         $module = $this->data['module_name'];
+        
+        $ns = $this->getNamespace();
         $classname = $this->getClassName();
         
-        $path = module_file($module, '/lib/form/'.$classname.'.php');
+        $path = module_file($module, '/lib/form/'.($ns?str_replace('\\','/',$ns).'/':'').$classname.'.php');
         $json = json_decode( $this->data['treedata'] );
         
         $code = $this->addJsonItems( $json );

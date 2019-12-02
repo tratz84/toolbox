@@ -21,10 +21,12 @@ Context::getInstance()->enableModule('base');
 
 
 $file = dirname(__FILE__).'/config-local.php';
-if (file_exists($file)) 
+if (file_exists($file)) {
     include $file;
-else
-    die('Config not found: config-local.php');
+} else {
+    define('INSTALLATION_MODE', true);
+//     die('Config not found: config-local.php');
+}
 
 
 if (!defined('SALT'))
