@@ -7,7 +7,7 @@ $sql = array();
 
 
 
-$sql[] = "CREATE TABLE `article__article` (
+$sql[] = "CREATE TABLE IF NOT EXISTS `article__article` (
     `article_id` int(11) NOT NULL AUTO_INCREMENT,
     `article_type` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL,
     `article_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
@@ -28,7 +28,7 @@ $sql[] = "CREATE TABLE `article__article` (
     CONSTRAINT `article__article_ibfk_1` FOREIGN KEY (`vat_id`) REFERENCES `invoice__vat` (`vat_id`) ON DELETE SET NULL ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
-$sql[] = "CREATE TABLE `article__article_group` (
+$sql[] = "CREATE TABLE IF NOT EXISTS `article__article_group` (
     `article_group_id` int(11) NOT NULL AUTO_INCREMENT,
     `parent_article_group_id` int(11) DEFAULT NULL,
     `group_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
@@ -43,7 +43,7 @@ $sql[] = "CREATE TABLE `article__article_group` (
     CONSTRAINT `article__article_group_ibfk_1` FOREIGN KEY (`parent_article_group_id`) REFERENCES `article__article_group` (`article_group_id`) ON DELETE SET NULL ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
-$sql[] = "CREATE TABLE `article__article_article_group` (
+$sql[] = "CREATE TABLE IF NOT EXISTS `article__article_article_group` (
     `article_group_id` int(11) NOT NULL,
     `article_id` int(11) NOT NULL,
     `sort` int(11) DEFAULT NULL,
