@@ -6,6 +6,48 @@ $sql = array();
 
 
 
+$sql[] = "CREATE TABLE IF NOT EXISTS `mailing__log` (
+    `log_id` int(11) NOT NULL AUTO_INCREMENT,
+    `template_id` int(11) DEFAULT NULL,
+    `from_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+    `from_email` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+    `log_to` text COLLATE utf8mb4_general_ci,
+    `log_cc` text COLLATE utf8mb4_general_ci,
+    `log_bcc` text COLLATE utf8mb4_general_ci,
+    `subject` varchar(512) COLLATE utf8mb4_general_ci DEFAULT NULL,
+    `content` text COLLATE utf8mb4_general_ci,
+    `created` datetime DEFAULT NULL,
+    PRIMARY KEY (`log_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+
+$sql[] = "CREATE TABLE IF NOT EXISTS `mailing__template` (
+    `template_id` int(11) NOT NULL AUTO_INCREMENT,
+    `template_code` varchar(64) COLLATE utf8mb4_general_ci DEFAULT NULL,
+    `name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+    `from_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+    `from_email` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+    `subject` varchar(512) COLLATE utf8mb4_general_ci DEFAULT NULL,
+    `content` text COLLATE utf8mb4_general_ci,
+    `active` tinyint(1) DEFAULT NULL,
+    `sort` int(11) DEFAULT '0',
+    `edited` datetime DEFAULT NULL,
+    `created` datetime DEFAULT NULL,
+    PRIMARY KEY (`template_id`),
+    UNIQUE KEY `template_code` (`template_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+
+$sql[] = "CREATE TABLE IF NOT EXISTS `mailing__template_to` (
+    `template_to_id` int(11) NOT NULL AUTO_INCREMENT,
+    `template_id` int(11) DEFAULT NULL,
+    `to_type` enum('To','Cc','Bcc') COLLATE utf8mb4_general_ci DEFAULT NULL,
+    `to_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+    `to_email` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+    `sort` int(11) DEFAULT NULL,
+    PRIMARY KEY (`template_to_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+
+
+
 
 
 $sql[] = "CREATE TABLE IF NOT EXISTS `webmail__connector` (
