@@ -135,3 +135,166 @@ CREATE TABLE IF NOT EXISTS `base__user_ip` (
 
 
 
+
+CREATE TABLE `customer__country` (
+  `country_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `country_iso2` varchar(2) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `country_iso3` varchar(3) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `country_no` varchar(3) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `phone_prefix` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  PRIMARY KEY (`country_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `customer__address` (
+  `address_id` int(11) NOT NULL AUTO_INCREMENT,
+  `street` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `street_no` varchar(64) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `zipcode` varchar(64) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `city` varchar(64) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `note` longtext COLLATE utf8mb4_general_ci,
+  `sort` int(11) DEFAULT NULL,
+  `country_id` int(11) DEFAULT NULL,
+  `edited` datetime DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  PRIMARY KEY (`address_id`),
+  KEY `country_id` (`country_id`),
+  CONSTRAINT `customer__address_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `customer__country` (`country_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `customer__company_type` (
+  `company_type_id` int(11) NOT NULL AUTO_INCREMENT,
+  `type_name` varchar(64) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `default_selected` tinyint(1) DEFAULT '0',
+  `sort` int(11) DEFAULT '0',
+  PRIMARY KEY (`company_type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `customer__company` (
+  `company_id` int(11) NOT NULL AUTO_INCREMENT,
+  `company_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `contact_person` varchar(128) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `coc_number` varchar(128) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `vat_number` varchar(64) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `iban` varchar(64) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `bic` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `note` longtext COLLATE utf8mb4_general_ci,
+  `deleted` tinyint(1) DEFAULT '0',
+  `edited` datetime DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `company_type_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`company_id`),
+  KEY `company_type_id` (`company_type_id`),
+  CONSTRAINT `customer__company_ibfk_1` FOREIGN KEY (`company_type_id`) REFERENCES `customer__company_type` (`company_type_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `customer__company_address` (
+  `company_address_id` int(11) NOT NULL AUTO_INCREMENT,
+  `company_id` int(11) DEFAULT NULL,
+  `address_id` int(11) DEFAULT NULL,
+  `sort` int(11) DEFAULT NULL,
+  PRIMARY KEY (`company_address_id`),
+  KEY `company_id` (`company_id`),
+  KEY `address_id` (`address_id`),
+  CONSTRAINT `customer__company_address_ibfk_1` FOREIGN KEY (`company_id`) REFERENCES `customer__company` (`company_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `customer__company_address_ibfk_2` FOREIGN KEY (`address_id`) REFERENCES `customer__address` (`address_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `customer__email` (
+  `email_id` int(11) NOT NULL AUTO_INCREMENT,
+  `email_address` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `note` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `description` longtext COLLATE utf8mb4_general_ci,
+  `primary_address` tinyint(1) DEFAULT '0',
+  `edited` datetime DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `sort` int(11) DEFAULT NULL,
+  PRIMARY KEY (`email_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `customer__company_email` (
+  `company_email_id` int(11) NOT NULL AUTO_INCREMENT,
+  `email_id` int(11) DEFAULT NULL,
+  `company_id` int(11) DEFAULT NULL,
+  `sort` int(11) DEFAULT NULL,
+  PRIMARY KEY (`company_email_id`),
+  KEY `company_id` (`company_id`),
+  KEY `email_id` (`email_id`),
+  CONSTRAINT `customer__company_email_ibfk_2` FOREIGN KEY (`company_id`) REFERENCES `customer__company` (`company_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `customer__company_email_ibfk_3` FOREIGN KEY (`email_id`) REFERENCES `customer__email` (`email_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `customer__phone` (
+  `phone_id` int(11) NOT NULL AUTO_INCREMENT,
+  `phonenr` varchar(128) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `edited` datetime DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `note` longtext COLLATE utf8mb4_general_ci,
+  `sort` int(11) DEFAULT NULL,
+  PRIMARY KEY (`phone_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `customer__company_phone` (
+  `company_phone_id` int(11) NOT NULL AUTO_INCREMENT,
+  `phone_id` int(11) DEFAULT NULL,
+  `company_id` int(11) DEFAULT NULL,
+  `sort` int(11) DEFAULT NULL,
+  PRIMARY KEY (`company_phone_id`),
+  KEY `company_id` (`company_id`),
+  KEY `phone_id` (`phone_id`),
+  CONSTRAINT `customer__company_phone_ibfk_2` FOREIGN KEY (`company_id`) REFERENCES `customer__company` (`company_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `customer__company_phone_ibfk_3` FOREIGN KEY (`phone_id`) REFERENCES `customer__phone` (`phone_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+CREATE TABLE IF NOT EXISTS `customer__person` (
+  `person_id` int(11) NOT NULL AUTO_INCREMENT,
+  `firstname` varchar(128) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `insert_lastname` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `lastname` varchar(128) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `iban` varchar(64) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `bic` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `note` longtext COLLATE utf8mb4_general_ci,
+  `deleted` tinyint(1) DEFAULT '0',
+  `edited` datetime DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  PRIMARY KEY (`person_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `customer__person_address` (
+  `person_address_id` int(11) NOT NULL AUTO_INCREMENT,
+  `person_id` int(11) DEFAULT NULL,
+  `address_id` int(11) DEFAULT NULL,
+  `sort` int(11) DEFAULT NULL,
+  PRIMARY KEY (`person_address_id`),
+  KEY `person_id` (`person_id`),
+  KEY `address_id` (`address_id`),
+  CONSTRAINT `customer__person_address_ibfk_1` FOREIGN KEY (`person_id`) REFERENCES `customer__person` (`person_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `customer__person_address_ibfk_2` FOREIGN KEY (`address_id`) REFERENCES `customer__address` (`address_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `customer__person_email` (
+  `person_email_id` int(11) NOT NULL AUTO_INCREMENT,
+  `email_id` int(11) DEFAULT NULL,
+  `person_id` int(11) DEFAULT NULL,
+  `sort` int(11) DEFAULT NULL,
+  PRIMARY KEY (`person_email_id`),
+  KEY `person_id` (`person_id`),
+  KEY `email_id` (`email_id`),
+  CONSTRAINT `customer__person_email_ibfk_2` FOREIGN KEY (`person_id`) REFERENCES `customer__person` (`person_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `customer__person_email_ibfk_3` FOREIGN KEY (`email_id`) REFERENCES `customer__email` (`email_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `customer__person_phone` (
+  `person_phone_id` int(11) NOT NULL AUTO_INCREMENT,
+  `person_id` int(11) DEFAULT NULL,
+  `phone_id` int(11) DEFAULT NULL,
+  `sort` int(11) DEFAULT NULL,
+  PRIMARY KEY (`person_phone_id`),
+  KEY `person_id` (`person_id`),
+  KEY `phone_id` (`phone_id`),
+  CONSTRAINT `customer__person_phone_ibfk_1` FOREIGN KEY (`person_id`) REFERENCES `customer__person` (`person_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `customer__person_phone_ibfk_2` FOREIGN KEY (`phone_id`) REFERENCES `customer__phone` (`phone_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
