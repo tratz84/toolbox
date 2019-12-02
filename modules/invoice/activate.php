@@ -6,6 +6,55 @@ $sql = array();
 
 
 
+
+$sql[] = "CREATE TABLE `article__article` (
+    `article_id` int(11) NOT NULL AUTO_INCREMENT,
+    `article_type` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL,
+    `article_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+    `long_description1` mediumtext COLLATE utf8mb4_general_ci,
+    `long_description2` mediumtext COLLATE utf8mb4_general_ci,
+    `price` double DEFAULT NULL,
+    `rentable` tinyint(1) DEFAULT '0',
+    `simultaneously_rentable` int(11) DEFAULT NULL,
+    `price_type` varchar(16) COLLATE utf8mb4_general_ci DEFAULT NULL,
+    `vat_price` bigint(20) DEFAULT NULL,
+    `vat_id` int(11) DEFAULT NULL,
+    `active` tinyint(1) DEFAULT '1',
+    `deleted` tinyint(1) DEFAULT '0',
+    `edited` datetime DEFAULT NULL,
+    `created` datetime DEFAULT NULL,
+    PRIMARY KEY (`article_id`),
+    KEY `article__article_ibfk_1` (`vat_id`),
+    CONSTRAINT `article__article_ibfk_1` FOREIGN KEY (`vat_id`) REFERENCES `invoice__vat` (`vat_id`) ON DELETE SET NULL ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+
+$sql[] = "CREATE TABLE `article__article_group` (
+    `article_group_id` int(11) NOT NULL AUTO_INCREMENT,
+    `parent_article_group_id` int(11) DEFAULT NULL,
+    `group_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+    `long_description1` mediumtext COLLATE utf8mb4_general_ci,
+    `long_description2` mediumtext COLLATE utf8mb4_general_ci,
+    `active` tinyint(1) DEFAULT NULL,
+    `sort` int(11) DEFAULT NULL,
+    `edited` datetime DEFAULT NULL,
+    `created` datetime DEFAULT NULL,
+    PRIMARY KEY (`article_group_id`),
+    KEY `article__article_group_ibfk_1` (`parent_article_group_id`),
+    CONSTRAINT `article__article_group_ibfk_1` FOREIGN KEY (`parent_article_group_id`) REFERENCES `article__article_group` (`article_group_id`) ON DELETE SET NULL ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+
+$sql[] = "CREATE TABLE `article__article_article_group` (
+    `article_group_id` int(11) NOT NULL,
+    `article_id` int(11) NOT NULL,
+    `sort` int(11) DEFAULT NULL,
+    PRIMARY KEY (`article_group_id`,`article_id`),
+    KEY `article__article_article_group_ibfk_2` (`article_id`),
+    CONSTRAINT `article__article_article_group_ibfk_1` FOREIGN KEY (`article_group_id`) REFERENCES `article__article_group` (`article_group_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+    CONSTRAINT `article__article_article_group_ibfk_2` FOREIGN KEY (`article_id`) REFERENCES `article__article` (`article_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+
+
+
 $sql[] = "CREATE TABLE IF NOT EXISTS `invoice__company_setting` (
     `company_setting_id` int(11) NOT NULL AUTO_INCREMENT,
     `company_id` int(11) DEFAULT NULL,
