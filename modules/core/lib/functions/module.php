@@ -3,6 +3,7 @@
 
 
 use core\Context;
+use base\service\SettingsService;
 
 function module_list($forceReload=false) {
     static $modules = null;
@@ -127,4 +128,31 @@ function module_less_defaults() {
     return $l;
 }
 
+
+/**
+ * module_update_handler()
+ * - Loads 'modules/<module name>/update.php' if $version is not 
+ *   the current (both DOWN and UPgrades!). Good place to call 
+ *   this function is in the autoload.php
+ */
+function module_update_handler($moduleName, $version) {
+    $settingsKey = 'module-'.$moduleName.'-version';
+    
+    $ctx = \core\Context::getInstance();
+    $curVer = $ctx->getSetting( $settingsKey );
+    
+    // note, this way update.php get both called on downgrades & upgrades. Script should handle it right!
+    if ($curVer != $version) {
+        $updatefile = module_file($moduleName, '/update.php');
+        
+        // check if file is found & include
+        if ($updatefile) {
+            load_php_file( $updatefile );
+        }
+        
+        // update version
+        $settingsService = object_container_get(SettingsService::class);
+        $settingsService->updateValue($settingsKey, $version);
+    }
+}
 
