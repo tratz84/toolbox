@@ -248,6 +248,7 @@ class BaseForm extends WidgetContainer {
         
         if (count($this->errors)) {
             $html .= '<div class="errors error-list">';
+            $html .= '<div class="error-close-container"><a href="javascript:void(0);" onclick="$(this).closest(\'div.errors.error-list\').remove();" class="fa fa-remove"></a></div>';
             $html .= '<ul>';
             foreach($this->errors as $fieldName => $errorList) {
                 foreach($errorList as $e) {

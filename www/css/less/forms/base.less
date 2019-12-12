@@ -166,6 +166,19 @@
 	padding: 10px;
 	margin-top: 15px;
 	margin-bottom: 25px;
+	
+	.error-close-container {
+		display: none;
+		float: right;
+		a {
+			color: #ff9a9a;
+			text-decoration: none;
+			&:hover { color: #f00; }
+		}
+	}
+	&:hover {
+		.error-close-container { display: block; }
+	}
 
 	ul {
 		margin: 0;
