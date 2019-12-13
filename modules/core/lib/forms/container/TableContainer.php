@@ -27,6 +27,10 @@ class TableContainer extends WidgetContainer {
             'label' => $label,
             'widgets' => $args
         );
+        
+        foreach($args as $w) {
+            $this->addWidget( $w );
+        }
     }
     
     
