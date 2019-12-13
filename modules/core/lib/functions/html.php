@@ -301,6 +301,30 @@ function hex2rgb($hexstr) {
 }
 
 
+function hex_inc_perc($hexstr, $perc=null) {
+    $rgb = hex2rgb($hexstr);
+    
+    if ($rgb == null)
+        return null;
+    
+
+    $rgb[0] += ((255-$rgb[0]) / 100 * $perc);
+    $rgb[1] += ((255-$rgb[1]) / 100 * $perc);
+    $rgb[2] += ((255-$rgb[2]) / 100 * $perc);
+    
+    if ($rgb[0] > 255)
+        $rgb[0] = 255;
+    if ($rgb[1] > 255)
+        $rgb[1] = 255;
+    if ($rgb[2] > 255)
+        $rgb[2] = 255;
+    
+    $x = sprintf('#%2x%2x%2x', $rgb[0], $rgb[1], $rgb[2]);
+    $x = str_replace(' ', '0', $x);
+    return $x;
+}
+
+
 
 
 
