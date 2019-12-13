@@ -37,6 +37,7 @@ class TableContainer extends WidgetContainer {
     public function render() {
         $html = '';
         
+        $html .= '<div class="table-container '.slugify($this->getName()).'">';
         $html .= '<table class="clear table-container">';
         $html .= '<thead>';
         $html .= '<tr>';
@@ -60,6 +61,7 @@ class TableContainer extends WidgetContainer {
         }
         
         $html .= '</table>';
+        $html .= '</div>';
         
         
         return $html;
