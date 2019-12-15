@@ -42,11 +42,13 @@ $(document).ready(function() {
 	focusFirstField( $('.main-content form') );
 	
 	var toolbox = $('.page-header .toolbox');
-	toolbox.find('.fa.fa-chevron-circle-left').attr('title', _('Back'));
-	toolbox.find('.fa.fa-send').attr('title', _('Send by mail'));
-	toolbox.find('.fa.fa-print').attr('title', _('Print'));
-	toolbox.find('.fa.fa-save').attr('title', _('Save'));
-	toolbox.find('.fa.fa-cog').attr('title', _('Settings'));
+	if (toolbox.length) {
+		toolbox.find('.fa.fa-chevron-circle-left').attr('title', _('Back'));
+		toolbox.find('.fa.fa-send').attr('title', _('Send by mail'));
+		toolbox.find('.fa.fa-print').attr('title', _('Print'));
+		toolbox.find('.fa.fa-save').attr('title', _('Save'));
+		toolbox.find('.fa.fa-cog').attr('title', _('Settings'));
+	}
 	
 	$(document).ajaxSend(function(evt, xhr, opts) {
 		// don't show progress on ping
