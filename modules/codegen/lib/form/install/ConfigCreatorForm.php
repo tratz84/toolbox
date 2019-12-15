@@ -86,7 +86,8 @@ class ConfigCreatorForm extends \core\forms\CodegenBaseForm {
 	    $this->fetch_mysqli_results($dbh);
 	    
 	    
-	    // TODO: generate random password?
+	    // NOTE: if this password is changed, also update modules/base/controller/authController.php
+	    //       this controller contains a check if default password is set & gives a warning!!!
 	    $sql_user = "insert into base__user set username='admin', password='admin123', edited=now(), created=now(), user_type='admin'";
 	    mysqli_query($dbh, $sql_user);
 	    
