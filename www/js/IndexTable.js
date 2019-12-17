@@ -461,7 +461,7 @@ function IndexTable( container, opts ) {
 		if (this.listResponse.objects.length == 0 && (!this.opts.autoloadNext || $(this.table).find('tbody tr').length == 0)) {
 			var td = $('<td class="no-results-found" />');
 			td.attr('colspan', this.columns.length + (this.sortable?1:0) );
-			td.text('Geen resultaten gevonden');
+			td.text(_('No results found'));
 
 			tbody.append(td);
 		}
