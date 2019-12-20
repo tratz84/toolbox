@@ -208,4 +208,25 @@ class MysqlConnection extends DBConnection {
         return new MysqlQueryBuilder( $this );
     }
     
+    
+    
+    public function getColumnProperties($tableName, $columnName) {
+        $rows = $this->queryList('describe '.$this->escape($tableName));
+        
+        foreach($rows as $r) {
+            if ($r['Field'] == $columnName) {
+                return $r;
+            }
+        }
+        
+        return null;
+    }
+    public function columnExists($tableName, $columnName) {
+        if ($this->getColumnProperties($tableName, $columnName) != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
 }
