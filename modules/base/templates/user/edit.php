@@ -14,7 +14,7 @@
 </div>
 
 
-<?php print $userForm->render() ?>
+<?php print $form->render() ?>
 
 <br/><br/>
 

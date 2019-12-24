@@ -5,6 +5,7 @@ namespace core\controller;
 use core\container\ActionContainer;
 use core\event\ActionValidationEvent;
 use core\event\EventBus;
+use core\exception\ObjectNotFoundException;
 
 class FormController extends BaseController {
     
@@ -103,6 +104,10 @@ class FormController extends BaseController {
         $service = $this->oc->get( $this->serviceClass );
         $read_func = $this->serviceFuncRead;
         $object = $service->$read_func($id);
+        
+        if (!$object) {
+            throw new ObjectNotFoundException('Object not found');
+        }
         
         /**
          * @var EventBus $eventBus
