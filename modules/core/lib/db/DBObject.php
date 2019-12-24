@@ -31,6 +31,7 @@ class DBObject {
 
     public function setPrimaryKey($n) { $this->primaryKey = $n; }
     public function getPrimaryKey() { return $this->primaryKey; }
+    public function getPrimaryKeyValue() { return $this->getField( $this->primaryKey ); }
     
     protected function setDatabaseFields($arr) { $this->dbFields = $arr; }
     
