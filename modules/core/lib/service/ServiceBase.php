@@ -4,8 +4,9 @@
 namespace core\service;
 
 
-use core\db\DatabaseTransactionObject;
 use core\container\ObjectHookable;
+use core\db\DatabaseTransactionObject;
+use core\forms\lists\ListResponse;
 
 class ServiceBase implements DatabaseTransactionObject, ObjectHookable {
     
@@ -19,6 +20,20 @@ class ServiceBase implements DatabaseTransactionObject, ObjectHookable {
     public function setObjectContainer($oc) { $this->oc = $oc; }
     public function getObjectContainer() { return $this->oc; }
     
+    
+    protected function daoSearch($daoClass, $opts, $fields, $start=0, $limit=null) {
+        if ($limit === null) {
+            $limit = \core\Context::getInstance()->getPageSize();
+        }
+            
+        $dao = new $daoClass();
+        
+        $cursor = $dao->search($opts);
+        
+        $r = ListResponse::fillByCursor($start, $limit, $cursor, $fields);
+        
+        return $r;
+    }
     
     public function saveForm($form, $objectClassName, $fields, $valuePk=null) {
         $obj = new $objectClassName();
