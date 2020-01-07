@@ -458,7 +458,7 @@ function IndexTable( container, opts ) {
 		if (!this.listResponse)
 			return;
 
-		if (this.listResponse.objects.length == 0 && (!this.opts.autoloadNext || $(this.table).find('tbody tr').length == 0)) {
+		if (this.listResponse.start == 0 && this.listResponse.objects.length == 0) {
 			var td = $('<td class="no-results-found" />');
 			td.attr('colspan', this.columns.length + (this.sortable?1:0) );
 			td.text(_('No results found'));
