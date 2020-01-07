@@ -10,6 +10,7 @@ use core\forms\ListWidget;
 use core\forms\Select2Field;
 use core\forms\SelectField;
 use core\forms\WidgetContainer;
+use core\forms\CheckboxField;
 
 class FormChangesHtml
 {
@@ -80,7 +81,9 @@ class FormChangesHtml
             if ($w->getLabel() == '')
                 continue;
             
-            if ($w->getValue() && (is_a($w, SelectField::class) || is_a($w, Select2Field::class))) {
+            if (is_a($w, CheckboxField::class)) {
+                $val = $w->getValue() ? t('Yes') : t('No');
+            } else if ($w->getValue() && (is_a($w, SelectField::class) || is_a($w, Select2Field::class))) {
                 $val = $w->getValueLabel();
             } else {
                 $val = $w->getValue();
@@ -93,7 +96,9 @@ class FormChangesHtml
                 continue;
             }
             
-            if ($w_old->getValue() && (is_a($w_old, SelectField::class) || is_a($w_old, Select2Field::class))) {
+            if (is_a($w_old, CheckboxField::class)) {
+                $oldVal = $w_old->getValue() ? t('Yes') : t('No');
+            } else if ($w_old->getValue() && (is_a($w_old, SelectField::class) || is_a($w_old, Select2Field::class))) {
                 $oldVal = $w_old->getValueLabel();
             } else {
                 $oldVal = $w_old->getValue();
@@ -202,7 +207,9 @@ class FormChangesHtml
                 
                 $w2->setValue('');
                 $w2->bindObject($objsNew[$x]);
-                if ($w2->getValue() && (is_a($w2, SelectField::class) || is_a($w2, Select2Field::class))) {
+                if (is_a($w2, CheckboxField::class)) {
+                    $vNew = $w2->getValue() ? t('Yes') : t('No');
+                } else if ($w2->getValue() && (is_a($w2, SelectField::class) || is_a($w2, Select2Field::class))) {
                     $vNew = $w2->getValueLabel();
                 } else {
                     $vNew = $w2->getValue();
@@ -210,7 +217,9 @@ class FormChangesHtml
                 
                 $w2->setValue('');
                 $w2->bindObject($objsOld[$x]);
-                if ($w2->getValue() && (is_a($w2, SelectField::class) || is_a($w2, Select2Field::class))) {
+                if (is_a($w2, CheckboxField::class)) {
+                    $vOld = $w2->getValue() ? t('Yes') : t('No');
+                } else if ($w2->getValue() && (is_a($w2, SelectField::class) || is_a($w2, Select2Field::class))) {
                     $vOld = $w2->getValueLabel();
                 } else {
                     $vOld = $w2->getValue();
@@ -425,7 +434,9 @@ class FormChangesHtml
             if ($w->getLabel() == '')
                 continue;
             
-            if ($w->getValue() && (is_a($w, SelectField::class) || is_a($w, Select2Field::class)))
+            if (is_a($w, CheckboxField::class)) {
+                $val = $w->getValue() ? t('Yes') : t('No');
+            } else if ($w->getValue() && (is_a($w, SelectField::class) || is_a($w, Select2Field::class)))
                 $val = $w->getValueLabel();
             else
                 $val = $w->getValue();
