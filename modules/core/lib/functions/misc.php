@@ -331,6 +331,10 @@ function save_upload($paramFile, $path) {
 function delete_data_file($f) {
     $file = get_data_file($f);
     
+    if ($file === false) {
+        return false;
+    }
+    
     return unlink($file);
 }
 
