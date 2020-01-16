@@ -1507,7 +1507,7 @@ function fill_form(form, obj) {
 			
 			inp.prop('checked', bln);
 		} else if (inp.hasClass('input-pickadate')) {
-			if (obj[i].match(/\d{4}-\d{2}-\d{2}$/)) {
+			if (typeof obj[i] == 'string' && obj[i].match(/\d{4}-\d{2}-\d{2}$/)) {
 				var toks = obj[i].split('-');
 				
 				inp.val(toks[2] + '-' + toks[1] + '-' + toks[0]);
