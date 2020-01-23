@@ -33,6 +33,13 @@ function module_list($forceReload=false) {
     return $modules;
 }
 
+function module_exists($moduleName) {
+    $ml = module_list();
+    
+    return isset($ml[$moduleName]) ? true : false;
+}
+
+
 
 function module_file($module, $path) {
     $modules = module_list();
