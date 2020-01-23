@@ -1511,7 +1511,12 @@ function fill_form(form, obj) {
 				var toks = obj[i].split('-');
 				
 				inp.val(toks[2] + '-' + toks[1] + '-' + toks[0]);
-				inp.addClass('reset-field-cross');
+				
+				if (inp.prop('readonly')) {
+					// don't add class
+				} else {
+					inp.addClass('reset-field-cross');
+				}
 			} else if (obj[i] == '') {
 				inp.removeClass('reset-field-cross');
 				inp.val('');
