@@ -145,7 +145,7 @@ class BaseWidget {
         
         $html .= '<div class="widget html-field-widget widget-'.slugify($this->getLabel()).'">';
         $html .= '<label>'.esc_html($this->getLabel()) . infopopup($this->getInfoText()) . '</label>';
-        $html .= '<span>'.esc_html($this->getValue()).'</span>';
+        $html .= '<span class="widget-value">'.esc_html($this->getValue()).'</span>';
         $html .= '</div>';
         
         return $html;
