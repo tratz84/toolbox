@@ -452,6 +452,45 @@ function get_data_file($f) {
     return $file;
 }
 
+
+function copy_data_tmp($file, $tmpname=null) {
+    $tmpfolder = get_data_file('/tmp');
+    if ($tmpfolder == false) {
+        $f = get_data_file('/');
+        
+        if (mkdir($f . '/tmp', 0755) == false) {
+            throw new FileException('Unable to create temp-folder');
+        }
+        
+        $tmpfolder = get_data_file('/tmp');
+    }
+    
+    if ($tmpfolder === false || file_exists($tmpfolder) == false) {
+        throw new FileException('Temp-folder not found');
+    }
+    
+    $file = null;
+    if ($tmpname === null) {
+        for($x=0; $x < 50; $x++) {
+            $f = 'temp'.rand(0, 999999999).'-'.basename($file);
+            
+            if (file_exists($tmpfolder . '/' . $f) == false) {
+                $file = $tmpfolder . '/' . $f;
+                break;
+            }
+        }
+        
+        if ($file === null) {
+            throw new FileException('Unable to determine temp-filename');
+        }
+    } else {
+        $file = $tmpfolder . '/' . basename($tmpname);
+    }
+    
+    return $file;
+}
+
+
 function url_data_file($f) {
     if (get_data_file($f)) {
         return appUrl('/?m=core&c=file&f='.urlencode($f));
