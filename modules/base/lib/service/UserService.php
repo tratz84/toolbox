@@ -26,13 +26,9 @@ class UserService extends ServiceBase {
     
     
     public function search($start, $limit, $opts=array()) {
-        $uDao = new UserDAO();
+        $fields = array('user_id', 'username', 'email', 'edited', 'created', 'user_type', 'firstname', 'lastname');
         
-        $cursor = $uDao->search($opts);
-        
-        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('user_id', 'username', 'email', 'edited', 'created', 'user_type', 'firstname', 'lastname'));
-        
-        return $r;
+        return $this->daoSearch(UserDAO::class, $opts, $fields, $start, $limit);
     }
     
     
