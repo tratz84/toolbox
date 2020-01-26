@@ -6,6 +6,7 @@ use core\exception\InvalidStateException;
 use webmail\service\EmailService;
 use core\Context;
 use webmail\model\Email;
+use core\exception\ResourceException;
 
 class SendMail {
     
@@ -86,10 +87,19 @@ class SendMail {
         
         if ($settings['server_type'] == 'local') {
             // hmz..
-            $transport = new \Swift_SmtpTransport(SMTP_HOST, SMTP_PORT);
-            if (defined('SMTP_USERNAME') && defined('SMTP_PASSWORD') && SMTP_USERNAME && SMTP_PASSWORD) {
-                $transport->setUsername(SMTP_USERNAME);
-                $transport->setPassword(SMTP_PASSWORD);
+            if (defined('SMTP_HOST') && SMTP_HOST) {
+                $transport = new \Swift_SmtpTransport(SMTP_HOST, SMTP_PORT);
+                if (defined('SMTP_USERNAME') && defined('SMTP_PASSWORD') && SMTP_USERNAME && SMTP_PASSWORD) {
+                    $transport->setUsername(SMTP_USERNAME);
+                    $transport->setPassword(SMTP_PASSWORD);
+                }
+            } else {
+                // unix? =>K use sendmail
+                if (file_exists('/usr/sbin/sendmail')) {
+                    $transport = new \Swift_SendmailTransport();
+                } else {
+                    throw new ResourceException('No mail transport configured');
+                }
             }
         } else {
             $transport = new \Swift_SmtpTransport($settings['mail_hostname'], $settings['mail_port']);
