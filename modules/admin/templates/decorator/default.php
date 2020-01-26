@@ -11,6 +11,7 @@
 			var appSettings = <?= json_encode([
 			    'base_href' => BASE_HREF,
 			    'contextName' => 'admin',
+			    'appRootUrl' => BASE_HREF.'admin/',
 			    'multiuser_check_interval' => MULTIUSER_CHECK_INTERVAL,
 			    'standalone_installation' => false
 			]) ?>;
