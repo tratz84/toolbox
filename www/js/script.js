@@ -1153,6 +1153,16 @@ function format_filesize(size) {
 }
 
 
+function validate_email(mail)  {
+	// credits to https://www.w3resource.com/javascript/form/email-validation.php
+	if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+
 
 function valid_date(value) {
 	if (value == '00-00-0000' || value == '0000-00-00')
