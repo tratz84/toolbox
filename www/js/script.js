@@ -1044,6 +1044,7 @@ function strtoint(str, default_val) {
 }
 
 function strtodouble(str, default_val) {
+	if (str === null) return 0;
 	
 	var pow_negative = -1;
 	
