@@ -9,7 +9,7 @@ function component_deletePayment_Click(payment_id) {
 		var l = window.location;
 		var back_url = l.pathname + l.search;
 
-		window.location = appUrl('/?m=invoice&c=payment&a=delete&id=' + payment_id + '&back_url=' + encodeURIComponent(back_url));
+		window.location = appUrl('/?m=payment&c=payment&a=delete&id=' + payment_id + '&back_url=' + encodeURIComponent(back_url));
 	});
 	
 }
@@ -20,7 +20,7 @@ var pot = new IndexTable('#payment-overview-table-container', {
 });
 
 
-pot.setConnectorUrl( '/?m=invoice&c=paymentOverview&a=search&<?= http_build_query($params) ?>' );
+pot.setConnectorUrl( '/?m=payment&c=paymentOverview&a=search&<?= http_build_query($params) ?>' );
 
 
 pot.addColumn({

@@ -1,11 +1,6 @@
 <?php
 
-
 use core\controller\BaseController;
-use core\forms\lists\ListResponse;
-use invoice\form\PaymentMethodForm;
-use invoice\model\PaymentMethod;
-use invoice\service\PaymentService;
 
 class paymentMethodController extends BaseController {
     
@@ -94,8 +89,6 @@ class paymentMethodController extends BaseController {
         
         redirect('/?m=invoice&c=paymentMethod');
     }
-    
-    
-}
 
+}
 

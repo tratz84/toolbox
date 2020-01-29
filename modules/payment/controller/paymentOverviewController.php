@@ -1,9 +1,6 @@
 <?php
 
-
-
 use core\controller\BaseController;
-use invoice\service\PaymentService;
 
 class paymentOverviewController extends BaseController {
     
@@ -16,22 +13,22 @@ class paymentOverviewController extends BaseController {
         
         if (isset($this->companyId) && $this->companyId)
             $params['company_id'] = $this->companyId;
-        if (isset($this->personId) && $this->personId)
-            $params['person_id'] = $this->personId;
-        
-        if (isset($this->refObject) && $this->refObject) {
-            $params['ref_object'] = $this->refObject;
-        }
-        if (isset($this->refId) && $this->refId) {
-            $params['ref_id'] = $this->refId;
-        }
-        
-        if (count($params)) {
-            $this->params = $params;
-            
-            $this->setShowDecorator(false);
-            $this->render();
-        }
+            if (isset($this->personId) && $this->personId)
+                $params['person_id'] = $this->personId;
+                
+                if (isset($this->refObject) && $this->refObject) {
+                    $params['ref_object'] = $this->refObject;
+                }
+                if (isset($this->refId) && $this->refId) {
+                    $params['ref_id'] = $this->refId;
+                }
+                
+                if (count($params)) {
+                    $this->params = $params;
+                    
+                    $this->setShowDecorator(false);
+                    $this->render();
+                }
     }
     
     
@@ -49,6 +46,6 @@ class paymentOverviewController extends BaseController {
         
         $this->json($arr);
     }
-    
-    
+
 }
+

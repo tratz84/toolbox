@@ -3,7 +3,7 @@
 
 $sql = array();
 
-$sql[] = "CREATE TABLE IF NOT EXISTS `invoice__payment` (
+$sql[] = "CREATE TABLE IF NOT EXISTS `payment__payment` (
     `payment_id` int(11) NOT NULL AUTO_INCREMENT,
     `ref_object` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL,
     `ref_id` int(11) DEFAULT NULL,
@@ -21,7 +21,7 @@ $sql[] = "CREATE TABLE IF NOT EXISTS `invoice__payment` (
     PRIMARY KEY (`payment_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
-$sql[] = "CREATE TABLE IF NOT EXISTS `invoice__payment_method` (
+$sql[] = "CREATE TABLE IF NOT EXISTS `payment__payment_method` (
     `payment_method_id` int(11) NOT NULL AUTO_INCREMENT,
     `code` varchar(16) COLLATE utf8mb4_general_ci DEFAULT NULL,
     `description` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,

@@ -1,6 +1,6 @@
 <?php
 
-namespace invoice\service;
+namespace payment\service;
 
 use core\forms\lists\ListResponse;
 use core\service\ServiceBase;
