@@ -39,8 +39,6 @@ $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($e
     
     if ($ctx->getSetting('invoiceModuleEnabled') || $ctx->getSetting('offerModuleEnabled')) {
         $src->addItem('Facturatie', 'Instellingen',     '/?m=invoice&c=settings');
-        
-        $src->addItem('Facturatie', 'Betalingsmogelijkheden',     '/?m=invoice&c=paymentMethod');
     }
     
     $src->addItem('Artikelen', 'Artikelen',     '/?m=invoice&c=article');
