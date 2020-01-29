@@ -80,6 +80,31 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
         $src->add($menuInvoice);
     }
 
+    if (hasCapability('invoice', 'edit-payments')) {
+        $menuNewPayment = new Menu();
+        $menuNewPayment->setSubmenuLabel(t('New payment'));
+        $menuNewPayment->setIconLabelUrl('fa-money', t('Payments'), '/?m=invoice&c=payment/add');
+        $menuNewPayment->setWeight(37);
+        $src->add($menuNewPayment);
+        
+        $menuOverviewPayments = new Menu();
+        $menuOverviewPayments->setIconLabelUrl('fa-list', t('Overview Payments'), '/?m=invoice&c=payment/overview');
+        $menuNewPayment->addChildMenu( $menuOverviewPayments );
+        
+        if (hasCapability('invoice', 'import-payments')) {
+            $menuImportPayments = new Menu();
+            $menuImportPayments->setIconLabelUrl('fa-download', t('Import Payments'), '/?m=invoice&c=payment/import');
+            $menuNewPayment->addChildMenu( $menuImportPayments );
+        }
+    }
+    else if (hasCapability('invoice', 'overview-payments')) {
+        $menuOverviewPayments = new Menu();
+        $menuOverviewPayments->setIconLabelUrl('fa-list', t('Overview Payments'), '/?m=invoice&c=payment/overview');
+        $menuNewPayment->addChildMenu( $menuOverviewPayments );
+    }
+    
+    
+    
     if ($ctx->isExperimental()) {
         $menuBillable = new Menu();
         $menuBillable->setIconLabelUrl('fa-money', 'Billable', '/?m=invoice&c=tobill');

@@ -139,7 +139,9 @@ $menuItems = $ms->listMainMenu();
     					<li>
     						<a class="nav-link weight-<?= $ci->getWeight() ?>" href="<?= appUrl($ci->getUrl()) ?>">
         						<i class="fa <?= $ci->getIcon() ?>"></i> 
-        						<span class="menu-label"><?= esc_html($ci->getLabel()) ?></span>
+        						<span class="menu-label">
+        							<?= esc_html($ci->getSubmenuLabel() ? $ci->getSubmenuLabel() : $ci->getLabel()) ?>
+        						</span>
         					</a>
     					</li>
     					<?php endforeach; ?>
