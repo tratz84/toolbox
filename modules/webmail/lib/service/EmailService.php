@@ -19,6 +19,9 @@ use webmail\model\Identity;
 use webmail\model\IdentityDAO;
 use webmail\form\EmailForm;
 use base\model\CompanyEmailDAO;
+use webmail\form\MailSettingsOutForm;
+use base\service\SettingsService;
+use webmail\mail\SendMail;
 
 class EmailService extends ServiceBase {
     
@@ -292,6 +295,60 @@ class EmailService extends ServiceBase {
         
         return $o;
     }
+    
+    
+    public function saveMailServerSettings(MailSettingsOutForm $form) {
+        $server_type   = trim( $form->getWidgetValue('server_type') );
+        $mail_hostname = trim( $form->getWidgetValue('mail_hostname') );
+        $mail_port     = trim( $form->getWidgetValue('mail_port') );
+        $mail_username = trim( $form->getWidgetValue('mail_username') );
+        $mail_password = trim( $form->getWidgetValue('mail_password') );
+        
+        $settingsService = object_container_get( SettingsService::class );
+        $settingsService->updateValue('webmail_server_type',   $server_type);
+        $settingsService->updateValue('webmail_mail_hostname', $mail_hostname);
+        $settingsService->updateValue('webmail_mail_port',     $mail_port);
+        $settingsService->updateValue('webmail_mail_username', $mail_username);
+        $settingsService->updateValue('webmail_mail_password', $mail_password);
+        
+        $ctx = object_container_get(Context::class);
+        $ctx->flushSettingCache();
+    }
+    
+    public function getMailServerSettings() {
+        /** @var Context */
+        $ctx = object_container_get(Context::class);
+        
+        $s = array();
+        $s['server_type']   = $ctx->getSetting('webmail_server_type');
+        $s['mail_hostname'] = $ctx->getSetting('webmail_mail_hostname');
+        $s['mail_port']     = $ctx->getSetting('webmail_mail_port');
+        $s['mail_username'] = $ctx->getSetting('webmail_mail_username');
+        $s['mail_password'] = $ctx->getSetting('webmail_mail_password');
+        
+        // default to local
+        if ($s['server_type'] != 'local' && $s['server_type'] != 'smtp')
+            $s['server_type'] = 'local';
+        
+        return $s;
+    }
+    
+    public function sendMailTest($emailAddress) {
+        $sm = new SendMail();
+        
+        $sm->setFromName('Toolbox - Test');
+        if (validate_email($sm->getFromEmail()) == false)
+            $sm->setFromEmail('toolboxtest@itxplain.nl');
+        $sm->setSubject('Toolbox test mail');
+        $sm->addTo($emailAddress);
+        
+        $tpl = module_file('webmail', 'templates/settingsMailOut/_testmail.php');
+        $content = get_template($tpl, array());
+        $sm->setContent( $content );
+        
+        return $sm->send();
+    }
+    
     
 }
 
