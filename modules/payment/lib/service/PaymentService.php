@@ -157,7 +157,16 @@ class PaymentService extends ServiceBase {
     
     public function readDefaultSelectedPaymentMethod() {
         $pmDao = new PaymentMethodDAO();
-        return $pmDao->readDefaultSelected();
+        $p = $pmDao->readDefaultSelected();
+        
+        if ($p == null) {
+            $pms = $pmDao->readActive();
+            if (count($pms) > 0) {
+                $p = $pms[0];
+            }
+        }
+        
+        return $p;
     }
     
     

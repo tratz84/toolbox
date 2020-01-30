@@ -5,6 +5,7 @@ use core\Context;
 use core\ObjectContainer;
 use core\event\CallbackPeopleEventListener;
 use core\event\EventBus;
+use invoice\model\Invoice;
 
 Context::getInstance()->enableModule('payment');
 
@@ -53,5 +54,22 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
     
 }));
 
+
+
+
+hook_eventbus_subscribe('invoice', 'invoice-edit', function($actionContainer) {
+    // might happen on new offer
+    if (!$actionContainer->getObjectId())
+        return;
+    
+    $created = object_meta_get(Invoice::class, $actionContainer->getObjectId(), 'payment_created');
+    
+    if ($created) {
+        $actionContainer->addItem('create-payment', '<a href="javascript:void(0);" disabled=disabled title="Reeds aangemaakt">Betaling aanmaken</a>');
+    } else {
+        $actionContainer->addItem('create-payment', '<a href="'.appUrl('/?m=payment&c=invoice&a=create_payment&invoice_id='.$actionContainer->getObjectId()).'">Betaling aanmaken</a>');
+    }
+});
+    
 
 
