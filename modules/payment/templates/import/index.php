@@ -12,4 +12,9 @@
 </div>
 
 
+<?= $form->render() ?>
 
+
+<script>
+
+</script>

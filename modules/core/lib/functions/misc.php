@@ -454,6 +454,7 @@ function get_data_file($f) {
 
 
 function copy_data_tmp($file, $tmpname=null) {
+    // create temp-folder
     $tmpfolder = get_data_file('/tmp');
     if ($tmpfolder == false) {
         $f = get_data_file('/');
@@ -469,25 +470,33 @@ function copy_data_tmp($file, $tmpname=null) {
         throw new FileException('Temp-folder not found');
     }
     
-    $file = null;
+    
+    // no name specified? => generate temp-file name
+    $dest = null;
     if ($tmpname === null) {
         for($x=0; $x < 50; $x++) {
-            $f = 'temp'.rand(0, 999999999).'-'.basename($file);
+            $f = 'temp'.date('Ymd').rand(0, 999999999).'-'.basename($file);
             
             if (file_exists($tmpfolder . '/' . $f) == false) {
-                $file = $tmpfolder . '/' . $f;
+                $dest = $tmpfolder . '/' . $f;
                 break;
             }
         }
         
-        if ($file === null) {
+        if ($dest === null) {
             throw new FileException('Unable to determine temp-filename');
         }
-    } else {
-        $file = $tmpfolder . '/' . basename($tmpname);
+    }
+    // tempname specified
+    else {
+        $dest = $tmpfolder . '/' . basename($tmpname);
     }
     
-    return $file;
+    if (copy($file, $dest)) {
+        return $dest;
+    } else {
+        throw new FileException('Unable to copy file to temp-folder');
+    }
 }
 
 

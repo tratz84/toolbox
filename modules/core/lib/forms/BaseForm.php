@@ -9,6 +9,8 @@ use core\db\DBObject;
 
 class BaseForm extends WidgetContainer {
     
+    protected $submitText = 'Opslaan';
+    
     protected $htmlAttributes = array();
     
     protected $validators = array();
@@ -43,6 +45,9 @@ class BaseForm extends WidgetContainer {
     public function setObjectLocked($bln) { $this->objectLocked = $bln; }
     public function isObjectLocked() { return $this->objectLocked ? true : false; }
     
+    
+    public function setSubmitText($t) { $this->submitText = $t; }
+    public function getSubmitText() { return $this->submitText; }
     
     public function addJavascript($name, $script) {
         $this->javascript[$name] = $script;
@@ -275,7 +280,7 @@ class BaseForm extends WidgetContainer {
             $html .= $w->render() . "\n";
         }
         
-        $html .= '<div class="submit-container"><input type="submit" value="Opslaan" /></div>' . "\n";
+        $html .= '<div class="submit-container"><input type="submit" value="'.esc_attr($this->submitText).'" /></div>' . "\n";
         
         $html .= '</form>' . "\n\n";
         
