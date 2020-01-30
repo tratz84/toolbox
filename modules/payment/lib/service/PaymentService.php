@@ -2,13 +2,17 @@
 
 namespace payment\service;
 
+use base\forms\FormChangesHtml;
+use base\util\ActivityUtil;
+use core\exception\ObjectNotFoundException;
 use core\service\ServiceBase;
+use payment\form\PaymentForm;
 use payment\form\PaymentMethodForm;
+use payment\model\Payment;
 use payment\model\PaymentDAO;
+use payment\model\PaymentLineDAO;
 use payment\model\PaymentMethod;
 use payment\model\PaymentMethodDAO;
-use core\exception\ObjectNotFoundException;
-use payment\model\PaymentLineDAO;
 
 class PaymentService extends ServiceBase {
     
@@ -149,8 +153,7 @@ class PaymentService extends ServiceBase {
     }
     
     public function deletePayment($paymentId) {
-        $pDao = new PaymentDAO();
-        $payment = $pDao->read( $paymentId );
+        $payment = $this->readPayment($paymentId);
         
         if (!$payment) {
             throw new ObjectNotFoundException('Payment not found');
@@ -159,8 +162,83 @@ class PaymentService extends ServiceBase {
         $plDao = new PaymentLineDAO();
         $plDao->deleteByPayment($payment->getPaymentId());
         
+        $pDao = new PaymentDAO();
         $pDao->delete($payment->getPaymentId());
         
+        $form = new PaymentForm();
+        $form->bind($payment);
+        $fch = FormChangesHtml::formDeleted($form);
+        
+        
+        ActivityUtil::logActivity($payment->getCompanyId(), $payment->getPersonId(), 'payment__payment', $payment->getPaymentId(), 'payment-deleted', 'Betaling verwijderd '.$payment->getPaymentId(), $fch->getHtml());
+    }
+    
+    
+    public function savePayment(PaymentForm $form) {
+        $paymentId = $form->getWidgetValue('payment_id');
+        if ($paymentId) {
+            $payment = object_container_get(PaymentService::class)->readPayment($paymentId);
+        } else {
+            $payment = new Payment();
+        }
+        
+        $isNew = $payment->isNew();
+        
+        if ($isNew) {
+            $fch = FormChangesHtml::formNew($form);
+        } else {
+            $oldForm = PaymentForm::createAndBind($payment);
+            $fch = FormChangesHtml::formChanged($oldForm, $form);
+        }
+        
+        
+        
+        $form->fill($payment, array('payment_id', 'payment_date', 'note'));
+        
+        $payment->setCompanyId(null);
+        $payment->setPersonId(null);
+        
+        // set customer
+        $customer_id = $form->getWidgetValue('customer_id');
+        $company_id = $person_id = null;
+        if (strpos($customer_id, 'company-') === 0) {
+            $company_id = substr($customer_id, strlen('company-'));
+            $payment->setCompanyId($company_id);
+        } else if (strpos($customer_id, 'person-') === 0) {
+            $person_id = substr($customer_id, strlen('person-'));
+            $payment->setPersonId($person_id);
+        }
+        
+        $newPls = $form->getWidget('PaymentLines')->asArray();
+        
+        // set total amount
+        $a = 0;
+        foreach($newPls as $pl) {
+            $a += strtodouble( $pl['amount'] );
+            $payment->setAmount( $a );
+        }
+        
+        
+        
+        if (!$payment->save()) {
+            // exception would also be on it's place
+            return false;
+        }
+        
+        $form->getWidget('payment_id')->setValue($payment->getPaymentId());
+        
+        $plDao = new PaymentLineDAO();
+//         var_export($newPls);
+        $plDao->mergeFormListMTO1('payment_id', $payment->getPaymentId(), $newPls);
+        
+        if ($isNew) {
+            ActivityUtil::logActivity($company_id, $person_id, 'payment__payment', null, 'payment-created', 'Betaling aangemaakt', $fch->getHtml());
+        } else {
+            // TODO: check of er wijzigingen zijn
+            ActivityUtil::logActivity($company_id, $person_id, 'payment__payment', null, 'payment-edited', 'Betaling aangepast', $fch->getHtml());
+        }
+        
+        return $payment->getPaymentId();
     }
     
     

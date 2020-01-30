@@ -28,15 +28,14 @@ class paymentController extends BaseController {
             $this->form->bind( $_REQUEST );
             
             if ($this->form->validate()) {
-                $paymentService->save($this->form);
+                $paymentService->savePayment($this->form);
                 
                 redirect('/?m=payment&c=paymentOverview');
             }
         }
         
         
-        $this->isNew = true;
-        
+        $this->isNew = $payment->isNew();
         
         
         if ($this->isNew)

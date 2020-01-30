@@ -21,10 +21,11 @@ class PaymentLineListEdit extends \core\forms\ListEditWidget {
 		$this->addWidget( $w1 );
 		$w2 = new \core\forms\TextField('description1', NULL, 'Opmerking');
 		$this->addWidget( $w2 );
-		$w3 = new \core\forms\EuroField('euro', NULL, 'Bedrag');
+		$w3 = new \core\forms\EuroField('amount', NULL, 'Bedrag');
 		$this->addWidget( $w3 );
 		
 	}
+
 
 
 
