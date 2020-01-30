@@ -5,13 +5,13 @@ use core\controller\BaseController;
 use payment\form\PaymentForm;
 use payment\service\PaymentService;
 use payment\model\Payment;
+use payment\pdf\PaymentPdf;
 
 
 class paymentController extends BaseController {
     
     
     public function action_index() {
-        
         $this->form = new PaymentForm();
         
         $paymentService = object_container_get(PaymentService::class);
@@ -29,9 +29,23 @@ class paymentController extends BaseController {
             $this->form->bind( $_REQUEST );
             
             if ($this->form->validate()) {
-                $paymentService->savePayment($this->form);
+                $payment = $paymentService->savePayment($this->form);
                 
-                redirect('/?m=payment&c=paymentOverview');
+                // print?
+                if (get_var('print')) {
+                    $payment = $paymentService->readPayment( $payment->getPaymentId() );
+                    $pdf = new PaymentPdf();
+                    $pdf->setPayment($payment);
+                    $pdf->render();
+                    
+                    $pdf->Output('I', 'betaling-'.$payment->getPaymentNumberText());
+                }
+                // just save?
+                else {
+                    report_user_message('Betaling opgeslagen');
+                    
+                    redirect('/?m=payment&c=payment&id='.$payment->getPaymentId());
+                }
             }
         }
         

@@ -7,6 +7,8 @@
 		<?php if (hasCapability('payment', 'edit-payments')) : ?>
     		<?php if ($isNew == false) : ?>
     		<a href="<?= appUrl('/?m=payment&c=payment&a=delete&id='.$paymentId) ?>" class="fa fa-trash delete"></a>
+    		
+    		<a href="javascript:void(0);" onclick="print_Click();" class="fa fa-print" target="_blank"></a>
     		<?php endif; ?>
     		
 			<a href="javascript:void(0);" class="fa fa-save submit-form"></a>
@@ -37,6 +39,14 @@ $(document).ready(function() {
 		$('.add-record').click();
 	}
 });
+
+
+function print_Click() {
+	var frm = $('.form-payment-form');
+	var data = serialize2object( frm );
+
+	formpost('/?m=payment&c=payment&print=1&id=' + $('[name=payment_id]').val(), data, { target: '_blank' });
+}
 
 
 </script>

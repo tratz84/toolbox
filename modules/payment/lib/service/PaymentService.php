@@ -273,6 +273,10 @@ class PaymentService extends ServiceBase {
         }
         
         
+        if ($fch->hasChanges() == false) {
+            return $payment;
+        }
+        
         
         $form->fill($payment, array('payment_id', 'payment_date', 'cancelled', 'description', 'note'));
         
@@ -319,7 +323,7 @@ class PaymentService extends ServiceBase {
             ActivityUtil::logActivity($company_id, $person_id, 'payment__payment', null, 'payment-edited', 'Betaling aangepast', $fch->getHtml());
         }
         
-        return $payment->getPaymentId();
+        return $payment;
     }
     
     

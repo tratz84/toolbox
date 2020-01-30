@@ -44,14 +44,14 @@ class invoiceController extends BaseController {
         $form = new PaymentForm();
         $form->bind($p);
         
-        $payment_id = $ps->savePayment($form);
+        $payment = $ps->savePayment($form);
         
         
         object_meta_save(Invoice::class, $invoice->getInvoiceId(), 'payment_created', true);
         
         report_user_message('Betaling aangemaakt');
         
-        redirect('/?m=payment&c=payment&id='.$payment_id);
+        redirect('/?m=payment&c=payment&id='.$payment->getPaymentId());
     }
     
     
