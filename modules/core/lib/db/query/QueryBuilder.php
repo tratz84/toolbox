@@ -85,11 +85,18 @@ abstract class QueryBuilder {
     }
     public function getSelectFields() { return $this->selectFields; }
     public function selectField($fieldName, $tableName=null, $label=null) {
-        $this->selectFields[$fieldName] = array(
+        if ($tableName) {
+            $key = $tableName . '.' . $fieldName;
+        } else {
+            $key = $fieldName;
+        }
+        
+        $this->selectFields[$key] = array(
             'field'     => $fieldName,
             'tableName' => $tableName,
             'label'     => $label
         );
+        
         return $this;
     }
     public function clearSelectFields() { $this->selectFields = array(); }

@@ -9,6 +9,7 @@ class paymentOverviewController extends BaseController {
     
     public function action_index() {
         
+        $this->params = array('exploded' => true);
         
         $this->render();
     }

@@ -5,16 +5,6 @@
 
 <script>
 
-function component_deletePayment_Click(payment_id) {
-	showConfirmation('Betaling verwijderen', 'Weet u zeker dat u deze betaling wilt verwijderen?', function() {
-		var l = window.location;
-		var back_url = l.pathname + l.search;
-
-		window.location = appUrl('/?m=payment&c=payment&a=delete&id=' + payment_id + '&back_url=' + encodeURIComponent(back_url));
-	});
-	
-}
-
 
 var pot = new IndexTable('#payment-overview-table-container', {
 	autoloadNext: true
@@ -22,6 +12,23 @@ var pot = new IndexTable('#payment-overview-table-container', {
 
 
 pot.setConnectorUrl( '/?m=payment&c=paymentOverview&a=search&<?= http_build_query($params) ?>' );
+
+pot.setRowClick(function(row) {
+	var r = $(row).data('record');
+
+	window.location = appUrl('/?m=payment&c=payment&id=' + r.payment_id);
+});
+
+pot.setCallbackRenderRows(function() {
+	$(this.container).find('tbody tr').each(function(index, node) {
+		var r = $(node).data('record');
+		if (!r) return;
+
+		if (r.cancelled == 1) {
+			$(node).addClass('cancelled');
+		}
+	});
+});
 
 
 pot.addColumn({
@@ -32,36 +39,37 @@ pot.addColumn({
 	searchable: false
 });
 pot.addColumn({
-	fieldName: 'paymentTypeText',
-	fieldDescription: 'Soort',
-	fieldType: 'text',
-	searchable: false
-});
-pot.addColumn({
-	fieldName: 'description',
-	fieldDescription: 'Omschrijving',
-	fieldType: 'text',
-	searchable: false
-});
-pot.addColumn({
-	fieldName: 'amount',
-	fieldType: 'currency',
-	fieldDescription: 'Bedrag',
-	searchable: false
-});
-
-pot.addColumn({
 	fieldName: 'payment_date',
 	fieldDescription: 'Betaaldatum',
 	fieldType: 'date',
 	searchable: false
 });
 pot.addColumn({
-	fieldName: 'actions',
+	fieldName: 'description',
+	fieldDescription: 'Kenmerk',
+	fieldType: 'text',
+	searchable: false,
 	render: function(row) {
-		console.log(row);
-		return '<a href="javascript:void(0);" onclick="component_deletePayment_Click('+row.payment_id+');"><span class="fa fa-close"></span></a>';
+		var pd = $.trim(row.payment_description);
+
+		if (pd != '')
+			return pd;
+
+		return row.payment_line_description1;
 	}
+});
+pot.addColumn({
+	fieldName: 'payment_amount',
+	fieldType: 'currency',
+	fieldDescription: 'Bedrag',
+	searchable: false
+});
+
+pot.addColumn({
+	fieldName: 'cancelled',
+	fieldType: 'boolean',
+	fieldDescription: 'Geannuleerd',
+	searchable: false
 });
 
 

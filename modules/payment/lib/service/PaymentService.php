@@ -43,8 +43,14 @@ class PaymentService extends ServiceBase {
         foreach($objects as &$o) {
             $pls = $plDao->readExploded( $o['payment_id'] );
             
-            foreach($pls as $pl) {
-                $newObjs[] = $pl->getFields();
+            if (isset($opts['exploded']) && $opts['exploded']) {
+                foreach($pls as $pl) {
+                    $newObjs[] = $pl->getFields();
+                }
+            }
+            else {
+                $newObjs[] = $pls[0]->getFields();
+//                 var_export($newObjs);exit;
             }
         }
         $r->setObjects($newObjs);

@@ -72,6 +72,27 @@ hook_eventbus_subscribe('invoice', 'invoice-edit', function($actionContainer) {
         $actionContainer->addItem('create-payment', '<a href="'.appUrl('/?m=payment&c=invoice&a=create_payment&invoice_id='.$actionContainer->getObjectId()).'">Betaling aanmaken</a>');
     }
 });
-    
 
+
+hook_eventbus_subscribe('base', 'company-edit-footer', function($ftc) {
+    $form = $ftc->getSource();
+    
+    $html = get_component('payment', 'tabOverviewController', 'index', array('companyId' => $form->getWidgetValue('company_id')));
+    
+    if ($html) {
+        $ftc->addTab('Betalingen', $html);
+    }
+});
+
+
+hook_eventbus_subscribe('base', 'person-edit-footer', function($ftc) {
+    $form = $ftc->getSource();
+    
+    $html = get_component('payment', 'tabOverviewController', 'index', array('personId' => $form->getWidgetValue('person_id')));
+    
+    if ($html) {
+        $ftc->addTab('Betalingen', $html);
+    }
+});
+    
 

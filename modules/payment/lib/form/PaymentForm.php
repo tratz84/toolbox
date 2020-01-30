@@ -56,6 +56,13 @@ class PaymentForm extends BaseForm {
                 return 'Geen betaalregels toegevoegd';
             }
             
+            foreach($objs as $o) {
+                $pid = (int)$o['payment_method_id'];
+                if ($pid == 0) {
+                    return 'Ongeldige betalingsmethode';
+                }
+            }
+            
             // check if there's a line with an amount
             $hasAmount = false;
             foreach($objs as $o) {

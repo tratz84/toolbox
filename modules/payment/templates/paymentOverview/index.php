@@ -16,7 +16,7 @@
 </div>
 
 
-<div id="payment-table-container"></div>
+<div id="payment-overview-table-container"></div>
 
 <script>
 
@@ -29,7 +29,7 @@ function component_deletePayment_Click(payment_id) {
 	});
 }
 
-var pot = new IndexTable('#payment-table-container', {
+var pot = new IndexTable('#payment-overview-table-container', {
 	autoloadNext: true
 });
 
