@@ -1,7 +1,6 @@
 <?php
 
-namespace invoice\form;
-
+namespace payment\form;
 
 use core\ObjectContainer;
 use core\forms\BaseForm;
@@ -10,7 +9,7 @@ use core\forms\HiddenField;
 use core\forms\TextField;
 use core\forms\TextareaField;
 use core\forms\validator\NotEmptyValidator;
-use invoice\service\PaymentService;
+use payment\service\PaymentService;
 
 class PaymentMethodForm extends BaseForm {
     

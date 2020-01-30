@@ -2,22 +2,17 @@
 
 namespace payment\service;
 
-use core\forms\lists\ListResponse;
 use core\service\ServiceBase;
-use invoice\form\PaymentMethodForm;
-use invoice\model\PaymentDAO;
-use invoice\model\PaymentMethod;
-use invoice\model\PaymentMethodDAO;
-use core\exception\ObjectNotFoundException;
-use core\event\EventBus;
-use base\util\ActivityUtil;
+use payment\model\PaymentMethodDAO;
+use payment\model\PaymentMethod;
+use payment\form\PaymentMethodForm;
 
 class PaymentService extends ServiceBase {
     
     
     
     
-    
+    /*
     public function search($start, $limit=20, $opts=array()) {
         $pDao = new PaymentDAO();
         
@@ -61,7 +56,7 @@ class PaymentService extends ServiceBase {
         
         ActivityUtil::logActivity($p->getCompanyId(), $p->getPersonId(), $p->getRefObject(), $p->getRefId(), 'payment-cancelled', $shortDescription);
     }
-    
+    */
     
     public function readAllMethods() {
         $pmDao = new PaymentMethodDAO();
@@ -117,19 +112,21 @@ class PaymentService extends ServiceBase {
     
     
     public function deletePaymentMethod($paymentMethodId) {
-        $pDao = new PaymentDAO();
-        $pDao->paymentMethodToNull($paymentMethodId);
+//         $pDao = new PaymentDAO();
+//         $pDao->paymentMethodToNull($paymentMethodId);
         
         $pmDao = new PaymentMethodDAO();
         $pmDao->delete($paymentMethodId);
     }
     
     
+    /*
     public function readTotalsForPeriod($start, $end, $refObject=null, $paymentType=null, $paymentMethodId=null) {
         $pDao = new PaymentDAO();
         
         return $pDao->readTotalsForPeriod($start, $end, $refObject, $paymentType, $paymentMethodId);
     }
+    */
     
     
     

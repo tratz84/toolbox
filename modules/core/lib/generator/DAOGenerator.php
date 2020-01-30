@@ -25,7 +25,7 @@ class DAOGenerator {
         
         $modelDir = module_path($this->moduleName).'/lib/model';
         if (file_exists($modelDir.'/base') == false)
-            mkdir($modelDir.'/base');
+            mkdir($modelDir.'/base', 0755, true);
         
         // generate base-DBObject classes
         $tpl = new DefaultTemplate( lookupModuleFile('templates/generator/dbbaseobject.php') );

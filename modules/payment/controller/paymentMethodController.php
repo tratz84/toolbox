@@ -1,6 +1,10 @@
 <?php
 
 use core\controller\BaseController;
+use core\forms\lists\ListResponse;
+use payment\form\PaymentMethodForm;
+use payment\service\PaymentService;
+use payment\model\PaymentMethod;
 
 class paymentMethodController extends BaseController {
     
@@ -33,7 +37,7 @@ class paymentMethodController extends BaseController {
             if ($paymentMethodForm->validate()) {
                 $paymentService->savePaymentMethod($paymentMethodForm);
                 
-                redirect('/?m=invoice&c=paymentMethod');
+                redirect('/?m=payment&c=paymentMethod');
             }
             
         }
@@ -87,7 +91,7 @@ class paymentMethodController extends BaseController {
         $paymentMethodService = $this->oc->get(PaymentService::class);
         $paymentMethodService->deletePaymentMethod($_REQUEST['id']);
         
-        redirect('/?m=invoice&c=paymentMethod');
+        redirect('/?m=payment&c=paymentMethod');
     }
 
 }

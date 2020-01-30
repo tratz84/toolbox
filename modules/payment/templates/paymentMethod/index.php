@@ -2,7 +2,7 @@
 <div class="page-header">
 	<div class="toolbox list-toolbox">
 		<a href="<?= appUrl('/?m=base&c=masterdata/index') ?>" class="fa fa-chevron-circle-left"></a>
-		<a href="<?= appUrl('/?m=invoice&c=paymentMethod&a=edit') ?>" class="fa fa-plus"></a>
+		<a href="<?= appUrl('/?m=payment&c=paymentMethod&a=edit') ?>" class="fa fa-plus"></a>
 	</div>
 	
     <h1>Betalingsmogelijkheden</h1>
@@ -21,7 +21,7 @@ var t = new IndexTable('#payment-method-table-container');
 
 
 t.setRowClick(function(row, evt) {
-	window.location = appUrl('/?m=invoice&c=paymentMethod&a=edit&id=' + $(row).data('record').payment_method_id);
+	window.location = appUrl('/?m=payment&c=paymentMethod&a=edit&id=' + $(row).data('record').payment_method_id);
 });
 
 t.setSortUpdate(function(evt) {
@@ -31,7 +31,7 @@ t.setSortUpdate(function(evt) {
 	});
 
 	$.ajax({
-		url: appUrl('/?m=invoice&c=paymentMethod&a=sort'),
+		url: appUrl('/?m=payment&c=paymentMethod&a=sort'),
 		type: 'POST',
 		data: {
 			ids: ids.join(',')
@@ -39,7 +39,7 @@ t.setSortUpdate(function(evt) {
 	});
 });
 
-t.setConnectorUrl( '/?m=invoice&c=paymentMethod&a=search' );
+t.setConnectorUrl( '/?m=payment&c=paymentMethod&a=search' );
 
 
 // t.addColumn({
@@ -83,10 +83,10 @@ t.addColumn({
 		var payment_method_id = record['payment_method_id'];
 		
 		var anchEdit = $('<a class="fa fa-pencil" />');
-		anchEdit.attr('href', appUrl('/?m=invoice&c=paymentMethod&a=edit&id=' + payment_method_id));
+		anchEdit.attr('href', appUrl('/?m=payment&c=paymentMethod&a=edit&id=' + payment_method_id));
 		
 		var anchDel  = $('<a class="fa fa-trash" />');
-		anchDel.attr('href', appUrl('/?m=invoice&c=paymentMethod&a=delete&id=' + payment_method_id));
+		anchDel.attr('href', appUrl('/?m=payment&c=paymentMethod&a=delete&id=' + payment_method_id));
 		anchDel.click( handle_deleteConfirmation_event );
 		anchDel.data('description', record.description);
 

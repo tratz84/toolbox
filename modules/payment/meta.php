@@ -1,3 +1,3 @@
 <?php
 
-return new core\module\ModuleMeta('payment', 'payment', 'Payment module');
+return new core\module\ModuleMeta('payment', 'Payment module', 'Payment module');

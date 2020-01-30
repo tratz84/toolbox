@@ -1,6 +1,6 @@
 <?php
 
-namespace invoice\form;
+namespace payment\form;
 
 use core\forms\BaseForm;
 use core\forms\FileField;
