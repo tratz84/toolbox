@@ -12,10 +12,12 @@ use core\forms\DynamicSelectField;
 use core\forms\HiddenField;
 use core\forms\HtmlField;
 use core\forms\SelectField;
+use core\forms\TextField;
 use core\forms\TextareaField;
 use core\forms\validator\NotEmptyValidator;
 use payment\model\Payment;
 use payment\service\PaymentService;
+use core\forms\CheckboxField;
 
 class PaymentForm extends BaseForm {
     
@@ -30,6 +32,11 @@ class PaymentForm extends BaseForm {
         $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=base&c=customer&a=select2', 'Klant') );
         
         $this->addWidget( new DatePickerField('payment_date', '', 'Betaaldatum'));
+        
+        $this->addWidget( new CheckboxField('cancelled', '', 'Geannuleerd') );
+        $this->getWidget('cancelled')->setInfoText('Uitgevoerde betaling om een of andere reden mislukt/geannuleerd?');
+        
+        $this->addWidget( new TextField('description', '', 'Omschrijving'));
         
         $this->addWidget( new HtmlField('spacer', '', ''));
         

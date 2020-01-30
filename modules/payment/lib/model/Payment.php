@@ -13,7 +13,7 @@ class Payment extends base\PaymentBase {
         parent::__construct( $id );
         
         $this->setPaymentDate( date('Y-m-d') );
-        
+        $this->setCancelled(false);
     }
     
     

@@ -2,8 +2,14 @@
 <div class="page-header">
 
 	<div class="toolbox">
+		<a href="<?= appUrl('/?m=payment&c=paymentOverview') ?>" class="fa fa-chevron-circle-left"></a>
+		
 		<?php if (hasCapability('payment', 'edit-payments')) : ?>
-		<a href="javascript:void(0);" class="fa fa-save submit-form"></a>
+    		<?php if ($isNew == false) : ?>
+    		<a href="<?= appUrl('/?m=payment&c=payment&a=delete&id='.$paymentId) ?>" class="fa fa-trash delete"></a>
+    		<?php endif; ?>
+    		
+			<a href="javascript:void(0);" class="fa fa-save submit-form"></a>
 		<?php endif; ?>
 	</div>
 

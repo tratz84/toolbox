@@ -19,6 +19,7 @@ class paymentController extends BaseController {
             $payment = $paymentService->readPayment( get_var('id') );
         } else {
             $payment = new Payment();
+            $payment->setDescription('Handmatig verwerkte betaling');
         }
         
         $this->form->bind($payment);
@@ -36,10 +37,12 @@ class paymentController extends BaseController {
         
         
         $this->isNew = $payment->isNew();
+        $this->paymentId = $payment->getPaymentId();
         
         
-        if ($this->isNew)
+        if ($this->isNew) {
             checkCapability('payment', 'edit-payments');
+        }
         
         
         return $this->render();
@@ -48,8 +51,6 @@ class paymentController extends BaseController {
     
     
     public function action_delete() {
-        
-        
         $paymentService = $this->oc->get(PaymentService::class);
         
         $paymentService->deletePayment($_REQUEST['id']);
@@ -57,7 +58,7 @@ class paymentController extends BaseController {
         if (get_var('back_url')) {
             redirect(get_var('back_url'));
         } else {
-            redirect('/');
+            redirect('/?m=payment&c=payment');
         }
     }
     

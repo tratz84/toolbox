@@ -27,5 +27,9 @@ class PaymentMethodDAO extends \core\db\DAOObject {
        return $this->queryOne("select * from payment__payment_method where code = ?", array($c));
    }
 
+   public function readDefaultSelected() {
+       return $this->queryOne("select * from payment__payment_method where default_selected=true");
+   }
+   
 }
 

@@ -31,6 +31,7 @@ $sql[] = "CREATE TABLE `payment__payment` (
   `note` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `amount` decimal(10,2) DEFAULT NULL,
   `payment_date` date DEFAULT NULL,
+  `cancelled` boolean default false,
   `created` datetime DEFAULT NULL,
   PRIMARY KEY (`payment_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";

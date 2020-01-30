@@ -74,6 +74,15 @@ class PaymentBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'cancelled' => 
+  array (
+    'Field' => 'cancelled',
+    'Type' => 'tinyint(1)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => '0',
+    'Extra' => '',
+  ),
   'created' => 
   array (
     'Field' => 'created',
@@ -116,6 +125,10 @@ class PaymentBase extends \core\db\DBObject {
 		
 	public function setPaymentDate($p) { $this->setField('payment_date', $p); }
 	public function getPaymentDate() { return $this->getField('payment_date'); }
+	
+		
+	public function setCancelled($p) { $this->setField('cancelled', $p); }
+	public function getCancelled() { return $this->getField('cancelled'); }
 	
 		
 	public function setCreated($p) { $this->setField('created', $p); }
