@@ -2,9 +2,14 @@
 <div class="page-header">
 
 	<div class="toolbox">
+		<?php if (hasCapability('payment', 'import-payments')) : ?>
+		<a href="<?= appUrl('/?m=payment&c=import') ?>" class="fa fa-download"></a>
+		<?php endif; ?>
+		
 		<?php if (hasCapability('payment', 'edit-payments')) : ?>
 		<a href="<?= appUrl('/?m=payment&c=payment') ?>" class="fa fa-plus"></a>
 		<?php endif; ?>
+		
 	</div>
 
 	<h1>Betalingsoverzicht</h1>

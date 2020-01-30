@@ -30,20 +30,22 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
     $src = $evt->getSource();
     
     if (hasCapability('payment', 'edit-payments')) {
-        $menuNewPayment = new Menu();
-        $menuNewPayment->setSubmenuLabel(t('New payment'));
-        $menuNewPayment->setIconLabelUrl('fa-money', t('Payments'), '/?m=payment&c=payment');
-        $menuNewPayment->setWeight(37);
-        $src->add($menuNewPayment);
         
         $menuOverviewPayments = new Menu();
-        $menuOverviewPayments->setIconLabelUrl('fa-list', t('Overview Payments'), '/?m=payment&c=paymentOverview');
-        $menuNewPayment->addChildMenu( $menuOverviewPayments );
+        $menuOverviewPayments->setIconLabelUrl('fa-list', t('Payments'), '/?m=payment&c=paymentOverview');
+        $menuOverviewPayments->setWeight(37);
+        $src->add( $menuOverviewPayments );
+        
+        
+        $menuNewPayment = new Menu();
+        $menuNewPayment->setIconLabelUrl('fa-money', t('New payment'), '/?m=payment&c=payment');
+        $menuOverviewPayments->addChildMenu($menuNewPayment);
+        
         
         if (hasCapability('payment', 'import-payments')) {
             $menuImportPayments = new Menu();
-            $menuImportPayments->setIconLabelUrl('fa-download', t('Import Payments'), '/?m=import&c=paymentImport');
-            $menuNewPayment->addChildMenu( $menuImportPayments );
+            $menuImportPayments->setIconLabelUrl('fa-download', t('Import Payments'), '/?m=payment&c=import');
+            $menuOverviewPayments->addChildMenu( $menuImportPayments );
         }
     }
     else if (hasCapability('payment', 'overview-payments')) {
