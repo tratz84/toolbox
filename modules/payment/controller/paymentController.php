@@ -2,9 +2,29 @@
 
 
 use core\controller\BaseController;
-use invoice\service\PaymentService;
+use payment\form\PaymentForm;
 
 class paymentController extends BaseController {
+    
+    
+    public function action_index() {
+        
+        
+        $this->form = new PaymentForm();
+        
+        
+        
+        
+        $this->isNew = true;
+        
+        
+        
+        if ($this->isNew)
+            checkCapability('payment', 'edit-payments');
+        
+        
+        return $this->render();
+    }
     
     
     

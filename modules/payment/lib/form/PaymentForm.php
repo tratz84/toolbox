@@ -1,15 +1,15 @@
 <?php
 
-namespace invoice\form;
+namespace payment\form;
 
 
 use core\forms\BaseForm;
 use core\forms\DynamicSelectField;
 use core\forms\SelectField;
-use invoice\service\PaymentService;
+use payment\service\PaymentService;
 use core\forms\EuroField;
 
-class NewPaymentForm extends BaseForm {
+class PaymentForm extends BaseForm {
     
     
     
@@ -18,12 +18,13 @@ class NewPaymentForm extends BaseForm {
         parent::__construct();
         
         
-//         $this->addWidget(new TextField('t', '', 'Test'));
         $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=base&c=customer&a=select2', 'Klant') );
         
-        $this->addPaymentMethod();
         
-        $this->addWidget(new EuroField('amount', '', t('Payment amount')));
+        
+//         $this->addPaymentMethod();
+        
+//         $this->addWidget(new EuroField('amount', '', t('Payment amount')));
         
     }
     
