@@ -131,5 +131,15 @@ class PaymentService extends ServiceBase {
         return $pDao->readTotalsForPeriod($start, $end, $refObject, $paymentType, $paymentMethodId);
     }
     
+    
+    
+    public function handleImportFile($file) {
+        
+        
+        
+    }
+    
+    
+    
 }
 

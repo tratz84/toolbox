@@ -15,6 +15,8 @@ class Menu extends base\MenuBase {
     protected $menuAsFirstChild = true;
     protected $childMenus = array();
     
+    protected $submenuLabel = null;
+    
     public function __construct() {
         
     }
@@ -36,6 +38,9 @@ class Menu extends base\MenuBase {
     
     public function setLabel($p) { $this->setField('label', $p); }
     public function getLabel() { return $this->getField('label'); }
+    
+    public function setSubmenuLabel($l) { $this->submenuLabel = $l; }
+    public function getSubmenuLabel() { return $this->submenuLabel; }
     
     public function setUrl($p) { $this->setField('url', $p); }
     public function getUrl() { return $this->getField('url'); }
