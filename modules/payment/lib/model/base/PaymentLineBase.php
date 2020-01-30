@@ -110,6 +110,15 @@ class PaymentLineBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'sort' => 
+  array (
+    'Field' => 'sort',
+    'Type' => 'int',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -159,6 +168,10 @@ class PaymentLineBase extends \core\db\DBObject {
 		
 	public function setMutationType($p) { $this->setField('mutation_type', $p); }
 	public function getMutationType() { return $this->getField('mutation_type'); }
+	
+		
+	public function setSort($p) { $this->setField('sort', $p); }
+	public function getSort() { return $this->getField('sort'); }
 	
 	
 }

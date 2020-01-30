@@ -3,9 +3,12 @@
 namespace payment\service;
 
 use core\service\ServiceBase;
-use payment\model\PaymentMethodDAO;
-use payment\model\PaymentMethod;
 use payment\form\PaymentMethodForm;
+use payment\model\PaymentDAO;
+use payment\model\PaymentMethod;
+use payment\model\PaymentMethodDAO;
+use core\exception\ObjectNotFoundException;
+use payment\model\PaymentLineDAO;
 
 class PaymentService extends ServiceBase {
     
@@ -127,6 +130,40 @@ class PaymentService extends ServiceBase {
         return $pDao->readTotalsForPeriod($start, $end, $refObject, $paymentType, $paymentMethodId);
     }
     */
+    
+    
+    public function readPayment($paymentId) {
+        $pDao = new PaymentDAO();
+        $payment = $pDao->read( $paymentId );
+        
+        if (!$payment) {
+            throw new ObjectNotFoundException('Payment not found');
+        }
+        
+        $plDao = new PaymentLineDAO();
+        $lines = $plDao->readByPayment($payment->getPaymentId());
+        
+        $payment->setPaymentLines($lines);
+        
+        return $payment;
+    }
+    
+    public function deletePayment($paymentId) {
+        $pDao = new PaymentDAO();
+        $payment = $pDao->read( $paymentId );
+        
+        if (!$payment) {
+            throw new ObjectNotFoundException('Payment not found');
+        }
+        
+        $plDao = new PaymentLineDAO();
+        $plDao->deleteByPayment($payment->getPaymentId());
+        
+        $pDao->delete($payment->getPaymentId());
+        
+    }
+    
+    
     
     
     

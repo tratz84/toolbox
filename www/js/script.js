@@ -987,7 +987,7 @@ function format_price(val, currency, opts) {
 //	s = s.replace('.', ',');
 	s = s.replace(',', '.');
 	
-	var d = strtodouble(s);
+	var d = strtodouble(s, 0);
 	s = d.toFixed(2).toString();
 	
 	var pos_decimal = s.indexOf('.');

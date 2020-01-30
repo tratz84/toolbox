@@ -47,6 +47,7 @@ $sql[] = "CREATE TABLE `payment__payment_line` (
   `description1` text,
   `description2` text,
   `mutation_type` varchar(64) DEFAULT NULL,
+  `sort` int DEFAULT NULL,
   PRIMARY KEY (`payment_line_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
 

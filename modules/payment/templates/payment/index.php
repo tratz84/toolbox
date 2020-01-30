@@ -18,3 +18,21 @@
 
 <?= $form->render() ?>
 
+
+
+
+<script>
+
+var isNew = <?= json_encode($isNew) ?>;
+var is_get_request = <?= json_encode(is_get()) ?>;
+
+$(document).ready(function() {
+	if (isNew && is_get_request) {
+		$('.add-record').click();
+	}
+});
+
+
+</script>
+
+

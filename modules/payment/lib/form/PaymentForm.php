@@ -6,8 +6,10 @@ namespace payment\form;
 use core\forms\BaseForm;
 use core\forms\DynamicSelectField;
 use core\forms\SelectField;
-use payment\service\PaymentService;
-use core\forms\EuroField;
+use core\forms\validator\NotEmptyValidator;
+use core\forms\DatePickerField;
+use core\forms\TextareaField;
+use core\forms\HtmlField;
 
 class PaymentForm extends BaseForm {
     
@@ -20,6 +22,42 @@ class PaymentForm extends BaseForm {
         
         $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=base&c=customer&a=select2', 'Klant') );
         
+        $this->addWidget( new DatePickerField('payment_date', '', 'Betaaldatum'));
+        
+        $this->addWidget( new HtmlField('spacer', '', ''));
+        
+        $this->addWidget( new PaymentLineListEdit() );
+        
+        $this->addWidget( new TextareaField('note', '', 'Notitie'));
+        
+        
+        $this->addValidator('customer_id', new NotEmptyValidator());
+        
+        $this->addValidator('PaymentLines', function($form) {
+            $w = $form->getWidget('PaymentLines');
+            
+            $objs = $w->getObjects();
+            
+            if (count($objs) == 0) {
+                return 'Geen betaalregels toegevoegd';
+            }
+            
+            // check if there's a line with an amount
+            $hasAmount = false;
+            foreach($objs as $o) {
+                $cents = intval(strtodouble($o['euro']) * 100);
+                
+                if ($cents != 0) {
+                    $hasAmount = true;
+                    break;
+                }
+            }
+            
+            if ($hasAmount == false) {
+                return 'Geen betaalregel met een bedrag';
+            }
+            
+        });
         
         
 //         $this->addPaymentMethod();

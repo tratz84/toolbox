@@ -119,6 +119,12 @@ class GeneratorHelper {
         );
         $formWidgets[] = array(
             'type' => 'widget',
+            'class' => \core\forms\EuroField::class,
+//             'editor' => \codegen\form\widgetoptions\NumberOptionsForm::class,
+            'label' => 'Euro field'
+        );
+        $formWidgets[] = array(
+            'type' => 'widget',
             'class' => TextField::class,
             'label' => 'Textfield'
         );

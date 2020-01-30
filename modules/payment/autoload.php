@@ -8,6 +8,10 @@ use core\event\EventBus;
 
 Context::getInstance()->enableModule('payment');
 
+require_once __DIR__.'/lib/functions/misc.php';
+
+
+
 $eb = ObjectContainer::getInstance()->get(EventBus::class);
 
 

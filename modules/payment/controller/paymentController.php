@@ -3,16 +3,36 @@
 
 use core\controller\BaseController;
 use payment\form\PaymentForm;
+use payment\service\PaymentService;
+use payment\model\Payment;
+
 
 class paymentController extends BaseController {
     
     
     public function action_index() {
         
-        
         $this->form = new PaymentForm();
         
+        $paymentService = object_container_get(PaymentService::class);
+        if (get_var('id')) {
+            $payment = $paymentService->readPayment( get_var('id') );
+        } else {
+            $payment = new Payment();
+        }
         
+        $this->form->bind($payment);
+        
+        
+        if (is_post()) {
+            $this->form->bind( $_REQUEST );
+            
+            if ($this->form->validate()) {
+                $paymentService->save($this->form);
+                
+                redirect('/?m=payment&c=paymentOverview');
+            }
+        }
         
         
         $this->isNew = true;
