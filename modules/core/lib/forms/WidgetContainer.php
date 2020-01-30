@@ -4,6 +4,7 @@
 namespace core\forms;
 
 
+use core\container\ObjectHookCall;
 use core\db\DBObject;
 use core\exception\InvalidStateException;
 
@@ -17,7 +18,7 @@ class WidgetContainer extends BaseWidget {
     protected $blnDoBinding = false;
     protected $bindHooks = array();
     
-    public function __construct($name='widget-containre') {
+    public function __construct($name='widget-container') {
         $this->setName($name);
     }
     
@@ -30,7 +31,7 @@ class WidgetContainer extends BaseWidget {
         
         // check duplicates
         if (isset($this->widgetNames[$widgetName])) {
-            throw new InvalidStateException('Duplicate widget name');
+            throw new InvalidStateException('Duplicate widget name: "'.$widgetName.'"');
         }
         
         $this->widgets[] = $w;
@@ -89,8 +90,11 @@ class WidgetContainer extends BaseWidget {
         $widgets = array();
         
         foreach($this->widgets as $w) {
-            if ($w->getName() == $name)
+            if ($w->getName() == $name) {
+                // found?
+                unset( $this->widgetNames[$name] );
                 continue;
+            }
             
             $widgets[] = $w;
         }
@@ -107,9 +111,13 @@ class WidgetContainer extends BaseWidget {
      * @return number of fields set
      */
     public function bind($obj) {
+        $ohc = new ObjectHookCall($this, 'bind', array($obj));
+        hook_eventbus_publish($ohc, 'core', 'pre-call-'.get_class($this).'::bind');
+        
+        
         $fieldCount = 0;
         
-        if (is_a($this, BaseForm::class) && is_a($obj, DBObject::class)) {
+        if (is_admin_context() == false && is_a($this, BaseForm::class) && is_a($obj, DBObject::class)) {
             $this->setObjectLocked( dbobject_is_locked($obj) ? true : false );
         }
         
@@ -136,6 +144,8 @@ class WidgetContainer extends BaseWidget {
             $this->blnDoBinding = false;
         }
         
+        $ohc->setReturnValue($fieldCount);
+        hook_eventbus_publish($ohc, 'core', 'post-call-'.get_class($this).'::bind');
         
         return $fieldCount;
     }
@@ -146,6 +156,8 @@ class WidgetContainer extends BaseWidget {
      * @param $obj
      */
     public function fill($obj, $fields=array()) {
+        $ohc = new ObjectHookCall($this, 'bind', array($obj, $fields));
+        hook_eventbus_publish($ohc, 'core', 'pre-call-'.get_class($this).'::fill');
         
         foreach($fields as $f) {
             $widget = $this->getWidget($f);
@@ -169,6 +181,7 @@ class WidgetContainer extends BaseWidget {
             }
         }
         
+        hook_eventbus_publish($ohc, 'core', 'post-call-'.get_class($this).'::fill');
     }
     
     

@@ -131,7 +131,7 @@
 		padding-right: 20px;
 	}
 	.reset-field-button.reset-field-cross:not([disabled]):hover {
-		background-image: url('/images/icon-red-cross.png');
+		background-image: url('../../images/icon-red-cross.png');
 		background-repeat: no-repeat;
 		background-size: 13px 13px;
 		background-position: calc(100% - 3px) 5px;
@@ -156,6 +156,14 @@
 	}
 }
 
+.table-container {
+	td {
+		label { display: none; }
+		label.checkbox-ui-placeholder { display: block; }
+		
+		padding-right: 10px;
+	}
+}
 
 .errors {
 	background-color: #fcffe5;
@@ -166,6 +174,19 @@
 	padding: 10px;
 	margin-top: 15px;
 	margin-bottom: 25px;
+	
+	.error-close-container {
+		display: none;
+		float: right;
+		a {
+			color: #ff9a9a;
+			text-decoration: none;
+			&:hover { color: #f00; }
+		}
+	}
+	&:hover {
+		.error-close-container { display: block; }
+	}
 
 	ul {
 		margin: 0;

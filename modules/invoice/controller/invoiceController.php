@@ -66,7 +66,7 @@ class invoiceController extends BaseController {
         }
         
         
-        $invoiceForm = new InvoiceForm();
+        $invoiceForm = $this->oc->create(InvoiceForm::class);
         $invoiceForm->bind($invoice);
         
         if (is_post()) {
@@ -270,6 +270,7 @@ class invoiceController extends BaseController {
                 $vars['naam'] = $invoice->getCustomer()->getPersonName();
         }
         $vars['betreft'] = $invoice->getSubject();
+        $vars['document_no'] = $invoice->getInvoiceNumberText();
         
         $html = $template->render($vars);
         $files = array();

@@ -2,7 +2,7 @@
 <html lang="nl">
 	<head>
 		<meta charset="utf-8">
-		<title>Insights</title>
+		<title>Toolbox</title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 

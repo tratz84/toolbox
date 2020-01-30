@@ -3,5 +3,5 @@
 
 use core\module\ModuleMeta;
 
-return new ModuleMeta('webmailModule', 'E-mail module',   'Versturen van facturen/offertes vanuit insights');
+return new ModuleMeta('webmailModule', 'E-mail module',   'Versturen van facturen/offertes vanuit Toolbox');
 

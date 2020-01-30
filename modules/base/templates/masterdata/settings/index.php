@@ -18,13 +18,18 @@
     
     <div class="list-available-modules">
         <?php foreach($availableModules as $m) : ?>
-        <div class="widget text-field-widget module-<?= slugify($m->getName()) ?>">
+        <?php $moduleEnabled = @$settings[$m->getTag().'Enabled'] ? true : false; ?>
+        <div class="widget text-field-widget module-line module-<?= slugify($m->getName()) ?>" style="<?= $moduleEnabled ? 'background-color: #c6f3ce;' : '' ?>">
         	<label>
         		<?= esc_html($m->getName()) ?>
         		<?= infopopup($m->getInfoText()) ?>
     		</label>
     		
-    		<?= render_checkbox($m->getTag().'Enabled', ['checked' => @$settings[$m->getTag().'Enabled']]) ?>
+    		<?php if ($moduleEnabled) : ?>
+    			<a href="<?= appUrl('/?m=base&c=masterdata/settings&a=deactivate_module&mod='.urlencode($m->getTag())) ?>"><?= t('Deactivate') ?></a>
+    		<?php else : ?>
+    			<a href="<?= appUrl('/?m=base&c=masterdata/settings&a=activate_module&mod='.urlencode($m->getTag())) ?>"><?= t('Activate') ?></a>
+    		<?php endif; ?>
         </div>
         <?php endforeach; ?>
     </div>
@@ -57,7 +62,7 @@
             $tabContainer = generate_tabs('base', 'masterdata-settings', null);
             $tabContainer->addTab('Basisinstellingen', $htmlBaseSettings, 0);
             $tabContainer->addTab('Extra', $htmlExtra);
-            $tabContainer->addTab('Kleuren', $htmlColors);
+            $tabContainer->addTab(t('Colors'), $htmlColors);
             print $tabContainer->render();
         ?>
         

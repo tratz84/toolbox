@@ -2,7 +2,7 @@
 <html lang="nl">
 	<head>
 		<meta charset="utf-8">
-		<title>itxplain - insights - <?= esc_html($ctx->getContextName()) ?></title>
+		<title>Toolbox - <?= esc_html($ctx->getContextName()) ?></title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -11,6 +11,7 @@
 			var appSettings = <?= json_encode([
 			    'base_href' => BASE_HREF,
 			    'contextName' => 'admin',
+			    'appRootUrl' => BASE_HREF.'admin/',
 			    'multiuser_check_interval' => MULTIUSER_CHECK_INTERVAL,
 			    'standalone_installation' => false
 			]) ?>;
@@ -48,7 +49,7 @@
                 <span class="current-user"> </span>
                 <a href="<?= appUrl('/?m=admin&c=auth&a=logoff') ?>" class="fa fa-sign-out"></a>
             </div>
-            <div class="administration-name"><a href="<?= appUrl('/') ?>">Admin: itxplain - insights</a></div>
+            <div class="administration-name"><a href="<?= appUrl('/') ?>">Admin: Toolbox</a></div>
         </div>
     </header>
 	<div class="nav-side-menu">

@@ -2,12 +2,13 @@
 
 use core\exception\DatabaseException;
 use core\exception\SecurityException;
+use core\exception\ContextNotFoundException;
 
 require_once '../config/config.php';
 
 
 try {
-    $fc = new \core\filter\FilterChain();
+    $fc = object_container_create( \core\filter\FilterChain::class );
     
     $fc->addFilter( new \core\filter\ModulePublicFilter() );
     $fc->addFilter( new \core\filter\SessionFilter() );
@@ -27,6 +28,8 @@ try {
     if (function_exists('debug_admin_notification'))
         debug_admin_notification('Error: ' . $cn . ': ' . $ex->getMessage());
     
+    include ROOT . '/modules/core/templates/exception/index.php';
+} catch (ContextNotFoundException $ex) {
     include ROOT . '/modules/core/templates/exception/index.php';
 } catch (\Error $ex) {
     $cn = \core\Context::getInstance()->getContextName();

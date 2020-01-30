@@ -3,6 +3,7 @@
 
 
 use core\Context;
+use core\event\CapabilityEvent;
 use core\exception\AuthorizationException;
 
 /**
@@ -21,6 +22,13 @@ function hasCapability($module, $capabilityCode=null) {
 
     if ($user->getUserType() == 'admin')
         return true;
+    
+    // publish capability event
+    $cc = new CapabilityEvent($module, $capabilityCode);
+    hook_eventbus_publish($cc, 'core', 'has-capability');
+    if ($cc->hasResult()) {
+        return $cc->getResult();
+    }
     
     return $user->hasCapability($module, $capabilityCode);
 }

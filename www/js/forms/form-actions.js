@@ -406,7 +406,7 @@ function ListEditFormWidget(container) {
 		var listName = $(this.container).find('.method-object-list').val();
 		
 		rows.each(function(index, node) {
-			$(node).find('input, select').each(function(index2, node2) {
+			$(node).find('input, select, textarea').each(function(index2, node2) {
 				var elementName = node2.name;
 				
 				if (elementName.indexOf('[') != -1) {

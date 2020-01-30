@@ -115,7 +115,7 @@ class CustomerService extends ServiceBase {
             }
         }
         
-        $lr = new ListResponse($start, $limit, $cursor->numRows, $customers);
+        $lr = new ListResponse($start, $limit, $cursor->numRows(), $customers);
         
         return $lr;
     }

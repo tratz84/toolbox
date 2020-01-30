@@ -12,6 +12,28 @@ $(document).ready(function() {
 	}, 60 * 1000);
 	
 	
+	$('.nav-side-menu .menu-list .menu-item > a.nav-link').on('touchend click', function() {
+		
+		if ($(window).width( ) < 767) {
+			// no child menu's? -> nothing to expand
+			if ($(this).closest('.menu-item').find('.child-menu').length == 0) {
+				return true;
+			}
+
+			var mi = $(this).closest('li.menu-item');
+			var isOpen = mi.hasClass('menu-item-open');
+			
+			$(this).closest('div.menu-list').find('li.menu-item-open').removeClass('menu-item-open');
+			
+			if (isOpen == false) {
+				mi.addClass('menu-item-open');
+			}
+			
+			return false;
+		}
+	});
+
+	
 	
 	applyWidgetFields(document.body);
 	
@@ -20,11 +42,13 @@ $(document).ready(function() {
 	focusFirstField( $('.main-content form') );
 	
 	var toolbox = $('.page-header .toolbox');
-	toolbox.find('.fa.fa-chevron-circle-left').attr('title', _('Back'));
-	toolbox.find('.fa.fa-send').attr('title', 'Verstuur per mail');
-	toolbox.find('.fa.fa-print').attr('title', 'Afdrukken');
-	toolbox.find('.fa.fa-save').attr('title', _('Save'));
-	toolbox.find('.fa.fa-cog').attr('title', 'Instellingen');
+	if (toolbox.length) {
+		toolbox.find('.fa.fa-chevron-circle-left').attr('title', _('Back'));
+		toolbox.find('.fa.fa-send').attr('title', _('Send by mail'));
+		toolbox.find('.fa.fa-print').attr('title', _('Print'));
+		toolbox.find('.fa.fa-save').attr('title', _('Save'));
+		toolbox.find('.fa.fa-cog').attr('title', _('Settings'));
+	}
 	
 	$(document).ajaxSend(function(evt, xhr, opts) {
 		// don't show progress on ping
@@ -164,7 +188,7 @@ function applyWidgetFields(container) {
 	
 	if (typeof $(document).tinymce == 'function') {
 		$('.input-tinymce').tinymce({
-			plugins: 'paste',
+			plugins: 'paste,code,link,fullpage,media,paste,table,textcolor,wordcount,contextmenu,colorpicker',
 			paste_data_images: true
 		});
 	}
@@ -194,6 +218,9 @@ function handle_resetFieldButton(objParent) {
 	});
 	$(objParent).find('.reset-field-button').click(function(evt) {
 		if (!$(this).hasClass('reset-field-cross'))
+			return;
+		
+		if ($(this).prop('readonly'))
 			return;
 		
 		if (evt.offsetX >= $(this).width()) {
@@ -252,7 +279,7 @@ $(document).ready(function() {
 	var form = $('.main-content form');
 	
 	if (form.length != 1) {
-		alert('Fout: submit-form button geplaatst, echter is het aantal forms op de huidige pagina != 1');
+		alert('Error: submit-form button found, but number of forms on current page != 1');
 		return;
 	}
 	
@@ -317,7 +344,14 @@ $(document).ready(function() {
 		}
 		
 		if ($('.nav-side-menu').css('display') == 'block') {
-			if (evt.clientX >= $('.nav-side-menu').width()) {
+			var w = $('.nav-side-menu').width();
+			
+			// childmenu support
+			var cmw = $('.nav-side-menu .child-menu:visible').width();
+			if (isNaN(cmw) == false)
+				w += cmw;
+			
+			if (evt.clientX >= w) {
 				$('.nav-side-menu').css('display', 'none');
 			}
 		} else {
@@ -377,11 +411,7 @@ function format_customername(record) {
 
 
 function appUrl(u) {
-	if (appSettings.standalone_installation) {
-		return appSettings.base_href + u.substr(1);
-	} else {
-		return appSettings.base_href + appSettings.contextName + u;
-	}
+	return appSettings.appRootUrl + u.substr(1);
 }
 
 function formpost(url, data, opts) {
@@ -463,7 +493,7 @@ function handle_deleteConfirmation_event(evt) {
 	var me = this;
 	
 	
-	var deleteText = 'Weet u zeker dat u dit record wilt verwijderen?';
+	var deleteText = _('Are you sure to delete this record?');
 	if ($(this).data('confirmationMessage')) {
 		deleteText = $(this).data('confirmationMessage');
 	} else if ($(this).data('description')) {
@@ -471,7 +501,7 @@ function handle_deleteConfirmation_event(evt) {
 	}
 	
 	
-	showConfirmation('Weet je het zeker?', deleteText, function() {
+	showConfirmation(_('Are you sure?'), deleteText, function() {
 		window.location = $(me).attr('href');
 	});
 	
@@ -510,7 +540,7 @@ function showConfirmation(title, body, callback_ok) {
 //	html += '        <p>One fine body&hellip;</p>';
 	html += '      </div>';
 	html += '      <div class="modal-footer">';
-	html += '        <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>';
+	html += '        <button type="button" class="btn btn-default" data-dismiss="modal">'+_('Cancel')+'</button>';
 	html += '        <button type="button" class="btn btn-primary">Ok</button>';
 	html += '      </div>';
 	html += '    </div>';	// <!-- /.modal-content -->
@@ -584,13 +614,21 @@ function showAlert(title, body, callback_ok) {
 }
 
 
-function showInlineWarning(message) {
+function showInlineWarning(message, opts) {
+	opts = opts ? opts : {};
+	
 	$('.js-inline-warning').remove();
 	
 	var html = $('<div  class="js-inline-warning alert alert-warning" />');
 	html.append(message);
 	
 	$('.main-content').prepend(html);
+	
+	if (opts.timeout) {
+		setTimeout(function() {
+			$(html).slideUp(function() { $(this).remove(); });
+		}, opts.timeout);
+	}
 }
 
 function showInlineSecondary(message) {
@@ -648,10 +686,11 @@ function showInfo(obj, html) {
 	var d = $('<div class="show-info-container" />');
 	d.html( html );
 	d.css('position', 'absolute');
-	d.css('z-index', '50');
+	d.css('z-index', '20000');
 	d.css('background-color', '#fff');
 	d.css('padding', '5px 5px');
 	d.css('box-shadow', '0px 0px 5px #000')
+	d.css('white-space', 'nowrap');
 	
 	$(document.body).prepend(d);
 
@@ -757,9 +796,9 @@ function showDialog(opts) {
 	
 	// cancel/save buttons
 	if (opts.showCancelSave) {
-		var btnCancel = $('<input type="button" value="Annuleer" />');
+		var btnCancel = $('<input type="button" class="btn-cancel" value="'+_('Cancel')+'" />');
 		btnCancel.click(function() { closeDialog(); });
-		var btnOk = $('<input type="button" value="Opslaan" />');
+		var btnOk = $('<input type="button" class="btn-save" value="'+_('Save')+'" />');
 		btnOk.click(function() {
 			if (opts.callback_ok) {
 				var objDialog = $('.pwdialog-container');
@@ -1005,6 +1044,7 @@ function strtoint(str, default_val) {
 }
 
 function strtodouble(str, default_val) {
+	if (str === null) return 0;
 	
 	var pow_negative = -1;
 	
@@ -1111,6 +1151,16 @@ function format_filesize(size) {
 	}
 	
 	return (parseInt(size / (1024.0*1024.0*1024.0*1024.0) * 10) / 10) + " tb";
+}
+
+
+function validate_email(mail)  {
+	// credits to https://www.w3resource.com/javascript/form/email-validation.php
+	if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 
@@ -1317,6 +1367,9 @@ function text2date(str) {
 	var minuts = 0;
 	var seconds = 0;
 	
+	if (str == null)
+		return null;
+	
 	if (str.match(/^\d{4}-\d{2}-\d{2}$/)) {
 		var tokens = str.split('-');
 		year  = parseInt(tokens[0]);
@@ -1437,19 +1490,6 @@ function uuidv4() {
 }
 
 
-
-function component_deletePayment_Click(payment_id) {
-	
-	
-	showConfirmation('Betaling verwijderen', 'Weet u zeker dat u deze betaling wilt verwijderen?', function() {
-		var l = window.location;
-		var back_url = l.pathname + l.search;
-
-		window.location = appUrl('/?m=invoice&c=payment&a=delete&id=' + payment_id + '&back_url=' + encodeURIComponent(back_url));
-	});
-	
-}
-
 /**
  * fill_form() - fills a form by given object
  * 
@@ -1462,6 +1502,14 @@ function fill_form(form, obj) {
 	for(var i in obj) {
 		var inp = form.find('[name=' + i + ']');
 		
+		// input is <select>? make sure <option> is visible
+		if (inp.is('select')) {
+			inp.find('option').each(function(index, node) {
+			if ($(node).attr('value') == obj[i])
+				$(node).css('display', '');
+			});
+		}
+
 		if (inp.is(':checkbox')) {
 			var bln = false;
 			if (obj[i] || obj[i] == 't' || obj[i] == 'T' || obj[i] == 'y' || obj[i] == 'Y' || obj[i] == '1') {
@@ -1469,11 +1517,51 @@ function fill_form(form, obj) {
 			}
 			
 			inp.prop('checked', bln);
+		} else if (inp.hasClass('input-pickadate')) {
+			if (typeof obj[i] == 'string' && obj[i].match(/\d{4}-\d{2}-\d{2}$/)) {
+				var toks = obj[i].split('-');
+				
+				inp.val(toks[2] + '-' + toks[1] + '-' + toks[0]);
+				
+				if (inp.prop('readonly')) {
+					// don't add class
+				} else {
+					inp.addClass('reset-field-cross');
+				}
+			} else if (obj[i] == '') {
+				inp.removeClass('reset-field-cross');
+				inp.val('');
+			} else {
+				// ??
+				inp.val(obj[i]);
+			}
 		} else {
 			inp.val(obj[i]);
 		}
 	}
 }
+
+function link_input2text(src, dst) {
+	var obj1 = $(src);
+	
+	obj1.on('keyup change', function() {
+		if (typeof dst == 'function') {
+			dst( );
+		} else {
+			var t = '';
+			if (this.nodeName == 'SELECT') {
+				t = $(this).find('option:selected').text();
+				t = $.trim( t );
+			} else {
+				t = this.value;
+			}
+			
+			$(dst).text( t );
+		}
+	});
+}
+
+
 
 
 

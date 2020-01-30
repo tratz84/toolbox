@@ -34,7 +34,7 @@ class DatabaseFilter {
             $sqlVersion = (int)$ctx->getSetting('SQL_VERSION', 0);
             if ($sqlVersion < SQL_VERSION) {
                 // exec update
-                $db = new DatabaseUpdater();
+                $db = new DatabaseUpdater('SQL_VERSION', SQL_VERSION, ROOT.'/updates');
                 $db->update();
             }
         }

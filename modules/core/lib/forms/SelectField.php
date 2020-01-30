@@ -18,6 +18,7 @@ class SelectField extends BaseWidget {
     }
     
     
+    public function setOptionItems($i) { $this->optionItems = $i; }
     public function getOptionItems() { return $this->optionItems; }
     
     public function renderAsText() {

@@ -30,13 +30,13 @@ t.addColumn({
 });
 t.addColumn({
 	fieldName: 'username',
-	fieldDescription: 'Gebruiker',
+	fieldDescription: _('User'),
 	fieldType: 'text',
 	searchable: true
 });
 t.addColumn({
 	fieldName: 'customer_name',
-	fieldDescription: 'Naam',
+	fieldDescription: _('Name'),
 	fieldType: 'text',
 	searchable: true,
 	render: function(record) {
@@ -71,13 +71,13 @@ t.addColumn({
 });
 t.addColumn({
 	fieldName: 'short_description',
-	fieldDescription: 'Korte omschrijving',
+	fieldDescription: _('Short description'),
 	fieldType: 'text',
 	searchable: true
 });
 t.addColumn({
 	fieldName: 'created',
-	fieldDescription: 'Uitgevoerd op',
+	fieldDescription: _('Run on'),
 	fieldType: 'datetime',
 	searchable: false
 });

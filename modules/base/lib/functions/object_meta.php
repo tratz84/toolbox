@@ -20,6 +20,21 @@ function object_meta_get($objectName, $objectId, $objectKey, $unserialize=true) 
     }
 }
 
+function object_meta_by_object($objectName, $objectId, $unserialize=true) {
+    $metaService = object_container_get(MetaService::class);
+    
+    $arr = array();
+    $objs = $metaService->readByObject($objectName, $objectId);
+    foreach($objs as $obj) {
+        $key = $obj->getObjectKey();
+        $val = $unserialize ? unserialize($obj->getObjectValue()) : $obj->getObjectValue();
+        $arr[$key] = $val;
+    }
+    
+    return $arr;
+}
+
+
 function object_meta_get_object($objectName, $objectId, $objectKey, $unserialize=true) {
     $metaService = object_container_get(MetaService::class);
     

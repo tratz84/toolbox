@@ -127,7 +127,13 @@ function compare_number($num1, $num2, $decimals=2) {
     $num1 = (int) ($num1 * $x);
     $num2 = (int) ($num2 * $x);
     
-    return $num1 <=> $num2;
+    if ($num1 > $num2) {
+        return 1;
+    } else if ($num1 < $num2) {
+        return -1;
+    } else {
+        return 0;
+    }
 }
 
 function currency_plus($price1, $price2) {

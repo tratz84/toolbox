@@ -14,7 +14,7 @@
 </div>
 
 
-<?php print $userForm->render() ?>
+<?php print $form->render() ?>
 
 <br/><br/>
 
@@ -31,10 +31,10 @@ $(document).ready(function() {
 function autosetUserCapabilityContainer() {
 	if ($('[name=user_type]').val() == 'admin') {
 		$('.widget-container-user-capabilities').hide();
-		$('.baseforms-list-user-ip-line-widget').hide();
+		$('.base-forms-list-user-ip-line-widget').hide();
 	} else {
 		$('.widget-container-user-capabilities').show();
-		$('.baseforms-list-user-ip-line-widget').show();
+		$('.base-forms-list-user-ip-line-widget').show();
 	}
 }
 

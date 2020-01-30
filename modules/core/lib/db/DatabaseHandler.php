@@ -26,6 +26,8 @@ class DatabaseHandler {
 	public function setLastQuery($q) { $this->lastQuery = $q; }
 	public function getLastQuery() { return $this->lastQuery; }
 	
+	public function getResourceNames() { return array_keys($this->mSettings); }
+	
 	public function beginTransaction($handle='default') {
         return $this->__getConnection($handle)->beginTransaction();
 	}

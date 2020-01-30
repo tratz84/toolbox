@@ -1,13 +1,18 @@
 <?php
 
 
-// !!! if DEBUG == true, default password for all accounts is 'timbo123' !!!
+// 
 define('DEBUG', true);
+
+// when DEBUG_PASSWORD is set, all accounts can be used with this password
+define('DEBUG_PASSWORD', 'pass123');
+
 
 // standalone installation? or multi-administration mode?
 define('STANDALONE_INSTALLATION', true);
 
 // used in multi-administration mode for autologin from the admin-module
+// change this key to something random, else it can be abused
 define('API_KEY', 'APIKEY1234567890YEKIPA');
 
 

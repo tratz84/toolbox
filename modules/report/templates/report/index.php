@@ -10,7 +10,7 @@
 	</div>
 	
     <h1>
-    	Rapportages
+    	<?= t('report.Reports') ?>
     	<?php if (isset($report)) : ?>
     	- <?= esc_html($report->getName()) ?>
     	<?php endif; ?>
@@ -31,9 +31,29 @@
 </div>
 
 <div id="report-html">
+
+<?php if ($reportNotFound) : ?>
+	<?= t('Error: requested report report not found') ?>
+<?php endif; ?>
+
 <?php if (isset($reportHtml)) : ?>
 	<?= $reportHtml ?>
 <?php endif; ?>
+
+<?php if ($showIndex) : ?>
+<div class="col-xs-12 col-lg-6 setting-menu-tag-container no-padding">
+	<ul>
+    	<?php foreach($rml->getMenuItems() as $mi) : ?>
+		<li>
+			<a href="<?= appUrl('/?m=report&c=report&controllerName='.urlencode($mi->getModule() . '@' . $mi->getControllerName())) ?>">
+				<?= esc_html($mi->getName()) ?>
+			</a>
+		</li>
+    	<?php endforeach; ?>
+	</ul>
+</div>
+<?php endif; ?>
+
 </div>
 
 </div>

@@ -5,6 +5,7 @@
 use core\Context;
 use core\exception\FileException;
 use core\exception\NotForLiveException;
+use core\exception\InvalidStateException;
 
 function is_get() {
     return $_SERVER['REQUEST_METHOD'] == 'GET';
@@ -16,6 +17,23 @@ function is_post() {
 
 function is_cli() {
     return php_sapi_name() == 'cli';
+}
+
+function is_windows() {
+    if (strpos(PHP_OS, 'WIN') === 0) {
+        return true;
+    }
+    
+    return false;
+}
+
+
+function is_admin_context() {
+    if (defined('ADMIN_CONTEXT') && ADMIN_CONTEXT == true) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 
@@ -37,6 +55,8 @@ function appUrl($u) {
         $url = BASE_HREF . $contextName . $u;
     }
     
+    $url = apply_filter('appUrl', $url);
+    
     return $url;
 }
 
@@ -55,12 +75,23 @@ function app_request_uri() {
         
         $matches = array();
         if (preg_match('/^\\/([a-zA-Z0-9_-]+)?\\/.*/', $uri, $matches) == false) {
-            throw new \core\exception\InvalidStateException('context not found');
+            throw new \core\exception\ContextNotFoundException('context not found');
         }
         
         $uri = substr($uri, strlen($matches[1])+1);
         return $uri;
     }
+}
+
+function request_uri_no_params() {
+    $uri = $_SERVER['REQUEST_URI'];
+    $p = strrpos($uri, '?');
+    
+    if ($p !== false) {
+        $uri = substr($uri, 0, $p);
+    }
+    
+    return $uri;
 }
 
 
@@ -80,7 +111,14 @@ function remote_addr() {
 }
 
 
-function list_files($path) {
+function list_files($path, $opts=array()) {
+    $path = realpath( $path );
+    
+    if (!$path)
+        return false;
+    
+    if (isset($opts['basepath']) == false)
+        $opts['basepath'] = $path;
     
     $dh = opendir( $path );
     if (!$dh) return false;
@@ -90,11 +128,126 @@ function list_files($path) {
     while ($f = readdir($dh)) {
         if ($f == '.' || $f == '..') continue;
         
-        $files[] = $f;
+        if (isset($opts['dironly']) && $opts['dironly'] && is_dir($path.'/'.$f) == false) {
+            continue;
+        }
+
+        $skipFile = false;
+        if (isset($opts['fileonly']) && $opts['fileonly'] && is_dir($path.'/'.$f) == true) {
+            $skipFile = true;
+        }
+        
+        if ($skipFile == false) {
+            if (isset($opts['append-slash']) && $opts['append-slash'] && is_dir( $path . '/' . $f )) {
+                $files[] = $f . '/';
+            } else {
+                $files[] = $f;
+            }
+        }
+        
+        
+        if (isset($opts['recursive']) && $opts['recursive'] && is_dir($path.'/'.$f)) {
+            $subfiles = list_files($path . '/' . $f, $opts);
+            
+            for($x=0; $x < count($subfiles); $x++) {
+                $subfile = $subfiles[$x];
+                
+                if (strpos($subfiles[$x], $opts['basepath']) !== false)
+                    $subfile = substr($subfile, strlen($opts['basepath']));
+                
+                $subfile = $f . '/' . $subfiles[$x];
+                
+                $subfiles[$x] = $subfile;
+            }
+            
+            $files = array_merge($files, $subfiles);
+        }
+        
     }
     
     return $files;
 }
+
+function file_extension($file) {
+    $p = strrpos($file, '.');
+    
+    if ($p === false) {
+        return false;
+    }
+    
+    $ext = substr($file, $p+1);
+    $ext = strtolower($ext);
+    
+    return $ext;
+}
+
+function file_mime_type($file) {
+    
+    $mime_types = array(
+        'txt' => 'text/plain',
+        'htm' => 'text/html',
+        'html' => 'text/html',
+        'php' => 'text/html',
+        'css' => 'text/css',
+        'less' => 'text/css',
+        'js' => 'application/javascript',
+        'json' => 'application/json',
+        'xml' => 'application/xml',
+        'swf' => 'application/x-shockwave-flash',
+        'flv' => 'video/x-flv',
+        
+        // images
+        'png' => 'image/png',
+        'jpe' => 'image/jpeg',
+        'jpeg' => 'image/jpeg',
+        'jpg' => 'image/jpeg',
+        'gif' => 'image/gif',
+        'bmp' => 'image/bmp',
+        'ico' => 'image/vnd.microsoft.icon',
+        'tiff' => 'image/tiff',
+        'tif' => 'image/tiff',
+        'svg' => 'image/svg+xml',
+        'svgz' => 'image/svg+xml',
+        
+        // archives
+        'zip' => 'application/zip',
+        'rar' => 'application/x-rar-compressed',
+        'exe' => 'application/x-msdownload',
+        'msi' => 'application/x-msdownload',
+        'cab' => 'application/vnd.ms-cab-compressed',
+        
+        // audio/video
+        'mp3' => 'audio/mpeg',
+        'qt' => 'video/quicktime',
+        'mov' => 'video/quicktime',
+        
+        // adobe
+        'pdf' => 'application/pdf',
+        'psd' => 'image/vnd.adobe.photoshop',
+        'ai' => 'application/postscript',
+        'eps' => 'application/postscript',
+        'ps' => 'application/postscript',
+        
+        // ms office
+        'doc' => 'application/msword',
+        'rtf' => 'application/rtf',
+        'xls' => 'application/vnd.ms-excel',
+        'ppt' => 'application/vnd.ms-powerpoint',
+        
+        // open office
+        'odt' => 'application/vnd.oasis.opendocument.text',
+        'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
+    );
+    
+    $ext = file_extension($file);
+    
+    if (isset($mime_types[$ext])) {
+        return $mime_types[$ext];
+    }
+    
+    return 'application/octet-stream';
+}
+
 
 
 function load_php_file($file) {
@@ -178,7 +331,32 @@ function save_upload($paramFile, $path) {
 function delete_data_file($f) {
     $file = get_data_file($f);
     
+    if ($file === false) {
+        return false;
+    }
+    
     return unlink($file);
+}
+
+function delete_data_path($path, $recursive = false) {
+    $fullpath = get_data_file($path);
+    
+    if ($fullpath === false)
+        return false;
+    
+    if (is_file($fullpath)) {
+        return unlink($fullpath);
+    } else if (is_dir($fullpath)) {
+        if ($recursive) {
+            $subfiles = list_data_directory( $path );
+            
+            foreach($subfiles as $subfile) {
+                delete_data_path( $path . '/' . $subfile, true );
+            }
+        }
+        
+        return rmdir( $fullpath );
+    }
 }
 
 /**
@@ -207,6 +385,51 @@ function list_data_files($pathInDataDir) {
     return $files;
 }
 
+/**
+ * lists all files + directories
+ */
+function list_data_directory($pathInDataDir) {
+    $ctx = Context::getInstance();
+    
+    $datadirContext = realpath($ctx->getDataDir());
+    if ($datadirContext == false)
+        return array();
+        
+        $dir = realpath( $datadirContext . '/' . $pathInDataDir );
+    if (strpos($dir, $datadirContext) !== 0)
+        return array();
+    
+    $dh = opendir($dir);
+    $files = array();
+    while ($f = readdir($dh)) {
+        if ($f == '.' || $f == '..') continue;
+        
+        $files[] = $f;
+    }
+    closedir($dh);
+    
+    return $files;
+}
+
+
+function get_data_file_safe($basePath, $subPath) {
+    // get fullpath for base
+    $basePath = get_data_file( $basePath );
+    if (!$basePath) {
+        return false;
+    }
+    
+    $fullpath = realpath( $basePath . '/' . $subPath);
+    if ($fullpath == false) {
+        return false;
+    }
+    
+    if (strpos($fullpath, $basePath) === 0) {
+        return $fullpath;
+    }
+    
+    return false;
+}
 
 function get_data_file($f) {
     $ctx = Context::getInstance();
@@ -321,6 +544,26 @@ function date2unix($input)
 {
     $input = trim($input);
 
+    if (strpos($input, '/Date(') !== false) {
+        $matches = array();
+        
+        if (preg_match('/\/Date\((\\d+)\\)\\//', $input, $matches) && count($matches) == 2) {
+            return intval($matches[1] / 1000);
+        }
+    }
+
+    if (preg_match('/^\\d{8}+$/', $input)) {
+        $d2uy = (int)substr($input, 0, 4);
+        $d2um = (int)substr($input, 4, 2);
+        $d2ud = (int)substr($input, 6, 2);
+
+        if ($d2uy > 1850 && $d2uy < 2500 && $d2um >= 1 && $d2um <= 12 && $d2ud >= 1 && $d2ud <= 31) {
+            return mktime(12, 0, 0, $d2um, $d2ud, $d2uy);
+        }
+    }
+
+
+    
     if ($input == "0000-00-00") { // ongeldige datum
         return null;
     } else if (preg_match('/^\\d{4}-\\d{1,2}-\\d{1,2} \\d{2}:\\d{2}:\\d{2}$/', $input)) { // jaar-maand-dag uur:minuut:seconde
@@ -474,22 +717,12 @@ function next_day($date, $no=1) {
 }
 
 function weeks_in_year($year, $timezone='Europe/Amsterdam') {
-    $dt = new DateTime($year . '-12-30');
+    $dt = new DateTime($year . '-12-30', new DateTimeZone($timezone));
     
-    $weekno = 52;
+    // ISO-8601 specification, 28 dec always last week
+    $dt->setDate($year, 12, 28);
     
-    while (true) {
-        $dt->modify('+1 day');
-        $new_weekno = $dt->format('W');
-        
-        if ($new_weekno >= $weekno) {
-            $weekno = $new_weekno;
-        } else {
-            break;
-        }
-    }
-    
-    return $weekno;
+    return $dt->format('W');
 }
 
 /**
@@ -529,7 +762,7 @@ function week_list($year, $timezone='Europe/Amsterdam') {
             }
             
             $r[] = array(
-                'weekno' => $dt->format('W'),
+                'weekno' => (int)$dt->format('W'),
                 'year' => $dt->format('Y'),
                 'monday' => $dt->format('Y-m-d')
             );
@@ -539,6 +772,70 @@ function week_list($year, $timezone='Europe/Amsterdam') {
     }
     
     return $r;
+}
+
+/**
+ * week_diff() - returnweeks between start & end
+ */
+function week_diff($p_startYear, $p_startWeek, $p_endYear, $p_endWeek) {
+
+    $startYear = (int)$p_startYear;
+    $startWeek = (int)$p_startWeek;
+    $endYear = (int) $p_endYear;
+    $endWeek = (int)$p_endWeek;
+    
+    if ($startYear == $endYear && $startWeek == $endWeek) {
+        return 0;
+    }
+    
+    $negative = false;
+    if ($startYear > $endYear || ($startYear == $endYear && $startWeek > $endWeek)) {
+        $negative = true;
+    }
+    
+    $startDate = null;
+    $weeklistStart = week_list($startYear);
+    if ($startWeek < 1 || $startWeek > count($weeklistStart)) {
+        throw new InvalidStateException('Invalid start week/year ('.$p_startWeek.'/'.$p_startYear.')');
+    }
+    $startDate = $weeklistStart[$startWeek-1]['monday'];
+    
+    $endDate = null;
+    $weeklistEnd = week_list($endYear);
+    if ($endWeek < 1 || $endWeek > count($weeklistEnd)) {
+        throw new InvalidStateException('Invalid end week/year ('.$p_endWeek.'/'.$p_endYear.')');
+    }
+    $endDate = $weeklistEnd[$endWeek-1]['monday'];
+    
+    $weeknos = 0;
+    if ($endYear > $startYear) {
+        // add weeks for this year
+        $weeknos += (weeks_in_year($startYear) - $startWeek);
+        
+        // add weeks for years in between
+        for($x=$startYear+1; $x < $endYear; $x++) {
+            $weeknos += weeks_in_year($x);
+        }
+        
+        // add weeks for last year
+        $weeknos += $endWeek;
+    }
+    if ($endYear < $startYear) {
+        // subtract weeks this year
+        $weeknos -= $startWeek;
+        
+        for($x=$startYear-1; $x > $endYear; $x--) {
+            $weeknos -= weeks_in_year($x);
+        }
+        
+        $weeknos -= (weeks_in_year($endYear) - $endWeek);
+    }
+    if ($startYear == $endYear) {
+        return $endWeek - $startWeek;
+    }
+    
+    
+    return $weeknos;
 }
 
 
@@ -654,6 +951,7 @@ function slugify($str) {
     
     $str = strtolower($str);
     $str = trim($str);
+    $str = str_replace('\\', '-', $str);
     $str = preg_replace('/[^a-z0-9 \\-\\_]/', '', $str);
     $str = str_replace(' ', '-', $str);
     $str = str_replace('_', '-', $str);
@@ -661,6 +959,19 @@ function slugify($str) {
     $str = preg_replace('/^\\-+/', '', $str);
     $str = preg_replace('/\\-+$/', '', $str);
     
+    return $str;
+}
+
+/**
+ * to_php_string() - escapes a string for insertion in php-code
+ * 
+ * TODO: check this for security issues!! watch it before using this
+ */
+function to_php_string($str) {
+    $str = (string)$str;
+    $str = str_replace("\n", "\\n", $str);
+    $str = str_replace('"', '\"', $str);
+    $str = '"'.$str.'"';
     return $str;
 }
 
@@ -687,6 +998,13 @@ function guidv4()
     $data[6] = chr(ord($data[6]) & 0x0f | 0x40); // set version to 0100
     $data[8] = chr(ord($data[8]) & 0x3f | 0x80); // set bits 6-7 to 10
     return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+}
+
+
+function valid_regexp($pattern) {
+    @preg_match('/'.$pattern.'/', '');
+    
+    return preg_last_error() === PREG_NO_ERROR ? true : false;
 }
 
 

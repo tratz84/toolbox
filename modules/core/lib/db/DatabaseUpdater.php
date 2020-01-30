@@ -9,17 +9,36 @@ use core\exception\MonitoringAlertException;
 
 class DatabaseUpdater {
     
+    protected $settingsKey = null;
+    protected $version = 0;
+    protected $updateFolder;
+    
+    /**
+     * 
+     * @param string $settingsKey  - value of base__setting.setting_code, ie 'CALENDAR_MODULE_VERSION'
+     * @param int    $version      - current version number
+     * @param string $updateFolder - folder containing sql update files
+     */
+    public function __construct($settingsKey, $version, $updateFolder) {
+        $this->settingsKey = $settingsKey;
+        $this->version = $version;
+        $this->updateFolder = $updateFolder;
+    }
+    
+    
     
     public function update() {
-        if (defined('SQL_VERSION') == false || preg_match('/^\\d{10}$/', SQL_VERSION) == false)
-            throw new InvalidStateException('Invalid SQL_VERSION set');
-        
         // fetch current version
         $ctx = Context::getInstance();
-        $sqlVersion = (int)$ctx->getSetting('SQL_VERSION', 0);
+        $currentVersion = (int)$ctx->getSetting($this->settingsKey, 0);
         
-        if ($sqlVersion >= SQL_VERSION) {
+        if ($currentVersion >= $this->version) {
             // hmz
+            return false;
+        }
+        
+        // update folder not existing?
+        if (is_dir($this->updateFolder) == false) {
             return false;
         }
         
@@ -34,9 +53,9 @@ class DatabaseUpdater {
         if (flock($fp, LOCK_EX)) {
             // check version after lock
             $ctx->flushSettingCache();
-            $sqlVersion = (int)$ctx->getSetting('SQL_VERSION', 0);
+            $currentVersion = (int)$ctx->getSetting($this->settingsKey, 0);
             
-            if ($sqlVersion < SQL_VERSION) {
+            if ($currentVersion < $this->version) {
                 $this->doUpdate();
             }
             
@@ -52,18 +71,18 @@ class DatabaseUpdater {
     protected function doUpdate() {
         $ctx = Context::getInstance();
         
-        $sqlVersion = (int)$ctx->getSetting('SQL_VERSION', 0);
+        $currentVersion = (int)$ctx->getSetting($this->settingsKey, 0);
 
-        if (is_dir(ROOT . '/updates') == false) {
+        if (is_dir($this->updateFolder) == false) {
             // updates-folder doesn't exist? => must be on purpose, mark as updated
             $settingsService = new SettingsService();
-            $settingsService->updateValue('SQL_VERSION', SQL_VERSION);
+            $settingsService->updateValue($this->settingsKey, $this->version);
             
             return false;
         }
         
         // fetch update files
-        $dh = opendir(ROOT . '/updates');
+        $dh = opendir( $this->updateFolder );
         if (!$dh)
             return false;
         
@@ -74,7 +93,7 @@ class DatabaseUpdater {
             
             $ts = substr($f, 0, strpos($f, '.'));
             
-            if ($ts > $sqlVersion) {
+            if ($ts > $currentVersion) {
                 $files[] = $f;
             }
         }
@@ -84,7 +103,7 @@ class DatabaseUpdater {
         // execute update
         $dbh = DatabaseHandler::getResource('default');
         foreach($files as $f) {
-            $dbh->multi_query( file_get_contents(ROOT . '/updates/' . $f) );
+            $dbh->multi_query( file_get_contents( $this->updateFolder . '/' . $f) );
             
             // flush results
             while ( $dbh->more_results() ) {
@@ -98,7 +117,7 @@ class DatabaseUpdater {
         
         // mark as updated
         $settingsService = new SettingsService();
-        $settingsService->updateValue('SQL_VERSION', SQL_VERSION);
+        $settingsService->updateValue( $this->settingsKey, $this->version );
     }
     
 }

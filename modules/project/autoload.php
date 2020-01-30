@@ -33,3 +33,13 @@ $eb->subscribe('report', 'menu-list', new CallbackPeopleEventListener(function($
     $reportMenuList->addMenuItem('Projecten - overzicht',   'project', 'report/hours', '/?m=project&c=report/hours&a=xls');
 }));
 
+$eb->subscribe('base', 'report-summaryPerMonth', new CallbackPeopleEventListener(function($evt) {
+    $datasources = $evt->getSource();
+    
+    $datasources->add([
+        'label' => 'Project uren',
+        'url' => '/?m=project&c=report/summaryPerMonth'
+    ]);
+    
+}));
+

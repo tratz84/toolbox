@@ -66,6 +66,12 @@ $lang['modulename.webmail'] = 'E-mail';
 $lang['modulename.invoice'] = 'Facturatie';
 $lang['modulename.calendar'] = 'Kalender';
 
+$lang['Add line']      = 'Nieuwe regel';
+
+$lang['Add']           = 'Toevoegen';
+$lang['Edit']          = 'Bewerk';
+$lang['Edit2']         = 'Bewerken';
+
 $lang['Back']          = 'Terug';
 $lang['Save']          = 'Opslaan';
 $lang['Last modified'] = 'Laatst bewerkt';
@@ -74,6 +80,14 @@ $lang['Created on']    = 'Aangemaakt op';
 $lang['Yes']           = 'Ja';
 $lang['No']            = 'Nee';
 
+$lang['Delete']        = 'Verwijder';
+$lang['Empty']         = 'Leeg';
+
+$lang['You don\'t have any widgets on your dashboard yet. Click the wheel at the top right to add widgets.'] = 'Je hebt nog geen widgets op je dashboard. Klik rechtsboven op het wieltje om widgets toe te voegen.';
+
+$lang['No results found'] = 'Geen resultaten gevonden';
+
+$lang['Field contains no value'] = 'Veld bevat geen waarde';
 
 return $lang;
 

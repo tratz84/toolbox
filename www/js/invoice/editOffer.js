@@ -16,14 +16,14 @@ $(document).ready(function() {
 	// $('.add-entry-container').append(' | ');
 	$('.add-entry-container').append('<span><a href="javascript:void(0);" id="addTextLine">Tekstregel toevoegen</a></span>');
 	$('#addTextLine').click(function() {
-		var lefw = $('.invoiceform-list-offer-line-widget').get(0).lefw;
+		var lefw = $('.invoice-form-list-offer-line-widget').get(0).lefw;
 		lefw.addRecord(function(row) {
 			$(row).find('.hidden-field-widget-line-type input').val('text');
 		});
 	});
 
 
-	$('.invoiceform-list-offer-line-widget').get(0).lefw.setCallbackAddRecord(function(row) {
+	$('.invoice-form-list-offer-line-widget').get(0).lefw.setCallbackAddRecord(function(row) {
 		fix_textLines();
 	});
 
@@ -41,7 +41,7 @@ $(document).ready(function() {
 		loadCustomerDetails( $('[name=customer_id]').val() );
 	}
 
-	$('<th class="price-sum">Totaal</th>').insertBefore('.invoiceform-list-offer-line-widget thead tr th:last-child');
+	$('<th class="price-sum">Totaal</th>').insertBefore('.invoice-form-list-offer-line-widget thead tr th:last-child');
 	
 	fix_textLines();
 });
@@ -49,7 +49,7 @@ $(document).ready(function() {
 
 function fix_textLines() {
 // 	return;
-	$('.invoiceform-list-offer-line-widget tbody tr').each(function(index, row) {
+	$('.invoice-form-list-offer-line-widget tbody tr').each(function(index, row) {
 		var linetype = $(row).find('.hidden-field-widget-line-type input').val();
 		if (linetype == 'text') {
 
@@ -101,7 +101,7 @@ function offer_calc_totals() {
 	var totalsByVat = {  };
 
 	
-	$('.invoiceform-list-offer-line-widget tbody tr').each(function(index, row) {
+	$('.invoice-form-list-offer-line-widget tbody tr').each(function(index, row) {
 		if ($(row).find('.hidden-field-widget-line-type input').val() == 'text')
 			return;
 		
@@ -122,7 +122,7 @@ function offer_calc_totals() {
 		$(row).find('td.price-sum').text( format_price((p+vat)/100, true, {'thousands': '.'}) );
 	});
 	
-	var tfoot = $('.invoiceform-list-offer-line-widget tfoot');
+	var tfoot = $('.invoice-form-list-offer-line-widget tfoot');
 	tfoot.empty();
 	
 	var trTotalExclVat = $('<tr><td colspan="6" align=right></td><td></td></tr>');
@@ -171,7 +171,7 @@ function sendMail_Click() {
 function article_Click(article) {
 
 	// get 'ListEditFormWidget' instance (js/forms/form-actions.js)
-	var lefw = $('.invoiceform-list-offer-line-widget').get(0).lefw;
+	var lefw = $('.invoice-form-list-offer-line-widget').get(0).lefw;
 
 	lefw.addRecord(function(row) {
 		$(row).find('.hidden-field-widget-article-id input[type=hidden]').val( article.article_id );

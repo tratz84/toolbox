@@ -2,6 +2,7 @@
 
 
 use base\forms\CompanyForm;
+use base\model\Menu;
 use core\Context;
 use core\ObjectContainer;
 use core\event\CallbackPeopleEventListener;
@@ -9,6 +10,7 @@ use core\event\EventBus;
 use core\event\PeopleEvent;
 use invoice\InvoiceSettings;
 use invoice\model\CompanySetting;
+use invoice\model\Invoice;
 use invoice\model\Offer;
 use invoice\service\InvoiceService;
 use invoice\service\OfferService;
@@ -59,15 +61,33 @@ $eb->subscribe('base', 'dashboard', new CallbackPeopleEventListener(function($ev
     }
 }));
 
-$eb->subscribe('base', 'user-capabilities', new CallbackPeopleEventListener(function($evt) {
-    $ctx = Context::getInstance();
     
-    if ($ctx->getSetting('invoiceModuleEnabled') || $ctx->getSetting('offerModuleEnabled')) {
-        $evt->getSource()->addCapability('invoice', 'edit-offer', 'Bewerken offertes', 'Aanmaken / bewerken van offertes');
-        $evt->getSource()->addCapability('invoice', 'edit-invoice', 'Bewerken ' . strtolower(strOrder(2)), 'Aanmaken / bewerken ' . strOrder(2));
+$eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListener(function($evt) {
+    $ctx = \core\Context::getInstance();
+    $src = $evt->getSource();
+    
+    if (hasCapability('invoice', 'edit-offer')) {
+        $menuOffers = new Menu();
+        $menuOffers->setIconLabelUrl('fa-share-alt', 'Offertes', '/?m=invoice&c=offer');
+        $menuOffers->setWeight(35);
+        $src->add($menuOffers);
     }
-}));
 
+    if (hasCapability('invoice', 'edit-invoice')) {
+        $menuInvoice = new Menu();
+        $menuInvoice->setIconLabelUrl('fa-file-archive-o', strOrder(3), '/?m=invoice&c=invoice');
+        $menuInvoice->setWeight(36);
+        $src->add($menuInvoice);
+    }
+
+    if ($ctx->isExperimental()) {
+        $menuBillable = new Menu();
+        $menuBillable->setIconLabelUrl('fa-money', 'Billable', '/?m=invoice&c=tobill');
+        $menuBillable->setWeight(37);
+        $src->add($menuBillable);
+    }
+    
+}));
 
 
 $eb->subscribe('base', 'company-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
@@ -120,8 +140,9 @@ if ($invoiceSettings->getIntracommunautair()) {
         $form->addWidget($w);
     });
     
-    $eb->subscribe('core', 'object-hook-base\\service\\CompanyService::readCompany', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
-        list($company, $arguments) = $evt->getSource();
+    $eb->subscribe('core', 'post-call-base\\service\\CompanyService::readCompany', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+        $ohc = $evt->getSource();
+        $company = $ohc->getReturnValue();
         
         if ($company->getCompanyId()) {
             $invoiceService = ObjectContainer::getInstance()->get(InvoiceService::class);
@@ -134,8 +155,11 @@ if ($invoiceSettings->getIntracommunautair()) {
         }
     }));
     // handle saveCompany
-    $eb->subscribe('core', 'object-hook-base\\service\\CompanyService::save', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
-        list($companyId, $arguments) = $evt->getSource();
+    $eb->subscribe('core', 'post-call-base\\service\\CompanyService::save', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+        $ohc = $evt->getSource();
+        $arguments = $ohc->getArguments();
+        
+        $companyId = $ohc->getReturnValue();
         
         if ($companyId) {
             $invoiceService = ObjectContainer::getInstance()->get(InvoiceService::class);
@@ -195,4 +219,13 @@ $eb->subscribe('core', 'lookupobject', new CallbackPeopleEventListener(function(
     
 }));
 
+$eb->subscribe('base', 'report-summaryPerMonth', new CallbackPeopleEventListener(function($evt) {
+    $datasources = $evt->getSource();
+    
+    $datasources->add([
+        'label' => 'Factuur bedragen',
+        'url' => '/?m=invoice&c=report/summaryPerMonth'
+    ]);
+    
+}));
 

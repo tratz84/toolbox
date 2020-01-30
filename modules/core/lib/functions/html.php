@@ -15,6 +15,10 @@ function esc_attr($str) {
     return htmlentities($str, ENT_QUOTES, 'UTF-8');
 }
 
+function esc_json_attr($str) {
+    return htmlentities(json_encode($str), ENT_QUOTES, 'UTF-8');
+}
+
 
 function infopopup($t) {
     if ($t == null) return '';
@@ -139,6 +143,17 @@ function get_component($module, $controller, $action, $vars=array()) {
     ob_start();
     
     include_component($module, $controller, $action, $vars);
+    
+    return ob_get_clean();
+}
+
+function get_template($file, $vars=array()) {
+    foreach($vars as $key => $val) {
+        $$key = $val;
+    }
+    
+    ob_start();
+    include $file;
     
     return ob_get_clean();
 }
@@ -283,6 +298,30 @@ function hex2rgb($hexstr) {
     }
     
     return null;
+}
+
+
+function hex_inc_perc($hexstr, $perc=null) {
+    $rgb = hex2rgb($hexstr);
+    
+    if ($rgb == null)
+        return null;
+    
+
+    $rgb[0] += ((255-$rgb[0]) / 100 * $perc);
+    $rgb[1] += ((255-$rgb[1]) / 100 * $perc);
+    $rgb[2] += ((255-$rgb[2]) / 100 * $perc);
+    
+    if ($rgb[0] > 255)
+        $rgb[0] = 255;
+    if ($rgb[1] > 255)
+        $rgb[1] = 255;
+    if ($rgb[2] > 255)
+        $rgb[2] = 255;
+    
+    $x = sprintf('#%2x%2x%2x', $rgb[0], $rgb[1], $rgb[2]);
+    $x = str_replace(' ', '0', $x);
+    return $x;
 }
 
 

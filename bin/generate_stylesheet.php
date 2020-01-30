@@ -22,8 +22,13 @@ foreach($modules as $moduleName => $path) {
 // generate css
 $css = '';
 foreach($lessFiles as $lf) {
-    $cmd = './node_modules/.bin/lessc -x '.$lf;
-    
+    if (is_windows()) {
+        $cmd = 'node_modules\.bin\lessc -x '.$lf;
+    } else {
+        $cmd = './node_modules/.bin/lessc -x '.$lf;
+    }
+
+    print "Executing command: {$cmd}\n";
     $css .= `$cmd`;
     $css .= "\n\n";
 }

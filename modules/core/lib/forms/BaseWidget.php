@@ -4,6 +4,7 @@
 namespace core\forms;
 
 use core\db\DBObject;
+use core\exception\InvalidStateException;
 
 class BaseWidget {
     
@@ -71,8 +72,10 @@ class BaseWidget {
         
         if (is_a($obj, DBObject::class)) {
             $arr = $obj->getFields();
-        } else {
+        } else if (is_array($obj)) {
             $arr = $obj;
+        } else {
+            throw new InvalidStateException('Invalid object given');
         }
         
         $fieldCount=0;
@@ -80,17 +83,17 @@ class BaseWidget {
         if (is_a($this, WidgetContainer::class)) {
             $fieldCount += $this->bind( $obj );
         } else {
-            if (isset($arr[$this->getName()])) {
+            // first try getter
+            $func = 'get'.dbCamelCase($this->getName());
+            if (is_a($obj, DBObject::class) && method_exists($obj, $func)) {
+                $this->setValue($obj->$func());
+                $fieldCount++;
+            }
+            // field set?
+            else if (isset($arr[$this->getName()])) {
                 $this->setValue( $arr[$this->getName()] );
                 
                 $fieldCount++;
-            } else {
-                // try to get value from getter
-                $func = 'get'.ucfirst($this->getName());
-                if (method_exists($obj, $func)) {
-                    $this->setValue($obj->$func());
-                    $fieldCount++;
-                }
             }
         }
         
@@ -142,7 +145,7 @@ class BaseWidget {
         
         $html .= '<div class="widget html-field-widget widget-'.slugify($this->getLabel()).'">';
         $html .= '<label>'.esc_html($this->getLabel()) . infopopup($this->getInfoText()) . '</label>';
-        $html .= '<span>'.esc_html($this->getValue()).'</span>';
+        $html .= '<span class="widget-value">'.esc_html($this->getValue()).'</span>';
         $html .= '</div>';
         
         return $html;

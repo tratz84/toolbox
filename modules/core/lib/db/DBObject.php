@@ -31,6 +31,7 @@ class DBObject {
 
     public function setPrimaryKey($n) { $this->primaryKey = $n; }
     public function getPrimaryKey() { return $this->primaryKey; }
+    public function getPrimaryKeyValue() { return $this->getField( $this->primaryKey ); }
     
     protected function setDatabaseFields($arr) { $this->dbFields = $arr; }
     
@@ -272,6 +273,28 @@ class DBObject {
         
         return true;
     }
+    
+    
+    public function __set($key, $val) {
+        $func = 'set'.dbCamelCase($key);
+        
+        if (is_callable(array($this, $func))) {
+            $this->$func( $val );
+        } else {
+            $this->setField($key, $val);
+        }
+    }
+    
+    public function __get($key) {
+        $func = 'get'.dbCamelCase($key);
+        
+        if (is_callable(array($this, $func))) {
+            return $this->$func( );
+        } else {
+            return $this->getField( $key );
+        }
+    }
+    
     
     
 }

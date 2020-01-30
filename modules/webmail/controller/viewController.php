@@ -8,6 +8,7 @@ use webmail\form\EmailForm;
 use webmail\form\EmailRecipientLineWidget;
 use webmail\model\EmailTo;
 use core\exception\InvalidStateException;
+use webmail\mail\SendMail;
 
 class viewController extends BaseController {
     
@@ -73,6 +74,10 @@ class viewController extends BaseController {
         
         $path = $this->ctx->getDataDir() . '/' . $emailFile->getPath();
         
+        if (file_exists($path) == false) {
+            die('file not found');
+        }
+        
         if (function_exists('mime_content_type')) {
             $type = mime_content_type($path);
         } else {
@@ -113,47 +118,12 @@ class viewController extends BaseController {
         
         
         // send mail
-        $transport = new Swift_SmtpTransport(SMTP_HOST, SMTP_PORT);
-        if (defined('SMTP_USERNAME') && defined('SMTP_PASSWORD') && SMTP_USERNAME && SMTP_PASSWORD) {
-            $transport->setUsername(SMTP_USERNAME);
-            $transport->setPassword(SMTP_PASSWORD);
+        $sm = SendMail::createMail($email);
+        if ($sm->send() == false) {
+            // redirect back
+            report_user_error('Sending mail failed');
+            redirect('/?m=webmail&c=view&id=' . $email->getEmailId());
         }
-        
-        
-        $message = new Swift_Message( $email->getSubject() );
-        $message->setFrom(array($email->getFromEmail() => $email->getFromName()));
-        foreach($email->getRecipients() as $r) {
-            if (strtolower($r->getToType()) == 'to') {
-                $message->addTo($r->getToEmail(), $r->getToName());
-            } else if (strtolower($r->getToType()) == 'cc') {
-                $message->addCc($r->getToEmail(), $r->getToName());
-            } else if (strtolower($r->getToType()) == 'bcc') {
-                $message->addBcc($r->getToEmail(), $r->getToName());
-            }
-        }
-        $message->setBody($email->getTextContent(), 'text/html', 'UTF-8');
-        
-        foreach($email->getFiles() as $f) {
-            $full_path = $this->ctx->getDataDir() . '/' . $f->getPath();
-            $data = file_get_contents($full_path);
-            
-            if ($data === false) {
-                throw new InvalidStateException('Attachment not found');
-            }
-            
-            $att = new Swift_Attachment($data, $f->getFilename());
-            $message->attach($att);
-        }
-        
-        
-        $mailer = new Swift_Mailer($transport);
-        
-        if ($this->ctx->getContextName() == 'demo') {
-            // don't send mail in demo-environment
-        } else {
-            $r = $mailer->send( $message );
-        }
-        
         
         // mark mail as sent
         $emailService->markMailAsSent( $email->getEmailId() );

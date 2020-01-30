@@ -42,7 +42,6 @@ class NumberField extends BaseWidget {
         if ($this->max)
             $this->setAttribute('max', $this->max);
         
-        
         if ($this->placeholder) {
             $this->setAttribute('placeholder', $this->getLabel());
         }

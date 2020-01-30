@@ -17,6 +17,7 @@ use project\model\ProjectHourStatusDAO;
 use project\model\ProjectHourType;
 use project\model\ProjectHourTypeDAO;
 use core\exception\ObjectNotFoundException;
+use core\exception\InvalidStateException;
 
 
 
@@ -257,5 +258,51 @@ class ProjectService extends ServiceBase {
         }
 
     }
+    
+    
+    public function totalsPerMonth($startPeriod, $endPeriod) {
+        
+        if (preg_match('/^\\d{4}-\\d{2}$/', $startPeriod) == false) {
+            throw new InvalidStateException('Startperiod not valid');
+        }
+        if (preg_match('/^\\d{4}-\\d{2}$/', $endPeriod) == false) {
+            throw new InvalidStateException('Endperiod not valid');
+        }
+        
+        $pDao = new ProjectDAO();
+        
+        $totals = $pDao->totalsPerMonth($startPeriod, $endPeriod);
+        
+        $list = array();
+        $start = format_date($startPeriod.'-15', 'Y-m-15');
+        $end = format_date($endPeriod.'-15', 'Y-m-15');
+        
+        $ymStart = (int)format_date($start, 'Ym');
+        $ymEnd = (int)format_date($end, 'Ym');
+        while($ymStart <= $ymEnd) {
+            $month = format_date($start, 'Y-m');
+            $count = 0;
+            
+            foreach($totals as $t) {
+                if ($t['month'] == $month) {
+                    $count = $t['hours'];
+                    break;
+                }
+            }
+            
+            $list[] = array(
+                'month' => $month,
+                'amount' => $count,
+                'hours' => $count
+            );
+            
+            $start = next_month($start);
+            $ymStart = (int)format_date($start, 'Ym');
+        }
+        
+        return $list;
+    }
+    
+    
 
 }

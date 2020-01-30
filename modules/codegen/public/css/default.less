@@ -1,0 +1,61 @@
+
+
+
+.codegen-formgenerator-controller
+, .codegen-listeditgenerator-controller {
+	
+	.row {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	
+	&.action-index {
+		
+		#widget-info {
+			width: 100%;
+			padding: 0 5px 5px 5px;
+			margin-top: 15px;
+			border: 1px solid #ccc;
+			
+			label {
+				display: block;
+				float: none;
+				width: auto;
+			}
+			
+			.html-field-widget.widget-class { font-weight: bold; }
+			
+			textarea { max-width: 100%; width: 95%; }
+			
+			.submit-container { display: none; }
+			
+		}
+		
+		.form-preview {
+			.submit-container { display: none; }
+		}
+		
+	}
+}
+
+
+.codegen-listeditgenerator-controller {
+	#widgets-container {
+		list-style-position: inside;
+		li.selected {
+			background-color: #f1f1f1;
+		}
+	}
+}
+
+
+
+.codegen-menugenerator-controller {
+	
+	&.action-edit {
+		.submit-container { display: none; }
+	}
+}
+
+
+

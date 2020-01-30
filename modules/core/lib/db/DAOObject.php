@@ -43,6 +43,13 @@ class DAOObject
         
         return $list;
     }
+    
+    public function escape($str) {
+        $con = DatabaseHandler::getConnection($this->resourceName);
+        return $con->escape($str);
+    }
+    
+    
 
     /**
      * queryOne() - return's first result or NULL
@@ -273,19 +280,23 @@ class DAOObject
     
     public function updateSort($ids, $field='sort') {
         if (is_array($ids) == false || count($ids) == 0)
-            return;
+            return -1;
         
         $obj = new $this->objectName();
         
         $table = $obj->getTableName();
         $pk = $obj->getPrimaryKey();
         
+        $updated = 0;
         for($x=0; $x < count($ids); $x++) {
             $i = (int)$ids[$x];
             if ($i) {
                 $this->query("update `".$table."` set `".$field."` = ? where `".$pk."` = ?", array($x, $i));
+                $updated++;
             }
         }
+        
+        return $updated;
     }
     
     public function unsetDefaultSelected($except_id) {

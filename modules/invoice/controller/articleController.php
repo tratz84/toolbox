@@ -112,7 +112,8 @@ class articleController extends BaseController {
         foreach($r->getObjects() as $article) {
             $arr[] = array(
                 'id' => $article['article_id'],
-                'text' => $article['article_name']
+                'text' => $article['article_name'],
+                'price' => $article['price']
             );
         }
         

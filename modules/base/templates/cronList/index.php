@@ -30,12 +30,12 @@
 			</td>
 			<td><?= esc_html($c->getLastStatus()) ?></td>
 			<td><?= esc_html($c->getLastRun()) ?></td>
-			<td><?= $c->getRunning()?'Ja':'Nee' ?></td>
+			<td><?= $c->getRunning()?t('Yes'):t('No')?></td>
 		</tr>
 		<?php endforeach; ?>
 		<?php if (count($crons) == 0) : ?>
 		<tr>
-			<td colspan="5" style="font-style: italic; text-align: center;">Geen ingeplande taken uitgevoerd</td>
+			<td colspan="5" style="font-style: italic; text-align: center;"><?= t('No scheduled tasks executed') ?></td>
 		</tr>
 		<?php endif; ?>
 	</tbody>

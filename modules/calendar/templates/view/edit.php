@@ -35,3 +35,18 @@
 	<?php endif; ?>    
 
 </div>
+
+<?php if ($readonly) : ?>
+<script>
+var t = $('.calendar-item-container .widget-locatie .widget-value').text();
+t = $.trim(t);
+if (t != '') {
+	anchorMaps = $('<a class="fa fa-map-marker" target="_blank" style="margin-left: 5px;"></a>');
+	anchorMaps.attr('href', 'https://www.google.com/maps/search/?api=1&query=' + encodeURI(t));
+	$('.calendar-item-container .widget-locatie .widget-value').after( anchorMaps );
+}
+
+</script>
+<?php endif; ?>
+
+

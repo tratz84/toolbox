@@ -3,6 +3,7 @@
 namespace core\filter;
 
 
+use core\exception\InvalidStateException;
 
 class ModulePublicFilter {
     
@@ -12,8 +13,16 @@ class ModulePublicFilter {
     
     
     public function doFilter($filterChain) {
-        
-        $uri = app_request_uri();
+        // support for files by 'mpf'-parameter. Used in cases where rewrites are not working
+        if (isset($_GET['mpf'])) {
+            $uri = $_GET['mpf'];
+        } else {
+            try {
+                $uri = app_request_uri();
+            } catch (InvalidStateException $ex) {
+                return $filterChain->next();
+            }
+        }
         
         // non-module path?
         if (strpos($uri, '/module/') !== 0) {
@@ -54,9 +63,7 @@ class ModulePublicFilter {
             header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + (60 * 60 * 24))); // 24 hours
             header("Pragma: cache");
             header("Cache-Control: max-age=3600");
-            $contentType = mime_content_type($fullpath);
-            if (!$contentType)
-                $contentType = 'application/octet-stream';
+            $contentType = file_mime_type($fullpath);
             header('Content-type: '.$contentType);
             
             // output file

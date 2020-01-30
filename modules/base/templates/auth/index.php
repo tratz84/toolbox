@@ -12,6 +12,15 @@
 			<img src="<?= appUrl('/?m=base&c=auth&a=logo') ?>" style="max-width: 300px;" />
 		</div>
 		<?php endif; ?>
+
+		<?php if ($showWarningDefaultAdminPassword) : ?>
+		<div style="padding: 10px; border: 1px solid #f00; background-color: #fcffe5; font-style: italic; color: #f00;">
+			<b>WARNING:</b>
+			<br/>username/password set to default,
+			<br/>Username: admin
+			<br/>Password: admin123
+		</div>
+		<?php endif; ?>
 	
     	<table>
     		<tr>

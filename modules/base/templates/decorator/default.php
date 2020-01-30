@@ -5,10 +5,10 @@ $menuItems = $ms->listMainMenu();
 
 
 ?><!doctype html>
-<html lang="nl">
+<html lang="<?= $context->getSelectedLang() ?>">
 	<head>
 		<meta charset="utf-8">
-		<title>Insights - <?= esc_html($context->getCompanyName()) ?></title>
+		<title>Toolbox - <?= esc_html($context->getCompanyName()) ?></title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -21,6 +21,7 @@ $menuItems = $ms->listMainMenu();
 			 print json_encode([
 			     'base_href' => BASE_HREF,
 			     'contextName' => $context->getContextName(),
+			     'appRootUrl' => appUrl('/'),
 			     'username' => $context->getUser() ? $context->getUser()->getUsername() : '',
 			     'multiuser_check_interval' => MULTIUSER_CHECK_INTERVAL,
 			     'standalone_installation' => is_standalone_installation(),
@@ -89,19 +90,25 @@ $menuItems = $ms->listMainMenu();
         <div class="notifications-bar">
             <div class="notifications-right">
                 <span class="current-user"><?= $context->getUser() ?></span>
+            	<?php if (DEBUG) : ?>
+                <a href="javascript:void(0);" onclick="show_debug_info();" class="fa fa-bug" title="Debug info"></a>
+                <?php endif; ?>
                 <a href="<?= appUrl('/?m=base&c=auth&a=logoff') ?>" class="fa fa-sign-out" title="Afmelden"></a>
             </div>
             <div class="administration-name">
 	            <a href="javascript:void(0);" class="nav-side-menu-toggle fa fa-caret-left" onclick="navSideMenu_toggle();"></a>
             
-            	<div class="administration-name"><a href="<?= appUrl('/') ?>" title="Dashboard"><?= esc_html($context->getCompanyName()) ?></a></div>
+            	<div class="administration-name"><a href="<?= appUrl('/') ?>" title="Dashboard"><?= apply_filter('base-decorator-administration-name', esc_html($context->getCompanyName())) ?></a></div>
             </div>
         </div>
     </header>
 	<div class="nav-side-menu">
 		<div class="mobile-menu-header d-md-none"><a href="<?= appUrl('/') ?>"><?= esc_html($context->getCompanyName()) ?></a></div>
 		
+		<div class="mobile-icon-container"></div>
+		
 		<div class="menu-mobile-spacer"></div>
+		
 	    <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
 	
 		<div class="menu-list">
@@ -118,11 +125,26 @@ $menuItems = $ms->listMainMenu();
         			 $active = false;
     			 }
     			?>
-				<li> 
-					<a class="nav-link <?= $active ? 'active' : '' ?>" href="<?= appUrl($mi->getUrl()) ?>">
+				<li class="menu-item">
+					<a class="nav-link <?= $active ? 'active' : '' ?> weight-<?= $mi->getWeight() ?>" href="<?= appUrl($mi->getUrl()) ?>">
 						<i class="fa <?= $mi->getIcon() ?>"></i> 
 						<span class="menu-label"><?= esc_html($mi->getLabel()) ?></span>
 					</a>
+					
+					<?php if ($mi->hasChildMenus()) : ?>
+					<?php $childItems = $mi->getChildMenus() ?>
+					<?php if ($mi->menuAsFirstChild()) $childItems = array_merge(array($mi), $childItems) ?>
+					<ul class="child-menu">
+    					<?php foreach($childItems as $ci) : ?>	
+    					<li>
+    						<a class="nav-link weight-<?= $ci->getWeight() ?>" href="<?= appUrl($ci->getUrl()) ?>">
+        						<i class="fa <?= $ci->getIcon() ?>"></i> 
+        						<span class="menu-label"><?= esc_html($ci->getLabel()) ?></span>
+        					</a>
+    					</li>
+    					<?php endforeach; ?>
+					</ul>
+					<?php endif; ?>
 				</li>
     		<?php endforeach; ?>
 			</ul>
@@ -138,6 +160,31 @@ $menuItems = $ms->listMainMenu();
 	</div>
 
 	<?php print_htmlScriptLoader_bottom() ?>
+	
+	<?php if (DEBUG) : ?>
+	<script>
+		function show_debug_info() {
+			var eventbusEvents = <?= json_encode(@$_SESSION['debug']['eventbus-publish']) ?>;
+			var serverData = <?= json_encode($_SERVER) ?>;
+			var getData = <?= json_encode($_GET) ?>;
+			var postData = <?= json_encode($_POST) ?>;
+			var requestData = <?= json_encode($_REQUEST) ?>;
+			
+			<?php unset($_SESSION['debug']['eventbus-publish']); ?>
+
+			
+			show_popup( appUrl('/?m=base&c=debug&a=show_debug_info'), {
+				data: {
+					eventbus: eventbusEvents,
+					server:   serverData,
+					get:      getData,
+					post:     postData,
+					request:  requestData
+				}
+			});
+		}
+	</script>
+	<?php endif; ?>
 	
 </body>
 </html>

@@ -2,26 +2,32 @@
 use admin\model\ExceptionLog;
 use core\exception\DatabaseException;
 use core\exception\NotForLiveException;
+use core\exception\ContextNotFoundException;
 
 try {
-    $ctx = \core\Context::getInstance();
     
-    $el = new ExceptionLog();
-    $el->setContextName($ctx->getContextName());
-    if ($ctx->getUser())
-        $el->setUserId($ctx->getUser()->getUserId());
-    $el->setRequestUri($_SERVER['REQUEST_URI']);
-    $el->setMessage($ex->getMessage());
-    
-    $stacktrace = '';
-    if (is_a($ex, DatabaseException::class)) {
-        $stacktrace .= 'Query: '.$ex->getQuery() . "\n\n";
+    if (is_a($ex, ContextNotFoundException::class)) {
+        // don't save ContextNotFound-Exceptions
+    } else {
+        $ctx = \core\Context::getInstance();
+        
+        $el = new ExceptionLog();
+        $el->setContextName($ctx->getContextName());
+        if ($ctx->getUser())
+            $el->setUserId($ctx->getUser()->getUserId());
+        $el->setRequestUri($_SERVER['REQUEST_URI']);
+        $el->setMessage($ex->getMessage());
+        
+        $stacktrace = '';
+        if (is_a($ex, DatabaseException::class)) {
+            $stacktrace .= 'Query: '.$ex->getQuery() . "\n\n";
+        }
+        $stacktrace .= $ex->getFile() . ' ('.$ex->getLine().')' . "\n";
+        $stacktrace .= $ex->getTraceAsString();
+        $el->setStacktrace($stacktrace);
+        $el->setParameters(var_export($_REQUEST, true));
+        $el->save();
     }
-    $stacktrace .= $ex->getFile() . ' ('.$ex->getLine().')' . "\n";
-    $stacktrace .= $ex->getTraceAsString();
-    $el->setStacktrace($stacktrace);
-    $el->setParameters(var_export($_REQUEST, true));
-    $el->save();
 } catch (\Exception $ex) { }
 
 
@@ -31,7 +37,7 @@ try {
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>itxplain - insights - serious error</title>
+		<title>Toolbox - serious error</title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="icon" type="image/x-icon" href="favicon.ico">

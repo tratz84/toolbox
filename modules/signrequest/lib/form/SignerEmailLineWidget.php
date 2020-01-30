@@ -10,9 +10,7 @@ use core\forms\ListEditWidget;
 class SignerEmailLineWidget extends ListEditWidget {
     
     public function __construct($methodObjectList=null) {
-        $this->setName($methodObjectList);
-        
-        $this->methodObjectList = $methodObjectList;
+        parent::__construct($methodObjectList);
         
         $this->init();
         

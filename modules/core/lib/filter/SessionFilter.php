@@ -4,7 +4,7 @@
 namespace core\filter;
 
 use core\Context;
-use core\exception\InvalidStateException;
+use core\exception\ContextNotFoundException;
 
 class SessionFilter {
     
@@ -24,7 +24,7 @@ class SessionFilter {
             
             $matches = array();
             if (preg_match('/^\\/([a-zA-Z0-9_-]+)?\\/.*/', $uri, $matches) == false) {
-                throw new InvalidStateException('context not found');
+                throw new ContextNotFoundException('context not found');
             }
             $contextName = $matches[1];
         }

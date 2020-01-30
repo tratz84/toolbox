@@ -31,8 +31,8 @@ class PersonForm extends BaseForm {
         $this->addWidget( new TextField('bic', '', 'BIC') );
         
         
-        $this->addWidget( new HtmlDatetimeField('edited', '', 'Laatst bewerkt', array('hide-when-invalid' => true) ));
-        $this->addWidget( new HtmlDatetimeField('created', '', 'Aangemaakt op', array('hide-when-invalid' => true) ));
+        $this->addWidget( new HtmlDatetimeField('edited', '', t('Last modified'), array('hide-when-invalid' => true) ));
+        $this->addWidget( new HtmlDatetimeField('created', '', t('Created on'), array('hide-when-invalid' => true) ));
         
         $this->addWidget( new TextareaField('note', '', t('Note')) );
         

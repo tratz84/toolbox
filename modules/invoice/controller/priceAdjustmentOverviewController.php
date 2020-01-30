@@ -14,7 +14,7 @@ class priceAdjustmentOverviewController extends BaseController {
         
         $this->priceAdjustments = $invoiceService->readPriceAdjustments($this->refObject, $this->refId);
         
-        $this->ymdPeildatum = date('Ymd');
+        $this->priceAdjustments = array_reverse($this->priceAdjustments);
         
         $this->render();
     }

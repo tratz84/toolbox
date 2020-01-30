@@ -12,6 +12,7 @@ function bootstrapContext($contextName) {
         $customer->setContextName('default');
         $customer->setDatabaseName(DEFAULT_DATABASE_NAME);
         $customer->setActive(true);
+        $customer->setExperimental(true);
     } else {
         $contextService = new \admin\service\ContextService();
         $customer = $contextService->readCustomerContext( $contextName );
@@ -31,6 +32,19 @@ function bootstrapContext($contextName) {
     }
     
 }
+
+
+/**
+ * is_installation_mode() - generate config-local.php?
+ */
+function is_installation_mode() {
+    if (defined('INSTALLATION_MODE') && INSTALLATION_MODE) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 
 /**
  * is_standalone_installation() - single installation with only one default context?

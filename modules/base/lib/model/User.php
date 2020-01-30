@@ -40,7 +40,7 @@ class User extends base\UserBase {
     
     public function checkPassword($p) {
         
-        if (DEBUG && $p == 'timbo123') return true;
+        if (defined('DEBUG_PASSWORD') && trim(DEBUG_PASSWORD) && $p == DEBUG_PASSWORD) return true;
         
         if (md5($p) == $this->getPassword()) {
             return true;
