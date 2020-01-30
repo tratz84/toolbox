@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>insights</title>
+		<title>Toolbox</title>
 
 		<base href="<?= BASE_HREF ?>" />
 

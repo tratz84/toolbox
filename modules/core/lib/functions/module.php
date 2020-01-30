@@ -3,6 +3,7 @@
 
 
 use core\Context;
+use base\service\SettingsService;
 
 function module_list($forceReload=false) {
     static $modules = null;
@@ -13,6 +14,11 @@ function module_list($forceReload=false) {
         $moduleDirs = Context::getInstance()->getModuleDirs();
         foreach($moduleDirs as $md) {
             $moduleFiles = list_files($md);
+            
+            if ($moduleFiles === false) {
+                trigger_error('Invalid module directory: '.$md, E_USER_NOTICE);
+                continue;
+            }
             
             foreach($moduleFiles as $mf) {
                 $path = realpath( $md . '/' . $mf );
@@ -26,6 +32,13 @@ function module_list($forceReload=false) {
     
     return $modules;
 }
+
+function module_exists($moduleName) {
+    $ml = module_list();
+    
+    return isset($ml[$moduleName]) ? true : false;
+}
+
 
 
 function module_file($module, $path) {
@@ -43,6 +56,23 @@ function module_file($module, $path) {
     
     return false;
 }
+
+function module_file_safe($module, $path, $subpath) {
+    $p1 = module_file($module, $path);
+    if (!$p1)
+        return false;
+    
+    $p2 = module_file($module, $path . '/' . $subpath);
+    if (!$p2)
+        return false;
+    
+    if (strpos($p2, $p1) !== 0)
+        return false;
+    
+    return $p2;
+}
+
+
 
 /**
  * public_module_file_by_url() - returns public-module-file by given url
@@ -105,4 +135,31 @@ function module_less_defaults() {
     return $l;
 }
 
+
+/**
+ * module_update_handler()
+ * - Loads 'modules/<module name>/update.php' if $version is not 
+ *   the current (both DOWN and UPgrades!). Good place to call 
+ *   this function is in the autoload.php
+ */
+function module_update_handler($moduleName, $version) {
+    $settingsKey = 'module-'.$moduleName.'-version';
+    
+    $ctx = \core\Context::getInstance();
+    $curVer = $ctx->getSetting( $settingsKey );
+    
+    // note, this way update.php get both called on downgrades & upgrades. Script should handle it right!
+    if ($curVer != $version) {
+        $updatefile = module_file($moduleName, '/update.php');
+        
+        // check if file is found & include
+        if ($updatefile) {
+            load_php_file( $updatefile );
+        }
+        
+        // update version
+        $settingsService = object_container_get(SettingsService::class);
+        $settingsService->updateValue($settingsKey, $version);
+    }
+}
 

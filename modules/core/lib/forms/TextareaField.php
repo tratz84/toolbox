@@ -21,7 +21,7 @@ class TextareaField extends BaseWidget {
         $extraClass .= ' widget-'.slugify($this->getName());
         
         $html .= '<div class="widget textarea-field-widget '.$extraClass.'">';
-        $html .= '<label>'.esc_html($this->getLabel()).'</label>';
+        $html .= '<label>'.esc_html($this->getLabel()).infopopup($this->getInfoText()).'</label>';
         $html .= '<textarea name="'.esc_attr($this->getName()).'">'.esc_html($this->getValue()).'</textarea>';
         $html .= '</div>';
         

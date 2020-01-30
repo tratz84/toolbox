@@ -32,7 +32,9 @@
 
 $(document).ready(function() {
 	link_input2text('[name=company_name]', '#h1-company-name');
+
 });
+
 
 </script>
 

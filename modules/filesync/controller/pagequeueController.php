@@ -64,7 +64,7 @@ class pagequeueController extends BaseController {
             if ($this->form->validate()) {
                 $pagequeueService->savePage( $this->form );
                 
-                redirect('/?m=filesync&c=pagequeue');
+                redirect('/?m=filesync&c=pagequeue&a=pdf');
             }
         }
         
@@ -207,16 +207,18 @@ class pagequeueController extends BaseController {
             
             
             $margin = 0.1;
-            $piw = $pw - ($pw * $margin);
-            $pih = $ph - ($ph * $margin);
+            $piw = $pw - ($pw * $margin);           // page width
+            $pih = $ph - ($ph * $margin);           // page height
             
             
             $w = $piw;
-            $h = $pih / $w * $piw;
+            $h = $piw * ($img->getImageHeight()/$img->getImageWidth());
+            
             if ($h > $pih) {
                 $h = $pih;
-                $w = $piw / $h * $pih;
+                $w = $pih * ($img->getImageWidth()/$img->getImageHeight());
             }
+            
             
             // add to pdf
             $p->ImagickJpeg($pq->getFilename(), $img, $pw/2-$w/2, ($ph*$margin)/4, $w, $h);

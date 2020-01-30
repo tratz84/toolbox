@@ -10,6 +10,7 @@ use core\forms\ListWidget;
 use core\forms\Select2Field;
 use core\forms\SelectField;
 use core\forms\WidgetContainer;
+use core\forms\CheckboxField;
 
 class FormChangesHtml
 {
@@ -85,14 +86,24 @@ class FormChangesHtml
             if ($w->getLabel() == '')
                 continue;
             
-            if ($w->getValue() && (is_a($w, SelectField::class) || is_a($w, Select2Field::class))) {
+            if (is_a($w, CheckboxField::class)) {
+                $val = $w->getValue() ? t('Yes') : t('No');
+            } else if ($w->getValue() && (is_a($w, SelectField::class) || is_a($w, Select2Field::class))) {
                 $val = $w->getValueLabel();
             } else {
                 $val = $w->getValue();
             }
 
             $w_old = $this->oldForm->getWidget($w->getName());
-            if ($w_old->getValue() && (is_a($w_old, SelectField::class) || is_a($w_old, Select2Field::class))) {
+            
+            // widget not found? => skip. Might happen if confirmation-checkbox or other temp-widgets are added to new-form
+            if (!$w_old) {
+                continue;
+            }
+            
+            if (is_a($w_old, CheckboxField::class)) {
+                $oldVal = $w_old->getValue() ? t('Yes') : t('No');
+            } else if ($w_old->getValue() && (is_a($w_old, SelectField::class) || is_a($w_old, Select2Field::class))) {
                 $oldVal = $w_old->getValueLabel();
             } else {
                 $oldVal = $w_old->getValue();
@@ -212,7 +223,9 @@ class FormChangesHtml
                 
                 $w2->setValue('');
                 $w2->bindObject($objsNew[$x]);
-                if ($w2->getValue() && (is_a($w2, SelectField::class) || is_a($w2, Select2Field::class))) {
+                if (is_a($w2, CheckboxField::class)) {
+                    $vNew = $w2->getValue() ? t('Yes') : t('No');
+                } else if ($w2->getValue() && (is_a($w2, SelectField::class) || is_a($w2, Select2Field::class))) {
                     $vNew = $w2->getValueLabel();
                 } else {
                     $vNew = $w2->getValue();
@@ -220,7 +233,9 @@ class FormChangesHtml
                 
                 $w2->setValue('');
                 $w2->bindObject($objsOld[$x]);
-                if ($w2->getValue() && (is_a($w2, SelectField::class) || is_a($w2, Select2Field::class))) {
+                if (is_a($w2, CheckboxField::class)) {
+                    $vOld = $w2->getValue() ? t('Yes') : t('No');
+                } else if ($w2->getValue() && (is_a($w2, SelectField::class) || is_a($w2, Select2Field::class))) {
                     $vOld = $w2->getValueLabel();
                 } else {
                     $vOld = $w2->getValue();
@@ -495,7 +510,7 @@ class FormChangesHtml
         $widgets = $this->getWidgets($this->newForm);
 
         $html = '<table class="form-changes list-widget-changes">';
-        $html .= '<thead><tr><th>Veldnaam</th><th>Waarde</th></tr></thead>' . "\n";
+        $html .= '<thead><tr><th class="th-fieldname">'.t('Fieldname').'</th><th class="th-value">'.t('Value').'</th></tr></thead>' . "\n";
 
         $html .= '<tbody>';
         foreach ($widgets as $w) {
@@ -505,7 +520,9 @@ class FormChangesHtml
             if ($w->getLabel() == '')
                 continue;
             
-            if ($w->getValue() && (is_a($w, SelectField::class) || is_a($w, Select2Field::class)))
+            if (is_a($w, CheckboxField::class)) {
+                $val = $w->getValue() ? t('Yes') : t('No');
+            } else if ($w->getValue() && (is_a($w, SelectField::class) || is_a($w, Select2Field::class)))
                 $val = $w->getValueLabel();
             else
                 $val = $w->getValue();
@@ -553,7 +570,7 @@ class FormChangesHtml
     public static function tableFromArray($arr) {
         $html = '<div class="form-changes-container">';
         $html .= '<table class="form-changes">';
-        $html .= '<thead><tr><th>Veldnaam</th><th>Oude waarde</th><th>Nieuwe waarde</th></tr></thead>' . "\n";
+        $html .= '<thead><tr><th class="th-fieldname">'.t('Fieldname').'</th><th class="th-old-value">'.t('Old value').'</th><th class="th-new-value">'.t('New value').'</th></tr></thead>' . "\n";
         
         $html .= '<tbody>';
         foreach($arr as $row) {

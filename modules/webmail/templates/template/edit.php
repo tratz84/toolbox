@@ -34,5 +34,9 @@
 		<th>[[betreft]]</th>
 		<td>Betreft-veld, offerte / factuur</td>
 	</tr>
+	<tr>
+		<th>[[document_no]]</th>
+		<td>Factuur-, offerte- of order-nr, offerte / factuur</td>
+	</tr>
 
 </table>

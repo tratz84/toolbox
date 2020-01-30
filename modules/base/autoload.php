@@ -2,7 +2,6 @@
 
 
 require_once dirname(__FILE__).'/lib/functions/person.php';
-require_once dirname(__FILE__).'/lib/functions/debug.php';
 require_once dirname(__FILE__).'/lib/functions/object_meta.php';
 require_once dirname(__FILE__).'/lib/functions/object_lock.php';
 require_once dirname(__FILE__).'/lib/functions/object_log.php';
@@ -30,7 +29,7 @@ $eb->subscribe('report', 'menu-list', new CallbackPeopleEventListener(function($
     $reportMenuList->addMenuItem('Klantenoverzicht', 'base', 'report/customerReportController', '/?m=base&c=report/customerReport&a=xls');
     
     if (hasCapability('base', 'list-activity')) {
-        $reportMenuList->addMenuItem('Logboek', 'base', 'report/activityReportController');
+        $reportMenuList->addMenuItem(t('Event viewer'), 'base', 'report/activityReportController');
     }
 }));
 
@@ -39,7 +38,7 @@ $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($e
     $src = $evt->getSource();
 //     $src->addItem('Klanten', 'Bedrijfsoorten',     '/?m=base&c=masterdata/companyType');
 
-    $src->addItem('Instellingen', 'Ingeplande taken',     '/?m=base&c=cronList');
+    $src->addItem(t('Settings'), t('Scheduled tasks'),     '/?m=base&c=cronList');
 }));
 
 
@@ -47,7 +46,7 @@ $eb->subscribe('base', 'dashboard', new CallbackPeopleEventListener(function($ev
     $dashboardWidgets = $evt->getSource();
     
     if (hasCapability('base', 'list-activity')) {
-        $dashboardWidgets->addWidget('log-activity', 'Algemeen: Laatste logboek activiteiten', 'Laatste 100 activiteiten die in het logboek zijn gezet', '/?m=base&c=dashboardWidgets&a=logActivity');
+        $dashboardWidgets->addWidget('log-activity', t('General: Last event viewer items'), t('Last 100 activities event viewer'), '/?m=base&c=dashboardWidgets&a=logActivity');
     }
 }));
     
@@ -57,7 +56,7 @@ $eb->subscribe('base', 'user-capabilities', new CallbackPeopleEventListener(func
     // with masterdata permission, user can give itself admin-rights :s
 //     $evt->getSource()->addCapability('base', 'edit-masterdata', 'Stamgegevens', 'Toegang tot stamgegevenspagina');
     
-    $evt->getSource()->addCapability('base', 'list-activity', 'Logboek', 'Logboek gegevens tonen');
+    $evt->getSource()->addCapability('base', 'list-activity', t('Event viewer'), t('Show events system'));
 }));
 
 

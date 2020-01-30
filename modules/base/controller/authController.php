@@ -9,6 +9,8 @@ use base\util\ActivityUtil;
 
 class authController extends BaseController {
     
+    // show a warning if the default 'admin123' password is set for user 'admin'
+    protected $showWarningDefaultAdminPassword = false;
     
     
     public function action_index() {
@@ -90,6 +92,16 @@ class authController extends BaseController {
             $this->username = 'demo';
             $this->password = 'demo123';
         }
+        
+        // check if default password is set. if yes, show warning
+        if (is_get() && is_standalone_installation()) {
+            $userService = $this->oc->get(UserService::class);
+            $user = $userService->readByUsername('admin');
+            if ($user && $user->getPassword() == 'admin123') {
+                $this->showWarningDefaultAdminPassword = true;
+            }
+        }
+        
         
         $this->logoFile = $this->ctx->getLogoFile();
         

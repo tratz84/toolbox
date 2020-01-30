@@ -15,6 +15,7 @@ class ListWidget extends WidgetContainer {
     
     
     
+    public function setMethodObjectList($mol) { $this->methodObjectList = $mol; }
     public function getMethodObjectList() { return $this->methodObjectList; }
     
     public function asObjects(string $className) {

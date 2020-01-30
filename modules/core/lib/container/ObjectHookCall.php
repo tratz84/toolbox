@@ -4,6 +4,8 @@
 namespace core\container;
 
 
+use core\exception\InvalidStateException;
+
 class ObjectHookCall {
     
     protected $object;
@@ -27,6 +29,14 @@ class ObjectHookCall {
     
     public function getArguments() { return $this->arguments; }
     public function setArguments($args) { $this->arguments = $args; }
+    
+    public function getArgumentNo($no) {
+        if ($no >= count($this->arguments) || $no < 0) {
+            throw new InvalidStateException('Invalid argument no');
+        }
+        
+        return $this->arguments[$no];
+    }
     
     public function getReturnValue() { return $this->returnValue; }
     public function setReturnValue($v) { $this->returnValue = $v; }

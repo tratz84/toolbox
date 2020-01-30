@@ -4,6 +4,7 @@ namespace core\filter;
 
 use core\Context;
 use core\module\ModuleMeta;
+use core\module\ModuleLoader;
 
 
 class ModuleEnablerFilter {
@@ -15,6 +16,12 @@ class ModuleEnablerFilter {
     
     
     public function doFilter($filterChain) {
+        $this->enableModules();
+        
+        $filterChain->next();
+    }
+    
+    public function enableModules() {
         $ctx = Context::getInstance();
         
         
@@ -22,6 +29,7 @@ class ModuleEnablerFilter {
         include ROOT . '/modules/core/autoload.php';
         include ROOT . '/modules/base/autoload.php';
         
+        $modulesToLoad = array();
         
         // load dynamic modules, old stuff must be rewritten to load this way..
         $modules = module_list();
@@ -51,14 +59,21 @@ class ModuleEnablerFilter {
             
             // module enabled? => include autoload.php
             if ($moduleEnabled) {
-                $autoloadfile = $path.'/autoload.php';
-                load_php_file( $autoloadfile );
+                $modulesToLoad[] = array('meta' => $meta, 'autoload' => $path.'/autoload.php');
             }
         }
+
+        // sort by prio
+        usort($modulesToLoad, function($o1, $o2) {
+            return $o1['meta'][0]->getPrio() - $o2['meta'][0]->getPrio();
+        });
         
+        // load autoload.php for modules
+        foreach($modulesToLoad as $m) {
+            $ml = new ModuleLoader($m['meta'], $m['autoload']);
+            $ml->load();
+        }
         
-        
-        $filterChain->next();
     }
     
 }

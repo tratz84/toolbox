@@ -12,7 +12,7 @@ class NotContainsValidator extends BaseValidator {
         $this->values = $values;
     }
     
-    public function getMessage() { return 'Veld bevat geen waarde'; }
+    public function getMessage() { return t('Field contains no value'); }
     
     public function validate($widget) {
         

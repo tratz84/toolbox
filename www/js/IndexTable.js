@@ -26,6 +26,8 @@ function IndexTable( container, opts ) {
 	
 	this.callback_renderRow = null;		// callback after '<tr/>' row is rendered, signature: function(listResponseObject, $(tr));
 	
+	this.callback_selectColumnsPopup = null;
+	
 	this.urlOnUnload = '?s'; 
 	
 	this.callback_filterChanged = null;
@@ -50,7 +52,7 @@ function IndexTable( container, opts ) {
 
 		if (!this.opts.autoloadNext) {
 			$(window).on('unload', function() {
-				var fields = serialize2object(me.container);
+				var fields = serialize2object(me.opts.searchContainer ? me.opts.searchContainer : me.container);
 				fields.pageNo = me.pageNo;
 				
 				var url = window.location.toString();
@@ -148,7 +150,7 @@ function IndexTable( container, opts ) {
 		var searchOpts = { };
 
 		// searchopts
-		searchOpts = serialize2object(this.container);
+		searchOpts = serialize2object(this.opts.searchContainer ? this.opts.searchContainer : this.container);
 
 		searchOpts['pageNo'] = this.pageNo - 1;
 		
@@ -215,6 +217,10 @@ function IndexTable( container, opts ) {
 	this.setCallbackRenderDone = function(callback) {
 		this.callback_renderDone = callback;
 	};
+	
+	this.setCallbackSelectColumnsPopup = function(callback) {
+		this.callback_selectColumnsPopup = callback;
+	};
 
 	this.setSortField = function(field) { this.sortField = field; };
 
@@ -243,7 +249,7 @@ function IndexTable( container, opts ) {
 		
 		if (this.opts.autoloadNext && this.listResponse && this.listResponse.objects.length >= this.listResponse.pageSize) {
 			var me = this;
-			var tr = $('<tr class="load-more"><td><a style="display: block;text-align: center;" href="javascript:void(0);">Laad meer</a></td></tr>');
+			var tr = $('<tr class="load-more"><td><a style="display: block;text-align: center;" href="javascript:void(0);">'+_('Load more')+'</a></td></tr>');
 			$(tr).find('td').attr('colspan', this.columns.length);
 			$(this.table).find('tbody:last-child').append(tr);
 			$(tr).find('a').click(function() {
@@ -434,6 +440,12 @@ function IndexTable( container, opts ) {
 		$(this.container).find('input, select').change(function() {
 			me.filterChanged();
 		});
+		
+		if (this.opts.searchContainer) {
+			$(this.opts.searchContainer).find('input, select').change(function() {
+				me.filterChanged();
+			});
+		}
 	};
 
 
@@ -446,10 +458,10 @@ function IndexTable( container, opts ) {
 		if (!this.listResponse)
 			return;
 
-		if (this.listResponse.objects.length == 0 && (!this.opts.autoloadNext || $(this.table).find('tbody tr').length == 0)) {
+		if (this.listResponse.start == 0 && this.listResponse.objects.length == 0) {
 			var td = $('<td class="no-results-found" />');
 			td.attr('colspan', this.columns.length + (this.sortable?1:0) );
-			td.text('Geen resultaten gevonden');
+			td.text(_('No results found'));
 
 			tbody.append(td);
 		}
@@ -522,11 +534,11 @@ function IndexTable( container, opts ) {
 
 					if (col.fieldType == 'boolean') {
 						if (typeof fieldText == 'string')
-							fieldText = (fieldText == '0' || fieldText == 'false') ? 'Nee' : 'Ja';
+							fieldText = (fieldText == '0' || fieldText == 'false') ? _('No') : _('Yes');
 						else if (typeof fieldText == 'boolean')
-							fieldText = fieldText ? 'Ja' : 'Nee';
+							fieldText = fieldText ? _('Yes') : _('No');
 						else if (typeof fieldText == 'number')
-							fieldText = fieldText == 0 ? 'Nee' : 'Ja';
+							fieldText = fieldText == 0 ? _('No') : _('Yes');
 					}
 					
 					if (col.fieldType == 'date') {
@@ -566,7 +578,11 @@ function IndexTable( container, opts ) {
 					if (fieldText == null || fieldText == 'null')
 						fieldText = '';
 
-					td.text(fieldText);
+					if (col.fieldType == 'html') {
+						td.html(fieldText);
+					} else {
+						td.text(fieldText);
+					}
 				}
 
 				tr.append(td);
@@ -594,7 +610,7 @@ function IndexTable( container, opts ) {
 			$(tbody).sortable({
 				handle: '.sort-handle',
 				update: function(evt) {
-					me.callback_sortUpdate(evt);
+					me.callback_sortUpdate.bind(me)(evt);
 				}
 			})
 		}
@@ -691,6 +707,101 @@ function IndexTable( container, opts ) {
 
 		// add new
 		$(this.container).append(pager);
+	};
+	
+	
+	this.createColumnSelection = function() {
+		var me = this;
+		
+		if (this.columns.length <= 30) {
+			for(var i in this.columns) {
+				var c = this.columns[i];
+				
+				var lbl = $('<label />');
+				
+				var inp = $('<input type="checkbox" />');
+				inp.attr('name', 'columnSelection['+c.fieldName+']');
+				inp.addClass('index-table-column-selector');
+				inp.prop('checked', true);
+				inp.data('column', c);
+				lbl.append(inp);
+				
+				var spanDesc = $('<span />');
+				spanDesc.text( c.fieldDescription );
+				lbl.append(spanDesc);
+				
+				$(this.opts.columnSelection).append(lbl);
+				
+				inp.change(function() {
+					me.updateColumnselection();
+				});
+			}
+		} else {
+			var anchSelectColumns = $('<a href="javascript:void(0);" />');
+			anchSelectColumns.text(_('Select columns'));
+			anchSelectColumns.click(function() {
+				this.selectColumnsPopup();
+			}.bind(this));
+			
+			$(this.opts.columnSelection).append( '<hr/>' );
+			$(this.opts.columnSelection).append( anchSelectColumns );
+		}
+	};
+	
+	
+	this.selectColumnsPopup = function() {
+		var container = $('<div />');
+		for(var i in this.columns) {
+			var c = this.columns[i];
+			
+			var lbl = $('<label style="width: 300px;" />');
+			
+			var inp = $('<input type="checkbox" />');
+			inp.attr('name', 'columnSelection['+c.fieldName+']');
+			inp.addClass('index-table-column-selector');
+			
+			var isChecked = $('.th-'+slugify(c.fieldName)).is(':visible');
+			
+			inp.prop('checked', isChecked);
+			inp.data('column', c);
+			lbl.append(inp);
+			
+			var spanDesc = $('<span />');
+			spanDesc.text( c.fieldDescription );
+			lbl.append(spanDesc);
+			
+			$(container).append( lbl );
+		}
+
+		var dialog = showDialog({
+			title: 'Column selection',
+			html: container,
+			callback_ok: function() {
+				this.updateColumnselection();
+			}.bind(this)
+		});
+		
+		dialog.find('.btn-save').val('Ok');
+		
+		if (this.callback_selectColumnsPopup) {
+			this.callback_selectColumnsPopup(this, dialog);
+		}
+	};
+	
+	
+	
+	this.updateColumnselection = function() {
+		$('.index-table-column-selector').each(function(index, node) {
+			var c = $(node).data('column');
+			
+			if ($(this).prop('checked')) {
+				$('.th-'+slugify(c.fieldName)).show();
+				$('.td-'+slugify(c.fieldName)).show();
+			} else {
+				$('.th-'+slugify(c.fieldName)).hide();
+				$('.td-'+slugify(c.fieldName)).hide();
+			}
+		});
 	};
 
 

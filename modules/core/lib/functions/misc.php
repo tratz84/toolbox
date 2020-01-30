@@ -5,6 +5,7 @@
 use core\Context;
 use core\exception\FileException;
 use core\exception\NotForLiveException;
+use core\exception\InvalidStateException;
 
 function is_get() {
     return $_SERVER['REQUEST_METHOD'] == 'GET';
@@ -16,6 +17,23 @@ function is_post() {
 
 function is_cli() {
     return php_sapi_name() == 'cli';
+}
+
+function is_windows() {
+    if (strpos(PHP_OS, 'WIN') === 0) {
+        return true;
+    }
+    
+    return false;
+}
+
+
+function is_admin_context() {
+    if (defined('ADMIN_CONTEXT') && ADMIN_CONTEXT == true) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 
@@ -57,7 +75,7 @@ function app_request_uri() {
         
         $matches = array();
         if (preg_match('/^\\/([a-zA-Z0-9_-]+)?\\/.*/', $uri, $matches) == false) {
-            throw new \core\exception\InvalidStateException('context not found');
+            throw new \core\exception\ContextNotFoundException('context not found');
         }
         
         $uri = substr($uri, strlen($matches[1])+1);
@@ -110,10 +128,21 @@ function list_files($path, $opts=array()) {
     while ($f = readdir($dh)) {
         if ($f == '.' || $f == '..') continue;
         
-        if (isset($opts['append-slash']) && $opts['append-slash'] && is_dir( $path . '/' . $f )) {
-            $files[] = $f . '/';
-        } else {
-            $files[] = $f;
+        if (isset($opts['dironly']) && $opts['dironly'] && is_dir($path.'/'.$f) == false) {
+            continue;
+        }
+
+        $skipFile = false;
+        if (isset($opts['fileonly']) && $opts['fileonly'] && is_dir($path.'/'.$f) == true) {
+            $skipFile = true;
+        }
+        
+        if ($skipFile == false) {
+            if (isset($opts['append-slash']) && $opts['append-slash'] && is_dir( $path . '/' . $f )) {
+                $files[] = $f . '/';
+            } else {
+                $files[] = $f;
+            }
         }
         
         
@@ -160,6 +189,7 @@ function file_mime_type($file) {
         'html' => 'text/html',
         'php' => 'text/html',
         'css' => 'text/css',
+        'less' => 'text/css',
         'js' => 'application/javascript',
         'json' => 'application/json',
         'xml' => 'application/xml',
@@ -300,6 +330,10 @@ function save_upload($paramFile, $path) {
 
 function delete_data_file($f) {
     $file = get_data_file($f);
+    
+    if ($file === false) {
+        return false;
+    }
     
     return unlink($file);
 }
@@ -683,22 +717,12 @@ function next_day($date, $no=1) {
 }
 
 function weeks_in_year($year, $timezone='Europe/Amsterdam') {
-    $dt = new DateTime($year . '-12-30');
+    $dt = new DateTime($year . '-12-30', new DateTimeZone($timezone));
     
-    $weekno = 52;
+    // ISO-8601 specification, 28 dec always last week
+    $dt->setDate($year, 12, 28);
     
-    while (true) {
-        $dt->modify('+1 day');
-        $new_weekno = $dt->format('W');
-        
-        if ($new_weekno >= $weekno) {
-            $weekno = $new_weekno;
-        } else {
-            break;
-        }
-    }
-    
-    return $weekno;
+    return $dt->format('W');
 }
 
 /**
@@ -738,7 +762,7 @@ function week_list($year, $timezone='Europe/Amsterdam') {
             }
             
             $r[] = array(
-                'weekno' => $dt->format('W'),
+                'weekno' => (int)$dt->format('W'),
                 'year' => $dt->format('Y'),
                 'monday' => $dt->format('Y-m-d')
             );
@@ -748,6 +772,70 @@ function week_list($year, $timezone='Europe/Amsterdam') {
     }
     
     return $r;
+}
+
+/**
+ * week_diff() - returnweeks between start & end
+ */
+function week_diff($p_startYear, $p_startWeek, $p_endYear, $p_endWeek) {
+
+    $startYear = (int)$p_startYear;
+    $startWeek = (int)$p_startWeek;
+    $endYear = (int) $p_endYear;
+    $endWeek = (int)$p_endWeek;
+    
+    if ($startYear == $endYear && $startWeek == $endWeek) {
+        return 0;
+    }
+    
+    $negative = false;
+    if ($startYear > $endYear || ($startYear == $endYear && $startWeek > $endWeek)) {
+        $negative = true;
+    }
+    
+    $startDate = null;
+    $weeklistStart = week_list($startYear);
+    if ($startWeek < 1 || $startWeek > count($weeklistStart)) {
+        throw new InvalidStateException('Invalid start week/year ('.$p_startWeek.'/'.$p_startYear.')');
+    }
+    $startDate = $weeklistStart[$startWeek-1]['monday'];
+    
+    $endDate = null;
+    $weeklistEnd = week_list($endYear);
+    if ($endWeek < 1 || $endWeek > count($weeklistEnd)) {
+        throw new InvalidStateException('Invalid end week/year ('.$p_endWeek.'/'.$p_endYear.')');
+    }
+    $endDate = $weeklistEnd[$endWeek-1]['monday'];
+    
+    $weeknos = 0;
+    if ($endYear > $startYear) {
+        // add weeks for this year
+        $weeknos += (weeks_in_year($startYear) - $startWeek);
+        
+        // add weeks for years in between
+        for($x=$startYear+1; $x < $endYear; $x++) {
+            $weeknos += weeks_in_year($x);
+        }
+        
+        // add weeks for last year
+        $weeknos += $endWeek;
+    }
+    if ($endYear < $startYear) {
+        // subtract weeks this year
+        $weeknos -= $startWeek;
+        
+        for($x=$startYear-1; $x > $endYear; $x--) {
+            $weeknos -= weeks_in_year($x);
+        }
+        
+        $weeknos -= (weeks_in_year($endYear) - $endWeek);
+    }
+    if ($startYear == $endYear) {
+        return $endWeek - $startWeek;
+    }
+    
+    
+    return $weeknos;
 }
 
 
@@ -874,6 +962,19 @@ function slugify($str) {
     return $str;
 }
 
+/**
+ * to_php_string() - escapes a string for insertion in php-code
+ * 
+ * TODO: check this for security issues!! watch it before using this
+ */
+function to_php_string($str) {
+    $str = (string)$str;
+    $str = str_replace("\n", "\\n", $str);
+    $str = str_replace('"', '\"', $str);
+    $str = '"'.$str.'"';
+    return $str;
+}
+
 
 function endsWith($haystack, $val) {
     $p = strrpos($haystack, $val);
@@ -897,6 +998,13 @@ function guidv4()
     $data[6] = chr(ord($data[6]) & 0x0f | 0x40); // set version to 0100
     $data[8] = chr(ord($data[8]) & 0x3f | 0x80); // set bits 6-7 to 10
     return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+}
+
+
+function valid_regexp($pattern) {
+    @preg_match('/'.$pattern.'/', '');
+    
+    return preg_last_error() === PREG_NO_ERROR ? true : false;
 }
 
 

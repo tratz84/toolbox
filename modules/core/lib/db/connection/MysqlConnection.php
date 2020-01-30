@@ -152,6 +152,12 @@ class MysqlConnection extends DBConnection {
         
         return $r;
     }
+    
+    function escape($str) {
+        $dbh = $this->getResource();
+        
+        return $dbh->real_escape_string($str);
+    }
 
     function queryOne($sql, $params=array()) {
         $res = $this->query($sql, $params);
@@ -200,6 +206,27 @@ class MysqlConnection extends DBConnection {
     
     public function createQueryBuilder() {
         return new MysqlQueryBuilder( $this );
+    }
+    
+    
+    
+    public function getColumnProperties($tableName, $columnName) {
+        $rows = $this->queryList('describe '.$this->escape($tableName));
+        
+        foreach($rows as $r) {
+            if ($r['Field'] == $columnName) {
+                return $r;
+            }
+        }
+        
+        return null;
+    }
+    public function columnExists($tableName, $columnName) {
+        if ($this->getColumnProperties($tableName, $columnName) != null) {
+            return true;
+        } else {
+            return false;
+        }
     }
     
 }

@@ -31,6 +31,7 @@ class Menu extends base\MenuBase {
     }
     
     
+    public function setIcon($p) { $this->setField('icon', $p); }
     public function getIcon() { return $this->getField('icon'); }
     
     public function setLabel($p) { $this->setField('label', $p); }

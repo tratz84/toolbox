@@ -1,6 +1,7 @@
 <?php
 
 
+use base\externalapi\VatCheckApiService;
 use base\forms\CompanyForm;
 use base\model\Address;
 use base\model\Company;
@@ -10,7 +11,6 @@ use base\service\CompanyService;
 use core\Context;
 use core\container\ActionContainer;
 use core\controller\BaseController;
-use core\db\DatabaseHandler;
 use core\event\ActionValidationEvent;
 use core\event\EventBus;
 use core\exception\InvalidStateException;
@@ -130,6 +130,41 @@ class companyController extends BaseController {
         $this->render();
     }
     
+    
+    public function action_view_vat_number() {
+        $vcaService = object_container_get(VatCheckApiService::class);
+        
+        $this->nr = get_var('nr');
+        
+        try {
+            $this->validVat = $vcaService->validateVat( $this->nr );
+            $this->vatInfo = $vcaService->vatInfo( $this->nr );
+//             var_export($this->response);exit;
+        } catch (\Exception $ex) {
+            $this->error = $ex->getMessage();
+        }
+        
+        $this->render();
+    }
+    
+    public function action_check_vat_number() {
+        $vcaService = object_container_get(VatCheckApiService::class);
+        
+        $r = array();
+        $r['success'] = false;
+        
+        try {
+            $validVat = $vcaService->validateVat( get_var('vat_number') );
+            if ($validVat) {
+                $r['success'] = true;
+                $r['data'] = (array)$vcaService->vatInfo( get_var('vat_number') );;
+            }
+        } catch (\Exception $ex) {
+            $r['error'] = $ex->getMessage();
+        }
+        
+        $this->json( $r );
+    }
 }
 
 

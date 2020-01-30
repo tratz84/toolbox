@@ -21,7 +21,7 @@ class PagequeueUploadForm extends BaseForm {
         
         $ff = new FileField('file', '', 'Bestand');
         $ff->setAttribute('accept', 'image/*');
-        $ff->setAttribute('capture', 'capture');
+//         $ff->setAttribute('capture', 'capture');         // if set, Android defaults to camera and taken photo's can't be selected
         $this->addWidget($ff);
         
         $this->addWidget(new HiddenField('crop_x1'));

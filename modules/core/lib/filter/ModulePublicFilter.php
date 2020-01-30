@@ -3,6 +3,7 @@
 namespace core\filter;
 
 
+use core\exception\InvalidStateException;
 
 class ModulePublicFilter {
     
@@ -12,8 +13,16 @@ class ModulePublicFilter {
     
     
     public function doFilter($filterChain) {
-        
-        $uri = app_request_uri();
+        // support for files by 'mpf'-parameter. Used in cases where rewrites are not working
+        if (isset($_GET['mpf'])) {
+            $uri = $_GET['mpf'];
+        } else {
+            try {
+                $uri = app_request_uri();
+            } catch (InvalidStateException $ex) {
+                return $filterChain->next();
+            }
+        }
         
         // non-module path?
         if (strpos($uri, '/module/') !== 0) {

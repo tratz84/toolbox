@@ -8,6 +8,9 @@ use report\ReportMenuList;
 
 class reportController extends BaseController {
     
+    protected $reportNotFound = false;
+    protected $showIndex = false;
+    
     
     public function init() {
         checkCapability('report', 'show-reports');
@@ -34,6 +37,10 @@ class reportController extends BaseController {
                     break;
                 }
             }
+            
+            if (!$this->report) {
+                $this->reportNotFound = true;
+            }
         }
         
         if ($this->report) {
@@ -43,6 +50,11 @@ class reportController extends BaseController {
             $this->divReportClasses[] = 'controller-' . slugify($this->report->getControllerName());
             
             $this->reportHtml = $ctrl->report();
+        }
+        
+        // no report selected? => show index
+        if ($this->reportNotFound == false && !$this->report) {
+            $this->showIndex = true;
         }
         
         

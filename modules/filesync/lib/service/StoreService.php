@@ -16,6 +16,8 @@ use core\exception\InvalidStateException;
 use filesync\model\StoreFile;
 use filesync\model\StoreFileRev;
 use core\exception\FileException;
+use filesync\form\ArchiveFileUploadForm;
+use core\exception\ObjectNotFoundException;
 
 class StoreService extends ServiceBase {
     
@@ -370,6 +372,43 @@ class StoreService extends ServiceBase {
         return $r;
     }
     
+    
+    public function saveArchiveFile(ArchiveFileUploadForm $form) {
+        $storeId = $form->getWidgetValue('store_id');
+        $store = $this->readStore($storeId);
+        
+        if (!$store) {
+            throw new ObjectNotFoundException('Store not found');
+        }
+        
+        // save file
+        $filename     = $_FILES['file']['name'];
+        $md5          = md5_file($_FILES['file']['tmp_name'], false);
+        $filesize     = $_FILES['file']['size'];
+        $lastmodified = date('Y-m-d H:i:s');
+        
+        $storeFile = $this->syncFile( $storeId, $filename, $md5, $filesize, $lastmodified, false, $_FILES['file']['tmp_name'] );
+        
+        
+        // save meta
+        $sfmDao = new StoreFileMetaDAO();
+        $sfm = $sfmDao->readByFile($storeFile->getStoreFileId());
+        $form->fill($sfm, array('store_file_id', 'subject', 'long_description', 'document_date'));
+        $customer_id = $form->getWidgetValue('customer_id');
+        
+        $sfm->setCompanyId(null);
+        $sfm->setPersonId(null);
+        
+        if (strpos($customer_id, 'company-') === 0) {
+            $sfm->setCompanyId((int)str_replace('company-', '', $customer_id));
+        }
+        if (strpos($customer_id, 'person-') === 0) {
+            $sfm->setPersonId((int)str_replace('person-', '', $customer_id));
+        }
+        $sfm->save();
+        
+        return $storeFile;
+    }
     
 }
 

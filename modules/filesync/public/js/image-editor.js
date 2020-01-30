@@ -72,6 +72,11 @@ function DocumentImageEditor(container, opts) {
 		
 		var w = cw;
 		var h = ih / iw * w;
+		
+		if (h > ch) {
+			h = ch;
+			w = iw / ih * h;
+		}
 
 		ctx.save();
 		

@@ -215,11 +215,16 @@ function ContainerBulkUpdate() {
 		$('#offer-table-container table thead .th-offer-status-description').after('<th class="th-offer-status-update">Bijwerken</th>');
 		
 		$('#offer-table-container table tbody tr').each(function(index, row) {
+			var record = $(row).data('record');
+
 			var td = $('<td class="td-update-status"><button /></td>');
 			td.find('button').text( me.description );
 			td.find('button').click(function() {
 				me.updateStatus( $(this).closest('tr') );
 			});
+			if (record.offer_status_id == me.offerStatusId) {
+				td.find('button').prop('disabled', true);
+			}
 
 			$(row).find('.td-offer-status-description').after( td );
 		});

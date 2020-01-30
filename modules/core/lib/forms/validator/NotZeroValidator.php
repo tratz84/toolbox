@@ -11,7 +11,7 @@ class NotZeroValidator extends BaseValidator {
         
     }
     
-    public function getMessage() { return 'Veld bevat geen waarde'; }
+    public function getMessage() { return t('Field contains no value'); }
     
     public function validate($widget) {
         

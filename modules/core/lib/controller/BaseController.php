@@ -19,6 +19,9 @@ class BaseController {
     
     protected $javascriptFiles = array();
     
+    protected $moduleName = null;
+    protected $controllerPath = null;
+    
     /**
      * @var \core\ObjectContainer
      */
@@ -28,6 +31,45 @@ class BaseController {
     public function __construct() {
         
     }
+    
+    
+    protected function getModuleName() {
+        if ($this->moduleName == null) {
+            $ref = new \ReflectionClass( get_class($this) );
+            
+            $filename_controller = $ref->getFileName();
+            
+            $dirs = \core\Context::getInstance()->getModuleDirs();
+            $found = null;
+            foreach($dirs as $d) {
+                $d = realpath($d);
+                if (strpos($filename_controller, $d) === 0) {
+                    $found = $d;
+                    break;
+                }
+            }
+            
+            // hmz
+            if (!$found) {
+                return null;
+            }
+            
+            $f = substr($filename_controller, strlen($d)+1);
+            $this->moduleName = substr($f, 0, strpos($f, DIRECTORY_SEPARATOR));
+            $this->controllerPath = substr($f, strlen($this->moduleName.'/controller/'), '-4');
+        }
+        
+        return $this->moduleName;
+    }
+    
+    public function getControllerPath() {
+        if ($this->controllerPath == null) {
+            $this->getModuleName();
+        }
+        
+        return $this->controllerPath;
+    }
+    
     
     public function addJavascript($url) { $this->javascriptFiles[] = $url; }
     
@@ -108,6 +150,7 @@ class BaseController {
             $this->templateFile = module_file($module, 'templates/'.$controllerDir.'/'.$this->actionTemplate.'.php');
         }
         $tpl = new \core\template\DefaultTemplate($this->templateFile);
+        $tpl->setVar('controller', $this);
         foreach($vars as $key => $val) {
             $tpl->setVar($key, $val);
         }

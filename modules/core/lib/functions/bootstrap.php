@@ -33,6 +33,19 @@ function bootstrapContext($contextName) {
     
 }
 
+
+/**
+ * is_installation_mode() - generate config-local.php?
+ */
+function is_installation_mode() {
+    if (defined('INSTALLATION_MODE') && INSTALLATION_MODE) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
 /**
  * is_standalone_installation() - single installation with only one default context?
  * 

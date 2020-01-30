@@ -215,11 +215,16 @@ function ContainerBulkUpdate() {
 		$('#invoice-table-container table thead .th-invoice-status-description').after('<th class="th-invoice-status-update">Bijwerken</th>');
 		
 		$('#invoice-table-container table tbody tr').each(function(index, row) {
+			var record = $(row).data('record');
+			
 			var td = $('<td class="td-update-status"><button /></td>');
 			td.find('button').text( me.description );
 			td.find('button').click(function() {
 				me.updateStatus( $(this).closest('tr') );
 			});
+			if (record.invoice_status_id == me.invoiceStatusId) {
+				td.find('button').prop('disabled', true);
+			}
 
 			$(row).find('.td-invoice-status-description').after( td );
 		});
