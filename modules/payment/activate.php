@@ -23,6 +23,43 @@ $sql = array();
 //     PRIMARY KEY (`payment_id`)
 // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
+$sql[] = "CREATE TABLE `payment__payment` (
+  `payment_id` int NOT NULL AUTO_INCREMENT,
+  `person_id` int DEFAULT NULL,
+  `company_id` int DEFAULT NULL,
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `note` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `payment_date` date DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  PRIMARY KEY (`payment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+
+$sql[] = "CREATE TABLE `payment__payment_line` (
+  `payment_line_id` int NOT NULL AUTO_INCREMENT,
+  `payment_id` int DEFAULT NULL,
+  `payment_method_id` int DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `bankaccountno` varchar(40) DEFAULT NULL,
+  `bankaccountno_contra` varchar(40) DEFAULT NULL,
+  `code` varchar(16) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `description1` text,
+  `description2` text,
+  `mutation_type` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`payment_line_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+
+$sql[] = "CREATE TABLE `payment__payment_ref` (
+  `payment_ref_id` int NOT NULL AUTO_INCREMENT,
+  `payment_id` int DEFAULT NULL,
+  `ref_object` varchar(32) DEFAULT NULL,
+  `ref_id` int DEFAULT NULL,
+  PRIMARY KEY (`payment_ref_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+
+
+
 $sql[] = "CREATE TABLE IF NOT EXISTS `payment__payment_method` (
     `payment_method_id` int(11) NOT NULL AUTO_INCREMENT,
     `code` varchar(16) COLLATE utf8mb4_general_ci DEFAULT NULL,
