@@ -106,7 +106,18 @@ pot.addColumn({
 	fieldName: 'payment_line_description1',
 	fieldDescription: 'Kenmerk',
 	fieldType: 'text',
-	searchable: false
+	searchable: false,
+	render: function(row) {
+		var d = $.trim(row.payment_line_description1);
+		
+		if (row.payment_line_sort == 0) {
+			var pd = $.trim(row.payment_description);
+			if (pd != '')
+				d = pd + '<br/>' + d;
+		}
+
+		return d;
+	}
 });
 
 pot.addColumn({

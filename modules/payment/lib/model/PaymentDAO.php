@@ -4,6 +4,8 @@
 namespace payment\model;
 
 
+use core\db\query\QueryBuilderWhere;
+
 class PaymentDAO extends \core\db\DAOObject {
 
 	public function __construct() {
@@ -47,6 +49,14 @@ class PaymentDAO extends \core\db\DAOObject {
 	    $qb->setGroupBy('payment__payment.payment_id');
 	    
 	    $qb->setOrderBy('payment__payment.payment_id desc');
+	    
+	    
+	    if (isset($opts['company_id']) && $opts['company_id']) {
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('payment__payment.company_id', '=', $opts['company_id']));
+	    }
+	    if (isset($opts['person_id']) && $opts['person_id']) {
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('payment__payment.person_id', '=', $opts['person_id']));
+	    }
 	    
 	    
 	    $sql = $qb->createSelect();
