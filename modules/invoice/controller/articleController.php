@@ -5,6 +5,7 @@ use core\controller\BaseController;
 use invoice\form\ArticleForm;
 use invoice\model\Article;
 use invoice\service\ArticleService;
+use invoice\service\InvoiceService;
 
 class articleController extends BaseController {
     
@@ -49,6 +50,17 @@ class articleController extends BaseController {
         
         $aForm = $this->oc->create(ArticleForm::class);
         $aForm->bind($a);
+        
+        
+        // new article? => set default vat
+        if (is_get() && $a->isNew()) {
+            $invoiceService = object_container_get(InvoiceService::class);
+            $vat = $invoiceService->readDefaultVat();
+            
+            if ($vat)
+                $aForm->getWidget('vat_id')->setValue( $vat->getVatId() );
+        }
+        
         
         if (is_post()) {
             $aForm->bind($_REQUEST);
