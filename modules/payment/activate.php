@@ -23,7 +23,7 @@ $sql = array();
 //     PRIMARY KEY (`payment_id`)
 // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
-$sql[] = "CREATE TABLE `payment__payment` (
+$sql[] = "CREATE TABLE IF NOT EXISTS `payment__payment` (
   `payment_id` int NOT NULL AUTO_INCREMENT,
   `person_id` int DEFAULT NULL,
   `company_id` int DEFAULT NULL,
@@ -36,7 +36,7 @@ $sql[] = "CREATE TABLE `payment__payment` (
   PRIMARY KEY (`payment_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
 
-$sql[] = "CREATE TABLE `payment__payment_line` (
+$sql[] = "CREATE TABLE IF NOT EXISTS `payment__payment_line` (
   `payment_line_id` int NOT NULL AUTO_INCREMENT,
   `payment_id` int DEFAULT NULL,
   `payment_method_id` int DEFAULT NULL,
@@ -52,7 +52,7 @@ $sql[] = "CREATE TABLE `payment__payment_line` (
   PRIMARY KEY (`payment_line_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
 
-$sql[] = "CREATE TABLE `payment__payment_ref` (
+$sql[] = "CREATE TABLE IF NOT EXISTS `payment__payment_ref` (
   `payment_ref_id` int NOT NULL AUTO_INCREMENT,
   `payment_id` int DEFAULT NULL,
   `ref_object` varchar(32) DEFAULT NULL,
@@ -77,6 +77,29 @@ $sql[] = "CREATE TABLE IF NOT EXISTS `payment__payment_method` (
     UNIQUE KEY `uq_code` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
+$sql[] = "CREATE TABLE IF NOT EXISTS payment__payment_import (
+    payment_import_id int primary key auto_increment,
+    description varchar(255),
+    created datetime
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+
+$sql[] = "CREATE TABLE IF NOT EXISTS payment__payment_import_line (
+    payment_import_line_id int primary key auto_increment,
+    payment_import_id int,
+    debet_credit varchar(1),
+    amount decimal(10, 2),
+    bankaccountno varchar(64),
+    bankaccountno_contra varchar(64),
+    payment_date date,
+    name varchar(255),
+    description varchar(512),
+    code varchar(16),
+    mutation_type varchar(32),
+    company_id int,
+    person_id int,
+    invoice_id int,
+    import_status varchar(16)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 
 $dbh = DatabaseHandler::getConnection('default');

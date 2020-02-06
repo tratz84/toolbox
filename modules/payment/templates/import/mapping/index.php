@@ -20,7 +20,7 @@
 
 
 
-    <?php include_component('payment', 'import/sheet', 'import_sample', array('sheet_file' => $tmpfile))?>
+    <?php include_component('payment', 'import/mapping', 'import_sample', array('sheet_file' => $tmpfile))?>
     
     
     <script>
@@ -44,7 +44,7 @@
     	data['sample_row'] = $('[name=sample_row]:checked').val();
     
     	$.ajax({
-    		url: appUrl('/?m=payment&c=import/sheet&a=sample_data'),
+    		url: appUrl('/?m=payment&c=import/mapping&a=sample_data'),
     		data: data,
     		success: function(data, xhr, textStatus) {
     			if (data && data.success) {

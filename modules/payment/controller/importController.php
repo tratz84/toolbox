@@ -22,7 +22,7 @@ class importController extends BaseController {
                     $ext = file_extension($_FILES['file']['name']);
                     $file = copy_data_tmp($_FILES['file']['tmp_name'], 'payment-import-'.date('YmdHis').'.'.$ext);
                     
-                    redirect('/?m=payment&c=import/sheet&f='.urlencode(basename($file)));
+                    redirect('/?m=payment&c=import/mapping&f='.urlencode(basename($file)));
                 }
                 
             }

@@ -6,7 +6,7 @@ use core\parser\SheetReader;
 use payment\form\PaymentImportMappingForm;
 use payment\import\PaymentSheetImporter;
 
-class sheetController extends BaseController {
+class mappingController extends BaseController {
     
     
     public function action_index() {
@@ -49,6 +49,16 @@ class sheetController extends BaseController {
             // save mapping-stage
             $data = $this->form->asArray(['flat' => true]);
             save_data('/payments/mapping-'.$uq_sheet, serialize($data));
+            
+            
+            if (get_var('default-button')) {
+                report_user_message('Mapping opgeslagen');
+            }
+            
+            if (get_var('stage-changes')) {
+                redirect('/?m=payment&c=import/stage&a=create&f='.urlencode($f));
+            }
+            
         }
         
         
