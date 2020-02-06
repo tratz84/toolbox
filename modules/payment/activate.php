@@ -86,6 +86,7 @@ $sql[] = "CREATE TABLE IF NOT EXISTS payment__payment_import (
 $sql[] = "CREATE TABLE IF NOT EXISTS payment__payment_import_line (
     payment_import_line_id int primary key auto_increment,
     payment_import_id int,
+    transaction_id int,
     debet_credit varchar(1),
     amount decimal(10, 2),
     bankaccountno varchar(64),

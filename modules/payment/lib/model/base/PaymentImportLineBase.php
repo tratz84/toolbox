@@ -29,6 +29,15 @@ class PaymentImportLineBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'transaction_id' => 
+  array (
+    'Field' => 'transaction_id',
+    'Type' => 'int',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
   'debet_credit' => 
   array (
     'Field' => 'debet_credit',
@@ -159,6 +168,10 @@ class PaymentImportLineBase extends \core\db\DBObject {
 		
 	public function setPaymentImportId($p) { $this->setField('payment_import_id', $p); }
 	public function getPaymentImportId() { return $this->getField('payment_import_id'); }
+	
+		
+	public function setTransactionId($p) { $this->setField('transaction_id', $p); }
+	public function getTransactionId() { return $this->getField('transaction_id'); }
 	
 		
 	public function setDebetCredit($p) { $this->setField('debet_credit', $p); }
