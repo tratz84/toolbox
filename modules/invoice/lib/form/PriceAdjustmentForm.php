@@ -11,7 +11,7 @@ class PriceAdjustmentForm extends BaseForm {
     
     
     public function __construct() {
-        
+        parent::__construct();
         
         $this->addWidget(new DatePickerField('start_date', '', 'Startdatum'));
         

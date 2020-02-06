@@ -95,7 +95,7 @@ class ListFormWidget extends ListWidget {
     }
     
     
-    public function asArray() {
+    public function asArray($opts=array()) {
         $r = array();
         
         $fields = array_merge( $this->fields, $this->publicFields );

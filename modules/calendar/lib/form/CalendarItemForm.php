@@ -14,6 +14,7 @@ use core\forms\validator\NotEmptyValidator;
 class CalendarItemForm extends BaseForm {
     
     public function __construct() {
+        parent::__construct();
         
         $this->addWidget(new HiddenField('edit_derived_item'));
         $this->addWidget(new HiddenField('calendar_id'));

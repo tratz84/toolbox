@@ -19,6 +19,7 @@ class ArticleForm extends BaseForm {
     
     
     public function __construct() {
+        parent::__construct();
         
         $this->addWidget( new HiddenField('article_id', '', 'Id') );
 //         $this->addWidget( new HiddenField('article_type', 'normal', 'Artikel type') );      // ie normal, rental, ...

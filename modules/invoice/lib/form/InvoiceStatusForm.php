@@ -17,6 +17,7 @@ class InvoiceStatusForm extends BaseForm {
     
     
     public function __construct() {
+        parent::__construct();
         
         $this->addKeyField('invoice_status_id');
         

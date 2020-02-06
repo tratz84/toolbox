@@ -9,7 +9,7 @@ use core\db\DBObject;
 
 class BaseForm extends WidgetContainer {
     
-    protected $submitText = 'Opslaan';
+    protected $submitButtons = array();
     
     protected $htmlAttributes = array();
     
@@ -30,6 +30,8 @@ class BaseForm extends WidgetContainer {
         
         $this->setHtmlAttribute('data-form-class', get_class($this));
         
+        $this->submitButtons['default-button'] = new SubmitField('default-button', t('Save'));
+        
     }
     
     public static function createAndBind(DBObject $obj) {
@@ -46,8 +48,11 @@ class BaseForm extends WidgetContainer {
     public function isObjectLocked() { return $this->objectLocked ? true : false; }
     
     
-    public function setSubmitText($t) { $this->submitText = $t; }
-    public function getSubmitText() { return $this->submitText; }
+    public function setSubmitText($t) { $this->submitButtons['default-button']->setValue( $t ); }
+    public function getSubmitText() { return $this->submitButtons['default-button']->getValue( ); }
+    
+    public function addButton($name, $label) { $this->submitButtons[$name] = new SubmitField($name, $label); }
+    
     
     public function addJavascript($name, $script) {
         $this->javascript[$name] = $script;
@@ -280,7 +285,12 @@ class BaseForm extends WidgetContainer {
             $html .= $w->render() . "\n";
         }
         
-        $html .= '<div class="submit-container"><input type="submit" value="'.esc_attr($this->submitText).'" /></div>' . "\n";
+        $html .= '<div class="submit-container">';
+        foreach($this->submitButtons as $key => $submitField) {
+            $html .= $submitField->render() . ' ';
+        }
+        $html .= '</div>' . PHP_EOL;
+//         <input type="submit" value="'.esc_attr($this->submitText).'" /></div>' . "\n";
         
         $html .= '</form>' . "\n\n";
         

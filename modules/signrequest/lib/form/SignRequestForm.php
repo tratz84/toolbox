@@ -16,6 +16,7 @@ use webmail\service\EmailService;
 class SignRequestForm extends BaseForm {
     
     public function __construct() {
+        parent::__construct();
         
         $this->enctypeToMultipartFormdata();
         

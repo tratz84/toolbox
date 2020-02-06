@@ -32,6 +32,10 @@ class PaymentImportMappingForm extends BaseForm {
         $this->addWidget( $tc );
         
         
+        $this->setSubmitText('Save mapping');
+        $this->addButton('stage-changes', 'Save mapping + stage payments');
+        
+        
     }
     
     public function setImportHeaders($arrHeaders) {

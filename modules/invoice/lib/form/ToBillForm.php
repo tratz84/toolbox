@@ -24,6 +24,7 @@ class ToBillForm extends BaseForm {
     
     
     public function __construct() {
+        parent::__construct();
         
         $this->addKeyField('to_bill_id');
         

@@ -13,6 +13,7 @@ class CompanyTypeForm extends BaseForm {
     
     
     public function __construct() {
+        parent::__construct();
         
         $this->addKeyField('company_type_id');
         

@@ -24,6 +24,7 @@ use invoice\service\OfferService;
 class OfferForm extends BaseForm {
     
     public function __construct() {
+        parent::__construct();
         
         $this->addKeyField('offer_id');
         

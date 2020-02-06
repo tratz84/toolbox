@@ -20,6 +20,7 @@ use project\service\ProjectService;
 class ProjectHourForm extends BaseForm {
     
     public function __construct($company_id, $person_id) {
+        parent::__construct();
         
         $this->addKeyField('project_hour_id');
         

@@ -21,6 +21,7 @@ class StoreFileMetaForm extends BaseForm {
     
     
     public function __construct() {
+        parent::__construct();
         
         $this->addKeyField('store_file_id');
         

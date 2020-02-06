@@ -14,6 +14,7 @@ use core\forms\validator\PercentageValidator;
 class VatForm extends BaseForm {
     
     public function __construct() {
+        parent::__construct();
         
         $this->addKeyField('vat_id');
         

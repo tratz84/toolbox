@@ -15,6 +15,7 @@ use core\forms\HiddenField;
 class RecentInvoiceWidgetForm extends BaseForm {
     
     public function __construct() {
+        parent::__construct();
         
         $this->disableSubmit();
         

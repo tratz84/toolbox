@@ -20,6 +20,8 @@ class ConnectorForm extends BaseForm {
     protected $connector = null;
     
     public function __construct(Connector $connector) {
+        parent::__construct();
+        
         $this->connector = $connector;
         
         $this->addKeyField('connector_id');

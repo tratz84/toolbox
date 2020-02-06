@@ -11,10 +11,11 @@ class PaymentImportForm extends BaseForm {
     
     
     public function __construct() {
+        parent::__construct();
         
         $this->enctypeToMultipartFormdata();
         
-        $this->setSubmitText('Pre-import');
+        $this->setSubmitText('Map fields');
         
         $mapTypes = array();
         $mapTypes['sheet'] = 'CSV / XLS';

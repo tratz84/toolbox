@@ -19,6 +19,7 @@ class ProjectHourReportForm extends BaseForm {
 
 
     public function __construct() {
+        parent::__construct();
 
         // $this->addWidget(new HiddenField('m', 'report'));
         // $this->addWidget(new HiddenField('c', 'report'));

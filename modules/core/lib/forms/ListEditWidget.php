@@ -59,7 +59,7 @@ abstract class ListEditWidget extends ListWidget {
         $this->objects[] = $obj;
     }
 
-    public function asArray() {
+    public function asArray($opts=array()) {
         $r = array();
         
         $fields = array_keys($this->widgetNames);

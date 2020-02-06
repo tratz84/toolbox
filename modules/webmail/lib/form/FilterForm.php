@@ -15,6 +15,7 @@ class FilterForm extends BaseForm {
     
     
     public function __construct() {
+        parent::__construct();
         
         $this->addKeyField('filter_id');
         

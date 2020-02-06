@@ -18,6 +18,7 @@ use core\forms\validator\NotEmptyValidator;
 class ProjectForm extends BaseForm {
     
     public function __construct() {
+        parent::__construct();
         
         $this->addKeyField('project_id');
         

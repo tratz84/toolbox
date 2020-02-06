@@ -17,6 +17,7 @@ class OfferStatusForm extends BaseForm {
     
     
     public function __construct() {
+        parent::__construct();
         
         $this->addKeyField('offer_status_id');
         

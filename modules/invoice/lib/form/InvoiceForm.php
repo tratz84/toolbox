@@ -24,6 +24,7 @@ use core\forms\CheckboxField;
 class InvoiceForm extends BaseForm {
 
     public function __construct() {
+        parent::__construct();
         
         $this->addKeyField('invoice_id');
         

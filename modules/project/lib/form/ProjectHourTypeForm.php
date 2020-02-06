@@ -11,6 +11,7 @@ class ProjectHourTypeForm extends BaseForm {
     
     
     public function __construct() {
+        parent::__construct();
         
         $this->addKeyField('project_hour_type_id');
         

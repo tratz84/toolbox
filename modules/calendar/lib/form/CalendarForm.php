@@ -14,6 +14,8 @@ class CalendarForm extends BaseForm {
     
     
     public function __construct() {
+        parent::__construct();
+        
         $this->addWidget( new HiddenField('calendar_id', '', 'Id') );
         
         $this->addWidget( new CheckboxField('active', '', 'Actief') );

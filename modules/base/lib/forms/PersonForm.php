@@ -15,7 +15,7 @@ class PersonForm extends BaseForm {
     
     
     public function __construct() {
-        
+        parent::__construct();
         
         $this->addKeyField('person_id');
         

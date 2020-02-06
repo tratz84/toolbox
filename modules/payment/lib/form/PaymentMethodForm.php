@@ -17,6 +17,7 @@ class PaymentMethodForm extends BaseForm {
     
     
     public function __construct() {
+        parent::__construct();
         
         $this->addKeyField('payment_method_id');
         
