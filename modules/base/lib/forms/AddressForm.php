@@ -14,12 +14,14 @@ class AddressForm extends BaseForm {
     public function __construct() {
         parent::__construct();
         
+        $this->addJavascript('address-form', appUrl('?mpf=/module/base/js/address-form.js'));
+        
         $customerService = ObjectContainer::getInstance()->get(CustomerService::class);
         $countries = $customerService->getCountries();
         
-        $this->addWidget( new TextField('street',    '', t('Street')) );
-        $this->addWidget( new TextField('street_no', '', t('Housenumber')) );
         $this->addWidget( new TextField('zipcode',   '', t('Zipcode')) );
+        $this->addWidget( new TextField('street_no', '', t('Housenumber')) );
+        $this->addWidget( new TextField('street',    '', t('Street')) );
         $this->addWidget( new TextField('city',      '', t('City')) );
         
         $this->addWidget( new SelectField('country_id', '148', $countries, t('Country')) );
