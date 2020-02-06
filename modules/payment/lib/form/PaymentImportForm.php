@@ -17,7 +17,7 @@ class PaymentImportForm extends BaseForm {
         $this->setSubmitText('Import');
         
         $mapTypes = array();
-        $mapTypes['csv'] = 'CSV';
+        $mapTypes['sheet'] = 'CSV / XLS';
         $this->addWidget(new SelectField('filetype', '', $mapTypes, 'Soort bestand'));
         
         
@@ -32,8 +32,15 @@ class PaymentImportForm extends BaseForm {
         $this->addValidator('file', function($form) {
             if (isset($_FILES['file']['tmp_name']) && file_exists($_FILES['file']['tmp_name']) && filesize($_FILES['file']['tmp_name']) > 0) {
             } else {
-                return 'Upload failed';
+                return t('Upload failed');
             }
+            
+            $ext = file_extension($_FILES['file']['name']);
+            
+            if (in_array($ext, array('csv', 'xls', 'xlsx')) == false) {
+                return t('Unknown filetype');
+            }
+            
         });
         
     }

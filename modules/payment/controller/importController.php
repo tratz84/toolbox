@@ -16,13 +16,13 @@ class importController extends BaseController {
             
             if ($this->form->validate()) {
                 // TODO: handle
-                
                 $filetype = $this->form->getWidgetValue('filetype');
                 
-                if ($filetype == 'csv') {
-                    $file = copy_data_tmp($_FILES['file']['tmp_name'], 'payment-import-'.date('YmdHis').'.csv');
+                if ($filetype == 'sheet') {
+                    $ext = file_extension($_FILES['file']['name']);
+                    $file = copy_data_tmp($_FILES['file']['tmp_name'], 'payment-import-'.date('YmdHis').'.'.$ext);
                     
-                    redirect('/?m=payment&c=import/csv&f='.urlencode(basename($file)));
+                    redirect('/?m=payment&c=import/sheet&f='.urlencode(basename($file)));
                 }
                 
             }
