@@ -185,12 +185,17 @@ class WidgetContainer extends BaseWidget {
     }
     
     
-    public function asArray() {
+    public function asArray($opts=array()) {
         $r = array();
         
         foreach($this->widgets as $w) {
             if (is_a($w, WidgetContainer::class)) {
-                $r[$w->getName()] = $w->asArray();
+                // TODO: remove 'flat' option & make it default?
+                if (isset($opts['flat']) && $opts['flat']) {
+                    $r = array_merge($r, $w->asArray());
+                } else {
+                    $r[$w->getName()] = $w->asArray();
+                }
             } else {
                 $r[$w->getName()] = $w->getValue();
             }

@@ -328,6 +328,56 @@ function save_upload($paramFile, $path) {
     }
 }
 
+function save_data($file, $data) {
+    $ctx = Context::getInstance();
+    
+    $datadirContext = realpath($ctx->getDataDir());
+    if ($datadirContext == false)
+        throw new FileException('DATA_DIR doesn\'t exist');
+        
+    if (file_exists($datadirContext) == false) {
+        if (mkdir($datadirContext, 0755, true) == false) {
+            throw new FileException('Unable to create DATA_DIR for ' . $ctx->getContextName());
+        }
+    }
+    
+    $datadirContext = realpath($datadirContext);
+    
+    // shouldn't/cant happen
+    if ($datadirContext == false) {
+        throw new FileException('Data directory not found for ' . $ctx->getContextName());
+    }
+    
+    $fullpath = $datadirContext . '/' . $file;
+    $filename = basename($file);
+    
+    $dir = dirname( $fullpath );
+    if (file_exists($dir) == false) {
+        if (!mkdir($dir, 0755, true))
+            return false;
+    }
+    
+    // check if dir is within contextName's path
+    $dir = realpath($dir);
+    if (strpos($dir, $datadirContext) !== 0) {
+        throw new FileException('Accessing file out of DATA_DIR for context (1)');
+    }
+    
+    $fullpath = $dir . '/' . $filename;
+    if (strpos($fullpath, $datadirContext) !== 0) {
+        throw new FileException('Accessing file out of DATA_DIR for context (2)');
+    }
+    
+    $r = file_put_contents($fullpath, $data);
+    
+    if ($r !== false) {
+        return substr(realpath( $fullpath ), strlen($datadirContext)+1);
+    } else {
+        return false;
+    }
+}
+
+
 function delete_data_file($f) {
     $file = get_data_file($f);
     
@@ -457,7 +507,8 @@ function copy_data_tmp($file, $tmpname=null) {
     // create temp-folder
     $tmpfolder = get_data_file('/tmp');
     if ($tmpfolder == false) {
-        $f = get_data_file('/');
+        $ctx = Context::getInstance();
+        $f = $ctx->getDataDir();
         
         if (mkdir($f . '/tmp', 0755) == false) {
             throw new FileException('Unable to create temp-folder');

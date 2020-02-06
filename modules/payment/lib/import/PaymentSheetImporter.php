@@ -72,12 +72,34 @@ class PaymentSheetImporter {
             }
         }
         
+        $matches = array();
+        $bac = preg_replace('/[^a-zA-Z0-9 ]/', '', $data['bankaccountno_contra']);
+        if (preg_match('/[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16}/', $bac, $matches)) {
+            $data['bankaccountno_contra'] = $matches[0];
+        } else {
+            $data['bankaccountno_contra'] = '';
+        }
+        
+        
         if (preg_match('/^\\d{8}$/', $data['payment_date'])) {
             $year = (int)substr($data['payment_date'], 0, 4);
             if ($year > date('Y')-100 && $year < date('Y')+100) {
                 $data['payment_date'] = $year . '-' . substr($data['payment_date'], 4, 2) . '-' . substr($data['payment_date'], 6, 2);
             }
         }
+
+        // ABN-business rule
+        if ($data['name'] == $data['description']) {
+            $matches = array();
+            if (preg_match('/Naam:(.*?)\\S+:/', $data['name'], $matches)) {
+                $name = trim($matches[1]);
+                $name = ltrim($name, '.');
+                if ($name) {
+                    $data['name'] = $name;
+                }
+            }
+        }
+        
         
     }
     

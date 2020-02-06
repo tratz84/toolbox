@@ -17,18 +17,40 @@ class sheetController extends BaseController {
             throw new InvalidStateException('Sheet file not found');
         }
         
+        
         $sr = new SheetReader( $fullpath );
-        if ($sr->read()) {
-            $head = $sr->getRow(0);
-            implode(',', $head);
-            
-            $this->form = new PaymentImportMappingForm();
-            $this->form->setImportHeaders( $head );
-            
-            $this->tmpfile = basename($fullpath);
-        } else {
+        if ($sr->read() == false) {
             $this->error = 'Unable to read sheet';
+            return $this->render();
         }
+        
+        
+        $head = $sr->getRow(0);                         // fetch 1st row (head)
+        $uq_sheet = md5( implode(',', $head) );         // unique key for sheet
+        
+        $this->form = new PaymentImportMappingForm();
+        $this->form->setImportHeaders( $head );
+        
+        $this->tmpfile = basename($fullpath);
+        
+        if (is_get()) {
+            if ($mappingfile = get_data_file('/payments/mapping-'.$uq_sheet)) {
+                $data = file_get_contents( $mappingfile );
+                $arr = @unserialize($data);
+                if ($arr && is_array($arr)) {
+                    $this->form->bind( $arr );
+                }
+            }
+        }
+        
+        if (is_post()) {
+            $this->form->bind($_REQUEST);
+            
+            // save mapping-stage
+            $data = $this->form->asArray(['flat' => true]);
+            save_data('/payments/mapping-'.$uq_sheet, serialize($data));
+        }
+        
         
         return $this->render();
     }
@@ -87,7 +109,8 @@ class sheetController extends BaseController {
         $psi->setMapping( $mapping );
         $psi->parseSheet();
         
-        $r = $psi->parseRow(1);
+        $row = is_numeric(get_var('sample_row')) ? get_var('sample_row') : 1;
+        $r = $psi->parseRow($row);
         
         $this->json(array(
             'success' => true,

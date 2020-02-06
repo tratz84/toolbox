@@ -39,7 +39,7 @@ class SheetReader {
             return $this->readCsv();
         }
         else if ($ext == 'xls' || $ext == 'xlsx') {
-            $this->readXls();
+            return $this->readXls();
         }
         else {
             return false;
@@ -89,6 +89,8 @@ class SheetReader {
         
         // BOEM :)
         $this->rows = $sheet->toArray();
+        
+        return true;
     }
     
 }
