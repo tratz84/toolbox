@@ -5,6 +5,8 @@ namespace payment\import;
 
 use core\parser\SheetReader;
 use core\exception\InvalidStateException;
+use payment\model\PaymentImportLine;
+
 
 class PaymentSheetImporter {
     
@@ -22,6 +24,14 @@ class PaymentSheetImporter {
     
     public function setSheetFile($f) { $this->sheetFile = $f; }
     public function setMapping($m) { $this->mapping = $m; }
+    
+    public function getRowCount() {
+        if (is_array($this->rows)) {
+            return count($this->rows);
+        } else {
+            return -1;
+        }
+    }
     
     public function parseSheet() {
         $sr = new SheetReader( $this->sheetFile );
@@ -131,6 +141,26 @@ class PaymentSheetImporter {
 //         var_export($m);exit;
         
         return $m;
+    }
+    
+    public function createPaymentImportLine($rowNo) {
+        $r = $this->parseRow( $rowNo );
+        
+        
+        $pil = new PaymentImportLine();
+        $pil->setDebetCredit( $r['debet_credit'] );
+        $pil->setAmount( $r['amount'] );
+        $pil->setBankaccountno( $r['bankaccountno'] );
+        $pil->setBankaccountnoContra( $r['bankaccountno_contra'] );
+        $pil->setPaymentDate( $r['payment_date'] );
+        $pil->setName( $r['name'] );
+        $pil->setDescription( $r['description'] );
+        $pil->setCode( $r['code'] );
+        $pil->setMutationType( $r['mutation_type'] );
+        
+        $pil->generateTransactionId();
+        
+        return $pil;
     }
     
     

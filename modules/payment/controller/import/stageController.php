@@ -6,6 +6,8 @@ use core\controller\BaseController;
 use core\exception\InvalidStateException;
 use core\parser\SheetReader;
 use payment\form\PaymentImportMappingForm;
+use payment\service\PaymentImportService;
+
 
 class stageController extends BaseController {
     
@@ -40,11 +42,21 @@ class stageController extends BaseController {
         $head = $sr->getRow(0);                         // fetch 1st row (head)
         $uq_sheet = md5( implode(',', $head) );         // unique key for sheet
         
-        $this->form = new PaymentImportMappingForm();
-        $this->form->setImportHeaders( $head );
+        $f = get_data_file( '/payments/mapping-'.$uq_sheet );
+        $mapping = @unserialize( file_get_contents($f) );
         
-        $this->tmpfile = basename($fullpath);
+        if ($mapping == false || is_array($mapping) == false) {
+            throw new InvalidStateException('Mapping not found');
+        }
         
+        
+        $piService = object_container_get(PaymentImportService::class);
+        $pi = $piService->stageImport( $fullpath, $mapping );
+        
+        redirect('/?m=payment&c=import/stage&a=import&id='.$pi->getPaymentImportId());
+    }
+    
+    public function action_import() {
         
     }
     
