@@ -31,25 +31,6 @@ $(document).ready(function() {
 	$('.table-container.import-fields').find('select').change(function() {
 		load_import_sample();
 		
-		/*
-		var postdata = {};
-		$('.table-container.import-fields').find('select').each(function(index, node) {
-			var name = $(node).attr('name');
-			var val = $(node).val();
-
-			postdata[name] = val;
-		});
-
-		postdata['sheet_file'] = <?= json_encode($tmpfile) ?>;
-		
-		$.ajax({
-			url: appUrl('/?m=payment&c=import/sheet&a=sample_data'),
-			data: postdata,
-			success: function(data, xhr, textStatus) {
-				// TODO: set values
-				
-			}
-		});*/
 	});
 });
 
@@ -59,9 +40,16 @@ function load_import_sample() {
 
 	$.ajax({
 		url: appUrl('/?m=payment&c=import/sheet&a=sample_data'),
-		data,
+		data: data,
 		success: function(data, xhr, textStatus) {
-			console.log( data );
+			if (data && data.success) {
+				for (x in data.sample) {
+					console.log(x);
+					var inp = $('.table-container.import-fields').find('[name=example_' + x + ']');
+
+					inp.closest('div.widget').find('span').text( data.sample[x] );
+				}
+			}
 		}
 	});
 	

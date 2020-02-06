@@ -14,7 +14,7 @@ class PaymentImportForm extends BaseForm {
         
         $this->enctypeToMultipartFormdata();
         
-        $this->setSubmitText('Import');
+        $this->setSubmitText('Pre-import');
         
         $mapTypes = array();
         $mapTypes['sheet'] = 'CSV / XLS';

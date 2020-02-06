@@ -15,7 +15,7 @@ try {
         $el->setContextName($ctx->getContextName());
         if ($ctx->getUser())
             $el->setUserId($ctx->getUser()->getUserId());
-        $el->setRequestUri($_SERVER['REQUEST_URI']);
+        $el->setRequestUri(substr($_SERVER['REQUEST_URI'], 0, 255));
         $el->setMessage($ex->getMessage());
         
         $stacktrace = '';

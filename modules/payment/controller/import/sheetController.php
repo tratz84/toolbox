@@ -71,22 +71,28 @@ class sheetController extends BaseController {
         
         $mapping = array();
         $chars_skip = strlen('col-');
-        $mapping['debet_credit']         = substr($_POST['debet_credit'],         $chars_skip);
-        $mapping['amount']               = substr($_POST['amount'],               $chars_skip);
-        $mapping['bankaccountno']        = substr($_POST['bankaccountno'],        $chars_skip);
-        $mapping['bankaccountno_contra'] = substr($_POST['bankaccountno_contra'], $chars_skip);
-        $mapping['payment_date']         = substr($_POST['payment_date'],         $chars_skip);
-        $mapping['name']                 = substr($_POST['name'],                 $chars_skip);
-        $mapping['description']          = substr($_POST['description'],          $chars_skip);
-        $mapping['code']                 = substr($_POST['code'],                 $chars_skip);
-        $mapping['mutation_type']        = substr($_POST['mutation_type'],        $chars_skip);
+        $mapping['debet_credit']         = substr(get_var('debet_credit'),         $chars_skip);
+        $mapping['amount']               = substr(get_var('amount'),               $chars_skip);
+        $mapping['bankaccountno']        = substr(get_var('bankaccountno'),        $chars_skip);
+        $mapping['bankaccountno_contra'] = substr(get_var('bankaccountno_contra'), $chars_skip);
+        $mapping['payment_date']         = substr(get_var('payment_date'),         $chars_skip);
+        $mapping['name']                 = substr(get_var('name'),                 $chars_skip);
+        $mapping['description']          = substr(get_var('description'),          $chars_skip);
+        $mapping['code']                 = substr(get_var('code'),                 $chars_skip);
+        $mapping['mutation_type']        = substr(get_var('mutation_type'),        $chars_skip);
         
         
         $psi = new PaymentSheetImporter();
         $psi->setSheetFile($fullpath);
         $psi->setMapping( $mapping );
+        $psi->parseSheet();
         
+        $r = $psi->parseRow(1);
         
+        $this->json(array(
+            'success' => true,
+            'sample' => $r
+        ));
     }
     
     

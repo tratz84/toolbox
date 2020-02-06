@@ -21,7 +21,7 @@ class PaymentImportMappingForm extends BaseForm {
         $tc->addRow('Bij/af',          new SelectField('debet_credit',         '', array(), 'Bij/af'),          new HtmlField('example_debet_credit'));
         $tc->addRow('Bedrag',          new SelectField('amount',               '', array(), 'Bedrag'),          new HtmlField('example_amount'));
         $tc->addRow('Rekeningnr',      new SelectField('bankaccountno',        '', array(), 'Rekeningnr'),      new HtmlField('example_bankaccountno'));
-        $tc->addRow('Tegenrekening',   new SelectField('bankaccountno_contra', '', array(), 'Tegenrekening'),   new HtmlField('example_bankaccountno_extra'));
+        $tc->addRow('Tegenrekening',   new SelectField('bankaccountno_contra', '', array(), 'Tegenrekening'),   new HtmlField('example_bankaccountno_contra'));
         $tc->addRow('Transactiedatum', new SelectField('payment_date',         '', array(), 'Transactiedatum'), new HtmlField('example_payment_date'));
         $tc->addRow('Naam',            new SelectField('name',                 '', array(), 'Naam'),            new HtmlField('example_name'));
         
