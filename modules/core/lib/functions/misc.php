@@ -1061,6 +1061,16 @@ function slugify($str) {
     return $str;
 }
 
+function limit_text($str, $maxlen, $suf='...') {
+    if (strlen($str) < $maxlen) {
+        return $str;
+    }
+    
+    $str = substr($str, 0, $maxlen-(strlen($suf))) . $suf;
+    
+    return $str;
+}
+
 /**
  * to_php_string() - escapes a string for insertion in php-code
  * 

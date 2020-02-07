@@ -23,7 +23,16 @@ class PaymentSheetImporter {
     
     
     public function setSheetFile($f) { $this->sheetFile = $f; }
-    public function setMapping($m) { $this->mapping = $m; }
+    public function setMapping($m) {
+        $this->mapping = array();
+        foreach($m as $key => $colname) {
+            if (strpos($colname, 'col-') === 0) {
+                // 4 = strlen('col-')
+                $colname = substr($colname, 4);
+            }
+            $this->mapping[$key] = $colname;
+        }
+    }
     
     public function getRowCount() {
         if (is_array($this->rows)) {
@@ -145,7 +154,6 @@ class PaymentSheetImporter {
     
     public function createPaymentImportLine($rowNo) {
         $r = $this->parseRow( $rowNo );
-        
         
         $pil = new PaymentImportLine();
         $pil->setDebetCredit( $r['debet_credit'] );
