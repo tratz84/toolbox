@@ -19,7 +19,7 @@
     <div class="list-available-modules">
         <?php foreach($availableModules as $m) : ?>
         <?php $moduleEnabled = @$settings[$m->getTag().'Enabled'] ? true : false; ?>
-        <div class="widget text-field-widget module-line module-<?= slugify($m->getName()) ?>" style="<?= $moduleEnabled ? 'background-color: #c6f3ce;' : '' ?>">
+        <div class="widget text-field-widget module-line module-<?= slugify($m->getName()) ?> <?= $moduleEnabled ? 'module-enabled' : '' ?>">
         	<label>
         		<?= esc_html($m->getName()) ?>
         		<?= infopopup($m->getInfoText()) ?>
