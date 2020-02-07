@@ -62,6 +62,12 @@ class MysqlQueryBuilder extends QueryBuilder {
         
         $fields = array_merge($fields, $this->selectFunctions);
         
+        // add functions
+        foreach($this->selectFunctions as $func) {
+            $fields[] = $func;
+        }
+        
+        
         if (count($fields) == 0) {
             $fields[] = '*';
         }

@@ -29,6 +29,15 @@ class PaymentImportBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'status' => 
+  array (
+    'Field' => 'status',
+    'Type' => 'varchar(16)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
   'created' => 
   array (
     'Field' => 'created',
@@ -51,6 +60,10 @@ class PaymentImportBase extends \core\db\DBObject {
 		
 	public function setDescription($p) { $this->setField('description', $p); }
 	public function getDescription() { return $this->getField('description'); }
+	
+		
+	public function setStatus($p) { $this->setField('status', $p); }
+	public function getStatus() { return $this->getField('status'); }
 	
 		
 	public function setCreated($p) { $this->setField('created', $p); }

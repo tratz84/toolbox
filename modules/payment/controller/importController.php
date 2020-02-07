@@ -3,6 +3,7 @@
 
 use core\controller\BaseController;
 use payment\form\PaymentImportForm;
+use payment\service\PaymentImportService;
 
 class importController extends BaseController {
     
@@ -31,5 +32,30 @@ class importController extends BaseController {
         return $this->render();
     }
     
+    public function action_search() {
+        
+        $pageNo = isset($_REQUEST['pageNo']) ? (int)$_REQUEST['pageNo'] : 0;
+        $limit = $this->ctx->getPageSize();
+        
+        $piService = $this->oc->get(PaymentImportService::class);
+        
+        $r = $piService->searchImport($pageNo*$limit, $limit, $_REQUEST);
+        
+        $arr = array();
+        $arr['listResponse'] = $r;
+        
+        
+        $this->json($arr);
+    }
+    
+    
+    
+    
+    public function action_delete() {
+        $piService = object_container_get(PaymentImportService::class);
+        $piService->deleteImport((int)get_var('id'));
+        
+        redirect('/?m=payment&c=import');
+    }
     
 }

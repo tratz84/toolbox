@@ -15,12 +15,16 @@ class stageController extends BaseController {
     
     
     public function action_index() {
+        $id = get_var('id');
+        
+        $piService = object_container_get(PaymentImportService::class);
+        $this->pi = $piService->readImport($id);
+        
         
         
         
         return $this->render();
     }
-    
     
     
     public function action_create() {
@@ -53,7 +57,7 @@ class stageController extends BaseController {
         $piService = object_container_get(PaymentImportService::class);
         $pi = $piService->stageImport( $fullpath, $mapping );
         
-        redirect('/?m=payment&c=import/stage&a=import&id='.$pi->getPaymentImportId());
+        redirect('/?m=payment&c=import/stage&id='.$pi->getPaymentImportId());
     }
     
     public function action_import() {

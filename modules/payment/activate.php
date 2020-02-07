@@ -80,6 +80,7 @@ $sql[] = "CREATE TABLE IF NOT EXISTS `payment__payment_method` (
 $sql[] = "CREATE TABLE IF NOT EXISTS payment__payment_import (
     payment_import_id int primary key auto_increment,
     description varchar(255),
+    status varchar(16),
     created datetime
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 

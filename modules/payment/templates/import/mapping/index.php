@@ -37,7 +37,11 @@
     	load_import_sample();
     });
     
-    function load_import_sample() {
+    function load_import_sample(no) {
+		if (typeof no != 'undefined') {
+			$('[name=sample_row][value='+no+']').prop('checked', true);
+		}
+        
     	var data = serialize2object('.table-container.import-fields');
     	data['sheet_file'] = <?= json_encode($tmpfile) ?>;
 
