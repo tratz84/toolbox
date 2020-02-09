@@ -10,6 +10,8 @@ abstract class QueryBuilder {
     protected $dbconnection;
     
     protected $selectFields = array();
+    protected $selectFunctions = array();
+    
     protected $fieldValues = array();
     protected $table;
     protected $leftJoin = array();
@@ -100,6 +102,11 @@ abstract class QueryBuilder {
         return $this;
     }
     public function clearSelectFields() { $this->selectFields = array(); }
+    
+    // used for count(), max(), etc
+    public function selectFunction($func) {
+        $this->selectFunctions[] = $func;
+    }
     
     
     public function setTable($table) {

@@ -16,8 +16,8 @@
 	<tbody>
 		<?php for($x=1; $x < 5 && $x < $sheet->getRowCount(); $x++) : ?>
 		<?php $row = $sheet->getRow($x) ?>
-		<tr>
-			<td><input type="radio" name="sample_row" value="<?= $x ?>" <?= $x==1?'checked=checked':'' ?> /></td>
+		<tr class="clickable" onclick="load_import_sample(<?= $x ?>)">
+			<td style="padding-right: 5px;"><input type="radio" name="sample_row" value="<?= $x ?>" <?= $x==1?'checked=checked':'' ?> /></td>
 			
 			<?php foreach($row as $col) : ?>
 			<td><?= esc_html($col) ?></td>
