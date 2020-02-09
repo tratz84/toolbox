@@ -33,12 +33,7 @@ class paymentController extends BaseController {
                 
                 // print?
                 if (get_var('print')) {
-                    $payment = $paymentService->readPayment( $payment->getPaymentId() );
-                    $pdf = new PaymentPdf();
-                    $pdf->setPayment($payment);
-                    $pdf->render();
-                    
-                    $pdf->Output('I', 'betaling-'.$payment->getPaymentNumberText());
+                    return $this->action_print( $payment->getPaymentId() );
                 }
                 // just save?
                 else {
@@ -63,8 +58,11 @@ class paymentController extends BaseController {
     }
     
     
-    public function action_print() {
-        $id = (int)get_var('id');
+    public function action_print($id=null) {
+
+        if ($id == null) {
+            $id = (int)get_var('id');
+        }
         
         $paymentService = object_container_get(PaymentService::class);
         
