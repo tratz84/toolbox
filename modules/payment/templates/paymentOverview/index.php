@@ -149,8 +149,12 @@ pot.addColumn({
 		var anchEdit = $('<a class="fa fa-pencil" />');
 		anchEdit.attr('href', appUrl('/?m=payment&c=payment&id=' + row.payment_id));
 		
+		var anchPrint = $('<a class="fa fa-print" target="_blank" />');
+		anchPrint.attr('href', appUrl('/?m=payment&c=payment&a=print&id=' + row.payment_id));
+		
 		var container = $('<div />');
 		container.append(anchEdit);
+		container.append(anchPrint);
 
 		return container;
 // 		console.log(row);

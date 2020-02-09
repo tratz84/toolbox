@@ -63,6 +63,21 @@ class paymentController extends BaseController {
     }
     
     
+    public function action_print() {
+        $id = (int)get_var('id');
+        
+        $paymentService = object_container_get(PaymentService::class);
+        
+        $payment = $paymentService->readPayment( $id );
+        
+        $pdf = new PaymentPdf();
+        $pdf->setPayment($payment);
+        $pdf->render();
+        
+        $pdf->Output('I', 'betaling-'.$payment->getPaymentNumberText());
+    }
+    
+    
     
     public function action_delete() {
         $paymentService = $this->oc->get(PaymentService::class);
