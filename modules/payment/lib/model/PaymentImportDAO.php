@@ -27,7 +27,7 @@ class PaymentImportDAO extends \core\db\DAOObject {
 	    $qb->selectField('payment_import_id', 'payment__payment_import');
 	    $qb->selectField('description', 'payment__payment_import');
 	    $qb->selectField('created', 'payment__payment_import');
-	    $qb->selectFunction('count(payment__payment_import_line.payment_import_line_id)');
+	    $qb->selectFunction('count(payment__payment_import_line.payment_import_line_id) as count');
 	    
 	    $qb->setTable('payment__payment_import');
 	    $qb->leftJoin('payment__payment_import_line', 'payment_import_id');

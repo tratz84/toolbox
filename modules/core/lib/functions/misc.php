@@ -1216,3 +1216,19 @@ if(!function_exists('mime_content_type')) {
         }
     }
 }
+
+/**
+ * crc32_int32() - on 64-bits systems, php always uses int64's. crc32_int32 returns
+ *                 the 32-bits value (in a 64-bits int...;)
+ */
+function crc32_int32($str) {
+    $i = crc32($str);
+    
+    // credits to comment jian @ https://www.php.net/manual/en/function.crc32.php
+    if ($i > 2147483647){
+        return $i - $int_max * 2 - 2;
+    } else {
+        return $i;
+    }
+}
+

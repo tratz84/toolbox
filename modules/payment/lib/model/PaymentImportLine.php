@@ -15,7 +15,7 @@ class PaymentImportLine extends base\PaymentImportLineBase {
         $str .= $this->getBankaccountnoContra();
         $str .= $this->getAmount();
         
-        $trxid = crc32( $str );
+        $trxid = crc32_int32( $str );
         
         $this->setTransactionId($trxid);
     }
