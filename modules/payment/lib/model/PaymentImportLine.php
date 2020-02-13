@@ -6,6 +6,12 @@ namespace payment\model;
 
 class PaymentImportLine extends base\PaymentImportLineBase {
 
+    protected static $lineStatuses = array(
+        'open',
+        'skip',
+        'imported'
+    );
+
 
     public function generateTransactionId() {
         

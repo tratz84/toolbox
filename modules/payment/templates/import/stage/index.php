@@ -21,6 +21,7 @@
 			<th class="amount">Amount</th>
 			<th>Name</th>
 			<th>Description</th>
+			<th></th>
 		</tr>
 	</thead>
 	
@@ -50,6 +51,9 @@
 			
 			<td title="<?= esc_attr($pl->getDescription()) ?>">
 				<?= esc_html(limit_text($pl->getDescription(), 50)) ?>
+			</td>
+			<td>
+				<input type="button" value="Import" />
 			</td>
 		</tr>
 		<?php endforeach; ?>
