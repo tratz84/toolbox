@@ -1226,7 +1226,7 @@ function crc32_int32($str) {
     
     // credits to comment jian @ https://www.php.net/manual/en/function.crc32.php
     if ($i > 2147483647){
-        return $i - $int_max * 2 - 2;
+        return $i - 2147483647 * 2 - 2;
     } else {
         return $i;
     }
