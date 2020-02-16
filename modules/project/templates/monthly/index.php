@@ -30,8 +30,10 @@
 		<th>Vrijdag</th>
 		<th>Zaterdag</th>
 		<th>Zondag</th>
+		<th></th>
 	</tr>
 	<?php $weeks = count($daysPerWeek)/7; ?>
+	<?php $totalMinutsMonth = 0; ?>
 	<?php for($weekno=0; $weekno < $weeks; $weekno++) : ?>
 	<tr>
 		<td>
@@ -51,11 +53,15 @@
 			 }
 			?>
 		</td>
+		<?php $totalMinutsWeek = 0; ?>
 		<?php for($weekdayno=0; $weekdayno < 7; $weekdayno++) : ?>
 			<?php $pos = ($weekno*7) + $weekdayno ?>
-    		<td>
+    		<td class="day">
     			<?php if ($daysPerWeek[$pos] != '-') : ?>
         			<?php $dayno = $daysPerWeek[$pos] ?>
+					<?php $totalMinutsWeek += $hours[$dayno] ?>
+					<?php $totalMinutsMonth += $hours[$dayno] ?>
+        			
         			<?php $date = substr($selected_month, 0, 8) . sprintf('%02d', $dayno);?>
         			<span class="day-no"><?= $dayno ?></span>
         			
@@ -64,8 +70,15 @@
     			
     		</td>
 		<?php endfor; ?>
+		<td class="total-minuts-week">
+			<?= round($totalMinutsWeek/60, 2) ?>
+		</td>
 	</tr>
 	<?php endfor; ?>
+	<tr class="total-minuts-month">
+		<td colspan="8"></td>
+		<td class="total-minuts-month"><?= round($totalMinutsMonth/60, 2) ?></td>
+	</tr>
 </table>
 
 
