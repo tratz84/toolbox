@@ -36,8 +36,10 @@
 	<?php $totalMinutsMonth = 0; ?>
 	<?php for($weekno=0; $weekno < $weeks; $weekno++) : ?>
 	<tr>
-		<td>
 			<?php
+			$row_week_no = null;
+			$row_week_no_is_current = false;
+			
 			 $pos = ($weekno*7);
 			 $firstDay = null;
 			 for($x=$pos; $x < count($daysPerWeek); $x++) {
@@ -49,9 +51,14 @@
 			 if ($firstDay) {
 			     $date = substr($selected_month, 0, 8) . sprintf('%02d', $firstDay);
 			     $dt = new DateTime($date, new DateTimeZone('Europe/Amsterdam'));
-			     print $dt->format('W');
+			     $row_week_no = $dt->format('W');
+			     
+			     $dt_now = new DateTime(null, new DateTimeZone('Europe/Amsterdam'));
+			     $row_week_no_is_current = $dt->format('Y-W') == $dt_now->format('Y-W') ? true : false;
 			 }
 			?>
+		<td class="<?= $row_week_no_is_current ? 'current-week' : '' ?>">
+			<?= $row_week_no ?>
 		</td>
 		<?php $totalMinutsWeek = 0; ?>
 		<?php for($weekdayno=0; $weekdayno < 7; $weekdayno++) : ?>
