@@ -79,6 +79,10 @@ class ProjectHourDAO extends \core\db\DAOObject {
 	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('project__project_hour_status.project_hour_status_id', '=', $opts['project_hour_status_id']));
 	    }
 	    
+	    if (isset($opts['date']) && valid_date($opts['date'])) {
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('date(project__project_hour.start_time)', '=', format_date($opts['date'], 'Y-m-d')));
+	    }
+	    
 	    if (isset($opts['start']) && $opts['start']) {
 	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('project__project_hour.start_time', '>=', format_date($opts['start'], 'Y-m-d 00:00:00')));
 	    }
@@ -110,6 +114,43 @@ class ProjectHourDAO extends \core\db\DAOObject {
 	public function deleteByProject($projectId) {
 	    $this->query('delete from project__project_hour where project_id = ?', array($projectId));
 	}
+	
+	
+	public function readFirstStartTime() {
+	    $sql = "select date(start_time) 
+                from project__project_hour 
+                order by start_time asc 
+                limit 1";
+	    
+	    return $this->queryValue( $sql );
+	}
+	
+	
+	public function userSummaryForMonth($userId, $year, $month) {
+	    $qb = $this->createQueryBuilder();
+	    $qb->setTable('project__project_hour');
+	    $qb->selectFunction("ifnull(duration*60, TIMESTAMPDIFF(minute, start_time, end_time)) total_minutes");
+	    $qb->selectFunction("day(start_time) day");
+	    
+	    $qb->addWhere(QueryBuilderWhere::whereRefByVal('year(start_time)', '=', $year));
+	    $qb->addWhere(QueryBuilderWhere::whereRefByVal('month(start_time)', '=', $month));
+	    
+	    $qb->getGroupBy('day(start_time)');
+	    
+	    $select = $qb->createSelect();
+	    $params = $qb->getParams();
+	    
+	    $res = $this->query($select, $params);
+	    $map = array();
+	    while($row = $res->fetch_object()) {
+	        if (isset($map[$row->day]) == false) $map[$row->day] = 0;
+	        $map[$row->day] += $row->total_minutes;
+	    }
+	    
+	    return $map;
+	}
+	
+	
 
 }
 

@@ -27,7 +27,7 @@ t.setRowClick(function(row, evt) {
 });
 
 
-t.setConnectorUrl( '/?m=project&c=projectHour&a=search&project_id=<?= $project_id ?>&company_id=<?= $company_id ?>&person_id=<?= $person_id ?>' );
+t.setConnectorUrl( '/?m=project&c=projectHour&a=search&project_id=<?= $project_id ?>&company_id=<?= $company_id ?>&person_id=<?= $person_id ?>&date=<?= $date ?>' );
 
 
 // t.addColumn({

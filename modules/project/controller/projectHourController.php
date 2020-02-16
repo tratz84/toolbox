@@ -15,7 +15,7 @@ class projectHourController extends BaseController {
     public function action_index() {
         $projectService = $this->oc->get(ProjectService::class);
         
-        $this->project_id = $this->company_id = $this->person_id = '';
+        $this->project_id = $this->company_id = $this->person_id = $this->date = '';
 
         if (get_var('project_id')) {
             $this->project = $projectService->readProject( get_var('project_id') );
@@ -34,6 +34,10 @@ class projectHourController extends BaseController {
             if ($person) {
                 $this->person_id = $person->getPersonId();
             }
+        }
+        
+        if (get_var('date') && valid_date(get_var('date'))) {
+            $this->date = get_var('date');
         }
         
         
