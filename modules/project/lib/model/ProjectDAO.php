@@ -50,6 +50,19 @@ class ProjectDAO extends \core\db\DAOObject {
 	        
 	        $qb->addWhere($qbwc);
 	    }
+	    
+	    if (isset($opts['q']) && $opts['q']) {
+	        
+	        $q = trim($opts['q']);
+	        $q = '%'.preg_replace('/\\s+/', '%', $q).'%';
+	        
+	        $qbwc = new QueryBuilderWhereContainer('OR');
+	        $qbwc->addWhere(QueryBuilderWhere::whereRefByVal("concat(company_name, ' ', project__project.project_name)", 'LIKE', $q));
+	        $qbwc->addWhere(QueryBuilderWhere::whereRefByVal("concat(customer__person.firstname, ' ', customer__person.insert_lastname, ' ', customer__person.lastname, ' ', project__project.project_name)", 'LIKE', $q));
+	        
+	        $qb->addWhere($qbwc);
+	    }
+	    
 
 		if (isset($opts['project_name']) && $opts['project_name']) {
 		    $qb->addWhere(QueryBuilderWhere::whereRefByVal('project_name', 'LIKE', '%' . $opts['project_name'] . '%'));

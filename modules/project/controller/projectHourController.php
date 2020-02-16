@@ -59,6 +59,46 @@ class projectHourController extends BaseController {
         $this->json($arr);
     }
     
+    
+    /**
+     * action_search_project() - ProjectHourForm search
+     */
+    public function action_search_project() {
+        $projectService = $this->oc->get(ProjectService::class);
+        
+        $r = $projectService->searchProject(0, 20, array('q' => get_var('name')));
+        
+        $arr = array();
+        
+        if (isset($_REQUEST['name']) == false || trim($_REQUEST['name']) == '') {
+            $arr[] = array(
+                'id' => '0',
+                'text' => 'Maak uw keuze'
+            );
+        }
+        foreach($r->getObjects() as $project) {
+            $name = '';
+            
+            if ($project['company_id']) {
+                $name = $project['company_name'];
+            } else {
+                $name = format_personname($project);
+            }
+            
+            $name = $name . ' - ' . $project['project_name'];
+            
+            $arr[] = array(
+                'id' => $project['project_id'],
+                'text' => $name
+            );
+        }
+        
+        $result = array();
+        $result['results'] = $arr;
+        
+        $this->json($result);
+    }
+    
     public function action_edit() {
         $projectService = $this->oc->get(ProjectService::class);
 
