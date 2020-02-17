@@ -57,23 +57,22 @@
 			     $row_week_no_is_current = $dt->format('Y-W') == $dt_now->format('Y-W') ? true : false;
 			 }
 			?>
-		<td class="<?= $row_week_no_is_current ? 'current-week' : '' ?>">
-			<?= $row_week_no ?>
+		<td class="<?= $row_week_no_is_current ? 'current-week' : '' ?> week-no-cell">
+			<?= (int)$row_week_no ?>
 		</td>
 		<?php $totalMinutsWeek = 0; ?>
 		<?php for($weekdayno=0; $weekdayno < 7; $weekdayno++) : ?>
 			<?php $pos = ($weekno*7) + $weekdayno ?>
 			<?php $dayno = $daysPerWeek[$pos] ?>
-			
-    		<td class="day <?= date('Y-m') == substr($selected_month, 0, 7) && (int)$dayno == (int)date('d') ? 'current-date' : '' ?>">
+			<?php $date = $daysPerWeek[$pos] != '-' ? substr($selected_month, 0, 8) . sprintf('%02d', $dayno) : ''; ?>
+    		<td data-date="<?= $date ?>" class="day <?= $daysPerWeek[$pos] != '-' ? 'day-in-month':'' ?> <?= date('Y-m') == substr($selected_month, 0, 7) && (int)$dayno == (int)date('d') ? 'current-date' : '' ?>">
     			<?php if ($daysPerWeek[$pos] != '-') : ?>
 					<?php $totalMinutsWeek += $hours[$dayno] ?>
 					<?php $totalMinutsMonth += $hours[$dayno] ?>
         			
-        			<?php $date = substr($selected_month, 0, 8) . sprintf('%02d', $dayno);?>
         			<span class="day-no"><?= $dayno ?></span>
         			
-        			<a href="<?= appUrl('/?m=project&c=projectHour&date='.$date)?>" class="hour-count"><?= round($hours[$dayno]/60, 2) ?></a>
+        			<span class="hour-count"><?= round($hours[$dayno]/60, 2) ?></span>
     			<?php endif; ?>
     			
     		</td>
@@ -109,6 +108,10 @@ $(document).ready(function() {
 		window.location = appUrl( url );
 	});
 
+	$('.day-in-month').click(function(){
+		window.location = appUrl('/?m=project&c=projectHour&date='+$(this).data('date'));
+	});
+	
 
 	var m = $('.overview-selection').find('select[name=month]');
 
