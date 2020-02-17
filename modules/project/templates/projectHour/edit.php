@@ -78,7 +78,7 @@ function adjust_time(field, method, type) {
 	
 
 	var date = <?= json_encode(date('d-m-Y')) ?>;
-	var time = '07:00';
+	var time = <?= json_encode(date('H:00')) ?>;
 
 	if (val == '') {
 		$(field).val( date + ' ' + time );
