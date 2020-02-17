@@ -63,9 +63,10 @@
 		<?php $totalMinutsWeek = 0; ?>
 		<?php for($weekdayno=0; $weekdayno < 7; $weekdayno++) : ?>
 			<?php $pos = ($weekno*7) + $weekdayno ?>
-    		<td class="day">
+			<?php $dayno = $daysPerWeek[$pos] ?>
+			
+    		<td class="day <?= date('Y-m') == substr($selected_month, 0, 7) && (int)$dayno == (int)date('d') ? 'current-date' : '' ?>">
     			<?php if ($daysPerWeek[$pos] != '-') : ?>
-        			<?php $dayno = $daysPerWeek[$pos] ?>
 					<?php $totalMinutsWeek += $hours[$dayno] ?>
 					<?php $totalMinutsMonth += $hours[$dayno] ?>
         			
