@@ -165,19 +165,23 @@ class WidgetContainer extends BaseWidget {
             if ($widget == null)
                 continue;
             
-            $val = $widget->getValue();
-            
-            if (is_a($obj, DBObject::class)) {
+            if (method_exists($widget, 'fill')) {
+                $widget->fill( $obj );
+            } else {
+                $val = $widget->getValue();
                 
-                $setFunction = 'set'.dbCamelCase($f);
-                
-                if (method_exists($obj, $setFunction)) {
-                    $obj->$setFunction( $val );
-                } else {
-                    $obj->setField($f, $val);
+                if (is_a($obj, DBObject::class)) {
+                    
+                    $setFunction = 'set'.dbCamelCase($f);
+                    
+                    if (method_exists($obj, $setFunction)) {
+                        $obj->$setFunction( $val );
+                    } else {
+                        $obj->setField($f, $val);
+                    }
+                } if (is_array($obj)) {
+                    $obj[$f] = $val;
                 }
-            } if (is_array($obj)) {
-                $obj[$f] = $val;
             }
         }
         
