@@ -43,6 +43,19 @@ t.addColumn({
 	fieldType: 'text',
 	searchable: false
 });
+
+<?php if (!$company_id && !$person_id && !$project_id) : ?>
+t.addColumn({
+	fieldName: 'name',
+	fieldDescription: 'Naam',
+	fieldType: 'text',
+	searchable: false,
+	render: function(row) {
+		return format_customername(row);
+	}
+});
+<?php endif; ?>
+
 t.addColumn({
 	fieldName: 'project_name',
 	fieldDescription: 'Project',

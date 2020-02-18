@@ -40,8 +40,10 @@ class ProjectHourDAO extends \core\db\DAOObject {
 	    
 	    $qb->selectFields('project__project_hour.*', 'customer__company.company_name');
 	    $qb->selectFields('customer__person.firstname', 'customer__person.insert_lastname', 'customer__person.lastname');
+	    $qb->selectFields('customer__person.person_id');
 	    $qb->selectFields('project__project.project_name', 'project__project_hour_type.description type_description', 'project__project_hour_status.description status_description');
 	    $qb->selectFields('base__user.username');
+	    $qb->selectFields('customer__company.company_id');
 	    $qb->selectFunction("ifnull(duration*60, TIMESTAMPDIFF(minute, start_time, end_time)) total_minutes");
 	    
 	    $qb->setTable('project__project_hour');
