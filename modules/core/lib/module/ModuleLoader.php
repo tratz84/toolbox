@@ -84,6 +84,19 @@ class ModuleLoader {
                 
                 $m = new Menu();
                 $m->setIconLabelUrl(@$data['icon'], @$data['label'], @$data['url']);
+                $m->setWeight( @$data['weight'] );
+                $m->setMenuAsFirstChild(@$data['as_first_child']  ? true : false);
+                
+                // submenu's
+                // TODO: recursive (?)
+                if (isset($menu['children'])) foreach($menu['children'] as $cmi) {
+                    $cm = new Menu();
+                    $cm->setIconLabelUrl(@$cmi['data']['icon'], @$cmi['data']['label'], @$cmi['data']['url']);
+                    $cm->setWeight( @$cmi['data']['weight'] );
+                    $cm->setMenuAsFirstChild(@$cmi['data']['as_first_child']  ? true : false);
+                    
+                    $m->addChildMenu( $cm );
+                }
                 $src->add( $m );
             }
         });

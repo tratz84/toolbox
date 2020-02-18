@@ -42,8 +42,12 @@ class MenuGeneratorItemForm extends \core\forms\CodegenBaseForm {
 		$this->addWidget( $w3 );
 		$w4 = new \core\forms\NumberField('weight', NULL, 'Weight');
 		$this->addWidget( $w4 );
+		$w5 = new \core\forms\CheckboxField('as_first_child', NULL, 'As first child');
+		$this->addWidget( $w5 );
+		$w5->setInfoText( 'In case of a submenu, this menu-item on top?' );
 		
 	}
+
 
 
 

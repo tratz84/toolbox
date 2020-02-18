@@ -1,0 +1,90 @@
+
+
+
+
+.project-project-hour-controller {
+	&.action-edit {
+	
+		.datetimepicker-field-widget.widget-start-time
+		, .datetimepicker-field-widget.widget-end-time {
+			a {
+				margin-right: 5px;
+			}
+			a.dec-hour { margin-left: 10px; }
+		}
+	}
+}
+
+
+
+.project-monthly-controller {
+	
+	
+	&.action-index {
+		
+		.overview-selection div.widget {
+			label { margin-right: 5px; }
+			
+			float: left;
+			margin-right: 20px;
+			
+			a.next-month, a.prev-month {
+				font-size: 20px;
+				padding: 0 5px;
+				text-decoration: none;
+			}
+		}
+		
+		
+		.monthly-project-hours {
+			th, td {
+				border: 1px solid #ccc;
+			}
+			th {
+				text-align: center;
+				font-weight: normal;
+			}
+			td {
+				width: 14%;
+				vertical-align: top;
+				
+				.day-no {
+					color: #616161;
+					font-size: 0.9em;
+				}
+				
+				.hour-count {
+					display: block;
+					text-align: center;
+					padding: 0px 0 18px;
+				}
+				
+				&.day:hover {
+					background-color: rgba(238, 255, 10, 0.11);
+				}
+				
+				a { text-decoration: none; }
+				
+				&.current-week { font-weight: bold; }
+			}
+			td:first-child {
+				width: 30px;
+				color: #616161;
+			}
+			
+			td.week-no-cell { padding-left: 8px; padding-right: 8px; font-size: 0.9em; }
+			td.day-in-month { cursor: pointer; }
+			
+			.total-minuts-week { text-align: center; }
+			.total-minuts-month {
+				text-align: center;
+				> td:first-child { border: 0px; }
+			}
+			
+			td.current-date { background-color: rgba(238, 255, 10, 0.11); }
+			
+		}
+		
+	}
+	
+}

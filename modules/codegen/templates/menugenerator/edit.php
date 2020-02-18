@@ -30,7 +30,6 @@
 </div>
 
 
-
 <script>
 
 var selectedNode = null;
@@ -145,7 +144,12 @@ function set_data_fields() {
 	$('#menu-info').find('input, select, textarea').each(function() {
 		var name = $(this).attr('name');
 		var val = $(this).val();
-		selectedNode.data[name] = val;
+
+		if ($(this).attr('type') == 'checkbox') {
+			selectedNode.data[name] = $(this).prop('checked') ? $(this).val() : '';
+		} else {
+			selectedNode.data[name] = val;
+		}
 	});
 }
 

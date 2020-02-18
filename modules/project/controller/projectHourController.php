@@ -15,7 +15,7 @@ class projectHourController extends BaseController {
     public function action_index() {
         $projectService = $this->oc->get(ProjectService::class);
         
-        $this->project_id = $this->company_id = $this->person_id = '';
+        $this->project_id = $this->company_id = $this->person_id = $this->date = '';
 
         if (get_var('project_id')) {
             $this->project = $projectService->readProject( get_var('project_id') );
@@ -36,6 +36,10 @@ class projectHourController extends BaseController {
             }
         }
         
+        if (get_var('date') && valid_date(get_var('date'))) {
+            $this->date = get_var('date');
+        }
+        
         
         $this->render();
     }
@@ -53,6 +57,46 @@ class projectHourController extends BaseController {
         $arr['listResponse'] = $r;
         
         $this->json($arr);
+    }
+    
+    
+    /**
+     * action_search_project() - ProjectHourForm search
+     */
+    public function action_search_project() {
+        $projectService = $this->oc->get(ProjectService::class);
+        
+        $r = $projectService->searchProject(0, 20, array('q' => get_var('name')));
+        
+        $arr = array();
+        
+        if (isset($_REQUEST['name']) == false || trim($_REQUEST['name']) == '') {
+            $arr[] = array(
+                'id' => '0',
+                'text' => 'Maak uw keuze'
+            );
+        }
+        foreach($r->getObjects() as $project) {
+            $name = '';
+            
+            if ($project['company_id']) {
+                $name = $project['company_name'];
+            } else {
+                $name = format_personname($project);
+            }
+            
+            $name = $name . ' - ' . $project['project_name'];
+            
+            $arr[] = array(
+                'id' => $project['project_id'],
+                'text' => $name
+            );
+        }
+        
+        $result = array();
+        $result['results'] = $arr;
+        
+        $this->json($result);
     }
     
     public function action_edit() {

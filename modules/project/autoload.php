@@ -13,6 +13,11 @@ Context::getInstance()->enableModule('project');
 
 $oc = ObjectContainer::getInstance();
 
+hook_register_javascript('project', BASE_HREF.'module/project/js/script.js');
+hook_htmlscriptloader_enableGroup('project');
+
+
+
 $eb = $oc->get(\core\event\EventBus::class);
 
 $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($evt) {

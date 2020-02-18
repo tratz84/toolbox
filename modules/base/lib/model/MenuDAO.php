@@ -28,7 +28,7 @@ class MenuDAO extends \core\db\DAOObject {
     	    $arr[] = array('menu_code' => 'calendar',        'sort' => 900, 'visible' => 1, 'icon' => 'fa-calendar',  'label' => 'Kalender',  'url' => '/?m=calendar&c=view');
 	    }
 	    
-	    $arr[] = array('menu_code' => 'project',         'sort' => 1000, 'visible' => 1, 'icon' => 'fa-tasks', 'label' => 'Projecten', 'url' => '/?m=project&c=project');
+// 	    $arr[] = array('menu_code' => 'project',         'sort' => 1000, 'visible' => 1, 'icon' => 'fa-tasks', 'label' => 'Projecten', 'url' => '/?m=project&c=project');
 	    
 	    $arr[] = array('menu_code' => 'rental',          'sort' => 1100, 'visible' => 1, 'icon' => 'fa-tags',      'label' => 'Plattegrond',    'url' => '/?m=rental&c=rental&a=index');
 	    $arr[] = array('menu_code' => 'rentallist',      'sort' => 1200, 'visible' => 1, 'icon' => 'fa-tags',      'label' => 'Alle units',     'url' => '/?m=rental&c=rental&a=list');

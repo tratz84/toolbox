@@ -2,6 +2,9 @@
 
 namespace project\service;
 
+use base\model\UserDAO;
+use core\exception\InvalidStateException;
+use core\exception\ObjectNotFoundException;
 use core\forms\lists\ListResponse;
 use core\service\ServiceBase;
 use project\form\ProjectForm;
@@ -16,8 +19,6 @@ use project\model\ProjectHourStatus;
 use project\model\ProjectHourStatusDAO;
 use project\model\ProjectHourType;
 use project\model\ProjectHourTypeDAO;
-use core\exception\ObjectNotFoundException;
-use core\exception\InvalidStateException;
 
 
 
@@ -104,7 +105,7 @@ class ProjectService extends ServiceBase {
 
         $cursor = $pDao->search($opts);
 
-        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('project_hour_id', 'project_id', 'project_name', 'short_description', 'start_time', 'end_time', 'duration', 'total_minutes', 'declarable', 'user_id', 'username', 'company_name', 'firstname', 'insert_lastname', 'lastname', 'status_description', 'created'));
+        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('project_hour_id', 'project_id', 'project_name', 'short_description', 'start_time', 'end_time', 'duration', 'total_minutes', 'declarable', 'user_id', 'username', 'company_id', 'company_name', 'person_id', 'firstname', 'insert_lastname', 'lastname', 'status_description', 'created'));
 
         return $r;
     }
@@ -303,6 +304,63 @@ class ProjectService extends ServiceBase {
         return $list;
     }
     
+    
+    
+    
+    public function mapProjectUsers() {
+        $sql = "select distinct project__project_hour.user_id, base__user.username
+                from project__project_hour
+                left join base__user on (base__user.user_id = project__project_hour.user_id)
+                order by username";
+        
+        $uDao = new UserDAO();
+        $users = $uDao->queryList($sql);
+        
+        $r = array();
+        foreach($users as $u) {
+            if ($u->getUsername()) {
+                $r[$u->getUserId()] = $u->getUsername();
+            } else {
+                // user might be deleted
+                $r[$u->getUserId()] = $u->getUserId();
+            }
+        }
+        
+        return $r;
+    }
+    
+    
+    /**
+     * returns start-time of first registered time
+     */
+    public function readFirstProjectStartTime() {
+        $phDao = new ProjectHourDAO();
+        
+        return $phDao->readFirstStartTime();
+    }
+    
+    public function readSummaryForMonth($userId, $year, $month) {
+        $year = (int)$year;
+        $month = (int)$month;
+        
+        $phDao = new ProjectHourDAO();
+        $summary = $phDao->userSummaryForMonth($userId, $year, $month);
+        
+        $t = mktime(0, 0, 0, $month, 15, $year);
+        $daysInMonth = date('t', $t);
+        
+        $result = array();
+        for($day=1; $day <= $daysInMonth; $day++) {
+            
+            if (isset($summary[$day])) {
+                $result[$day] = $summary[$day];
+            } else {
+                $result[$day] = 0;
+            }
+        }
+        
+        return $result;
+    }
     
 
 }

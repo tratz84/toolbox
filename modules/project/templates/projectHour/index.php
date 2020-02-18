@@ -27,7 +27,7 @@ t.setRowClick(function(row, evt) {
 });
 
 
-t.setConnectorUrl( '/?m=project&c=projectHour&a=search&project_id=<?= $project_id ?>&company_id=<?= $company_id ?>&person_id=<?= $person_id ?>' );
+t.setConnectorUrl( '/?m=project&c=projectHour&a=search&project_id=<?= $project_id ?>&company_id=<?= $company_id ?>&person_id=<?= $person_id ?>&date=<?= $date ?>' );
 
 
 // t.addColumn({
@@ -43,6 +43,19 @@ t.addColumn({
 	fieldType: 'text',
 	searchable: false
 });
+
+<?php if (!$company_id && !$person_id && !$project_id) : ?>
+t.addColumn({
+	fieldName: 'name',
+	fieldDescription: 'Naam',
+	fieldType: 'text',
+	searchable: false,
+	render: function(row) {
+		return format_customername(row);
+	}
+});
+<?php endif; ?>
+
 t.addColumn({
 	fieldName: 'project_name',
 	fieldDescription: 'Project',

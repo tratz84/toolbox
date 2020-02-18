@@ -16,6 +16,8 @@ use core\forms\TextareaField;
 use core\forms\validator\DateTimeValidator;
 use core\forms\validator\NotEmptyValidator;
 use project\service\ProjectService;
+use core\forms\DynamicSelectField;
+use project\model\ProjectHour;
 
 class ProjectHourForm extends BaseForm {
     
@@ -111,6 +113,41 @@ class ProjectHourForm extends BaseForm {
     }
     
     
+    public function bind($obj) {
+        parent::bind($obj);
+        
+        
+        $widgetProjectId = $this->getWidget('project_id');
+        
+        if (is_a($widgetProjectId, DynamicSelectField::class)) {
+            $p_id = null;
+            if (is_a($obj, ProjectHour::class)) {
+                $p_id = $obj->getProjectId();
+            }
+            if (is_array($obj)) {
+                $p_id = $obj['project_id'];
+            }
+            if ($p_id) {
+                $projectService = object_container_get(ProjectService::class);
+                $project = $projectService->readProject( $p_id );
+                
+                $name = '';
+                if ($this->getWidget('company_name')) {
+                    $name = $this->getwidgetValue('company_name');
+                }
+                if ($this->getWidget('person_name')) {
+                    $name = $this->getWidgetValue('person_name');
+                }
+                if ($name)
+                    $name = $name . ' - ';
+                $name = $name . $project->getProjectName();
+                
+                $this->getWidget('project_id')->setDefaultText($name);
+            }
+        }
+        
+    }
+    
     protected function addUsers() {
         $userService = ObjectContainer::getInstance()->get(UserService::class);
         $users = $userService->readAllUsers();
@@ -124,15 +161,22 @@ class ProjectHourForm extends BaseForm {
     }
     
     protected function addProjects($company_id, $person_id) {
-        $projectService = ObjectContainer::getInstance()->get(ProjectService::class);
-        $projects = $projectService->readByCustomer($company_id, $person_id);
-        
-        $mapProjects = array();
-        foreach($projects as $p) {
-            $mapProjects[$p->getProjectId()] = $p->getProjectName();
+        // company/person known? => just add specific projects
+        if ($company_id || $person_id) {
+            $projectService = ObjectContainer::getInstance()->get(ProjectService::class);
+            $projects = $projectService->readByCustomer($company_id, $person_id);
+            
+            $mapProjects = array();
+            foreach($projects as $p) {
+                $mapProjects[$p->getProjectId()] = $p->getProjectName();
+            }
+            
+            $this->addWidget(new SelectField('project_id', '', $mapProjects, 'Project'));
         }
-        
-        $this->addWidget(new SelectField('project_id', '', $mapProjects, 'Project'));
+        // add project-search box
+        else {
+            $this->addWidget( new DynamicSelectField('project_id', '', 'Select project', '/?m=project&c=projectHour&a=search_project', 'Project') );
+        }
     }
     
     protected function addProjectHourType() {

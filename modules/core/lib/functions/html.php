@@ -128,12 +128,18 @@ function include_component($module, $controller, $action, $vars=array()) {
     $controllerInstance->setActionTemplate($action);
     
     if (method_exists($controllerInstance, 'handle_action')) {
+        // publish event
+        hook_eventbus_publish($controllerInstance, $module, 'include-component');
+        
         $controllerInstance->handle_action();
     } else {
         // check if action exists
         if (method_exists($controllerInstance, 'action_'.$action) == false)
             throw new \Exception('Action doesn\'t exist, ' . $controller . '::action_' . $action);
-            
+
+        // publish event
+        hook_eventbus_publish($controllerInstance, $module, 'include-component-'.$action);
+        
         // call
         $controllerInstance->{'action_'.$action}();
     }
