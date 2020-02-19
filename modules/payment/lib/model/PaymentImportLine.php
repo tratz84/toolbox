@@ -7,9 +7,10 @@ namespace payment\model;
 class PaymentImportLine extends base\PaymentImportLineBase {
 
     protected static $lineStatuses = array(
-        'open',
-        'skip',
-        'imported'
+        'unknown',              // not linked to a customer/invoice
+        'skip',                 // skipped
+        'ready',                // ready to import
+        'imported'              // imported
     );
 
 
@@ -25,5 +26,22 @@ class PaymentImportLine extends base\PaymentImportLineBase {
         
         $this->setTransactionId($trxid);
     }
+    
+    
+    public function getImportStatus() {
+        $p = parent::getImportStatus();
+        
+        if ($p == 'skip' || $p == 'imported') {
+            return $p;
+        }
+        
+        if ($this->getCompanyId() || $this->getPersonId()) {
+            return 'ready';
+        }
+        
+        return 'unknown';
+    }
+    
+    
 }
 
