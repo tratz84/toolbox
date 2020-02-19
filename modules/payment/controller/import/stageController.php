@@ -2,10 +2,12 @@
 
 
 
+use base\model\Company;
+use base\model\Person;
+use base\service\CustomerService;
 use core\controller\BaseController;
 use core\exception\InvalidStateException;
 use core\parser\SheetReader;
-use payment\form\PaymentImportMappingForm;
 use payment\service\PaymentImportService;
 
 
@@ -21,9 +23,47 @@ class stageController extends BaseController {
         $this->pi = $piService->readImport($id);
         
         
+        $ctx = \core\Context::getInstance();
+        $this->prefixNumbers = $ctx->getPrefixNumbers();
         
         
         return $this->render();
+    }
+    
+    
+    public function action_update_customer() {
+        
+        $piService = object_container_get(PaymentImportService::class);
+        
+        $pil_id = get_var('payment_line_import_id');
+        
+        $cid = get_var('customer_id');
+        $person_id = $company_id = null;
+        if (strpos($cid, 'company-') === 0) {
+            $company_id = (int)substr($cid, strlen('company-'));
+        }
+        if (strpos($cid, 'person-') === 0) {
+            $person_id = (int)substr($cid, strlen('person-'));
+        }
+        
+        $piService->setCustomer($pil_id, $company_id, $person_id);
+        
+        $customerService = object_container_get(CustomerService::class);
+        // Company OR Person
+        $customer = $customerService->readCustomerAuto($company_id, $person_id);
+        
+        $name = '';
+        if ($customer) {
+            $name = format_customername($customer);
+        }
+        
+        $r = array();
+        $r['success'] = true;
+        $r['name'] = $name;
+        $r['person_id'] = is_a($customer, Person::class) ? $customer->getPersonId() : null;
+        $r['company_id'] = is_a($customer, Company::class) ? $customer->getCompanyId() : null;
+        
+        return $this->json( $r );
     }
     
     

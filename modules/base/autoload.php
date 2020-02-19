@@ -2,6 +2,7 @@
 
 
 require_once dirname(__FILE__).'/lib/functions/person.php';
+require_once dirname(__FILE__).'/lib/functions/misc.php';
 require_once dirname(__FILE__).'/lib/functions/object_meta.php';
 require_once dirname(__FILE__).'/lib/functions/object_lock.php';
 

@@ -79,6 +79,24 @@ class PaymentImportService extends ServiceBase {
     }
     
     
+    public function setCustomer($paymentImportLineId, $companyId, $personId) {
+        $pilDao = new PaymentImportLineDAO();
+        
+        $pil = $pilDao->read( $paymentImportLineId );
+        
+        if (!$pil) {
+            throw new ObjectNotFoundException('PaymentImportLine not found');
+        }
+        
+        $pil->setPersonId( null );
+        $pil->setCompanyId( null );
+        if ($companyId) {
+            $pil->setCompanyId( $companyId );
+        } else if ($personId) {
+            $pil->setPersonId( $personId );
+        }
+        $pil->save();
+    }
     
     
 }
