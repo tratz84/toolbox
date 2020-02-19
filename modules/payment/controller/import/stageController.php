@@ -85,6 +85,19 @@ class stageController extends BaseController {
             $invoice = $invoiceService->readInvoice( $invoice_id );
             $r['invoice_number'] = $invoice->getInvoiceNumberText();
             $r['invoice_id'] = $invoice->getInvoiceId();
+            
+            $customerService = object_container_get(CustomerService::class);
+            $customer = $customerService->readCustomerAuto( $invoice->getCompanyId(), $invoice->getPersonId() );
+            if ($customer) {
+                $r['name'] = format_customername($customer);
+                if ($customer->getCompany()) {
+                    $r['company_id'] = $customer->getCompany()->getCompanyId();
+                }
+                if ($customer->getPerson()) {
+                    $r['person_id'] = $customer->getPerson()->getPersonId();
+                }
+            }
+            
         } else {
             $r['invoice_number'] = null;
             $r['invoice_id'] = null;

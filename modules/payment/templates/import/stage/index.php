@@ -159,15 +159,28 @@ function set_customer(plid, customer_id) {
 		},
 		success: function(data, xhr, textStatus) {
 			if (data.success) {
-				var cs = $('#line-'+plid).find('.customer-selection');
-				cs.text( data.name );
-				cs.data('person-id', data.person_id);
-				cs.data('company-id', data.company_id);
+				set_customer_info(plid, data);
 			}
 		}
 	});
 }
 
+function set_customer_info(plid, data) {
+	var cs = $('#line-'+plid).find('.customer-selection');
+
+	cs.text( '' );
+	cs.data('person-id', '');
+	cs.data('company-id', '');
+
+	if (data.company_id) {
+    	cs.text( data.name );
+    	cs.data('company-id', data.company_id );
+	}
+	if (data.person_id) {
+    	cs.text( data.name );
+    	cs.data('person-id', data.person_id );
+	}
+}
 
 
 function handle_invoiceSelection(plid) {
@@ -235,6 +248,8 @@ function set_invoice(plid, invoice_id) {
 				var cs = $('#line-'+plid).find('.invoice-selection');
 				cs.text( data.invoice_number );
 				cs.data('invoice-id', data.invoice_id);
+				
+				set_customer_info(plid, data);
 			}
 		}
 	});
