@@ -2,6 +2,8 @@
 
 
 
+use payment\service\PaymentImportService;
+
 class PaymentImportMatcher {
     
     protected $paymentImportId;
@@ -18,7 +20,14 @@ class PaymentImportMatcher {
     public function match() {
         $updatedLines = array();
         
+        $piService = object_container_get(PaymentImportService::class);
+        $pi = $piService->readImport( $this->paymentImportId );
         
+        
+        $lines = $pi->getImportLines();
+        for($x=0; $x < count($lines); $x++) {
+            
+        }
         
     }
     
