@@ -34,10 +34,9 @@ function PaymentImportTable(container, opts) {
 		var tr = $('tr.import-line-'+line['payment_import_line_id']);
 		var newRow = tr.length == 0 ? true : false;
 		
-		if (true) {
+		if (newRow) {
 			var tr = $('<tr />');
 			tr.addClass('import-line-' + line['payment_import_line_id']);
-			tr.data('pil', line);
 			tr.append('<td class="td-import-status" />');
 			tr.append('<td class="td-customer" />');
 			tr.append('<td class="td-invoice" />');
@@ -46,27 +45,34 @@ function PaymentImportTable(container, opts) {
 			tr.append('<td class="td-name" />');
 			tr.append('<td class="td-description" />');
 			tr.append('<td class="td-action-buttons" />');
-			
-			tr.find('.td-import-status').text( line['import_status'] );
-			
+		}
+	
+		tr.data('pil', line);
+		tr.find('.td-import-status').text( line['import_status'] );
+		
+		if (newRow) {
 			tr.find('.td-customer').append('<div class="customer-selection" />');
-			tr.find('.td-customer .customer-selection').text(line['customer_name']);
 			tr.find('.td-customer .customer-selection').click(function(evt) {
 				this.customer_selection_Click( evt.target );
 			}.bind(this));
-			
+		}
+//		tr.find('.td-customer .customer-selection').empty();
+		console.log(name);
+		tr.find('.td-customer .customer-selection').text( line['customer_name'] );
+		
+		if (newRow) {
 			tr.find('.td-invoice').append('<div class="invoice-selection" />');
-			tr.find('.td-invoice .invoice-selection').text( line['invoice_number'] );
 			tr.find('.td-invoice .invoice-selection').click(function(evt) {
 				this.invoice_selection_Click( evt.target );
 			}.bind(this));
-			
-			tr.find('.td-bankaccounts').append('<div>'+line['bankaccountno']+'</div><div>'+line['bankaccountno_contra']+'</div>');
-			tr.find('.td-amounts').append( format_price(line['amount']) );
-			tr.find('.td-name').append( line['name'] );
-			tr.find('.td-description').append(limit_text(line['description'], 50));
-			tr.find('.td-description').attr('title', line['description']);
 		}
+		tr.find('.td-invoice .invoice-selection').text( line['invoice_number'] );
+		
+		tr.find('.td-bankaccounts').html('<div>'+line['bankaccountno']+'</div><div>'+line['bankaccountno_contra']+'</div>');
+		tr.find('.td-amounts').text( format_price(line['amount']) );
+		tr.find('.td-name').text( line['name'] );
+		tr.find('.td-description').text(limit_text(line['description'], 50));
+		tr.find('.td-description').attr('title', line['description']);
 		
 		this.determineButtons( tr );
 		
@@ -87,11 +93,17 @@ function PaymentImportTable(container, opts) {
 		}
 		if (il['import_status'] == 'ready' || il['import_status'] == 'unknown') {
 			var btnSkip = $('<input type="button" value="Skip" />');
+			btnSkip.click(function(evt) {
+				this.skip_Click(evt.target);
+			}.bind(this));
 			tdButtons.append( btnSkip );
 		}
 		
 		if (il['import_status'] == 'skip') {
 			var btnUnskip= $('<input type="button" value="Unskip" />');
+			btnUnskip.click(function(evt) {
+				this.unskip_Click(evt.target);
+			}.bind(this));
 			tdButtons.append( btnUnskip );
 		}
 	};
@@ -122,6 +134,50 @@ function PaymentImportTable(container, opts) {
 		
 	};
 	
+	this.skip_Click = function(btn) {
+		var tr = $(btn).closest('tr');
+		var l = tr.data('pil');
+		
+		var me = this;
+		$.ajax({
+			type: 'POST',
+			url: appUrl('/?m=payment&c=import/stage&a=skip'),
+			data: {
+				payment_import_line_id: l['payment_import_line_id']
+			},
+			success: function(data, xhr, textStatus) {
+				if (data.success) {
+					me.updateImportLines( data.payment_import_lines );
+				}
+			}
+		});
+	};
+
+	this.unskip_Click = function(btn) {
+		var tr = $(btn).closest('tr');
+		var l = tr.data('pil');
+		
+		var me = this;
+		$.ajax({
+			type: 'POST',
+			url: appUrl('/?m=payment&c=import/stage&a=unskip'),
+			data: {
+				payment_import_line_id: l['payment_import_line_id']
+			},
+			success: function(data, xhr, textStatus) {
+				if (data.success) {
+					me.updateImportLines( data.payment_import_lines );
+				}
+			}
+		});
+	};
+
+	
+	this.updateImportLines = function(pils) {
+		for(var i in pils) {
+			this.updateLine( pils[i] );
+		}
+	};
 	
 	
 	this.customer_selection_Click = function(obj) {
@@ -183,7 +239,8 @@ function PaymentImportTable(container, opts) {
 	};
 	
 
-	function set_customer(plid, customer_id) {
+	this.set_customer = function(plid, customer_id) {
+		var me = this;
 		$.ajax({
 			type: 'POST',
 			url: appUrl('/?m=payment&c=import/stage&a=update_customer'),
@@ -193,7 +250,8 @@ function PaymentImportTable(container, opts) {
 			},
 			success: function(data, xhr, textStatus) {
 				if (data.success) {
-					set_customer_info(plid, data);
+					me.updateImportLines( data.payment_import_lines );
+//					set_customer_info(plid, data);
 				}
 			}
 		});

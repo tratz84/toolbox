@@ -11,6 +11,7 @@ use payment\model\PaymentImportDAO;
 use payment\model\PaymentImportLineDAO;
 use core\exception\ObjectNotFoundException;
 use invoice\service\InvoiceService;
+use core\exception\InvalidStateException;
 
 class PaymentImportService extends ServiceBase {
     
@@ -80,6 +81,16 @@ class PaymentImportService extends ServiceBase {
     }
     
     
+    public function readImportLine($paymentImportLineId) {
+        $pilDao = new PaymentImportLineDAO();
+        
+        $pil = $pilDao->read( $paymentImportLineId );
+        
+        return $pil;
+    }
+    
+    
+    
     public function setCustomer($paymentImportLineId, $companyId, $personId) {
         $pilDao = new PaymentImportLineDAO();
         
@@ -103,9 +114,7 @@ class PaymentImportService extends ServiceBase {
     
     public function setInvoice($paymentImportLineId, $invoiceId) {
         // fetch PaymentImportLine
-        $pilDao = new PaymentImportLineDAO();
-        
-        $pil = $pilDao->read( $paymentImportLineId );
+        $pil = $this->readImportLine( $paymentImportLineId );
         if (!$pil) {
             throw new ObjectNotFoundException('PaymentImportLine not found');
         }
@@ -126,6 +135,29 @@ class PaymentImportService extends ServiceBase {
         
         
         return $pil->save();
+    }
+    
+    
+    public function markSkipped($paymentImportLineId) {
+        
+        $pil = $this->readImportLine($paymentImportLineId);
+        $pil->setImportStatus('skip');
+        $pil->save();
+        
+        return $pil;
+    }
+
+    public function markUnskipped($paymentImportLineId) {
+        $pil = $this->readImportLine( $paymentImportLineId );
+        
+        if ($pil->getImportStatus() == 'open') {
+            throw new InvalidStateException('Line already imported');
+        }
+        
+        $pil->setImportStatus('ready');
+        $pil->save();
+        
+        return $pil;
     }
     
     

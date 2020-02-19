@@ -30,23 +30,7 @@ class stageController extends BaseController {
         
         $this->lines = array();
         foreach($this->pi->getImportLines() as $pl) {
-            $l = array();
-            
-            $l['payment_import_line_id'] = $pl->getPaymentImportLineId();
-            $l['import_status']          = $pl->getImportStatus();
-            $l['company_id']             = $pl->getCompanyId();
-            $l['person_id']              = $pl->getPersonId();
-            $l['customer_name']          = format_customername($pl);
-            $l['invoice_id']             = $pl->getInvoiceId();
-            $l['invoice_number']         = $pl->getInvoiceId() ? $this->prefixNumbers . $pl->getField('invoice_number') : '';
-            $l['bankaccountno']          = $pl->getBankaccountno();
-            $l['bankaccountno_contra']   = $pl->getBankaccountnoContra();
-            $l['amount']                 = $pl->getAmount();
-            $l['name']                   = $pl->getName();
-            $l['description']            = $pl->getDescription();
-            
-            
-            $this->lines[] = $l;
+            $this->lines[] = $pl->asArray();
         }
         
         return $this->render();
@@ -69,20 +53,18 @@ class stageController extends BaseController {
         
         $piService->setCustomer($pil_id, $company_id, $person_id);
         
-        $customerService = object_container_get(CustomerService::class);
+//         $customerService = object_container_get(CustomerService::class);
         // Company OR Person
-        $customer = $customerService->readCustomerAuto($company_id, $person_id);
+//         $customer = $customerService->readCustomerAuto($company_id, $person_id);
         
-        $name = '';
-        if ($customer) {
-            $name = format_customername($customer);
-        }
+        $pil = $piService->readImportLine( $pil_id );
         
         $r = array();
         $r['success'] = true;
-        $r['name'] = $name;
-        $r['person_id'] = $customer->getPerson() ? $customer->getPerson()->getPersonId() : null;
-        $r['company_id'] = $customer->getCompany() ? $customer->getCompany()->getCompanyId() : null;
+        $r['payment_import_lines'] = array( $pil->asArray() );
+//         $r['name'] = $name;
+//         $r['person_id'] = $customer->getPerson() ? $customer->getPerson()->getPersonId() : null;
+//         $r['company_id'] = $customer->getCompany() ? $customer->getCompany()->getCompanyId() : null;
         
         return $this->json( $r );
     }
@@ -133,7 +115,30 @@ class stageController extends BaseController {
         $piService = object_container_get(PaymentImportService::class);
         $pil_id = get_var('payment_import_line_id');
         
+        $p = $piService->markSkipped($pil_id);
         
+        $r = array();
+        $r['success'] = true;
+        $r['payment_import_lines'] = array(
+            $p->asArray()
+        );
+        
+        return $this->json( $r );
+    }
+
+    public function action_unskip() {
+        $piService = object_container_get(PaymentImportService::class);
+        $pil_id = get_var('payment_import_line_id');
+        
+        $p = $piService->markUnskipped($pil_id);
+        
+        $r = array();
+        $r['success'] = true;
+        $r['payment_import_lines'] = array(
+            $p->asArray()
+        );
+        
+        return $this->json( $r );
     }
     
     
