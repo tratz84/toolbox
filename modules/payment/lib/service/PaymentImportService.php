@@ -10,6 +10,7 @@ use payment\model\PaymentImport;
 use payment\model\PaymentImportDAO;
 use payment\model\PaymentImportLineDAO;
 use core\exception\ObjectNotFoundException;
+use invoice\service\InvoiceService;
 
 class PaymentImportService extends ServiceBase {
     
@@ -95,8 +96,36 @@ class PaymentImportService extends ServiceBase {
         } else if ($personId) {
             $pil->setPersonId( $personId );
         }
-        $pil->save();
+        
+        return $pil->save();
     }
+    
+    
+    public function setInvoice($paymentImportLineId, $invoiceId) {
+        // fetch PaymentImportLine
+        $pilDao = new PaymentImportLineDAO();
+        
+        $pil = $pilDao->read( $paymentImportLineId );
+        if (!$pil) {
+            throw new ObjectNotFoundException('PaymentImportLine not found');
+        }
+        
+        // fetch Invoice
+        $invoiceService = object_container_get(InvoiceService::class);
+        $invoice = $invoiceService->readInvoice( $invoiceId );
+        
+        if (!$invoice) {
+            throw new ObjectNotFoundException('Invoice not found');
+        }
+        
+        
+        $pil->setInvoiceId( $invoice->getInvoiceId() );
+        
+        return $pil->save();
+    }
+    
+    
+    
     
     
 }

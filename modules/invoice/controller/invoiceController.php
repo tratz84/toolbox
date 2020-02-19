@@ -209,6 +209,41 @@ class invoiceController extends BaseController {
         $this->json($arr);
     }
     
+    
+    public function action_select2() {
+        $invoiceService = $this->oc->get(InvoiceService::class);
+        
+        $opts = array();
+        $opts['invoiceNumberText'] = get_var('name');
+        if ((int)get_var('company_id'))
+            $opts['company_id'] = (int)get_var('company_id');
+        if ((int)get_var('person_id'))
+            $opts['person_id'] = (int)get_var('person_id');
+        
+        $r = $invoiceService->searchInvoice(0, 20, $opts);
+        
+        $arr = array();
+        if (isset($_REQUEST['name']) == false || trim($_REQUEST['name']) == '') {
+            $arr[] = array(
+                'id' => '0',
+                'text' => 'Maak uw keuze'
+            );
+        }
+        foreach($r->getObjects() as $invoice) {
+            $arr[] = array(
+                'id' => $invoice['invoice_id'],
+                'text' => $invoice['invoiceNumberText']
+            );
+        }
+        
+        $result = array();
+        $result['results'] = $arr;
+        
+        $this->json($result);
+    }
+    
+    
+    
     public function action_delete() {
         $invoiceService = $this->oc->get(InvoiceService::class);
         

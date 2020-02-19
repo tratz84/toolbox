@@ -41,9 +41,12 @@ use base\forms\CustomerSelectWidget;
 				</div>
 			</td>
 			<td>
+				<div class="invoice-selection" data-invoice-id="<?= $pl->getInvoiceId() ?>">
 				<?php
-				if ($pl->getInvoiceId()) print $prefixNumbers . $pl->getInvoiceId();
+				if ($pl->getInvoiceId())
+			        print $prefixNumbers . $pl->getField('invoice_number');
 				?>
+				</div>
 			</td>
 			
 			<td>
@@ -82,6 +85,13 @@ $(document).ready(function() {
 
 		handle_customerSelection( plid );
 	});
+
+	$('.invoice-selection').click(function() {
+		var tr = $(this).closest('tr');
+		var plid = $(tr).data('payment-import-line-id');
+
+		handle_invoiceSelection( plid );
+	});
 });
 
 
@@ -95,8 +105,6 @@ function handle_customerSelection(plid) {
 	var customer_name = row.find('.customer-selection').text();
 	var person_id = row.find('.customer-selection').data('person-id');
 	var company_id = row.find('.customer-selection').data('company-id');
-
-	console.log(company_id);
 
 	// remove old text
 	row.find('.customer-selection').empty();
@@ -146,7 +154,7 @@ function set_customer(plid, customer_id) {
 		type: 'POST',
 		url: appUrl('/?m=payment&c=import/stage&a=update_customer'),
 		data: {
-			payment_line_import_id: plid,
+			payment_import_line_id: plid,
 			customer_id: customer_id
 		},
 		success: function(data, xhr, textStatus) {
@@ -159,6 +167,79 @@ function set_customer(plid, customer_id) {
 		}
 	});
 }
+
+
+
+function handle_invoiceSelection(plid) {
+	var row = $('#line-'+plid);
+
+	if (row.find('.select-invoice').length > 0) {
+		return;
+	}
+
+	var invoice_text = row.find('.invoice-selection').text();
+	var invoice_id = row.find('.invoice-selection').data('invoice-id');
+
+	// remove old text
+	row.find('.invoice-selection').empty();
+
+	// add select2-box
+	var s = $('<select class="select-invoice" name="invoice_id_'+plid+'"></select>');
+	var opt = $('<option value=""></option>');
+	opt.text( invoice_text );
+	opt.attr('value', invoice_id);
+	s.append(opt);
+	row.find('.invoice-selection').append( s );
+
+	// init select2
+	$(s).select2({
+		ajax: {
+    		url: appUrl('/?m=invoice&c=invoice&a=select2'),
+    		type: 'POST',
+    		data: function(params) {
+				var d = {};
+
+				var cs = $(this).closest('tr').find('.customer-selection');
+				d.person_id = $(cs).data('person-id');
+				d.company_id = $(cs).data('company-id');
+
+        		d.name = params.term;
+        		
+        		return d;
+    		}
+		}
+	});
+
+	// handle customer selection
+	$(s).on("select2:select", function (e) {
+		var v = $(this).val();
+		var plid = $(this).closest('tr').data('payment-import-line-id');
+		
+		if (v != '') {
+			set_invoice( plid, v );
+		}
+	});
+}
+
+
+function set_invoice(plid, invoice_id) {
+	$.ajax({
+		type: 'POST',
+		url: appUrl('/?m=payment&c=import/stage&a=update_invoice'),
+		data: {
+			payment_import_line_id: plid,
+			invoice_id: invoice_id
+		},
+		success: function(data, xhr, textStatus) {
+			if (data.success) {
+				var cs = $('#line-'+plid).find('.invoice-selection');
+				cs.text( data.invoice_number );
+				cs.data('invoice-id', data.invoice_id);
+			}
+		}
+	});
+}
+
 
 
 

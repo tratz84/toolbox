@@ -9,6 +9,7 @@ use core\controller\BaseController;
 use core\exception\InvalidStateException;
 use core\parser\SheetReader;
 use payment\service\PaymentImportService;
+use invoice\service\InvoiceService;
 
 
 class stageController extends BaseController {
@@ -32,10 +33,9 @@ class stageController extends BaseController {
     
     
     public function action_update_customer() {
-        
         $piService = object_container_get(PaymentImportService::class);
         
-        $pil_id = get_var('payment_line_import_id');
+        $pil_id = get_var('payment_import_line_id');
         
         $cid = get_var('customer_id');
         $person_id = $company_id = null;
@@ -62,6 +62,25 @@ class stageController extends BaseController {
         $r['name'] = $name;
         $r['person_id'] = is_a($customer, Person::class) ? $customer->getPersonId() : null;
         $r['company_id'] = is_a($customer, Company::class) ? $customer->getCompanyId() : null;
+        
+        return $this->json( $r );
+    }
+
+    public function action_update_invoice() {
+        $piService = object_container_get(PaymentImportService::class);
+        
+        $pil_id = get_var('payment_import_line_id');
+        
+        $invoice_id = get_var('invoice_id');
+        $piService->setInvoice($pil_id, $invoice_id);
+        
+        $invoiceService = object_container_get(InvoiceService::class);
+        $invoice = $invoiceService->readInvoice( $invoice_id );
+        
+        $r = array();
+        $r['success'] = true;
+        $r['invoice_number'] = $invoice->getInvoiceNumberText();
+        $r['invoice_id'] = $invoice->getInvoiceId();
         
         return $this->json( $r );
     }
