@@ -1477,6 +1477,22 @@ function isIE() {
 	return false;
 }
 
+
+
+function limit_text(str, maxlen, suffix) {
+	if (!suffix)
+		suffix = '...';
+	
+	if (str.length > maxlen + suffix.length) {
+		str = str.substr(0, maxlen) + suffix;
+	}
+	
+	return str;
+}
+
+
+
+
 /**
  * uuidv4() - generates uuid
  * 

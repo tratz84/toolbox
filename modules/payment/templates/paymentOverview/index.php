@@ -2,7 +2,7 @@
 <div class="page-header">
 
 	<div class="toolbox">
-		<?php if (hasCapability('payment', 'import-payments')) : ?>
+		<?php if ($ctx->isExperimental() && hasCapability('payment', 'import-payments')) : ?>
 		<a href="<?= appUrl('/?m=payment&c=import') ?>" class="fa fa-download"></a>
 		<?php endif; ?>
 		

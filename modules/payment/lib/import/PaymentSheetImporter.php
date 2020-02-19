@@ -165,7 +165,7 @@ class PaymentSheetImporter {
         $pil->setDescription( $r['description'] );
         $pil->setCode( $r['code'] );
         $pil->setMutationType( $r['mutation_type'] );
-        
+        $pil->setImportStatus('open');
         $pil->generateTransactionId();
         
         return $pil;

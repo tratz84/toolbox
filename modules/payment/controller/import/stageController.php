@@ -28,6 +28,27 @@ class stageController extends BaseController {
         $this->prefixNumbers = $ctx->getPrefixNumbers();
         
         
+        $this->lines = array();
+        foreach($this->pi->getImportLines() as $pl) {
+            $l = array();
+            
+            $l['payment_import_line_id'] = $pl->getPaymentImportLineId();
+            $l['import_status']          = $pl->getImportStatus();
+            $l['company_id']             = $pl->getCompanyId();
+            $l['person_id']              = $pl->getPersonId();
+            $l['customer_name']          = format_customername($pl);
+            $l['invoice_id']             = $pl->getInvoiceId();
+            $l['invoice_number']         = $pl->getInvoiceId() ? $this->prefixNumbers . $pl->getField('invoice_number') : '';
+            $l['bankaccountno']          = $pl->getBankaccountno();
+            $l['bankaccountno_contra']   = $pl->getBankaccountnoContra();
+            $l['amount']                 = $pl->getAmount();
+            $l['name']                   = $pl->getName();
+            $l['description']            = $pl->getDescription();
+            
+            
+            $this->lines[] = $l;
+        }
+        
         return $this->render();
     }
     
@@ -60,8 +81,8 @@ class stageController extends BaseController {
         $r = array();
         $r['success'] = true;
         $r['name'] = $name;
-        $r['person_id'] = is_a($customer, Person::class) ? $customer->getPersonId() : null;
-        $r['company_id'] = is_a($customer, Company::class) ? $customer->getCompanyId() : null;
+        $r['person_id'] = $customer->getPerson() ? $customer->getPerson()->getPersonId() : null;
+        $r['company_id'] = $customer->getCompany() ? $customer->getCompany()->getCompanyId() : null;
         
         return $this->json( $r );
     }
@@ -106,6 +127,15 @@ class stageController extends BaseController {
         
         return $this->json( $r );
     }
+    
+    
+    public function action_skip() {
+        $piService = object_container_get(PaymentImportService::class);
+        $pil_id = get_var('payment_import_line_id');
+        
+        
+    }
+    
     
     
     public function action_create() {

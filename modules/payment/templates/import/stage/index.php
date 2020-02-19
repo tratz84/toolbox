@@ -1,6 +1,5 @@
-<?php
-use base\forms\CustomerSelectWidget;
-?>
+
+<script src="<?= appUrl('/module/payment/js/payment-import.js') ?>?v=<?= filemtime(module_file('payment', 'public/js/payment-import.js')) ?>"></script>
 
 <div class="page-header">
 
@@ -13,248 +12,21 @@ use base\forms\CustomerSelectWidget;
 </div>
 
 
-
-<table class="list-response-table payment-import-table">
-	<thead>
-		<tr>
-			<th>Status</th>
-			<th>Customer</th>
-			<th>Invoice</th>
-			<th>Bankaccounts</th>
-			<th class="amount">Amount</th>
-			<th>Name</th>
-			<th>Description</th>
-			<th></th>
-		</tr>
-	</thead>
-	
-	<tbody>
-		<?php foreach($pi->getImportLines() as $pl) : ?>
-		<?php $plid = $pl->getPaymentImportLineId(); ?>
-		<tr data-payment-import-line-id="<?= $plid ?>" id="line-<?= $plid ?>">
-			<td>
-				Status
-			</td>
-			<td>
-				<div class="customer-selection" data-company-id="<?= $pl->getCompanyId() ?>" data-person-id="<?= $pl->getPersonId() ?>">
-				<?= format_customername($pl) ?>
-				</div>
-			</td>
-			<td>
-				<div class="invoice-selection" data-invoice-id="<?= $pl->getInvoiceId() ?>">
-				<?php
-				if ($pl->getInvoiceId())
-			        print $prefixNumbers . $pl->getField('invoice_number');
-				?>
-				</div>
-			</td>
-			
-			<td>
-				<?= esc_html($pl->getBankaccountno()) ?>
-				<br/>
-				<?= esc_html($pl->getBankaccountnoContra()) ?>
-			</td>
-			<td class="amount"><?= format_price($pl->getAmount()) ?></td>
-			
-			<td title="<?= esc_attr($pl->getName()) ?>">
-				<?= esc_html(limit_text($pl->getName(), 50)) ?>
-			</td>
-			
-			<td title="<?= esc_attr($pl->getDescription()) ?>">
-				<?= esc_html(limit_text($pl->getDescription(), 50)) ?>
-			</td>
-			<td>
-				<input type="button" value="Import" />
-			</td>
-		</tr>
-		<?php endforeach; ?>
-	</tbody>
-
-</table>
-
+<div id="pi-table"></div>
 
 <script>
+
+var pil_data = <?= json_encode($lines) ?>;
+var pit;
 
 $(document).ready(function() {
 	handle_deleteConfirmation();
 
 
-	$('.customer-selection').click(function() {
-		var tr = $(this).closest('tr');
-		var plid = $(tr).data('payment-import-line-id');
-
-		handle_customerSelection( plid );
-	});
-
-	$('.invoice-selection').click(function() {
-		var tr = $(this).closest('tr');
-		var plid = $(tr).data('payment-import-line-id');
-
-		handle_invoiceSelection( plid );
-	});
+	pit = new PaymentImportTable('#pi-table');
+	pit.setData( pil_data );
+	pit.render();
 });
-
-
-function handle_customerSelection(plid) {
-	var row = $('#line-'+plid);
-
-	if (row.find('.select-user').length > 0) {
-		return;
-	}
-
-	var customer_name = row.find('.customer-selection').text();
-	var person_id = row.find('.customer-selection').data('person-id');
-	var company_id = row.find('.customer-selection').data('company-id');
-
-	// remove old text
-	row.find('.customer-selection').empty();
-
-	// add select2-box
-	var s = $('<select class="select-user" name="customer_id_'+plid+'"></select>');
-	var opt = $('<option value=""></option>');
-	opt.text( customer_name );
-	if (company_id) {
-		opt.attr('value', 'company-'+company_id);
-	} else if (person_id) {
-		opt.attr('value', 'person-'+person_id);
-	} else {
-		opt.text('Maak uw keuze');
-	}
-	s.append(opt);
-	row.find('.customer-selection').append( s );
-
-	// init select2
-	$(s).select2({
-		ajax: {
-    		url: appUrl('/?m=base&c=customer&a=select2'),
-    		type: 'POST',
-    		data: function(params) {
-				var d = {};
-
-        		d.name = params.term;
-        		
-        		return d;
-    		}
-		}
-	});
-
-	// handle customer selection
-	$(s).on("select2:select", function (e) {
-		var v = $(this).val();
-		var plid = $(this).closest('tr').data('payment-import-line-id');
-		
-		if (v != '') {
-			set_customer( plid, v );
-		}
-	});
-}
-
-function set_customer(plid, customer_id) {
-	$.ajax({
-		type: 'POST',
-		url: appUrl('/?m=payment&c=import/stage&a=update_customer'),
-		data: {
-			payment_import_line_id: plid,
-			customer_id: customer_id
-		},
-		success: function(data, xhr, textStatus) {
-			if (data.success) {
-				set_customer_info(plid, data);
-			}
-		}
-	});
-}
-
-function set_customer_info(plid, data) {
-	var cs = $('#line-'+plid).find('.customer-selection');
-
-	cs.text( '' );
-	cs.data('person-id', '');
-	cs.data('company-id', '');
-
-	if (data.company_id) {
-    	cs.text( data.name );
-    	cs.data('company-id', data.company_id );
-	}
-	if (data.person_id) {
-    	cs.text( data.name );
-    	cs.data('person-id', data.person_id );
-	}
-}
-
-
-function handle_invoiceSelection(plid) {
-	var row = $('#line-'+plid);
-
-	if (row.find('.select-invoice').length > 0) {
-		return;
-	}
-
-	var invoice_text = row.find('.invoice-selection').text();
-	var invoice_id = row.find('.invoice-selection').data('invoice-id');
-
-	// remove old text
-	row.find('.invoice-selection').empty();
-
-	// add select2-box
-	var s = $('<select class="select-invoice" name="invoice_id_'+plid+'"></select>');
-	var opt = $('<option value=""></option>');
-	opt.text( invoice_text );
-	opt.attr('value', invoice_id);
-	s.append(opt);
-	row.find('.invoice-selection').append( s );
-
-	// init select2
-	$(s).select2({
-		ajax: {
-    		url: appUrl('/?m=invoice&c=invoice&a=select2'),
-    		type: 'POST',
-    		data: function(params) {
-				var d = {};
-
-				var cs = $(this).closest('tr').find('.customer-selection');
-				d.person_id = $(cs).data('person-id');
-				d.company_id = $(cs).data('company-id');
-
-        		d.name = params.term;
-        		
-        		return d;
-    		}
-		}
-	});
-
-	// handle customer selection
-	$(s).on("select2:select", function (e) {
-		var v = $(this).val();
-		var plid = $(this).closest('tr').data('payment-import-line-id');
-		
-		if (v != '') {
-			set_invoice( plid, v );
-		}
-	});
-}
-
-
-function set_invoice(plid, invoice_id) {
-	$.ajax({
-		type: 'POST',
-		url: appUrl('/?m=payment&c=import/stage&a=update_invoice'),
-		data: {
-			payment_import_line_id: plid,
-			invoice_id: invoice_id
-		},
-		success: function(data, xhr, textStatus) {
-			if (data.success) {
-				var cs = $('#line-'+plid).find('.invoice-selection');
-				cs.text( data.invoice_number );
-				cs.data('invoice-id', data.invoice_id);
-				
-				set_customer_info(plid, data);
-			}
-		}
-	});
-}
-
 
 
 
