@@ -111,15 +111,19 @@ class PaymentImportService extends ServiceBase {
         }
         
         // fetch Invoice
-        $invoiceService = object_container_get(InvoiceService::class);
-        $invoice = $invoiceService->readInvoice( $invoiceId );
-        
-        if (!$invoice) {
-            throw new ObjectNotFoundException('Invoice not found');
+        if ($invoiceId != null) {
+            $invoiceService = object_container_get(InvoiceService::class);
+            $invoice = $invoiceService->readInvoice( $invoiceId );
+            
+            if (!$invoice) {
+                throw new ObjectNotFoundException('Invoice not found');
+            }
+            $pil->setInvoiceId( $invoice->getInvoiceId() );
+        } else {
+            $pil->setInvoiceId( null );
         }
         
         
-        $pil->setInvoiceId( $invoice->getInvoiceId() );
         
         return $pil->save();
     }

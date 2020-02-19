@@ -71,16 +71,25 @@ class stageController extends BaseController {
         
         $pil_id = get_var('payment_import_line_id');
         
-        $invoice_id = get_var('invoice_id');
+        $invoice_id = (int)get_var('invoice_id');
+        if ($invoice_id == 0)
+            $invoice_id = null;
         $piService->setInvoice($pil_id, $invoice_id);
         
-        $invoiceService = object_container_get(InvoiceService::class);
-        $invoice = $invoiceService->readInvoice( $invoice_id );
         
+        // build response
         $r = array();
         $r['success'] = true;
-        $r['invoice_number'] = $invoice->getInvoiceNumberText();
-        $r['invoice_id'] = $invoice->getInvoiceId();
+        if ($invoice_id) {
+            $invoiceService = object_container_get(InvoiceService::class);
+            $invoice = $invoiceService->readInvoice( $invoice_id );
+            $r['invoice_number'] = $invoice->getInvoiceNumberText();
+            $r['invoice_id'] = $invoice->getInvoiceId();
+        } else {
+            $r['invoice_number'] = null;
+            $r['invoice_id'] = null;
+        }
+        
         
         return $this->json( $r );
     }
