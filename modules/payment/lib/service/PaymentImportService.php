@@ -28,6 +28,7 @@ class PaymentImportService extends ServiceBase {
         
         $pi = new PaymentImport();
         $pi->setDescription('New import ' . basename($file));
+        $pi->setStatus('open');
         $pi->save();
         
         for($x=1; $x < $psi->getRowCount(); $x++) {
@@ -78,7 +79,7 @@ class PaymentImportService extends ServiceBase {
         
         $cursor = $piDao->search($opts);
         
-        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('payment_import_id', 'description', 'created', 'count'));
+        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('payment_import_id', 'description', 'status', 'created', 'count'));
         
         return $r;
     }
@@ -200,6 +201,34 @@ class PaymentImportService extends ServiceBase {
         $pil->save();
         
         return $pil;
+    }
+    
+    public function markBatchDone($paymentImportId) {
+        $piDao = new PaymentImportDAO();
+        
+        $pi = $piDao->read($paymentImportId);
+        
+        if (!$pi) {
+            throw new InvalidStateException('PaymentImport not found');
+        }
+        
+        $pi->setStatus('done');
+        
+        return $pi->save();
+    }
+    
+    public function reopenBatch($paymentImportId) {
+        $piDao = new PaymentImportDAO();
+        
+        $pi = $piDao->read($paymentImportId);
+        
+        if (!$pi) {
+            throw new InvalidStateException('PaymentImport not found');
+        }
+        
+        $pi->setStatus('reopened');
+        
+        return $pi->save();
     }
     
     

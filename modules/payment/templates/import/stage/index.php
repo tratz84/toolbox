@@ -12,8 +12,13 @@
 	<h1>Import</h1>
 </div>
 
-<input type="button" id="btnAutomatch" value="Automatch" /> <span id="automatch-status"></span>
-<hr/>
+<?php if ($pi->getStatus() != 'done') : ?>
+    <input type="button" id="btnAutomatch" value="Automatch" /> <span id="automatch-status"></span>
+    <input type="button" id="btnDone" value="Done" title="Mark batch as done" />
+<?php elseif ($pi->getStatus() == 'done') : ?>
+	<input type="button" id="btnReopen" value="Re-open" title="Re-open batch" />
+<?php endif; ?>
+    <hr/>
     <div class="filter-container">
     	<label>
     		<input type="checkbox" name="incoming" value="1" <?= get_var('incoming') ? 'checked=checked' : '' ?> />
@@ -31,12 +36,14 @@ var pit;
 
 var paymentAutomatch;
 
+var pi_status = <?= json_encode($pi->getStatus()) ?>;
+
 
 $(document).ready(function() {
 	handle_deleteConfirmation();
-
-
-	pit = new PaymentImportTable('#pi-table');
+	
+	
+	pit = new PaymentImportTable('#pi-table', { payment_import_status: pi_status });
 	pit.setData( pil_data );
 	pit.render();
 
@@ -76,6 +83,15 @@ $(document).ready(function() {
 		}
 
 		window.location = appUrl(u);
+	});
+
+
+	$('#btnDone').click(function() {
+		window.location = appUrl('/?m=payment&c=import/stage&a=done&id=<?= $pi->getPaymentImportId() ?>');
+	});
+
+	$('#btnReopen').click(function() {
+		window.location = appUrl('/?m=payment&c=import/stage&a=reopen&id=<?= $pi->getPaymentImportId() ?>');
 	});
 });
 

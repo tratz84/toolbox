@@ -44,7 +44,10 @@ function PaymentImportTable(container, opts) {
 			tr.append('<td class="td-amount" />');
 			tr.append('<td class="td-name" />');
 			tr.append('<td class="td-description" />');
-			tr.append('<td class="td-action-buttons" />');
+			
+			if (this.opts.payment_import_status != 'done') {
+				tr.append('<td class="td-action-buttons" />');
+			}
 		}
 	
 		tr.data('pil', line);
@@ -115,6 +118,12 @@ function PaymentImportTable(container, opts) {
 	};
 	
 	this.determineButtons = function(tr) {
+		// batch marked as done? => no buttons
+		if (this.opts.payment_import_status == 'done') {
+			return;
+		}
+		
+		
 		var il = tr.data('pil');
 		
 		var tdButtons = tr.find('.td-action-buttons');
@@ -241,6 +250,12 @@ function PaymentImportTable(container, opts) {
 	
 	
 	this.customer_selection_Click = function(obj) {
+		// batch done? => do nothing
+		if (this.opts.payment_import_status == 'done') {
+			return;
+		}
+		
+		
 		var tr = $(obj).closest('tr');
 		var l = tr.data('pil');
 		
@@ -319,6 +334,11 @@ function PaymentImportTable(container, opts) {
 	
 	
 	this.invoice_selection_Click = function(obj) {
+		// batch done? => do nothing
+		if (this.opts.payment_import_status == 'done') {
+			return;
+		}
+
 		var tr = $(obj).closest('tr');
 		var l = tr.data('pil');
 		

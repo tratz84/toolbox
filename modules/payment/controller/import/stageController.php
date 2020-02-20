@@ -238,6 +238,22 @@ class stageController extends BaseController {
     }
     
     
+    
+    public function action_done() {
+        $piService = object_container_get(PaymentImportService::class);
+        $piService->markBatchDone( get_var('id') );
+        
+        redirect('/?m=payment&c=import');
+    }
+
+    public function action_reopen() {
+        $piService = object_container_get(PaymentImportService::class);
+        $piService->reopenBatch( get_var('id') );
+        
+        redirect('/?m=payment&c=import/stage&id='.get_var('id'));
+    }
+    
+    
 }
 
 
