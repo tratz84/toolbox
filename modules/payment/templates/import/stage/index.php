@@ -13,7 +13,13 @@
 </div>
 
 <input type="button" id="btnAutomatch" value="Automatch" /> <span id="automatch-status"></span>
-
+<hr/>
+    <div class="filter-container">
+    	<label>
+    		<input type="checkbox" name="incoming" value="1" />
+    		Alleen inkomende bedragen
+    	</label>
+	</div>
 <hr/>
 
 <div id="pi-table"></div>
@@ -58,6 +64,18 @@ $(document).ready(function() {
 
 // 		paymentAutomatch.matchPayment(1);
 		paymentAutomatch.matchAll();
+	});
+
+
+	$('.filter-container input').change(function() {
+		var obj = serialize2object('.filter-container');
+
+		var u = '/?m=payment&c=import/stage&id=<?= $pi->getPaymentImportId() ?>';
+		for(var i in obj) {
+			u = u + '&'+i+'='+obj[i];
+		}
+
+		window.location = appUrl(u);
 	});
 });
 

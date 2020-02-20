@@ -148,6 +148,8 @@ class PaymentImportService extends ServiceBase {
                 throw new ObjectNotFoundException('Invoice not found');
             }
             $pil->setInvoiceId( $invoice->getInvoiceId() );
+            $pil->setCompanyId( $invoice->getCompanyId() );
+            $pil->setPersonId( $invoice->getPersonId() );
         } else {
             $pil->setInvoiceId( null );
         }

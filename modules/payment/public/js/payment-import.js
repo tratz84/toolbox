@@ -295,9 +295,10 @@ function PaymentImportTable(container, opts) {
 
 		var invoice_text = l['invoice_number'];
 		var invoice_id = l['invoice_id'];
+		var plid = l['payment_import_line_id'];
 
 		// remove old text
-		row.find('.invoice-selection').empty();
+		tr.find('.invoice-selection').empty();
 
 		// add select2-box
 		var s = $('<select class="select-invoice" name="invoice_id_'+plid+'"></select>');
@@ -305,7 +306,7 @@ function PaymentImportTable(container, opts) {
 		opt.text( invoice_text );
 		opt.attr('value', invoice_id);
 		s.append(opt);
-		row.find('.invoice-selection').append( s );
+		tr.find('.invoice-selection').append( s );
 
 		// init select2
 		$(s).select2({
@@ -340,6 +341,8 @@ function PaymentImportTable(container, opts) {
 	
 
 	this.set_invoice = function(plid, invoice_id) {
+		var me = this;
+		
 		$.ajax({
 			type: 'POST',
 			url: appUrl('/?m=payment&c=import/stage&a=update_invoice'),
@@ -353,7 +356,7 @@ function PaymentImportTable(container, opts) {
 					cs.text( data.invoice_number );
 					cs.data('invoice-id', data.invoice_id);
 					
-					set_customer_info(plid, data);
+					me.updateImportLines( data.payment_import_lines );
 				}
 			}
 		});

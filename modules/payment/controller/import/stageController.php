@@ -29,6 +29,10 @@ class stageController extends BaseController {
         
         $this->lines = array();
         foreach($this->pi->getImportLines() as $pl) {
+            if (get_var('incoming') == '1') {
+                if ($pl->getAmount() < 0) continue;
+            }
+            
             $this->lines[] = $pl->asArray();
         }
         
@@ -81,28 +85,32 @@ class stageController extends BaseController {
         
         // build response
         $r = array();
-        $r['success'] = true;
         if ($invoice_id) {
             $invoiceService = object_container_get(InvoiceService::class);
             $invoice = $invoiceService->readInvoice( $invoice_id );
-            $r['invoice_number'] = $invoice->getInvoiceNumberText();
-            $r['invoice_id'] = $invoice->getInvoiceId();
+//             $r['invoice_number'] = $invoice->getInvoiceNumberText();
+//             $r['invoice_id'] = $invoice->getInvoiceId();
             
-            $customerService = object_container_get(CustomerService::class);
-            $customer = $customerService->readCustomerAuto( $invoice->getCompanyId(), $invoice->getPersonId() );
-            if ($customer) {
-                $r['name'] = format_customername($customer);
-                if ($customer->getCompany()) {
-                    $r['company_id'] = $customer->getCompany()->getCompanyId();
-                }
-                if ($customer->getPerson()) {
-                    $r['person_id'] = $customer->getPerson()->getPersonId();
-                }
-            }
+//             $customerService = object_container_get(CustomerService::class);
+//             $customer = $customerService->readCustomerAuto( $invoice->getCompanyId(), $invoice->getPersonId() );
+//             if ($customer) {
+//                 $r['name'] = format_customername($customer);
+//                 if ($customer->getCompany()) {
+//                     $r['company_id'] = $customer->getCompany()->getCompanyId();
+//                 }
+//                 if ($customer->getPerson()) {
+//                     $r['person_id'] = $customer->getPerson()->getPersonId();
+//                 }
+//             }
+            
+            $pil = $piService->readImportLine( $pil_id );
+            
+            
+            $r['success'] = true;
+            $r['payment_import_lines'] = array( $pil->asArray() );
             
         } else {
-            $r['invoice_number'] = null;
-            $r['invoice_id'] = null;
+            $r['success'] = false;
         }
         
         
