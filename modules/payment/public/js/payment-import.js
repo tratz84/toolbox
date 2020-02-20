@@ -51,6 +51,19 @@ function PaymentImportTable(container, opts) {
 		tr.find('.td-import-status').text( line['import_status'] );
 		
 		if (newRow) {
+			var anchViewCompany = $('<a href="javascript:void(0);" class="fa fa-search view-customer"></a>');
+			anchViewCompany.click(function() {
+				var tr = $(this).closest('tr');
+				var pil = tr.data('pil');
+				if (pil['company_id']) {
+					window.open(appUrl('/?m=base&c=company&a=edit&company_id='+pil['company_id']), '_blank');
+				}
+				if (pil['person_id']) {
+					window.open(appUrl('/?m=base&c=person&a=edit&person_id='+pil['person_id']), '_blank');
+				}
+			});
+			
+			tr.find('.td-customer').append( anchViewCompany );
 			tr.find('.td-customer').append('<div class="customer-selection" />');
 			tr.find('.td-customer .customer-selection').click(function(evt) {
 				this.customer_selection_Click( evt.target );
@@ -59,14 +72,34 @@ function PaymentImportTable(container, opts) {
 //		tr.find('.td-customer .customer-selection').empty();
 //		console.log(name);
 		tr.find('.td-customer .customer-selection').text( line['customer_name'] );
+		if (line['company_id'] || line['person_id']) {
+			tr.find('.td-customer a.view-customer').show();
+		} else {
+			tr.find('.td-customer a.view-customer').hide();
+		}
 		
 		if (newRow) {
+			var anchViewInvoice = $('<a href="javascript:void(0);" class="fa fa-search view-invoice"></a>');
+			anchViewInvoice.click(function() {
+				var tr = $(this).closest('tr');
+				var pil = tr.data('pil');
+				if (pil['invoice_id']) {
+					window.open(appUrl('/?m=invoice&c=invoice&a=edit&id='+pil['invoice_id']), '_blank');
+				}
+			});
+
+			tr.find('.td-invoice').append( anchViewInvoice );
 			tr.find('.td-invoice').append('<div class="invoice-selection" />');
 			tr.find('.td-invoice .invoice-selection').click(function(evt) {
 				this.invoice_selection_Click( evt.target );
 			}.bind(this));
 		}
 		tr.find('.td-invoice .invoice-selection').text( line['invoice_number'] );
+		if (line['invoice_id']) {
+			tr.find('.td-invoice .view-invoice').show();
+		} else {
+			tr.find('.td-invoice .view-invoice').hide();
+		}
 		
 		tr.find('.td-bankaccounts').html('<div>'+line['bankaccountno']+'</div><div>'+line['bankaccountno_contra']+'</div>');
 		tr.find('.td-amount').text( format_price(line['amount']) );
