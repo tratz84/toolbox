@@ -43,7 +43,7 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
         $menuOverviewPayments->addChildMenu($menuNewPayment);
         
         
-        if ($ctx->isExperimental() && hasCapability('payment', 'import-payments')) {
+        if (hasCapability('payment', 'import-payments')) {
             $menuImportPayments = new Menu();
             $menuImportPayments->setIconLabelUrl('fa-download', t('Import Payments'), '/?m=payment&c=import');
             $menuOverviewPayments->addChildMenu( $menuImportPayments );
