@@ -38,12 +38,30 @@ class PaymentImportMatcher {
     }
     
     
+    
+    public function checkDuplicate($pil) {
+        $piService = object_container_get(PaymentImportService::class);
+        
+        if (!$pil) {
+            throw new ObjectNotFoundException('Line not found');
+        }
+        
+        if ($piService->checkDuplicate( $pil )) {
+            $piService->markDuplicate( $pil->getPaymentImportLineId() );
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    
+    
     /**
      * matchLine() - looks up customer + invoice for given import-line
      */
-    public function matchLine($paymentImportLineId) {
+    public function matchLine($pil) {
         $piService = object_container_get(PaymentImportService::class);
-        $pil = $piService->readImportLine( $paymentImportLineId );
+//         $pil = $piService->readImportLine( $paymentImportLineId );
         
         if (!$pil) {
             throw new ObjectNotFoundException('Line not found');
@@ -59,6 +77,10 @@ class PaymentImportMatcher {
         
         $customer = null;
         $invoice = null;
+        
+        
+        // TODO: check if payment is duplicate
+        
         
         // lookup customer or invoice
         if ($customer = $this->lookupCustomer( $pil )) {
@@ -92,9 +114,9 @@ class PaymentImportMatcher {
         
         $piService->saveImportLine( $pil );
         
-        $pil = $piService->readImportLine( $paymentImportLineId );
+//         $pil = $piService->readImportLine( $pil->getPaymentImportLineId() );
         
-        return $pil;
+        return true;
     }
     
     /**
@@ -141,10 +163,11 @@ class PaymentImportMatcher {
         $matches = array();
         
         if ($this->invoicePrefix) {
-            preg_match('/'.preg_quote($this->invoicePrefix).'\\s*\\d+/', $desc, $matches);
+            preg_match_all('/'.preg_quote($this->invoicePrefix).'\\s*\\d+/', $desc, $matches, PREG_SET_ORDER);
         }
+        
         if (count($matches) == 0) {
-            preg_match('/\\d+/', $desc, $matches);
+            preg_match_all('/\\d+/', $desc, $matches, PREG_SET_ORDER);
         }
         
         if (count($matches) == 0) {
@@ -152,6 +175,8 @@ class PaymentImportMatcher {
         }
         
         foreach($matches as $possibleInvoiceNo) {
+            $possibleInvoiceNo = $possibleInvoiceNo[0];
+            
             if (in_array(strlen($possibleInvoiceNo), $this->invoiceNumberLengths) == false)
                 continue;
             

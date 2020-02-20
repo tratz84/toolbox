@@ -83,6 +83,14 @@ class PaymentImportService extends ServiceBase {
         return $r;
     }
     
+    public function checkDuplicate(PaymentImportLine $pil) {
+        $piDao = new PaymentImportDAO();
+        
+        $pis = $piDao->readDuplicate($pil);
+        
+        return count($pis) > 0 ? true : false;
+    }
+    
     
     public function readImportLine($paymentImportLineId) {
         $pilDao = new PaymentImportLineDAO();
@@ -170,6 +178,13 @@ class PaymentImportService extends ServiceBase {
         $pil->save();
         
         return $pil;
+    }
+    
+    public function markDuplicate($paymentImportLineId) {
+        $pil = $this->readImportLine( $paymentImportLineId );
+        
+        $pil->setImportStatus('duplicate');
+        return $pil->save();
     }
     
     public function markImported($paymentImportLineId) {

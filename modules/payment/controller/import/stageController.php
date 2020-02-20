@@ -182,11 +182,21 @@ class stageController extends BaseController {
         $r = array();
         
         $pil = null;
-        if ($pil = $pim->matchLine( get_var('payment_import_line_id') )) {
+        
+        $piService = object_container_get(PaymentImportService::class);
+        $pil = $piService->readImportLine( get_var('payment_import_line_id') );
+        
+        
+        if ($pim->checkDuplicate( $pil )) {
+            $r['success'] = false;
+        }
+        else if ($pim->matchLine( $pil )) {
             $r['success'] = true;
         } else {
             $r['success'] = false;
         }
+        
+        $pil = $piService->readImportLine( get_var('payment_import_line_id') );
         
         $r['payment_import_lines'] = array();
         if ($pil) {

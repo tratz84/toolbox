@@ -20,6 +20,29 @@ class PaymentImportDAO extends \core\db\DAOObject {
 	    $this->query('delete from payment__payment_import where payment_import_id=?', array($id));
 	}
 	
+	public function readDuplicate($pil) {
+	    $sql = "select * 
+                from payment__payment_import_line 
+                where payment_import_id <> ?
+                    and transaction_id = ? 
+                    and amount = ? 
+                    and payment_date = ? 
+                    and bankaccountno = ? 
+                    and bankaccountno_contra = ? 
+                    and description = ?";
+	    
+	    $p = array();
+	    $p[] = $pil->getPaymentImportId();
+	    $p[] = $pil->getTransactionId();
+	    $p[] = $pil->getAmount();
+	    $p[] = $pil->getPaymentDate();
+	    $p[] = $pil->getBankaccountno();
+	    $p[] = $pil->getBankaccountnoContra();
+	    $p[] = $pil->getDescription();
+	    
+	    return $this->queryList($sql, $p);
+	}
+	
 
 	public function search($opts) {
 	    $qb = $this->createQueryBuilder();

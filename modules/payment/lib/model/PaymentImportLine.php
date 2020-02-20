@@ -34,7 +34,7 @@ class PaymentImportLine extends base\PaymentImportLineBase {
     public function getImportStatus() {
         $p = parent::getImportStatus();
         
-        if ($p == 'skip' || $p == 'imported') {
+        if ($p == 'skip' || $p == 'imported' || $p == 'duplicate') {
             return $p;
         }
         
