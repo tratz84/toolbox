@@ -16,7 +16,7 @@
 <hr/>
     <div class="filter-container">
     	<label>
-    		<input type="checkbox" name="incoming" value="1" />
+    		<input type="checkbox" name="incoming" value="1" <?= get_var('incoming') ? 'checked=checked' : '' ?> />
     		Alleen inkomende bedragen
     	</label>
 	</div>
