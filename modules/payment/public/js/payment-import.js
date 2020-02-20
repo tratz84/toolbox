@@ -37,7 +37,7 @@ function PaymentImportTable(container, opts) {
 		if (newRow) {
 			var tr = $('<tr />');
 			tr.addClass('import-line-' + line['payment_import_line_id']);
-			tr.append('<td class="td-import-status" />');
+			tr.append('<td class="td-import-status" title="pil-id '+line['payment_import_line_id']+'" />');
 			tr.append('<td class="td-customer" />');
 			tr.append('<td class="td-invoice" />');
 			tr.append('<td class="td-bankaccounts" />');
@@ -57,7 +57,7 @@ function PaymentImportTable(container, opts) {
 			}.bind(this));
 		}
 //		tr.find('.td-customer .customer-selection').empty();
-		console.log(name);
+//		console.log(name);
 		tr.find('.td-customer .customer-selection').text( line['customer_name'] );
 		
 		if (newRow) {
@@ -69,7 +69,7 @@ function PaymentImportTable(container, opts) {
 		tr.find('.td-invoice .invoice-selection').text( line['invoice_number'] );
 		
 		tr.find('.td-bankaccounts').html('<div>'+line['bankaccountno']+'</div><div>'+line['bankaccountno_contra']+'</div>');
-		tr.find('.td-amounts').text( format_price(line['amount']) );
+		tr.find('.td-amount').text( format_price(line['amount']) );
 		tr.find('.td-name').text( line['name'] );
 		tr.find('.td-description').text(limit_text(line['description'], 50));
 		tr.find('.td-description').attr('title', line['description']);
@@ -89,6 +89,9 @@ function PaymentImportTable(container, opts) {
 		
 		if (il['import_status'] == 'ready') {
 			var btnImport = $('<input type="button" value="Import" />');
+			btnImport.click(function(evt) {
+				this.import_Click( evt.target );
+			}.bind(this));
 			tdButtons.append( btnImport );
 		}
 		if (il['import_status'] == 'ready' || il['import_status'] == 'unknown') {
@@ -131,6 +134,30 @@ function PaymentImportTable(container, opts) {
 	this.render = function() {
 		
 		this.createTable();
+		
+	};
+	
+	
+	this.import_Click = function(btn) {
+		var tr = $(btn).closest('tr');
+		var l = tr.data('pil');
+		
+		$(btn).prop('disabled', true);
+		var me = this;
+		$.ajax({
+			type: 'POST',
+			url: appUrl('/?m=payment&c=import/stage&a=import'),
+			data: {
+				payment_import_line_id: l['payment_import_line_id']
+			},
+			success: function(data, xhr, textStatus) {
+				if (data.success) {
+					me.updateImportLines( data.payment_import_lines );
+				} else {
+					showAlert('Error', 'Error: ' + data.message);
+				}
+			}
+		});
 		
 	};
 	

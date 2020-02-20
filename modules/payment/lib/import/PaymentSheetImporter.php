@@ -67,7 +67,7 @@ class PaymentSheetImporter {
         }
     }
     
-    protected function normalizeRow(&$data) {
+    public static function normalizeRow(&$data) {
         
         if ($data['debet_credit']) {
             if ($data['debet_credit'] == 'Bij') $data['debet_credit'] = 'D';

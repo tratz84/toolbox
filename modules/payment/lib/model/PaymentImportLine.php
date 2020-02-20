@@ -11,6 +11,7 @@ class PaymentImportLine extends base\PaymentImportLineBase {
     protected static $lineStatuses = array(
         'unknown',              // not linked to a customer/invoice
         'skip',                 // skipped
+        'duplicate',
         'ready',                // ready to import
         'imported'              // imported
     );

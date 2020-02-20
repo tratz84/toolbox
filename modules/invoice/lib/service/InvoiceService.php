@@ -208,6 +208,20 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
     }
     
     
+    
+    public function readInvoiceByNumber($invoiceNumber, $fullObject=true) {
+        $iDao = new InvoiceDAO();
+        
+        $invoice = $iDao->readByInvoiceNumber($invoiceNumber);
+        if ($invoice && $fullObject) {
+            return $this->readInvoice( $invoice->getInvoiceId() );
+        }
+        
+        return $invoice;
+    }
+    
+    
+    
     /**
      * lookupCreditInvoiceId() - looks up the credit invoice by given invoice
      */
@@ -417,6 +431,14 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
 
         return true;
     }
+    
+    
+    public function getInvoiceNumberLengths() {
+        $iDao = new InvoiceDAO();
+        
+        return $iDao->getInvoiceNumberLengths();
+    }
+    
 
 
     public function deletePriceAdjustment($priceAdjustmentId) {

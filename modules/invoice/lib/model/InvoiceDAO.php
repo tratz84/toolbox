@@ -172,6 +172,20 @@ class InvoiceDAO extends \core\db\DAOObject {
 	public function getLastInvoiceDate() {
 		return $this->queryValue('select max(invoice_date) from invoice__invoice');
 	}
+	
+	public function getInvoiceNumberLengths() {
+	    $sql = "select distinct length(invoice_number)
+        	    from invoice__invoice
+        	    where length(invoice_number) is not null";
+	    
+	    $lengths = array();
+	    $ret = $this->query($sql);
+	    while($row = $ret->fetch_array()) {
+	        $lengths[] = $row[0];
+	    }
+	    
+	    return $lengths;
+	}
 
 	
 	public function totalsPerMonth($start, $end) {

@@ -22,6 +22,7 @@ $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($e
     $src = $evt->getSource();
     
     $src->addItem('Betalingen', 'Betalingsmethoden',     '/?m=payment&c=paymentMethod');
+    $src->addItem('Betalingen', 'Import instellingen',   '/?m=payment&c=import/settings');
 }));
 
 

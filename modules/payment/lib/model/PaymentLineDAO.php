@@ -5,6 +5,7 @@ namespace payment\model;
 
 
 use core\db\query\QueryBuilderWhere;
+use core\db\query\QueryBuilderWhereContainer;
 
 class PaymentLineDAO extends \core\db\DAOObject {
 
@@ -129,7 +130,30 @@ class PaymentLineDAO extends \core\db\DAOObject {
 	    $qb->leftJoin('customer__person',        'person_id',        'payment__payment');
 	    
 	    
-	    $qb->setOrderBy('payment__payment.payment_id desc, payment__payment_line.sort asc');
+	    
+	    if (isset($opts['iban']) && $opts['iban']) {
+	        $qb->addWhere( QueryBuilderWhere::whereRefByVal('payment__payment_line.bankaccountno_contra', '=', $opts['iban']) );
+	    }
+	    
+	    if (isset($opts['matched_customer']) && $opts['matched_customer']) {
+	        $qbwc = new QueryBuilderWhereContainer();
+	        $qbwc->setJoinMethod('OR');
+	        $qbwc->addWhere( QueryBuilderWhere::whereRefByRef('payment__payment.company_id', 'IS', 'NOT NULL') );
+	        $qbwc->addWhere( QueryBuilderWhere::whereRefByRef('payment__payment.person_id', 'IS', 'NOT NULL') );
+	        
+	        $qb->addWhere( $qbwc );
+	    }
+
+	    
+	    if (isset($opts['order'])) {
+	        $order = preg_match('/[^a-zA-Z0-9_ ]/', '', $opts['order']);
+	        if ($order) {
+	            $qb->setOrderBy( $order );
+	        }
+	    }
+	    else {
+    	    $qb->setOrderBy('payment__payment.payment_id desc, payment__payment_line.sort asc');
+	    }
 	    
 	    
 	    $sql = $qb->createSelect();

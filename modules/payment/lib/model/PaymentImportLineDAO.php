@@ -57,7 +57,7 @@ class PaymentImportLineDAO extends \core\db\DAOObject {
 	    
 	    $qb->addWhere(QueryBuilderWhere::whereRefByVal('payment_import_id', '=', $paymentImportId));
 	    
-	    $qb->setLimit(1000);
+// 	    $qb->setLimit(1000);
 	    
 	    $sql = $qb->createSelect();
 	    $params = $qb->getParams();

@@ -26,6 +26,12 @@ class CustomerDAO extends \core\db\DAOObject {
                 $where1[] = ' c.company_name like ? ';
                 $params[] = '%'.$opts['name'].'%';
             }
+            
+            if (isset($opts['iban']) && $opts['iban']) {
+                $where1[] = ' c.iban = ? ';
+                $params[] = $opts['iban'];
+            }
+            
         }
         
         $where2 = array();
@@ -38,6 +44,12 @@ class CustomerDAO extends \core\db\DAOObject {
                 $where2[] = ' concat(lastname, \', \', insert_lastname, \' \', firstname) like ? ';
                 $params[] = '%'.$opts['name'].'%';
             }
+            
+            if (isset($opts['iban']) && $opts['iban']) {
+                $where2[] = ' customer__person.iban = ? ';
+                $params[] = $opts['iban'];
+            }
+            
             
             if (count($where2)) {
                 $sql2 .= " WHERE (" . implode(") AND (", $where2) . " ) ";

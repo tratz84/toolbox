@@ -2,14 +2,13 @@
 
 
 
-use base\model\Company;
-use base\model\Person;
 use base\service\CustomerService;
 use core\controller\BaseController;
 use core\exception\InvalidStateException;
 use core\parser\SheetReader;
-use payment\service\PaymentImportService;
 use invoice\service\InvoiceService;
+use payment\import\PaymentImportMatcher;
+use payment\service\PaymentImportService;
 
 
 class stageController extends BaseController {
@@ -176,8 +175,48 @@ class stageController extends BaseController {
         redirect('/?m=payment&c=import/stage&id='.$pi->getPaymentImportId());
     }
     
+    
+    public function action_match_line() {
+        $pim = new PaymentImportMatcher();
+        
+        $r = array();
+        
+        $pil = null;
+        if ($pil = $pim->matchLine( get_var('payment_import_line_id') )) {
+            $r['success'] = true;
+        } else {
+            $r['success'] = false;
+        }
+        
+        $r['payment_import_lines'] = array();
+        if ($pil) {
+            $r['payment_import_lines'][] = $pil->asArray();
+        }
+        
+        return $this->json( $r );
+    }
+    
+    
     public function action_import() {
         
+        $piService = object_container_get(PaymentImportService::class);
+        
+        $r = array();
+        try {
+            $pil_id = get_var('payment_import_line_id');
+            
+            $payment = $piService->createPayment( $pil_id );
+            
+            $pil = $piService->readImportLine( $pil_id );
+            
+            $r['success'] = true;
+            $r['payment_import_lines'] = array( $pil->asArray() );
+        } catch (\Exception $ex) {
+            $r['success'] = false;
+            $r['message'] = $ex->getMessage();
+        }
+        
+        return $this->json( $r );
     }
     
     
