@@ -2,12 +2,21 @@
 
 namespace report;
 
+use core\event\EventBus;
+
 class ReportMenuList {
     
     
     protected $menuItems = array();
     
     public function __construct() {
+        
+    }
+    
+    
+    public function triggerMenuEvent() {
+        $eb = object_container_get(EventBus::class);
+        $eb->publishEvent($this, 'report', 'menu-list');
         
     }
     

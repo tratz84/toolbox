@@ -20,11 +20,10 @@ class reportController extends BaseController {
     public function action_index() {
         
         $this->rml = new ReportMenuList();
+        $this->rml->triggerMenuEvent();
+        
         $this->divReportClasses = array();
         
-        $eb = $this->oc->get(EventBus::class);
-        $eb->publishEvent($this->rml, 'report', 'menu-list');
-
         // get current reportClass
         $this->report = null;
         if (get_var('controllerName')) {
