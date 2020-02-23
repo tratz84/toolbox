@@ -12,6 +12,7 @@ class TableModel {
     
     protected $columns = array();
     protected $uniqueColumns = array();
+    protected $indexes = array();
     
     public function __construct($schemaName, $tableName) {
         $this->setSchemaName($schemaName);
@@ -62,6 +63,7 @@ class TableModel {
         }
     }
     
+    public function hasColumn($columnName) { return isset($this->columns[$columnName]) ? true : false; }
     public function getColumn($columnName) {
         if (isset($this->columns[$columnName]) == false) {
             throw new InvalidStateException('Unknown column');
@@ -69,15 +71,18 @@ class TableModel {
         
         return $this->columns[$columnName];
     }
-    
-    
-    public function unsetUniqueColumns($indexName) {
-        unset($this->uniqueColumns[$indexName]);
-    }
 
-    public function setUniqueColumns($indexName, $columns) {
-        $this->uniqueColumns[$indexName] = $columns;
-    }
+    
+    public function hasIndex($indexName) { return isset($this->indexes[$indexName]) ? true : false; }
+    public function getIndexes() { return $this->indexes; }
+    public function getIndex($indexName) { return $this->indexes[$indexName]; }
+    public function setIndex($indexName, $columns=array()) { $this->indexes[$indexName] = $columns; }
+    
+    
+    public function hasUniqueConstraint($indexName) { return isset($this->uniqueColumns[$indexName]) ? true : false; }
+    public function getUniqueConstraints() { return $this->uniqueColumns; }
+    public function getUniqueConstraint($indexName) { return $this->uniqueColumns[$indexName]; }
+    public function setUniqueColumns($indexName, $columns=array()) { $this->uniqueColumns[$indexName] = $columns; }
     
 }
 
