@@ -9,6 +9,9 @@ class MysqlTableGenerator {
     
     protected $tableModel = null;
     
+    protected $dbColumns = array();
+    protected $dbConstraints = array();
+    
     public function __construct(TableModel $model) {
         $this->tableModel = $model;
         
@@ -37,21 +40,29 @@ class MysqlTableGenerator {
         }
     }
     
-    protected function tableProperties() {
+    protected function loadTableProperties() {
         $props = array();
         
         $mysql = DatabaseHandler::getInstance()::getConnection('default');
-        $r = $mysql->query('describe `'.$this->getTableName().'`');
         
+        $r = $mysql->query('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME=?', array($mysql->getDatabaseName(), $this->getTableName()));
         while ($row = $r->fetch_assoc()) {
-            $props[ $row['Field'] ] = $row;
+            $this->dbColumns[ $row['COLUMN_NAME'] ] = $row;
         }
         
-        return $props;
+        $r = $mysql->query('select * from information_schema.table_constraints where TABLE_SCHEMA=? and TABLE_NAME=?', array($mysql->getDatabaseName(), $this->getTableName()));
+        while ($row = $r->fetch_assoc()) {
+            $in = $row['CONSTRAINT_NAME'];
+            if (isset($this->dbConstraints[$in]) == false) {
+                $this->dbConstraints[$in] = array();
+            }
+            
+            $this->dbConstraints[$in][] = $row;
+        }
     }
     
     public function buildAlter() {
-        $props = $this->tableProperties();
+        $this->loadTableProperties();
         
         $sql = '';
         
@@ -63,8 +74,8 @@ class MysqlTableGenerator {
             $model_type = $this->tableModel->getColumnProperty($columnName, 'type');
             $model_default_val = $this->tableModel->getColumnProperty($columnName, 'default');
             
-            if (isset($props[ $columnName ])) {
-                $db_type = $props[ $columnName ];
+            if (isset($this->dbColumns[ $columnName ])) {
+                $db_type = $this->dbColumns[ $columnName ];
                 
                 if ($this->typesEqual($db_type, $model_type)) {
                     continue;
@@ -81,6 +92,8 @@ class MysqlTableGenerator {
         }
         
         // TODO: drop columns
+        
+        // TODO: constraints
         
         $sql = 'blabla';
         
