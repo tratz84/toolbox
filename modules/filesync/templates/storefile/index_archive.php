@@ -24,13 +24,21 @@ t.setRowClick(function(row, evt) {
 t.setConnectorUrl( '/?m=filesync&c=storefile&a=search&storeId=<?= $store->getStoreId() ?>' );
 
 
+// t.addColumn({
+// 	fieldName: 'store_file_id',
+// 	width: 40,
+// 	fieldDescription: 'Id',
+// 	fieldType: 'text',
+// 	searchable: false
+// });
+
+
 t.addColumn({
-	fieldName: 'store_file_id',
-	width: 40,
-	fieldDescription: 'Id',
-	fieldType: 'text',
-	searchable: false
+	fieldName: 'document_date',
+	fieldDescription: 'Datum',
+	fieldType: 'date'
 });
+
 
 t.addColumn({
 	fieldName: 'company_name',
@@ -60,12 +68,6 @@ t.addColumn({
 	fieldName: 'filesize_text',
 	fieldDescription: 'Bestandsgrootte',
 	fieldType: 'text'
-});
-
-t.addColumn({
-	fieldName: 'document_date',
-	fieldDescription: 'Datum',
-	fieldType: 'date'
 });
 
 t.addColumn({
