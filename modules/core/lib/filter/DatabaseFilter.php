@@ -27,17 +27,17 @@ class DatabaseFilter {
         $dh->addServer('default', DEFAULT_DATABASE_HOST, DEFAULT_DATABASE_USERNAME, DEFAULT_DATABASE_PASSWORD, $customer->getDatabaseName());
         
         
-        if (defined('SQL_VERSION')) {
-            if (preg_match('/^\\d{10}$/', SQL_VERSION) == false)
-                throw new InvalidStateException('Invalid SQL_VERSION set');
-            
-            $sqlVersion = (int)$ctx->getSetting('SQL_VERSION', 0);
-            if ($sqlVersion < SQL_VERSION) {
-                // exec update
-                $db = new DatabaseUpdater('SQL_VERSION', SQL_VERSION, ROOT.'/updates');
-                $db->update();
-            }
-        }
+        // if (defined('SQL_VERSION')) {
+        //     if (preg_match('/^\\d{10}$/', SQL_VERSION) == false)
+        //         throw new InvalidStateException('Invalid SQL_VERSION set');
+        // 
+        //     $sqlVersion = (int)$ctx->getSetting('SQL_VERSION', 0);
+        //     if ($sqlVersion < SQL_VERSION) {
+        //         // exec update
+        //         $db = new DatabaseUpdater('SQL_VERSION', SQL_VERSION, ROOT.'/updates');
+        //         $db->update();
+        //     }
+        // }
         
         
         $filterChain->next();
