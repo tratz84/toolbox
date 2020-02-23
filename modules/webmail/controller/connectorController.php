@@ -91,19 +91,26 @@ class connectorController extends BaseController {
         
         $result = array();
         
-        $imap = new ImapConnection(get_var('hostname'), get_var('port'), get_var('username'), $password);
-        if ($imap->connect()) {
-            $result['folders'] = $imap->listFolders();
-            $imap->disconnect();
-            
-            $result['status'] = 'ok';
-        } else {
-            $result['status'] = 'error';
-            $result['message'] = 'Mislukt verbinding te maken';
-            
-            if (count($imap->getErrors())) {
-                $result['message'] = $result['message']. ': ' . implode(', ', $imap->getErrors());
+        try {
+            $imap = new ImapConnection(get_var('hostname'), get_var('port'), get_var('username'), $password);
+            if ($imap->connect()) {
+                $result['folders'] = $imap->listFolders();
+                $imap->disconnect();
+                
+                $result['status'] = 'ok';
+            } else {
+                $result['status'] = 'error';
+                $result['message'] = 'Mislukt verbinding te maken';
+                if (count($imap->getErrors())) {
+                    $result['message'] = $result['message']. ': ' . implode(', ', $imap->getErrors());
+                }
             }
+        } catch (\Exception $ex) {
+            $result['status'] = 'error';
+            $result['message'] = $ex->getMessage();
+        } catch (\Error $err) {
+            $result['status'] = 'error';
+            $result['message'] = $err->getMessage();
         }
         
         $this->json( $result );

@@ -17,7 +17,8 @@ chdir(dirname(__FILE__));
 // bootstrap
 include '../config/config.php';
 $contextName = $argv[1];
-bootstrapContext($contextName);
+bootstrapCli($contextName);
+
 
 
 $connectorService = ObjectContainer::getInstance()->get(ConnectorService::class);

@@ -83,7 +83,7 @@ class ImapConnection {
         
         $this->mailbox = '{'.$this->getHostname().':'.$this->getPort().$strOpts.'}';
         
-        $this->imap = @imap_open($this->mailbox, $this->getUsername(), $this->getPassword());
+        $this->imap = @\imap_open($this->mailbox, $this->getUsername(), $this->getPassword());
         
         if ($this->imap === false) {
             $this->errors = imap_errors();
@@ -230,6 +230,7 @@ class ImapConnection {
         
         $fh = fopen($file, 'w');
         if (!$fh)
+            print "ERROR: Unable to open file: $file\n"; 
             return false;
         
         $r = fwrite($fh, $str);

@@ -4,6 +4,7 @@
 use core\Context;
 use core\exception\InvalidStateException;
 use admin\model\Customer;
+use core\filter\FilterChain;
 
 function bootstrapContext($contextName) {
     
@@ -30,6 +31,18 @@ function bootstrapContext($contextName) {
     if (file_exists($autoloadfile)) {
         load_php_file($autoloadfile);
     }
+    
+}
+
+
+function bootstrapCli($contextName) {
+    bootstrapContext($contextName);
+    
+    $fc = new FilterChain();
+    $fc->addFilter( new \core\filter\DatabaseFilter() );
+    $fc->addFilter( new \core\filter\ModuleEnablerFilter() );
+    
+    $fc->execute();
     
 }
 
