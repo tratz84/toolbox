@@ -229,9 +229,10 @@ class ImapConnection {
         }
         
         $fh = fopen($file, 'w');
-        if (!$fh)
+        if (!$fh) {
             print "ERROR: Unable to open file: $file\n"; 
             return false;
+        }
         
         $r = fwrite($fh, $str);
         fclose($fh);
