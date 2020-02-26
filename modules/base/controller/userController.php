@@ -22,6 +22,9 @@ class userController extends FormController {
         $this->serviceFuncRead   = 'readUser';
         $this->serviceFuncSave   = 'saveUser';
         $this->serviceFuncDelete = 'deleteUser';
+        
+        $this->addTitle(t('Master data'));
+        $this->addTitle(t('Overview users'));
     }
     
 }

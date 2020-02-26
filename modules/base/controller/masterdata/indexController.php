@@ -8,6 +8,8 @@ class indexController extends BaseController {
     
     public function init() {
         checkCapability('base', 'edit-masterdata');
+        
+        $this->addTitle(t('Master data'));
     }
     
     

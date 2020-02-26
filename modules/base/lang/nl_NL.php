@@ -19,10 +19,22 @@ $lang['Fieldname']              = 'Veldnaam';
 $lang['Old value']              = 'Oude waarde';
 $lang['New value']              = 'Nieuwe waarde';
 $lang['Value']                  = 'Waarde';
+$lang['New company']            = 'Nieuw bedrijf';
 
 $lang['Company']                = 'Bedrijf';
+$lang['Companies']              = 'Bedrijven';
 $lang['Private']                = 'Particulier';
+$lang['Persons']                = 'Personen';
+$lang['New person']             = 'Persoon toevoegen';
 
+$lang['Offers']                 = 'Offertes';
+$lang['New offer']              = 'Nieuwe offerte';
+$lang['Offer']                  = 'Offerte';
+
+$lang['New order']              = 'Nieuwe order';
+$lang['New invoice']            = 'Nieuwe factuur';
+
+$lang['Master data']            = 'Stamgegevens';
 $lang['Settings']               = 'Instellingen';
 $lang['Save']                   = 'Opslaan';
 $lang['Cancel']                 = 'Annuleer';

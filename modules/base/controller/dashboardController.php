@@ -10,6 +10,7 @@ class dashboardController extends BaseController {
     
     
     public function action_index() {
+        $this->addTitle('Dashboard');
         
         $this->dwc = new DashboardWidgets();
         

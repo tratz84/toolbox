@@ -22,6 +22,8 @@ class BaseController {
     protected $moduleName = null;
     protected $controllerPath = null;
     
+    protected $pageTitle = array();
+    
     /**
      * @var \core\ObjectContainer
      */
@@ -31,6 +33,8 @@ class BaseController {
     public function __construct() {
         
     }
+    
+    public function addTitle($txt) { $this->pageTitle[] = $txt; }
     
     
     protected function getModuleName() {

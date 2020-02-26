@@ -20,6 +20,9 @@ use webmail\service\EmailTemplateService;
 
 class offerController extends BaseController {
     
+    public function init() {
+        $this->addTitle(t('Offers'));
+    }
     
     public function action_index() {
         
@@ -50,7 +53,16 @@ class offerController extends BaseController {
             $offer = $offerService->readOffer($id);
             if ($offer == null)
                 return $this->renderError('Offer not found');
+            
+            $strTitle = t('Offer').' ' . $offer->getOfferNumberText();
+            if ($offer->getCustomer()) {
+                $strTitle .= ' - ' . $offer->getCustomer()->getName();
+            }
+            
+            $this->addTitle( $strTitle );
         } else {
+            $this->addTitle(t('New offer'));
+            
             $offer = new Offer();
         }
         

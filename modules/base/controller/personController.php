@@ -32,6 +32,7 @@ class personController extends FormController {
         $this->serviceFuncSave   = 'save';
         $this->serviceFuncDelete = 'delete';
         
+        $this->addTitle(t('Persons'));
     }
 
     
@@ -47,6 +48,12 @@ class personController extends FormController {
         if ($r == 'not_found') {
             $person = $this->object;
             return $this->renderError('Person not found'.($person&&$person->getDeleted()?' (deleted)':''));
+        }
+        
+        if ($this->person->getPersonId()) {
+            $this->addTitle( $this->person->getFullname() );
+        } else {
+            $this->addTitle( t('New person') );
         }
         
         $this->render();

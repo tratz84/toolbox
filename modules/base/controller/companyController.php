@@ -21,6 +21,8 @@ class companyController extends BaseController {
     public function init() {
         if (Context::getInstance()->isCompaniesEnabled() == false)
             throw new InvalidStateException('Company-module not activated');
+        
+        $this->addTitle(t('Companies'));
     }
     
     public function action_index() {
@@ -55,10 +57,14 @@ class companyController extends BaseController {
                 if ($company->getDeleted()) {
                     throw new ObjectNotFoundException('Company marked as deleted');
                 }
+                
+                $this->addTitle($company->getCompanyName());
             } catch (ObjectNotFoundException $ex) {
                 return $this->renderError( $ex->getMessage() );
             }
         } else {
+            $this->addTitle(t('New company'));
+            
             $company = new Company();
         }
         

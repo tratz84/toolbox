@@ -8,7 +8,7 @@ $menuItems = $ms->listMainMenu();
 <html lang="<?= $context->getSelectedLang() ?>">
 	<head>
 		<meta charset="utf-8">
-		<title>Toolbox - <?= esc_html($context->getCompanyName()) ?></title>
+		<title><?= count($pageTitle) ? implode(' - ', array_reverse($pageTitle)) . ' - ' : '' ?><?= esc_html($context->getCompanyName()) ?> - Toolbox</title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 

@@ -23,6 +23,7 @@ class invoiceController extends BaseController {
         
         checkCapability('invoice', 'edit-invoice');
         
+        $this->addTitle(strOrder(2));
     }
     
     
@@ -55,8 +56,19 @@ class invoiceController extends BaseController {
             $invoice = $invoiceService->readInvoice($id);
             if ($invoice == null)
                 return $this->renderError('Invoice not found');
+            
+            $strTitle = strOrder('1') . ' ' . $invoice->getInvoiceNumberText();
+            if ($invoice->getCustomer())
+                $strTitle .= ' - ' . $invoice->getCustomer()->getName();
+            $this->addTitle($strTitle);
         } else {
             $invoice = new Invoice();
+            
+            if (\core\Context::getInstance()->getSetting('invoice__orderType') == 'invoice') {
+                $this->addTitle(t('New invoice'));
+            } else {
+                $this->addTitle(t('New order'));
+            }
         }
         
         // there must be atleast 1 active vat-tarif
