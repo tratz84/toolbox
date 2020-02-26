@@ -14,6 +14,8 @@ class reportController extends BaseController {
     
     public function init() {
         checkCapability('report', 'show-reports');
+        
+        $this->addTitle(t('Reports'));
     }
     
     
@@ -43,6 +45,8 @@ class reportController extends BaseController {
         }
         
         if ($this->report) {
+            $this->addTitle($this->report->getName());
+            
             $ctrl = $this->oc->getController($this->report->getModule(), $this->report->getControllerName());
             
             $this->divReportClasses[] = 'module-' . slugify($this->report->getModule());

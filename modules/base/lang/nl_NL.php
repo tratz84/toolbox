@@ -13,6 +13,7 @@ $lang['Make your choice']       = 'Maak uw keuze';
 $lang['Activate']               = 'Activeer';
 $lang['Deactivate']             = 'Deactiveer';
 
+$lang['Subject']                = 'Onderwerp';
 $lang['Time']                   = 'Tijdstip';
 
 $lang['Fieldname']              = 'Veldnaam';

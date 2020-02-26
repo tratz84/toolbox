@@ -12,6 +12,9 @@ use webmail\mail\SendMail;
 
 class viewController extends BaseController {
     
+    public function init() {
+        $this->addTitle(t('E-mail'));
+    }
     
     public function action_index() {
         
@@ -22,6 +25,8 @@ class viewController extends BaseController {
         if ($email === null) {
             throw new ObjectNotFoundException('Requested e-mail not found');
         }
+        
+        $this->addTitle(t('Subject') . ': ' . $email->getSubject());
 
         $this->form = new EmailForm();
         $this->form->bind( $email );

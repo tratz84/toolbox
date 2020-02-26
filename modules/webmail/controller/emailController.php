@@ -9,6 +9,9 @@ use webmail\form\EmailForm;
 
 class emailController extends BaseController {
     
+    public function init() {
+        $this->addTitle(t('E-mail'));
+    }
     
     public function action_index() {
         
