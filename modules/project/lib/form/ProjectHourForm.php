@@ -66,6 +66,8 @@ class ProjectHourForm extends BaseForm {
         $this->addValidator('start_time', function($form) {
         });
         
+        $this->addValidator('project_id', new NotEmptyValidator());
+        
         $this->addValidator('end_time', function($form) {
             if ($form->getWidgetValue('registration_type') == 'from_to') {
                 $dtv = new DateTimeValidator();
