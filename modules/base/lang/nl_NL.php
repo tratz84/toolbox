@@ -8,6 +8,8 @@ $lang['Yes']                    = 'Ja';
 $lang['No']                     = 'Nee';
 $lang['Load more']              = 'Laad meer';
 
+$lang['Basic settings']         = 'Basis instellingen';
+
 $lang['Make your choice']       = 'Maak uw keuze';
 
 $lang['Activate']               = 'Activeer';

@@ -12,6 +12,10 @@ class authController extends BaseController {
     // show a warning if the default 'admin123' password is set for user 'admin'
     protected $showWarningDefaultAdminPassword = false;
     
+    public function init() {
+        $this->addTitle('Login');
+    }
+    
     
     public function action_index() {
         $this->setDecoratorFile( lookupModuleFile('templates/decorator/auth.php') );

@@ -7,6 +7,9 @@ use payment\service\PaymentImportService;
 
 class importController extends BaseController {
     
+    public function init() {
+        $this->addTitle(t('Import payments'));
+    }
     
     public function action_index() {
         

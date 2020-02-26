@@ -9,6 +9,11 @@ use base\service\SettingsService;
 class settingsController extends BaseController {
     
     
+    public function init() {
+        $this->addTitle( t('Master data') );
+        $this->addTitle( t('Payment import settings') );
+    }
+    
     
     public function action_index() {
         

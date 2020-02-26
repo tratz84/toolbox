@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Toolbox</title>
+		<title><?= count($pageTitle) ? implode(' - ', array_reverse($pageTitle)) . ' - ' : '' ?>Toolbox</title>
 
 		<base href="<?= BASE_HREF ?>" />
 

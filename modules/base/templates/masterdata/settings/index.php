@@ -6,7 +6,7 @@
 		<a href="javascript:void(0);" onclick="$('form').submit()" class="fa fa-save"></a>
 	</div>
 
-	<h1>Basisinstellingen</h1>
+	<h1><?= t('Basic settings') ?></h1>
 </div>
 
 

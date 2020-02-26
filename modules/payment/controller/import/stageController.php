@@ -13,7 +13,9 @@ use payment\service\PaymentImportService;
 
 class stageController extends BaseController {
     
-    
+    public function init() {
+        $this->addTitle(t('Import payments'));
+    }
     
     
     public function action_index() {

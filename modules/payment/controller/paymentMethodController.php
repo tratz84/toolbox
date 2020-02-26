@@ -10,6 +10,9 @@ class paymentMethodController extends BaseController {
     
     public function init() {
         checkCapability('base', 'edit-masterdata');
+        
+        $this->addTitle( t('Master data') );
+        $this->addTitle( t('Payment methods') );
     }
     
     
@@ -24,8 +27,12 @@ class paymentMethodController extends BaseController {
         $paymentService = $this->oc->get(PaymentService::class);
         if ($id) {
             $paymentMethod = $paymentService->readPaymentMethod($id);
+            
+            $this->addTitle( t('Edit payment method') . ' ' . $paymentMethod->getDescription() );
         } else {
             $paymentMethod = new PaymentMethod();
+            
+            $this->addTitle( t('New payment method') );
         }
         
         $paymentMethodForm = new PaymentMethodForm();

@@ -9,6 +9,9 @@ class companySettingsController extends BaseController {
     
     public function init() {
         checkCapability('base', 'edit-masterdata');
+        
+        $this->addTitle(t('Master data'));
+        $this->addTitle(t('Company settings'));
     }
     
     public function action_index() {
