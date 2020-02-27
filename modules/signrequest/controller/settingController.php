@@ -7,6 +7,9 @@ use core\controller\BaseController;
 
 class settingController extends BaseController {
     
+    public function init() {
+        $this->addTitle('SignRequest settings');
+    }
     
     
     public function action_index() {
