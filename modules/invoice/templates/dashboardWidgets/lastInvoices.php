@@ -5,15 +5,15 @@
 		<a href="javascript:void(0);" onclick="show_popup(appUrl('/?m=invoice&c=dashboardWidgets&a=lastInvoices_settings'));" class="fa fa-cog"></a>
 	</div>
 
-	Recente <?= strtolower(strOrder(2)) ?>
+	<?= t('Recent') ?> <?= strtolower(strOrder(2)) ?>
 </div>
 
 <table class="list-widget" style="width: 100%;">
 	<thead>
 		<tr>
-			<th>Nr</th>
-			<th>Naam</th>
-			<th>Omschrijving</th>
+			<th><?= t('No') ?></th>
+			<th><?= t('Name') ?></th>
+			<th><?= t('Description') ?></th>
 			<?php if ($widgetSettings['show_invoice_amount']) : ?>
 			<th style="text-align: right; padding-right: 10px;">
 				Bedrag
@@ -25,11 +25,11 @@
 				<?php endif; ?>
 			</th>
 			<?php endif; ?>
-			<th>Status</th>
+			<th><?= t('State') ?></th>
 			<?php if ($widgetSettings['show_open_days']) : ?>
 			<th>Dagen</th>
 			<?php endif; ?>
-			<th><?= strOrder(1) ?>datum</th>
+			<th><?= strOrder(1) ?><?= t('date') ?></th>
 		</tr>
 	</thead>
 	<tbody>

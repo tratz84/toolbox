@@ -1,22 +1,22 @@
 
 
 <div class="widget-title">
-	Opkomende agendapunten
+	<?= t('Upcoming agenda items') ?>
 </div>
 
 <table class="list-widget" style="width: 100%;">
 	<thead>
 		<tr>
-			<th>Omschrijving</th>
-			<th style="width: 150px;">Datum / tijd</th>
-			<th style="width: 50px;">Dag</th>
+			<th><?= t('Description') ?></th>
+			<th style="width: 150px;"><?= t('Date / time') ?></th>
+			<th style="width: 50px;"><?= t('Day') ?></th>
 		</tr>
 	</thead>
 	
 	<tbody>
 	<?php if (count($items) == 0) : ?>
 		<tr>
-			<td colspan="3" style="text-align: center; font-style: italic;">Geen opkomende punten</td>
+			<td colspan="3" style="text-align: center; font-style: italic;"><?= t('No upcoming agenda items') ?></td>
 		</tr>
 	<?php else : ?>
 		<?php foreach($items as $i) : ?>
