@@ -185,6 +185,23 @@ function applyWidgetFields(container) {
 		});
 	}
 	
+	$(container).find('.dynamic-select-field-widget .select2-widget').each(function(index, node) {
+		var url = $(node).data('url');
+		
+		$(node).select2({
+			ajax: {
+				url: appUrl(url),
+				type: 'POST',
+				data: function(params) {
+					var d = {};
+	
+					d.name = params.term;
+					
+					return d;
+				}
+			}
+		});
+	});
 	
 	if (typeof $(document).tinymce == 'function') {
 		$('.input-tinymce').tinymce({
@@ -288,27 +305,6 @@ $(document).ready(function() {
 	submitForm.click(function() {
 		console.log(form);
 		form.submit();
-	});
-});
-
-// DynamicSelectField-widget handling
-$(document).ready(function() {
-	$('.dynamic-select-field-widget .select2-widget').each(function(index, node) {
-		var url = $(node).data('url');
-		
-		$(node).select2({
-			ajax: {
-	    		url: appUrl(url),
-	    		type: 'POST',
-	    		data: function(params) {
-					var d = {};
-	
-	        		d.name = params.term;
-	        		
-	        		return d;
-	    		}
-			}
-		});
 	});
 });
 

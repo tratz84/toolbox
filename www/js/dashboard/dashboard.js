@@ -153,6 +153,8 @@ function Dashboard( containerId, config ) {
 				this.getGrid().addWidget(c);
 			}
 		}
+		
+		applyWidgetFields( c );
 	};
 	
 	
