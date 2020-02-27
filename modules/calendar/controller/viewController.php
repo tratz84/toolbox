@@ -11,6 +11,8 @@ class viewController extends BaseController {
     
     public function init() {
         checkCapability('calendar', 'edit-calendar');
+        
+        $this->addTitle(t('Calendar'));
     }
     
     
@@ -18,6 +20,8 @@ class viewController extends BaseController {
         $calendarService = $this->oc->get(CalendarService::class);
         
         $this->calendar = $calendarService->readFirstCalendar();
+        
+        $this->addTitle($this->calendar->getName());
         
         $this->render();
     }
