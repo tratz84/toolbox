@@ -12,6 +12,8 @@ class vatController extends BaseController {
     
     public function init() {
         checkCapability('base', 'edit-masterdata');
+        
+        $this->addTitle( t('Vat tarifs') );
     }
     
     
@@ -27,8 +29,12 @@ class vatController extends BaseController {
         $invoiceService = $this->oc->get(InvoiceService::class);
         if ($id) {
             $vat = $invoiceService->readVat($id);
+            
+            $this->addTitle( t('Edit vat tarifs') . ' ' . $vat->getDescription());
         } else {
             $vat = new Vat();
+            
+            $this->addTitle( t('New vat tarifs') );
         }
         
         

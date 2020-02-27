@@ -12,6 +12,8 @@ class offerStatusController extends BaseController {
     
     public function init() {
         checkCapability('base', 'edit-masterdata');
+        
+        $this->addTitle( t('Offer states') );
     }
     
     
@@ -26,8 +28,12 @@ class offerStatusController extends BaseController {
         $offerService = $this->oc->get(OfferService::class);
         if ($id) {
             $offerStatus = $offerService->readOfferStatus($id);
+            
+            $this->addTitle( t('Edit offer state') . ' ' . $offerStatus->getDescription() );
         } else {
             $offerStatus = new OfferStatus();
+            
+            $this->addTitle( t('New offer state') );
         }
         
         

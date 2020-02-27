@@ -10,6 +10,8 @@ class articleGroupController extends BaseController {
     
     public function init() {
         checkCapability('base', 'edit-masterdata');
+        
+        $this->addTitle(t('Article groups'));
     }
     
     
@@ -43,8 +45,12 @@ class articleGroupController extends BaseController {
         $articleService = $this->oc->get(ArticleService::class);
         if ($id) {
             $group = $articleService->readArticleGroup($id);
+            
+            $this->addTitle(t('Edit article group') . ' ' . $group->getGroupName());
         } else {
             $group = new ArticleGroup();
+            
+            $this->addTitle(t('New article group'));
         }
         
         

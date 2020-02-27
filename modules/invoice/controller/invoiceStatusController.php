@@ -13,6 +13,8 @@ class invoiceStatusController extends BaseController {
     
     public function init() {
         checkCapability('base', 'edit-masterdata');
+        
+        $this->addTitle(strOrder(1) . ' ' . t('states'));
     }
     
     
@@ -27,8 +29,12 @@ class invoiceStatusController extends BaseController {
         $invoiceService = $this->oc->get(InvoiceService::class);
         if ($id) {
             $invoiceStatus = $invoiceService->readInvoiceStatus($id);
+            
+            $this->addTitle(t('Edit') . ' ' . strOrder(1) . ' ' . t('state') . ' ' . $invoiceStatus->getDescription());
         } else {
             $invoiceStatus = new InvoiceStatus();
+            
+            $this->addTitle(t('New') . ' ' . strOrder(1) . ' ' . t('state'));
         }
         
         

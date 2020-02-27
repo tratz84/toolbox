@@ -13,6 +13,8 @@ class calendarController extends BaseController {
     
     public function init() {
         checkCapability('calendar', 'edit-calendar');
+        
+        $this->addTitle( t('Calendars') );
     }
     
     public function action_index() {
@@ -46,8 +48,12 @@ class calendarController extends BaseController {
         $calendarService = $this->oc->get(CalendarService::class);
         if ($id) {
             $calendar = $calendarService->readCalendar($id);
+            
+            $this->addTitle( t('Edit calendar') . ' ' . $calendar->getName() );
         } else {
             $calendar = new Calendar();
+            
+            $this->addTitle( t('Add calendar') );
         }
         
         

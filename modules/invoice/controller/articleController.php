@@ -11,6 +11,8 @@ class articleController extends BaseController {
     
     public function init() {
         checkCapability('base', 'edit-masterdata');
+        
+        $this->addTitle(t('Articles'));
     }
     
     
@@ -43,8 +45,12 @@ class articleController extends BaseController {
         $articleService = $this->oc->get(ArticleService::class);
         if ($id) {
             $a = $articleService->readArticle($id);
+            
+            $this->addTitle(t('Edit article') . ' ' . $a->getArticleName());
         } else {
             $a = new Article();
+            
+            $this->addTitle(t('New article'));
         }
         
         

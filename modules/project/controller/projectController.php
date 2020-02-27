@@ -9,6 +9,9 @@ use core\exception\ObjectNotFoundException;
 
 class projectController extends BaseController {
     
+    public function init() {
+        $this->addTitle( t('Projects') );
+    }
     
     
     public function action_index() {

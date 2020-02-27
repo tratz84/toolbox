@@ -14,5 +14,27 @@ $lang['Payment method']         = 'Betaalmethode';
 $lang['Payment amount']         = 'Bedrag';
 $lang['New payment']            = 'Nieuwe betaling';
 
+$lang['Articles']               = 'Artikelen';
+$lang['New article']            = 'Nieuw artikel';
+$lang['Edit article']           = 'Bewerk artikel';
+
+$lang['Article groups']         = 'Artikelgroepen';
+$lang['New article group']      = 'Nieuw artikelgroep';
+$lang['Edit article group']     = 'Bewerk artikelgroep';
+
+$lang['states']                 = 'statussen';
+$lang['New']                    = 'Nieuwe';
+$lang['state']                  = 'status';
+$lang['settings']               = 'instellingen';
+
+$lang['Offer states']           = 'Offerte statussen';
+$lang['New offer state']        = 'Nieuwe offerte status';
+$lang['Edit offer state']       = 'Bewerk offerte status';
+
+$lang['New vat tarifs']         = 'Nieuw btw tarief';
+$lang['Edit vat tarifs']        = 'Bewerk btw tarief';
+$lang['Vat tarifs']             = 'Btw tarieven';
+
+
 
 return $lang;

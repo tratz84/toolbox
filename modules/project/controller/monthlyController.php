@@ -4,10 +4,14 @@
 use core\controller\BaseController;
 use core\forms\SelectField;
 use project\service\ProjectService;
+use base\service\UserService;
 
 class monthlyController extends BaseController {
     
-    
+    public function init() {
+        $this->addTitle(t('Month overview'));
+        
+    }
     
     public function action_index() {
         $this->handleProjectUsers();
@@ -18,6 +22,10 @@ class monthlyController extends BaseController {
         if ($this->selected_user_id) {
             $projectService = object_container_get(ProjectService::class);
             $this->hours = $projectService->readSummaryForMonth( $this->selected_user_id, format_date($this->selected_month, 'Y'), format_date($this->selected_month, 'm'));
+            
+            $userService = object_container_get(UserService::class);
+            $selected_user = $userService->readUser( $this->selected_user_id );
+            $this->addTitle( t('Month overview') . ' ' . $selected_user->getUsername() );
         }
         
         
@@ -28,7 +36,7 @@ class monthlyController extends BaseController {
         $projectService = object_container_get(ProjectService::class);
         $map = $projectService->mapProjectUsers();
         
-        $this->selectUser = new SelectField('user_id', '', $map, 'Selected user ');
+        $this->selectUser = new SelectField('user_id', '', $map, t('User shown'));
         
         // determine user_id to show
         $user = \core\Context::getInstance()->getUser();
@@ -76,7 +84,7 @@ class monthlyController extends BaseController {
         } else {
             $this->selected_month = date('Y-m-01');
         }
-        $this->selectMonth = new SelectField('month', $this->selected_month, $map, 'Maand');
+        $this->selectMonth = new SelectField('month', $this->selected_month, $map, t('Month'));
         
         // fill array of days/week
         $this->daysPerWeek = array();

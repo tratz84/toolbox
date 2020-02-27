@@ -5,7 +5,7 @@
 		<a href="<?= appUrl('/?m=project&c=project') ?>" class="fa fa-chevron-circle-left"></a>
 	</div>
 
-	<h1>Maandelijks overzicht</h1>
+	<h1>Maandoverzicht</h1>
 </div>
 
 

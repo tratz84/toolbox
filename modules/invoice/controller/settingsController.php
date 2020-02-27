@@ -9,6 +9,8 @@ class settingsController extends BaseController
     public function init()
     {
         checkCapability('base', 'edit-masterdata');
+        
+        $this->addTitle( strOrder(1) . ' ' . t('settings'));
     }
 
     public function action_index()

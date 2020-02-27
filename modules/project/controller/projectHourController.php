@@ -11,6 +11,10 @@ use project\service\ProjectService;
 
 class projectHourController extends BaseController {
     
+    public function init() {
+        $this->addTitle( t('Projects') );
+    }
+
     
     public function action_index() {
         $projectService = $this->oc->get(ProjectService::class);
@@ -38,6 +42,10 @@ class projectHourController extends BaseController {
         
         if (get_var('date') && valid_date(get_var('date'))) {
             $this->date = get_var('date');
+        }
+        
+        if ($this->project) {
+            $this->addTitle( t('Project') . ' ' . $this->project->getProjectName() );
         }
         
         
@@ -146,6 +154,13 @@ class projectHourController extends BaseController {
         
         $this->isNew = $ph->isNew();
         $this->form = $form;
+        
+        
+        if ($this->isNew) {
+            $this->addTitle(t('New hour'));
+        } else {
+            $this->addTitle(t('Edit hour'));
+        }
         
         $this->render();
     }
