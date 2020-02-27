@@ -19,6 +19,7 @@ class BaseForm extends WidgetContainer {
     
     protected $errors = array();
     
+    protected $action = "";
     protected $enctype = "application/x-www-form-urlencoded";
     
     protected $keyFields = array();
@@ -79,6 +80,9 @@ class BaseForm extends WidgetContainer {
         
         return $html;
     }
+    
+    public function setAction($str) { $this->action = $str; }
+    public function getAction() { return $this->action; }
     
     protected function enctypeToMultipartFormdata() {
         $this->enctype = 'multipart/form-data';
@@ -270,7 +274,7 @@ class BaseForm extends WidgetContainer {
         }
         
         
-        $html .= '<form method="POST" enctype="'.$this->enctype.'" class="form-generator form-'.slugify($className).'" ';
+        $html .= '<form method="POST" enctype="'.$this->enctype.'" action="'.esc_attr($this->action).'" class="form-generator form-'.slugify($className).'" ';
         
         foreach($this->htmlAttributes as $key => $val) {
             $html .= ' ' . esc_attr($key) . '="' . esc_attr($val) . '"';
