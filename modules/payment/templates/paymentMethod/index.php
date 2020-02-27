@@ -5,7 +5,7 @@
 		<a href="<?= appUrl('/?m=payment&c=paymentMethod&a=edit') ?>" class="fa fa-plus"></a>
 	</div>
 	
-    <h1>Betalingsmogelijkheden</h1>
+    <h1><?= t('Payment methods') ?></h1>
 </div>
 
 

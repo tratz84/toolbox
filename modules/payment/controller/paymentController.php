@@ -10,6 +10,10 @@ use payment\pdf\PaymentPdf;
 
 class paymentController extends BaseController {
     
+    public function init() {
+        $this->addTitle(t('Payments'));
+    }
+
     
     public function action_index() {
         $this->form = new PaymentForm();
@@ -17,9 +21,13 @@ class paymentController extends BaseController {
         $paymentService = object_container_get(PaymentService::class);
         if (get_var('id')) {
             $payment = $paymentService->readPayment( get_var('id') );
+            
+            $this->addTitle($payment->getDescription());
         } else {
             $payment = new Payment();
             $payment->setDescription('Handmatig verwerkte betaling');
+            
+            $this->addTitle(t('New payment'));
         }
         
         $this->form->bind($payment);

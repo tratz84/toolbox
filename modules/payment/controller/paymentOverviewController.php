@@ -6,6 +6,10 @@ use payment\service\PaymentService;
 class paymentOverviewController extends BaseController {
     
     
+    public function init() {
+        $this->addTitle(t('Payments'));
+    }
+    
     
     public function action_index() {
         
