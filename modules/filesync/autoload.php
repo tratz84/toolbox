@@ -68,3 +68,19 @@ $eb->subscribe('base', 'person-edit-footer', new CallbackPeopleEventListener(fun
         $ftc->addTab('Documenten', $html, 50);
     }
 }));
+
+
+
+$eb->subscribe('base', 'dashboard', new CallbackPeopleEventListener(function($evt) {
+    $dashboardWidgets = $evt->getSource();
+    
+    $ctx = Context::getInstance();
+    
+    $dashboardWidgets->addWidget('filesync-archive-upload'
+                                    , 'Filesync: Archive file'
+                                    , 'Bestanden archiveren'
+                                    , '/?m=filesync&c=dashboard/archiveWidget');
+    
+}));
+
+

@@ -9,22 +9,30 @@ use core\forms\DatePickerField;
 use core\forms\DynamicSelectField;
 use core\forms\FileField;
 use core\forms\HiddenField;
+use core\forms\SelectField;
 use core\forms\TextField;
 use core\forms\TextareaField;
 use core\forms\validator\DateValidator;
+use filesync\service\StoreService;
+use base\forms\CustomerSelectWidget;
 
 class ArchiveFileUploadForm extends BaseForm {
     
     
-    public function __construct() {
+    public function __construct($opts=array()) {
         parent::__construct();
         
         $this->enctypeToMultipartFormdata();
         
-        $this->addWidget(new HiddenField('store_id'));
+        if (isset($opts['store_as_list']) && $opts['store_as_list']) {
+            $this->addStoreArchiveList();
+        } else {
+            $this->addWidget(new HiddenField('store_id'));
+        }
         $this->addWidget(new FileField('file', '', 'Bestand'));
         $this->addWidget(new DatePickerField('document_date', '', 'Document datum'));
-        $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=base&c=customer&a=select2', 'Klant') );
+        $this->addWidget(new CustomerSelectWidget());
+        
         $this->addWidget(new TextField('subject', '', 'Onderwerp'));
         $this->addWidget(new TextareaField('long_description', '', 'Lange omschrijving'));
         
@@ -52,6 +60,24 @@ class ArchiveFileUploadForm extends BaseForm {
         $this->addValidator('document_date', new DateValidator());
         
     }
+    
+    
+    
+    
+    protected function addStoreArchiveList() {
+        $storeService = object_container_get(StoreService::class);
+        $archiveStores = $storeService->readArchiveStores();
+        
+        $map = array();
+        
+        foreach($archiveStores as $as) {
+            $map[$as->getStoreId()] = $as->getStoreName();
+        }
+        
+        $this->addWidget(new SelectField('store_id', '', $map, 'Archive store'));
+        
+    }
+    
     
     
 }
