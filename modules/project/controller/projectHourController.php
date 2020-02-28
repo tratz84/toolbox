@@ -23,6 +23,9 @@ class projectHourController extends BaseController {
 
         if (get_var('project_id')) {
             $this->project = $projectService->readProject( get_var('project_id') );
+            if (!$this->project) {
+                throw new \core\exception\ObjectNotFoundException('Project not found');
+            }
             $this->project_id = $this->project->getProjectId();
         }
         if (get_var('company_id')) {
@@ -44,7 +47,7 @@ class projectHourController extends BaseController {
             $this->date = get_var('date');
         }
         
-        if ($this->project) {
+        if (isset($this->project)) {
             $this->addTitle( t('Project') . ' ' . $this->project->getProjectName() );
         }
         
