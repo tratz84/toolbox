@@ -20,16 +20,70 @@ class HtmlParser {
     public function loadFile($file) { $this->html = file_get_contents($file); }
     
     
-    public function getBlocks() { return $this->blocks; }
+    public function getParts() { return $this->parts; }
     
     public function parse() {
         $blocks = $this->htmlToBlocks();
         
         $this->parts = $this->parseBlocks( $blocks );
         
-        var_export( $this->parts );exit;
     }
     
+    public function getBodyText() {
+        return $this->getElementText('body');
+    }
+    
+    public function getElementText($elementName) {
+        $el = $this->findElement(['element' => $elementName]);
+        
+        $t = $this->parts2text( $el['childNodes'] );
+        
+        $t = html_entity_decode($t, ENT_COMPAT, 'UTF-8');
+        $t = str_replace("\r", "", $t);
+        $t = mb_trim($t, "\n");
+        
+        return $t;
+    }
+    
+    public function parts2text($parts) {
+        if (!$parts) {
+            return '';
+        }
+        
+        $text='';
+        
+        for($x=0; $x < count($parts); $x++) {
+            if (isset($parts[$x]['childNodes'])) {
+                $text .= $this->parts2text($parts[$x]['childNodes']);
+            }
+            else if (@$parts[$x]['type'] == 'text') {
+                $text .= $parts[$x]['content'];
+            }
+        }
+        
+        return $text;
+    }
+    
+    public function findElement($filter=array(), $parts=null) {
+        if ($parts == null) {
+            $parts = $this->parts;
+        }
+        
+        for($x=0; $x < count($parts); $x++) {
+            if (isset($parts[$x]['childNodes'])) {
+                $e = $this->findElement($filter, $parts[$x]['childNodes']);
+                if ($e) {
+                    return $e;
+                }
+            }
+            
+            if (@$parts[$x]['tag'] == @$filter['element']) {
+                return $parts[$x];
+            }
+        }
+        
+        return null;
+    }
     
     
     
@@ -73,8 +127,18 @@ class HtmlParser {
                     
                     $x = $pos;
                     
+                    // get tag name
+                    $tag = '';
+                    for($y=1; $y < strlen($trimmed_content); $y++) {
+                        $yc = $trimmed_content{$y};
+                        if ($yc == "\t" || $yc == "\n" || $yc == " " || $yc == ">")
+                            break;
+                        $tag .= $yc;
+                    }
+                    
+                    // set parts
                     $childNodes = array_merge(array($b), $childNodes);
-                    $parts[] = array('childNodes' => $childNodes);
+                    $parts[] = array('tag' => $tag, 'childNodes' => $childNodes);
                 }
             }
             else {

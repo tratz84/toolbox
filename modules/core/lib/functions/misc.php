@@ -1098,6 +1098,13 @@ function endsWith($haystack, $val) {
     }
 }
 
+
+if (function_exists('mb_trim') == false) {
+    function mb_trim($str) {
+        return preg_replace("/(^\s+)|(\s+$)/u", "", $str);
+    }
+}
+
 function guidv4()
 {
     if (function_exists('com_create_guid') === true)

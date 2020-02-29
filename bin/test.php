@@ -17,10 +17,11 @@ $p = new \core\parser\HtmlParser();
 $p->loadString( $html );
 $p->parse();
 
+$b = $p->getBodyText();
+// var_export($b);exit;
+print $b;exit;
 
 // var_export($p->getBlocks());
-
-print "done\n";
 
 // print $text;
 
