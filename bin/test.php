@@ -10,9 +10,19 @@ $parser = new PhpMimeMailParser\Parser();
 $parser->setPath( '/home/timvw/projects/toolbox/data/dev/email/inbox/2020/02/27/9b1ac03051ce57e4ef0aea70e447a12c' );
 
 $html = $parser->getMessageBody('html');
-$text = $parser->getMessageBody('text');
+// $text = $parser->getMessageBody('text');
 
-print $text;
+// print $html;exit;
+$p = new \core\parser\HtmlParser();
+$p->loadString( $html );
+$p->parse();
+
+
+// var_export($p->getBlocks());
+
+print "done\n";
+
+// print $text;
 
 
 
