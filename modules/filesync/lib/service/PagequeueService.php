@@ -62,7 +62,7 @@ class PagequeueService extends ServiceBase {
         }
         
         if ($p->getFilename()) {
-            $path = Context::getInstance()->getDataDir() . $p->getFilename();
+            $path = Context::getInstance()->getDataDir() . '/' . $p->getFilename();
             if ($path && file_exists($path)) {
                 unlink($path);
             }
