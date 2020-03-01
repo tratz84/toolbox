@@ -7,6 +7,7 @@ use core\ObjectContainer;
 use core\template\HtmlScriptLoader;
 
 require_once dirname( __FILE__ ) . '/functions/debug.php';
+require_once dirname( __FILE__ ) . '/functions/lock.php';
 require_once dirname( __FILE__ ) . '/functions/bootstrap.php';
 require_once dirname( __FILE__ ) . '/functions/module.php';
 require_once dirname( __FILE__ ) . '/functions/misc.php';
