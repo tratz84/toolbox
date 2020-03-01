@@ -19,7 +19,7 @@ function lock_system($lockname, $throwException=true) {
     // check if lock already exists
     if (realpath( $tmpdir . '/' . $lockname . '.lock' ) != false) {
         if ($throwException) {
-            throw new \core\exception\InvalidStateException('Lock already exists');
+            throw new \core\exception\LockException('System locked: '.$lockname);
         } else {
             return false;
         }
@@ -29,7 +29,7 @@ function lock_system($lockname, $throwException=true) {
     $fh = fopen($tmpdir . '/' . $lockname . '.lock' , 'x' );
     if ($fh == false) {
         if ($throwException) {
-            throw new \core\exception\InvalidStateException('Lock already exists');
+            throw new \core\exception\LockException('System locked: '.$lockname);
         } else {
             return false;
         }
