@@ -23,9 +23,9 @@ class HtmlParser {
     public function getParts() { return $this->parts; }
     
     public function parse() {
-        $blocks = $this->htmlToBlocks();
+        $tokens = $this->htmlToTokens();
         
-        $this->parts = $this->parseBlocks( $blocks );
+        $this->parts = $this->parseTokens( $tokens );
         
     }
     
@@ -45,7 +45,7 @@ class HtmlParser {
         return $t;
     }
     
-    public function parts2text($parts) {
+    public function parts2text($parts, $depth=0) {
         if (!$parts) {
             return '';
         }
@@ -53,13 +53,25 @@ class HtmlParser {
         $text='';
         
         for($x=0; $x < count($parts); $x++) {
+            if (@$parts[$x]['tag'] == 'style') {
+                continue;
+            }
+            
             if (isset($parts[$x]['childNodes'])) {
-                $text .= $this->parts2text($parts[$x]['childNodes']);
+                $text .= $this->parts2text($parts[$x]['childNodes'], $depth+1);
             }
             else if (@$parts[$x]['type'] == 'text') {
                 $text .= $parts[$x]['content'];
             }
         }
+        
+        // $text = preg_replace('/[\r\n]+/', "\n", $text);
+        // $text = preg_replace('/^\\s+/u', '', $text);
+        if ($depth == 0) {
+            $text = preg_replace('/(\n)[\t ]+/u', "\\1", $text);
+            $text = preg_replace('/[\n\r]{3,}/u', "\n\n\n", $text);
+        }
+        
         
         return $text;
     }
@@ -89,23 +101,23 @@ class HtmlParser {
     
     
     /**
-     * parseBlocks() - parse blocks into a tree
+     * parseTokens() - parse tokens into a tree
      */
-    protected function parseBlocks($blocks, $startpos=0) {
+    protected function parseTokens($tokens, $startpos=0) {
         $parts = array();
         
-        // var_export($blocks);exit;
+        // var_export($tokens);exit;
         
-        for($x=$startpos; $x < count($blocks); $x++) {
-            $b = $blocks[$x];
+        for($x=$startpos; $x < count($tokens); $x++) {
+            $t = $tokens[$x];
             
             // print "$x\n";
             
-            if ($b['type'] == 'html') {
-                $trimmed_content = trim($b['content']);
+            if ($t['type'] == 'html') {
+                $trimmed_content = trim($t['content']);
                 
                 if (strpos($trimmed_content, '</') === 0) {
-                    $parts[] = $b;
+                    $parts[] = $t;
                     
                     if ($startpos == 0) {
                         return $parts;
@@ -113,17 +125,17 @@ class HtmlParser {
                         return array($x, $parts);
                     }
                 }
-                else if ($b['type'] == 'html' && endsWith($trimmed_content, '/>') == false) {
+                else if ($t['type'] == 'html' && endsWith($trimmed_content, '/>') == false) {
                     // single-tag elements
                     $tags = ['!', 'meta', 'link', 'img', 'br'];
                     foreach($tags as $tag) {
                         if (stripos($trimmed_content, '<'.$tag) === 0) {
-                            $parts[] = $b;
+                            $parts[] = $t;
                             continue 2;
                         }
                     }
                     
-                    list($pos, $childNodes) = $this->parseBlocks($blocks, $x+1);
+                    list($pos, $childNodes) = $this->parseTokens($tokens, $x+1);
                     
                     $x = $pos;
                     
@@ -137,12 +149,12 @@ class HtmlParser {
                     }
                     
                     // set parts
-                    $childNodes = array_merge(array($b), $childNodes);
+                    $childNodes = array_merge(array($t), $childNodes);
                     $parts[] = array('tag' => $tag, 'childNodes' => $childNodes);
                 }
             }
             else {
-                $parts[] = $b;
+                $parts[] = $t;
             }
         }
     
@@ -154,19 +166,19 @@ class HtmlParser {
     }
     
     /**
-     * htmlToBlocks() - parse text into text & html parts
+     * htmlToTokens() - parse text into text & html parts
      */
-    public function htmlToBlocks() {
+    public function htmlToTokens() {
         $state = array();
         $state['in_tag'] = false;
         $state['in_string'] = false;
         $state['pos'] = 0;
         
-        $blocks = array();
-        $blocks[] = array('type' => 'text', 'content' => '');
+        $tokens = array();
+        $tokens[] = array('type' => 'text', 'content' => '');
         
         $html_len = strlen($this->html);
-        $block_no = 0;
+        $token_no = 0;
         for($pos=0; $pos < $html_len; $pos++) {
             $char = $this->html{$pos};
             $next_char = null;
@@ -178,8 +190,8 @@ class HtmlParser {
             if ($state['in_tag'] == false && $char == '<' && in_array($next_char, [" ", "\n", "\t"]) == false) {
                 $state['in_tag'] = true;
                 
-                $block_no++;
-                $blocks[] = array('type' => 'html', 'content' => '');
+                $token_no++;
+                $tokens[] = array('type' => 'html', 'content' => '');
             }
             
             
@@ -190,24 +202,24 @@ class HtmlParser {
                 $state['in_string'] = false;
             }
 
-            $blocks[$block_no]['content'] .= $char;
+            $tokens[$token_no]['content'] .= $char;
             
             if ($state['in_string'] == false && $state['in_tag'] == true && $char == '>') {
                 $state['in_tag'] = false;
                 
-                $block_no++;
-                $blocks[] = array('type' => 'text', 'content' => '');
+                $token_no++;
+                $tokens[] = array('type' => 'text', 'content' => '');
             }
         }
         
-        $b2 = array();
-        foreach($blocks as $b) {
-            if ($b['content'] != '') {
-                $b2[] = $b;
+        $ret_tokens = array();
+        foreach($tokens as $t) {
+            if ($t['content'] != '') {
+                $ret_tokens[] = $t;
             }
         }
         
-        return $b2;
+        return $ret_tokens;
     }
     
     
