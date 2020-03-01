@@ -143,6 +143,8 @@ function module_less_defaults() {
  *   this function is in the autoload.php
  */
 function module_update_handler($moduleName, $version) {
+    lock_system('module-update');
+    
     $settingsKey = 'module-'.$moduleName.'-version';
     
     $ctx = \core\Context::getInstance();
@@ -161,5 +163,10 @@ function module_update_handler($moduleName, $version) {
         $settingsService = object_container_get(SettingsService::class);
         $settingsService->updateValue($settingsKey, $version);
     }
+    
+    // note: update might throw an error and this point isn't reached, so
+    //       the lock isn't released. This is design on purpose, if an
+    //       update failes manual action is required
+    release_system_lock('module-update');
 }
 
