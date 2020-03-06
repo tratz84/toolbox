@@ -30,7 +30,7 @@ class ProjectService extends ServiceBase {
 
         $cursor = $pDao->search($opts);
 
-        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('project_id', 'project_name', 'total_minutes', 'person_id', 'firstname', 'insert_lastname', 'lastname', 'company_id', 'company_name', 'active'));
+        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('project_id', 'project_name', 'total_minutes', 'person_id', 'firstname', 'insert_lastname', 'lastname', 'company_id', 'company_name', 'active', 'project_hours', 'project_billable_type'));
 
         return $r;
     }

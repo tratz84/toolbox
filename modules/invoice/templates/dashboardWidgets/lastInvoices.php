@@ -11,7 +11,7 @@
 <table class="list-widget" style="width: 100%;">
 	<thead>
 		<tr>
-			<th><?= t('No') ?></th>
+			<th><?= t('Number_short') ?></th>
 			<th><?= t('Name') ?></th>
 			<th><?= t('Description') ?></th>
 			<?php if ($widgetSettings['show_invoice_amount']) : ?>

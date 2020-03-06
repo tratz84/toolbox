@@ -72,6 +72,19 @@ t.addColumn({
 	},
 	searchable: false
 });
+
+t.addColumn({
+	fieldName: 'project_hours',
+	fieldDescription: 'Max. hours',
+	fieldType: 'text',
+	render: function(record) {
+		if (record.project_billable_type == 'fixed') {
+			return record.project_hours;
+		}
+	},
+	searchable: false
+});
+
 t.addColumn({
 	fieldName: 'active',
 	fieldDescription: 'Actief',
