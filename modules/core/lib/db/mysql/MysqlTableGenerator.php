@@ -4,6 +4,7 @@ namespace core\db\mysql;
 
 use core\db\TableModel;
 use core\db\DatabaseHandler;
+use core\exception\DatabaseException;
 
 class MysqlTableGenerator {
     
@@ -33,13 +34,34 @@ class MysqlTableGenerator {
         }
     }
     
-    public function createTableUpdate() {
+    public function createSqlDiff() {
         if ($this->tableExists()) {
             return $this->buildAlter();
         } else {
             return $this->buildCreateTable();
         }
     }
+    
+    public function executeDiff() {
+        
+        $stats = $this->createSqlDiff();
+        
+        if (count($stats) == 0) {
+            return 0;
+        }
+        
+        $mysql = DatabaseHandler::getInstance()::getConnection('default');
+        
+        foreach($stats as $sql) {
+            $r = $mysql->query( $sql );
+            if ($r == false) {
+                throw new DatabaseException('Error updating database: ' . $mysql->error);
+            }
+        }
+        
+        return count($stats);
+    }
+    
     
     protected function loadTableProperties() {
         $props = array();
@@ -81,17 +103,16 @@ class MysqlTableGenerator {
     public function buildAlter() {
         $this->loadTableProperties();
         
-        $sql = '';
         
-        $sql .= $this->buildAlterColumns();
-        $sql .= $this->buildAlterUniqueConstraints();
-        $sql .= $this->buildAlterIndexes();
+        $sql1 = $this->buildAlterColumns();
+        $sql2 = $this->buildAlterUniqueConstraints();
+        $sql3 = $this->buildAlterIndexes();
         
-        return $sql;
+        return array_merge($sql1, $sql2, $sql3);
     }
     
     protected function buildAlterColumns() {
-        $sql = '';
+        $sql_statements = array();
         
         // add/change columns
         $columns = $this->tableModel->getColumns();
@@ -106,36 +127,42 @@ class MysqlTableGenerator {
                     continue;
                 }
                 
+                $sql = "";
                 $sql = "ALTER TABLE  `" . $this->getTableName() . "` CHANGE COLUMN ";
                 $sql .= $columnName . ' ' . $columnName . ' ' . $model_type;
                 if ($model_default_val) {
                     $sql .= ' default \''.$model_default_val.'\'';
                 }
-                $sql .= ";\n";
+                $sql .= ";";
+                
+                $sql_statements[] = $sql;
                 
             } else {
+                $sql = "";
                 $sql .= "ALTER TABLE `" . $this->getTableName() . "` ADD COLUMN ";
                 $sql .= '`'.$columnName . '` ' . $model_type;
                 if ($model_default_val) {
                     $sql .= ' default \''.$model_default_val.'\'';
                 }
-                $sql .= ";\n";
+                $sql .= ";";
+                
+                $sql_statements[] = $sql;
             }
         }
         
         // drop columns
         foreach($this->dbColumns as $columnName => $props) {
             if ($this->tableModel->hasColumn($columnName) == false) {
-                $sql .= "ALTER TABLE `" . $this->getTableName() . "` DROP COLUMN " . $columnName . ";\n";
+                $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` DROP COLUMN " . $columnName . ";";
             }
         }
         
-        return $sql;
+        return $sql_statements;
     }
     
     
     protected function buildAlterUniqueConstraints() {
-        $sql = '';
+        $sql_statements = array();
         
         // ADD UNIQUE constraints
         $ucs = $this->tableModel->getUniqueConstraints();
@@ -144,7 +171,7 @@ class MysqlTableGenerator {
             if (isset($this->dbConstraints[$key_name]))
                 continue;
             
-            $sql .= "ALTER TABLE `" . $this->getTableName() . "` ADD UNIQUE KEY `" . $key_name . "`(`".implode('`, `', $columns)."`);\n";
+            $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` ADD UNIQUE KEY `" . $key_name . "`(`".implode('`, `', $columns)."`);";
         }
         
         // changed UNIQUE constraints
@@ -155,7 +182,7 @@ class MysqlTableGenerator {
             
             // constraint removed?
             if ($this->tableModel->hasUniqueConstraint($key) == false) {
-                $sql .= "ALTER TABLE `" . $this->getTableName() . "` DROP KEY `" . $key . "`;\n";
+                $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` DROP KEY `" . $key . "`;";
                 continue;
             }
             
@@ -176,19 +203,19 @@ class MysqlTableGenerator {
             }
             
             if ($changed) {
-                $sql .= "ALTER TABLE `" . $this->getTableName() . "` DROP KEY `" . $key . "`;\n";
-                $sql .= "ALTER TABLE `" . $this->getTableName() . "` ADD UNIQUE KEY `" . $key . "`(`".implode('`, `', $model_constraints)."`);\n";
+                $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` DROP KEY `" . $key . "`;";
+                $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` ADD UNIQUE KEY `" . $key . "`(`".implode('`, `', $model_constraints)."`);";
                 
             }
         }
         
-        return $sql;
+        return $sql_statements;
     }
     
     
     
     protected function buildAlterIndexes() {
-        $sql = '';
+        $sql_statements = array();
         
         // ADD indexes
         $ix = $this->tableModel->getIndexes();
@@ -197,7 +224,7 @@ class MysqlTableGenerator {
             if (isset($this->dbIndexes[$key_name]))
                 continue;
                 
-            $sql .= "ALTER TABLE `" . $this->getTableName() . "` ADD KEY `" . $key_name . "`(`".implode('`, `', $columns)."`);\n";
+            $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` ADD KEY `" . $key_name . "`(`".implode('`, `', $columns)."`);";
         }
         
         // changed UNIQUE constraints
@@ -209,7 +236,7 @@ class MysqlTableGenerator {
             
             // constraint removed?
             if ($this->tableModel->hasIndex($key) == false) {
-                $sql .= "ALTER TABLE `" . $this->getTableName() . "` DROP KEY `" . $key . "`;\n";
+                $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` DROP KEY `" . $key . "`;";
                 continue;
             }
             
@@ -230,13 +257,13 @@ class MysqlTableGenerator {
             }
             
             if ($changed) {
-                $sql .= "ALTER TABLE `" . $this->getTableName() . "` DROP KEY `" . $key . "`;\n";
-                $sql .= "ALTER TABLE `" . $this->getTableName() . "` ADD KEY `" . $key . "`(`".implode('`, `', $model_index)."`);\n";
+                $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` DROP KEY `" . $key . "`;";
+                $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` ADD KEY `" . $key . "`(`".implode('`, `', $model_index)."`);";
                 
             }
         }
         
-        return $sql;
+        return $sql_statements;
     }
     
     
@@ -312,7 +339,7 @@ class MysqlTableGenerator {
         
         $sql .= PHP_EOL.') ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci'.PHP_EOL;
         
-        return $sql;
+        return array( $sql );
     }
     
 }
