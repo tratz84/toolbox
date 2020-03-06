@@ -14,7 +14,7 @@ class ProjectBase extends \core\db\DBObject {
   'project_id' => 
   array (
     'Field' => 'project_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'NO',
     'Key' => 'PRI',
     'Default' => NULL,
@@ -23,7 +23,7 @@ class ProjectBase extends \core\db\DBObject {
   'company_id' => 
   array (
     'Field' => 'company_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -32,7 +32,7 @@ class ProjectBase extends \core\db\DBObject {
   'person_id' => 
   array (
     'Field' => 'person_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => 'MUL',
     'Default' => NULL,
@@ -83,6 +83,24 @@ class ProjectBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'project_hours' => 
+  array (
+    'Field' => 'project_hours',
+    'Type' => 'int',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'project_billable_type' => 
+  array (
+    'Field' => 'project_billable_type',
+    'Type' => 'enum(\'fixed\',\'ongoing\')',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -120,6 +138,14 @@ class ProjectBase extends \core\db\DBObject {
 		
 	public function setCreated($p) { $this->setField('created', $p); }
 	public function getCreated() { return $this->getField('created'); }
+	
+		
+	public function setProjectHours($p) { $this->setField('project_hours', $p); }
+	public function getProjectHours() { return $this->getField('project_hours'); }
+	
+		
+	public function setProjectBillableType($p) { $this->setField('project_billable_type', $p); }
+	public function getProjectBillableType() { return $this->getField('project_billable_type'); }
 	
 	
 }

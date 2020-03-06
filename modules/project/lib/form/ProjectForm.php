@@ -14,6 +14,8 @@ use core\forms\TextField;
 use core\forms\TextareaField;
 use project\model\Project;
 use core\forms\validator\NotEmptyValidator;
+use core\forms\NumberField;
+use core\forms\RadioField;
 
 class ProjectForm extends BaseForm {
     
@@ -27,6 +29,14 @@ class ProjectForm extends BaseForm {
         $this->addWidget(new TextField('project_name', '', 'Naam'));
         
         $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=base&c=customer&a=select2', 'Klant') );
+        
+        $mapProjectType = array();
+        $mapProjectType['fixed'] = _('Fixed price');
+        $mapProjectType['ongoing'] = _('Ongoing');
+        $this->addWidget(new RadioField('project_billable_type', '', $mapProjectType, t('Project type')));
+        
+        $this->addWidget(new NumberField('project_hours', '', _('Max. hours')));
+        $this->getWidget('project_hours')->setMin(-1);
         
         
         $this->addWidget(new TextareaField('note', '', 'Notitie'));

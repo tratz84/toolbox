@@ -7,6 +7,7 @@ use core\ObjectContainer;
 use core\event\CallbackPeopleEventListener;
 use core\Context;
 
+module_update_handler('project', '20200309');
 
 Context::getInstance()->enableModule('project');
 
@@ -15,6 +16,7 @@ $oc = ObjectContainer::getInstance();
 
 hook_register_javascript('project', BASE_HREF.'module/project/js/script.js');
 hook_htmlscriptloader_enableGroup('project');
+
 
 
 

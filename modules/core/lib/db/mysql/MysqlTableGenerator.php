@@ -284,7 +284,6 @@ class MysqlTableGenerator {
             return false;
         }
         
-        
         return true;
     }
     

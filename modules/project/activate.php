@@ -12,6 +12,8 @@ $sql[] = "CREATE TABLE `project__project` (
     `project_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
     `active` tinyint(1) DEFAULT '1',
     `note` longtext COLLATE utf8mb4_general_ci,
+    `project_hours` int,
+    `project_type` enum('fixed', 'ongoing'),
     `edited` datetime DEFAULT NULL,
     `created` datetime DEFAULT NULL,
     PRIMARY KEY (`project_id`),

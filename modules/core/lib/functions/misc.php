@@ -27,6 +27,14 @@ function is_windows() {
     return false;
 }
 
+function is_debug() {
+    if (defined('DEBUG') && DEBUG) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 
 function is_admin_context() {
     if (defined('ADMIN_CONTEXT') && ADMIN_CONTEXT == true) {

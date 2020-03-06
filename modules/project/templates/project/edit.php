@@ -18,3 +18,29 @@
     $tabContainer->addTab('Projectgegevens', $form->render(), 0);
     print $tabContainer->render();
 ?>
+
+
+
+
+<script>
+
+$(document).ready(function() {
+
+	$('[name=project_billable_type]').change(function() {
+		handle_projectHourWidget();
+	});
+	
+	handle_projectHourWidget();
+});
+
+
+function handle_projectHourWidget() {
+	if ($('[name=project_billable_type]:checked').val() == 'fixed') {
+		$('.project-hours-widget').show();
+	} else {
+    	$('.project-hours-widget').hide();
+	}
+}
+
+</script>
+

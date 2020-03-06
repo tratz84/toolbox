@@ -7,35 +7,33 @@ use core\exception\InvalidStateException;
 
 class TableModel {
     
-    protected $schemaName;
-    protected $tableName;
-    
-    protected $columns = array();
-    protected $uniqueColumns = array();
-    protected $indexes = array();
+    protected $data = array();
     
     public function __construct($schemaName, $tableName) {
         $this->setSchemaName($schemaName);
         $this->setTableName($tableName);
         
+        $this->data['columns'] = array();
+        $this->data['uniqueColumns'] = array();
+        $this->data['indexes'] = array();
     }
     
-    public function setSchemaName($n) { $this->schemaName = $n; }
-    public function getSchemaName() { return $this->schemaName; }
+    public function setSchemaName($n) { $this->data['schemaName'] = $n; }
+    public function getSchemaName() { return $this->data['schemaName']; }
     
-    public function setTableName($n) { $this->tableName = $n; }
-    public function getTableName() { return $this->tableName; }
+    public function setTableName($n) { $this->data['tableName'] = $n; }
+    public function getTableName() { return $this->data['tableName']; }
     
     public function getColumns() {
-        return array_keys( $this->columns );
+        return array_keys( $this->data['columns'] );
     }
     
     public function addColumn($columnName, $type, $props=array()) {
-        $this->columns[$columnName] = array(
+        $this->data['columns'][$columnName] = array(
             'type' => $type
         );
         
-        $this->columns[$columnName] = array_merge($this->columns[$columnName], $props);
+        $this->data['columns'][$columnName] = array_merge($this->data['columns'][$columnName], $props);
     }
     
     
@@ -45,44 +43,44 @@ class TableModel {
     }
     
     public function setColumnProperty($columnName, $propName, $propVal) {
-        if (isset($this->columns[$columnName]) == false) {
+        if (isset($this->data['columns'][$columnName]) == false) {
             throw new InvalidStateException('Unknown column');
         }
         
-        $this->columns[$columnName][$propName] = $propVal;
+        $this->data['columns'][$columnName][$propName] = $propVal;
     }
     public function getColumnProperty($columnName, $propertyName, $defaultValue=null) {
-        if (isset($this->columns[$columnName]) == false) {
+        if (isset($this->data['columns'][$columnName]) == false) {
             throw new InvalidStateException('Unknown column');
         }
         
-        if (isset($this->columns[$columnName][$propertyName])) {
-            return $this->columns[$columnName][$propertyName];
+        if (isset($this->data['columns'][$columnName][$propertyName])) {
+            return $this->data['columns'][$columnName][$propertyName];
         } else {
             return $defaultValue;
         }
     }
     
-    public function hasColumn($columnName) { return isset($this->columns[$columnName]) ? true : false; }
+    public function hasColumn($columnName) { return isset($this->data['columns'][$columnName]) ? true : false; }
     public function getColumn($columnName) {
-        if (isset($this->columns[$columnName]) == false) {
+        if (isset($this->data['columns'][$columnName]) == false) {
             throw new InvalidStateException('Unknown column');
         }
         
-        return $this->columns[$columnName];
+        return $this->data['columns'][$columnName];
     }
 
     
-    public function hasIndex($indexName) { return isset($this->indexes[$indexName]) ? true : false; }
-    public function getIndexes() { return $this->indexes; }
-    public function getIndex($indexName) { return $this->indexes[$indexName]; }
-    public function setIndex($indexName, $columns=array()) { $this->indexes[$indexName] = $columns; }
+    public function hasIndex($indexName) { return isset($this->data['indexes'][$indexName]) ? true : false; }
+    public function getIndexes() { return $this->data['indexes']; }
+    public function getIndex($indexName) { return $this->data['indexes'][$indexName]; }
+    public function setIndex($indexName, $columns=array()) { $this->data['indexes'][$indexName] = $columns; }
     
     
-    public function hasUniqueConstraint($indexName) { return isset($this->uniqueColumns[$indexName]) ? true : false; }
-    public function getUniqueConstraints() { return $this->uniqueColumns; }
-    public function getUniqueConstraint($indexName) { return $this->uniqueColumns[$indexName]; }
-    public function setUniqueColumns($indexName, $columns=array()) { $this->uniqueColumns[$indexName] = $columns; }
+    public function hasUniqueConstraint($indexName) { return isset($this->data['uniqueColumns'][$indexName]) ? true : false; }
+    public function getUniqueConstraints() { return $this->data['uniqueColumns']; }
+    public function getUniqueConstraint($indexName) { return $this->data['uniqueColumns'][$indexName]; }
+    public function setUniqueColumns($indexName, $columns=array()) { $this->data['uniqueColumns'][$indexName] = $columns; }
     
 }
 

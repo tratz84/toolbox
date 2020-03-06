@@ -67,7 +67,7 @@ class ProjectService extends ServiceBase {
         }
 
 
-        $form->fill($project, array('project_id', 'project_name', 'active', 'note'));
+        $form->fill($project, array('project_id', 'project_name', 'active', 'note', 'project_billable_type', 'project_hours'));
 
         $project->setCompanyId(null);
         $project->setPersonId(null);
