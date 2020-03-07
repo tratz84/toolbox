@@ -7,7 +7,7 @@ use core\ObjectContainer;
 use core\event\CallbackPeopleEventListener;
 use core\Context;
 
-module_update_handler('project', '20200309');
+module_update_handler('project', '20200307');
 
 Context::getInstance()->enableModule('project');
 

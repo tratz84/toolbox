@@ -12,6 +12,7 @@ $lang['Month overview']   = 'Maandoverzicht';
 $lang['Month']            = 'Maand';
 $lang['User shown']       = 'Getoonde gebruiker';
 
+$lang['Hourly rate']      = 'Uurtarief';
 
 return $lang;
 

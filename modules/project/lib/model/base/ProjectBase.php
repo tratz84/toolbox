@@ -14,7 +14,7 @@ class ProjectBase extends \core\db\DBObject {
   'project_id' => 
   array (
     'Field' => 'project_id',
-    'Type' => 'int',
+    'Type' => 'int(11)',
     'Null' => 'NO',
     'Key' => 'PRI',
     'Default' => NULL,
@@ -23,7 +23,7 @@ class ProjectBase extends \core\db\DBObject {
   'company_id' => 
   array (
     'Field' => 'company_id',
-    'Type' => 'int',
+    'Type' => 'int(11)',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -32,7 +32,7 @@ class ProjectBase extends \core\db\DBObject {
   'person_id' => 
   array (
     'Field' => 'person_id',
-    'Type' => 'int',
+    'Type' => 'int(11)',
     'Null' => 'YES',
     'Key' => 'MUL',
     'Default' => NULL,
@@ -86,7 +86,7 @@ class ProjectBase extends \core\db\DBObject {
   'project_hours' => 
   array (
     'Field' => 'project_hours',
-    'Type' => 'int',
+    'Type' => 'int(11)',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -96,6 +96,15 @@ class ProjectBase extends \core\db\DBObject {
   array (
     'Field' => 'project_billable_type',
     'Type' => 'enum(\'fixed\',\'ongoing\')',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'hourly_rate' => 
+  array (
+    'Field' => 'hourly_rate',
+    'Type' => 'decimal(10,2)',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -146,6 +155,10 @@ class ProjectBase extends \core\db\DBObject {
 		
 	public function setProjectBillableType($p) { $this->setField('project_billable_type', $p); }
 	public function getProjectBillableType() { return $this->getField('project_billable_type'); }
+	
+		
+	public function setHourlyRate($p) { $this->setField('hourly_rate', $p); }
+	public function getHourlyRate() { return $this->getField('hourly_rate'); }
 	
 	
 }

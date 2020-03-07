@@ -16,6 +16,7 @@ use project\model\Project;
 use core\forms\validator\NotEmptyValidator;
 use core\forms\NumberField;
 use core\forms\RadioField;
+use core\forms\EuroField;
 
 class ProjectForm extends BaseForm {
     
@@ -38,6 +39,7 @@ class ProjectForm extends BaseForm {
         $this->addWidget(new NumberField('project_hours', '', _('Max. hours')));
         $this->getWidget('project_hours')->setMin(-1);
         
+        $this->addWidget(new EuroField('hourly_rate', '', t('Hourly rate')));
         
         $this->addWidget(new TextareaField('note', '', 'Notitie'));
         

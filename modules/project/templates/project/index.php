@@ -86,6 +86,13 @@ t.addColumn({
 });
 
 t.addColumn({
+	fieldName: 'hourly_rate',
+	fieldDescription: _('Hourly rate'),
+	fieldType: 'currency',
+	searchable: false
+});
+
+t.addColumn({
 	fieldName: 'active',
 	fieldDescription: 'Actief',
 	fieldType: 'boolean',

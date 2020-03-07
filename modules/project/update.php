@@ -10,6 +10,7 @@ $tm_project->addColumn('project_id',   'int', ['key' => 'PRIMARY KEY', 'auto_inc
 
 $tm_project->addColumn('project_hours', 'int');
 $tm_project->addColumn('project_billable_type',  'enum(\'fixed\',\'ongoing\')');
+$tm_project->addColumn('hourly_rate',  'decimal(10, 2)');
 
 $tm_project->addColumn('company_id',   'int');
 $tm_project->addColumn('person_id',    'int');
