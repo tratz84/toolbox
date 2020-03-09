@@ -70,7 +70,7 @@ function bootstrapCli($contextName) {
             $el->setMessage($ex->getMessage());
             
             $stacktrace = '';
-            if (is_a($ex, DatabaseException::class)) {
+            if (is_a($ex, \core\exception\DatabaseException::class)) {
                 $stacktrace .= 'Query: '.$ex->getQuery() . "\n\n";
             }
             $stacktrace .= $ex->getFile() . ' ('.$ex->getLine().')' . "\n";
@@ -85,7 +85,7 @@ function bootstrapCli($contextName) {
             // no way to handle
         }
         
-        throw $ex;
+       throw $ex;
     });
     
     $fc = new FilterChain();
