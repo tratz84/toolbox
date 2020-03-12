@@ -82,6 +82,8 @@ class ProjectService extends ServiceBase {
         if (!$project->save()) {
             return false;
         }
+        
+        return $project;
     }
 
     public function readByCustomer($companyId=null, $personId=null) {

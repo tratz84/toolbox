@@ -27,9 +27,11 @@ class ProjectForm extends BaseForm {
         
         $this->addWidget(new HiddenField('project_id'));
         $this->addWidget(new CheckboxField('active', '', 'Actief'));
-        $this->addWidget(new TextField('project_name', '', 'Naam'));
         
         $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=base&c=customer&a=select2', 'Klant') );
+        
+        $this->addWidget(new TextField('project_name', '', 'Naam'));
+        
         
         $mapProjectType = array();
         $mapProjectType['fixed'] = _('Fixed price');
