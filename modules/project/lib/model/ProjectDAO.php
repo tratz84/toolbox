@@ -63,6 +63,14 @@ class ProjectDAO extends \core\db\DAOObject {
 	        $qb->addWhere($qbwc);
 	    }
 	    
+	    if (isset($opts['active']) && $opts['active'] !== '') {
+	        if ($opts['active']) {
+	            $qb->addWhere(QueryBuilderWhere::whereRefByRef('project__project.active', '=', 'true'));
+	        } else {
+	            $qb->addWhere(QueryBuilderWhere::whereRefByRef('project__project.active', '=', 'false'));
+	        }
+	    }
+	    
 
 		if (isset($opts['project_name']) && $opts['project_name']) {
 		    $qb->addWhere(QueryBuilderWhere::whereRefByVal('project_name', 'LIKE', '%' . $opts['project_name'] . '%'));

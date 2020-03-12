@@ -95,8 +95,20 @@ t.addColumn({
 t.addColumn({
 	fieldName: 'active',
 	fieldDescription: 'Actief',
-	fieldType: 'boolean',
-	searchable: false
+	filterOptions: <?= json_encode([
+	    [ 'value' => '',  'text' => t('Active') ],
+	    [ 'value' => '1', 'text' => t('Yes') ],
+	    [ 'value' => '0', 'text' => t('No') ],
+	]) ?>,
+	fieldType: 'select',
+	searchable: true,
+	render: function(row) {
+		if (row.active) {
+			return _('Yes');
+		} else {
+			return _('No');
+		}
+	}
 });
 
 
