@@ -3,6 +3,9 @@
 
 	<div class="toolbox">
 		<a href="<?= appUrl('/?m=project&c=project') ?>" class="fa fa-chevron-circle-left"></a>
+		<?php if (isset($project)) : ?>
+		<a href="<?= appUrl('/?m=project&c=project&a=edit&project_id='.$project->getProjectId()) ?>" class="fa fa-cog" title="Project info"></a>
+		<?php endif; ?>
 		<a href="<?= appUrl('/?m=project&c=projectHour'.($project_id?'&project_id='.$project_id:'').($company_id?'&company_id='.$company_id:'').($person_id?'&person_id='.$person_id:'').'&a=edit') ?>" class="fa fa-plus"></a>
 	</div>
 
