@@ -51,6 +51,8 @@ class invoiceController extends BaseController {
     public function action_edit() {
         $id = isset($_REQUEST['id'])?(int)$_REQUEST['id']:0;
         
+        $invoiceSettings = $this->oc->get(InvoiceSettings::class);
+
         $invoiceService = $this->oc->get(InvoiceService::class);
         if ($id) {
             $invoice = $invoiceService->readInvoice($id);
@@ -80,6 +82,11 @@ class invoiceController extends BaseController {
         
         $invoiceForm = $this->oc->create(InvoiceForm::class);
         $invoiceForm->bind($invoice);
+        
+        // invoice locked?
+        if ($invoiceSettings->invoiceLocked( $invoice )) {
+            $invoiceForm->setObjectLocked( true );
+        }
         
         if (is_post()) {
             $invoiceForm->bind($_REQUEST);

@@ -46,7 +46,10 @@ function t_lc($str) {
 }
 
 
-
+/**
+ * strOrder() - returns right naming for order/invoice
+ *   TODO: move this to invoice-module
+ */
 function strOrder($no) {
     static $orderType = null;
     if ($orderType === null) {
