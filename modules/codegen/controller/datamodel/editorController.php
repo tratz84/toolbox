@@ -10,10 +10,23 @@ class editorController extends BaseController {
     
     
     public function action_index() {
-        
         $this->mod = get_var('mod');
-        if (module_exists($this->mod) == false)
+        if (module_exists($this->mod) == false) {
             throw new InvalidStateException('Module not found');
+        }
+        
+        
+        $data_tablemodel = array();
+        $file_tablemodel = module_file($this->mod, 'config/tablemodel.php');
+        if ($file_tablemodel) {
+            $data_tablemodel = load_php_file( module_file($this->mod, 'config/tablemodel.php') );
+        }
+        
+        
+        
+        if (is_post()) {
+            
+        }
         
         
         return $this->render();
