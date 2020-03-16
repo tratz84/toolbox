@@ -20,7 +20,11 @@ class MysqlTableGenerator {
     }
     
     public function getTableName() {
-        return $this->tableModel->getSchemaName().'__'.$this->tableModel->getTableName();
+        if ($this->tableModel->useSchemaInTableName()) {
+            return $this->tableModel->getSchemaName().'__'.$this->tableModel->getTableName();
+        } else {
+            return $this->tableModel->getTableName();
+        }
     }
     
     public function tableExists() {
@@ -366,7 +370,7 @@ class MysqlTableGenerator {
     /**
      * updateModule() - loads '<module>/config/tablemodel.php' & applies TableModel-changes
      */
-    public static function updateModule($moduleName) {
+    public static function updateModule($moduleName, $outputSql=false) {
         // get file with models
         $file_tablemodel = module_file($moduleName, 'config/tablemodel.php');
         if (!$file_tablemodel) {
@@ -378,7 +382,13 @@ class MysqlTableGenerator {
         if (is_array($tablemodels)) {
             foreach($tablemodels as $tm) {
                 $mtg = new MysqlTableGenerator( $tm );
-                $mtg->executeDiff();
+                
+                if ($outputSql) {
+                    // DEBUG database changes?
+                    var_export( $mtg->createSqlDiff() );
+                } else {
+                    $mtg->executeDiff();
+                }
             }
         }
         
