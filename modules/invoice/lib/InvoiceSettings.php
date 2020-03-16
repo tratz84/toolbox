@@ -86,5 +86,33 @@ class InvoiceSettings {
         return $keys[0];
     }
     
+    /**
+     * invoiceLocked() - business rule for checking if invoice must be locked
+     *  TODO: when an accounting-module is added, invoices must be locked after it's
+     *        booked or vat-reporting is done
+     */
+    public function invoiceLocked(\invoice\model\Invoice $invoice) {
+        // only invoices are locked
+        if ($this->getOrderType() != 'invoice') {
+            return false;
+        }
+        
+        $invoice_date = $invoice->getInvoiceDate();
+        
+        // invalid date?
+        if (valid_date($invoice_date) == false) {
+            return false;
+        }
+        
+        // invoice older then 90 days? => auto-lock
+        $days = days_between( $invoice_date, date('Y-m-d') );
+        if ($days > 90) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    
 }
 

@@ -88,6 +88,10 @@ class settingsController extends BaseController {
             include $activationFile;
         }
         
+        // update database
+        \core\db\mysql\MysqlTableGenerator::updateModule( $moduleName );
+        
+        
         // mark as enabled
         $settingsService = $this->oc->get(SettingsService::class);
         $settingsService->updateValue($mod.'Enabled', 1);

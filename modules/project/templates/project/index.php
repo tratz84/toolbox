@@ -72,11 +72,43 @@ t.addColumn({
 	},
 	searchable: false
 });
+
+t.addColumn({
+	fieldName: 'project_hours',
+	fieldDescription: 'Max. hours',
+	fieldType: 'text',
+	render: function(record) {
+		if (record.project_billable_type == 'fixed') {
+			return record.project_hours;
+		}
+	},
+	searchable: false
+});
+
+t.addColumn({
+	fieldName: 'hourly_rate',
+	fieldDescription: _('Hourly rate'),
+	fieldType: 'currency',
+	searchable: false
+});
+
 t.addColumn({
 	fieldName: 'active',
 	fieldDescription: 'Actief',
-	fieldType: 'boolean',
-	searchable: false
+	filterOptions: <?= json_encode([
+	    [ 'value' => '',  'text' => t('Active') ],
+	    [ 'value' => '1', 'text' => t('Yes') ],
+	    [ 'value' => '0', 'text' => t('No') ],
+	]) ?>,
+	fieldType: 'select',
+	searchable: true,
+	render: function(row) {
+		if (row.active) {
+			return _('Yes');
+		} else {
+			return _('No');
+		}
+	}
 });
 
 

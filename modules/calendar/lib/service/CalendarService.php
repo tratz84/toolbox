@@ -110,7 +110,7 @@ class CalendarService extends ServiceBase {
                 $r = strcmp($t1, $t2);
                 
                 if ($r != 0)
-                    $r;
+                    return $r;
                 
                 return strcmp($obj1->getDescription(), $obj2->getDescription());
             }

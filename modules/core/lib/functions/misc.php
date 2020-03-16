@@ -19,12 +19,24 @@ function is_cli() {
     return php_sapi_name() == 'cli';
 }
 
+function is_web() {
+    return php_sapi_name() != 'cli';
+}
+
 function is_windows() {
     if (strpos(PHP_OS, 'WIN') === 0) {
         return true;
     }
     
     return false;
+}
+
+function is_debug() {
+    if (defined('DEBUG') && DEBUG) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 

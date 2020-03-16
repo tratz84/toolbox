@@ -4,6 +4,8 @@ namespace core\forms;
 
 class DatePickerField extends BaseWidget {
     
+    protected $placeholder = false;
+    
     
     public function __construct($name, $value=null, $label=null) {
         
@@ -12,6 +14,9 @@ class DatePickerField extends BaseWidget {
         $this->setValue($value);
         
     }
+    
+    public function showPlaceholder() { $this->placeholder = true; }
+    
     
     public function getValue() {
         $v = parent::getValue();
@@ -40,7 +45,29 @@ class DatePickerField extends BaseWidget {
     }
     
     public function render() {
+        
         $html = '';
+        
+        $this->setAttribute('type', 'text');
+        
+        $this->addContainerClass('datepicker-field-widget');
+        $this->addContainerClass('widget-'. slugify($this->getName()));
+        if ($this->hasError()) {
+            $this->addContainerClass('error');
+        }
+        
+        if ($this->placeholder) {
+            $this->setAttribute('placeholder', $this->getLabel());
+        } else if (isset($this->options['placeholder']) && $this->options['placeholder']) {
+            $this->setAttribute('placeholder', $this->options['placeholder']);
+        }
+        
+        if (isset($this->options['readonly'])&&$this->options['readonly']) {
+            $this->setAttribute('readonly', 'readonly');
+        }
+        
+        $this->setAttribute('class', 'input-pickadate reset-field-button');
+        $this->setAttribute('autocomplete', 'off');
         
         $v = '';
         if ($this->getValue()) {
@@ -50,14 +77,9 @@ class DatePickerField extends BaseWidget {
             }
         }
         
-        $extraClass = $this->hasError() ? 'error' : '';
+        $this->setAttribute('value', $v);
         
-        $html .= '<div class="widget datepicker-field-widget widget-'. slugify($this->getName()) . ' '.$extraClass.'">';
-        $html .= '<label>'.esc_html($this->getLabel()).infopopup($this->getInfoText()).'</label>';
-        $html .= '<input type="text" autocomplete=off class="input-pickadate reset-field-button" name="'.esc_attr($this->getName()).'" value="'.esc_attr($v).'" />';
-        $html .= '</div>';
-        
-        return $html;
+        return parent::render();
     }
     
     

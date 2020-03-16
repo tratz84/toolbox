@@ -5,6 +5,11 @@
  * lock_system() - create system wide lock
  */
 function lock_system($lockname, $throwException=true) {
+    // don't lock in development environment
+    if (is_debug()) {
+        return false;
+    }
+    
     $lockname = preg_replace('/[^a-zA-Z0-9_-]/', '', slugify($lockname));
     
     $ctx = \core\Context::getInstance();

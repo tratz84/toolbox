@@ -283,6 +283,11 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
             $fch = FormChangesHtml::formChanged($oldForm, $form);
         }
 
+        $invoiceSettings = object_container_get(InvoiceSettings::class);
+        if ($isNew == false && $invoiceSettings->invoiceLocked( $invoice )) {
+            throw new InvalidStateException('Object auto-locked');
+        }
+
         // no changes? => skip (saveInvoice is called when printing or sending email)
         if ($fch->hasChanges() == false) {
             return $invoice;

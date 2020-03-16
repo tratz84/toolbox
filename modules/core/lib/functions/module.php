@@ -159,6 +159,9 @@ function module_update_handler($moduleName, $version) {
             load_php_file( $updatefile );
         }
         
+        // update database
+        \core\db\mysql\MysqlTableGenerator::updateModule( $moduleName );
+        
         // update version
         $settingsService = object_container_get(SettingsService::class);
         $settingsService->updateValue($settingsKey, $version);

@@ -83,6 +83,33 @@ class ProjectBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'project_hours' => 
+  array (
+    'Field' => 'project_hours',
+    'Type' => 'int(11)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'project_billable_type' => 
+  array (
+    'Field' => 'project_billable_type',
+    'Type' => 'enum(\'fixed\',\'ongoing\')',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'hourly_rate' => 
+  array (
+    'Field' => 'hourly_rate',
+    'Type' => 'decimal(10,2)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -120,6 +147,18 @@ class ProjectBase extends \core\db\DBObject {
 		
 	public function setCreated($p) { $this->setField('created', $p); }
 	public function getCreated() { return $this->getField('created'); }
+	
+		
+	public function setProjectHours($p) { $this->setField('project_hours', $p); }
+	public function getProjectHours() { return $this->getField('project_hours'); }
+	
+		
+	public function setProjectBillableType($p) { $this->setField('project_billable_type', $p); }
+	public function getProjectBillableType() { return $this->getField('project_billable_type'); }
+	
+		
+	public function setHourlyRate($p) { $this->setField('hourly_rate', $p); }
+	public function getHourlyRate() { return $this->getField('hourly_rate'); }
 	
 	
 }

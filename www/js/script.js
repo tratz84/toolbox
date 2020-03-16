@@ -43,11 +43,18 @@ $(document).ready(function() {
 	
 	var toolbox = $('.page-header .toolbox');
 	if (toolbox.length) {
-		toolbox.find('.fa.fa-chevron-circle-left').attr('title', _('Back'));
-		toolbox.find('.fa.fa-send').attr('title', _('Send by mail'));
-		toolbox.find('.fa.fa-print').attr('title', _('Print'));
-		toolbox.find('.fa.fa-save').attr('title', _('Save'));
-		toolbox.find('.fa.fa-cog').attr('title', _('Settings'));
+		if (toolbox.find('.fa.fa-chevron-circle-left').attr('title') != '')
+			toolbox.find('.fa.fa-chevron-circle-left').attr('title', _('Back'));
+		if (toolbox.find('.fa.fa-send').attr('title') != '')
+			toolbox.find('.fa.fa-send').attr('title', _('Send by mail'));
+		if (toolbox.find('.fa.fa-print').attr('title') != '')
+			toolbox.find('.fa.fa-print').attr('title', _('Print'));
+		if (toolbox.find('.fa.fa-save').attr('title') != '')
+			toolbox.find('.fa.fa-save').attr('title', _('Save'));
+		if (toolbox.find('.fa.fa-plus').attr('title') != '')
+			toolbox.find('.fa.fa-plus').attr('title', _('Add'));
+		if (toolbox.find('.fa.fa-cog').attr('title') == '')
+			toolbox.find('.fa.fa-cog').attr('title', _('Settings'));
 	}
 	
 	$(document).ajaxSend(function(evt, xhr, opts) {

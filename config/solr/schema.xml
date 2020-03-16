@@ -7,26 +7,30 @@
     <field name="_text_" type="text_general" indexed="true" stored="false" multiValued="true"/>
 
     <field name="contextName" type="string" indexed="true" stored="true"/>
+    <field name="mailboxName" type="string" indexed="true" stored="true"/>
     <field name="file"        type="string" indexed="true" stored="true"/>
     <field name="folderName"  type="string" indexed="true" stored="true"/>
     <field name="date"        type="pdate" indexed="true" stored="true"/>
     <field name="subject"     type="string_ci" indexed="true" stored="true"/>
 
-    <field name="isJunk"        type="boolean" indexed="true" stored="true"/>
-    <field name="isNotJunk"     type="boolean" indexed="true" stored="true"/>
-    <field name="isAnswered"    type="boolean" indexed="true" stored="true"/>
-    <field name="isRead"        type="boolean" indexed="true" stored="true"/>
-    <field name="isForwarded"   type="boolean" indexed="true" stored="true"/>
-    <field name="isSeen"        type="boolean" indexed="true" stored="true"/>
-    <field name="isDeleted"     type="boolean" indexed="true" stored="true"/>
+    <field name="isJunk"        type="boolean" indexed="true" stored="true" />
+    <field name="isNotJunk"     type="boolean" indexed="true" stored="true" />
+    <field name="isAnswered"    type="boolean" indexed="true" stored="true" />
+    <field name="isRead"        type="boolean" indexed="true" stored="true" />
+    <field name="isForwarded"   type="boolean" indexed="true" stored="true" />
+    <field name="isSeen"        type="boolean" indexed="true" stored="true" />
+    <field name="isDeleted"     type="boolean" indexed="true" stored="true" />
 
-    <field name="fromName"    type="string_ci" indexed="true" stored="true"/>
-    <field name="fromEmail"   type="string_ci" indexed="true" stored="true"/>
+    <field name="status"        type="string" indexed="true" stored="true" />
+    <field name="permissions"   type="string" multiValued="true" indexed="true" stored="true" />
 
-    <field name="toName"      type="string_ci" indexed="true" stored="true" multiValued="true" />
-    <field name="toEmail"     type="string_ci" indexed="true" stored="true" multiValued="true" />
+    <field name="fromName"      type="string_ci" indexed="true" stored="true"/>
+    <field name="fromEmail"     type="string_ci" indexed="true" stored="true"/>
 
-    <field name="content"     type="text_general" indexed="true" stored="false" />
+    <field name="toName"        type="string_ci" indexed="true" stored="true" multiValued="true" />
+    <field name="toEmail"       type="string_ci" indexed="true" stored="true" multiValued="true" />
+
+    <field name="content"       type="text_general" indexed="true" stored="false" />
 
 
     <!-- This can be enabled, in case the client does not know what fields may be searched. It isn't enabled by default

@@ -21,6 +21,7 @@ require_once dirname( __FILE__ ) . '/functions/auth.php';
 require_once dirname( __FILE__ ) . '/functions/forms.php';
 require_once dirname( __FILE__ ) . '/functions/image.php';
 require_once dirname( __FILE__ ) . '/functions/hook-helper.php';
+require_once dirname( __FILE__ ) . '/functions/log.php';
 
 
 register_shutdown_function(function() {

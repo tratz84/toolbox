@@ -40,8 +40,10 @@ class projectController extends BaseController {
         $projectService = $this->oc->get(ProjectService::class);
         if ($id) {
             $project = $projectService->readProject($id);
+            $this->isNew = false;
         } else {
             $project = new Project();
+            $this->isNew = true;
         }
         
         
@@ -52,9 +54,13 @@ class projectController extends BaseController {
             $form->bind($_REQUEST);
             
             if ($form->validate()) {
-                $projectService->saveProject($form);
+                $project = $projectService->saveProject($form);
                 
-                redirect('/?m=project&c=project');
+                if ($this->isNew) {
+                    redirect('/?m=project&c=projectHour&project_id='.$project->getProjectId());
+                } else {
+                    redirect('/?m=project&c=project');
+                }
             }
             
         }

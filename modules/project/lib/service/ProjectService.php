@@ -30,7 +30,7 @@ class ProjectService extends ServiceBase {
 
         $cursor = $pDao->search($opts);
 
-        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('project_id', 'project_name', 'total_minutes', 'person_id', 'firstname', 'insert_lastname', 'lastname', 'company_id', 'company_name', 'active'));
+        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('project_id', 'project_name', 'total_minutes', 'person_id', 'firstname', 'insert_lastname', 'lastname', 'company_id', 'company_name', 'active', 'project_hours', 'project_billable_type', 'hourly_rate'));
 
         return $r;
     }
@@ -67,7 +67,7 @@ class ProjectService extends ServiceBase {
         }
 
 
-        $form->fill($project, array('project_id', 'project_name', 'active', 'note'));
+        $form->fill($project, array('project_id', 'project_name', 'active', 'note', 'project_billable_type', 'project_hours', 'hourly_rate'));
 
         $project->setCompanyId(null);
         $project->setPersonId(null);
@@ -82,6 +82,8 @@ class ProjectService extends ServiceBase {
         if (!$project->save()) {
             return false;
         }
+        
+        return $project;
     }
 
     public function readByCustomer($companyId=null, $personId=null) {

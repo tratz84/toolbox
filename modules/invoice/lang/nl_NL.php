@@ -36,7 +36,7 @@ $lang['Edit vat tarifs']        = 'Bewerk btw tarief';
 $lang['Vat tarifs']             = 'Btw tarieven';
 
 $lang['Recent']                 = 'Recente';
-$lang['No']                     = 'Nr';
+$lang['Number_short']           = 'Nr';
 $lang['Name']                   = 'Naam';
 $lang['Description']            = 'Omschrijving';
 $lang['State']                  = 'Status';
