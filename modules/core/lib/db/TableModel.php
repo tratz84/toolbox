@@ -13,10 +13,18 @@ class TableModel {
         $this->setSchemaName($schemaName);
         $this->setTableName($tableName);
         
+        $this->data['schemaInTableName'] = true;
+        
         $this->data['columns'] = array();
-        $this->data['uniqueIndexes'] = array();
         $this->data['indexes'] = array();
     }
+    
+    
+    public function getData() { return $this->data; }
+    
+    
+    public function setUseSchemaInTableName($bln) { $this->data['schemaInTableName'] = $bln ? true : false; }
+    public function useSchemaInTableName() { return $this->data['schemaInTableName'] ? true : false; }
     
     public function setSchemaName($n) { $this->data['schemaName'] = $n; }
     public function getSchemaName() { return $this->data['schemaName']; }
@@ -29,17 +37,29 @@ class TableModel {
     }
     
     public function addColumn($columnName, $type, $props=array()) {
-        $this->data['columns'][$columnName] = array(
-            'type' => $type
+        $coldata = array(
+            'type' => $type,
+            'name' => $columnName,
         );
         
-        $this->data['columns'][$columnName] = array_merge($this->data['columns'][$columnName], $props);
+        $this->data['columns'][$columnName] = array_merge($coldata, $props);
     }
     
     
     public function setPrimaryKey($columnName, $autoIncrement=true) {
-        $this->setColumnProperty($columnName, 'key', 'PRIMARY KEY');
-        $this->setColumnProperty($columnName, 'auto_increment', true);
+        if (is_array($columnName)) {
+            $pks = $columnName;
+        } else {
+            $pks = array( $columnName );
+        }
+        
+        foreach($pks as $pk) {
+            $this->setColumnProperty($pk, 'key', 'PRIMARY KEY');
+            
+            if ($autoIncrement) {
+                $this->setColumnProperty($pk, 'auto_increment', true);
+            }
+        }
     }
     
     public function setColumnProperty($columnName, $propName, $propVal) {
@@ -73,14 +93,18 @@ class TableModel {
     
     public function hasIndex($indexName) { return isset($this->data['indexes'][$indexName]) ? true : false; }
     public function getIndexes() { return $this->data['indexes']; }
-    public function getIndex($indexName) { return $this->data['indexes'][$indexName]; }
-    public function setIndex($indexName, $columns=array()) { $this->data['indexes'][$indexName] = $columns; }
+    public function getIndex($indexName) {
+        return $this->data['indexes'][$indexName];
+    }
+    public function addIndex($indexName, $columns=array(), $props=array()) {
+        $data = array(
+            'columns' => $columns,
+            'name' => $indexName,
+        );
+        
+        $this->data['indexes'][$indexName] = array_merge($data, $props);
+    }
     
-    
-    public function hasUniqueConstraint($indexName) { return isset($this->data['uniqueColumns'][$indexName]) ? true : false; }
-    public function getUniqueConstraints() { return $this->data['uniqueColumns']; }
-    public function getUniqueConstraint($indexName) { return $this->data['uniqueColumns'][$indexName]; }
-    public function setUniqueColumns($indexName, $columns=array()) { $this->data['uniqueColumns'][$indexName] = $columns; }
     
 }
 

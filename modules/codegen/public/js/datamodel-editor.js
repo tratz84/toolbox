@@ -10,6 +10,8 @@ function DatamodelEditor( schemaName, container ) {
 	this.container = container;
 	this.data = [];
 	
+	this.selectedTable = null;
+	
 	this.addTable = function() {
 		
 	};
@@ -20,7 +22,6 @@ function DatamodelEditor( schemaName, container ) {
 	
 	
 	this.render = function() {
-		
 		this.renderToolbar();
 		
 		this.renderTables();
@@ -55,36 +56,47 @@ function DatamodelEditor( schemaName, container ) {
 			if ($(node).data('tableName') == tbl_data.tableName) {
 				tbl = node;
 				return false;
-			});
-		}
+			}
+		});
 		if (tbl == null) {
-			tbl = $('<table />');
+			tbl = $('<table class="data-table" />');
+			tbl.click(function( evt ) {
+				var tableName = $(evt.target).data('tableName');
+				this.selectTable( tableName );
+			}.bind(this));
+			
 			tbl.data('schemaName', tbl_data.schemaName);
 			tbl.data('tableName',  tbl_data.tableName);
 			
 			tc.append( tbl );
+			
+			$(tbl).draggable();
 		}
 		
 		tbl.empty();
 		
-		var trTableName = $('<tr class="tbl-name"><td></td></tr>');
-		trTableName.find('.tbl-name td').text( tbl_data.schemaName + '__' + tbl_data.tableName );
+		var trTableName = $('<tr class="tbl-name"><td colspan="2" class="table-name"></td></tr>');
+		trTableName.find('td.table-name').text( tbl_data['schemaName'] + '__' + tbl_data['tableName'] );
 		tbl.append( trTableName );
 		
 		// columns
 		for(var columnName in tbl_data['columns']) {
 			var col_props = tbl_data['columns'][ columnName ];
 			
-			var trCol = $('<tr class="tbl-col col-index"><td></td></tr>');
-			trCol.find('.tbl-col.col-index td').text( columnName )
+			var trCol = $('<tr class="tr-col col-index"><td class="col-type"></td><td class="col-name"></td></tr>');
+			trCol.find('td.col-name').text( col_props['name'] );
 			
+			trCol.data('data', col_props);
 		}
-		
-		// TODO: indexes
-		
-		
-		
-		
+
+		for(var indexName in tbl_data['indexes']) {
+			var index_props = tbl_data['indexes'][ indexName ];
+			
+			var trIndex = $('<tr class="tr-index index-name"><td class="index-type"></td><td class="index-name"></td></tr>');
+			trIndex.find('td.index-name').text( col_props['name'] );
+			
+			trIndex.data('data', index_props );
+		}
 	};
 	
 	
@@ -130,13 +142,15 @@ function DatamodelEditor( schemaName, container ) {
 		tbl['x'] = 0;
 		tbl['y'] = 0;
 		
-		tbl['schemaName']    = this.schemaName;
-		tbl['tableName']     = tablename;
-		tbl['columns']       = [];
-		tbl['uniqueColumns'] = [];
-		tbl['indexes']       = [];
+		tbl['schemaInTableName'] = true;
+		tbl['schemaName']        = this.schemaName;
+		tbl['tableName']         = tablename;
+		tbl['columns']           = [];
+		tbl['indexes']           = [];
 		
 		this.data.push( tbl );
+		
+		this.renderTables();
 	};
 	
 	this.createColumn_Click = function() {
@@ -153,6 +167,13 @@ function DatamodelEditor( schemaName, container ) {
 		
 		// update tables
 		this.renderTables();
+	};
+	
+	
+	this.selectTable = function(tableName) {
+		$(this.container).find('.data-table').removeClass('selected');
+		
+		
 	};
 	
 	
