@@ -16,10 +16,10 @@ class editorController extends BaseController {
         }
         
         
-        $data_tablemodel = array();
+        $this->data_tablemodel = array();
         $file_tablemodel = module_file($this->mod, 'config/tablemodel.php');
         if ($file_tablemodel) {
-            $data_tablemodel = load_php_file( module_file($this->mod, 'config/tablemodel.php') );
+            $this->data_tablemodel = load_php_file( module_file($this->mod, 'config/tablemodel.php') );
         }
         
         

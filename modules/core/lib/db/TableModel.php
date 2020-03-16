@@ -14,7 +14,7 @@ class TableModel {
         $this->setTableName($tableName);
         
         $this->data['columns'] = array();
-        $this->data['uniqueColumns'] = array();
+        $this->data['uniqueIndexes'] = array();
         $this->data['indexes'] = array();
     }
     

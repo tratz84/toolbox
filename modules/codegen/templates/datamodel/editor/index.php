@@ -11,7 +11,11 @@
 	<h1>Datamodel - <?= esc_html($mod) ?></h1>
 </div>
 
-<form >
+<form>
+
+<div class="model-container">
+	
+</div>
 
 </form>
 
@@ -19,14 +23,15 @@
 <script>
 
 var data_tablemodel = <?= json_encode($data_tablemodel) ?>;
+var schemaname = <?= json_encode($mod) ?>;
 
 var dmEditor;
 $(document).ready(function() {
-	dmEditor = new DatamodelEditor();
+	dmEditor = new DatamodelEditor(schemaname, '.model-container');
 
 	dmEditor.setData( data_tablemodel );
 	
-	
+	dmEditor.render();
 });
 
 
