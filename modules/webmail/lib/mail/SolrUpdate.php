@@ -5,6 +5,7 @@ namespace webmail\mail;
 
 
 use core\exception\SolrException;
+use core\parser\HtmlParser;
 
 class SolrUpdate {
     
@@ -81,8 +82,13 @@ class SolrUpdate {
         
         
         $r['content'] = $p->getMessageBody('html');
-        if (!trim(strip_tags($r['content'])))
+        $hp = new HtmlParser();
+        $hp->loadString( $r['content'] );
+        $r['content'] = $hp->getBodyText();
+        
+        if (trim($r['content']) == '') {
             $r['content'] = $p->getMessageBody('text');
+        }
         
         $r['fromName'] = '';
         $r['fromEmail'] = '';
