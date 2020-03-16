@@ -89,6 +89,19 @@ class SolrUpdate {
         $r['toName'] = array();
         $r['toEmail'] = array();
         
+        // TODO: fields
+//         $r['mailboxName'] = '';
+//         $r['isJunk'] = null;
+//         $r['isNotJunk'] = null;
+//         $r['isAnswered'] = null;
+//         $r['isRead'] = null;
+//         $r['isForwarded'] = null;
+//         $r['isSeen'] = null;
+//         $r['isDeleted'] = null;
+//         $r['status'] = null;
+//         $r['permissions'] = array();
+//         $r['content'] = null;
+//         $r['properties'] = null;
         
         
         $from = $p->getAddresses('from');

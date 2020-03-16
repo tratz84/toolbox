@@ -15,18 +15,18 @@ chdir(dirname(__FILE__));
 // bootstrap
 include '../config/config.php';
 $contextName = $argv[1];
-bootstrapContext($contextName);
+bootstrapCli($contextName);
 
 $ctx = \core\Context::getInstance();
 
 
 
-try {
-    $su = new SolrUpdate();
-    $su->truncate();
-    $su->importFolder($ctx->getDataDir().'/email/inbox');
-    $su->commit();
-} catch (\Exception $ex) {
-    print 'Error: ' . $ex->getFile() . ':' . $ex->getLine() . ': ' . $ex->getMessage() . "\n";
-	print $ex->getTraceAsString() . "\n";
-}
+$su = new SolrUpdate();
+// $su->truncate();
+// $su->importFolder($ctx->getDataDir().'/email/inbox');
+
+$su->queueFile( '/home/timvw/projects/toolbox/data/dev/email/inbox/2020/02/22/c7689b1bb97e699809b5d707bdcaf57f' );
+$su->purge( true );
+
+$su->commit();
+

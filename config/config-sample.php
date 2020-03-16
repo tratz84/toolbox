@@ -28,7 +28,7 @@ define('BASE_HREF', '/');
 
 // note, not to be used directly, use Context::getInstance()->getDataDir();
 define('DATA_DIR', '/projects/peopleweb-php/data');
-define('WEBMAIL_SOLR', 'http://localhost:8984/solr/insights');
+define('WEBMAIL_SOLR', 'http://localhost:8984/solr/webmail');
 
 
 // used @ core\lib\AuthFilter
