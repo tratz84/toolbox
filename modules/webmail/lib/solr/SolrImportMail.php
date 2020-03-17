@@ -72,18 +72,18 @@ class SolrImportMail {
         
         $r['content'] = $hp->getBodyText();
         
-        $r['text'] = array();
+//         $r['text'] = array();
         
         if (trim($r['content']) == '') {
             $r['content'] = $p->getMessageBody('text');
-            $r['text'][] = $r['content'];
+//             $r['text'][] = $r['content'];
         }
         
         // fields
         $r['mailboxName'] = $props['folder'];
         $r['isJunk']      = $props['folder'] == 'Junk' || $props['folder'] == 'Spam';
         $r['isNotJunk']   = !$r['isJunk'];
-        $r['isAnswered']  = isset($r['answered']) && $r['answered'] ? true : false;;
+        $r['isAnswered']  = isset($r['answered']) && $r['answered'] ? true : false;
         $r['isRead']      = isset($r['seen']) && $r['seen'] ? true : false;
         $r['isForwarded'] = null;
         $r['isSeen']      = $r['isRead'];
@@ -119,18 +119,20 @@ class SolrImportMail {
             }
         }
         
-        if ($r['fromName'])
-            $r['text'][] = $r['fromName'];
-        if ($r['fromEmail'])
-            $r['text'][] = $r['fromEmail'];
+//         if ($r['fromName'])
+//             $r['text'][] = $r['fromName'];
+//         if ($r['fromEmail'])
+//             $r['text'][] = $r['fromEmail'];
         
-        foreach($r['toName'] as $tn) {
-            $r['text'][] = $tn;
-        }
-        foreach($r['toEmail'] as $tn) {
-            $r['text'][] = $tn;
-        }
-        
+//         foreach($r['toName'] as $tn) {
+//             $r['text'][] = $tn;
+//         }
+//         foreach($r['toEmail'] as $tn) {
+//             $r['text'][] = $tn;
+//         }
+
+        unset( $p );
+
         return $r;
     }
     
@@ -182,6 +184,8 @@ class SolrImportMail {
             throw new SolrException( $json->error->msg );
         }
         
+        $this->documentCount++;
+        unset($this->documents);
         $this->documents = array();
     }
     

@@ -157,6 +157,8 @@ class ImapConnection {
             }
         }
         
+        imap_gc($this->imap, IMAP_GC_ELT | IMAP_GC_ENV | IMAP_GC_TEXTS);
+        
         return $items;
     }
     
@@ -170,7 +172,7 @@ class ImapConnection {
         $items = array();
         
         // Fetch an overview for all messages in INBOX
-        $pagesize = 1000;
+        $pagesize = 500;
         for($x=1; $x <= $messageCount->Nmsgs; $x += $pagesize) {
             $end = ($x + $pagesize) - 1;
             
@@ -267,6 +269,8 @@ class ImapConnection {
         $r = fwrite($fh, $str);
         fclose($fh);
         
+        imap_gc($this->imap, IMAP_GC_ELT | IMAP_GC_ENV | IMAP_GC_TEXTS);
+        
         return $file;
     }
     
@@ -357,6 +361,8 @@ class ImapConnection {
         if ($blnExpunge) {
             imap_expunge($this->imap);
         }
+        
+        imap_gc($this->imap, IMAP_GC_ELT | IMAP_GC_ENV | IMAP_GC_TEXTS);
         
         return $items;
     }
