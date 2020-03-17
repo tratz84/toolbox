@@ -25,7 +25,7 @@ $su = new SolrUpdate();
 // $su->truncate();
 // $su->importFolder($ctx->getDataDir().'/email/inbox');
 
-$su->queueFile( '/home/timvw/projects/toolbox/data/dev/email/inbox/2020/02/22/c7689b1bb97e699809b5d707bdcaf57f' );
+$su->queueFile( '/home/timvw/projects/toolbox/data/dev/webmail/inbox/2020/02/22/c7689b1bb97e699809b5d707bdcaf57f' );
 $su->purge( true );
 
 $su->commit();

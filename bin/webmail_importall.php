@@ -46,4 +46,6 @@ foreach($cs as $c) {
     
     
     $ic->disconnect();
+    
+    $ic->saveMessagePropertyChecksums();
 }

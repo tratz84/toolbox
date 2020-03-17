@@ -25,6 +25,8 @@ class ImapConnection {
     
     protected $callback_itemImported = null;
     
+    protected $messagePropertyChecksums = null;
+    
     
     public function __construct($hostname=null, $port=null, $username=null, $password=null) {
         
@@ -198,7 +200,7 @@ class ImapConnection {
         
         $uid = @md5($overview->size . $overview->message_id . $overview->from . $overview->subject . $overview->udate);
         
-        $p = $this->ctx->getDataDir() . '/email/inbox/' . $dt->format('Y') . '/' . $dt->format('m') . '/' . $dt->format('d');
+        $p = $this->ctx->getDataDir() . '/webmail/inbox/' . $dt->format('Y') . '/' . $dt->format('m') . '/' . $dt->format('d');
         
         $file = $p . '/' . $uid;
         
@@ -215,6 +217,30 @@ class ImapConnection {
             if (mkdir(dirname($file), 0755, true) == false) {
                 return false;
             }
+        }
+        
+        
+        // $mp = message-properties
+        $mp = array();
+        $mp['folder']     = $folderName;
+        $mp['subject']    = @$overview->subject;
+        $mp['from']       = @$overview->from;
+        $mp['to']         = @$overview->to;
+        $mp['size']       = @$overview->size;
+        $mp['message_id'] = @$overview->message_id;
+        $mp['uid']        = @$overview->uid;
+        $mp['udate']      = @$overview->udate;
+        $mp['flagged']    = @$overview->flagged;
+        $mp['answered']   = @$overview->answered;
+        $mp['deleted']    = @$overview->deleted;
+        $mp['seen']       = @$overview->seen;
+        $mp['draft']      = @$overview->draft;
+        
+        
+        // check if props are changed before saving?
+        $data_mp = json_encode($mp);
+        if ($this->messagePropertiesChanged($file.'.properties', $data_mp)) {
+            file_put_contents($file . '.properties', json_encode($mp));
         }
         
         if (file_exists($file)) {
@@ -239,6 +265,30 @@ class ImapConnection {
         
         return $r;
     }
+    
+    public function messagePropertiesChanged($filename, $data) {
+        $chksum = crc32_int32($data);
+        
+        if ($this->messagePropertyChecksums === null) {
+            $f = module_file('webmail', 'webmail/message-checksums');
+            if ($f)
+                $this->messagePropertyChecksums = unserialize( file_get_contents( $f ) );
+        }
+        
+        if (isset($this->messagePropertyChecksums[ $filename ]) && $this->messagePropertyChecksums[ $filename ] == $chksum) {
+            return false;
+        }
+        
+        $this->messagePropertyChecksums[ $filename ] = $chksum;
+        
+        return true;
+    }
+    
+    public function saveMessagePropertyChecksums() {
+        
+        return save_data('webmail/message-checksums', serialize($this->messagePropertyChecksums));
+    }
+    
     
     public function importInbox(Connector $connector) {
         if (!imap_reopen($this->imap, $this->mailbox.'INBOX')) {
