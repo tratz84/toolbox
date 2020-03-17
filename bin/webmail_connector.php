@@ -67,8 +67,8 @@ while (true) {
                     print "Importing mail, " . $c->getConnectorId() . ': ' . $overview->subject . " (".$overview->date.")\n";
                     
                     // save header info in db
-                    $emailService = \core\ObjectContainer::getInstance()->get( EmailService::class );
-                    $emailService->saveEmailFile($c->getConnectorId(), $folderName, $file);
+//                     $emailService = \core\ObjectContainer::getInstance()->get( EmailService::class );
+//                     $emailService->saveEmailFile($c->getConnectorId(), $folderName, $file);
                     
                     // TODO: update solr
                 });

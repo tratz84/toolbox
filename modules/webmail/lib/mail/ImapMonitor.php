@@ -52,6 +52,11 @@ class ImapMonitor extends MailMonitor {
     }
     
     
+    /**
+     * poll() - checks if there's new mail
+     * 
+     * @return boolean true/false, true if there's new mail
+     */
     public function poll() {
         // no connection? => try to connect
         if ($this->imapConnection == null || $this->connected == false) {

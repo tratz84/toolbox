@@ -43,9 +43,9 @@ class testController extends BaseController {
         $su = new SolrUpdate();
         $su->truncate();
 //         $su->commit();exit;
-        $su->importFolder($this->ctx->getDataDir().'/email/inbox');
+        $su->importFolder($this->ctx->getDataDir().'/webmail/inbox');
         
-//         $su->queueFile('C:/projects/insights/data/demo/email/inbox/2017/09/29/f29ed66633e944897e194bb2d5e50510');
+//         $su->queueFile('C:/projects/insights/data/demo/webmail/inbox/2017/09/29/f29ed66633e944897e194bb2d5e50510');
 //         $su->purge(true);
         $su->commit();
         
@@ -57,7 +57,7 @@ class testController extends BaseController {
 //         var_export(function_exists('mailparse_msg_parse_file'));
         
         $su = new SolrUpdate();
-        $r = $su->parseEml('/home/timvw/projects/insights/data/dev/email/inbox/2017/09/29/f29ed66633e944897e194bb2d5e50510');
+        $r = $su->parseEml('/home/timvw/projects/insights/data/dev/webmail/inbox/2017/09/29/f29ed66633e944897e194bb2d5e50510');
         
         var_export( $r );
         exit;
