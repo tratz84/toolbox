@@ -3,6 +3,8 @@
 
 namespace core\parser;
 
+use core\exception\InvalidStateException;
+
 
 class HtmlParser {
     
@@ -78,6 +80,10 @@ class HtmlParser {
     
     public function findElement($filter=array(), $parts=null) {
         if ($parts == null) {
+            if ($this->parts === null) {
+                throw new InvalidStateException('HtmlParser::parse() not called');
+            }
+            
             $parts = $this->parts;
         }
         

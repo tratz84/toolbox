@@ -5,6 +5,7 @@
 use core\ObjectContainer;
 use webmail\mail\ImapConnection;
 use webmail\service\ConnectorService;
+use webmail\solr\SolrImportMail;
 
 if (count($argv) != 2) {
     print "Usage: {$argv[0]} <contextname>\n";
@@ -37,15 +38,17 @@ foreach($cs as $c) {
         
     print "Connected to " . $c->getDescription() . "\n";
     
-    $ic->setCallbackItemImported(function($folderName, $overview, $file) {
-        // TODO: implement
+    
+    $solrImportMail = new SolrImportMail(WEBMAIL_SOLR);
+    $ic->setCallbackItemImported(function($folderName, $overview, $file) use ($solrImportMail) {
+        $solrImportMail->queueEml( $file );
+        $solrImportMail->purge();
     });
     
     
     $ic->doImport( $c );
-    
-    
     $ic->disconnect();
-    
     $ic->saveMessagePropertyChecksums();
+    
+    $solrImportMail->purge( true );
 }

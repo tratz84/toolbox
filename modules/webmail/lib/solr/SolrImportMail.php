@@ -13,7 +13,7 @@ class SolrImportMail {
     protected $solrUrl;
     
     protected $documents = array();
-    
+    protected $documentCount = 1;
     
     public function __construct($solrUrl) {
         $this->contextName = \core\Context::getInstance()->getContextName();
@@ -32,7 +32,7 @@ class SolrImportMail {
         $pf = $emlFile . '.properties';
         
         if (file_exists($pf)) {
-            $r = unserialize( file_get_contents($pf) );
+            $r = json_decode( file_get_contents($pf), true );
         }
         
         if (is_array($r)) {
@@ -50,10 +50,12 @@ class SolrImportMail {
         $p->setPath($emlFile);
         
         
+        $datadir = \core\Context::getInstance()->getDataDir();
+        
         $r = array();
-        $r['id'] = str_replace($this->datadir, '', $emlFile);
+        $r['id'] = str_replace($datadir, '', $emlFile);
         $r['contextName'] = $this->contextName;
-        $r['file'] = str_replace($this->datadir, '', $emlFile);
+        $r['file'] = str_replace($datadir, '', $emlFile);
         
         $dt = new \DateTime(null, new \DateTimeZone('+0000'));
         $dt->setTimestamp(strtotime($p->getHeader('date')));
@@ -62,8 +64,12 @@ class SolrImportMail {
         
         
         $r['content'] = $p->getMessageBody('html');
+        
+        
         $hp = new HtmlParser();
         $hp->loadString( $r['content'] );
+        $hp->parse();
+        
         $r['content'] = $hp->getBodyText();
         
         $r['text'] = array();
@@ -124,7 +130,6 @@ class SolrImportMail {
         foreach($r['toEmail'] as $tn) {
             $r['text'][] = $tn;
         }
-        
         
         return $r;
     }
@@ -191,6 +196,7 @@ class SolrImportMail {
             
             if (is_cli()) {
                 print "Document no: " . $this->documentCount . PHP_EOL;
+                $this->documentCount++;
             }
             $this->commit();
             

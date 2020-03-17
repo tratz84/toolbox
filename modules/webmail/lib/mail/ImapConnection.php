@@ -185,6 +185,10 @@ class ImapConnection {
             
             for($y=0; $y < count($results); $y++) {
                 $this->saveMessage($folderName, $results[$y], $x+$y);
+                
+                $emlfile = $this->determineEmailPath($results[$y]);
+                
+                call_user_func($this->callback_itemImported, $folderName, $results[$y], $emlfile);
             }
             
             imap_gc($this->imap, IMAP_GC_ELT | IMAP_GC_ENV | IMAP_GC_TEXTS);
@@ -263,7 +267,7 @@ class ImapConnection {
         $r = fwrite($fh, $str);
         fclose($fh);
         
-        return $r;
+        return $file;
     }
     
     public function messagePropertiesChanged($filename, $data) {
@@ -319,10 +323,10 @@ class ImapConnection {
                 $file = $this->determineEmailPath( $results[$y] );
                 
                 if (file_exists($file) == false) {
-                    $mailSaved = $this->saveMessage('INBOX', $results[$y], $x+$y);
+                    $emlfile = $this->saveMessage('INBOX', $results[$y], $x+$y);
                     
                     // new?
-                    if ($mailSaved) {
+                    if ($emlfile) {
                         // apply filters
                         print "Applying filters\n";
                         $result = $this->applyFilters($connector, $file, $x+$y);
