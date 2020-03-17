@@ -20,7 +20,7 @@ chdir(dirname(__FILE__));
 // bootstrap
 include '../config/config.php';
 $contextName = $argv[1];
-bootstrapContext($contextName);
+bootstrapCli($contextName);
 
 // connect to database for current context
 $dh = \core\db\DatabaseHandler::getInstance();
