@@ -140,6 +140,7 @@ class SolrImportMail {
         $r = $this->parseEml( $emlFile );
         
         $this->documents[] = $r;
+        $this->documentCount++;
     }
     
     
@@ -184,7 +185,6 @@ class SolrImportMail {
             throw new SolrException( $json->error->msg );
         }
         
-        $this->documentCount++;
         unset($this->documents);
         $this->documents = array();
     }
@@ -200,7 +200,6 @@ class SolrImportMail {
             
             if (is_cli()) {
                 print "Document no: " . $this->documentCount . PHP_EOL;
-                $this->documentCount++;
             }
             $this->commit();
             
