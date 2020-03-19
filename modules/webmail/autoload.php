@@ -9,6 +9,11 @@ use core\Context;
 
 Context::getInstance()->enableModule('webmail');
 
+module_update_handler('webmail', '20200319');
+
+// core\db\mysql\MysqlTableGenerator::updateModule('webmail', true);
+// exit;
+
 $eb = ObjectContainer::getInstance()->get(EventBus::class);
 
 $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($evt) {
