@@ -231,7 +231,12 @@ class MysqlTableGenerator {
             if (isset($props['unique']) && $props['unique']) {
                 $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` ADD UNIQUE `" . $indexName . "`(`".implode('`, `', $props['columns'])."`);";
             } else {
-                $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` ADD INDEX `" . $indexName . "`(`".implode('`, `', $props['columns'])."`);";
+                $indexProps = '';
+                if (isset($props['fulltext']) && $props['fulltext']) {
+                    $indexProps = ' FULLTEXT ';
+                }
+                
+                $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` ADD {$indexProps} INDEX `" . $indexName . "`(`".implode('`, `', $props['columns'])."`);";
             }
         }
         
@@ -261,7 +266,11 @@ class MysqlTableGenerator {
                     else if ($db_index['Non_unique'] == '1' && isset($model_index['unique']) && $model_index['unique']) {
                         $changed = true;
                         break;
+                    } else if ($db_index['Index_type'] == 'FULLTEXT' && (isset($model_index['fulltext']) == false || $model_index['fulltext'] == false)) {
+                        $changed = true;
+                        break;
                     }
+                    
                 }
             }
             
@@ -271,7 +280,12 @@ class MysqlTableGenerator {
                 if (isset($props['unique']) && $props['unique']) {
                     $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` ADD UNIQUE `" . $indexName . "`(`".implode('`, `', $model_index['columns'])."`);";
                 } else {
-                    $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` ADD INDEX `" . $key . "`(`".implode('`, `', $model_index['columns'])."`);";
+                    $indexProps = '';
+                    if (isset($props['fulltext']) && $props['fulltext']) {
+                        $indexProps = ' FULLTEXT ';
+                    }
+
+                    $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` ADD {$indexProps} INDEX `" . $key . "`(`".implode('`, `', $model_index['columns'])."`);";
                 }
                 
             }
@@ -352,7 +366,12 @@ class MysqlTableGenerator {
                 $sql .= "\tCONSTRAINT `{$key}` UNIQUE(".implode(', ', $cols) . ")";
             } else {
                 // standard INDEX
-                $sql .= "\tKEY `{$key}` (".implode(', ', $cols) . ")";
+                $indexProps = '';
+                if (isset($indexes[$key]['fulltext']) && $indexes[$key]['fulltext']) {
+                    $indexProps = 'FULLTEXT ';
+                }
+
+                $sql .= "\t{$indexProps}KEY `{$key}` (".implode(', ', $cols) . ")";
             }
             
             $sql .= ($x < count($constraint_keys)-1 ? ",\n":"");
