@@ -46,7 +46,12 @@
 					$(node).data('height-in-percentage', perc);
 				}
 				$(node).height( containerHeight * perc );
-				$(node).css('overflow-y', 'auto');
+				
+				if ($(node).data('dont-overflow')) {
+					
+				} else {
+					$(node).css('overflow-y', 'auto');
+				}
 
 				currentHeightOffset += $(node).height();
 

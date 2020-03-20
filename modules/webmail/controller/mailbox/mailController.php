@@ -46,10 +46,11 @@ class mailController extends BaseController {
         $this->bcc         = $mail->getBcc();
         $this->subject     = $mail->getSubject();
         
-        $this->setShowDecorator( false );
+        $this->setDecoratorFile( module_file('base', 'templates/decorator/blank.php') );
         
         return $this->render();
     }
+    
     
     public function action_attachment() {
         /** @var SolrMail $mail */
@@ -61,6 +62,7 @@ class mailController extends BaseController {
         header('Content-disposition: inline; filename="' . $f['filename'] .'"');
         print $f['content'];
     }
+    
     
     
 }

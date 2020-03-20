@@ -12,19 +12,14 @@
 			<div id="emailheader-table-container"></div>
 			
 		</div>
-		<div id="mail-content" style="" data-height-in-percentage="<?= isset($state['slider-ratio'][0]) ? $state['slider-ratio'][1] : '' ?>">
+		<div id="mail-content" style="" data-dont-overflow="1" data-height-in-percentage="<?= isset($state['slider-ratio'][0]) ? $state['slider-ratio'][1] : '' ?>">
+			<iframe style="width:100%; height: 150%;" frameborder="0" sandbox=""></iframe>
 		</div>
 	</div>
 </div>
 
 
-<script>
 
-function uploadFilesField_Click(obj) {
-// 	window.open(appUrl('/?m=webmail&c=view&a=file&id=' + $(obj).data('id')), '_blank');
-}
-
-</script>
 
 <script>
 
@@ -32,7 +27,7 @@ var opts = {
 	onresize: function(containerSlider) {
 		var p = containerSlider.getPanelPercentages();
 		$.ajax({
-			url: appUrl('/?m=webmail&c=email&a=savestate'),
+			url: appUrl('/?m=webmail&c=mailbox/search&a=savestate'),
 			type: 'POST',
 			data: {
 				percentages: p
@@ -67,17 +62,9 @@ t.setRowClick(function(row, evt) {
 
 	$('#emailheader-table-container tr.active').removeClass('active');
 	$(row).addClass('active');
-	
-	$.ajax({
-		type: 'POST',
-		url: appUrl('/?m=webmail&c=mailbox/mail&a=view'),
-		data: {
-			id: $(row).data('record').email_id
-		},
-		success: function(data) {
-			$('#mail-content').html( data );
-		}
-	});
+
+	var email_id = $(row).data('record').email_id;
+	$('#mail-content iframe').attr('src', appUrl('/?m=webmail&c=mailbox/mail&a=view&id=' + email_id));
 });
 
 t.setRowDblclick(function(row, evt) {

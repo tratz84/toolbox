@@ -14,6 +14,9 @@ class SolrMailQuery extends SolrQuery {
         
         $this->responseClass = SolrMailQueryResponse::class;
         
+        $ctx = \core\Context::getInstance();
+        
+        $this->addFacetSearch('contextName', ':', $ctx->getContextName());
         $this->setSort('date desc');
     }
     
