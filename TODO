@@ -1,21 +1,22 @@
 
-TODO:
-
-- database editor
-- form generator
-- webmail
-- sales
-
-
-Finance-module?
-- Voorbeeld rekenschema, http://home.hccnet.nl/van.asperen/Boekhouden/Cursus/vrbrekschema.htm
+== TODO ==
+- database editor <= postponed. First implement it with code. Maybe after that create GUI
+- form generator  <= TODO: ListFormWidget
+- webmail         <= in progres
+- sales           <= ?
 
 
+== Finance-module ==
+- Example ledger account nr's, http://home.hccnet.nl/van.asperen/Boekhouden/Cursus/vrbrekschema.htm
+
+
+== Calendar ==
 - Add feature to calendar. Give calendar-items a status, ie.
 	- Open
 	- Postponed
 	- Done
 
 Based on status create a list: 'Calendar items to be addressed'
+
 
 
