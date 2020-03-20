@@ -66,15 +66,21 @@ class SolrMail {
         return $r;
     }
     
-    public function getFromName() { return $this->jsonMail->fromName; }
-    public function getFromEmail() { return $this->jsonMail->fromEmail; }
+    public function getFromName() {
+        return isset($this->jsonMail->fromName) ? $this->jsonMail->fromName : '';
+    }
+    public function getFromEmail() {
+        return isset($this->jsonMail->fromEmail) ? $this->jsonMail->fromEmail : '';
+    }
     
     public function getTo() { $this->parseMail();  return $this->to; }
     public function getCc() { $this->parseMail();  return $this->cc; }
     public function getBcc() { $this->parseMail(); return $this->bcc; }
     
     
-    public function getSubject() { return $this->jsonMail->subject; }
+    public function getSubject() {
+        return isset($this->jsonMail->subject) ? $this->jsonMail->subject : '';
+    }
     
     
     
