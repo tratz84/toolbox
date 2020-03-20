@@ -1,7 +1,7 @@
 
 
 <div class="page-header">
-	<h1>Outbox</h1>
+	<h1>Mailarchive</h1>
 </div>
 
 
@@ -21,7 +21,7 @@
 <script>
 
 function uploadFilesField_Click(obj) {
-	window.open(appUrl('/?m=webmail&c=view&a=file&id=' + $(obj).data('id')), '_blank');
+// 	window.open(appUrl('/?m=webmail&c=view&a=file&id=' + $(obj).data('id')), '_blank');
 }
 
 </script>
@@ -70,7 +70,7 @@ t.setRowClick(function(row, evt) {
 	
 	$.ajax({
 		type: 'POST',
-		url: appUrl('/?m=webmail&c=email&a=view'),
+		url: appUrl('/?m=webmail&c=mailbox/mail&a=view'),
 		data: {
 			id: $(row).data('record').email_id
 		},
@@ -84,43 +84,21 @@ t.setRowDblclick(function(row, evt) {
 	window.location = appUrl('/?m=webmail&c=view&id=' + $(row).data('record').email_id);
 });
 
-t.setConnectorUrl( '/?m=webmail&c=email&a=search' );
+t.setConnectorUrl( '/?m=webmail&c=mailbox/search&a=search' );
 
 
-// t.addColumn({
-// 	fieldName: 'email_id',
-// 	width: 40,
-// 	fieldDescription: 'Id',
-// 	fieldType: 'text',
-// 	searchable: false
-// });
+
+t.addColumn({
+	fieldName: 'mailbox_name',
+	fieldDescription: 'Mailbox',
+	fieldType: 'text',
+	searchable: false
+});
+
 t.addColumn({
 	fieldName: 'from_name',
 	fieldDescription: 'Van',
 	fieldType: 'text',
-	searchable: false
-});
-t.addColumn({
-	fieldName: 'customer_name',
-	fieldDescription: 'Klant',
-	fieldType: 'text',
-	render: function(row) {
-		if (row.company_name) {
-			return row.company_name;
-		} else {
-			var t = '';
-
-			if (row.lastname)
-				t += row.lastname;
-			if (row.insert_lastname) {
-				t += ', ' + row.insert_lastname;
-			}
-			if (row.firstname) {
-				t += ' ' + row.firstname;
-			}
-			return t;
-		}
-	},
 	searchable: false
 });
 
@@ -146,7 +124,7 @@ t.addColumn({
 });
 
 t.addColumn({
-	fieldName: 'created',
+	fieldName: 'date',
 	fieldDescription: 'Aangemaakt op',
 	fieldType: 'datetime',
 	searchable: false
@@ -159,14 +137,7 @@ t.addColumn({
 	render: function( record ) {
 		var email_id = record['email_id'];
 		
-		var anchDel  = $('<a class="fa fa-trash" />');
-		anchDel.attr('href', appUrl('/?m=webmail&c=email&a=delete&id=' + email_id));
-		anchDel.click( handle_deleteConfirmation_event );
-		anchDel.data('description', record.subject);
-
-		
 		var container = $('<div />');
-		container.append(anchDel);
 		
 		return container;
 	}

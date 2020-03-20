@@ -18,6 +18,7 @@ class SolrQuery {
     protected $facetQueries = array();
     protected $query        = '*:*';
     
+    protected $responseClass = SolrQueryResponse::class;
     
     
     public function __construct($solrUrl) {
@@ -41,6 +42,12 @@ class SolrQuery {
     
     public function addField($fieldName) {
         $this->fields[] = $fieldName;
+    }
+    
+    public function addFacetSearch($fieldName, $operator, $value) {
+        $fq = solr_escapeTerm($fieldName) . $operator . solr_escapePhrase($value);
+        
+        $this->addFacetQuery($fq);
     }
     
     public function addFacetQuery($fq) {
@@ -72,12 +79,11 @@ class SolrQuery {
             $url_params[] = 'q='.urlencode( $this->query );
         }
         
-        $url = $this->solrUrl . '?' . implode('&', $url_params);
-        print "$url\n";
+        $url = $this->solrUrl . '/select?' . implode('&', $url_params);
         
         $data = get_url($url);
         
-        return new SolrQueryResponse($data, $this);
+        return new $this->responseClass($data, $this);
     }
     
 }
