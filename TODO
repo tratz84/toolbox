@@ -9,3 +9,13 @@ TODO:
 
 Finance-module?
 - Voorbeeld rekenschema, http://home.hccnet.nl/van.asperen/Boekhouden/Cursus/vrbrekschema.htm
+
+
+- Add feature to calendar. Give calendar-items a status, ie.
+	- Open
+	- Postponed
+	- Done
+
+Based on status create a list: 'Calendar items to be addressed'
+
+
