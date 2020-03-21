@@ -396,6 +396,8 @@ class MysqlTableGenerator {
             return false;
         }
         
+        $changedTableModels = array();
+        
         $tablemodels = load_php_file( $file_tablemodel );
         
         if (is_array($tablemodels)) {
@@ -404,14 +406,24 @@ class MysqlTableGenerator {
                 
                 if ($outputSql) {
                     // DEBUG database changes?
-                    var_export( $mtg->createSqlDiff() );
+                    $diff = $mtg->createSqlDiff();
+                    
+                    var_export( $diff );
+                    
+                    if (count($diff)) {
+                        $changedTableModels[] = $tm;
+                    }
                 } else {
-                    $mtg->executeDiff();
+                    $countQueries = $mtg->executeDiff();
+                    
+                    if ($countQueries) {
+                        $changedTableModels[] = $tm;
+                    }
                 }
             }
         }
         
-        return true;
+        return $changedTableModels;
     }
     
     

@@ -3,7 +3,6 @@
 
 use core\controller\BaseController;
 use core\exception\InvalidStateException;
-use core\db\mysql\MysqlTableGenerator;
 use core\db\TableModel;
 
 class editorController extends BaseController {

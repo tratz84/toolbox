@@ -12,10 +12,16 @@ class DAOGenerator {
     protected $tableName;
     protected $columns;
     
-    public function __construct($databaseResource, $moduleName, $tableName, $columns) {
+    public function __construct($databaseResource, $moduleName, $tableName, $columns = null) {
         $this->databaseResource = $databaseResource;
         $this->moduleName = $moduleName;
         $this->tableName = $tableName;
+        
+        // fetch columns
+        if ($columns === null) {
+            $columns = queryList($databaseResource, 'describe '.$tableName);
+        }
+        
         $this->columns = $columns;
     }
     

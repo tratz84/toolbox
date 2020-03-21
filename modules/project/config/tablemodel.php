@@ -14,6 +14,7 @@ $tb_project->addColumn('hourly_rate',            'decimal(10,2)');
 $tb_project->addColumn('company_id',             'int');
 $tb_project->addColumn('person_id',              'int');
 $tb_project->addColumn('project_name',           'varchar(255)');
+$tb_project->addColumn('blabla_name',           'varchar(255)');
 $tb_project->addColumn('active',                 'boolean');
 $tb_project->addColumn('note',                   'longtext');
 $tb_project->addColumn('edited',                 'datetime');

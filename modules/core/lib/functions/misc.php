@@ -514,6 +514,15 @@ function get_data_file($f) {
     return $file;
 }
 
+function get_data_bytes($f) {
+    $file = get_data_file($f);
+    if (!$file) {
+        return false;
+    }
+    
+    return file_get_contents( $file );
+}
+
 
 function copy_data_tmp($file, $tmpname=null) {
     // create temp-folder

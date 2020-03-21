@@ -11,6 +11,9 @@
 		
 		<ul>
 			<li>
+				<a href="<?= appUrl('/?m=codegen&c=settings') ?>">Settings</a>
+			</li>
+			<li>
 				<a href="<?= appUrl('/?m=codegen&c=generateModule') ?>">Generate module</a>
 			</li>
 			<li>
