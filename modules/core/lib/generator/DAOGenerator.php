@@ -28,6 +28,10 @@ class DAOGenerator {
     
     public function generate() {
         
+        if (is_debug() == false) {
+            throw new \core\exception\NotForLiveException('DAOGenerator::generate() called in live environment!');
+        }
+        
         
         $modelDir = module_path($this->moduleName).'/lib/model';
         if (file_exists($modelDir.'/base') == false)
