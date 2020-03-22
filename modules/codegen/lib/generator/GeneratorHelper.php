@@ -20,6 +20,9 @@ use codegen\form\widgetoptions\TextareaOptionsForm;
 use codegen\form\widgetoptions\NumberOptionsForm;
 use codegen\form\widgetoptions\HtmlOptionsForm;
 use core\forms\TextareaField;
+use base\forms\CustomerSelectWidget;
+use core\forms\RadioField;
+use codegen\form\widgetoptions\RadioOptionsForm;
 
 class GeneratorHelper {
     
@@ -147,6 +150,19 @@ class GeneratorHelper {
             'editor' => SelectOptionsForm::class,
             'label' => 'Select'
         );
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => RadioField::class,
+            'editor' => RadioOptionsForm::class,
+            'label' => 'Radio'
+        );
+        
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => CustomerSelectWidget::class,
+            'label' => 'Customer select'
+        );
+        
         $formWidgets[] = array(
             'type' => 'widget',
             'class' => ColorPickerField::class,
