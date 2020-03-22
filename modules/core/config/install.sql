@@ -1,4 +1,8 @@
 
+--     THIS FILE IS DEPRECATED      --
+--  SEE core/config/tablemodel.php  --
+
+
 CREATE TABLE IF NOT EXISTS `insights__autologin` (
   `autologin_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `contextName` varchar(64) COLLATE utf8mb4_general_ci NOT NULL,

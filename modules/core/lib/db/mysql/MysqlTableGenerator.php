@@ -8,14 +8,17 @@ use core\exception\DatabaseException;
 
 class MysqlTableGenerator {
     
+    protected $resourceName = null;
     protected $tableModel = null;
     
     protected $dbColumns = array();
     protected $dbConstraints = array();
     protected $dbIndexes = array();
     
-    public function __construct(TableModel $model) {
+    public function __construct(TableModel $model, $resourceName='default') {
         $this->tableModel = $model;
+        
+        $this->resourceName = $resourceName;
         
     }
     
@@ -28,7 +31,7 @@ class MysqlTableGenerator {
     }
     
     public function tableExists() {
-        $mysql = DatabaseHandler::getInstance()::getConnection('default');
+        $mysql = DatabaseHandler::getInstance()::getConnection( $this->resourceName );
         
         try {
             $r = $mysql->query('describe `'.$this->getTableName().'`');
@@ -54,7 +57,7 @@ class MysqlTableGenerator {
             return 0;
         }
         
-        $mysql = DatabaseHandler::getInstance()::getConnection('default');
+        $mysql = DatabaseHandler::getInstance()::getConnection( $this->resourceName );
         
         foreach($stats as $sql) {
             $r = $mysql->query( $sql );
@@ -70,7 +73,7 @@ class MysqlTableGenerator {
     protected function loadTableProperties() {
         $props = array();
         
-        $mysql = DatabaseHandler::getInstance()::getConnection('default');
+        $mysql = DatabaseHandler::getInstance()::getConnection( $this->resourceName );
         
         $r = $mysql->query('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME=?', array($mysql->getDatabaseName(), $this->getTableName()));
         while ($row = $r->fetch_assoc()) {
@@ -124,7 +127,7 @@ class MysqlTableGenerator {
             $columnName = $columns[$x];
             
             $model_type = $this->tableModel->getColumnProperty($columnName, 'type');
-            $model_default_val = $this->tableModel->getColumnProperty($columnName, 'default');
+            $model_default_val = $this->tableModel->getColumnProperty($columnName,  $this->resourceName );
             
             if (isset($this->dbColumns[ $columnName ])) {
                 if ($this->columnTypeChanged($columnName) == false) {
