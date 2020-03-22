@@ -7,16 +7,8 @@ use base\service\CompanyService;
 use base\service\PersonService;
 use core\ObjectContainer;
 use core\forms\BaseForm;
-use core\forms\CheckboxField;
-use core\forms\DynamicSelectField;
-use core\forms\HiddenField;
-use core\forms\TextField;
-use core\forms\TextareaField;
-use project\model\Project;
 use core\forms\validator\NotEmptyValidator;
-use core\forms\NumberField;
-use core\forms\RadioField;
-use core\forms\EuroField;
+use project\model\Project;
 
 class ProjectForm extends BaseForm {
     
@@ -25,25 +17,14 @@ class ProjectForm extends BaseForm {
         
         $this->addKeyField('project_id');
         
-        $this->addWidget(new HiddenField('project_id'));
-        $this->addWidget(new CheckboxField('active', '', 'Actief'));
+        $this->codegen();
         
-        $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=base&c=customer&a=select2', 'Klant') );
-        
-        $this->addWidget(new TextField('project_name', '', 'Naam'));
+//         $this->addWidget(new HiddenField('project_id'));
+//         $this->addWidget(new CheckboxField('active', '', 'Actief'));
         
         
-        $mapProjectType = array();
-        $mapProjectType['fixed'] = _('Fixed price');
-        $mapProjectType['ongoing'] = _('Ongoing');
-        $this->addWidget(new RadioField('project_billable_type', '', $mapProjectType, t('Project type')));
-        
-        $this->addWidget(new NumberField('project_hours', '', _('Max. hours')));
         $this->getWidget('project_hours')->setMin(-1);
         
-        $this->addWidget(new EuroField('hourly_rate', '', t('Hourly rate')));
-        
-        $this->addWidget(new TextareaField('note', '', 'Notitie'));
         
         $this->addValidator('project_name', new NotEmptyValidator());
         $this->addValidator('customer_id', new NotEmptyValidator());
@@ -94,5 +75,36 @@ class ProjectForm extends BaseForm {
         }
     }
     
+
+	function codegen() {
+		
+		
+		$w1 = new \core\forms\HiddenField('project_id', NULL, 'Hidden field');
+		$this->addWidget( $w1 );
+		$w2 = new \core\forms\CheckboxField('active', NULL, 'Active');
+		$this->addWidget( $w2 );
+		$w3 = new \base\forms\CustomerSelectWidget('customer_id', NULL, NULL, NULL, 'Klant');
+		$this->addWidget( $w3 );
+		$w4 = new \core\forms\TextField('project_name', NULL, 'Name');
+		$this->addWidget( $w4 );
+		$w5 = new \core\forms\RadioField('project_billable_type', NULL, array (
+		  'fixed' => 'Fixed price',
+		  'ongoing' => 'Ongoing',
+		), 'Project type');
+		$this->addWidget( $w5 );
+		$w6 = new \core\forms\NumberField('project_hours', NULL, 'Max. hours');
+		$this->addWidget( $w6 );
+		$w7 = new \core\forms\EuroField('hourly_rate', NULL, 'Hourly rate');
+		$this->addWidget( $w7 );
+		$w8 = new \core\forms\TextareaField('note', NULL, 'Note');
+		$this->addWidget( $w8 );
+		
+	}
+
+
+
+
+
+
 }
 
