@@ -7,6 +7,7 @@ $lang = array();
 $lang['Yes']                    = 'Ja';
 $lang['No']                     = 'Nee';
 $lang['Load more']              = 'Laad meer';
+$lang['Active']                 = 'Actief';
 
 $lang['Basic settings']         = 'Basis instellingen';
 
