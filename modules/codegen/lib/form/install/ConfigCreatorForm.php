@@ -85,7 +85,13 @@ class ConfigCreatorForm extends \core\forms\CodegenBaseForm {
 	    $this->fetch_mysqli_results($dbh);
 	    
 	    // base stuff
-	    $sql = file_get_contents( module_file('base', 'config/install.sql') );
+	    $sql = '';
+	    $core_tms = load_php_file( module_file('core', 'base/tablemodel.php'));
+	    foreach($core_tms as $tm) {
+	        $mtg = new MysqlTableGenerator($tm);
+	        $sql .= $mtg->buildCreateTable() . "\n";
+	    }
+	    
 	    $r = mysqli_multi_query($dbh, $sql);
 	    if (!$r) {
 	        die('Base-queries failed to execute: '.mysqli_error($dbh));
