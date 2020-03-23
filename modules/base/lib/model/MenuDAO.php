@@ -24,9 +24,6 @@ class MenuDAO extends \core\db\DAOObject {
 	    $arr[] = array('menu_code' => 'person',          'sort' => 300, 'visible' => 1, 'icon' => 'fa-user',      'label' => 'Personen',  'url' => '/?m=base&c=person');
 // 	    $arr[] = array('menu_code' => 'webmail',         'sort' => 700, 'visible' => 1);
 	    $arr[] = array('menu_code' => 'todo',            'sort' => 800, 'visible' => 1);
-	    if (hasCapability('calendar', 'edit-calendar')) {
-    	    $arr[] = array('menu_code' => 'calendar',        'sort' => 900, 'visible' => 1, 'icon' => 'fa-calendar',  'label' => 'Kalender',  'url' => '/?m=calendar&c=view');
-	    }
 	    
 // 	    $arr[] = array('menu_code' => 'project',         'sort' => 1000, 'visible' => 1, 'icon' => 'fa-tasks', 'label' => 'Projecten', 'url' => '/?m=project&c=project');
 	    

@@ -22,6 +22,7 @@ $tb_ci = new TableModel('cal', 'calendar_item');
 $tb_ci->addColumn('calendar_item_id',          'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
 $tb_ci->addColumn('ref_calendar_item_id',      'int');
 $tb_ci->addColumn('calendar_id',               'int');
+$tb_ci->addColumn('item_action',               'varchar(16)');
 $tb_ci->addColumn('calendar_item_status_id',   'int');
 $tb_ci->addColumn('calendar_item_category_id', 'int');
 $tb_ci->addColumn('title',                     'varchar(255)');
@@ -46,6 +47,7 @@ $tb_ci->addIndex('cal__calendar_item_ibfk_2', array('calendar_item_category_id')
 $tbs[] = $tb_ci;
 
 
+// unused at the moment
 $tb_cic = new TableModel('cal', 'calendar_item_category');
 $tb_cic->addColumn('calendar_item_category_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
 $tb_cic->addColumn('category_name',             'varchar(255)');
@@ -56,7 +58,7 @@ $tb_cic->addColumn('created',                   'datetime');
 $tbs[] = $tb_cic;
 
 
-
+// unused at the moment
 $tb_cis = new TableModel('cal', 'calendar_item_status');
 $tb_cis->addColumn('calendar_item_status_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
 $tb_cis->addColumn('status_name',             'varchar(255)');
@@ -68,7 +70,8 @@ $tbs[] = $tb_cis;
 
 
 
-
+// unused at the moment
+// modelled after RFC 5545
 $tb_todo = new TableModel('cal', 'todo');
 $tb_todo->addColumn('todo_id',   'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
 $tb_todo->addColumn('user_id',   'int');

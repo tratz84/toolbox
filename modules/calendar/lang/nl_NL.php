@@ -10,6 +10,9 @@ $lang['Day']               = 'Dag';
 $lang['Upcoming agenda items']    = 'Opkomende agendapunten';
 $lang['No upcoming agenda items'] = 'Geen opkomende punten';
 
+$lang['Actions']           = 'Acties';
+
+$lang['Calendar']          = 'Kalender';
 $lang['Calendars']         = 'Kalenders';
 $lang['Add calendar']      = 'Kalender toevoegen';
 $lang['Edit calendar']     = 'Kalender bewerken';

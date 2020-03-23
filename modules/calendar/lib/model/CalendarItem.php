@@ -5,7 +5,22 @@ namespace calendar\model;
 
 
 class CalendarItem extends base\CalendarItemBase {
+    
+    protected static $itemActions = null;
 
+    public static function getItemActions() {
+        
+        if (self::$itemActions == null) {
+            self::$itemActions = array();
+            self::$itemActions['open']       = t('Open');
+            self::$itemActions['postponed']  = t('Post poned');
+            self::$itemActions['inprogress'] = t('In progress');
+            self::$itemActions['done']       = t('Done');
+        }
+        
+        
+        return self::$itemActions;
+    }
 
 }
 

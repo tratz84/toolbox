@@ -10,6 +10,8 @@ use core\forms\TextareaField;
 use core\forms\HiddenField;
 use core\forms\TimePickerField;
 use core\forms\validator\NotEmptyValidator;
+use core\forms\SelectField;
+use calendar\model\CalendarItem;
 
 class CalendarItemForm extends BaseForm {
     
@@ -21,6 +23,10 @@ class CalendarItemForm extends BaseForm {
         $this->addWidget(new HiddenField('calendar_item_id'));
         
         $this->addWidget(new HiddenField('selected_date'));                         // selected date in calendar
+        
+        $map_itemActions = CalendarItem::getItemActions();
+        $this->addWidget(new SelectField('item_action', '', $map_itemActions, t('Current action')));
+        
         
         $this->addWidget(new TextField('title',    '', 'Titel'));
         $this->addWidget(new TextField('location', '', 'Locatie'));

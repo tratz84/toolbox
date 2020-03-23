@@ -14,7 +14,7 @@ class CalendarItemBase extends \core\db\DBObject {
   'calendar_item_id' => 
   array (
     'Field' => 'calendar_item_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'NO',
     'Key' => 'PRI',
     'Default' => NULL,
@@ -23,7 +23,7 @@ class CalendarItemBase extends \core\db\DBObject {
   'ref_calendar_item_id' => 
   array (
     'Field' => 'ref_calendar_item_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -32,7 +32,7 @@ class CalendarItemBase extends \core\db\DBObject {
   'calendar_id' => 
   array (
     'Field' => 'calendar_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -41,7 +41,7 @@ class CalendarItemBase extends \core\db\DBObject {
   'calendar_item_status_id' => 
   array (
     'Field' => 'calendar_item_status_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => 'MUL',
     'Default' => NULL,
@@ -50,7 +50,7 @@ class CalendarItemBase extends \core\db\DBObject {
   'calendar_item_category_id' => 
   array (
     'Field' => 'calendar_item_category_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => 'MUL',
     'Default' => NULL,
@@ -131,7 +131,7 @@ class CalendarItemBase extends \core\db\DBObject {
   'reminder' => 
   array (
     'Field' => 'reminder',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -204,6 +204,15 @@ class CalendarItemBase extends \core\db\DBObject {
   array (
     'Field' => 'created',
     'Type' => 'datetime',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'item_action' => 
+  array (
+    'Field' => 'item_action',
+    'Type' => 'varchar(16)',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -302,6 +311,10 @@ class CalendarItemBase extends \core\db\DBObject {
 		
 	public function setCreated($p) { $this->setField('created', $p); }
 	public function getCreated() { return $this->getField('created'); }
+	
+		
+	public function setItemAction($p) { $this->setField('item_action', $p); }
+	public function getItemAction() { return $this->getField('item_action'); }
 	
 	
 }

@@ -190,7 +190,7 @@ class CalendarService extends ServiceBase {
             $fch = FormChangesHtml::formChanged($oldForm, $form);
         }
         
-        $form->fill($ci, array('calendar_item_id', 'calendar_id', 'title', 'location', 'all_day', 'private', 'cancelled', 'start_date', 'start_time', 'end_date', 'end_time', 'recurrence_type', 'message'));
+        $form->fill($ci, array('calendar_item_id', 'calendar_id', 'item_action', 'title', 'location', 'all_day', 'private', 'cancelled', 'start_date', 'start_time', 'end_date', 'end_time', 'recurrence_type', 'message'));
 
         $addExDate = false;
         
