@@ -29,6 +29,21 @@ function module_list($forceReload=false) {
                 }
             }
         }
+        
+        // prioritize loading modules
+        uasort($modules, function($o1, $o2) {
+            if (strrpos($o1, '/codegen')) return -1;
+            if (strrpos($o2, '/codegen')) return 1;
+            
+            if (strrpos($o1, '/core')) return -1;
+            if (strrpos($o2, '/core')) return 1;
+            
+            if (strrpos($o1, '/base')) return -1;
+            if (strrpos($o2, '/base')) return 1;
+            
+            return 0;
+        });
+        
     }
     
     return $modules;
