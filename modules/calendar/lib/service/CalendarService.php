@@ -12,6 +12,8 @@ use calendar\model\CalendarDAO;
 use calendar\model\CalendarItem;
 use calendar\model\CalendarItemDAO;
 use core\service\ServiceBase;
+use core\exception\InvalidStateException;
+use calendar\CalendarSettings;
 
 class CalendarService extends ServiceBase {
     
@@ -171,6 +173,9 @@ class CalendarService extends ServiceBase {
     
     
     public function saveItem(CalendarItemForm $form) {
+        /** @var CalendarSettings $calendarSettings */
+        $calendarSettings = object_container_get(CalendarSettings::class);
+        
         $id = $form->getWidgetValue('calendar_item_id');
         if ($id) {
             $ci = $this->readItem($id);
@@ -206,6 +211,12 @@ class CalendarService extends ServiceBase {
             $rrule = $form->getWidget('recurrence_type')->getRecurrenceRule();
             $ci->setRecurrenceRule($rrule);
         }
+        
+        // calendarItem actions enabled & no rrule set? & no ex-date selected?
+        if ($calendarSettings->calendarItemActionsEnabled() && $rrule == '' && $addExDate == false) {
+            $itemAction = $form->getWidgetValue('item_action');
+            $ci->setItemAction( $itemAction );
+        }
 
         if (!$ci->save()) {
             return false;
@@ -214,6 +225,13 @@ class CalendarService extends ServiceBase {
         // add ex date
         if ($addExDate) {
             $this->addExDate($ci->getRefCalendarItemId(), $form->getWidgetValue('selected_date'));
+            
+            // calendarItem actions enabled? => save itemAction
+            if ($calendarSettings->calendarItemActionsEnabled()) {
+                $itemAction = $form->getWidgetValue('item_action');
+                $selectedDate = $form->getWidgetValue('selected_date');
+                object_meta_save(CalendarItem::class, $ci->getCalendarItemId(), 'action-occurrence-'.format_date($selectedDate, 'Y-m-d'), $itemAction);
+            }
         }
         
         $datetime = format_date($ci->getStartDate(), 'd-m-Y');
@@ -278,17 +296,17 @@ class CalendarService extends ServiceBase {
             
             // inprogress @ top
             if ($ia1 == 'inprogress' && $ia2 != 'inprogress') {
-                return 1;
+                return -1;
             }
             if ($ia1 != 'inprogress' && $ia2 == 'inprogress') {
-                return -1;
+                return 1;
             }
             
             if ($ia1 == 'open' && $ia2 != 'open') {
-                return 1;
+                return -1;
             }
             if ($ia1 != 'open' && $ia2 == 'open') {
-                return -1;
+                return 1;
             }
             
             $d1 = $e1->getStartDate();
@@ -314,6 +332,45 @@ class CalendarService extends ServiceBase {
         return $events;
     }
     
+    
+    public function updateActionItem($calendarItemId, $itemAction, $date=null) {
+        /** @var CalendarItem $calendarItem */
+        $calendarItem = $this->readItem($calendarItemId);
+        
+        
+        /** @var VEvent $evt */
+        $evt = VEvent::generateByCalendarItem( $calendarItem );
+        
+        // check if CalendarItem is recurrent
+        if ($evt->getRecurrent() && valid_date($date) == false) {
+            throw new InvalidStateException('Recurrent item, but no date given');
+        }
+        
+        // check if itemAction is valid
+        $availableItemActions = CalendarItem::getItemActions();
+        if (isset($availableItemActions[$itemAction]) == false) {
+            throw new InvalidStateException('Invalid itemAction');
+        }
+        
+        
+        if ($evt->getRecurrent()) {
+            $eventInstances = $evt->generateEventInstances($date, $date);
+            
+            if (count($eventInstances) == 0) {
+                throw new InvalidStateException('CalendarItem does not occur on given date');
+            }
+            
+            // set itemAction on recurrence instance
+            object_meta_save(CalendarItem::class, $calendarItem->getCalendarItemId(), 'action-occurrence-'.format_date($date, 'Y-m-d'), $itemAction);
+        }
+        else {
+            // set itemAction on CalendarItem
+            $calendarItem->setItemAction( $itemAction );
+            $calendarItem->save();
+        }
+        
+        return true;
+    }
     
     
     

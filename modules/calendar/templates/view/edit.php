@@ -50,3 +50,19 @@ if (t != '') {
 <?php endif; ?>
 
 
+<?php if (!$readonly) : ?>
+<script>
+
+var updateItemActionWidget = function() {
+    if ($('form.form-calendar-item-form [name=recurrence_type]').val() == '') {
+    	$('.widget-item-action').show();
+    } else {
+    	$('.widget-item-action').hide();
+    }
+};
+$('form.form-calendar-item-form [name=recurrence_type]').change( updateItemActionWidget );
+updateItemActionWidget();
+
+</script>
+<?php endif; ?>
+

@@ -64,7 +64,7 @@ use core\forms\SelectField;
 			<?php endforeach; ?>
 		</select>
 		
-		<input type="button" value="<?= t('Execute') ?>" />
+		<input type="button" value="<?= t('Execute') ?>" onclick="btnExecute_Click();" />
 	</div>
 </div>
 
@@ -75,7 +75,9 @@ use core\forms\SelectField;
 $(document).ready(function() {
 	$('.tbl-calendar-items tr.calendar-item').each(function(index, node) {
 		$(node).find('td.item-action select').change(function() {
-			
+			var tr = $(this).closest('tr');
+
+			update_itemAction( tr, $(this).val() );
 		});
 	});
 
@@ -98,6 +100,59 @@ $(document).ready(function() {
 	
 });
 
+
+function btnExecute_Click() {
+
+	var trs = new Array();
+	
+	$('.select-item-action:checked').each(function(index, node) {
+		trs.push( $(node).closest('tr') );
+	});
+	
+	// items selected?
+	if (trs.length == 0) {
+		showAlert('Error', 'No items selected');
+		return false;
+	}
+	
+	// action selected?
+	if ($('[name=action_item_name]').val() == '') {
+		showAlert('Error', 'No action selected');
+		return false;
+	}
+
+	
+	update_itemAction( $(trs), $('[name=action_item_name]').val() );
+}
+
+
+
+function update_itemAction( rowSelector, itemAction ) {
+
+	var data = {};
+
+	rowSelector.each(function(index, node) {
+		var ci_id = $(node).data('calendar-item-id');
+		var ci_start_date = $(node).data('start-date');
+
+		data['calendar_item[' + index + '][id]']          = ci_id;
+		data['calendar_item[' + index + '][start_date]']  = ci_start_date;
+		data['calendar_item[' + index + '][item_action]'] = itemAction;
+	});
+
+	$.ajax({
+		type: 'POST',
+		url: appUrl('/?m=calendar&c=calitemActionOverview&a=update_item_action'),
+		data: data,
+		success: function(data, textStatus, xhr) {
+			show_user_message('Changes saved');
+			window.location = appUrl('/?m=calendar&c=calitemActionOverview');
+		},
+		error: function(xhr, textStatus, errorThrown) {
+			alert('Error: ' + xhr.responseText);
+		}
+	});
+}
 
 
 

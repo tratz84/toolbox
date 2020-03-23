@@ -6,8 +6,6 @@ use calendar\model\CalendarItem;
 
 class VEvent extends VEventInstance {
     
-    protected $recurrentItem = false;
-    
     public $frequency;
     public $interval = 1;
     public $byMonth = null;              // 1 - 12
@@ -33,7 +31,7 @@ class VEvent extends VEventInstance {
         $tokens = explode(';', $recurrenceRule);
         
         if (count($tokens)) {
-            $this->recurrentItem = true;
+            $this->setRecurrent(true);
         }
         
         foreach($tokens as $t) {
@@ -392,7 +390,7 @@ class VEvent extends VEventInstance {
         $ymdend = (int)format_date($endDate, 'Ymd');
         
         
-        if (!$this->recurrentItem) {
+        if (!$this->getRecurrent()) {
             $ymd = (int)str_replace('-', '', $this->getStartDate());
             
             if ($ymdstart <= $ymd && $ymdend >= $ymd) {

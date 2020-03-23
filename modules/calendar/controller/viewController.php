@@ -59,7 +59,8 @@ class viewController extends BaseController {
             $this->form->bind($_REQUEST);
         }
         
-        $this->form->getWidget('edit_derived_item')->setValue(isset($_REQUEST['edit_derived_item']) && $_REQUEST['edit_derived_item'] ? 1 : 0);
+        $edit_derived_item = isset($_REQUEST['edit_derived_item']) && $_REQUEST['edit_derived_item'] ? 1 : 0;
+        $this->form->getWidget('edit_derived_item')->setValue( $edit_derived_item );
         if (isset($_REQUEST['startDate'])) {
             $this->form->getWidget('selected_date')->setValue($_REQUEST['startDate']);
         }

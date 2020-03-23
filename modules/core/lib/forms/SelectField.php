@@ -61,7 +61,7 @@ class SelectField extends BaseWidget {
 
         $extraClass = $this->hasError() ? 'error' : '';
         
-        $html .= '<div class="widget select-field-widget '.$extraClass.'">';
+        $html .= '<div class="widget select-field-widget '.$extraClass.' widget-'.slugify($this->getName()).'">';
         $html .= '<label>'.esc_html($this->getLabel()).infopopup($this->getInfoText()).'</label>';
         $html .= '<select name="'.esc_attr($this->getName()).'">';
         

@@ -12,11 +12,15 @@ use core\forms\TimePickerField;
 use core\forms\validator\NotEmptyValidator;
 use core\forms\SelectField;
 use calendar\model\CalendarItem;
+use calendar\CalendarSettings;
 
 class CalendarItemForm extends BaseForm {
     
     public function __construct() {
         parent::__construct();
+        
+        /** @var CalendarSettings $calendarSettings */
+        $calendarSettings = object_container_get(CalendarSettings::class);
         
         $this->addWidget(new HiddenField('edit_derived_item'));
         $this->addWidget(new HiddenField('calendar_id'));
@@ -24,8 +28,10 @@ class CalendarItemForm extends BaseForm {
         
         $this->addWidget(new HiddenField('selected_date'));                         // selected date in calendar
         
-        $map_itemActions = CalendarItem::getItemActions();
-        $this->addWidget(new SelectField('item_action', '', $map_itemActions, t('Current action')));
+        if ($calendarSettings->calendarItemActionsEnabled()) {
+            $map_itemActions = CalendarItem::getItemActions();
+            $this->addWidget(new SelectField('item_action', '', $map_itemActions, t('Current action')));
+        }
         
         
         $this->addWidget(new TextField('title',    '', 'Titel'));
