@@ -179,7 +179,14 @@ class FormGenerator {
                 }
                 // value found?
                 else if (isset($item->data->{$func_param->name})) {
-                    $params[] = var_export($item->data->{$func_param->name}, true);
+                    $param_value = var_export($item->data->{$func_param->name}, true);
+                    
+                    if ($func_param->name == 'label') {
+                        $param_value = 't('.$param_value.')';
+                    }
+                    
+                    
+                    $params[] = $param_value;
                     $lastNonDefaultParam = $cnt;
                 }
                 // default parameter-value?
@@ -208,6 +215,7 @@ class FormGenerator {
             $html .= $varname.' = new \\' . $classname . '(';
             for($z=0; $z < count($params) && $z <= $lastNonDefaultParam; $z++) {
                 if ($z > 0) $html .= ', ';
+                
                 $html .= $params[$z];
             }
             $html .= ');' . PHP_EOL;
