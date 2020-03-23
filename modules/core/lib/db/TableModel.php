@@ -9,7 +9,14 @@ class TableModel {
     
     protected $data = array();
     
-    public function __construct($schemaName, $tableName) {
+    /**
+     * 
+     * @param string $schemaName
+     * @param string $tableName
+     * @param string $resourceName - database resource name (default / admin)
+     */
+    public function __construct($schemaName, $tableName, $resourceName='default') {
+        $this->setResourceName($resourceName);
         $this->setSchemaName($schemaName);
         $this->setTableName($tableName);
         
@@ -25,6 +32,9 @@ class TableModel {
     
     public function setUseSchemaInTableName($bln) { $this->data['schemaInTableName'] = $bln ? true : false; }
     public function useSchemaInTableName() { return $this->data['schemaInTableName'] ? true : false; }
+
+    public function setResourceName($n) { $this->data['resourceName'] = $n; }
+    public function getResourceName() { return $this->data['resourceName']; }
     
     public function setSchemaName($n) { $this->data['schemaName'] = $n; }
     public function getSchemaName() { return $this->data['schemaName']; }

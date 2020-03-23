@@ -15,10 +15,10 @@ class MysqlTableGenerator {
     protected $dbConstraints = array();
     protected $dbIndexes = array();
     
-    public function __construct(TableModel $model, $resourceName='default') {
+    public function __construct(TableModel $model) {
         $this->tableModel = $model;
         
-        $this->resourceName = $resourceName;
+        $this->resourceName = $model->getResourceName();
         
     }
     
@@ -95,7 +95,7 @@ class MysqlTableGenerator {
         }
         
         $tbl = $mysql->getDatabaseName().'.'.$this->getTableName();
-        $sql = "show keys from ".$tbl." where Non_unique=1";
+        $sql = "show keys from ".$tbl;//." where Non_unique=1";
         $r = $mysql->query($sql);
         while ($row = $r->fetch_assoc()) {
             $in = $row['Key_name'];
@@ -112,7 +112,6 @@ class MysqlTableGenerator {
         
         
         $sql1 = $this->buildAlterColumns();
-//         $sql2 = $this->buildAlterUniqueConstraints();
         $sql3 = $this->buildAlterIndexes();
         
         return array_merge($sql1, $sql3);
@@ -168,61 +167,11 @@ class MysqlTableGenerator {
     }
     
     
-    protected function buildAlterUniqueConstraints() {
-        $sql_statements = array();
-        
-        // ADD UNIQUE constraints
-        $ucs = $this->tableModel->getUniqueConstraints();
-        foreach($ucs as $key_name => $columns) {
-            // already exists? => skip
-            if (isset($this->dbConstraints[$key_name]))
-                continue;
-            
-            $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` ADD UNIQUE KEY `" . $key_name . "`(`".implode('`, `', $columns)."`);";
-        }
-        
-        // changed UNIQUE constraints
-        foreach($this->dbConstraints as $key => $constraints) {
-            // only handle UNIQUE
-            if ($constraints[0]['CONSTRAINT_TYPE'] != 'UNIQUE')
-                continue;
-            
-            // constraint removed?
-            if ($this->tableModel->hasUniqueConstraint($key) == false) {
-                $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` DROP KEY `" . $key . "`;";
-                continue;
-            }
-            
-            // constraint changed?
-            $model_constraints = $this->tableModel->getUniqueConstraint($key);
-            
-            $changed = false;
-            
-            if (count($constraints) != count($model_constraints)) {
-                $changed = true;
-            } else {
-                foreach($constraints as $db_constraint) {
-                    if (in_array($db_constraint['COLUMN_NAME'], $model_constraints) == false) {
-                        $changed = true;
-                        break;
-                    }
-                }
-            }
-            
-            if ($changed) {
-                $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` DROP KEY `" . $key . "`;";
-                $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` ADD UNIQUE KEY `" . $key . "`(`".implode('`, `', $model_constraints)."`);";
-                
-            }
-        }
-        
-        return $sql_statements;
-    }
-    
     
     
     protected function buildAlterIndexes() {
         $sql_statements = array();
+        
         
         // ADD indexes
         $ix = $this->tableModel->getIndexes();
@@ -245,6 +194,11 @@ class MysqlTableGenerator {
         
         // changed constraints
         foreach($this->dbIndexes as $key => $indexes) {
+            // skip primary-key indexes
+            if ($key == 'PRIMARY') {
+                continue;
+            }
+            
             // constraint removed?
             if ($this->tableModel->hasIndex($key) == false) {
                 $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` DROP KEY `" . $key . "`;";
@@ -256,12 +210,14 @@ class MysqlTableGenerator {
             
             $changed = false;
             
+            
             // column-count changed?
             if (count($indexes) != count($model_index['columns'])) {
                 $changed = true;
             }
             else {
                 foreach($indexes as $db_index) {
+                    
                     if (in_array($db_index['Column_name'], $model_index['columns']) == false) {
                         $changed = true;
                         break;
