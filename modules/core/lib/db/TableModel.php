@@ -46,6 +46,19 @@ class TableModel {
         return array_keys( $this->data['columns'] );
     }
     
+    public function getPrimaryKeys() {
+        $keys = array();
+        
+        foreach($this->data['columns'] as $c) {
+            if (isset($c['key']) && $c['key'] == 'PRIMARY KEY') {
+                $keys[] = $c['name'];
+            }
+        }
+        
+        return $keys;
+    }
+    
+    
     public function addColumn($columnName, $type, $props=array()) {
         $coldata = array(
             'type' => $type,

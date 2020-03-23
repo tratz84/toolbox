@@ -250,6 +250,37 @@ class MysqlTableGenerator {
             }
         }
         
+        
+        // handle PRIMARY KEY's
+        foreach($this->dbIndexes as $key => $indexes) {
+            if ($key != 'PRIMARY')
+                continue;
+            
+            if ($this->getTableName() != 'base__multiuser_lock')
+                continue;
+            
+            // fetch PK's from model
+            $model_pks = $this->tableModel->getPrimaryKeys();
+            
+            $changed = false;
+            if (count($model_pks) != count($indexes)) {
+                $changed = true;
+            } else {
+                foreach($indexes as $i) {
+                    if (in_array($i['Column_name'], $model_pks) == false) {
+                        $changed = true;
+                        break;
+                    }
+                }
+            }
+            
+            if ($changed) {
+                $sql_statements[] = "ALTER TABLE base__multiuser_lock DROP PRIMARY KEY;";
+                $sql_statements[] = "ALTER TABLE base__multiuser_lock ADD PRIMARY KEY (`". implode('`, `', $model_pks) . "`);";
+            }
+        }
+        
+        
         return $sql_statements;
     }
     
@@ -289,6 +320,8 @@ class MysqlTableGenerator {
     public function buildCreateTable() {
         $m = $this->tableModel;
         
+        $primaryKeyColumns = array();
+        
         $sql = 'CREATE TABLE '.$this->getTableName().' ('.PHP_EOL;
         $columns = $m->getColumns();
         for($colno=0; $colno < count($columns); $colno++) {
@@ -297,7 +330,12 @@ class MysqlTableGenerator {
 
             $sql .= ' ' . $m->getColumnProperty( $c, 'type');
             if ($key = $m->getColumnProperty($c, 'key')) {
-                $sql .= ' ' . $key;
+                if ($key == 'PRIMARY KEY') {
+                    $primaryKeyColumns[] = $c;
+                }
+                else {
+                    $sql .= ' ' . $key;
+                }
             }
             if ($m->getColumnProperty($c, 'auto_increment')) {
                 $sql .= ' AUTO_INCREMENT';
@@ -337,6 +375,11 @@ class MysqlTableGenerator {
             
             $counter++;
         }
+        
+        if (count($primaryKeyColumns)) {
+            $sql .= ",\n" . "\tPRIMARY KEY (" . implode(', ', $primaryKeyColumns) . ")";
+        }
+        
         
         
         $sql .= PHP_EOL.') ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci'.PHP_EOL;
