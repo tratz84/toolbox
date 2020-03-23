@@ -4,6 +4,7 @@
 namespace core\db;
 
 use core\exception\InvalidStateException;
+use core\exception\DebugException;
 
 class TableModel {
     
@@ -60,6 +61,12 @@ class TableModel {
     
     
     public function addColumn($columnName, $type, $props=array()) {
+        // throw an error, if a space is accidentally added it causes the MysqlTableGenerator to create a drop-column & add-column statement
+        // it's probably not necessary to throw an error here, because mysql doesn't allow columns with spaces
+        if ($columnName != trim($columnName)) {
+            throw new DebugException('Column name contains spaces before/after name');
+        }
+        
         $coldata = array(
             'type' => $type,
             'name' => $columnName,

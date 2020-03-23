@@ -135,7 +135,7 @@ class MysqlTableGenerator {
                 
                 $sql = "";
                 $sql = "ALTER TABLE  `" . $this->getTableName() . "` CHANGE COLUMN ";
-                $sql .= $columnName . ' ' . $columnName . ' ' . $model_type;
+                $sql .= '`' . $columnName . '` `' . $columnName . '` ' . $model_type;
                 if ($model_default_val) {
                     $sql .= ' default \''.$model_default_val.'\'';
                 }
@@ -159,7 +159,7 @@ class MysqlTableGenerator {
         // drop columns
         foreach($this->dbColumns as $columnName => $props) {
             if ($this->tableModel->hasColumn($columnName) == false) {
-                $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` DROP COLUMN " . $columnName . ";";
+                $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` DROP COLUMN `" . $columnName . "`;";
             }
         }
         

@@ -181,6 +181,7 @@ class FormGenerator {
                 else if (isset($item->data->{$func_param->name})) {
                     $param_value = var_export($item->data->{$func_param->name}, true);
                     
+                    // label? => wrap value in translation function for multi-lang
                     if ($func_param->name == 'label') {
                         $param_value = 't('.$param_value.')';
                     }
