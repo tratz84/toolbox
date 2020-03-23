@@ -11,6 +11,7 @@ $lang['Upcoming agenda items']    = 'Opkomende agendapunten';
 $lang['No upcoming agenda items'] = 'Geen opkomende punten';
 
 $lang['Actions']           = 'Acties';
+$lang['Execute']           = 'Uitvoeren';
 
 $lang['Calendar']          = 'Kalender';
 $lang['Calendars']         = 'Kalenders';

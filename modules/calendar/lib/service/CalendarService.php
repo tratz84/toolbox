@@ -232,6 +232,92 @@ class CalendarService extends ServiceBase {
     
     
     
+    public function readOpenActionItems($calendarId, $daysPast=-60, $daysFuture = 0) {
+        
+        $start = date('Y-m-d', strtotime($daysPast . ' days'));
+        $end   = date('Y-m-d', strtotime($daysFuture . ' days'));
+        
+        
+        $events = $this->readEventInstancesExploded( $calendarId, $start, $end );
+        
+        // fetch status of recurrent-calendar_items
+        for($x=0; $x < count($events); $x++) {
+            $evt = $events[$x];
+
+            if ( $evt->getRecurrent() ) {
+                // $evt->getId() == calendar_item_id
+                $action = object_meta_get( CalendarItem::class, $evt->getId(), 'action-occurrence-'.$evt->getStartDate() );
+                
+                if ($action) {
+                    $events[$x]->setItemAction($action);
+                }
+                // default
+                else {
+                    $events[$x]->setItemAction('open');
+                }
+            }
+        }
+        
+        // filter
+        array_filter($events, function($evt) {
+            if ($evt->getItemAction() == 'done')
+                return false;
+            
+            if ($evt->getCancelled())
+                return false;
+            
+            return true;
+        });
+        
+        
+        // sort
+        // order: 1. inprogress, 2. open, 3. postponed.   Sorted by date/time
+        usort($events, function($e1, $e2) {
+            $ia1 = $e1->getItemAction();
+            $ia2 = $e2->getItemAction();
+            
+            // inprogress @ top
+            if ($ia1 == 'inprogress' && $ia2 != 'inprogress') {
+                return 1;
+            }
+            if ($ia1 != 'inprogress' && $ia2 == 'inprogress') {
+                return -1;
+            }
+            
+            if ($ia1 == 'open' && $ia2 != 'open') {
+                return 1;
+            }
+            if ($ia1 != 'open' && $ia2 == 'open') {
+                return -1;
+            }
+            
+            $d1 = $e1->getStartDate();
+            $d2 = $e2->getStartDate();
+            
+            $c = strcmp($d1, $d2);
+            if ($c != 0) {
+                return $c;
+            }
+            
+            $t1 = $e1->getStartTime();
+            $t2 = $e2->getStartTime();
+            
+            $c = strcmp($t1, $t2);
+            if ($c != 0) {
+                return $c;
+            }
+            
+            // same day & time? => sort by description
+            return strcmp($e1->getDescription(), $e2->getDescription());
+        });
+        
+        return $events;
+    }
+    
+    
+    
+    
+    
     
 }
 

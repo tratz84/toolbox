@@ -5,6 +5,7 @@ namespace calendar\ical;
 class VEventInstance {
 
     public $id;
+    public $itemAction = null;
     public $startDate = null;
     public $endDate = null;
     public $startTime = null;
@@ -22,6 +23,9 @@ class VEventInstance {
     
     public function setId($id) { $this->id = $id; }
     public function getId() { return $this->id; }
+    
+    public function setItemAction($action) { $this->itemAction = $action; }
+    public function getItemAction() { return $this->itemAction; }
     
     public function setStartDate($date) { $this->startDate = $date; }
     public function getStartDate() { return $this->startDate; }

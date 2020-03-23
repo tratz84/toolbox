@@ -21,6 +21,17 @@ class CalendarItem extends base\CalendarItemBase {
         
         return self::$itemActions;
     }
+    
+    
+    public function getItemAction() {
+        $a = $this->getField('item_action');
+        
+        if ($a) {
+            return $a;
+        } else {
+            return 'open';
+        }
+    }
 
 }
 
