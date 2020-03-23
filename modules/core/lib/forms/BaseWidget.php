@@ -143,7 +143,7 @@ class BaseWidget {
     public function renderAsText() {
         $html = '';
         
-        $html .= '<div class="widget html-field-widget widget-'.slugify($this->getLabel()).'">';
+        $html .= '<div class="widget html-field-widget widget-'.slugify($this->getName()).'">';
         $html .= '<label>'.esc_html($this->getLabel()) . infopopup($this->getInfoText()) . '</label>';
         $html .= '<span class="widget-value">'.esc_html($this->getValue()).'</span>';
         $html .= '</div>';
