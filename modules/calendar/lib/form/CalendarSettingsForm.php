@@ -19,9 +19,11 @@ class CalendarSettingsForm extends \core\forms\CodegenBaseForm {
 		
 		$w1 = new \core\forms\CheckboxField('calendar_item_actions_enabled', NULL, t('Calendar Item actions'));
 		$this->addWidget( $w1 );
-		$w1->setInfoText( 'Adds field to calendar items & adds overview which uncompleted calendar-items' );
+		$w1->setInfoText( 'Adds field to calendar items & adds overview with uncompleted calendar-items' );
 		
 	}
+
+
 
 
 }
