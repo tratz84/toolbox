@@ -46,12 +46,15 @@ var t = new IndexTable('#calendar-item-table-container');
 
 t.setRowClick(function(row, evt) {
 	// no selection in action-box
-	if ($(evt.target).hasClass('.td-actions') || $(evt.target).closest('.td-actions').length > 1)
+	if ($(evt.target).hasClass('td-actions') || $(evt.target).closest('.td-actions').length > 1)
+		return;
+	if ($(evt.target).hasClass('select-item-action'))
 		return;
 
 
 	var selectItemAction = $(evt.target).closest('tr').find('.select-item-action');
 	selectItemAction.prop( 'checked', !selectItemAction.prop('checked') );
+	selectItemAction.trigger('change');
 	
 });
 
