@@ -282,6 +282,9 @@ class CalendarService extends ServiceBase {
 //             if ($evt->getStartDate() == date('Y-m-d'))
 //                 return true;
             
+            if ($evt->getItemAction() == 'ignore')
+                return false;
+            
             if ($evt->getItemAction() == 'done')
                 return false;
             
