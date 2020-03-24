@@ -208,7 +208,7 @@ class ImapConnection {
         
         $p = $this->ctx->getDataDir() . '/webmail/inbox/' . $dt->format('Y') . '/' . $dt->format('m') . '/' . $dt->format('d');
         
-        $file = $p . '/' . $uid;
+        $file = $p . '/' . $uid . '.eml';
         
         return $file;
     }

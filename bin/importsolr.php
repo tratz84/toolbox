@@ -2,7 +2,7 @@
 <?php
 
 
-use webmail\mail\SolrUpdate;
+use webmail\solr\SolrImportMail;
 
 if (count($argv) != 2) {
     print "Usage: {$argv[0]} <contextname>\n";
@@ -17,16 +17,13 @@ include '../config/config.php';
 $contextName = $argv[1];
 bootstrapCli($contextName);
 
+ini_set('memory_limit', '2GB');
+
 $ctx = \core\Context::getInstance();
 
 
+$solrImportMail = new SolrImportMail(WEBMAIL_SOLR);
+$solrImportMail->importFolder( $ctx->getDataDir().'/webmail/inbox/2020' );
 
-$su = new SolrUpdate();
-// $su->truncate();
-// $su->importFolder($ctx->getDataDir().'/email/inbox');
 
-$su->queueFile( '/home/timvw/projects/toolbox/data/dev/webmail/inbox/2020/02/22/c7689b1bb97e699809b5d707bdcaf57f' );
-$su->purge( true );
-
-$su->commit();
 

@@ -229,6 +229,21 @@ class SolrImportMail {
     }
     
     
+    public function importFolder( $dir ) {
+        $files = list_files($dir, ['fileonly' => true, 'recursive' => true]);
+        
+        for($x=0; $x < count($files); $x++) {
+            if (file_extension($files[$x]) == 'eml') {
+                $this->queueEml( $dir . '/' . $files[$x] );
+                
+                // purge handles minimum docs
+                $this->purge();
+            }
+        }
+   
+        $this->purge( true );
+    }
+    
 }
 
 
