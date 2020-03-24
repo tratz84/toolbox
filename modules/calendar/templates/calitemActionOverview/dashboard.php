@@ -94,7 +94,7 @@ function update_itemAction( rowSelector, itemAction ) {
 		url: appUrl('/?m=calendar&c=calitemActionOverview&a=update_item_action'),
 		data: data,
 		success: function(data, textStatus, xhr) {
-			show_user_message('Changes saved');
+// 			show_user_message('Changes saved');
 			it_itemActions.load();
 		},
 		error: function(xhr, textStatus, errorThrown) {
