@@ -15,43 +15,9 @@ use core\forms\SelectField;
 
 
 <div>
+	
+	<div id="calendar-item-table-container"></div>
 
-	<table class="tbl-calendar-items list-response-table">
-		<thead>
-			<tr>
-				<th style="width: 25px;">
-					<input type="checkbox" class="top-select-item-action" />
-				</th>
-				<th style="width: 125px;">Date</th>
-				<th style="width: 125px;">Time</th>
-				<th>Description</th>
-				<th width="200">Status</th>
-			</tr>
-		</thead>
-	
-		<tbody>
-			<?php foreach($events as $e) : ?>
-			<tr class="calendar-item"
-    				data-calendar-item-id="<?= $e->getId() ?>"
-    				data-recurrent="<?= $e->getRecurrent() ? 'true':'false' ?>"
-    				data-start-date="<?= $e->getStartDate() ?>">
-				<td>
-					<input type="checkbox" class="select-item-action" />
-				</td>
-				<td><?= $e->getStartDateFormat('d-m-Y') ?></td>
-				<td><?= $e->getStartTime() ?></td>
-				<td><?= esc_html($e->getDescription()) ?></td>
-				<td class="item-action">
-					<?php 
-					   $sl = new SelectField('item-action', $e->getItemAction(), \calendar\model\CalendarItem::getItemActions(), '');
-					   print $sl->render();
-					?>
-				</td>
-			</tr>
-			<?php endforeach; ?>
-		</tbody>
-	</table>
-	
 	<div>
 		Actie:
 		<select name="action_name">
@@ -72,14 +38,36 @@ use core\forms\SelectField;
 
 <script>
 
-$(document).ready(function() {
-	$('.tbl-calendar-items tr.calendar-item').each(function(index, node) {
-		$(node).find('td.item-action select').change(function() {
+
+var map_itemActions = <?= json_encode($map_itemActions) ?>;
+
+
+var t = new IndexTable('#calendar-item-table-container');
+
+t.setRowClick(function(row, evt) {
+	// no selection in action-box
+	if ($(evt.target).hasClass('.td-actions') || $(evt.target).closest('.td-actions').length > 1)
+		return;
+
+
+	var selectItemAction = $(evt.target).closest('tr').find('.select-item-action');
+	selectItemAction.prop( 'checked', !selectItemAction.prop('checked') );
+	
+});
+
+t.setConnectorUrl( '/?m=calendar&c=calitemActionOverview&a=search&calendar_id=<?= $calendar_id ?>' );
+
+t.setCallbackRenderRows(function() {
+	$('#calendar-item-table-container tbody tr').each(function(index, node) {
+		$(node).find('td.td-actions select').change(function() {
 			var tr = $(this).closest('tr');
 
 			update_itemAction( tr, $(this).val() );
 		});
 	});
+
+	$('.th-topselectitemaction').empty();
+	$('.th-topselectitemaction').append('<input type="checkbox" class="top-select-item-action" />');
 
 	$('.top-select-item-action').change(function() {
 		var checked = $(this).prop('checked');
@@ -97,8 +85,69 @@ $(document).ready(function() {
 			$('.top-select-item-action').prop('checked', false);
 		}
 	});
-	
 });
+
+
+t.addColumn({
+	fieldName: 'top-select-item-action',
+	width: 25,
+	fieldDescription: '',
+	fieldType: 'text',
+	searchable: false,
+	render: function() {
+		return '<input type="checkbox" class="select-item-action" />';
+	}
+});
+
+t.addColumn({
+	fieldName: 'start_date',
+	width: 125,
+	fieldDescription: 'Date',
+	fieldType: 'date',
+	searchable: false
+});
+t.addColumn({
+	fieldName: 'start_time',
+	width: 125,
+	fieldDescription: 'Time',
+	fieldType: 'time',
+	searchable: false
+});
+t.addColumn({
+	fieldName: 'description',
+	fieldDescription: 'Description',
+	fieldType: 'text',
+	searchable: false
+});
+t.addColumn({
+	fieldName: 'actions',
+	width: 125,
+	fieldDescription: '',
+	fieldType: 'text',
+	searchable: false,
+	render: function( row ) {
+		var s = $('<select class="item-action" />');
+
+		for(var i in map_itemActions) {
+			var opt = $('<option />');
+			opt.attr('value', i);
+			opt.text( map_itemActions[i] );
+
+			if (i == row.item_action) {
+				opt.attr('selected', 'selected');
+			}
+			
+			s.append( opt );
+		}
+		 
+		return s;
+	}
+});
+
+
+t.load();
+
+
 
 
 function btnExecute_Click() {
@@ -132,11 +181,10 @@ function update_itemAction( rowSelector, itemAction ) {
 	var data = {};
 
 	rowSelector.each(function(index, node) {
-		var ci_id = $(node).data('calendar-item-id');
-		var ci_start_date = $(node).data('start-date');
-
-		data['calendar_item[' + index + '][id]']          = ci_id;
-		data['calendar_item[' + index + '][start_date]']  = ci_start_date;
+		var record = $(node).data('record');
+		
+		data['calendar_item[' + index + '][id]']          = record.calendar_item_id;
+		data['calendar_item[' + index + '][start_date]']  = record.start_date;
 		data['calendar_item[' + index + '][item_action]'] = itemAction;
 	});
 
@@ -146,7 +194,7 @@ function update_itemAction( rowSelector, itemAction ) {
 		data: data,
 		success: function(data, textStatus, xhr) {
 			show_user_message('Changes saved');
-			window.location = appUrl('/?m=calendar&c=calitemActionOverview');
+			t.load();
 		},
 		error: function(xhr, textStatus, errorThrown) {
 			alert('Error: ' + xhr.responseText);

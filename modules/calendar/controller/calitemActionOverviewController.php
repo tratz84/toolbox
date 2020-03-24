@@ -3,6 +3,7 @@
 
 use core\controller\BaseController;
 use calendar\service\CalendarService;
+use core\forms\lists\ListResponse;
 
 class calitemActionOverviewController extends BaseController {
     
@@ -12,14 +13,49 @@ class calitemActionOverviewController extends BaseController {
         /** @var CalendarService $calendarService */
         $calendarService = object_container_get(CalendarService::class);
         $cal = $calendarService->readFirstCalendar();
-        $this->events = $calendarService->readOpenActionItems( $cal->getCalendarId() );
+        
+        $this->calendar_id = $cal->getCalendarId();
+        
+        $this->map_itemActions = \calendar\model\CalendarItem::getItemActions();
+        
 //         var_export($this->events);exit;
         
         return $this->render();
     }
     
-    public function action_update_item_action() {
+    
+    public function action_search() {
+        /** @var CalendarService $calendarService */
+        $calendarService = object_container_get(CalendarService::class);
         
+        $events = $calendarService->readOpenActionItems( get_var('calendar_id') );
+        
+        $objs = array();
+        foreach($events as $evt) {
+            $o = array();
+            
+            $o['calendar_item_id'] = $evt->getId();
+            $o['recurrent'] = $evt->getRecurrent() ? true : false;
+            $o['start_date'] = $evt->getStartDate();
+            $o['start_time'] = $evt->getStartTime();
+            $o['description'] = $evt->getDescription();
+            $o['item_action'] = $evt->getItemAction();
+            
+            
+            $objs[] = $o;
+        }
+        
+        
+        
+        $lr = new ListResponse(0, count($objs), count($objs), $objs);
+        
+        return $this->json(array(
+            'listResponse' => $lr
+        ));
+    }
+    
+    
+    public function action_update_item_action() {
         $calendarService = object_container_get(CalendarService::class);
         
         // check if calendar_item is set

@@ -277,7 +277,7 @@ class CalendarService extends ServiceBase {
         }
         
         // filter
-        array_filter($events, function($evt) {
+        $events = array_filter($events, function($evt) {
             if ($evt->getItemAction() == 'done')
                 return false;
             
@@ -312,9 +312,10 @@ class CalendarService extends ServiceBase {
             $d1 = $e1->getStartDate();
             $d2 = $e2->getStartDate();
             
+            
             $c = strcmp($d1, $d2);
             if ($c != 0) {
-                return $c;
+                return $c*-1;
             }
             
             $t1 = $e1->getStartTime();

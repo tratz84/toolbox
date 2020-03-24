@@ -303,7 +303,16 @@ class VEvent extends VEventInstance {
             }
             
             $dt->modify('+' . $this->interval . ' month');
+            
+            
+            // last month? => match end date
+            if ($dt->format('Ym') == substr($ymdend, 0, 6)) {
+                $day = substr($ymdend, 6);
+                $dt->setDate($dt->format('Y'), $dt->format('n'), $day);
+            }
+            
         }
+        
         
         return $instances;
     }
