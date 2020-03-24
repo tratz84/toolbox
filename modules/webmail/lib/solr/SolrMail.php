@@ -35,7 +35,7 @@ class SolrMail {
 
     public function getId() { return $this->jsonMail->id; }
     public function getEmlFile() { return $this->jsonMail->file; }
-    public function getMailboxName() { return $this->jsonMail->mailboxName; }
+    public function getMailboxName() { return @$this->jsonMail->mailboxName; }
     public function getDate() {
         if (!@$this->jsonMail->date) {
             return null;

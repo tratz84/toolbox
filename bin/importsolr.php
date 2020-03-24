@@ -23,7 +23,7 @@ $ctx = \core\Context::getInstance();
 
 
 $solrImportMail = new SolrImportMail(WEBMAIL_SOLR);
-$solrImportMail->importFolder( $ctx->getDataDir().'/webmail/inbox/2020' );
+$solrImportMail->importFolder( $ctx->getDataDir().'/webmail/inbox' );
 
 
 

@@ -12,6 +12,8 @@ use core\ObjectContainer;
 use webmail\mail\ImapConnection;
 use webmail\service\ConnectorService;
 use webmail\solr\SolrImportMail;
+use webmail\solr\SolrMailQuery;
+use webmail\solr\SolrMailQueryResponse;
 
 if (count($argv) != 2) {
     print "Usage: {$argv[0]} <contextname>\n";
@@ -46,12 +48,24 @@ foreach($cs as $c) {
         
     print "Connected to " . $c->getDescription() . "\n";
     
+    $strlen_dataDir = strlen(\core\Context::getInstance()->getDataDir());
     
     $solrImportMail = new SolrImportMail(WEBMAIL_SOLR);
-    $ic->setCallbackItemImported(function($folderName, $overview, $file) use ($solrImportMail) {
-        // TODO: check if email is actually changed
-        $solrImportMail->queueEml( $file );
-        $solrImportMail->purge( );
+    $ic->setCallbackItemImported(function($folderName, $overview, $file) use ($solrImportMail, $strlen_dataDir) {
+        
+        // lookup file
+        $solrMailQuery = new SolrMailQuery( WEBMAIL_SOLR );
+        $id = substr($file, $strlen_dataDir);
+        $solrMailQuery->addFacetSearch('id', ':', $id);
+        /** @var SolrMailQueryResponse $smqr */
+        $smqr = $solrMailQuery->search();
+
+        // TODO: check if .properties is changed
+        
+        if ($smqr->getNumFound() == 0) {
+            $solrImportMail->queueEml( $file );
+            $solrImportMail->purge( );
+        }
     });
     
     

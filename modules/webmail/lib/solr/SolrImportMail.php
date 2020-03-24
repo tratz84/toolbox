@@ -225,7 +225,6 @@ class SolrImportMail {
         $d = post_url($this->solrUrl . '/update?commit=true', '<delete><query>*:*</query></delete>', array(
             'headers' => array('Content-type: text/xml')
         ));
-        
     }
     
     

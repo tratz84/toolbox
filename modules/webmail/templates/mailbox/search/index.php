@@ -15,7 +15,7 @@
 			
 		</div>
 		<div id="mail-content" style="" data-dont-overflow="1" data-height-in-percentage="<?= isset($state['slider-ratio'][0]) ? $state['slider-ratio'][1] : '' ?>">
-			<iframe style="width:100%; height: 150%;" frameborder="0" sandbox=""></iframe>
+			<iframe style="width:100%; height: 150%;" frameborder="0" sandbox="allow-popups"></iframe>
 		</div>
 	</div>
 </div>

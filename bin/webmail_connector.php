@@ -3,11 +3,10 @@
 
 
 use core\ObjectContainer;
-use webmail\service\ConnectorService;
 use webmail\mail\ImapMonitor;
-use core\Context;
-use webmail\mail\SpamCheck;
+use webmail\service\ConnectorService;
 use webmail\service\EmailService;
+use webmail\solr\SolrImportMail;
 
 if (count($argv) != 2) {
     print "Usage: {$argv[0]} <contextname>\n";
@@ -66,16 +65,18 @@ while (true) {
                 $im->setCallbackItemImported(function($folderName, $overview, $file) use ($c) {
                     print "Importing mail, " . $c->getConnectorId() . ': ' . $overview->subject . " (".$overview->date.")\n";
                     
-                    // save header info in db
-//                     $emailService = \core\ObjectContainer::getInstance()->get( EmailService::class );
-//                     $emailService->saveEmailFile($c->getConnectorId(), $folderName, $file);
-                    
-                    // TODO: update solr
+                    // update solr
+                    if (defined('WEBMAIL_SOLR') && WEBMAIL_SOLR) {
+                        $solrImportMail = new SolrImportMail( WEBMAIL_SOLR );
+                        $solrImportMail->queueEml( $file );
+                        $solrImportMail->purge( true );
+                    }
                 });
                 
                 $monitors[$connectorId] = $im;
             }
         }
+        
         
         
         // check for removed
