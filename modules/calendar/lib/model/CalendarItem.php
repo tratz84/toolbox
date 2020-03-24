@@ -16,7 +16,7 @@ class CalendarItem extends base\CalendarItemBase {
             self::$itemActions['postponed']  = t('Post poned');
             self::$itemActions['inprogress'] = t('In progress');
             self::$itemActions['done']       = t('Done');
-            self::$itemActions['ignore']     = t('Ignored');
+            self::$itemActions['ignore']     = t('Ignore');
         }
         
         
