@@ -59,7 +59,15 @@ $eb->subscribe('base', 'dashboard', new CallbackPeopleEventListener(function($ev
     $dashboardWidgets = $evt->getSource();
     
     if (hasCapability('calendar', 'edit-calendar')) {
+        /** @var CalendarSettings $calendarSettings */
+        $calendarSettings = object_container_get( CalendarSettings::class );
+        
         $dashboardWidgets->addWidget('upcoming-calendar-items', 'Kalender: Opkomende agenda punten', 'Opkomende agendapunten voor deze week', '/?m=calendar&c=dashboard&a=upcoming');
+        
+        if ($calendarSettings->calendarItemActionsEnabled()) {
+            $dashboardWidgets->addWidget('calendar-items-actions', 'Kalender: Actiepunten agenda', 'Nog uit te voeren actiepunten agenda', '/?m=calendar&c=calitemActionOverview&a=dashboard');
+        }
+        
     }
 }));
     

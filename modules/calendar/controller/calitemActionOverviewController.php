@@ -86,11 +86,22 @@ class calitemActionOverviewController extends BaseController {
     
     
     public function action_dashboard() {
+        $calendarService = object_container_get(CalendarService::class);
+        $cal = $calendarService->readFirstCalendar();
         
+        $this->calendar_id = $cal->getCalendarId();
+        
+        $this->map_itemActions = \calendar\model\CalendarItem::getItemActions();
+        
+        
+        
+        $this->setShowDecorator(false);
+        
+        return $this->render();
     }
 
     public function action_dashboard_settings() {
-        // ??
+        // TODO: calendar selection? now default the first calendar is selected..
     }
     
     

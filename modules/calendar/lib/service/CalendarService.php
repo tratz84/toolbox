@@ -250,7 +250,7 @@ class CalendarService extends ServiceBase {
     
     
     
-    public function readOpenActionItems($calendarId, $daysPast=-60, $daysFuture = 0) {
+    public function readOpenActionItems($calendarId, $daysPast=-90, $daysFuture = 0, $opts=array()) {
         
         $start = date('Y-m-d', strtotime($daysPast . ' days'));
         $end   = date('Y-m-d', strtotime($daysFuture . ' days'));
@@ -278,6 +278,10 @@ class CalendarService extends ServiceBase {
         
         // filter
         $events = array_filter($events, function($evt) {
+            
+            if ($evt->getStartDate() == date('Y-m-d'))
+                return true;
+            
             if ($evt->getItemAction() == 'done')
                 return false;
             
