@@ -279,8 +279,8 @@ class CalendarService extends ServiceBase {
         // filter
         $events = array_filter($events, function($evt) {
             
-            if ($evt->getStartDate() == date('Y-m-d'))
-                return true;
+//             if ($evt->getStartDate() == date('Y-m-d'))
+//                 return true;
             
             if ($evt->getItemAction() == 'done')
                 return false;
