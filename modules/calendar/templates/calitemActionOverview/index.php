@@ -94,8 +94,12 @@ t.addColumn({
 	fieldDescription: '',
 	fieldType: 'text',
 	searchable: false,
-	render: function() {
-		return '<input type="checkbox" class="select-item-action" />';
+	render: function( record ) {
+		var chk = $('<input type="checkbox" class="select-item-action" />');
+
+		chk.attr('title', record.calendar_item_id);
+		
+		return chk;
 	}
 });
 

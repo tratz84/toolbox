@@ -306,7 +306,7 @@ class VEvent extends VEventInstance {
             
             
             // last month? => match end date
-            if ($dt->format('Ym') == substr($ymdend, 0, 6)) {
+            if ($dt->format('Ym') == substr($ymdend, 0, 6) && !$this->byMonthDay) {
                 $day = substr($ymdend, 6);
                 $dt->setDate($dt->format('Y'), $dt->format('n'), $day);
             }
