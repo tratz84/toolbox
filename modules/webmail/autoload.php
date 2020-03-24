@@ -6,6 +6,8 @@ use core\ObjectContainer;
 use core\event\CallbackPeopleEventListener;
 use core\event\EventBus;
 use core\Context;
+use core\container\ArrayContainer;
+use base\model\Menu;
 
 Context::getInstance()->enableModule('webmail');
 
@@ -36,4 +38,24 @@ $eb->subscribe('base', 'user-capabilities', new CallbackPeopleEventListener(func
     $evt->getSource()->addCapability('webmail', 'send-mail', 'Verstuur e-mail', 'E-mails versturen');
     
 }));
+
+
+$eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListener(function($evt) {
+    
+    /** @var ArrayContainer $menuContainer */
+    $menuContainer = $evt->getSource();
+    
+    if (hasCapability('webmail', 'send-mail')) {
+        $m = new Menu();
+        $m->setIconLabelUrl('fa-send', 'E-mail', '/?m=webmail&c=email');
+        $m->setWeight(70);
+        
+        $menuContainer->add($m);
+    }
+    
+        
+}));
+
+
+
 

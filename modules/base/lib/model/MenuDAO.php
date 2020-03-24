@@ -33,8 +33,8 @@ class MenuDAO extends \core\db\DAOObject {
 // 	    $arr[] = array('menu_code' => 'rentalfg',        'sort' => 1400, 'visible' => 1);
         
 	    
-	    if (hasCapability('webmail', 'send-mail'))
-	        $arr[] = array('menu_code' => 'webmail',      'sort' => 1500, 'visible' => 1, 'icon' => 'fa-send',    'label' => 'E-mail',   'url' => '/?m=webmail&c=email');
+// 	    if (hasCapability('webmail', 'send-mail'))
+// 	        $arr[] = array('menu_code' => 'webmail',      'sort' => 1500, 'visible' => 1, 'icon' => 'fa-send',    'label' => 'E-mail',   'url' => '/?m=webmail&c=email');
 	        
 	    if (hasCapability('report', 'show-reports'))
 	        $arr[] = array('menu_code' => 'report',          'sort' => 1700, 'visible' => 1, 'icon' => 'fa-signal',    'label' => 'Rapportage',     'url' => '/?m=report&c=report');
