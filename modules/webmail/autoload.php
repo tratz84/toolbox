@@ -42,6 +42,9 @@ $eb->subscribe('base', 'user-capabilities', new CallbackPeopleEventListener(func
 
 $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListener(function($evt) {
     
+    /** @var \core\Context $ctx */
+    $ctx = \core\Context::getInstance();
+    
     /** @var ArrayContainer $menuContainer */
     $menuContainer = $evt->getSource();
     
@@ -49,6 +52,12 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
         $m = new Menu();
         $m->setIconLabelUrl('fa-send', 'E-mail', '/?m=webmail&c=email');
         $m->setWeight(70);
+        
+        if ($ctx->isExperimental()) {
+            $menu_mailbox = new Menu();
+            $menu_mailbox->setIconLabelUrl('fa-send', 'Webmail', '/?m=webmail&c=mailbox/search');
+            $m->addChildMenu($menu_mailbox);
+        }
         
         $menuContainer->add($m);
     }

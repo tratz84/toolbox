@@ -8,7 +8,9 @@
 <div id="mail-container">
 	<div class="messages-content ui-layout-center">
 		<div data-height-in-percentage="<?= isset($state['slider-ratio'][0]) ? $state['slider-ratio'][0] : '' ?>">
-			
+			<div class="search-fields">
+				<input type="text" name="q" placeholder="Search" style="width: 100%;" />
+			</div>
 			<div id="emailheader-table-container"></div>
 			
 		</div>
@@ -55,7 +57,9 @@ if (typeof less != 'undefined') {
 
 var t = new IndexTable('#emailheader-table-container', {
 	autoloadNext: true,
-	fixedHeader: true
+	fixedHeader: true,
+	tableHeight: 'calc(100% - 35px)',
+	searchContainer: '.search-fields'
 });
 
 t.setRowClick(function(row, evt) {
@@ -68,7 +72,7 @@ t.setRowClick(function(row, evt) {
 });
 
 t.setRowDblclick(function(row, evt) {
-	window.location = appUrl('/?m=webmail&c=view&id=' + $(row).data('record').email_id);
+	window.open(appUrl('/?m=webmail&c=mailbox/mail&a=view&id=' + $(row).data('record').email_id), '_blank');
 });
 
 t.setConnectorUrl( '/?m=webmail&c=mailbox/search&a=search' );

@@ -71,7 +71,7 @@
     			<th>Bijlages</th>
     			<td class="attachments">
     				<?php for($attno=0; $attno < count($attachments); $attno++) : ?>
-    				<a href="<?= appUrl('/?m=webmail&c=mailbox/mail&a=attachment&no='.$attno.'&id='.$id) ?>" target="_blank"><?= esc_html($attachments[$attno]['filename']) ?></a>
+    				<a href="<?= appUrl('/?m=webmail&c=mailbox%2Fmail&a=attachment&no='.urlencode($attno).'&id='.urlencode($id)) ?>" target="_blank"><?= esc_html($attachments[$attno]['filename']) ?></a>
     				<?php endfor; ?>
     			</td>
     		</tr>

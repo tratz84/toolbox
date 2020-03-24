@@ -100,6 +100,11 @@ class SolrMail {
     public function getContentSafe() {
         $this->parseMail();
         
+        // no contentHtml? => return contentText
+        if (!$this->contentHtml || trim($this->contentHtml) == '') {
+            return nl2br(esc_html($this->contentText));
+        }
+        
         // TODO: implement the other way around? not remove selective, but remove all BUT allowed tags.. ? (more safe approach & more future-proof?)
         
         // strip html
@@ -112,7 +117,7 @@ class SolrMail {
         
         
         // remove elements
-        $removeElements = array('script', 'style', 'link');
+        $removeElements = array('script', 'style', 'link', 'base');
         foreach($removeElements as $re) {
             do {
                 $els = $dom->getElementsByTagName( $re );
@@ -222,7 +227,6 @@ class SolrMail {
                 'email' => $ht['address'],
             );
         }
-        
         
         $this->contentHtml = $p->getMessageBody('html');
         $this->contentText = $p->getMessageBody('text');

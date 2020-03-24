@@ -30,6 +30,10 @@ class searchController extends BaseController {
 	    $smq->setStart($pageNo * $limit);
 	    $smq->setRows( $limit );
 	    
+	    if (get_var('q')) {
+	        $smq->setQuery( get_var('q') );
+	    }
+	    
 	    $lr = $smq->searchListResponse();
 	    
 	    $arr = array();

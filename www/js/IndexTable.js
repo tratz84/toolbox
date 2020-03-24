@@ -69,7 +69,7 @@ function IndexTable( container, opts ) {
 		
 		
 		if (this.opts.autoloadNext) {
-			$(this.container).css('height', '100%');
+			$(this.container).css('height', this.opts.tableHeight);
 			$(this.container).css('overflow-y', 'auto');
 		
 			$(this.container).scroll(function(evt) {
