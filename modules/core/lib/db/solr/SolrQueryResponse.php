@@ -9,7 +9,6 @@ class SolrQueryResponse {
     
     protected $response = null;
     
-    
     public function __construct($solrResponseText, $solrQuery=null) {
         $this->solrResponseText = $solrResponseText;
         $this->solrQuery = $solrQuery;
@@ -17,13 +16,26 @@ class SolrQueryResponse {
         $this->response = @json_decode( $this->solrResponseText );
     }
     
-    
     public function getResponse() {
         return $this->response;
     }
     
     
     public function getQTime() { return $this->response->responseHeader->QTime; }
+    
+    public function hasError() {
+        if ($this->response === false || $this->response === null) {
+            return true;
+        }
+        
+        return false;
+    }
+    public function getError() {
+        if ($this->response === false || $this->response === null) {
+            return 'No valid response (solr down?)';
+        }
+    }
+    
     
     /**
      * getParams() - search params

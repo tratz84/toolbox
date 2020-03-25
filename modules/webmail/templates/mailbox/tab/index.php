@@ -1,10 +1,14 @@
 
 
 
-<div id="mail-container" style="height: 100%;">
+<div id="mail-container" class="tab-mailbox-container" style="height: 100%;">
 	<div style="height: 200px; overflow-y: scroll;">
 		<div class="search-fields">
-			<input type="text" name="q" placeholder="Search" style="width: 100%;" />
+			<div class="toolbox">
+				<a href="javascript:void(0);" onclick="mailboxTabSettings_Click();" class="fa fa-cog"></a>
+			</div>
+			<input type="hidden" name="mailtabSettings" value="<?= esc_json_attr($mailtabSettings) ?>" />
+			<input type="text" name="q" placeholder="Search" style="width: calc(100% - 50px);" />
 		</div>
 		<div id="emailheader-table-container"></div>
 	</div>
@@ -16,6 +20,7 @@
 
 
 <script>
+
 
 var it_webmail = new IndexTable('#emailheader-table-container', {
 	autoloadNext: true,
@@ -96,11 +101,18 @@ it_webmail.addColumn({
 	}
 });
 
-</script>
+function mailboxTabSettings_Click() {
+
+	show_popup(appUrl('/?m=webmail&c=mailbox/tab&a=settings'), {
+		data: {
+			mailtabSettings: $('#mailtabSettings').val()
+		}
+	});
+	
+}
 
 
-<script>
-
+// load IndexTable on tab activation
 $(window).on('tabcontainer-item-click', function(e, f) {
 	var tab_name = $( f ).data('tab-name');
 

@@ -79,6 +79,11 @@ $eb->subscribe('base', 'company-edit-footer', new CallbackPeopleEventListener(fu
     $ftc = $evt->getSource();
     
     $companyId = $ftc->getSource()->getWidgetValue('company_id');
+    
+    // new Company? => skip
+    if (!$companyId)
+        return;
+    
     $webmailHtml = get_component('webmail', 'mailbox/tabController', 'index', array('companyId' => $companyId));
     $ftc->addTab('Mail', $webmailHtml, 80);
 }));
@@ -96,6 +101,11 @@ $eb->subscribe('base', 'person-edit-footer', new CallbackPeopleEventListener(fun
     $ftc = $evt->getSource();
     
     $personId = $ftc->getSource()->getWidgetValue('person_id');
+    
+    // new Person? => skip
+    if (!$personId)
+        return;
+    
     $webmailHtml = get_component('webmail', 'mailbox/tabController', 'index', array('personId' => $personId));
     $ftc->addTab('Mail', $webmailHtml, 80);
 }));

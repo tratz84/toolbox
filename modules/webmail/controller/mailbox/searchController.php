@@ -3,6 +3,7 @@
 use core\controller\BaseController;
 use webmail\solr\SolrMailQuery;
 use base\service\MetaService;
+use core\forms\lists\ListResponse;
 
 class searchController extends BaseController {
 
@@ -21,8 +22,32 @@ class searchController extends BaseController {
 
 	public function action_search() {
 	    
-	    $smq = new SolrMailQuery();
+        $mailtabSettings = @json_decode( get_var('mailtabSettings', true) );
+        if (is_object($mailtabSettings)) $mailtabSettings = (array)$mailtabSettings;
+        
+	    if (is_post()) {
+	        // check if mailtabSettings is set
+	        $emptyResult = false;
+	        if ($mailtabSettings == false) {
+	            $emptyResult = true;
+	        } if (is_array($mailtabSettings)) {
+	            if (count($mailtabSettings) == 0) {
+	                $emptyResult = true;
+	            }
+	            if (isset($mailtabSettings['email']) && count($mailtabSettings['email']) == 0) {
+	                $emptyResult = true;
+	            }
+	        }
+	        
+	        if ($emptyResult) {
+	            return $this->json([
+	                'listResponse' => new ListResponse(0, 0, 0, [])
+	            ]);
+	        }
+	    }
 	    
+	    
+	    $smq = new SolrMailQuery();
 	    
 	    $pageNo = isset($_REQUEST['pageNo']) ? (int)$_REQUEST['pageNo'] : 0;
 	    $limit = $this->ctx->getPageSize();
@@ -33,14 +58,20 @@ class searchController extends BaseController {
 	    if (get_var('q')) {
 	        $smq->setQuery( get_var('q') );
 	    }
+        $smq->setMailTabSettings( $mailtabSettings );
 	    
-	    $lr = $smq->searchListResponse();
-	    
-	    $arr = array();
-	    $arr['listResponse'] = $lr;
-	    
-	    
-	    $this->json($arr);
+	    try {
+    	    $lr = $smq->searchListResponse();
+    	    
+    	    $arr = array();
+    	    $arr['listResponse'] = $lr;
+    	    $this->json($arr);
+	    } catch(\Exception $ex) {
+	        $this->json([
+	            'error' => true,
+	            'message' => $ex->getMessage()
+            ]);
+	    }
 	}
 	
 	

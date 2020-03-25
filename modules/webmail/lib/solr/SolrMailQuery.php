@@ -20,6 +20,35 @@ class SolrMailQuery extends SolrQuery {
     }
     
     
+    public function setMailTabSettings( $mailtabSettings ) {
+        if (isset($mailtabSettings['email']) == false)
+            return;
+        
+        // build query
+        $qs = array();
+        foreach($mailtabSettings['email'] as $e) {
+            $e = trim($e);
+            
+            if (strpos($e, '@') === 0) {
+                $e = '*'.$e;
+            }
+            
+            $qs[] = 'toEmail:'.solr_escapeTerm($e);
+            $qs[] = 'fromEmail:'.solr_escapeTerm($e);
+        }
+        
+        
+        // append query to current query
+        if (count($qs)) {
+            $q = '(' . implode(' OR ', $qs) . ')';
+            if ($this->query != '*:*') {
+                $q .= ' AND ( ' . $this->query . ')';
+            }
+            $this->setRawQuery( $q );
+        }
+        
+    }
+    
     
     public function searchListResponse() {
         if (!$this->getSort()) {
@@ -34,6 +63,10 @@ class SolrMailQuery extends SolrQuery {
         
         /** @var SolrMailQueryResponse $msqr */
         $msqr = $this->search();
+        
+        if ($msqr->hasError()) {
+            throw new \core\exception\SolrException( $msqr->getError() );
+        }
         
         $mails = array();
         for($x=0; $x < $msqr->getRows(); $x++) {
