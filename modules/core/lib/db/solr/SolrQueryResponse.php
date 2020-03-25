@@ -40,28 +40,28 @@ class SolrQueryResponse {
      * getNumFound() - total records found
      */
     public function getNumFound() {
-        return $this->response->response->numFound;
+        return isset($this->response->response->numFound) ? $this->response->response->numFound: 0;
     }
     
     /**
      * getStart() - position first document
      */
     public function getStart() {
-        return $this->response->response->start;
+        return isset($this->response->response->start) ? $this->response->response->start : 0;
     }
     
     /**
      * getRows() - number of documents in current response
      */
     public function getRows() {
-        return count( $this->response->response->docs );
+        return isset($this->response->response->docs) ? count( $this->response->response->docs ) : 0;
     }
     
     
     
     
     public function getDocuments() {
-        return $this->response->response->docs;
+        return isset($this->response->response->docs) ? $this->response->response->docs : array();
     }
     
     

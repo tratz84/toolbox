@@ -17,15 +17,22 @@ class SolrMailQuery extends SolrQuery {
         $ctx = \core\Context::getInstance();
         
         $this->addFacetSearch('contextName', ':', $ctx->getContextName());
-        $this->setSort('date desc');
     }
     
     
     
     public function searchListResponse() {
-        /**
-         * @var SolrMailQueryResponse $msqr
-         */
+        if (!$this->getSort()) {
+            if ($this->query == '*:*') {
+                $this->setSort('date desc');
+            } else {
+                $this->setSort('score desc, date desc');
+            }
+            
+        }
+        
+        
+        /** @var SolrMailQueryResponse $msqr */
         $msqr = $this->search();
         
         $mails = array();

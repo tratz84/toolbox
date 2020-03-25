@@ -40,7 +40,8 @@ class SolrQuery {
     public function setTimeAllowed($ms) { $this->timeAllowed = $ms; }
     public function getTimeAllowed() { return $this->timeAllowed; }
     
-    public function setQuery($q) { $this->query = $q; }
+    public function setQuery($q) { $this->query = solr_escapeTerm($q); }
+    public function setRawQuery($q) { $this->query = $q; }
     
     public function addField($fieldName) {
         $this->fields[] = $fieldName;
