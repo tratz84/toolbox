@@ -159,6 +159,13 @@ class ConnectorService extends ServiceBase {
         return $cDao->readAll();
     }
     
+    public function hasConnectors() {
+        $cDao = new ConnectorDAO();
+        
+        return $cDao->connectorCount() > 0 ? true : false;
+    }
+    
+    
     public function readImapFolder($connectorImapFolderId) {
         $cifDao = new ConnectorImapfolderDAO();
         

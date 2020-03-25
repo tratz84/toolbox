@@ -2,12 +2,14 @@
 
 
 
+use base\model\Menu;
+use core\Context;
 use core\ObjectContainer;
+use core\container\ArrayContainer;
 use core\event\CallbackPeopleEventListener;
 use core\event\EventBus;
-use core\Context;
-use core\container\ArrayContainer;
-use base\model\Menu;
+use core\event\PeopleEvent;
+use webmail\service\ConnectorService;
 
 Context::getInstance()->enableModule('webmail');
 
@@ -61,10 +63,43 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
         
         $menuContainer->add($m);
     }
-    
-        
 }));
 
+
+    
+$eb->subscribe('base', 'company-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+    if (!hasCapability('webmail', 'send-mail'))
+        return;
+    
+    /** @var ConnectorService $connectorService */
+    $connectorService = object_container_get(ConnectorService::class);
+    if ($connectorService->hasConnectors() == false)
+        return;
+
+    $ftc = $evt->getSource();
+    
+    $companyId = $ftc->getSource()->getWidgetValue('company_id');
+    $webmailHtml = get_component('webmail', 'mailbox/tabController', 'index', array('companyId' => $companyId));
+    $ftc->addTab('Mail', $webmailHtml, 80);
+}));
+
+
+$eb->subscribe('base', 'person-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+    if (!hasCapability('webmail', 'send-mail'))
+        return;
+    
+    /** @var ConnectorService $connectorService */
+    $connectorService = object_container_get(ConnectorService::class);
+    if ($connectorService->hasConnectors() == false)
+        return;
+        
+    $ftc = $evt->getSource();
+    
+    $personId = $ftc->getSource()->getWidgetValue('person_id');
+    $webmailHtml = get_component('webmail', 'mailbox/tabController', 'index', array('personId' => $personId));
+    $ftc->addTab('Mail', $webmailHtml, 80);
+}));
+    
 
 
 
