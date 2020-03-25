@@ -1,19 +1,5 @@
 
 
-// save tab state
-$(document).ready(function() {
-	$('.nav.nav-tabs a[role=tab]').click(function() {
-		current_pageState.saveValue('selected-tab', $(this).attr('id'));
-	});
-	
-	if (current_pageState.getValue('selected-tab') != null) {
-		$('.nav.nav-tabs').find( '#' + current_pageState.getValue('selected-tab') ).tab('show');
-		
-		// current_pageState.saveValue('selected-tab', null);
-	}
-});
-
-
 
 function PageState() {
 	this.state = history.state || {};

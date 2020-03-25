@@ -1,6 +1,37 @@
 
 
 
+$(document).ready(function() {
+	// save tab state
+	$('.nav.nav-tabs a[role=tab]').click(function() {
+		current_pageState.saveValue('selected-tab', $(this).attr('id'));
+	});
+	// set tab-state on pageload
+	if (current_pageState.getValue('selected-tab') != null) {
+		var anchor = $('.nav.nav-tabs').find( '#' + current_pageState.getValue('selected-tab') );
+		anchor.tab('show');
+		anchor.trigger('click');
+//		var obj = current_pageState.getValue('selected-tab');
+		$(window).trigger('tabcontainer-item-click', anchor);
+		// current_pageState.saveValue('selected-tab', null);
+	}
+	
+	
+	// raise event when there's clicked on a TabContainer-tab
+	$('.nav.nav-tabs .nav-item.nav-link').click(function(e) {
+		$(window).trigger('tabcontainer-item-click', e.target);
+	});
+});
+
+
+
+$(document).ready(function() {
+});
+
+
+
+
+
 function TabContainer(container) {
 	
 	this.container = container;

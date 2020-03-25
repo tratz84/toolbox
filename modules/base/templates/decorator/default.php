@@ -77,6 +77,7 @@ $menuItems = $ms->listMainMenu();
 		<script src="<?= BASE_HREF ?>js/script.js?t=<?= filemtime(WWW_ROOT.'/js/script.js') ?>"></script>
 		<script src="<?= BASE_HREF ?>js/multiuser.js?t=<?= filemtime(WWW_ROOT.'/js/multiuser.js') ?>"></script>
 		<script src="<?= BASE_HREF ?>js/savestate.js?t=<?= filemtime(WWW_ROOT.'/js/savestate.js') ?>"></script>
+		<script src="<?= BASE_HREF ?>js/TabContainer.js?t=<?= filemtime(WWW_ROOT.'/js/TabContainer.js') ?>"></script>
 		
 		<link href="<?= BASE_HREF ?>lib/font-awesome-4/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 		

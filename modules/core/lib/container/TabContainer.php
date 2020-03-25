@@ -17,12 +17,24 @@ class TabContainer {
     public function getSource() { return $this->source; }
     public function setSource($source) { $this->source = $source; }
     
-    public function addTab($title, $content, $prio=10) {
-        $this->tabs[] = array(
+    /**
+     * 
+     * @param string $title
+     * @param string $content
+     * @param number $prio
+     * @param array $opts - extra options, ie:
+     *                              - 'name'
+     */
+    public function addTab($title, $content, $prio=10, $opts=array()) {
+        $tab = array(
             'title' => $title,
             'content' => $content,
             'prio' => $prio
         );
+        
+        $tab = array_merge($tab, $opts);
+        
+        $this->tabs[] = $tab;
     }
     
     public function getTabs() { return $this->tabs; }
@@ -48,7 +60,9 @@ class TabContainer {
         foreach($this->tabs as $x => $tab) {
             $slug = slugify($tab['title']);
             
-            $html .= '<a class="nav-item nav-link '.($x==0?'active':'').'" id="nav-'.$slug.'-tab" data-toggle="tab" role="tab" aria-controls="'.$slug.'" href="#nav-'.$slug.'" aria-selected="'.($x==0?'true':'false').'">'.esc_html($tab['title']).'</a>' . PHP_EOL;
+            $tab_name = isset($tab['name']) ? $tab['name'] : $slug;
+            
+            $html .= '<a class="nav-item nav-link '.($x==0?'active':'').'" id="nav-'.$slug.'-tab" data-tab-name="'.esc_attr($tab_name).'" data-toggle="tab" role="tab" aria-controls="'.$slug.'" href="#nav-'.$slug.'" aria-selected="'.($x==0?'true':'false').'">'.esc_html($tab['title']).'</a>' . PHP_EOL;
         }
         $html .= '</div>' . PHP_EOL;
         $html .= '</nav>' . PHP_EOL;
