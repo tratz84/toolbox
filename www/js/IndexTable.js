@@ -179,6 +179,10 @@ function IndexTable( container, opts ) {
 					
 					me.loading = false;
 				}
+			},
+			complete: function() {
+				//showAlert('Error', 'An error occured..');
+				me.loading = false;
 			}
 		});
 	};
