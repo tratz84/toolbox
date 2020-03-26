@@ -118,11 +118,11 @@ function hook_loader($folder, $opts=array()) {
     }
 }
 
-
 function object_container_get($className) {
     return ObjectContainer::getInstance()->get($className);
 }
 
+// TODO: parameter support, class can contain constructor..
 function object_container_create($className) {
     return ObjectContainer::getInstance()->create($className);
 }
