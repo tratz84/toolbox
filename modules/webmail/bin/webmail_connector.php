@@ -12,6 +12,7 @@ use webmail\mail\ImapMonitor;
 use webmail\service\ConnectorService;
 use webmail\service\EmailService;
 use webmail\solr\SolrImportMail;
+use webmail\model\Connector;
 
 if (count($argv) != 2) {
     print "Usage: {$argv[0]} <contextname>\n";
@@ -46,6 +47,7 @@ while (true) {
         
         // check if connectors are changed
         $connectorIds = array();
+        /** @var Connector $c */
         foreach($connectors as $c) {
             $connectorId = $c->getConnectorId();
             $connectorIds[] = $connectorId;
@@ -64,20 +66,25 @@ while (true) {
                 // get instance with all properties loaded
                 $c = $connectorService->readConnector( $connectorId );
                 
-                print "Starting monitor for: " . $c->getDescription() . "\n";
-                $im = new ImapMonitor($c);
-                $im->setCallbackItemImported(function($folderName, $overview, $file) use ($c) {
-                    print "Importing mail, " . $c->getConnectorId() . ': ' . $overview->subject . " (".$overview->date.")\n";
+                if ($c->getConnectorType() == 'imap') {
+                    print "Starting monitor for: " . $c->getDescription() . "\n";
+                    $im = new ImapMonitor($c);
+                    $im->setCallbackItemImported(function($folderName, $overview, $file) use ($c) {
+                        print "Importing mail, " . $c->getConnectorId() . ': ' . $overview->subject . " (".$overview->date.")\n";
+                        
+                        // update solr
+                        if (defined('WEBMAIL_SOLR') && WEBMAIL_SOLR) {
+                            $solrImportMail = new SolrImportMail( WEBMAIL_SOLR );
+                            $solrImportMail->queueEml( $file );
+                            $solrImportMail->purge( true );
+                        }
+                    });
                     
-                    // update solr
-                    if (defined('WEBMAIL_SOLR') && WEBMAIL_SOLR) {
-                        $solrImportMail = new SolrImportMail( WEBMAIL_SOLR );
-                        $solrImportMail->queueEml( $file );
-                        $solrImportMail->purge( true );
-                    }
-                });
-                
-                $monitors[$connectorId] = $im;
+                    $monitors[$connectorId] = $im;
+                }
+                else if ($c->getConnectorType() == 'pop3') {
+                    // TODO: implement Pop3Monitor
+                }
             }
         }
         
