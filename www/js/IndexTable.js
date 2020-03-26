@@ -474,7 +474,16 @@ function IndexTable( container, opts ) {
 			td.attr('colspan', this.columns.length + (this.sortable?1:0) );
 			td.text(_('No results found'));
 
-			tbody.append(td);
+			var tr = $('<tr class="no-results" />');
+			tr.append( td );
+			
+			tbody.append(tr);
+		}
+		
+		
+		// reload/table changed? => remove message
+		if (this.listResponse.objects.length > 0) {
+			$(tbody).find('tr.no-results').remove();
 		}
 		
 		
