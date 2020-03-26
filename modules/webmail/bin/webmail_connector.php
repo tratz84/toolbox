@@ -69,7 +69,7 @@ while (true) {
                 if ($c->getConnectorType() == 'imap') {
                     print "Starting monitor for: " . $c->getDescription() . "\n";
                     $im = new ImapMonitor($c);
-                    $im->setCallbackItemImported(function($folderName, $overview, $file) use ($c) {
+                    $im->setCallbackItemImported(function($folderName, $overview, $file, $changed) use ($c) {
                         print "Importing mail, " . $c->getConnectorId() . ': ' . $overview->subject . " (".$overview->date.")\n";
                         
                         // update solr

@@ -22,7 +22,7 @@ use webmail\solr\SolrMailQueryResponse;
 use core\parser\ArgumentParser;
 
 if (count($argv) < 2) {
-    print "Usage: {$argv[0]} <contextname>\n";
+    print "Usage: {$argv[0]} <contextname> [-u] [--skip-folder-import] [--skip-connector-import]\n";
     exit;
 }
 
@@ -42,62 +42,60 @@ $argumentParser = new ArgumentParser( $argv );
 $updateOnly = $argumentParser->hasOption('u');
 
 
-
 // import folder
-print "Importing webmail/inbox\n";
-$solrImportMail = new SolrImportMail(WEBMAIL_SOLR);
-$solrImportMail->setUpdateMode( $updateOnly );
-$solrImportMail->importFolder( ctx()->getDataDir().'/webmail/inbox' );
-unset( $solrImportMail );
-print "Importing webmail/inbox done\n\n";
-die("Folder import done\n");
+if ($argumentParser->hasOption('skip-folder-import') == false) {
+    print "START Folder import, importing webmail/inbox\n";
+    $solrImportMail = new SolrImportMail(WEBMAIL_SOLR);
+    $solrImportMail->setUpdateMode( $updateOnly );
+    $solrImportMail->importFolder( ctx()->getDataDir().'/webmail/inbox' );
+    unset( $solrImportMail );
+    print "DONE Folder import\n";
+}
 
 
-// loop through active Connectors to sync/fetch mail
-$connectorService = ObjectContainer::getInstance()->get(ConnectorService::class);
-$cs = $connectorService->readActive();
-
-foreach($cs as $c) {
-    /** @var \webmail\model\Connector $c */
-    $c = $connectorService->readConnector( $c->getConnectorId() );
+if ($argumentParser->hasOption('skip-connector-import') == false) {
+    print "START Connector import\n";
     
-    if ($c->getConnectorType() == 'imap') {
-        $ic = ImapConnection::createByConnector($c);
-        if (!$ic->connect()) {
-            print "Unable to connect to " . $c->getDescription() . "\n";
-            continue;
-        }
-            
-        print "Connected to " . $c->getDescription() . "\n";
+    // loop through active Connectors to sync/fetch mail
+    $connectorService = ObjectContainer::getInstance()->get(ConnectorService::class);
+    $cs = $connectorService->readActive();
+    
+    foreach($cs as $c) {
+        /** @var \webmail\model\Connector $c */
+        $c = $connectorService->readConnector( $c->getConnectorId() );
         
-        $strlen_dataDir = strlen(\core\Context::getInstance()->getDataDir());
-        $solrImportMail = new SolrImportMail(WEBMAIL_SOLR);
-        $ic->setCallbackItemImported(function($folderName, $overview, $file) use ($solrImportMail, $strlen_dataDir) {
-            
-            // lookup file
-            $solrMailQuery = new SolrMailQuery( WEBMAIL_SOLR );
-            $id = substr($file, $strlen_dataDir);
-            $solrMailQuery->addFacetSearch('id', ':', solr_escapePhrase($id));
-            /** @var SolrMailQueryResponse $smqr */
-            $smqr = $solrMailQuery->search();
-    
-            // TODO: check if .properties is changed
-            if ($smqr->getNumFound() == 0) {
-                $solrImportMail->queueEml( $file );
-                $solrImportMail->purge( );
+        if ($c->getConnectorType() == 'imap') {
+            $ic = ImapConnection::createByConnector($c);
+            if (!$ic->connect()) {
+                print "Unable to connect to " . $c->getDescription() . "\n";
+                continue;
             }
-        });
+                
+            print "Connected to " . $c->getDescription() . "\n";
+            
+            $solrImportMail = new SolrImportMail(WEBMAIL_SOLR);
+            $ic->setCallbackItemImported(function($folderName, $overview, $file, $changed) use ($solrImportMail) {
+                // this callback is only called on new mail and changed (IMAP-properties like isRead & folderName can change)
+//                 print "Queueing file: $file\n";
+                if ($changed) {
+                    $solrImportMail->queueEml( $file );
+                    $solrImportMail->purge( );
+                }
+            });
+            
+            
+            $ic->doImport( $c );
+            $ic->disconnect();
+            $ic->saveMessagePropertyChecksums();
+        }
+        else if ($c->getConnectorType() == 'pop3') {
+            
+        }
         
-        
-        $ic->doImport( $c );
-        $ic->disconnect();
-        $ic->saveMessagePropertyChecksums();
-    }
-    else if ($c->getConnectorType() == 'pop3') {
-        
+        $solrImportMail->purge( true );
     }
     
-    $solrImportMail->purge( true );
+    print "DONE Connector import\n";
 }
 
 
