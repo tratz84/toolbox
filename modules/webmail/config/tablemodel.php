@@ -54,7 +54,7 @@ $tb_connector->addColumn('description',                   'varchar(255)');
 $tb_connector->addColumn('connector_type',                'varchar(16)');
 $tb_connector->addColumn('hostname',                      'varchar(255)');
 $tb_connector->addColumn('port',                          'int');
-$tb_connector->addColumn('usernamae',                      'varchar(255)');
+$tb_connector->addColumn('username',                      'varchar(255)');
 $tb_connector->addColumn('password',                      'varchar(255)');
 $tb_connector->addColumn('nextrun_fullimport',            'boolean');
 $tb_connector->addColumn('sent_connector_imapfolder_id',  'int');
