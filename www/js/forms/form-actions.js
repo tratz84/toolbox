@@ -319,16 +319,17 @@ jQuery(document).ready(function($) {
  * list-edit-form-widget event handling
  */
 $(document).ready(function() {
-	
 	$('.widget.list-edit-form-widget').each(function(index, node) {
-		
-		
 		var lefw = new ListEditFormWidget( node );
 		node.lefw = lefw;
-		
 	});
 	
-	
+	$(window).on('popup-container-created', function(evt, el) {
+		$(el).find('.widget.list-edit-form-widget').each(function(index, node) {
+			var lefw = new ListEditFormWidget( node );
+			node.lefw = lefw;
+		});
+	});
 });
 
 

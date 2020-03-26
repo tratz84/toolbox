@@ -216,6 +216,17 @@ function applyWidgetFields(container) {
 			paste_data_images: true
 		});
 	}
+	
+	$(container).find('.sortable-container').each(function(index, node) {
+		var opts = {};
+		
+		if ($(node).find('.handler-sortable').length) {
+			opts.handle = '.handler-sortable';
+		}
+		
+		$(node).sortable(opts);
+	});
+
 
 	handle_resetFieldButton( container );
 }
@@ -312,20 +323,6 @@ $(document).ready(function() {
 	submitForm.click(function() {
 		console.log(form);
 		form.submit();
-	});
-});
-
-
-
-$(document).ready(function() {
-	$('.sortable-container').each(function(index, node) {
-		var opts = {};
-		
-		if ($(node).find('.handler-sortable').length) {
-			opts.handle = '.handler-sortable';
-		}
-		
-		$(node).sortable(opts);
 	});
 });
 
@@ -737,6 +734,8 @@ function show_popup(url, opts) {
 			autoformat_fields( popup );
 			
 			applyWidgetFields( popup );
+			
+			$(window).trigger('popup-container-created', popup);
 			
 			if (opts.renderCallback)
 				opts.renderCallback(popup, data, xhr, textStatus);
