@@ -89,6 +89,12 @@ class formgeneratorController extends BaseController {
         }
         
         usort($this->forms, function($f1, $f2) {
+            // first sort on module-name
+            $c = strcmp($f1['module'], $f2['module']);
+            if ($c != 0)
+                return $c;
+            
+            // sort on form-name
             return strcmp($f1['form_name'], $f2['form_name']);
         });
         
