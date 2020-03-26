@@ -414,7 +414,7 @@ class ImapConnection {
                 $actions = $f->getActions();
                 
                 if (count($actions) == 0)
-                    return;
+                    return null;
                 
                 if ($actions[0]->getFilterAction() == 'move_to_folder') {
                     $connectorService = ObjectContainer::getInstance()->get(ConnectorService::class);
