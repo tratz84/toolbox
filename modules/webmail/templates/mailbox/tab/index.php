@@ -19,7 +19,7 @@
 		<div id="emailheader-table-container"></div>
 	</div>
 	<div id="mail-content" style="height: 500px; min-height: 500px;">
-		<iframe style="width:100%; height: 150%;" frameborder="0" sandbox="allow-popups"></iframe>
+		<iframe style="width:100%; height: 150%;" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox"></iframe>
 	</div>
 </div>
 
@@ -36,7 +36,6 @@ var it_webmail = new IndexTable('#emailheader-table-container', {
 });
 
 it_webmail.setRowClick(function(row, evt) {
-
 	$('#emailheader-table-container tr.active').removeClass('active');
 	$(row).addClass('active');
 
@@ -126,8 +125,14 @@ $(window).on('tabcontainer-item-click', function(e, f) {
 	if (tab_name != 'mail')
 		return;
 
-	// TODO: load mail
+	// load mail
 	it_webmail.load();
+
+	// set focus to search-field
+	setTimeout(function() {
+		$('.tab-mailbox-container [name=q]').focus();
+	}, 500);
+	
 });
 
 </script>

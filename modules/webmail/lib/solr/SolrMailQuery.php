@@ -3,11 +3,9 @@
 namespace webmail\solr;
 
 
-use base\service\CompanyService;
 use core\db\solr\SolrQuery;
 use core\forms\lists\ListResponse;
 use webmail\MailTabSettings;
-use base\service\PersonService;
 
 class SolrMailQuery extends SolrQuery {
     

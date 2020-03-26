@@ -15,7 +15,7 @@
 			
 		</div>
 		<div id="mail-content" style="" data-dont-overflow="1" data-height-in-percentage="<?= isset($state['slider-ratio'][0]) ? $state['slider-ratio'][1] : '' ?>">
-			<iframe style="width:100%; height: 150%;" frameborder="0" sandbox="allow-popups"></iframe>
+			<iframe style="width:100%; height: 150%;" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox"></iframe>
 		</div>
 	</div>
 </div>
@@ -41,10 +41,14 @@ var opts = {
 if (typeof less != 'undefined') {
 	less.pageLoadFinished.then(function() {
 		$('#mail-container .messages-content').horizontalSplitContainer( opts );
+
+		$('[name=q]').focus();
 	});
 } else {
 	$(document).ready(function() {
 		$('#mail-container .messages-content').horizontalSplitContainer( opts );
+		
+		$('[name=q]').focus();
 	});
 }
 
