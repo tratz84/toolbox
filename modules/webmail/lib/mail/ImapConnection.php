@@ -368,7 +368,7 @@ class ImapConnection {
                                 $folderName = 'INBOX';
                             }
                             
-                            call_user_func($this->callback_itemImported, $folderName, $results[$y], $file);
+                            call_user_func($this->callback_itemImported, $folderName, $results[$y], $file, true);
                         }
                     }
                 }
