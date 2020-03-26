@@ -1,6 +1,8 @@
 #!/usr/bin/php
 <?php
 
+die('deprecated, use webmail_importall.php <contextName> -u');
+
 
 use webmail\solr\SolrImportMail;
 

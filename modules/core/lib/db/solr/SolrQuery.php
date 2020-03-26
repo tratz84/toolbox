@@ -91,6 +91,20 @@ class SolrQuery {
         return new $this->responseClass($data, $this);
     }
     
+    public function commit() {
+        $url = $this->solrUrl . '/update?commit=true';
+        
+        $data = get_url($url);
+        
+        $json = @json_decode( $data );
+        
+        if ($json && isset($json->responseHeader->status) && $json->responseHeader->status == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
 }
 
 
