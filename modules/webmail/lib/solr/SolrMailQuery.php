@@ -50,6 +50,13 @@ class SolrMailQuery extends SolrQuery {
                 $qs[] = 'toEmail:'.$v;
                 $qs[] = 'fromEmail:'.$v;
             }
+            
+            if ($filter['filter_type'] == 'folder') {
+                $v = solr_escapePhrase( trim($filter['filter_value']) );
+                
+                $qs[] = 'mailboxName:'.$v;
+            }
+            
         }
         
         // append query to current query
