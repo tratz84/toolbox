@@ -9,11 +9,16 @@ if (count($argv) != 2) {
     exit;
 }
 
-// move to cwd
-chdir(dirname(__FILE__));
+// move to root
+chdir(__DIR__.'/../../../');
 
 // bootstrap
-include '../config/config.php';
+include 'config/config.php';
+
+if (count($argv) != 2) {
+    die("Usage: importsolr.php <environment-name>\n");
+}
+
 $contextName = $argv[1];
 bootstrapCli($contextName);
 

@@ -1,6 +1,11 @@
 #!/usr/bin/php
 <?php
 
+/**
+ * modules/webmail/bin/webmail_connector.php - monitors mailboxes for given contextname
+ * 
+ */
+
 
 use core\ObjectContainer;
 use webmail\mail\ImapMonitor;
@@ -13,11 +18,10 @@ if (count($argv) != 2) {
     exit;
 }
 
-// move to cwd
-chdir(dirname(__FILE__));
-
 // bootstrap
-include '../config/config.php';
+chdir(__DIR__.'/../../../');
+include 'config/config.php';
+
 $contextName = $argv[1];
 bootstrapCli($contextName);
 
@@ -105,7 +109,7 @@ while (true) {
     $cnt = ($cnt+1) % (DEBUG?1:20);
 }
 
-
+// shouldn't be reached
 print "Done.. :)\n";
 
 

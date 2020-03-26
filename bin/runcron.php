@@ -1,6 +1,11 @@
 #!/usr/bin/env php
 <?php
 
+/**
+ * bin/runcron.php - run's crontab-jobs for ALL environments/cusotmers
+ * 
+ */
+
 use admin\service\AdminCustomerService;
 use core\ObjectContainer;
 

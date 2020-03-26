@@ -75,3 +75,6 @@ foreach($cs as $c) {
     
     $solrImportMail->purge( true );
 }
+
+
+
