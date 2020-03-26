@@ -21,6 +21,7 @@ class TextField extends BaseWidget {
     }
     
     public function showPlaceholder() { $this->placeholder = true; }
+    public function setPlaceholder($str) { $this->options['placeholder'] = $str; }
     
     public function render() {
         $this->setAttribute('type', 'text');

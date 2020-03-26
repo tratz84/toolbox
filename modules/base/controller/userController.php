@@ -27,6 +27,20 @@ class userController extends FormController {
         $this->addTitle(t('Overview users'));
     }
     
+    public function action_edit($opts = array()) {
+        parent::action_edit(['render' => false]);
+        
+        
+        if ($this->object->getPassword() != '') {
+            $this->form->getWidget('password')->setPlaceholder( t('Password set') );
+        } else {
+            $this->form->getWidget('password')->setPlaceholder( t('No password set') );
+        }
+        
+        
+        return $this->render();
+    }
+    
 }
 
 

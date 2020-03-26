@@ -13,18 +13,32 @@ class PasswordField extends BaseWidget {
         
     }
     
+    public function setPlaceholder($str) { $this->options['placeholder'] = $str; }
     
     public function render() {
-        $html = '';
         
-        $extraClass = $this->hasError() ? 'error' : '';
+        $this->setAttribute('type', 'password');
         
-        $html .= '<div class="widget text-field-widget '.$extraClass.'">';
-        $html .= '<label>'.esc_html($this->getLabel()).'</label>';
-        $html .= '<input type="password" autocomplete="new-password" name="'.esc_attr($this->getName()).'" value="" />';
-        $html .= '</div>';
+        if ($this->hasError()) {
+            $this->addContainerClass('error');
+        }
         
-        return $html;
+        if (isset($this->options['placeholder']) && $this->options['placeholder']) {
+            $this->setAttribute('placeholder', $this->options['placeholder']);
+        }
+        
+        if (isset($this->options['maxlength']) && is_numeric($this->options['maxlength'])) {
+            $this->setAttribute('maxlength', $this->options['maxlength']);
+        }
+        if (isset($this->options['readonly'])&&$this->options['readonly']) {
+            $this->setAttribute('readonly', 'readonly');
+        }
+        
+        $this->setAttribute('autocomplete', 'new-password');
+        
+        $this->setAttribute('value', '');//$this->getValue());
+        
+        return parent::render();
     }
     
     
