@@ -46,6 +46,13 @@ class connectorController extends BaseController {
         $connectorForm->bind($connector);
         $connectorForm->getWidget('password')->setValue('');
         
+        if ($connector->getPassword()) {
+            $connectorForm->getWidget('password')->setPlaceholder( t('Password set') );
+        } else {
+            $connectorForm->getWidget('password')->setPlaceholder( t('No password set') );
+        }
+        
+        
         if (is_post()) {
             $connectorForm->bind($_REQUEST);
             
