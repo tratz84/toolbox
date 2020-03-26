@@ -128,6 +128,10 @@ $(window).on('tabcontainer-item-click', function(e, f) {
 	// load mail
 	it_webmail.load();
 
+	$(window).on('webmail-reload', function() {
+		it_webmail.load();
+	});
+
 	// set focus to search-field
 	setTimeout(function() {
 		$('.tab-mailbox-container [name=q]').focus();

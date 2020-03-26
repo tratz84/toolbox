@@ -32,7 +32,7 @@ function mailTabSettingsSave_Click() {
 
 			close_popup();
 
-			it_webmail.load();
+			$(window).trigger('webmail-reload');
 		}
 	});
 	
