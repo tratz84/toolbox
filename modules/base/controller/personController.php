@@ -39,6 +39,7 @@ class personController extends FormController {
     
     public function action_edit($opts=array()) {
         $r = parent::action_edit(array(
+            'stay_after_save' => true,
             'render' => false,
             'return_on_object_deleted' => 'not_found'
         ));

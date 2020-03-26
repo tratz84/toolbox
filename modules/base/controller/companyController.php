@@ -77,9 +77,11 @@ class companyController extends BaseController {
             
             
             if ($companyForm->validate()) {
-                $companyService->save($companyForm);
+                $companyId = $companyService->save($companyForm);
                 
-                redirect('/?m=base&c=company');
+                report_user_message(t('Changes saved'));
+                
+                redirect('/?m=base&c=company&a=edit&company_id='.$companyId);
             }
             
         }

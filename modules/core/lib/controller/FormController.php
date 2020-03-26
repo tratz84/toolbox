@@ -74,9 +74,19 @@ class FormController extends BaseController {
             
             if ($form->validate()) {
                 $save_func = $this->serviceFuncSave;
-                $service->{$save_func}($form);
+                $r = $service->{$save_func}($form);
                 
-                redirect('/?m='.$this->getModuleName().'&c='.$this->getControllerPath());
+                $objId = null;
+                if (is_numeric($r)) {
+                    $objId = $r;
+                }
+                
+                if (isset($opts['stay_after_save']) && $opts['stay_after_save'] && $objId != null) {
+                    report_user_message(t('Changed saved'));
+                    redirect('/?m='.$this->getModuleName().'&c='.$this->getControllerPath().'&a=edit&'.$this->varNameId.'='.$objId);
+                } else {
+                    redirect('/?m='.$this->getModuleName().'&c='.$this->getControllerPath());
+                }
             }
         }
         
