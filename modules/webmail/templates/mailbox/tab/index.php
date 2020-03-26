@@ -129,7 +129,7 @@ $(window).on('tabcontainer-item-click', function(e, f) {
 	it_webmail.load();
 
 	$(window).on('webmail-reload', function() {
-		it_webmail.load();
+		it_webmail.load( { force: true } );
 	});
 
 	// set focus to search-field

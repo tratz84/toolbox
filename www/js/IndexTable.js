@@ -129,14 +129,21 @@ function IndexTable( container, opts ) {
 		this.columns.sort(function(o1, o2) { return o1.pos - o2.pos });
 	};
 	
-	this.load = function() {
+	/**
+	 * load() - (re)load table
+	 * 			opts.force = force reload
+	 */
+	this.load = function( opts ) {
+		opts = opts ? opts : { };
+		opts.force = opts.force ? true : false;
+		
 		if (this.loading == true) return;
 		
 		this.loading = true;
 		$('.load-more').remove();
 		
 		
-		if (this.opts.autoloadNext && this.listResponse != null && this.listResponse.objects.length == 0) {
+		if (opts.force == false && this.opts.autoloadNext && this.listResponse != null && this.listResponse.objects.length == 0) {
 			this.loading = false;
 			return;
 		}
