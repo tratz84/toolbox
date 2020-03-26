@@ -1,5 +1,11 @@
 #!/usr/bin/env php
 <?php
+/**
+ * make-release.php
+ * 
+ * - makes copy in given folder with only the activated modules bundled
+ * 
+ */
 
 include dirname(__FILE__).'/../config/config.php';
 
