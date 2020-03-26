@@ -39,6 +39,11 @@ function is_debug() {
     }
 }
 
+/** @return \core\Context */
+function ctx() {
+    return \core\Context::getInstance();
+}
+
 
 function is_admin_context() {
     if (defined('ADMIN_CONTEXT') && ADMIN_CONTEXT == true) {
