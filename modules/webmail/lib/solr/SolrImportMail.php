@@ -280,7 +280,7 @@ class SolrImportMail {
     public function importFolder( $dir ) {
         $files = list_files($dir, ['fileonly' => true, 'recursive' => true]);
         
-        for($x=0; $x < count($files); $x++) {
+        if (is_array($files)) for($x=0; $x < count($files); $x++) {
             if (file_extension($files[$x]) == 'eml') {
                 
                 if ($this->updateMode) {
