@@ -186,11 +186,21 @@ class ImapConnection {
             }
             
             for($y=0; $y < count($results); $y++) {
-                $this->saveMessage($folderName, $results[$y], $x+$y);
+                $mp = $this->buildMessageProperties($folderName, $results[$y]);
+                $emlfile = $this->determineEmailPath( $results[$y] );
                 
-                $emlfile = $this->determineEmailPath($results[$y]);
+                // check if mail (properties) are changed
+                $data_mp = json_encode($mp);
+//                 print $data_mp . "\n";
+//                 print "$emlfile\n";
+                $changed = $this->messagePropertiesChanged($emlfile.'.properties', $data_mp);
+                if ($changed) {
+                    $this->saveMessage($folderName, $results[$y], $x+$y);
+                    
+                }
                 
-                call_user_func($this->callback_itemImported, $folderName, $results[$y], $emlfile);
+                // callback (probably Solr-import)
+                call_user_func($this->callback_itemImported, $folderName, $results[$y], $emlfile, $changed);
             }
             
             imap_gc($this->imap, IMAP_GC_ELT | IMAP_GC_ENV | IMAP_GC_TEXTS);
@@ -213,19 +223,8 @@ class ImapConnection {
         return $file;
     }
     
-    /**
-     * returns filename if new , else true/false
-     */
-    protected function saveMessage($folderName, $overview, $seqNo) {
-        $file = $this->determineEmailPath($overview);
-        
-        if (is_dir(dirname($file)) == false) {
-            if (mkdir(dirname($file), 0755, true) == false) {
-                return false;
-            }
-        }
-        
-        
+    
+    public function buildMessageProperties($folderName, $overview) {
         // $mp = message-properties
         $mp = array();
         $mp['folder']     = $folderName;
@@ -242,13 +241,27 @@ class ImapConnection {
         $mp['seen']       = @$overview->seen;
         $mp['draft']      = @$overview->draft;
         
+        return $mp;
+    }
+    
+    /**
+     * returns filename if new , else true/false
+     */
+    protected function saveMessage($folderName, $overview, $seqNo) {
+        $file = $this->determineEmailPath($overview);
         
-        // check if props are changed before saving?
-        $data_mp = json_encode($mp);
-        if ($this->messagePropertiesChanged($file.'.properties', $data_mp)) {
-            file_put_contents($file . '.properties', json_encode($mp));
+        if (is_dir(dirname($file)) == false) {
+            if (mkdir(dirname($file), 0755, true) == false) {
+                return false;
+            }
         }
         
+        $mp = $this->buildMessageProperties($folderName, $overview);
+        
+        // props changed?
+        file_put_contents($file . '.properties', json_encode($mp));
+        
+        // mail/eml itself won't ever change. Only it's overhead (that's put into the .properties-file)
         if (file_exists($file)) {
             return false;
         }
@@ -267,6 +280,10 @@ class ImapConnection {
         }
         
         $r = fwrite($fh, $str);
+        if ($r != strlen($str)) {
+            // TODO: handle this?  skip? disk full?
+        }
+        
         fclose($fh);
         
         imap_gc($this->imap, IMAP_GC_ELT | IMAP_GC_ENV | IMAP_GC_TEXTS);
@@ -278,7 +295,7 @@ class ImapConnection {
         $chksum = crc32_int32($data);
         
         if ($this->messagePropertyChecksums === null) {
-            $f = module_file('webmail', 'webmail/message-checksums');
+            $f = get_data_file('webmail/message-checksums');
             if ($f)
                 $this->messagePropertyChecksums = unserialize( file_get_contents( $f ) );
         }

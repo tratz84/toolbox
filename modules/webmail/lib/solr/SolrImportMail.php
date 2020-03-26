@@ -294,7 +294,7 @@ class SolrImportMail {
             }
         }
         
-        // force queue files to update
+        // empty update-queue
         if ($this->updateMode) {
             $this->updateEml(null, true);
         }
