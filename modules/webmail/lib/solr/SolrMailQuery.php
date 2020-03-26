@@ -3,8 +3,11 @@
 namespace webmail\solr;
 
 
+use base\service\CompanyService;
 use core\db\solr\SolrQuery;
 use core\forms\lists\ListResponse;
+use webmail\MailTabSettings;
+use base\service\PersonService;
 
 class SolrMailQuery extends SolrQuery {
     
@@ -16,27 +19,40 @@ class SolrMailQuery extends SolrQuery {
         
         $ctx = \core\Context::getInstance();
         
+        $this->setSort('date desc');
         $this->addFacetSearch('contextName', ':', $ctx->getContextName());
     }
     
     
-    public function setMailTabSettings( $mailtabSettings ) {
-        if (isset($mailtabSettings['email']) == false)
-            return;
+    public function setMailTabSettings( MailTabSettings $mailtabSettings ) {
         
-        // build query
         $qs = array();
-        foreach($mailtabSettings['email'] as $e) {
-            $e = trim($e);
-            
-            if (strpos($e, '@') === 0) {
-                $e = '*'.$e;
-            }
-            
-            $qs[] = 'toEmail:'.solr_escapeTerm($e);
-            $qs[] = 'fromEmail:'.solr_escapeTerm($e);
+        
+        // apply default filter(s)? (e-mailadresses linked to company/person)
+        
+        $filters = $mailtabSettings->getFilters();
+        
+        if ($mailtabSettings->applyDefaultFilters()) {
+            $defaultFilters = $mailtabSettings->getDefaultFilters();
+            $filters = array_merge($filters, $defaultFilters);
         }
         
+        // other filters specified?
+        foreach($filters as $filter) {
+            if ($filter['filter_type'] == 'email') {
+                $v = solr_escapeTerm( trim($filter['filter_value']) );
+                // unescape asterisks
+                $v = str_replace('\\*', '*', $v);
+                
+                // @domainname.com? => prefix with asterisk
+                if (strpos($v, '@') === 0) {
+                    $v = '*'.$v;
+                }
+                
+                $qs[] = 'toEmail:'.$v;
+                $qs[] = 'fromEmail:'.$v;
+            }
+        }
         
         // append query to current query
         if (count($qs)) {
@@ -51,16 +67,6 @@ class SolrMailQuery extends SolrQuery {
     
     
     public function searchListResponse() {
-        if (!$this->getSort()) {
-            if ($this->query == '*:*') {
-                $this->setSort('date desc');
-            } else {
-                $this->setSort('score desc, date desc');
-            }
-            
-        }
-        
-        
         /** @var SolrMailQueryResponse $msqr */
         $msqr = $this->search();
         

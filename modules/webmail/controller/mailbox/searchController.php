@@ -4,6 +4,7 @@ use core\controller\BaseController;
 use webmail\solr\SolrMailQuery;
 use base\service\MetaService;
 use core\forms\lists\ListResponse;
+use webmail\MailTabSettings;
 
 class searchController extends BaseController {
 
@@ -25,21 +26,19 @@ class searchController extends BaseController {
         $mailtabSettings = @json_decode( get_var('mailtabSettings', true) );
         if (is_object($mailtabSettings)) $mailtabSettings = (array)$mailtabSettings;
         
-	    if (is_post()) {
-	        // check if mailtabSettings is set
-	        $emptyResult = false;
-	        if ($mailtabSettings == false) {
-	            $emptyResult = true;
-	        } if (is_array($mailtabSettings)) {
-	            if (count($mailtabSettings) == 0) {
-	                $emptyResult = true;
-	            }
-	            if (isset($mailtabSettings['email']) && count($mailtabSettings['email']) == 0) {
-	                $emptyResult = true;
-	            }
-	        }
-	        
-	        if ($emptyResult) {
+        $mts = null;
+        if (get_var('mailtab')) {
+            $companyId = get_var('company_id');
+            $personId = get_var('person_id');
+            
+            $mts = new MailTabSettings($companyId, $personId);
+            
+	        // no filters? => don't show anything..
+            if (
+                ($mts->applyDefaultFilters() == false && $mts->getFilterCount() == 0)
+                    ||
+                ($mts->applyDefaultFilters() == true && count($mts->getDefaultFilters()) == 0 && $mts->getFilterCount() == 0)
+                ) {
 	            return $this->json([
 	                'listResponse' => new ListResponse(0, 0, 0, [])
 	            ]);
@@ -57,8 +56,12 @@ class searchController extends BaseController {
 	    
 	    if (get_var('q')) {
 	        $smq->setQuery( get_var('q') );
+            $smq->setSort('score desc, date desc');
+	        
 	    }
-        $smq->setMailTabSettings( $mailtabSettings );
+	    if ($mts) {
+            $smq->setMailTabSettings( $mts );
+	    }
 	    
 	    try {
     	    $lr = $smq->searchListResponse();

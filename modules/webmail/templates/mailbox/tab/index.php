@@ -7,7 +7,13 @@
 			<div class="toolbox">
 				<a href="javascript:void(0);" onclick="mailboxTabSettings_Click();" class="fa fa-cog"></a>
 			</div>
-			<input type="hidden" name="mailtabSettings" value="<?= esc_json_attr($mailtabSettings) ?>" />
+			<input type="hidden" name="mailtab" value="1" />
+			<?php if (isset($companyId)) : ?>
+			<input type="hidden" name="company_id" value="<?= esc_attr($companyId) ?>" />
+			<?php endif; ?>
+			<?php if (isset($personId)) : ?>
+			<input type="hidden" name="person_id" value="<?= esc_attr($personId) ?>" />
+			<?php endif; ?>
 			<input type="text" name="q" placeholder="Search" style="width: calc(100% - 50px);" />
 		</div>
 		<div id="emailheader-table-container"></div>
@@ -105,7 +111,8 @@ function mailboxTabSettings_Click() {
 
 	show_popup(appUrl('/?m=webmail&c=mailbox/tab&a=settings'), {
 		data: {
-			mailtabSettings: $('#mailtabSettings').val()
+			companyId: <?= json_encode(isset($companyId) ? $companyId : null) ?>,
+    		personId:  <?= json_encode(isset($personId)  ? $personId  : null) ?>
 		}
 	});
 	
