@@ -2,7 +2,50 @@
 
 use core\db\TableModel;
 
+// TODO: unique key constraints
+
 $tbs = array();
+
+$tb_mlog = new TableModel('mailing', 'log');
+$tb_mlog->addColumn('log_id',      'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_mlog->addColumn('template_id', 'int');
+$tb_mlog->addColumn('from_name',   'varchar(255)');
+$tb_mlog->addColumn('from_email',  'varchar(255)');
+$tb_mlog->addColumn('log_to',      'text');
+$tb_mlog->addColumn('log_cc',      'text');
+$tb_mlog->addColumn('log_bcc',     'text');
+$tb_mlog->addColumn('subject',     'varchar(512)');
+$tb_mlog->addColumn('content',     'text');
+$tb_mlog->addColumn('created',     'datetime');
+$tbs[] = $tb_mlog;
+
+
+$tb_mtemplate = new TableModel('mailing', 'template');
+$tb_mtemplate->addColumn('template_id',   'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_mtemplate->addColumn('template_code', 'varchar(64)');
+$tb_mtemplate->addColumn('name',          'varchar(255)');
+$tb_mtemplate->addColumn('from_name',     'varchar(255)');
+$tb_mtemplate->addColumn('from_email',    'varchar(255)');
+$tb_mtemplate->addColumn('subject',       'varchar(512)');
+$tb_mtemplate->addColumn('content',       'text');
+$tb_mtemplate->addColumn('active',        'boolean');
+$tb_mtemplate->addColumn('sort',          'int');
+$tb_mtemplate->addColumn('edited',        'datetime');
+$tb_mtemplate->addColumn('created',       'datetime');
+$tb_mtemplate->addIndex('template_code', array('template_code'), ['unique' => true]);
+$tbs[] = $tb_mtemplate;
+
+
+$tb_mtemplateto = new TableModel('mailing', 'template_to');
+$tb_mtemplateto->addColumn('template_to_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_mtemplateto->addColumn('template_id',    'int');
+$tb_mtemplateto->addColumn('to_type',        "enum('To','Cc','Bcc')");
+$tb_mtemplateto->addColumn('to_name',        'varchar(255)');
+$tb_mtemplateto->addColumn('to_email',       'varchar(255)');
+$tb_mtemplateto->addColumn('sort',           'int');
+$tbs[] =$tb_mtemplateto;
+
+
 
 $tb_connector = new TableModel('webmail', 'connector');
 $tb_connector->addColumn('connector_id',                  'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
@@ -11,7 +54,7 @@ $tb_connector->addColumn('description',                   'varchar(255)');
 $tb_connector->addColumn('connector_type',                'varchar(16)');
 $tb_connector->addColumn('hostname',                      'varchar(255)');
 $tb_connector->addColumn('port',                          'int');
-$tb_connector->addColumn('username',                      'varchar(255)');
+$tb_connector->addColumn('usernamae',                      'varchar(255)');
 $tb_connector->addColumn('password',                      'varchar(255)');
 $tb_connector->addColumn('nextrun_fullimport',            'boolean');
 $tb_connector->addColumn('sent_connector_imapfolder_id',  'int');
@@ -72,7 +115,7 @@ $tb_eet = new TableModel('webmail', 'email_email_tag');
 $tb_eet->addColumn('email_email_tag_id',                'bigint', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
 $tb_eet->addColumn('email_id', 'int');
 $tb_eet->addColumn('email_tag_id', 'int');
-// TODO: check, $tb_eet->addIndex('uc_email_id_tag_id', array('email_id', 'email_tag_id'), ['unique' => true]);
+$tb_eet->addIndex('uc_email_id_tag_id', array('email_id', 'email_tag_id'), ['unique' => true]);
 $tb_eet->addIndex('webmail__email_email_tag_ibfk_2', array('email_tag_id'));
 // TODO: CONSTRAINT `webmail__email_email_tag_ibfk_1` FOREIGN KEY (`email_id`) REFERENCES `webmail__email` (`email_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
 // CONSTRTODO: AINT `webmail__email_email_tag_ibfk_2` FOREIGN KEY (`email_tag_id`) REFERENCES `webmail__email_tag` (`email_tag_id`) ON DELETE CASCADE ON UPDATE RESTRICT
@@ -164,6 +207,6 @@ $tb_identity->addIndex('webmail__identity_ibfk_1', array('connector_id'));
 $tbs[] = $tb_identity;
 
 
-// TODO: return $tbs;
+// return $tbs;
 return null;
 

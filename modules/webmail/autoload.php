@@ -13,10 +13,11 @@ use webmail\service\ConnectorService;
 
 Context::getInstance()->enableModule('webmail');
 
+// core\db\mysql\MysqlTableGenerator::updateModule('webmail', true);
+// die('done');
+
 module_update_handler('webmail', '20200319');
 
-// core\db\mysql\MysqlTableGenerator::updateModule('webmail', true);
-// exit;
 
 $eb = ObjectContainer::getInstance()->get(EventBus::class);
 
