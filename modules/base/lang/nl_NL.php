@@ -50,6 +50,7 @@ $lang['Choose Widgets']         = 'Widgets kiezen';
 
 $lang['Are you sure to delete this record?'] = 'Weet u zeker dat u dit record wilt verwijderen?';
 $lang['Are you sure?']          = 'Weet je het zeker?';
+$lang['Are you sure to delete this record:'] = 'Weet u zeker dat u dit record wilt verwijderen:';
 
 // cronList
 $lang['Scheduled tasks']        = 'Ingeplande taken';

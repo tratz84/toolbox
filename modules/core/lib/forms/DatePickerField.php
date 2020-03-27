@@ -6,6 +6,8 @@ class DatePickerField extends BaseWidget {
     
     protected $placeholder = false;
     
+    protected $showWeeks = false;
+    
     
     public function __construct($name, $value=null, $label=null) {
         
@@ -16,7 +18,7 @@ class DatePickerField extends BaseWidget {
     }
     
     public function showPlaceholder() { $this->placeholder = true; }
-    
+    public function setShowWeeks($bln) { $this->showWeeks = $bln; }
     
     public function getValue() {
         $v = parent::getValue();
@@ -64,6 +66,10 @@ class DatePickerField extends BaseWidget {
         
         if (isset($this->options['readonly'])&&$this->options['readonly']) {
             $this->setAttribute('readonly', 'readonly');
+        }
+        
+        if ($this->showWeeks) {
+            $this->setAttribute('data-show-weeks', 1);
         }
         
         $this->setAttribute('class', 'input-pickadate reset-field-button');

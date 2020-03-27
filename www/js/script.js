@@ -101,11 +101,16 @@ function applyWidgetFields(container) {
 			$(node).attr("autocomplete", "off");
 			$( $(node).parent() ).css('position', 'relative');
 			$( $(node).parent() ).css('overflow', 'visible');
-			$(node).datetimepicker({
+			
+			var pickerSettings = {
 				locale: 'nl',
 				format: 'DD-MM-YYYY',
 				useCurrent: false
-			});
+			};
+
+			if ($(node).data('show-weeks') ) pickerSettings.calendarWeeks = true;
+
+			$(node).datetimepicker( pickerSettings );
 			
 			$(node).on('dp.show', function() {
 				$(this).data('date-value', this.value);
@@ -497,7 +502,7 @@ function handle_deleteConfirmation_event(evt) {
 	if ($(this).data('confirmationMessage')) {
 		deleteText = $(this).data('confirmationMessage');
 	} else if ($(this).data('description')) {
-		deleteText = 'Weet u zeker dat u "'+$(this).data('description')+'" wilt verwijderen?';
+		deleteText = _('Are you sure to delete this record:')+' "'+$(this).data('description')+'" ?';
 	}
 	
 	
