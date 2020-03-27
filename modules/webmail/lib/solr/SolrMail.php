@@ -41,7 +41,8 @@ class SolrMail {
             return null;
         }
         
-        $dt = new \DateTime($this->jsonMail->date, new \DateTimeZone('Europe/Amsterdam'));
+        $dt = new \DateTime($this->jsonMail->date);
+        $dt->setTimezone(new \DateTimeZone('Europe/Amsterdam'));
         
         return $dt->format('Y-m-d H:i:s');
     }
