@@ -15,6 +15,7 @@ use webmail\model\FilterConditionDAO;
 use webmail\model\FilterActionDAO;
 use webmail\form\FilterForm;
 use webmail\model\Filter;
+use core\exception\DatabaseException;
 
 class ConnectorService extends ServiceBase {
     
@@ -106,7 +107,7 @@ class ConnectorService extends ServiceBase {
         
         if (!$connector->save()) {
             // exception would also be on it's place
-            return false;
+            throw new DatabaseException('Error saving Connector');
         }
         
         $arrImapfolders = $form->getWidgetValue('imapfolders');
@@ -117,9 +118,18 @@ class ConnectorService extends ServiceBase {
         $imapfolders = array();
         if (is_array($arrImapfolders)) {
             for($x=0; $x < count($arrImapfolders); $x++) {
+                // lookup existing ID
+                $imapfolder_db_id = null;
+                foreach($imapfoldersInDb as $ifdb) {
+                    if ($ifdb->getFolderName() == $arrImapfolders[$x]) {
+                        $imapfolder_db_id = $ifdb->getConnectorImapfolderId();
+                        break;
+                    }
+                }
+                
                 $i = $arrImapfolders[$x];
                 $imapfolders[] = array(
-                    'connector_imapfolder_id' => isset($imapfoldersInDb[$x]) ? $imapfoldersInDb[$x]->getConnectorImapfolderId() : null,
+                    'connector_imapfolder_id' => $imapfolder_db_id,
                     'folderName' => $i,
                     'active' => is_array($arrSelectedImapfolders) && in_array($i, $arrSelectedImapfolders) ? '1' : '0'
                 );
@@ -140,6 +150,8 @@ class ConnectorService extends ServiceBase {
         
         $cifDao = new ConnectorImapfolderDAO();
         $cifDao->mergeFormListMTO1('connector_id', $connector->getConnectorId(), $imapfolders);
+        
+        return $connector->getConnectorId();
     }
     
     

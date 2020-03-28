@@ -35,6 +35,7 @@ class connectorController extends BaseController {
     public function action_edit() {
         $id = isset($_REQUEST['connector_id'])?(int)$_REQUEST['connector_id']:0;
         
+        /** @var ConnectorService $connectorService */
         $connectorService = $this->oc->get(ConnectorService::class);
         if ($id) {
             $connector = $connectorService->readConnector($id);
@@ -57,9 +58,10 @@ class connectorController extends BaseController {
             $connectorForm->bind($_REQUEST);
             
             if ($connectorForm->validate()) {
-                $connectorService->saveConnector($connectorForm);
+                $connectorId = $connectorService->saveConnector($connectorForm);
                 
-                redirect('/?m=webmail&c=connector');
+                report_user_message(t('Changes saved'));
+                redirect('/?m=webmail&c=connector&a=edit&connector_id='.$connectorId);
             }
         }
         
