@@ -232,6 +232,15 @@ class FormGenerator {
             
             $html .= ($parentVariable?$parentVariable:'$this').'->addWidget( '.$varname.' );' . PHP_EOL;
             
+            // editor set? => check generateExtraSetters()-function
+            if (@$item->data->editor) {
+                $editorClass = $item->data->editor;
+                $editorObject = new $editorClass();
+                $editorObject->bind( (array)$item->data );
+                $html .= $editorObject->generateExtraSetters( $varname );
+            }
+            
+            
             if (@$item->data->info_text) {
                 $html .= $varname.'->setInfoText( '.var_export($item->data->info_text, true).' );' . PHP_EOL;
             }

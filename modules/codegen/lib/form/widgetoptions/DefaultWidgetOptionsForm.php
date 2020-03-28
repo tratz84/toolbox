@@ -22,4 +22,8 @@ class DefaultWidgetOptionsForm extends BaseForm {
         $this->addWidget(new TextField('info_text', '', 'Info-text'));
     }
     
+    public function generateExtraSetters( $varname ) {
+        return '';
+    }
+    
 }

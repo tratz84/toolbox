@@ -12,6 +12,7 @@ use core\forms\WidgetContainer;
 use core\forms\HtmlField;
 use codegen\form\widgetoptions\DefaultWidgetOptionsForm;
 use codegen\form\widgetoptions\CheckboxOptionsForm;
+use codegen\form\widgetoptions\DatePickerOptionsForm;
 use codegen\form\widgetoptions\ContainerOptionsForm;
 use codegen\form\widgetoptions\SelectOptionsForm;
 use codegen\form\widgetoptions\HiddenOptionsForm;
@@ -23,6 +24,9 @@ use core\forms\TextareaField;
 use base\forms\CustomerSelectWidget;
 use core\forms\RadioField;
 use codegen\form\widgetoptions\RadioOptionsForm;
+use core\forms\ListEditWidget;
+use core\forms\ListWidget;
+use core\forms\DatePickerField;
 
 class GeneratorHelper {
     
@@ -146,6 +150,12 @@ class GeneratorHelper {
         );
         $formWidgets[] = array(
             'type' => 'widget',
+            'class' => DatePickerField::class,
+            'editor' => DatePickerOptionsForm::class,
+            'label' => 'DatePicker'
+        );
+        $formWidgets[] = array(
+            'type' => 'widget',
             'class' => SelectField::class,
             'editor' => SelectOptionsForm::class,
             'label' => 'Select'
@@ -195,6 +205,26 @@ class GeneratorHelper {
             if (isset($formWidgets[$x]['type']) == false)
                 $formWidgets[$x]['type'] = 'widget';
         }
+
+        // sort, containers on top, ListEdit bottom, Widgets in the middel, sorted by name
+        usort($formWidgets, function($o1, $o2) {
+            if (endsWith($o1['type'], 'container') == true && endsWith($o2['type'], 'container') == false) {
+                return -1;
+            }
+            if (endsWith($o1['type'], 'container') == false && endsWith($o2['type'], 'container') == true) {
+                return 1;
+            }
+            
+            if (endsWith($o1['class'], 'ListEdit') == true && endsWith($o2['class'], 'ListEdit') == false) {
+                return 1;
+            }
+            if (endsWith($o1['class'], 'ListEdit') == false&& endsWith($o2['class'], 'ListEdit') == true) {
+                return -1;
+            }
+            
+            return strcmp($o1['label'], $o2['label']);
+            
+        });
         
         return $formWidgets;
     }
