@@ -153,7 +153,8 @@ t.load();
 
 function markMailAsSpam(email_id) {
 	$.ajax({
-		url: appUrl('/?m=webmail&c=mailbox&mail&a=mark_as_spam'),
+		url: appUrl('/?m=webmail&c=mailbox/mail&a=mark_as_spam'),
+		type: 'POST',
 		data: {
 			email_id: email_id
 		},
