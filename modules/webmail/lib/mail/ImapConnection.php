@@ -51,7 +51,7 @@ class ImapConnection {
         $ic->setUsername($c->getUsername());
         $ic->setPassword($c->getPassword());
         
-        $this->connector = $c;
+        $ic->setConnector($c);
         
         return $ic;
     }
@@ -69,6 +69,8 @@ class ImapConnection {
     public function setPassword($p) { $this->password = $p; }
     public function getPassword( ) { return $this->password; }
     
+    public function setConnector($c) { $this->connector = $c; }
+    public function getConnector() { return $this->connector; }
     
     public function getErrors() { return $this->errors; }
     
