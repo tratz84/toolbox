@@ -6,6 +6,7 @@
 use core\controller\BaseController;
 use webmail\mail\SolrMailActions;
 use webmail\solr\SolrMailQuery;
+use core\exception\ObjectNotFoundException;
 
 class mailController extends BaseController {
    
@@ -59,6 +60,11 @@ class mailController extends BaseController {
         
         try {
             $mail = $smq->readById( get_var('id') );
+            
+            if (!$mail) {
+                throw new ObjectNotFoundException('Mail not found');
+            }
+            
             
             $ma = new SolrMailActions();
             $ma->markAsSpam($mail);
