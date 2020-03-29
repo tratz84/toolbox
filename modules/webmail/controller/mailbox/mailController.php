@@ -59,7 +59,7 @@ class mailController extends BaseController {
         $smq = object_container_create(SolrMailQuery::class);
         
         try {
-            $mail = $smq->readById( get_var('id') );
+            $mail = $smq->readById( get_var('email_id') );
             
             if (!$mail) {
                 throw new ObjectNotFoundException('Mail not found');
