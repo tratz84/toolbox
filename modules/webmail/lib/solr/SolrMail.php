@@ -90,6 +90,7 @@ class SolrMail {
     public function getProperties() {
         if ($this->properties === null) {
             $this->properties = new MailProperties( $this->getEmlFile() );
+            $this->properties->load();
         }
         
         return $this->properties;

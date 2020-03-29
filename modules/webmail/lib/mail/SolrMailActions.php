@@ -5,6 +5,8 @@ namespace webmail\mail;
 use webmail\model\Connector;
 use webmail\service\ConnectorService;
 use webmail\solr\SolrMail;
+use webmail\solr\SolrMailQuery;
+use webmail\solr\SolrImportMail;
 
 class SolrMailActions {
     
@@ -50,7 +52,7 @@ class SolrMailActions {
             /** @var ConnectorService $connectorService */
             $connectorService = object_container_get(ConnectorService::class);
             /** @var \webmail\model\Connector $connector */
-            $connector = $connectorService->readConnector($props['connectorId']);
+            $connector = $connectorService->readConnector( $mailProperties->getConnectorId() );
         }
         
         if (!$connector)
@@ -95,7 +97,15 @@ class SolrMailActions {
         if ($this->imapConnection->moveMailByUid($props->getUid(), $props->getFolder(), $if->getFolderName())) {
             $solrMail->setProperty('folder', $if->getFolderName());
             $solrMail->saveProperties();
+            
+            // update solr
+            $su = new SolrImportMail( WEBMAIL_SOLR );
+            $su->updateDoc($solrMail->getId(),
+                [
+                'mailboxName' => 'Junk'
+            ]);
         }
+        
         
         
     }

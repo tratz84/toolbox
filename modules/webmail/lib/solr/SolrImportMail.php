@@ -6,6 +6,7 @@ namespace webmail\solr;
 use core\exception\SolrException;
 use core\parser\HtmlParser;
 use webmail\mail\MailProperties;
+use core\db\solr\SolrQueryResponse;
 
 
 class SolrImportMail {
@@ -265,6 +266,27 @@ class SolrImportMail {
         $this->documents = array();
     }
     
+    
+    public function updateDoc($id, $doc) {
+        $sq = new \core\db\solr\SolrQuery( $this->solrUrl );
+        $sq->addFacetSearch('contextName', ':', ctx()->getContextName());
+        $sq->addFacetSearch('id', ':', $id);
+        
+        /** @var SolrQueryResponse $sqr */
+        $sqr = $sq->search();
+        
+        if ($sqr->getNumFound() == 1) {
+            $docs = $sqr->getDocuments();
+            $doc = array_merge((array)$docs[0], $doc);
+            
+            $this->documents[] = $doc;
+            $this->purge(true);
+            
+            return true;
+        }
+        
+        return false;
+    }
     
     
     public function commit() {

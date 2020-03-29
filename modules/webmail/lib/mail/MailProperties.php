@@ -20,14 +20,15 @@ class MailProperties {
             $this->file = $emlFile.'.properties';
         } else {
             $f = get_data_file( $emlFile );
-            if ($f)
+            if ($f) {
                 $this->file = $f . '.properties';
+            }
         }
     }
     
     public function load() {
         if ($this->file && file_exists($this->file)) {
-            $data = file_get_contents( get_data_file($this->getEmlFile().'.properties') );
+            $data = file_get_contents( $this->file );
             $this->properties = json_decode( $data, true );
             
             return is_array($this->properties) ? true : false;
@@ -41,7 +42,7 @@ class MailProperties {
             throw new FileException('No file set');
         }
         
-        return file_put_contents($this->file . '.properties', json_encode($this->properties));
+        return file_put_contents($this->file, json_encode($this->properties));
     }
     
     public function setProperty($name, $val) {
