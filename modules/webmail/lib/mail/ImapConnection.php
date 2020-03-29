@@ -16,6 +16,8 @@ class ImapConnection {
     protected $username;
     protected $password;
     
+    protected $connector = null;
+    
     protected $connectionOptions = array();
     
     protected $mailbox = null;
@@ -48,6 +50,8 @@ class ImapConnection {
         $ic->setPort($c->getPort());
         $ic->setUsername($c->getUsername());
         $ic->setPassword($c->getPassword());
+        
+        $this->connector = $c;
         
         return $ic;
     }
@@ -227,6 +231,7 @@ class ImapConnection {
     public function buildMessageProperties($folderName, $overview) {
         // $mp = message-properties
         $mp = array();
+        $mp['connectorId']= $this->connector->getConnectorId();
         $mp['folder']     = $folderName;
         $mp['subject']    = @$overview->subject;
         $mp['from']       = @$overview->from;
