@@ -381,6 +381,7 @@ class ImapConnection {
                                 
                                 // update properties
                                 $mp = new MailProperties($emlfile);
+                                $mp->load();
                                 $mp->setFolder($folderName);
                                 $mp->save();
                             }

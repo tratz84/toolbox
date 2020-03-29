@@ -64,6 +64,7 @@ class SolrImportMail {
     
     public function parseEml($emlFile) {
         $mp = new MailProperties($emlFile);
+        $mp->load();
         
         $p = new \PhpMimeMailParser\Parser();
         $p->setPath($emlFile);
