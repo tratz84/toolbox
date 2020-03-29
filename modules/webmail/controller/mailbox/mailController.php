@@ -2,10 +2,10 @@
 
 
 
+
 use core\controller\BaseController;
+use webmail\mail\SolrMailActions;
 use webmail\solr\SolrMailQuery;
-use webmail\solr\SolrMailQueryResponse;
-use webmail\solr\SolrMail;
 
 class mailController extends BaseController {
    
@@ -53,6 +53,32 @@ class mailController extends BaseController {
         print $f['content'];
     }
     
+    
+    public function action_mark_as_spam() {
+        $smq = object_container_create(SolrMailQuery::class);
+        
+        try {
+            $mail = $smq->readById( get_var('id') );
+            
+            $ma = new SolrMailActions();
+            $ma->markAsSpam($mail);
+            $ma->closeConnection();
+            
+            return $this->json([
+                'success' => true
+            ]);
+        } catch (\Exception $ex) {
+            return $this->json([
+                'error' => true,
+                'message' => $ex->getMessage()
+            ]);
+        } catch (\Error $err) {
+            return $this->json([
+                'error' => true,
+                'message' => $err->getMessage()
+            ]);
+        }
+    }
     
     
 }

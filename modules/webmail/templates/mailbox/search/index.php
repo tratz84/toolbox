@@ -131,8 +131,17 @@ t.addColumn({
 	fieldType: 'actions',
 	render: function( record ) {
 		var email_id = record['email_id'];
+
+		var btnSpam = $('<a class="fa fa-flag" />');
+		btnSpam.click(function() {
+			var c = confirm('Are you sure to mark this mail as spam?');
+			if (c) {
+				markMailAsSpam( email_id );
+			}
+		});
 		
 		var container = $('<div />');
+		container.append(btnSpam);
 		
 		return container;
 	}
@@ -140,4 +149,24 @@ t.addColumn({
 
 t.load();
 
+
+
+function markMailAsSpam(email_id) {
+	$.ajax({
+		url: appUrl('/?m=webmail&c=mailbox&mail&a=mark_as_spam'),
+		data: {
+			email_id: email_id
+		},
+		success: function(data, xhr, textStatus) {
+			if (data.error) {
+				alert('Error: ' + data.message);
+			} else {
+				show_user_message('Message marked as spam');
+			}
+		}
+	});
+}
+
+
 </script>
+
