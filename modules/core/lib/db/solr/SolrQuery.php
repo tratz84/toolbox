@@ -55,6 +55,7 @@ class SolrQuery {
         $this->addFacetQuery($fq);
     }
     
+    public function clearFacetQueries() { $this->facetQueries = array(); }
     public function addFacetQuery($fq) {
         $this->facetQueries[] = $fq;
     }

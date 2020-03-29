@@ -102,6 +102,14 @@ class ImapConnection {
         return true;
     }
     
+    public function isConnected() {
+        if ($this->imap !== false && $this->imap !== null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     public function disconnect() {
         if ($this->imap === null) return;
         
@@ -192,8 +200,9 @@ class ImapConnection {
             }
             
             for($y=0; $y < count($results); $y++) {
-                $mp = $this->buildMessageProperties($folderName, $results[$y]);
                 $emlfile = $this->determineEmailPath( $results[$y] );
+                $mp = $this->buildMessageProperties($emlfile, $folderName, $results[$y]);
+                $mp->save();
                 
                 // check if mail (properties) are changed
                 $data_mp = json_encode($mp);
@@ -230,23 +239,23 @@ class ImapConnection {
     }
     
     
-    public function buildMessageProperties($folderName, $overview) {
+    public function buildMessageProperties($emlFile, $folderName, $overview) {
         // $mp = message-properties
-        $mp = array();
-        $mp['connectorId']= $this->connector->getConnectorId();
-        $mp['folder']     = $folderName;
-        $mp['subject']    = @$overview->subject;
-        $mp['from']       = @$overview->from;
-        $mp['to']         = @$overview->to;
-        $mp['size']       = @$overview->size;
-        $mp['message_id'] = @$overview->message_id;
-        $mp['uid']        = @$overview->uid;
-        $mp['udate']      = @$overview->udate;
-        $mp['flagged']    = @$overview->flagged;
-        $mp['answered']   = @$overview->answered;
-        $mp['deleted']    = @$overview->deleted;
-        $mp['seen']       = @$overview->seen;
-        $mp['draft']      = @$overview->draft;
+        $mp = new MailProperties($emlFile);
+        $mp->setProperty('connectorId', $this->connector->getConnectorId());
+        $mp->setProperty('folder',      $folderName);
+        $mp->setProperty('subject',     @$overview->subject);
+        $mp->setProperty('from',        @$overview->from);
+        $mp->setProperty('to',          @$overview->to);
+        $mp->setProperty('size',        @$overview->size);
+        $mp->setProperty('message_id',  @$overview->message_id);
+        $mp->setProperty('uid',         @$overview->uid);
+        $mp->setProperty('udate',       @$overview->udate);
+        $mp->setProperty('flagged',     @$overview->flagged);
+        $mp->setProperty('answered',    @$overview->answered);
+        $mp->setProperty('deleted',     @$overview->deleted);
+        $mp->setProperty('seen',        @$overview->seen);
+        $mp->setProperty('draft',       @$overview->draft);
         
         return $mp;
     }
@@ -263,10 +272,10 @@ class ImapConnection {
             }
         }
         
-        $mp = $this->buildMessageProperties($folderName, $overview);
+        $mp = $this->buildMessageProperties($file, $folderName, $overview);
         
-        // props changed?
-        file_put_contents($file . '.properties', json_encode($mp));
+        // TODO: props changed..?
+        $mp->save();
         
         // mail/eml itself won't ever change. Only it's overhead (that's put into the .properties-file)
         if (file_exists($file)) {
@@ -369,6 +378,11 @@ class ImapConnection {
                             // message moved to another folder?
                             if (is_array($result) && isset($result['action']) && $result['action'] == 'move_to_folder') {
                                 $folderName = $result['value'];
+                                
+                                // update properties
+                                $mp = new MailProperties($emlfile);
+                                $mp->setFolder($folderName);
+                                $mp->save();
                             }
                             // set default folder
                             else {
@@ -448,6 +462,35 @@ class ImapConnection {
         
     }
     
+    
+    public function moveMailByUid($uid, $sourceFolder, $targetFolder) {
+        if (!imap_reopen($this->imap, $this->mailbox.$sourceFolder)) {
+            return false;
+        }
+        
+        return imap_mail_move($this->imap, $uid, $targetFolder, CP_UID);
+    }
+    
+    public function setFlagByUid($uid, $folder, $flags) {
+        if (!imap_reopen($this->imap, $this->mailbox.$folder)) {
+            return false;
+        }
+        
+        return imap_setflag_full($this->imap, $uid, $flags, ST_UID);
+    }
+    public function clearFlagByUid($uid, $folder, $flags) {
+        if (!imap_reopen($this->imap, $this->mailbox.$folder)) {
+            return false;
+        }
+        
+        return imap_clearflag_full($this->imap, $uid, $flags, ST_UID);
+    }
+    
+    
+    
+    public function expunge() {
+        return imap_expunge($this->imap);
+    }
     
     
     public function doImport(Connector $c) {

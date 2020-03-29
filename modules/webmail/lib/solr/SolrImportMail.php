@@ -5,6 +5,7 @@ namespace webmail\solr;
 
 use core\exception\SolrException;
 use core\parser\HtmlParser;
+use webmail\mail\MailProperties;
 
 
 class SolrImportMail {
@@ -61,7 +62,7 @@ class SolrImportMail {
     
     
     public function parseEml($emlFile) {
-        $props = $this->getProperties($emlFile);
+        $mp = new MailProperties($emlFile);
         
         $p = new \PhpMimeMailParser\Parser();
         $p->setPath($emlFile);
@@ -101,8 +102,8 @@ class SolrImportMail {
         
         // fields
         // TODO: check out why 'folder' is not set in some cases?
-        $r['mailboxName'] = isset($props['folder']) ? $props['folder'] : '';
-        $r['isJunk']      = isset($props['folder']) && ($props['folder'] == 'Junk' || $props['folder'] == 'Spam');
+        $r['mailboxName'] = $mp->getFolder();
+        $r['isJunk']      = $mp->getFolder() == 'Junk' || $mp->getFolder() == 'Spam';
         $r['isNotJunk']   = !$r['isJunk'];
         $r['isAnswered']  = isset($r['answered']) && $r['answered'] ? true : false;
         $r['isRead']      = isset($r['seen']) && $r['seen'] ? true : false;

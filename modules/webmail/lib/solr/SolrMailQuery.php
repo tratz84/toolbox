@@ -22,6 +22,13 @@ class SolrMailQuery extends SolrQuery {
     }
     
     
+    public function clearFacetQueries() {
+        $this->facetQueries = array();
+        
+        // MUST have
+        $this->addFacetSearch('contextName', ':', ctx()->getContextName());
+    }
+    
     public function setMailTabSettings( MailTabSettings $mailtabSettings ) {
         
         $qs = array();
@@ -68,6 +75,27 @@ class SolrMailQuery extends SolrQuery {
             $this->setRawQuery( $q );
         }
         
+    }
+    
+    public function readById($id) {
+        // reset query
+        $this->clearFields();
+        $this->clearFacetQueries();
+        $this->setRawQuery('*:*');
+
+        // add id-facet
+        $this->addFacetSearch('id', ':', $id);
+        
+        // search
+        /** @var SolrMailQueryResponse $smqr */
+        $smqr = $this->search();
+        
+        
+        if ($smqr->getNumFound() == 0) {
+            return null;
+        }
+        
+        return $smqr->getMail(0);
     }
     
     

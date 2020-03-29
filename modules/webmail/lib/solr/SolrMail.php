@@ -5,6 +5,8 @@ namespace webmail\solr;
 
 
 use core\exception\OutOfBoundException;
+use core\exception\InvalidStateException;
+use webmail\mail\MailProperties;
 
 class SolrMail {
     
@@ -26,6 +28,8 @@ class SolrMail {
     protected $attachments;
     
     protected $parserAttachments = array();
+    
+    protected $properties = null;
     
     
     public function __construct($jsonMail) {
@@ -81,6 +85,26 @@ class SolrMail {
     
     public function getSubject() {
         return isset($this->jsonMail->subject) ? $this->jsonMail->subject : '';
+    }
+    
+    public function getProperties() {
+        if ($this->properties === null) {
+            $this->properties = new MailProperties( $this->getEmlFile() );
+        }
+        
+        return $this->properties;
+    }
+    public function setProperty($name, $val) {
+        if ($this->properties === null) {
+            $this->getProperties();
+        }
+        
+        $this->properties->setProperty($name, $val);
+    }
+    
+    public function saveProperties() {
+        
+        return $this->properties->save();
     }
     
     
