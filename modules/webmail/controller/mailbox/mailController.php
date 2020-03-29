@@ -13,17 +13,7 @@ class mailController extends BaseController {
     protected function getMail($id) {
         $smq = new SolrMailQuery();
         
-        $smq->addFacetSearch('id', ':', $id);
-        
-        /** @var SolrMailQueryResponse $smqr */
-        $smqr = $smq->search();
-        
-        
-        if ($smqr->getNumFound() == 0) {
-            return null;
-        }
-        
-        return $smqr->getMail(0);
+        return $smq->readById($id);
     }
     
     
