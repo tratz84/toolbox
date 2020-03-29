@@ -4,11 +4,12 @@ namespace webmail\mail;
 
 class SpamCheck {
     
+    // TODO: set this in some config file
     protected static $cmdDaemon = '/usr/bin/spamc --exitcode';
     protected static $cmdStandalone = '/usr/bin/spamassassin -L --exit-code';
     
-    protected static $cmdMarkSpam = '/usr/spamassassin/bin/sa-learn --spam -f -';
-    protected static $cmdMarkHam = '/usr/spamassassin/bin/sa-learn --ham';
+    protected static $cmdMarkSpam = '/usr/bin/sa-learn --spam -f -';
+    protected static $cmdMarkHam = '/usr/bin/sa-learn --ham';
     
 
     protected static function cmdExists($cmd) {
