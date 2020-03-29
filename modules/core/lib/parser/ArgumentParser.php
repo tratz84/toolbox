@@ -36,7 +36,7 @@ class ArgumentParser {
             
             if (strpos($t, '--') === 0 && strlen($t) > 2) {
                 if (strlen($t) > 2) {
-                    $key = trim( trim(substr($t, 3)) );
+                    $key = trim( trim(substr($t, 2)) );
                     $this->options[$key] = true;
                 }
             }
