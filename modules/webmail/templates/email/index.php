@@ -1,18 +1,42 @@
 
+<link rel="stylesheet" href="<?= BASE_HREF ?>lib/split-view-pane/split-pane.css" />
+<link rel="stylesheet" href="<?= BASE_HREF ?>lib/split-view-pane/pretty-split-pane.css" />
+<script src="<?= BASE_HREF ?>lib/split-view-pane/split-pane.js"></script>
+
+<style type="text/css">
+.pretty-split-pane-frame { padding: 0; }
+.pretty-split-pane-component-inner { padding: 0; }
+#mail-content { padding: 0 6px; }
+#top-component {
+	margin-bottom: 5px;
+	min-height: 50px;
+}
+
+#my-divider {
+	height: 5px;
+	background-color: #f00;
+}
+
+#bottom-component {
+	min-height: 50px;
+}
+
+</style>
+
 
 <div class="page-header">
 	<h1>Outbox</h1>
 </div>
 
 
-<div id="mail-container">
-	<div class="messages-content ui-layout-center">
-		<div data-height-in-percentage="<?= isset($state['slider-ratio'][0]) ? $state['slider-ratio'][0] : '' ?>">
-			
-			<div id="emailheader-table-container"></div>
-			
+<div id="mail-container" class="pretty-split-pane-frame">
+	<div class="split-pane  horizontal-percent">
+		<div class="split-pane-component" id="top-component">
+			<div id="emailheader-table-container" class="pretty-split-pane-component-inner"></div>
 		</div>
-		<div id="mail-content" style="" data-height-in-percentage="<?= isset($state['slider-ratio'][0]) ? $state['slider-ratio'][1] : '' ?>">
+		<div class="split-pane-divider" id="my-divider"></div>
+		<div class="split-pane-component" id="bottom-component">
+			<div id="mail-content" class="pretty-split-pane-component-inner"></div>
 		</div>
 	</div>
 </div>
@@ -28,9 +52,36 @@ function uploadFilesField_Click(obj) {
 
 <script>
 
-var opts = {
-	onresize: function(containerSlider) {
-		var p = containerSlider.getPanelPercentages();
+var paneState = <?= json_encode($state) ?>;
+
+function resizeMailContainer() {
+	var marginTop = $('.page-header').next().offset().top;
+	var wh = $(window).height() - marginTop;
+	$('#mail-container').css('height', wh);
+}
+
+$(window).resize( resizeMailContainer );
+
+function execSplitPane() {
+	resizeMailContainer();
+	
+	$('.split-pane').splitPane();
+	
+	if (paneState['slider-ratio'][0]) {
+		var mch = $('#mail-container').height();
+		
+		var s = parseInt( mch * paneState['slider-ratio'][0] );
+		$('.split-pane').splitPane('firstComponentSize', s);
+	}
+	
+	$('.split-pane').on('dividerdragend', function() {
+		var p = [];
+		var totalHeight = $('#mail-container').height();
+		var tc = $('#mail-container #top-component').height();
+		p.push( tc / totalHeight );
+		p.push( 1-(tc / totalHeight) );
+		
+		console.log( p );
 		$.ajax({
 			url: appUrl('/?m=webmail&c=email&a=savestate'),
 			type: 'POST',
@@ -38,16 +89,16 @@ var opts = {
 				percentages: p
 			}
 		});
-	}
-};
+	});
+}
 
 if (typeof less != 'undefined') {
 	less.pageLoadFinished.then(function() {
-		$('#mail-container .messages-content').horizontalSplitContainer( opts );
+		execSplitPane();
 	});
 } else {
 	$(document).ready(function() {
-		$('#mail-container .messages-content').horizontalSplitContainer( opts );
+		execSplitPane();
 	});
 }
 
