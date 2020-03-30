@@ -487,6 +487,9 @@ class ImapConnection {
         return imap_clearflag_full($this->imap, $uid, $flags, ST_UID);
     }
     
+    public function imapAppend($mailbox, $message, $options=null, $internal_date=null) {
+        return imap_append($this->imap, $this->mailbox.$mailbox, $message);
+    }
     
     
     public function expunge() {
