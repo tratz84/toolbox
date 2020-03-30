@@ -79,6 +79,43 @@ class SendMail {
         );
     }
     
+    public function buildMessage() {
+        $message = new \Swift_Message( $this->getSubject() );
+        $message->setFrom(array($this->getFromEmail() => $this->getFromName()));
+        
+        foreach($this->to as $m) {
+            $message->addTo($m['email'], $m['name']);
+        }
+        foreach($this->cc as $m) {
+            $message->addCc($m['email'], $m['name']);
+        }
+        foreach($this->bcc as $m) {
+            $message->addBcc($m['email'], $m['name']);
+        }
+        
+        $message->setBody($this->getContent(), 'text/html', 'UTF-8');
+        
+        foreach($this->attachmentFiles as $f) {
+            $data = file_get_contents($f['file']);
+            
+            if ($data === false) {
+                throw new InvalidStateException('Attachment not found');
+            }
+            
+            if (!$f['filename'])
+                $f['filename'] = basename($f['file']);
+                
+                $att = new \Swift_Attachment($data, $f['filename']);
+                $message->attach($att);
+        }
+        
+        foreach($this->attachmentDataFiles as $f) {
+            $att = new \Swift_Attachment($f['data'], $f['filename']);
+            $message->attach($att);
+        }
+        
+        return $message;
+    }
     
     
     public function send() {
@@ -110,41 +147,7 @@ class SendMail {
             
         }
         
-        
-        $message = new \Swift_Message( $this->getSubject() );
-        $message->setFrom(array($this->getFromEmail() => $this->getFromName()));
-        
-        foreach($this->to as $m) {
-            $message->addTo($m['email'], $m['name']);
-        }
-        foreach($this->cc as $m) {
-            $message->addCc($m['email'], $m['name']);
-        }
-        foreach($this->bcc as $m) {
-            $message->addBcc($m['email'], $m['name']);
-        }
-        
-        $message->setBody($this->getContent(), 'text/html', 'UTF-8');
-        
-        foreach($this->attachmentFiles as $f) {
-            $data = file_get_contents($f['file']);
-            
-            if ($data === false) {
-                throw new InvalidStateException('Attachment not found');
-            }
-            
-            if (!$f['filename'])
-                $f['filename'] = basename($f['file']);
-            
-            $att = new \Swift_Attachment($data, $f['filename']);
-            $message->attach($att);
-        }
-        
-        foreach($this->attachmentDataFiles as $f) {
-            $att = new \Swift_Attachment($f['data'], $f['filename']);
-            $message->attach($att);
-        }
-        
+        $message = $this->buildMessage();
         
         $mailer = new \Swift_Mailer($transport);
         
@@ -174,7 +177,7 @@ class SendMail {
         $sm->setFromEmail($email->getFromEmail());
         
         foreach($email->getRecipients() as $r) {
-            if (strtolower($r->getToType()) == 'to') {
+            if (strtolower($r->getToType()) == 'to' || $r->getToType() == null) {
                 $sm->addTo($r->getToEmail(), $r->getToName());
             } else if (strtolower($r->getToType()) == 'cc') {
                 $sm->addCc($r->getToEmail(), $r->getToName());

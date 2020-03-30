@@ -4,13 +4,16 @@ namespace webmail\mail;
 
 use webmail\model\Connector;
 use webmail\service\ConnectorService;
-use webmail\solr\SolrMail;
-use webmail\solr\SolrMailQuery;
+use webmail\service\EmailService;
 use webmail\solr\SolrImportMail;
+use webmail\solr\SolrMail;
+use core\exception\ObjectNotFoundException;
 
 class SolrMailActions {
     
     protected $imapConnection = null;
+    
+    protected $lastError = null;
     
     public function __construct() {
         
@@ -32,6 +35,8 @@ class SolrMailActions {
         }
     }
     
+    public function getLastError() { return $this->lastError; }
+    public function setLastError($v) { $this->lastError = $v; }
     
     
     public function markAsSpam(SolrMail $solrMail) {
@@ -151,10 +156,58 @@ class SolrMailActions {
                 'mailboxName' => 'Junk'
             ]);
         }
-        
-        
-        
     }
+    
+    
+    public function saveEmailToConnector($connectorId, $emailId) {
+        /** @var ConnectorService $connectorService */
+        $connectorService = object_container_get(ConnectorService::class);
+        /** @var \webmail\model\Connector $connector */
+        $connector = $connectorService->readConnector( $connectorId );
+        
+        if (!$connector) {
+            throw new ObjectNotFoundException('Email not found');
+        }
+        
+        // fetch send-folder
+        if (!$connector->getSentConnectorImapfolderId())
+            return false;
+        
+        $if_send = $connectorService->readImapFolder($connector->getSentConnectorImapfolderId());
+        if (!$if_send || $if_send->getFolderName() == '')
+            return false;
+        
+        // get e-mail
+        $emailService = object_container_get(EmailService::class);
+        $email = $emailService->readEmail( $emailId );
+   
+        if (!$email) {
+            throw new ObjectNotFoundException('Email not found');
+        }
+        
+        $this->createImapConnection($connector);
+        
+        // connect to imap server
+        if (!$this->imapConnection->isConnected()) {
+            if ($this->imapConnection->connect() == false) {
+                return false;
+            }
+        }
+        
+        // build eml-message
+        $sendMail = SendMail::createMail($email);
+        $emlMessage = $sendMail->buildMessage();
+        
+//         $emlMessage = str_replace("\n", "\r\n", $emlMessage);
+//         print $emlMessage;exit; 
+        
+        $r = $this->imapConnection->imapAppend($if_send->getFolderName(), $emlMessage);
+        
+        $this->lastError = imap_last_error();
+        
+        return $r;
+    }
+    
     
     
 }
