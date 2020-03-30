@@ -92,7 +92,11 @@ class invoiceController extends BaseController {
             $invoiceForm->bind($_REQUEST);
             
             if ($invoiceForm->validate()) {
-                $invoiceService->saveInvoice($invoiceForm);
+                if ((get_var('print') || get_var('sendmail')) && $invoiceForm->isObjectLocked()) {
+                    // print/sendmail-clicked & object locked? => don't save
+                } else {
+                    $invoiceService->saveInvoice($invoiceForm);
+                }
                 
                 if (get_var('print')) {
                     $url = '/?m=invoice&c=invoice&a=print&id=' . $invoiceForm->getWidgetValue('invoice_id');
