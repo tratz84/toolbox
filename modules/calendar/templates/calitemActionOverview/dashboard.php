@@ -34,7 +34,7 @@ it_itemActions.addColumn({
 	fieldType: 'date',
 	searchable: false,
 	render: function(record) {
-		var t = record.start_date;//format_date( record.start_date, { dmy: true });
+		var t = format_date( str2date(record.start_date), { dmy: true });
 		if (record.start_time) {
 			t = t + ' ' + record.start_time;
 		}
