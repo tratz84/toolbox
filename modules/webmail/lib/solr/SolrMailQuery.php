@@ -120,6 +120,12 @@ class SolrMailQuery extends SolrQuery {
             $mh['from_name']    = $mail->getFromName();
             $mh['from_email']   = $mail->getFromEmail();
             
+            if (strtolower($mail->getMailboxName()) == 'junk') {
+                $mh['junk'] = true;
+            } else {
+                $mh['junk'] = false;
+            }
+            
             $mails[] = $mh;
         }
         

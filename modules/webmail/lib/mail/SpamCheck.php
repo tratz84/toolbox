@@ -9,7 +9,7 @@ class SpamCheck {
     protected static $cmdStandalone = '/usr/bin/spamassassin -L --exit-code';
     
     protected static $cmdMarkSpam = '/usr/bin/spamc -4 -p 783 -L spam';
-    protected static $cmdMarkHam = 'spamc -4 -p 783 -L ham';
+    protected static $cmdMarkHam = '/usr/bin/spamc -4 -p 783 -L ham';
     
 
     protected static function cmdExists($cmd) {

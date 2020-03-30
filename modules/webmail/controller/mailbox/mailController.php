@@ -85,6 +85,37 @@ class mailController extends BaseController {
             ]);
         }
     }
+
+    public function action_mark_as_ham() {
+        $smq = object_container_create(SolrMailQuery::class);
+        
+        try {
+            $mail = $smq->readById( get_var('email_id') );
+            
+            if (!$mail) {
+                throw new ObjectNotFoundException('Mail not found');
+            }
+            
+            
+            $ma = new SolrMailActions();
+            $ma->markAsHam($mail);
+            $ma->closeConnection();
+            
+            return $this->json([
+                'success' => true
+            ]);
+        } catch (\Exception $ex) {
+            return $this->json([
+                'error' => true,
+                'message' => $ex->getMessage()
+            ]);
+        } catch (\Error $err) {
+            return $this->json([
+                'error' => true,
+                'message' => $err->getMessage()
+            ]);
+        }
+    }
     
     
 }

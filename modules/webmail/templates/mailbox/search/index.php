@@ -132,16 +132,33 @@ t.addColumn({
 	render: function( record ) {
 		var email_id = record['email_id'];
 
-		var btnSpam = $('<a class="fa fa-flag" />');
+		var btnSpam = $('<a class="fa fa-flag mark-as-spam" href="javascript:void(0);" />');
 		btnSpam.click(function() {
 			var c = confirm('Are you sure to mark this mail as spam?');
 			if (c) {
 				markMailAsSpam( $(this).closest('tr'), email_id );
 			}
 		});
+
+		var btnHam = $('<a class="fa fa-thumbs-o-up mark-as-ham" href="javascript:void(0);" />');
+		btnHam.click(function() {
+			var c = confirm('Are you sure to mark this mail as HAM?');
+			if (c) {
+				markMailAsHam( $(this).closest('tr'), email_id );
+			}
+		});
+
+		if (record.junk) {
+			btnHam.show();
+			btnSpam.hide();
+		} else {
+			btnHam.hide();
+			btnSpam.show();
+		}
 		
 		var container = $('<div />');
 		container.append(btnSpam);
+		container.append(btnHam);
 		
 		return container;
 	}
@@ -163,7 +180,27 @@ function markMailAsSpam(row, email_id) {
 				alert('Error: ' + data.message);
 			} else {
 				$(row).find('.td-mailbox-name').text('Junk');
-// 				show_user_message('Message marked as spam');
+				$(row).find('.mark-as-spam').hide();
+				$(row).find('.mark-as-ham').show();
+			}
+		}
+	});
+}
+
+function markMailAsham(row, email_id) {
+	$.ajax({
+		url: appUrl('/?m=webmail&c=mailbox/mail&a=mark_as_ham'),
+		type: 'POST',
+		data: {
+			email_id: email_id
+		},
+		success: function(data, xhr, textStatus) {
+			if (data.error) {
+				alert('Error: ' + data.message);
+			} else {
+// 				$(row).find('.td-mailbox-name').text('Junk');
+				$(row).find('.mark-as-spam').show();
+				$(row).find('.mark-as-ham').hide();
 			}
 		}
 	});

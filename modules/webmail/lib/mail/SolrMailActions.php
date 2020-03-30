@@ -63,8 +63,54 @@ class SolrMailActions {
         }
         
     }
+
+    
+    public function markAsHam(SolrMail $solrMail) {
+        $fullpathEmlFile = get_data_file( $solrMail->getEmlFile() );
+        
+        // eml not found?
+        if (!$fullpathEmlFile)
+            return false;
+            
+        // mark as spam
+        SpamCheck::markHam( $fullpathEmlFile );
+        
+        
+        // if Connector exists, connection is imap & message is in Junk-folder? => move to inbox
+        $mailProperties = $solrMail->getProperties();
+        $connector = null;
+        $junkImapFolder = null;
+        if ($mailProperties->getConnectorId()) {
+            /** @var ConnectorService $connectorService */
+            $connectorService = object_container_get(ConnectorService::class);
+            /** @var \webmail\model\Connector $connector */
+            $connector = $connectorService->readConnector( $mailProperties->getConnectorId() );
+            
+            $junkImapFolder = $connectorService->readImapFolder( $connector->getJunkConnectorImapfolderId() );
+        }
+        
+        if (!$connector || $connector->getConnectorType() != 'imap')
+            return;
+        
+        if (!$junkImapFolder)
+            return;
+        
+        // message already not in junk-folder?
+        if ($junkImapFolder && $junkImapFolder->getFolderName() != $mailProperties->getFolder())
+            return;
+        
+        // move message to INBOX
+        $this->moveMail($connector, $solrMail, 'INBOX');
+    }
+    
+    
     
     public function moveMail(Connector $connector, SolrMail $solrMail, $imapFolderId) {
+        // connector inactive?
+        if ($connector->getActive() == false) {
+            return false;
+        }
+        
         /** @var ConnectorService $connectorService */
         $connectorService = object_container_get(ConnectorService::class);
         /** @var \webmail\model\ConnectorImapfolder $if */
