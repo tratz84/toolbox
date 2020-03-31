@@ -1,37 +1,77 @@
 
 
+<link rel="stylesheet" href="<?= BASE_HREF ?>lib/split-view-pane/split-pane.css" />
+<link rel="stylesheet" href="<?= BASE_HREF ?>lib/split-view-pane/pretty-split-pane.css" />
+<script src="<?= BASE_HREF ?>lib/split-view-pane/split-pane.js"></script>
 
-<div id="mail-container" class="tab-mailbox-container" style="height: 100%;">
-	<div style="height: 200px; overflow-y: scroll;">
-		<div class="search-fields">
-			<div class="toolbox">
-				<a href="javascript:void(0);" onclick="mailboxTabSettings_Click();" class="fa fa-cog"></a>
+<style type="text/css">
+.pretty-split-pane-frame { padding: 0; }
+.pretty-split-pane-component-inner { padding: 0; }
+#mail-content { padding: 0 6px; }
+#top-component {
+	margin-bottom: 5px;
+	min-height: 50px;
+}
+
+#my-divider {
+	height: 5px;
+	background-color: #f00;
+}
+
+#bottom-component {
+	min-height: 50px;
+}
+
+</style>
+
+
+<div id="mail-container" class="pretty-split-pane-frame" style="height: 800px;">
+	<div class="split-pane  horizontal-percent">
+		<div class="split-pane-component" id="top-component">
+			<div class="pretty-split-pane-component-inner">
+				<div class="search-fields">
+					<div class="toolbox">
+						<a href="javascript:void(0);" onclick="mailboxTabSettings_Click();" style="font-size: 20px; margin: 7px 5px 0 0;" class="fa fa-cog"></a>
+					</div>
+					<input type="hidden" name="mailtab" value="1" />
+					<?php if (isset($companyId)) : ?>
+					<input type="hidden" name="company_id" value="<?= esc_attr($companyId) ?>" />
+					<?php endif; ?>
+					<?php if (isset($personId)) : ?>
+					<input type="hidden" name="person_id" value="<?= esc_attr($personId) ?>" />
+					<?php endif; ?>
+					<input type="text" name="q" placeholder="Search" style="width: calc(100% - 50px);" />
+				</div>
+				<div id="emailheader-table-container"></div>
 			</div>
-			<input type="hidden" name="mailtab" value="1" />
-			<?php if (isset($companyId)) : ?>
-			<input type="hidden" name="company_id" value="<?= esc_attr($companyId) ?>" />
-			<?php endif; ?>
-			<?php if (isset($personId)) : ?>
-			<input type="hidden" name="person_id" value="<?= esc_attr($personId) ?>" />
-			<?php endif; ?>
-			<input type="text" name="q" placeholder="Search" style="width: calc(100% - 50px);" />
 		</div>
-		<div id="emailheader-table-container"></div>
-	</div>
-	<div id="mail-content" style="height: 500px; min-height: 500px;">
-		<iframe style="width:100%; height: 150%;" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox"></iframe>
+		<div class="split-pane-divider" id="my-divider"></div>
+		<div class="split-pane-component" id="bottom-component">
+			<div id="mail-content" class="pretty-split-pane-component-inner">
+				<iframe style="width:100%; height: calc(100% - 10px);" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox"></iframe>
+			</div>
+		</div>
 	</div>
 </div>
 
 
 
+
+
 <script>
 
+var mailSplitPaneState = <?= json_encode($state) ?>;
+
+function resizeMailContainer() {
+	var marginTop = $('#mail-container').offset().top;
+	var wh = $(window).height() - marginTop;
+	$('#mail-container').css('height', wh);
+}
 
 var it_webmail = new IndexTable('#emailheader-table-container', {
 	autoloadNext: true,
 	fixedHeader: true,
-	tableHeight: 'calc(100% - 35px)',
+//	tableHeight: 'calc(100% - 35px)',
 	searchContainer: '.search-fields'
 });
 
@@ -119,24 +159,67 @@ function mailboxTabSettings_Click() {
 
 
 // load IndexTable on tab activation
+var mailtab_first_open = true;
 $(window).on('tabcontainer-item-click', function(e, f) {
 	var tab_name = $( f ).data('tab-name');
 
 	if (tab_name != 'mail')
 		return;
-
-	// load mail
-	it_webmail.load();
-
-	$(window).on('webmail-reload', function() {
-		it_webmail.load( { force: true } );
-	});
-
-	// set focus to search-field
-	setTimeout(function() {
-		$('.tab-mailbox-container [name=q]').focus();
-	}, 500);
 	
+	mail_tab_opened = true;
+
+	resizeMailContainer();
+
+	if (mailtab_first_open) {
+		// load mail
+		it_webmail.load();
+
+		$(window).on('webmail-reload', function() {
+			it_webmail.load( { force: true } );
+		});
+		
+		$(window).resize(function( ){
+			resizeMailContainer();
+		});
+
+		$('#mail-container .split-pane').splitPane();
+		
+		$('.split-pane').on('dividerdragend', function() {
+			var p = [];
+			var totalHeight = $('#mail-container').height();
+			var tc = $('#mail-container #top-component').height();
+			p.push( tc / totalHeight );
+			p.push( 1-(tc / totalHeight) );
+			
+			$.ajax({
+				url: appUrl('/?m=webmail&c=mailbox/tab&a=savestate'),
+				type: 'POST',
+				data: {
+					percentages: p
+				}
+			});
+		});
+
+		$(document).ready(function( ){
+			resizeMailContainer();
+			$('#mail-container [name=q]').focus();
+		});
+		if (typeof less != 'undefined') {
+			less.pageLoadFinished.then(function() {
+				resizeMailContainer();
+			});
+		}
+		
+		// set focus to search-field
+		setTimeout(function() {
+			resizeMailContainer();
+			$('#mail-container [name=q]').focus();
+			var fcs = $('#mail-container').height() * mailSplitPaneState[0];
+			$('#mail-container .split-pane').splitPane('firstComponentSize', fcs);
+		}, 500);
+	}
+	
+	mailtab_first_open = false;
 });
 
 </script>

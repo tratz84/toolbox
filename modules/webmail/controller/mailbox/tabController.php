@@ -3,6 +3,7 @@
 use core\controller\BaseController;
 use webmail\MailTabSettings;
 use webmail\form\MailTabSettingsForm;
+use base\service\MetaService;
 
 
 class tabController extends BaseController {
@@ -16,6 +17,11 @@ class tabController extends BaseController {
         $mts = new MailTabSettings( $companyId, $personId );
         
         $this->mailtabSettings = $mts->getData();
+        
+        $this->state = object_meta_get('user', ctx()->getUser()->getUserId(), 'customer-mailtab-splitpane-state');
+        if (is_array($this->state) == false || count($this->state) != 2 || is_numeric($this->state[0]) == false || is_numeric($this->state[1]) == false) {
+            $this->state = array(0.5, 0.5);
+        }
         
         $this->setShowDecorator(false);
         return $this->render();
@@ -73,6 +79,24 @@ class tabController extends BaseController {
         return $this->json([
             'success' => true
         ]);
+    }
+    
+    
+    public function action_savestate() {
+        $state = array();
+        
+        $state = array();
+        if (is_array($_REQUEST['percentages'])) for($x=0; $x < count($_REQUEST['percentages']) && $x < 10; $x++) {
+            if (!doubleval($_REQUEST['percentages'][$x])) break;
+            $state[] = $_REQUEST['percentages'][$x];
+        }
+        
+        
+        $user = $this->ctx->getUser();
+        
+        object_meta_save('user', $user->getUserId(), 'customer-mailtab-splitpane-state', $state);
+        
+        print 'OK';
     }
     
 }

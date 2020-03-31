@@ -81,7 +81,6 @@ function execSplitPane() {
 		p.push( tc / totalHeight );
 		p.push( 1-(tc / totalHeight) );
 		
-		console.log( p );
 		$.ajax({
 			url: appUrl('/?m=webmail&c=email&a=savestate'),
 			type: 'POST',
