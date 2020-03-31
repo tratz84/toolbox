@@ -1,29 +1,91 @@
 
+<link rel="stylesheet" href="<?= BASE_HREF ?>lib/split-view-pane/split-pane.css" />
+<link rel="stylesheet" href="<?= BASE_HREF ?>lib/split-view-pane/pretty-split-pane.css" />
+<script src="<?= BASE_HREF ?>lib/split-view-pane/split-pane.js"></script>
+
+<style type="text/css">
+.pretty-split-pane-frame { padding: 0; }
+.pretty-split-pane-component-inner { padding: 0; }
+#mail-content { padding: 0 6px; }
+#top-component {
+	margin-bottom: 5px;
+	min-height: 50px;
+}
+
+#my-divider {
+	height: 5px;
+	background-color: #f00;
+}
+
+#bottom-component {
+	min-height: 50px;
+}
+
+</style>
 
 <div class="page-header">
 	<h1>Mailarchive</h1>
 </div>
 
 
-<div id="mail-container">
-	<div class="messages-content ui-layout-center">
-		<div data-height-in-percentage="<?= isset($state['slider-ratio'][0]) ? $state['slider-ratio'][0] : '' ?>">
-			<div class="search-fields">
-				<input type="text" name="q" placeholder="Search" style="width: 100%;" />
-			</div>
-			<div id="emailheader-table-container"></div>
-			
+<div id="mail-container" class="pretty-split-pane-frame">
+	<div class="split-pane horizontal-percent">
+		<div class="split-pane-component" id="top-component">
+			<div id="emailheader-table-container" class="pretty-split-pane-component-inner"></div>
 		</div>
-		<div id="mail-content" style="" data-dont-overflow="1" data-height-in-percentage="<?= isset($state['slider-ratio'][0]) ? $state['slider-ratio'][1] : '' ?>">
-			<iframe style="width:100%; height: 150%;" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox"></iframe>
+		<div class="split-pane-divider" id="my-divider"></div>
+		<div class="split-pane-component" id="bottom-component">
+			<div id="mail-content" class="pretty-split-pane-component-inner">
+				<iframe style="width:100%; height: calc(100% - 10px);" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox"></iframe>
+			</div>
 		</div>
 	</div>
 </div>
 
 
 
-
 <script>
+
+var paneState = <?= json_encode($state) ?>;
+
+function resizeMailContainer() {
+	var marginTop = $('#mail-container').offset().top;
+	var wh = $(window).height() - marginTop;
+	$('#mail-container').css('height', wh);
+}
+
+$(window).resize( resizeMailContainer );
+
+function execSplitPane() {
+	resizeMailContainer();
+	
+	$('.split-pane').splitPane();
+	
+	if (paneState['slider-ratio'][0]) {
+		var mch = $('#mail-container').height();
+		
+		var s = parseInt( mch * paneState['slider-ratio'][0] );
+		$('.split-pane').splitPane('firstComponentSize', s);
+	}
+	
+	$('.split-pane').on('dividerdragend', function() {
+		var p = [];
+		var totalHeight = $('#mail-container').height();
+		var tc = $('#mail-container #top-component').height();
+		p.push( tc / totalHeight );
+		p.push( 1-(tc / totalHeight) );
+		
+		$.ajax({
+			url: appUrl('/?m=webmail&c=mailbox/search&a=savestate'),
+			type: 'POST',
+			data: {
+				percentages: p
+			}
+		});
+	});
+}
+
+
 
 var opts = {
 	onresize: function(containerSlider) {
@@ -40,15 +102,15 @@ var opts = {
 
 if (typeof less != 'undefined') {
 	less.pageLoadFinished.then(function() {
-		$('#mail-container .messages-content').horizontalSplitContainer( opts );
-
 		$('[name=q]').focus();
+
+		execSplitPane();
 	});
 } else {
 	$(document).ready(function() {
-		$('#mail-container .messages-content').horizontalSplitContainer( opts );
-		
 		$('[name=q]').focus();
+		
+		execSplitPane();
 	});
 }
 
@@ -62,7 +124,6 @@ if (typeof less != 'undefined') {
 var t = new IndexTable('#emailheader-table-container', {
 	autoloadNext: true,
 	fixedHeader: true,
-	tableHeight: 'calc(100% - 35px)',
 	searchContainer: '.search-fields'
 });
 
