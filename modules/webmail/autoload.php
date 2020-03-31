@@ -52,17 +52,30 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
     $menuContainer = $evt->getSource();
     
     if (hasCapability('webmail', 'send-mail')) {
-        $m = new Menu();
-        $m->setIconLabelUrl('fa-send', 'E-mail', '/?m=webmail&c=email');
-        $m->setWeight(70);
-        
-        if ($ctx->isExperimental()) {
-            $menu_mailbox = new Menu();
-            $menu_mailbox->setIconLabelUrl('fa-send', 'Webmail', '/?m=webmail&c=mailbox/search');
-            $m->addChildMenu($menu_mailbox);
+        // active connectors? => show Webmail first
+        if (ctx()->getSetting('webmail__active_connector_count', 0) > 0) {
+            $m = new Menu();
+            $m->setIconLabelUrl('fa-send', 'Webmail', '/?m=webmail&c=mailbox/search');
+            $m->setWeight(70);
+            
+            $menu_outbox = new Menu();
+            $menu_outbox->setIconLabelUrl('fa-send', 'Outbox', '/?m=webmail&c=email');
+            $m->addChildMenu( $menu_outbox );
+            
+            $menuContainer->add($m);
         }
-        
-        $menuContainer->add($m);
+        // No active connectors? => show Outbox first & E-mail is called E-mail archive
+        else {
+            $m = new Menu();
+            $m->setIconLabelUrl('fa-send', 'E-mail', '/?m=webmail&c=email');
+            $m->setWeight(70);
+            if ($ctx->isExperimental()) {
+                $menu_mailbox = new Menu();
+                $menu_mailbox->setIconLabelUrl('fa-send', 'E-mail archive', '/?m=webmail&c=mailbox/search');
+                $m->addChildMenu($menu_mailbox);
+            }
+            $menuContainer->add($m);
+        }
     }
 }));
 

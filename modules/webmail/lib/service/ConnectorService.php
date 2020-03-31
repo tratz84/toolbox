@@ -16,6 +16,7 @@ use webmail\model\FilterActionDAO;
 use webmail\form\FilterForm;
 use webmail\model\Filter;
 use core\exception\DatabaseException;
+use base\service\SettingsService;
 
 class ConnectorService extends ServiceBase {
     
@@ -150,6 +151,12 @@ class ConnectorService extends ServiceBase {
         
         $cifDao = new ConnectorImapfolderDAO();
         $cifDao->mergeFormListMTO1('connector_id', $connector->getConnectorId(), $imapfolders);
+        
+        // save number of active connectors
+        $settingsService = object_container_get( SettingsService::class );
+        $connectorDao = new ConnectorDAO();
+        $settingsService->updateValue('webmail__active_connector_count', $connectorDao->activeConnectorCount());
+        
         
         return $connector->getConnectorId();
     }

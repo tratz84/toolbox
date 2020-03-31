@@ -22,6 +22,10 @@ class ConnectorDAO extends \core\db\DAOObject {
 	public function connectorCount() {
 	    return $this->queryValue('select count(*) from webmail__connector');
 	}
+
+	public function activeConnectorCount() {
+	    return $this->queryValue('select count(*) from webmail__connector where active = true');
+	}
 	
 	public function read($id) {
 	    return $this->queryOne('select * from webmail__connector where connector_id = ?', array($id));
