@@ -72,7 +72,7 @@ class TabContainer {
         $html .= '<div class="tab-content" id="nav-tabContent">' . PHP_EOL;
         foreach($this->tabs as $x => $tab) {
             $slug = slugify($tab['title']);
-            $html .= '<div class="tab-pane fade '.($x==0?'show active':'').'" id="nav-'.$slug.'" role="tabpanel" aria-labelledby="'.$slug.'-tab">' . PHP_EOL;
+            $html .= '<div class="tab-pane '.($x==0?'show active':'').'" id="nav-'.$slug.'" role="tabpanel" aria-labelledby="'.$slug.'-tab">' . PHP_EOL;
             $html .= $tab['content'] . PHP_EOL;
             $html .= '</div>' . PHP_EOL;
         }
