@@ -87,12 +87,13 @@ if ($argumentParser->hasOption('skip-connector-import') == false) {
             $ic->doImport( $c );
             $ic->disconnect();
             $ic->saveMessagePropertyChecksums();
+            
+            $solrImportMail->purge( true );
         }
         else if ($c->getConnectorType() == 'pop3') {
             
         }
         
-        $solrImportMail->purge( true );
     }
     
     print "DONE Connector import\n";
