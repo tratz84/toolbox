@@ -34,6 +34,7 @@ use invoice\model\ToBillDAO;
 use invoice\model\Vat;
 use invoice\model\VatDAO;
 use project\model\ProjectDAO;
+use core\exception\LockException;
 
 class InvoiceService extends ServiceBase implements ObjectHookable {
 
@@ -247,6 +248,13 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
 
             if ($lastInvoiceNumber != $invoice->getInvoiceNumber()) {
                 throw new \core\exception\InvalidStateException('Unable to delete invoice');
+            }
+            
+            /** @var InvoiceSettings $invoiceSettings */
+            $invoiceSettings = object_container_get(InvoiceSettings::class);
+            // locked? => throw LockException
+            if ($invoiceSettings->invoiceLocked( $invoice )) {
+                throw new LockException('Invoice locked');
             }
         }
 
