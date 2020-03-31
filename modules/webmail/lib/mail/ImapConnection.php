@@ -202,16 +202,14 @@ class ImapConnection {
             for($y=0; $y < count($results); $y++) {
                 $emlfile = $this->determineEmailPath( $results[$y] );
                 $mp = $this->buildMessageProperties($emlfile, $folderName, $results[$y]);
-                $mp->save();
                 
                 // check if mail (properties) are changed
-                $data_mp = json_encode($mp);
-//                 print $data_mp . "\n";
-//                 print "$emlfile\n";
-                $changed = $this->messagePropertiesChanged($emlfile.'.properties', $data_mp);
+                $changed = $this->messagePropertiesChanged($emlfile, mp);
+                
                 if ($changed) {
-                    $this->saveMessage($folderName, $results[$y], $x+$y);
+                    $mp->save();
                     
+                    $this->saveMessage($folderName, $results[$y], $x+$y);
                 }
                 
                 // callback (probably Solr-import)
@@ -308,7 +306,7 @@ class ImapConnection {
     }
     
     public function messagePropertiesChanged($filename, $data) {
-        $chksum = crc32_int32($data);
+        $chksum = crc32_int32(serialize($data));
         
         if ($this->messagePropertyChecksums === null) {
             $f = get_data_file('webmail/message-checksums');

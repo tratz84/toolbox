@@ -45,6 +45,8 @@ class MailProperties {
         return file_put_contents($this->file, json_encode($this->properties));
     }
     
+    public function getProperties() { return $this->properties; }
+    
     public function setProperty($name, $val) {
         $this->properties[$name] = $val;
     }
