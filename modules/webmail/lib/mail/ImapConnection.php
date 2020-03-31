@@ -204,7 +204,7 @@ class ImapConnection {
                 $mp = $this->buildMessageProperties($emlfile, $folderName, $results[$y]);
                 
                 // check if mail (properties) are changed
-                $changed = $this->messagePropertiesChanged($emlfile, mp);
+                $changed = $this->messagePropertiesChanged($emlfile, $mp);
                 
                 if ($changed) {
                     $mp->save();
