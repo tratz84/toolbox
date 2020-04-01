@@ -2,12 +2,14 @@
 
 namespace webmail\mail;
 
+use core\exception\ObjectNotFoundException;
+use function object_container_get;
+use function webmail\mail\ImapConnection\imapAppend as imap_last_error;
 use webmail\model\Connector;
 use webmail\service\ConnectorService;
 use webmail\service\EmailService;
 use webmail\solr\SolrImportMail;
 use webmail\solr\SolrMail;
-use core\exception\ObjectNotFoundException;
 
 class SolrMailActions {
     
@@ -172,6 +174,23 @@ class SolrMailActions {
                 'mailboxName' => $if->getFolderName()
         ]);
     }
+    
+    
+    public function saveSendMail( SendMail $mail) {
+        /** @var EmailService $emailService */
+        $emailService = object_container_get(EmailService::class);
+        
+        /** @var \webmail\model\Identity $identity */
+        $identity = $emailService->readIdentity( $this->getIdentityId() );
+        
+        // connector linked to identity?
+        if ($identity && $identity->getConnectorId()) {
+            return $this->saveEmailToConnector($identity->getConnectorId(), $mail->getEmailId());
+        }
+        
+        return false;
+    }
+    
     
     
     public function saveEmailToConnector($connectorId, $emailId) {

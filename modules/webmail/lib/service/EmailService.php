@@ -63,7 +63,7 @@ class EmailService extends ServiceBase {
             $identity = new Identity();
         }
         
-        $form->fill($identity, array('identity_id', 'from_name', 'from_email', 'active'));
+        $form->fill($identity, array('identity_id', 'connector_id', 'from_name', 'from_email', 'active'));
         
         return $identity->save();
     }

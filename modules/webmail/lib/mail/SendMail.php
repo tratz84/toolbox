@@ -7,6 +7,7 @@ use webmail\service\EmailService;
 use core\Context;
 use webmail\model\Email;
 use core\exception\ResourceException;
+use webmail\service\ConnectorService;
 
 class SendMail {
     
@@ -20,6 +21,9 @@ class SendMail {
     
     protected $attachmentFiles = array();
     protected $attachmentDataFiles = array();
+    
+    protected $emailId = null;
+    protected $identityId = null;
     
     protected $content = null;
     
@@ -49,6 +53,11 @@ class SendMail {
     public function getBcc() { return $this->to; }
     public function clearBcc() { $this->to = array(); }
     
+    public function setEmailId($id) { $this->emailId = $id; }
+    public function getEmailId() { return $this->emailId; }
+    
+    public function setIdentityId($id) { $this->identityId = $id; }
+    public function getIdentityId() { return $this->identityId; }
     
     public function getFromName() { return $this->fromName; }
     public function setFromName($n) { $this->fromName = $n; }
@@ -163,6 +172,16 @@ class SendMail {
                 return false;
             }
             
+            // mail sent & identity is set? => try to save mail on imap server (if configured)
+            if ($r && $this->getIdentityId()) {
+                // call SolrMailActions::saveSendMail()
+                // might return false if imap is not configured
+                $solrMailActions = object_container_get(SolrMailActions::class);
+                $solrMailActions->saveSendMail( $this );
+            }
+            
+            
+            
             return $r;
         }
     }
@@ -172,6 +191,8 @@ class SendMail {
         $ctx = object_container_get(Context::class);
         
         $sm = new SendMail();
+        $sm->setEmailId($email->getIdentityId());
+        $sm->setIdentityId( $email->getIdentityId() );
         $sm->setSubject($email->getSubject());
         $sm->setFromName($email->getFromName());
         $sm->setFromEmail($email->getFromEmail());

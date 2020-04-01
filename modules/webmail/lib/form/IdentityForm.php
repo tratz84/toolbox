@@ -11,6 +11,9 @@ use core\forms\HiddenField;
 use core\forms\TextField;
 use core\forms\validator\EmailValidator;
 use core\forms\validator\NotEmptyValidator;
+use webmail\service\ConnectorService;
+use core\forms\DynamicSelectField;
+use core\forms\SelectField;
 
 class IdentityForm extends BaseForm {
     
@@ -25,9 +28,33 @@ class IdentityForm extends BaseForm {
         $this->addWidget( new TextField('from_name', '', 'Naam') );
         $this->addWidget( new EmailField('from_email', '', 'E-mail'));
         
+        if (ctx()->isExperimental()) {
+            $this->addLinkedConnectorId();
+        }
+        
         
         $this->addValidator('from_name', new NotEmptyValidator());
         $this->addValidator('from_email', new EmailValidator());
+        
+    }
+    
+    
+    protected function addLinkedConnectorId() {
+        
+        $map = array();
+        $map[''] = t('Make your choice');
+        
+        /** @var ConnectorService $connectorService */
+        $connectorService = object_container_get(ConnectorService::class);
+        
+        $cons = $connectorService->readConnectors();
+        foreach($cons as $c) {
+            $map[$c->getConnectorId()] = $c->getDescription();
+        }
+        
+        $sf = new SelectField('connector_id', '', $map, t('Sent mail connector'));
+        $sf->setInfoText( t('If connector is an IMAP instance, sent mail is saved in the Sent-folder (if set)') );
+        $this->addWidget($sf);
         
     }
     
