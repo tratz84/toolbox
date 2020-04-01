@@ -232,6 +232,19 @@ function applyWidgetFields(container) {
 		$(node).sortable(opts);
 	});
 
+	
+	$(container).find('.stretch-to-bottom').each(function(index, node) {
+		$(node).addClass('stretch-to-bottom-autoresize');
+		var wh = $(window).height() - $(node).offset().top;
+		$(node).css('height', wh);
+	});
+	$(window).resize(function() {
+		$(container).find('.stretch-to-bottom-autoresize').each(function(index, node) {
+			var h = $(window).height() - $(node).offset().top;
+			$(node).css('height', h);
+		});
+	});
+	
 
 	handle_resetFieldButton( container );
 }

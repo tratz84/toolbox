@@ -29,7 +29,7 @@
 </div>
 
 
-<div id="mail-container" class="pretty-split-pane-frame">
+<div id="mail-container" class="pretty-split-pane-frame stretch-to-bottom">
 	<div class="split-pane  horizontal-percent">
 		<div class="split-pane-component" id="top-component">
 			<div id="emailheader-table-container" class="pretty-split-pane-component-inner"></div>
@@ -54,16 +54,8 @@ function uploadFilesField_Click(obj) {
 
 var paneState = <?= json_encode($state) ?>;
 
-function resizeMailContainer() {
-	var marginTop = $('.page-header').next().offset().top;
-	var wh = $(window).height() - marginTop;
-	$('#mail-container').css('height', wh);
-}
-
-$(window).resize( resizeMailContainer );
 
 function execSplitPane() {
-	resizeMailContainer();
 	
 	$('.split-pane').splitPane();
 	

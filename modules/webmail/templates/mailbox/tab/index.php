@@ -25,7 +25,7 @@
 </style>
 
 
-<div id="mail-container" class="pretty-split-pane-frame" style="height: 800px;">
+<div id="mail-container" class="pretty-split-pane-frame stretch-to-bottom" style="height: 800px;">
 	<div class="split-pane  horizontal-percent">
 		<div class="split-pane-component" id="top-component">
 			<div class="pretty-split-pane-component-inner">
@@ -62,11 +62,6 @@
 
 var mailSplitPaneState = <?= json_encode($state) ?>;
 
-function resizeMailContainer() {
-	var marginTop = $('#mail-container').offset().top;
-	var wh = $(window).height() - marginTop;
-	$('#mail-container').css('height', wh);
-}
 
 var it_webmail = new IndexTable('#emailheader-table-container', {
 	autoloadNext: true,
@@ -168,8 +163,6 @@ $(window).on('tabcontainer-item-click', function(e, f) {
 	
 	mail_tab_opened = true;
 
-	resizeMailContainer();
-
 	if (mailtab_first_open) {
 		// load mail
 		it_webmail.load();
@@ -178,9 +171,6 @@ $(window).on('tabcontainer-item-click', function(e, f) {
 			it_webmail.load( { force: true } );
 		});
 		
-		$(window).resize(function( ){
-			resizeMailContainer();
-		});
 
 		$('#mail-container .split-pane').splitPane();
 		
@@ -201,18 +191,11 @@ $(window).on('tabcontainer-item-click', function(e, f) {
 		});
 
 		$(document).ready(function( ){
-			resizeMailContainer();
 			$('#mail-container [name=q]').focus();
 		});
-		if (typeof less != 'undefined') {
-			less.pageLoadFinished.then(function() {
-				resizeMailContainer();
-			});
-		}
 		
 		// set focus to search-field
 		setTimeout(function() {
-			resizeMailContainer();
 			$('#mail-container [name=q]').focus();
 			var fcs = $('#mail-container').height() * mailSplitPaneState[0];
 			$('#mail-container .split-pane').splitPane('firstComponentSize', fcs);

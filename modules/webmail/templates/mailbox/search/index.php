@@ -28,7 +28,7 @@
 </div>
 
 
-<div id="mail-container" class="pretty-split-pane-frame">
+<div id="mail-container" class="pretty-split-pane-frame stretch-to-bottom">
 	<div class="split-pane horizontal-percent">
 		<div class="split-pane-component" id="top-component">
 			<div id="emailheader-table-container" class="pretty-split-pane-component-inner"></div>
@@ -48,17 +48,8 @@
 
 var paneState = <?= json_encode($state) ?>;
 
-function resizeMailContainer() {
-	var marginTop = $('#mail-container').offset().top;
-	var wh = $(window).height() - marginTop;
-	$('#mail-container').css('height', wh);
-}
-
-$(window).resize( resizeMailContainer );
 
 function execSplitPane() {
-	resizeMailContainer();
-	
 	$('.split-pane').splitPane();
 	
 	if (paneState['slider-ratio'][0]) {
