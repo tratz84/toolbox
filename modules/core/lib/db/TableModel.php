@@ -151,8 +151,8 @@ class TableModel {
             $columns = array( $columns );
         }
         
-        // TODO: auto add index for foreign keys?
-//         $this->addIndex($indexName, $columns);
+        // auto add index for foreign keys?
+        $this->addIndex($indexName, $columns);
             
         
         if (is_string($refColumns)) {
