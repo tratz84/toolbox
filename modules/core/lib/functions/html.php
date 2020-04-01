@@ -331,6 +331,31 @@ function hex_inc_perc($hexstr, $perc=null) {
 }
 
 
+function toolbox_html2pdf_available() {
+    if (defined('PATH_WKHTMLTOPDF') && file_exists(PATH_WKHTMLTOPDF)) {
+        return PATH_WKHTMLTOPDF;
+    }
+    
+    return which_exec('wkhtmltopdf');
+}
+
+function toolbox_html2pdf( $html ) {
+    $exec = toolbox_html2pdf_available();
+    if (!$exec) {
+        return null;
+    }
+    
+    list($return_value, $stdout) = exec_return($exec . ' - -', $html);
+    
+    // TODO: check $return_value?
+    if ($return_value != 1) {
+        return null;
+    }
+    
+    return $stdout;
+}
+
+
 
 
 
