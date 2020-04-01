@@ -31,10 +31,11 @@
 <div id="mail-container" class="pretty-split-pane-frame stretch-to-bottom">
 	<div class="split-pane horizontal-percent">
 		<div class="split-pane-component" id="top-component">
-			<div id="emailheader-table-container" class="pretty-split-pane-component-inner">
-				<div class="search-fields">
-					<input type="text" name="q" placeholder="<?= t('Search') ?>" style="width: 100%;" />
-				</div>
+			<div class="pretty-split-pane-component-inner">
+    			<div class="search-fields">
+    				<input type="text" name="q" placeholder="<?= t('Search') ?>" style="width: 100%;" />
+    			</div>
+    			<div id="emailheader-table-container" style="max-height: calc(100% - 35px);"></div>
 			</div>
 		</div>
 		<div class="split-pane-divider" id="my-divider"></div>
