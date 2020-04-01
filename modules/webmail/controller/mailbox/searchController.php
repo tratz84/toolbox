@@ -24,6 +24,7 @@ class searchController extends BaseController {
 	    $this->actionContainer = new ActionContainer('mail-actions', null);
 	    hook_eventbus_publish($this->actionContainer, 'webmail', 'mailbox-search');
 	    
+	    $this->filtersEnabled = isset($_GET['filters']) == false || $_GET['filters'] ? true : false;
 	    
 		$this->render();
 	}
@@ -72,8 +73,11 @@ class searchController extends BaseController {
 	    if ($mts) {
             $smq->setMailTabSettings( $mts );
 	    } else {
-	        $mss = new MailboxSearchSettings();
-	        $mss->applyFilters($smq);
+	        
+	        if (get_var('f')) {
+    	        $mss = new MailboxSearchSettings();
+    	        $mss->applyFilters($smq);
+	        }
 	    }
 	    
 	    try {

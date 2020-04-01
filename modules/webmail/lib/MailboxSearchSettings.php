@@ -126,11 +126,13 @@ class MailboxSearchSettings {
         
         // append includes to current query
         if (count($qs_inc)) {
+            $query = $smq->getRawQuery();
+            
             $q = '(' . implode(' OR ', $qs_inc) . ')';
-            if ($this->query != '*:*') {
-                $q .= ' AND ( ' . $this->query . ')';
+            if ($query != '*:*') {
+                $q .= ' AND ( ' . $query . ')';
             }
-            $this->setRawQuery( $q );
+            $smq->setRawQuery( $q );
         }
         
     }

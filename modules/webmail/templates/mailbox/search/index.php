@@ -33,11 +33,12 @@
 		<div class="split-pane-component" id="top-component">
 			<div class="pretty-split-pane-component-inner">
     			<div class="search-fields">
-    				<div class="toolbox" style="padding: 5px 5px 0 0;">
+    				<div class="toolbox" style="padding: 5px 5px 0 3px;">
+    					<input type="checkbox" name="f" title="filters" <?= $filtersEnabled ? 'checked=checked':'' ?> />
     					<a href="javascript:void(0);" onclick="show_popup(<?= esc_json_attr(appUrl('/?m=webmail&c=mailbox/search&a=settings')) ?>);" class="fa fa-cog" style="font-size: 20px;"></a>
     				</div>
     				
-    				<input type="text" name="q" placeholder="<?= t('Search') ?>" style="width: calc(100% - 35px);" />
+    				<input type="text" name="q" placeholder="<?= t('Search') ?>" style="width: calc(100% - 50px);" />
     			</div>
     			<div id="emailheader-table-container" style="max-height: calc(100% - 35px);"></div>
 			</div>
