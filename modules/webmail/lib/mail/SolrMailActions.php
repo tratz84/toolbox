@@ -68,6 +68,7 @@ class SolrMailActions {
             // update solr
             $su = new SolrImportMail( WEBMAIL_SOLR );
             $su->updateDoc($solrMail->getId(), [ 'mailboxName' => 'Junk' ]);
+            return;
         }
         
         
