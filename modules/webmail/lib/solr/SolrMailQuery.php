@@ -29,54 +29,7 @@ class SolrMailQuery extends SolrQuery {
         $this->addFacetSearch('contextName', ':', ctx()->getContextName());
     }
     
-    public function setMailTabSettings( MailTabSettings $mailtabSettings ) {
-        
-        $qs = array();
-        
-        // apply default filter(s)? (e-mailadresses linked to company/person)
-        
-        $filters = $mailtabSettings->getFilters();
-        
-        if ($mailtabSettings->applyDefaultFilters()) {
-            $defaultFilters = $mailtabSettings->getDefaultFilters();
-            $filters = array_merge($filters, $defaultFilters);
-        }
-        
-        // other filters specified?
-        foreach($filters as $filter) {
-            if ($filter['filter_type'] == 'email') {
-                $v = solr_escapeTerm( trim($filter['filter_value']) );
-                // unescape asterisks
-                $v = str_replace('\\*', '*', $v);
-                
-                // @domainname.com? => prefix with asterisk
-                if (strpos($v, '@') === 0) {
-                    $v = '*'.$v;
-                }
-                
-                $qs[] = 'toEmail:'.$v;
-                $qs[] = 'fromEmail:'.$v;
-            }
-            
-            if ($filter['filter_type'] == 'folder') {
-                $v = solr_escapePhrase( trim($filter['filter_value']) );
-                
-                $qs[] = 'mailboxName:'.$v;
-            }
-            
-        }
-        
-        // append query to current query
-        if (count($qs)) {
-            $q = '(' . implode(' OR ', $qs) . ')';
-            if ($this->query != '*:*') {
-                $q .= ' AND ( ' . $this->query . ')';
-            }
-            $this->setRawQuery( $q );
-        }
-        
-    }
-    
+
     public function readById($id) {
         // reset query
         $this->clearFields();

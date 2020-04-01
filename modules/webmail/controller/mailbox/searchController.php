@@ -71,9 +71,8 @@ class searchController extends BaseController {
 	    
 	    // TODO: hmz... this isn't the right way
 	    if ($mts) {
-            $smq->setMailTabSettings( $mts );
+	        $mts->applyFilters( $smq );
 	    } else {
-	        
 	        if (get_var('f')) {
     	        $mss = new MailboxSearchSettings();
     	        $mss->applyFilters($smq);

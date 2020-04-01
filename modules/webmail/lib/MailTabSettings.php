@@ -7,6 +7,7 @@ use base\model\Company;
 use base\model\Person;
 use base\service\CompanyService;
 use base\service\PersonService;
+use webmail\solr\SolrMailQuery;
 
 
 class MailTabSettings {
@@ -123,6 +124,56 @@ class MailTabSettings {
         );
     }
     
+    
+    
+    public function applyFilters(SolrMailQuery $smq) {
+        
+        $qs = array();
+        
+        // apply default filter(s)? (e-mailadresses linked to company/person)
+        
+        $filters = $this->getFilters();
+        
+        if ($this->applyDefaultFilters()) {
+            $defaultFilters = $this->getDefaultFilters();
+            $filters = array_merge($filters, $defaultFilters);
+        }
+        
+        // other filters specified?
+        foreach($filters as $filter) {
+            if ($filter['filter_type'] == 'email') {
+                $v = solr_escapeTerm( trim($filter['filter_value']) );
+                // unescape asterisks
+                $v = str_replace('\\*', '*', $v);
+                
+                // @domainname.com? => prefix with asterisk
+                if (strpos($v, '@') === 0) {
+                    $v = '*'.$v;
+                }
+                
+                $qs[] = 'toEmail:'.$v;
+                $qs[] = 'fromEmail:'.$v;
+            }
+            
+            if ($filter['filter_type'] == 'folder') {
+                $v = solr_escapePhrase( trim($filter['filter_value']) );
+                
+                $qs[] = 'mailboxName:'.$v;
+            }
+            
+        }
+        
+        // append query to current query
+        if (count($qs)) {
+            $q = '(' . implode(' OR ', $qs) . ')';
+            if ($smq->getRawQuery() != '*:*') {
+                $q .= ' AND ( ' . $smq->getRawQuery() . ')';
+            }
+            $smq->setRawQuery( $q );
+        }
+        
+        
+    }
     
     
     
