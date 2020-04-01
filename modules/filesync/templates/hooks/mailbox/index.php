@@ -75,6 +75,8 @@ function filesync_mailbox_Click(anch) {
 
 	var url = appUrl('/?m=filesync&c=hooks/mailbox&a=import&email_id=' + email_id + '&attachmentNo=' + attachment_no + '&store_id=' + storeid);
 	window.open(url, '_blank');
+
+	close_popup();
 }
 
 
