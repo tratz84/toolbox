@@ -348,9 +348,9 @@ function toolbox_html2pdf( $html ) {
     list($return_value, $stdout) = exec_return($exec . ' - -', $html);
     
     // TODO: check $return_value?
-    if ($return_value != 1) {
-        return null;
-    }
+//     if ($return_value != 1) {
+//         return null;
+//     }
     
     return $stdout;
 }
