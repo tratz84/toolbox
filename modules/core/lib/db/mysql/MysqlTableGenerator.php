@@ -14,6 +14,7 @@ class MysqlTableGenerator {
     protected $dbColumns = array();
     protected $dbConstraints = array();
     protected $dbIndexes = array();
+    protected $dbForeignKeys = array();
     
     public function __construct(TableModel $model) {
         $this->tableModel = $model;
@@ -75,11 +76,13 @@ class MysqlTableGenerator {
         
         $mysql = DatabaseHandler::getInstance()::getConnection( $this->resourceName );
         
+        // column info
         $r = $mysql->query('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME=?', array($mysql->getDatabaseName(), $this->getTableName()));
         while ($row = $r->fetch_assoc()) {
             $this->dbColumns[ $row['COLUMN_NAME'] ] = $row;
         }
         
+        // constraints info
         $sql = "select *
                 from information_schema.key_column_usage kcu 
                 join information_schema.table_constraints tc on (kcu.constraint_catalog = tc.constraint_catalog and kcu.table_schema = tc.table_schema and kcu.table_name=tc.table_name and kcu.CONSTRAINT_NAME=tc.CONSTRAINT_NAME)  
@@ -94,6 +97,7 @@ class MysqlTableGenerator {
             $this->dbConstraints[$in][] = $row;
         }
         
+        // indexes
         $tbl = $mysql->getDatabaseName().'.'.$this->getTableName();
         $sql = "show keys from ".$tbl;//." where Non_unique=1";
         $r = $mysql->query($sql);
@@ -105,6 +109,44 @@ class MysqlTableGenerator {
             
             $this->dbIndexes[$in][] = $row;
         }
+        
+        
+        // foreign keys
+        $sql = "SELECT CONSTRAINT_NAME, COLUMN_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
+                FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+                WHERE REFERENCED_TABLE_SCHEMA = ?
+                    AND TABLE_NAME = ? 
+                ORDER BY ORDINAL_POSITION";
+        $r = $mysql->query($sql, array($mysql->getDatabaseName(), $this->getTableName()));
+        while ($row = $r->fetch_assoc()) {
+            $fk_name = $row['CONSTRAINT_NAME'];
+            
+            if (isset($this->dbForeignKeys[$fk_name]) == false) {
+                $this->dbForeignKeys[$fk_name] = array();
+                $this->dbForeignKeys[$fk_name]['columns'] = array();
+                $this->dbForeignKeys[$fk_name]['ref_table'] = $row['REFERENCED_TABLE_NAME'];
+                $this->dbForeignKeys[$fk_name]['ref_columns'] = array();
+                
+                $sql = "select *
+                        FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS
+                        WHERE CONSTRAINT_SCHEMA = ? 
+                                AND TABLE_NAME = ?
+                                AND CONSTRAINT_NAME = ?";
+                $ref_constraint = $mysql->queryOne($sql, array($mysql->getDatabaseName(), $this->getTableName(), $row['CONSTRAINT_NAME']));
+                
+                if (!$ref_constraint) {
+                    // this shouldn't never happen afaik. Remove in future when sure?
+                    throw new DatabaseException('Unable to lookup referential_constraints');
+                }
+                
+                $this->dbForeignKeys[$fk_name]['on_update'] = $ref_constraint['UPDATE_RULE'];
+                $this->dbForeignKeys[$fk_name]['on_delete'] = $ref_constraint['DELETE_RULE'];
+            }
+            
+            $this->dbForeignKeys[$fk_name]['columns'][] = $row['COLUMN_NAME'];
+            $this->dbForeignKeys[$fk_name]['ref_columns'][] = $row['REFERENCED_COLUMN_NAME'];
+        }
+        
     }
     
     public function buildAlter() {
@@ -112,9 +154,10 @@ class MysqlTableGenerator {
         
         
         $sql1 = $this->buildAlterColumns();
-        $sql3 = $this->buildAlterIndexes();
+        $sql2 = $this->buildAlterIndexes();
+        $sql3 = $this->buildAlterForeignKeys();
         
-        return array_merge($sql1, $sql3);
+        return array_merge($sql1, $sql2, $sql3);
     }
     
     protected function buildAlterColumns() {
@@ -286,6 +329,84 @@ class MysqlTableGenerator {
     
     
     
+    protected function buildAlterForeignKeys() {
+        $sql_statements = array();
+        
+        // add/change foreign keys
+        $foreignKeys = $this->tableModel->getForeignKeys();
+        $fkNames = array_keys($foreignKeys);
+        
+        for($x=0; $x < count($fkNames); $x++) {
+            $fkName = $fkNames[$x];
+            $foreignKey = $foreignKeys[$fkName];
+            
+            if (isset($this->dbForeignKeys[$fkName])) {
+                // TODO: check if FK is changed
+                $changed = false;
+                
+                if (count($this->dbForeignKeys[$fkName]['columns']) != count($foreignKey['columns'])) {
+                    $changed = true;
+                } else {
+                    for($y=0; $y < count($this->dbForeignKeys[$fkName]['columns']); $y++) {
+                        if ($this->dbForeignKeys[$fkName]['columns'][$y] != $foreignKey['columns'][$y]) {
+                            $changed = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (count($this->dbForeignKeys[$fkName]['ref_columns']) != count($foreignKey['ref_columns'])) {
+                    $changed = true;
+                } else {
+                    for($y=0; $y < count($this->dbForeignKeys[$fkName]['ref_columns']); $y++) {
+                        if ($this->dbForeignKeys[$fkName]['ref_columns'][$y] != $foreignKey['ref_columns'][$y]) {
+                            $changed = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if ($this->dbForeignKeys[$fkName]['ref_table'] != $foreignKey['ref_table']) {
+                    $changed = true;
+                }
+                if ($this->dbForeignKeys[$fkName]['on_delete'] != $foreignKey['on_delete']) {
+                    $changed = true;
+                }
+                if ($this->dbForeignKeys[$fkName]['on_update'] != $foreignKey['on_update']) {
+                    $changed = true;
+                }
+                
+                if ($changed) {
+                    $sql_statements[] = 'ALTER TABLE `'.$this->getTableName().'` DROP CONSTRAINT `'.$fkName.'`';
+                } else {
+                    // not changed? => skip
+                    continue;
+                }
+            }
+            
+            // build add constraint-sql
+            $sql = '';
+            $sql .= 'ALTER TABLE `'.$this->getTableName().'` ADD CONSTRAINT `'.$fkName.'`';
+            $sql .= ' FOREIGN KEY (`'.implode('`, `', $foreignKey['columns']).'`)';
+            $sql .= ' REFERENCES `'.$foreignKey['ref_table'].'` (`'.implode('`, `', $foreignKey['ref_columns']).'`)';
+            $sql .= ' ON DELETE '.$foreignKey['on_delete'].' ON UPDATE '.$foreignKey['on_update'].';';
+            $sql_statements[] = $sql;
+        }
+        
+        // drop foreign keys
+//         var_export($foreignKeys);exit;
+        foreach($this->dbForeignKeys as $fkName => $props) {
+            if (isset($foreignKeys[$fkName]) == false) {
+                $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` DROP CONSTRAINT `" . $fkName . "`;";
+            }
+        }
+        
+        
+        return $sql_statements ;
+    }
+    
+    
+    
     
     protected function columnTypeChanged($columnName) {
         $model_type = $this->tableModel->getColumnProperty($columnName, 'type');
@@ -325,6 +446,10 @@ class MysqlTableGenerator {
         $sql = 'CREATE TABLE '.$this->getTableName().' ('.PHP_EOL;
         $columns = $m->getColumns();
         for($colno=0; $colno < count($columns); $colno++) {
+            if ($colno > 0) {
+                $sql .= ",\n";
+            }
+            
             $c = $columns[$colno];
             $sql .= "\t`$c`";
 
@@ -341,9 +466,6 @@ class MysqlTableGenerator {
                 $sql .= ' AUTO_INCREMENT';
             }
             
-            if ($colno < count($columns)-1)
-                $sql .= ",\n";
-            
         }
         
         $indexes = $this->tableModel->getIndexes();
@@ -352,9 +474,7 @@ class MysqlTableGenerator {
         for($x=0; $x < count($constraint_keys); $x++) {
             $key = $constraint_keys[$x];
             
-            if ($x == 0) {
-                $sql .= ",\n";
-            }
+            $sql .= ",\n";
             
             $cols = $indexes[$key]['columns'];
 
@@ -371,15 +491,31 @@ class MysqlTableGenerator {
                 $sql .= "\t{$indexProps}KEY `{$key}` (".implode(', ', $cols) . ")";
             }
             
-            $sql .= ($x < count($constraint_keys)-1 ? ",\n":"");
+//             $sql .= ($x < count($constraint_keys)-1 ? ",\n":"");
             
             $counter++;
         }
         
+        // build FK's
+        $foreignKeys = $this->tableModel->getForeignKeys();
+        foreach($foreignKeys as $keyName => $fk) {
+            $sql .= ",\n";
+            
+            $fk_sql = '';
+            $fk_sql .= "\tCONSTRAINT `".$keyName."` FOREIGN KEY";
+            $fk_sql .= " (`".implode("`, `", $fk['columns'])."`)";
+            $fk_sql .= " REFERENCES `".$fk['ref_table']."`";
+            $fk_sql .= " (`".implode("`, `", $fk['ref_columns'])."`)";
+            $fk_sql .= " ON DELETE " . strtoupper($fk['on_delete']);
+            $fk_sql .= " ON UPDATE " . strtoupper($fk['on_update']);
+            
+            $sql .= $fk_sql;
+        }
+        
+        
         if (count($primaryKeyColumns)) {
             $sql .= ",\n" . "\tPRIMARY KEY (" . implode(', ', $primaryKeyColumns) . ")";
         }
-        
         
         
         $sql .= PHP_EOL.') ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci'.PHP_EOL;

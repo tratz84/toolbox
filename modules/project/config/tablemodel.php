@@ -20,6 +20,7 @@ $tb_project->addColumn('edited',                 'datetime');
 $tb_project->addColumn('created',                'datetime');
 $tb_project->addIndex('person_id', array('person_id'));
 $tb_project->addIndex('company_id', array('company_id'));
+$tb_project->addForeignKey('project__project_ibfk_1', 'person_id', 'customer__person', 'person_id', 'restrict', 'restrict');
 $tbs[] = $tb_project;
 
 
@@ -60,6 +61,8 @@ $tb_ph->addColumn('user_id',                'int');
 $tb_ph->addColumn('declarable',             'boolean');
 $tb_ph->addIndex('project_id', ['project_id']);
 $tb_ph->addIndex('project_hour_type_id', ['project_hour_type_id']);
+$tb_ph->addForeignKey('project__project_hour_ibfk_1', 'project_id', 'project__project', 'project_id', 'restrict', 'restrict');
+$tb_ph->addForeignKey('project__project_hour_ibfk_2', 'project_hour_type_id', 'project__project_hour_type', 'project_hour_type_id', 'restrict', 'restrict');
 $tbs[] = $tb_ph;
 
 return $tbs;

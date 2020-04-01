@@ -2,7 +2,6 @@
 
 use core\db\TableModel;
 
-// TODO: unique key constraints
 
 $tbs = array();
 
@@ -64,7 +63,7 @@ $tb_connector->addColumn('active',                        'boolean');
 $tb_connector->addColumn('edited',                        'datetime');
 $tb_connector->addColumn('created',                       'datetime');
 $tb_connector->addIndex('email__connector_ibfk_1', array('user_id'));
-// TODO:   CONSTRAINT `email__connector_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `base__user` (`user_id`) ON DELETE SET NULL ON UPDATE RESTRICT
+$tb_connector->addForeignKey('email__connector_ibfk_1', 'user_id', 'base__user', 'user_id', 'set null', 'restrict');
 $tbs[] = $tb_connector;
 
 
@@ -79,7 +78,7 @@ $tb_cif->addColumn('active',                  'boolean');
 $tb_cif->addColumn('edited',                  'datetime');
 $tb_cif->addColumn('created',                 'datetime');
 $tb_cif->addIndex('webmail__connector_imapfolder_ibfk_1', array('connector_id'));
-// TODO:   CONSTRAINT `webmail__connector_imapfolder_ibfk_1` FOREIGN KEY (`connector_id`) REFERENCES `webmail__connector` (`connector_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+$tb_cif->addForeignKey('webmail__connector_imapfolder_ibfk_1', 'connector_id', 'webmail__connector', 'connector_id', 'cascade', 'restrict');
 $tbs[] = $tb_cif;
 
 $tb_email = new TableModel('webmail', 'email');
@@ -107,7 +106,7 @@ $tb_email->addIndex('webmail__email_ibfk_1', array('user_id'));
 $tb_email->addIndex('id_search_id', array('search_id'));
 $tb_email->addIndex('connector_imapfolder_id', array('connector_imapfolder_id'));
 $tb_email->addIndex('text_content', array('text_content'), ['fulltext' => true]);
-// TODO: CONSTRAINT `webmail__email_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `base__user` (`user_id`) ON DELETE SET NULL ON UPDATE RESTRICT
+$tb_email->addForeignKey('webmail__email_ibfk_1', 'user_id', 'base__user', 'user_id', 'set null', 'restrict');
 $tbs[] = $tb_email;
 
 
@@ -117,8 +116,8 @@ $tb_eet->addColumn('email_id', 'int');
 $tb_eet->addColumn('email_tag_id', 'int');
 $tb_eet->addIndex('uc_email_id_tag_id', array('email_id', 'email_tag_id'), ['unique' => true]);
 $tb_eet->addIndex('webmail__email_email_tag_ibfk_2', array('email_tag_id'));
-// TODO: CONSTRAINT `webmail__email_email_tag_ibfk_1` FOREIGN KEY (`email_id`) REFERENCES `webmail__email` (`email_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
-// CONSTRTODO: AINT `webmail__email_email_tag_ibfk_2` FOREIGN KEY (`email_tag_id`) REFERENCES `webmail__email_tag` (`email_tag_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+$tb_eet->addForeignKey('webmail__email_email_tag_ibfk_1', 'email_id', 'webmail__email', 'email_id', 'cascade', 'restrict');
+$tb_eet->addForeignKey('webmail__email_email_tag_ibfk_2', 'email_tag_id', 'webmail__email_tag', 'email_tag_id', 'cascade', 'restrict');
 $tbs[] = $tb_eet;
 
 
@@ -158,6 +157,7 @@ $tb_eto->addColumn('to_type',     "enum('To','Cc','Bcc')");
 $tb_eto->addColumn('to_name',     'varchar(255)');
 $tb_eto->addColumn('to_email',    'varchar(255)');
 $tb_eto->addIndex('webmail__email_to_ibfk_1', array('email_id'));
+$tb_eto->addForeignKey('webmail__email_to_ibfk_1', 'email_id', 'webmail__email', 'email_id', 'cascade', 'restrict');
 $tbs[] = $tb_eto;
 
 $tb_filter = new TableModel('webmail', 'filter');
@@ -179,7 +179,7 @@ $tb_filter_action->addColumn('filter_action_property', 'varchar(255)');
 $tb_filter_action->addColumn('filter_action_value', 'varchar(255)');
 $tb_filter_action->addColumn('sort', 'int');
 $tb_filter_action->addIndex('webmail__filter_action_ibfk_1', array('filter_id'));
-// TODO: CONSTRAINT `webmail__filter_action_ibfk_1` FOREIGN KEY (`filter_id`) REFERENCES `webmail__filter` (`filter_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+$tb_filter_action->addForeignKey('webmail__filter_action_ibfk_1', 'filter_id', 'webmail__filter', 'filter_id', 'restrict', 'restrict');
 $tbs[] = $tb_filter_action;
 
 $tb_filter_condition = new TableModel('webmail', 'filter_condition');
@@ -190,7 +190,7 @@ $tb_filter_condition->addColumn('filter_type', 'varchar(255)');
 $tb_filter_condition->addColumn('filter_pattern', 'varchar(255)');
 $tb_filter_condition->addColumn('sort', 'int');
 $tb_filter_condition->addIndex('webmail__filter_condition_ibfk_1', array('filter_id'));
-// TODO: CONSTRAINT `webmail__filter_condition_ibfk_1` FOREIGN KEY (`filter_id`) REFERENCES `webmail__filter` (`filter_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+$tb_filter_condition->addForeignKey('webmail__filter_condition_ibfk_1', 'filter_id', 'webmail__filter', 'filter_id', 'restrict', 'restrict');
 $tbs[] = $tb_filter_condition;
 
 $tb_identity = new TableModel('webmail', 'identity');
@@ -203,10 +203,9 @@ $tb_identity->addColumn('sort',         'int');
 $tb_identity->addColumn('edited',       'datetime');
 $tb_identity->addColumn('created',      'datetime');
 $tb_identity->addIndex('webmail__identity_ibfk_1', array('connector_id'));
-// TODO: CONSTRAINT `webmail__identity_ibfk_1` FOREIGN KEY (`connector_id`) REFERENCES `webmail__connector` (`connector_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+$tb_identity->addForeignKey('webmail__identity_ibfk_1', 'connector_id', 'webmail__connector', 'connector_id', 'restrict', 'restrict');
 $tbs[] = $tb_identity;
 
 
-// return $tbs;
-return null;
+return $tbs;
 

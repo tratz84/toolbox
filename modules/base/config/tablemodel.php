@@ -6,7 +6,7 @@ $tbs = array();
 
 
 $tb_activity = new TableModel('base', 'activity');
-$tb_activity->addColumn('activity_id',       ' int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_activity->addColumn('activity_id',       'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
 $tb_activity->addColumn('user_id',           'int');
 $tb_activity->addColumn('username',          'varchar(128)');
 $tb_activity->addColumn('company_id',        'int');
@@ -158,7 +158,7 @@ $tb_address->addColumn('country_id', 'int');
 $tb_address->addColumn('edited',     'datetime');
 $tb_address->addColumn('created',    'datetime');
 $tb_address->addIndex('country_id', array('country_id'));
-// TODO: FK,  CONSTRAINT `customer__address_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `customer__country` (`country_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+$tb_address->addForeignKey('customer__address_ibfk_1', 'country_id', 'customer__country', 'country_id', 'restrict', 'restrict');
 $tbs[] = $tb_address;
 
 
@@ -184,7 +184,7 @@ $tb_company->addColumn('edited',          'datetime');
 $tb_company->addColumn('created',         'datetime');
 $tb_company->addColumn('company_type_id', 'int');
 $tb_company->addIndex('company_type_id', array('company_type_id'));
-// FK: TODO, CONSTRAINT `customer__company_ibfk_1` FOREIGN KEY (`company_type_id`) REFERENCES `customer__company_type` (`company_type_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+$tb_company->addForeignKey('customer__company_ibfk_1', 'company_type_id', 'customer__company_type', 'company_type_id', 'restrict', 'restrict');
 $tbs[] = $tb_company;
 
 $tb_ca = new TableModel('customer', 'company_address');
@@ -194,8 +194,8 @@ $tb_ca->addColumn('address_id',         'int');
 $tb_ca->addColumn('sort',               'int');
 $tb_ca->addIndex('company_id', array('company_id'));
 $tb_ca->addIndex('address_id', array('address_id'));
-// TODO: FK, CONSTRAINT `customer__company_address_ibfk_1` FOREIGN KEY (`company_id`) REFERENCES `customer__company` (`company_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-// TODO: FK, CONSTRAINT `customer__company_address_ibfk_2` FOREIGN KEY (`address_id`) REFERENCES `customer__address` (`address_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+$tb_ca->addForeignKey('customer__company_address_ibfk_1', 'company_id', 'customer__company', 'company_id', 'restrict', 'restrict');
+$tb_ca->addForeignKey('customer__company_address_ibfk_2', 'address_id', 'customer__address', 'address_id', 'cascade', 'restrict');
 $tbs[] = $tb_ca;
 
 $tb_email = new TableModel('customer', 'email');
@@ -217,8 +217,8 @@ $tb_ce->addColumn('company_id',       'int');
 $tb_ce->addColumn('sort',             'int');
 $tb_ce->addIndex('company_id', array('company_id'));
 $tb_ce->addIndex('email_id', array('email_id'));
-// TODO: FK, CONSTRAINT `customer__company_email_ibfk_2` FOREIGN KEY (`company_id`) REFERENCES `customer__company` (`company_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-// TODO: FK, CONSTRAINT `customer__company_email_ibfk_3` FOREIGN KEY (`email_id`) REFERENCES `customer__email` (`email_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+$tb_ce->addForeignKey('customer__company_email_ibfk_2', 'company_id', 'customer__company', 'company_id', 'restrict', 'restrict');
+$tb_ce->addForeignKey('customer__company_email_ibfk_3', 'email_id', 'customer__email', 'email_id', 'cascade', 'restrict');
 $tbs[] = $tb_ce;
 
 
@@ -239,8 +239,8 @@ $tb_company_phone->addColumn('company_id',       'int');
 $tb_company_phone->addColumn('sort',             'int');
 $tb_company_phone->addIndex('company_id', array('company_id'));
 $tb_company_phone->addIndex('phone_id', array('phone_id'));
-// TODO: FK, CONSTRAINT `customer__company_phone_ibfk_2` FOREIGN KEY (`company_id`) REFERENCES `customer__company` (`company_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-// TODO: FK, CONSTRAINT `customer__company_phone_ibfk_3` FOREIGN KEY (`phone_id`) REFERENCES `customer__phone` (`phone_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+$tb_company_phone->addForeignKey('customer__company_phone_ibfk_2', 'company_id', 'customer__company', 'company_id', 'restrict', 'restrict');
+$tb_company_phone->addForeignKey('customer__company_phone_ibfk_3', 'phone_id', 'customer__phone', 'phone_id', 'cascade', 'restrict');
 $tbs[] = $tb_company_phone;
 
 
@@ -265,8 +265,8 @@ $tb_person_address->addColumn('address_id',        'int');
 $tb_person_address->addColumn('sort',              'int');
 $tb_person_address->addIndex('person_id', array('person_id'));
 $tb_person_address->addIndex('address_id', array('address_id'));
-// TODO: FK, CONSTRAINT `customer__person_address_ibfk_1` FOREIGN KEY (`person_id`) REFERENCES `customer__person` (`person_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-// TODO: FK, CONSTRAINT `customer__person_address_ibfk_2` FOREIGN KEY (`address_id`) REFERENCES `customer__address` (`address_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+$tb_person_address->addForeignKey('customer__person_address_ibfk_1', 'person_id', 'customer__person', 'person_id', 'restrict', 'restrict');
+$tb_person_address->addForeignKey('customer__person_address_ibfk_2', 'address_id', 'customer__address', 'address_id', 'cascade', 'restrict');
 $tbs[] = $tb_person_address;
 
 
@@ -277,8 +277,8 @@ $tb_person_email->addColumn('person_id',       'int');
 $tb_person_email->addColumn('sort',            'int');
 $tb_person_email->addIndex('person_id', array('person_id'));
 $tb_person_email->addIndex('email_id', array('email_id'));
-// TODO: FK, CONSTRAINT `customer__person_email_ibfk_2` FOREIGN KEY (`person_id`) REFERENCES `customer__person` (`person_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-// TODO: FK, CONSTRAINT `customer__person_email_ibfk_3` FOREIGN KEY (`email_id`) REFERENCES `customer__email` (`email_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+$tb_person_email->addForeignKey('customer__person_email_ibfk_2', 'person_id', 'customer__person', 'person_id', 'restrict', 'restrict');
+$tb_person_email->addForeignKey('customer__person_email_ibfk_3', 'email_id', 'customer__email', 'email_id', 'cascade', 'restrict');
 $tbs[] = $tb_person_email;
 
 
@@ -288,9 +288,9 @@ $tb_person_phone->addColumn('person_id',       'int');
 $tb_person_phone->addColumn('phone_id',        'int');
 $tb_person_phone->addColumn('sort',            'int');
 $tb_person_phone->addIndex('person_id', array('person_id'));
-// TODO: FK, CONSTRAINT `customer__person_phone_ibfk_1` FOREIGN KEY (`person_id`) REFERENCES `customer__person` (`person_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-// TODO: FK, CONSTRAINT `customer__person_phone_ibfk_2` FOREIGN KEY (`phone_id`) REFERENCES `customer__phone` (`phone_id`) ON DELETE CASCADE ON UPDATE RESTRICT
 $tb_person_phone->addIndex('phone_id', array('phone_id'));
+$tb_person_phone->addForeignKey('customer__person_phone_ibfk_1', 'person_id', 'customer__person', 'person_id', 'restrict', 'restrict');
+$tb_person_phone->addForeignKey('customer__person_phone_ibfk_2', 'phone_id', 'customer__phone', 'phone_id', 'cascade', 'restrict');
 $tbs[] = $tb_person_phone;
 
 

@@ -15,6 +15,7 @@ $tb_cal->addColumn('deleted',     'datetime');
 $tb_cal->addColumn('edited',      'datetime');
 $tb_cal->addColumn('created',     'datetime');
 $tb_cal->addIndex('cal__calendar_ibfk_1', array('user_id'));
+$tb_cal->addForeignKey('cal__calendar_ibfk_1', 'user_id', 'base__user', 'user_id', 'restrict', 'restrict');
 $tbs[] = $tb_cal;
 
 
@@ -44,6 +45,8 @@ $tb_ci->addColumn('edited',                    'datetime');
 $tb_ci->addColumn('created',                   'datetime');
 $tb_ci->addIndex('cal__calendar_item_ibfk_1', array('calendar_item_status_id'));
 $tb_ci->addIndex('cal__calendar_item_ibfk_2', array('calendar_item_category_id'));
+$tb_ci->addForeignKey('cal__calendar_item_ibfk_1', 'calendar_item_status_id', 'cal__calendar_item_status', 'calendar_item_status_id', 'restrict', 'restrict');
+$tb_ci->addForeignKey('cal__calendar_item_ibfk_2', 'calendar_item_category_id', 'cal__calendar_item_category', 'calendar_item_category_id', 'restrict', 'restrict');
 $tbs[] = $tb_ci;
 
 
@@ -79,7 +82,7 @@ $tb_todo->addColumn('list_name', 'varchar(255)');
 $tb_todo->addColumn('edited',    'datetime');
 $tb_todo->addColumn('created',   'datetime');
 $tb_todo->addIndex('user_id', array('user_id'));
-// TODO: FK, CONSTRAINT `cal__todo_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `base__user` (`user_id`) ON DELETE SET NULL ON UPDATE SET NULL
+$tb_todo->addForeignKey('cal__todo_ibfk_1', 'user_id', 'base__user', 'user_id', 'set null', 'set null');
 $tbs[] = $tb_todo;
 
 $tb_todo_item = new TableModel('cal', 'todo_item');
@@ -94,7 +97,7 @@ $tb_todo_item->addColumn('status',           'int');
 $tb_todo_item->addColumn('edited',           'datetime');
 $tb_todo_item->addColumn('created',          'datetime');
 $tb_todo_item->addIndex('todo_id', array('todo_id'));
-// TODO: FK, CONSTRAINT `cal__todo_item_ibfk_1` FOREIGN KEY (`todo_id`) REFERENCES `cal__todo` (`todo_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+$tb_todo_item->addForeignKey('cal__todo_item_ibfk_1', 'todo_id', 'cal__todo', 'todo_id', 'restrict', 'restrict');
 $tbs[] = $tb_todo_item;
 
 

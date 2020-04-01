@@ -25,6 +25,7 @@ class TableModel {
         
         $this->data['columns'] = array();
         $this->data['indexes'] = array();
+        $this->data['foreignKeys'] = array();
     }
     
     
@@ -133,6 +134,56 @@ class TableModel {
         );
         
         $this->data['indexes'][$indexName] = array_merge($data, $props);
+    }
+    
+    
+    public function getForeignKeys() {
+        if (isset($this->data['foreignKeys'])) {
+            return $this->data['foreignKeys'];
+        } else {
+            return array();
+        }
+    }
+    
+    public function addForeignKey($indexName, $columns, $refTable, $refColumns, $onDelete=null, $onUpdate=null) {
+        
+        if (is_string($columns)) {
+            $columns = array( $columns );
+        }
+        
+        // TODO: auto add index for foreign keys?
+//         $this->addIndex($indexName, $columns);
+            
+        
+        if (is_string($refColumns)) {
+            $refColumns = array( $refColumns );
+        }
+        
+        if ($onDelete == null) $onDelete = 'set default';
+        if ($onUpdate == null) $onUpdate = 'set default';
+        
+        $onDelete = strtoupper(trim($onDelete));
+        $onUpdate = strtoupper(trim($onUpdate));
+        
+        $ref_opts = array('RESTRICT', 'CASCADE', 'SET NULL', 'NO ACTION', 'SET DEFAULT');
+        
+        if (in_array($onDelete, $ref_opts) == false) {
+            throw new \core\exception\InvalidArgumentException('Invalid onDelete value');
+        }
+        if (in_array($onUpdate, $ref_opts) == false) {
+            throw new \core\exception\InvalidArgumentException('Invalid onUpdate value');
+        }
+        
+        
+        
+        $this->data['foreignKeys'][$indexName] = array(
+            'columns' => $columns,
+            'ref_table' => $refTable,
+            'ref_columns' => $refColumns,
+            'on_delete' => $onDelete,
+            'on_update' => $onUpdate
+        );
+        
     }
     
     
