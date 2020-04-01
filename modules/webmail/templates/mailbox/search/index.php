@@ -31,11 +31,16 @@
 <div id="mail-container" class="pretty-split-pane-frame stretch-to-bottom">
 	<div class="split-pane horizontal-percent">
 		<div class="split-pane-component" id="top-component">
-			<div id="emailheader-table-container" class="pretty-split-pane-component-inner"></div>
+			<div id="emailheader-table-container" class="pretty-split-pane-component-inner">
+				<div class="search-fields">
+					<input type="text" name="q" placeholder="<?= t('Search') ?>" style="width: 100%;" />
+				</div>
+			</div>
 		</div>
 		<div class="split-pane-divider" id="my-divider"></div>
 		<div class="split-pane-component" id="bottom-component">
 			<div id="mail-content" class="pretty-split-pane-component-inner">
+				<?= $actionContainer->render() ?>
 				<iframe style="width:100%; height: calc(100% - 10px);" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox"></iframe>
 			</div>
 		</div>
@@ -112,6 +117,8 @@ if (typeof less != 'undefined') {
 
 <script>
 
+var selectedMailId = null;
+
 var t = new IndexTable('#emailheader-table-container', {
 	autoloadNext: true,
 	fixedHeader: true,
@@ -119,12 +126,14 @@ var t = new IndexTable('#emailheader-table-container', {
 });
 
 t.setRowClick(function(row, evt) {
-
+	selectedMailId = $(row).data('record').email_id;
+	
 	$('#emailheader-table-container tr.active').removeClass('active');
 	$(row).addClass('active');
 
-	var email_id = $(row).data('record').email_id;
-	$('#mail-content iframe').attr('src', appUrl('/?m=webmail&c=mailbox/mail&a=view&id=' + email_id));
+	$('#mail-content iframe').attr('src', appUrl('/?m=webmail&c=mailbox/mail&a=view&id=' + selectedMailId));
+
+	$('.action-box').show();
 });
 
 t.setRowDblclick(function(row, evt) {

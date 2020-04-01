@@ -83,4 +83,21 @@ $eb->subscribe('base', 'dashboard', new CallbackPeopleEventListener(function($ev
     
 }));
 
+/**
+ * Webmail action-button for importing e-mail attachments or e-mail itself
+ */
+$eb->subscribe('webmail', 'mailbox-search', new CallbackPeopleEventListener(function($evt) {
+    /** @var \core\container\ActionContainer $actionContainer */
+    $actionContainer = $evt->getSource();
+    
+    $url = json_encode( appUrl('/?m=filesync&c=hooks/mailbox') );
+    
+    $onclick = 'show_popup('.$url.', { data: { email_id: selectedMailId } }  );';
+    
+    $actionContainer->addItem('filesync-import-file', '<input type="button" value="Archive" onclick="'.esc_attr($onclick).'" />', 100);
+    
+}));
+
+
+
 

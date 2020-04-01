@@ -5,6 +5,7 @@ use webmail\solr\SolrMailQuery;
 use base\service\MetaService;
 use core\forms\lists\ListResponse;
 use webmail\MailTabSettings;
+use core\container\ActionContainer;
 
 class searchController extends BaseController {
 
@@ -15,6 +16,10 @@ class searchController extends BaseController {
 	    $user = $this->ctx->getUser();
 	    
 	    $this->state = @unserialize( $metaService->getMetaValue('user', $user->getUserId(), 'mailbox-search-state') );
+	    
+	    // action buttons for e-mail
+	    $this->actionContainer = new ActionContainer('mail-actions', null);
+	    hook_eventbus_publish($this->actionContainer, 'webmail', 'mailbox-search');
 	    
 	    
 		$this->render();
