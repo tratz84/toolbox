@@ -153,7 +153,7 @@ class SolrMailActions {
             $su = new SolrImportMail( WEBMAIL_SOLR );
             $su->updateDoc($solrMail->getId(),
                 [
-                'mailboxName' => 'Junk'
+                    'mailboxName' => $if->getFolderName()
             ]);
         }
     }
