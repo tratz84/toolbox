@@ -154,17 +154,23 @@ class SolrMailActions {
         $this->imapConnection->clearFlagByUid($props->getUid(), $props->getFolder(), '$NonJunk');
         
         // moved? => update properties-file
-        if ($this->imapConnection->moveMailByUid($props->getUid(), $props->getFolder(), $if->getFolderName())) {
-            $solrMail->setProperty('folder', $if->getFolderName());
-            $solrMail->saveProperties();
-            
-            // update solr
-            $su = new SolrImportMail( WEBMAIL_SOLR );
-            $su->updateDoc($solrMail->getId(),
-                [
-                    'mailboxName' => $if->getFolderName()
-            ]);
+        if ($this->imapConnection->moveMailByUid($props->getUid(), $props->getFolder(), $if->getFolderName()) == false) {
+            // ?
         }
+        
+        // move might fail if mail is already moved and mailbox is not in sink
+        // just update solr? if mail is deleted, it's atleast in this mailbox in the right folder (especially in case of junk)
+        // if this move is to the wrong folder, it will get synced automatically by modules/webmail/bin/webmail_importall.php-script
+        
+        $solrMail->setProperty('folder', $if->getFolderName());
+        $solrMail->saveProperties();
+        
+        // update solr
+        $su = new SolrImportMail( WEBMAIL_SOLR );
+        $su->updateDoc($solrMail->getId(),
+            [
+                'mailboxName' => $if->getFolderName()
+        ]);
     }
     
     
