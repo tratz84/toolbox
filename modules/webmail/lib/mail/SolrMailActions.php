@@ -60,8 +60,16 @@ class SolrMailActions {
             $connector = $connectorService->readConnector( $mailProperties->getConnectorId() );
         }
         
-        if (!$connector)
-            return;
+        // connector not found? => just throw in 'Junk'
+        if (!$connector) {
+            $solrMail->setProperty('folder', 'Junk');
+            $solrMail->saveProperties();
+            
+            // update solr
+            $su = new SolrImportMail( WEBMAIL_SOLR );
+            $su->updateDoc($solrMail->getId(), [ 'mailboxName' => 'Junk' ]);
+        }
+        
         
         if ($connector->getConnectorType() == 'imap' && $connector->getJunkConnectorImapfolderId()) {
             $this->moveMail($connector, $solrMail, $connector->getJunkConnectorImapfolderId());
