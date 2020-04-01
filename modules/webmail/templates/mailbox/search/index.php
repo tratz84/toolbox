@@ -47,7 +47,7 @@
 		<div class="split-pane-component" id="bottom-component">
 			<div id="mail-content" class="pretty-split-pane-component-inner">
 				<?= $actionContainer->render() ?>
-				<iframe style="width:100%; height: calc(100% - 10px);" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox"></iframe>
+				<iframe style="width:100%; height: calc(100% - 78px);" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox"></iframe>
 			</div>
 		</div>
 	</div>
