@@ -33,7 +33,11 @@
 		<div class="split-pane-component" id="top-component">
 			<div class="pretty-split-pane-component-inner">
     			<div class="search-fields">
-    				<input type="text" name="q" placeholder="<?= t('Search') ?>" style="width: 100%;" />
+    				<div class="toolbox" style="padding: 5px 5px 0 0;">
+    					<a href="javascript:void(0);" onclick="show_popup(<?= esc_json_attr(appUrl('/?m=webmail&c=mailbox/search&a=settings')) ?>);" class="fa fa-cog" style="font-size: 20px;"></a>
+    				</div>
+    				
+    				<input type="text" name="q" placeholder="<?= t('Search') ?>" style="width: calc(100% - 35px);" />
     			</div>
     			<div id="emailheader-table-container" style="max-height: calc(100% - 35px);"></div>
 			</div>
@@ -228,6 +232,9 @@ t.addColumn({
 
 t.load();
 
+$(window).on('webmail-reload', function() {
+	window.location = appUrl('/?m=webmail&c=mailbox/search');
+});
 
 
 function markMailAsSpam(row, email_id) {

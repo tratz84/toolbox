@@ -7,7 +7,6 @@ use base\model\Company;
 use base\model\Person;
 use base\service\CompanyService;
 use base\service\PersonService;
-use function webmail\MailTabSettings\getFilterCount as count;
 
 
 class MailTabSettings {

@@ -6,6 +6,9 @@ use base\service\MetaService;
 use core\forms\lists\ListResponse;
 use webmail\MailTabSettings;
 use core\container\ActionContainer;
+use webmail\form\MailboxSearchSettingsForm;
+use webmail\form\MailSettingsOutForm;
+use webmail\MailboxSearchSettings;
 
 class searchController extends BaseController {
 
@@ -64,8 +67,13 @@ class searchController extends BaseController {
             $smq->setSort('score desc, date desc');
 	        
 	    }
+	    
+	    // TODO: hmz... this isn't the right way
 	    if ($mts) {
             $smq->setMailTabSettings( $mts );
+	    } else {
+	        $mss = new MailboxSearchSettings();
+	        $mss->applyFilters($smq);
 	    }
 	    
 	    try {
@@ -101,6 +109,64 @@ class searchController extends BaseController {
 	    print 'OK';
 	}
 
+	
+	public function action_settings() {
+	    
+	    $this->form = new MailboxSearchSettingsForm();
+	    
+	    $mss = new MailboxSearchSettings();
+	    $this->form->bind( $mss->getData() );
+	    
+	    $this->setShowDecorator(false);
+	    
+	    return $this->render();
+	}
+	
+	public function action_settings_save() {
+	    
+	    $form = new MailboxSearchSettingsForm();
+	    $form->bind( $_REQUEST );
+	    
+	    // validate
+	    if ($form->validate() == false) {
+	        return $this->json([
+	            'error' => true,
+	            'message' => 'Form validation failed'
+	        ]);
+	    }
+	    
+	    
+	    $mss = new MailboxSearchSettings();
+	    $mss->clearIncludeFilters();
+	    $mss->clearExcludeFilters();
+	    
+	    /** @var \webmail\form\MailTabFilterListEdit $includeFilters */
+	    $includeFilters = $form->getWidget('includeFilters');
+	    $objs = $includeFilters->getObjects();
+	    foreach($objs as $o) {
+	        if (trim($o['filter_value']) == '')
+	            continue;
+            
+            $mss->addIncludeFilter($o['filter_type'], $o['filter_value']);
+	    }
+
+	    /** @var \webmail\form\MailTabFilterListEdit $excludeFilters */
+	    $excludeFilters = $form->getWidget('excludeFilters');
+	    $objs = $excludeFilters->getObjects();
+	    foreach($objs as $o) {
+	        if (trim($o['filter_value']) == '')
+	            continue;
+            
+            $mss->addExcludeFilter($o['filter_type'], $o['filter_value']);
+	    }
+	    
+	    $mss->save();
+	    
+	    return $this->json([
+	        'success' => true
+	    ]);
+	}
+	
 
 }
 
