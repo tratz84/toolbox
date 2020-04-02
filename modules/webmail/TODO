@@ -2,11 +2,11 @@
 
 - dashboard widget
 - move mails to other folder
-- solr, set property connector-id + connector-name
+* - solr, set property connector-id + connector-name
 
 
 - create mails
-	- new
+*	- new
 	- forward
 	- reply
 
@@ -20,6 +20,6 @@
 - assign to user (or usergroup?)
 
 
-
+- templates / standaard reacties & antwoorden
 
 
