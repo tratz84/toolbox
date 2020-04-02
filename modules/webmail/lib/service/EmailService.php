@@ -65,6 +65,11 @@ class EmailService extends ServiceBase {
         
         $form->fill($identity, array('identity_id', 'connector_id', 'from_name', 'from_email', 'active'));
         
+        // set to null if not set
+        if (!$identity->getConnectorId()) {
+            $identity->setConnectorId(null);
+        }
+        
         return $identity->save();
     }
     
