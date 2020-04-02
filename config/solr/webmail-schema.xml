@@ -7,6 +7,11 @@
     <field name="_text_" type="text_en" indexed="true" stored="false" multiValued="true"/>
 
     <field name="contextName" type="string" indexed="true" stored="true"/>
+    
+    <field name="connectorId"          type="pint"   indexed="false" stored="true" />
+    <field name="connectorDescription" type="string" indexed="true"  stored="true"/>
+    
+    
     <field name="mailboxName" type="string" indexed="true" stored="true"/>
     <field name="file"        type="string" indexed="true" stored="true"/>
     <field name="folderName"  type="string" indexed="true" stored="true"/>

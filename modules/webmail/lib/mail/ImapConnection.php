@@ -240,7 +240,9 @@ class ImapConnection {
     public function buildMessageProperties($emlFile, $folderName, $overview) {
         // $mp = message-properties
         $mp = new MailProperties($emlFile);
-        $mp->setProperty('connectorId', $this->connector->getConnectorId());
+        $mp->setProperty('connectorId',          $this->connector->getConnectorId());
+        $mp->setProperty('connectorDescription', $this->connector->getDescription());
+        
         $mp->setProperty('folder',      $folderName);
         $mp->setProperty('subject',     @$overview->subject);
         $mp->setProperty('from',        @$overview->from);

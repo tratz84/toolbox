@@ -104,16 +104,18 @@ class SolrImportMail {
         
         // fields
         // TODO: check out why 'folder' is not set in some cases?
-        $r['mailboxName'] = $mp->getFolder();
-        $r['isJunk']      = $mp->getFolder() == 'Junk' || $mp->getFolder() == 'Spam';
-        $r['isNotJunk']   = !$r['isJunk'];
-        $r['isAnswered']  = isset($r['answered']) && $r['answered'] ? true : false;
-        $r['isRead']      = isset($r['seen']) && $r['seen'] ? true : false;
-        $r['isForwarded'] = null;
-        $r['isSeen']      = $r['isRead'];
-        $r['isDeleted']   = isset($r['deleted']) && $r['deleted'] ? true : false;
-        $r['status']      = array('imported');
-        $r['permissions'] = array();
+        $r['mailboxName']          = $mp->getFolder();
+        $r['connectorId']          = $mp->getConnectorId();
+        $r['connectorDescription'] = $mp->getConnectorDescription();
+        $r['isJunk']               = $mp->getFolder() == 'Junk' || $mp->getFolder() == 'Spam';
+        $r['isNotJunk']            = !$r['isJunk'];
+        $r['isAnswered']           = isset($r['answered']) && $r['answered'] ? true : false;
+        $r['isRead']               = isset($r['seen']) && $r['seen'] ? true : false;
+        $r['isForwarded']          = null;
+        $r['isSeen']               = $r['isRead'];
+        $r['isDeleted']            = isset($r['deleted']) && $r['deleted'] ? true : false;
+        $r['status']               = array('imported');
+        $r['permissions']          = array();
         $r['properties_checksum']  = $this->getPropertiesChecksum($emlFile);
         
         

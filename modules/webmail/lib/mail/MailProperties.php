@@ -69,5 +69,20 @@ class MailProperties {
     public function getFolder() { return $this->getProperty('folder'); }
     public function setFolder($f) { $this->setProperty('folder', $f); }
     
+    // set in \webmai\mail\ImapConnection
+    public function getConnectorDescription() { return $this->getProperty('connectorDescription'); }
+    public function getSubject() { return $this->getProperty('subject'); }
+    public function getFrom() { return $this->getProperty('from'); }
+    public function getTo() { return $this->getProperty('to'); }
+    public function getSize() { return $this->getProperty('size'); }
+    public function getMessageId() { return $this->getProperty('message_id'); }
+    public function getUDate() { return $this->getProperty('udate'); }
+    public function getFlagged() { return $this->getProperty('flagged'); }
+    public function getAnswered() { return $this->getProperty('answered'); }
+    public function getDeleted() { return $this->getProperty('deleted'); }
+    public function getSeen() { return $this->getProperty('seen'); }
+    public function getDraft() { return $this->getProperty('draft'); }
+    
+    
 }
 
