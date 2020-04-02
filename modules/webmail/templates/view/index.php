@@ -26,6 +26,34 @@ var mailStatus = <?php print json_encode($emailStatus) ?>;
 
 $(document).ready(function() {
 	$('.delete-email').click( handle_deleteConfirmation_event );
+
+	$('[name=customer_id]').change(function() {
+		$.ajax({
+			type: 'POST',
+			url: appUrl('/?m=base&c=customer&a=emailaddresses'),
+			data: {
+				customer_id: $(this).val()
+			},
+			success: function(data, xhr, textStatus) {
+				if (data.success && data.addresses.length) {
+					$('.list-edit-widget-recipients').empty();
+
+					var lefw = $('.list-edit-form-widget').get(0).lefw;
+
+					for(var i in data.addresses) {
+						var address = data.addresses[i];
+						
+						lefw.addRecord(function(row) {
+							$(row).find('.to-name-widget input').val( this.name );
+							$(row).find('.email-field-widget input').val( this.email );
+							
+						}.bind(address));
+					}
+				}
+				console.log( data );
+			}
+		});
+	});
 });
 
 function uploadFilesField_Click(obj) {

@@ -3,6 +3,8 @@
 
 use base\service\CustomerService;
 use core\controller\BaseController;
+use base\service\CompanyService;
+use base\service\PersonService;
 
 class customerController extends BaseController {
     
@@ -52,6 +54,64 @@ class customerController extends BaseController {
         $this->json($result);
         
     }
+    
+    
+    public function action_emailaddresses() {
+        
+        $companyId = null;
+        $personId = null;
+        
+        if (get_var('customer_id')) {
+            if (strpos(get_var('customer_id'), 'company-') === 0) {
+                $companyId = (int)substr(get_var('customer_id'), strlen('company-'));
+            }
+            if (strpos(get_var('customer_id'), 'person-') === 0) {
+                $personId = (int)substr(get_var('customer_id'), strlen('person-'));
+            }
+        }
+        
+        if (!$companyId && get_var('company_id')) {
+            $companyId = (int)get_var('company_id');
+        }
+        if (!$personId && get_var('person_id')) {
+            $personId = (int)get_var('person_id');
+        }
+        
+        $addresses = array();
+        
+        if ($companyId) {
+            /** @var CompanyService $companyService */
+            $companyService = object_container_get(CompanyService::class);
+            
+            $company = $companyService->readCompany($companyId, ['null-if-not-found' => true]);
+            
+            if ($company) foreach($company->getEmailList() as $e) {
+                $addresses[] = array(
+                    'name' => $e->getDescription(),
+                    'email' => $e->getEmailAddress()
+                );
+            }
+        }
+        if ($personId) {
+            /** @var PersonService $personService */
+            $personService = object_container_get(PersonService::class);
+            
+            $person = $personService->readPerson($personId);
+            
+            if ($person) foreach($person->getEmailList() as $e) {
+                $addresses[] = array(
+                    'name' => $e->getDescription(),
+                    'email' => $e->getEmailAddress()
+                );
+            }
+        }
+        
+        return $this->json([
+            'success' => true,
+            'addresses' => $addresses
+        ]);
+    }
+    
     
 }
 
