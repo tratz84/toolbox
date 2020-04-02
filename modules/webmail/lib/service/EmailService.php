@@ -309,7 +309,9 @@ class EmailService extends ServiceBase {
         $settingsService->updateValue('webmail_mail_hostname', $mail_hostname);
         $settingsService->updateValue('webmail_mail_port',     $mail_port);
         $settingsService->updateValue('webmail_mail_username', $mail_username);
-        $settingsService->updateValue('webmail_mail_password', $mail_password);
+        if ($mail_password) {
+            $settingsService->updateValue('webmail_mail_password', $mail_password);
+        }
         
         $ctx = object_container_get(Context::class);
         $ctx->flushSettingCache();

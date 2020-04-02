@@ -16,6 +16,18 @@ class settingsMailOutController extends BaseController {
         $this->form = new MailSettingsOutForm();
         $this->form->bind( $mailServerSettings );
         
+        // get-request? => show if password is set/not-set in placeholder and not actually the password itself
+        if (is_get()) {
+            $w = $this->form->getWidget('mail_password');
+            
+            if ($w->getValue()) {
+                $w->setValue('');
+                $w->setPlaceholder('Password set');
+            } else {
+                $w->setPlaceholder('No password set');
+            }
+        }
+        
         
         if (is_post()) {
             $this->form->bind($_REQUEST);
@@ -33,7 +45,8 @@ class settingsMailOutController extends BaseController {
                     redirect('/?m=webmail&c=settingsMailOut');
                 }
                 
-                redirect('/?m=base&c=masterdata/index');
+                report_user_message(t('Changes saved'));
+                redirect('/?m=webmail&c=settingsMailOut');
             }
             
         }

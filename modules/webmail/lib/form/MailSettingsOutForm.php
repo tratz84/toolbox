@@ -22,6 +22,7 @@ class MailSettingsOutForm extends BaseForm {
         
         $this->addWidget(new TextField('mail_username', '', t('Username')));
         $this->addWidget(new TextField('mail_password', '', t('Password')));
+        $this->getWidget('mail_password')->disableAutocomplete();
         
         
         $this->addValidator('mail_port', function($form) {
