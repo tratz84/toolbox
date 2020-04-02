@@ -191,7 +191,7 @@ class SendMail {
         $ctx = object_container_get(Context::class);
         
         $sm = new SendMail();
-        $sm->setEmailId($email->getIdentityId());
+        $sm->setEmailId($email->getEmailId());
         $sm->setIdentityId( $email->getIdentityId() );
         $sm->setSubject($email->getSubject());
         $sm->setFromName($email->getFromName());

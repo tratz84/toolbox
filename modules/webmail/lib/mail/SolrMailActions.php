@@ -181,7 +181,7 @@ class SolrMailActions {
         $emailService = object_container_get(EmailService::class);
         
         /** @var \webmail\model\Identity $identity */
-        $identity = $emailService->readIdentity( $this->getIdentityId() );
+        $identity = $emailService->readIdentity( $mail->getIdentityId() );
         
         // connector linked to identity?
         if ($identity && $identity->getConnectorId()) {
@@ -200,7 +200,7 @@ class SolrMailActions {
         $connector = $connectorService->readConnector( $connectorId );
         
         if (!$connector) {
-            throw new ObjectNotFoundException('Email not found');
+            throw new ObjectNotFoundException('Connector not found');
         }
         
         // fetch send-folder
@@ -237,7 +237,7 @@ class SolrMailActions {
         
         $r = $this->imapConnection->imapAppend($if_send->getFolderName(), $emlMessage);
         
-        $this->lastError = imap_last_error();
+        $this->lastError = \imap_last_error();
         
         return $r;
     }
