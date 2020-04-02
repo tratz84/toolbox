@@ -21,6 +21,8 @@ use project\model\ProjectHour;
 
 class ProjectHourForm extends BaseForm {
     
+    protected $customerName = null;
+    
     public function __construct($company_id, $person_id) {
         parent::__construct();
         
@@ -35,12 +37,14 @@ class ProjectHourForm extends BaseForm {
         if ($company_id) {
             $companyService = ObjectContainer::getInstance()->get(\base\service\CompanyService::class);
             $company = $companyService->readCompany($company_id);
-            $this->addWidget(new HtmlField('company_name', $company->getCompanyName(), 'Bedrijfsnaam'));
+//             $this->addWidget(new HtmlField('company_name', $company->getCompanyName(), 'Bedrijfsnaam'));
+            $this->customerName = $company->getCompanyName();
         }
         if ($person_id) {
             $personService = ObjectContainer::getInstance()->get(\base\service\PersonService::class);
             $person = $personService->readPerson($person_id);
-            $this->addWidget(new HtmlField('person_name', $person->getFullname(), 'Naam'));
+//             $this->addWidget(new HtmlField('person_name', $person->getFullname(), 'Naam'));
+            $this->customerName = $person->getFullname();
         }
         
         $this->addProjects($company_id, $person_id);
@@ -133,15 +137,15 @@ class ProjectHourForm extends BaseForm {
                 $projectService = object_container_get(ProjectService::class);
                 $project = $projectService->readProject( $p_id );
                 
-                $name = '';
-                if ($this->getWidget('company_name')) {
-                    $name = $this->getwidgetValue('company_name');
-                }
-                if ($this->getWidget('person_name')) {
-                    $name = $this->getWidgetValue('person_name');
-                }
-                if ($name)
-                    $name = $name . ' - ';
+//                 $name = '';
+//                 if ($this->getWidget('company_name')) {
+//                     $name = $this->getwidgetValue('company_name');
+//                 }
+//                 if ($this->getWidget('person_name')) {
+//                     $name = $this->getWidgetValue('person_name');
+//                 }
+                if ($this->customerName)
+                    $name = $this->customerName . ' - ';
                 $name = $name . $project->getProjectName();
                 
                 $this->getWidget('project_id')->setDefaultText($name);
@@ -164,21 +168,21 @@ class ProjectHourForm extends BaseForm {
     
     protected function addProjects($company_id, $person_id) {
         // company/person known? => just add specific projects
-        if ($company_id || $person_id) {
-            $projectService = ObjectContainer::getInstance()->get(ProjectService::class);
-            $projects = $projectService->readByCustomer($company_id, $person_id);
+//         if ($company_id || $person_id) {
+//             $projectService = ObjectContainer::getInstance()->get(ProjectService::class);
+//             $projects = $projectService->readByCustomer($company_id, $person_id);
             
-            $mapProjects = array();
-            foreach($projects as $p) {
-                $mapProjects[$p->getProjectId()] = $p->getProjectName();
-            }
+//             $mapProjects = array();
+//             foreach($projects as $p) {
+//                 $mapProjects[$p->getProjectId()] = $p->getProjectName();
+//             }
             
-            $this->addWidget(new SelectField('project_id', '', $mapProjects, 'Project'));
-        }
-        // add project-search box
-        else {
+//             $this->addWidget(new SelectField('project_id', '', $mapProjects, 'Project'));
+//         }
+//         // add project-search box
+//         else {
             $this->addWidget( new DynamicSelectField('project_id', '', 'Select project', '/?m=project&c=projectHour&a=search_project', 'Project') );
-        }
+//         }
     }
     
     protected function addProjectHourType() {
