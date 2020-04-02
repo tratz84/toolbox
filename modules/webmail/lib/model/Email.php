@@ -9,8 +9,14 @@ class Email extends base\EmailBase {
     const STATUS_DRAFT = 'draft';
     const STATUS_SENT  = 'sent';
 
-    protected $files;
+    protected $files = array();
     protected $recipients = array();
+    
+    public function __construct($id=null) {
+        parent::__construct($id);
+    }
+    
+    
     
     public function setFiles($files) { $this->files = $files; }
     public function getFiles() { return $this->files; }

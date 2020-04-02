@@ -110,9 +110,12 @@ class EmailService extends ServiceBase {
             $email = $this->readEmail($id);
         } else {
             $email = new Email();
+            
+            $email->setStatus( $form->getWidgetValue('status') );
+            $email->setIncoming( $form->getWidgetValue('incoming') ? true : false );
         }
         
-        $form->fill($email, array('email_id', 'identity_id', 'subject', 'text_content', 'recipients'));
+        $form->fill($email, array('email_id', 'identity_id', 'subject', 'text_content', 'recipients', 'company_id', 'person_id'));
         
         if ($email->getIdentityId()) {
             $identity = $this->readIdentity($email->getIdentityId());
@@ -132,7 +135,7 @@ class EmailService extends ServiceBase {
         $arrRecipients = $form->getWidget('recipients')->getObjects();
         $etDao->mergeFormListMTO1('email_id', $email->getEmailId(), $arrRecipients);
         
-        
+        return $email;
     }
     
     

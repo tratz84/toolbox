@@ -36,7 +36,6 @@ class EmailDAO extends \core\db\DAOObject {
 	        }
 	    }
 	    
-	    
 	    return $this->queryCursor($sql, $params);
 	}
 	

@@ -9,6 +9,8 @@ use webmail\form\EmailRecipientLineWidget;
 use webmail\model\EmailTo;
 use core\exception\InvalidStateException;
 use webmail\mail\SendMail;
+use webmail\model\Email;
+use core\forms\HtmlField;
 
 class viewController extends BaseController {
     
@@ -20,7 +22,13 @@ class viewController extends BaseController {
         
         $emailService = $this->oc->get(EmailService::class);
         
-        $email = $emailService->readEmail($_REQUEST['id']);
+        if (get_var('id')) {
+            $email = $emailService->readEmail($_REQUEST['id']);
+        } else {
+            $email = new Email();
+            $email->setStatus(Email::STATUS_DRAFT);
+            $email->setIncoming(false);
+        }
         
         if ($email === null) {
             throw new ObjectNotFoundException('Requested e-mail not found');
@@ -42,7 +50,7 @@ class viewController extends BaseController {
             
             $this->form->bind( $_REQUEST );
             
-            $emailService->saveEmail($this->form);
+            $email = $emailService->saveEmail($this->form);
             
             if (get_var('sendmail')) {
                 redirect('/?m=webmail&c=view&a=send&id=' . $email->getEmailId());
@@ -62,6 +70,13 @@ class viewController extends BaseController {
             $email->setRecipients( array( new EmailTo() ));
         }
         $this->form->bind( $email );
+        
+        if ($email->isNew()) {
+            $this->form->addWidget(new HtmlField('lblNew', t('New e-mail'), t('Id')));
+            $this->form->getWidget('lblNew')->setPrio(5);
+            $this->form->removeWidget('email_id');
+        }
+        
         $this->emailStatus = $email->getStatus();
         
         $this->render();

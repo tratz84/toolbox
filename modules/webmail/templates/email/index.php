@@ -25,6 +25,9 @@
 
 
 <div class="page-header">
+	<div class="toolbox">
+		<a href="<?= appUrl('/?m=webmail&c=view') ?>" class="fa fa-plus"></a>
+	</div>
 	<h1>Outbox</h1>
 </div>
 
