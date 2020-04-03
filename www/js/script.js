@@ -1306,7 +1306,10 @@ function format_date(date, opts) {
 }
 
 
-function format_datetime(date) {
+function format_datetime(date, opts) {
+	
+	opts = opts ? opts : {};
+	if (typeof opts.skipSeconds == 'undefined') opts.skipSeconds = false;
 	
 	var t = '';
 	
@@ -1348,11 +1351,13 @@ function format_datetime(date) {
 	}
 	
 	// seconds
-	t += ':';
-	if (date.getSeconds() < 10) {
-		t = t + '0' + date.getSeconds();
-	} else {
-		t = t + date.getSeconds();
+	if (opts.skipSeconds == false) {
+		t += ':';
+		if (date.getSeconds() < 10) {
+			t = t + '0' + date.getSeconds();
+		} else {
+			t = t + date.getSeconds();
+		}
 	}
 	
 	return t;
