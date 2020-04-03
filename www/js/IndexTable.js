@@ -577,7 +577,7 @@ function IndexTable( container, opts ) {
 						} else {
 							dt = text2date(fieldText);
 							if (dt != null)
-								fieldText = format_datetime(dt);
+								fieldText = format_datetime(dt, {skipSeconds: true});
 							else
 								fieldText = '';
 						}
