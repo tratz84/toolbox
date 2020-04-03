@@ -20,6 +20,16 @@ class Connector extends base\ConnectorBase {
     public function getFilters() { return $this->filters; }
     public function setFilters($filters) { $this->filters = $filters; }
     
+    public function getFolders() {
+        $f = array();
+        
+        foreach($this->getImapfolders() as $if) {
+            $f[] = $if->getFolderName();
+        }
+        
+        return $f;
+    }
+    
     public function getImapfolders() { return $this->imapfolders; }
     public function setImapfolders($f) { $this->imapfolders = $f; }
 

@@ -1,14 +1,18 @@
 <?php
 
-use core\controller\BaseController;
-use webmail\solr\SolrMailQuery;
 use base\service\MetaService;
+use core\container\ActionContainer;
+use core\controller\BaseController;
+use core\exception\ObjectNotFoundException;
 use core\forms\lists\ListResponse;
 use webmail\MailTabSettings;
-use core\container\ActionContainer;
-use webmail\form\MailboxSearchSettingsForm;
-use webmail\form\MailSettingsOutForm;
 use webmail\MailboxSearchSettings;
+use webmail\form\MailboxSearchSettingsForm;
+use webmail\mail\MailProperties;
+use webmail\model\Connector;
+use webmail\service\ConnectorService;
+use webmail\solr\SolrMailQuery;
+use core\forms\SelectField;
 
 class searchController extends BaseController {
 
@@ -19,10 +23,6 @@ class searchController extends BaseController {
 	    $user = $this->ctx->getUser();
 	    
 	    $this->state = @unserialize( $metaService->getMetaValue('user', $user->getUserId(), 'mailbox-search-state') );
-	    
-	    // action buttons for e-mail
-	    $this->actionContainer = new ActionContainer('mail-actions', null);
-	    hook_eventbus_publish($this->actionContainer, 'webmail', 'mailbox-search');
 	    
 	    $this->filtersEnabled = isset($_GET['filters']) == false || $_GET['filters'] ? true : false;
 	    
@@ -92,6 +92,50 @@ class searchController extends BaseController {
             ]);
 	    }
 	}
+	
+	
+	public function action_view() {
+	    
+	    $this->emailId = $emailId = get_var('id');
+	    
+	    $this->url_view_mail = appUrl( '/?m=webmail&c=mailbox/mail&a=view&id=' . $emailId );
+	    
+	    // action buttons for e-mail
+	    $this->actionContainer = new ActionContainer('mail-actions', null);
+	    
+	    
+	    $f = get_data_file_safe('webmail/inbox', substr($emailId, strlen('/webmail/inbox')));
+	    if (!$f) {
+	        throw new ObjectNotFoundException('Mail not found');
+	    }
+	    $mp = new MailProperties( $f );
+	    $mp->load();
+	    if ($mp->getConnectorId()) {
+	        /** @var ConnectorService $connectorService */
+	        $connectorService = object_container_get(ConnectorService::class);
+	        /** @var Connector $connector */
+	        $connector = $connectorService->readConnector($mp->getConnectorId());
+	        
+	        $mapFolders = array();
+	        if ($connector) foreach($connector->getImapfolders() as $if) {
+	            $mapFolders[$if->getFolderName()] = $if->getFolderName();
+	        }
+	        
+	        $selectFolders = new SelectField('move_imap_folder', $mp->getFolder(), $mapFolders, null, ['add-unlisted' => true]);
+	        $selectFolders->setAttribute('onchange', 'moveMail('.json_encode($emailId).', this.value)');
+	        
+	        $this->actionContainer->addItem('move-mail-to-folder', $selectFolders->render());
+	    }
+	    
+	    
+	    hook_eventbus_publish($this->actionContainer, 'webmail', 'mailbox-search');
+	    
+	    $this->setShowDecorator(false);
+	    
+	    return $this->render();
+	}
+	
+	
 	
 	
 	public function action_savestate() {

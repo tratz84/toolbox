@@ -167,11 +167,15 @@ class SolrMailActions {
         $solrMail->setProperty('folder', $if->getFolderName());
         $solrMail->saveProperties();
         
+        $this->updateSolrFolder($solrMail->getId(), $if->getFolderName());
+    }
+    
+    public function updateSolrFolder($emailId, $folderName) {
         // update solr
         $su = new SolrImportMail( WEBMAIL_SOLR );
-        $su->updateDoc($solrMail->getId(),
+        $su->updateDoc($emailId,
             [
-                'mailboxName' => $if->getFolderName()
+                'mailboxName' => $folderName
         ]);
     }
     

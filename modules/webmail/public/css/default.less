@@ -26,9 +26,18 @@
 // Mailbox search
 .webmail-search-controller {
 	#mail-content .action-box {
-		display: none;
 		padding: 10px 0 0;
+		overflow-y: auto;
+		
+		span {
+			float: left;
+			margin-right: 10px;
+			
+			button, input[type=button] { margin-top: 2px; }
+		}
 	}
 	
 	.form-mailbox-search-settings-form .submit-container { display: none; }
 }
+
+

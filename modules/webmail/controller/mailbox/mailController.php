@@ -7,6 +7,7 @@ use core\controller\BaseController;
 use webmail\mail\SolrMailActions;
 use webmail\solr\SolrMailQuery;
 use core\exception\ObjectNotFoundException;
+use webmail\service\ConnectorService;
 
 class mailController extends BaseController {
    
@@ -52,6 +53,66 @@ class mailController extends BaseController {
         header('Content-type: ' . $f['contentType']);
         header('Content-disposition: inline; filename="' . $f['filename'] .'"');
         print $f['content'];
+    }
+    
+    
+    
+    public function action_move_mail() {
+        $smq = object_container_create(SolrMailQuery::class);
+        
+        try {
+            /** @var \webmail\solr\SolrMail $mail */
+            $mail = $smq->readById( get_var('email_id') );
+            
+            if (!$mail) {
+                throw new ObjectNotFoundException('Mail not found');
+            }
+            
+            
+            /** @var \webmail\mail\MailProperties $mailProperties */
+            $mailProperties = $mail->getProperties();
+            
+            $newFolder = get_var('target_folder');
+            
+            $connectorService = object_container_get(ConnectorService::class);
+            
+            /** @var \webmail\model\Connector $connector */
+            $connector = $connectorService->readConnector( $mailProperties->getConnectorId() );
+            
+            $imapFolderId = null;
+            if ($connector) {
+                $ifs = $connector->getImapfolders();
+                foreach($ifs as $if) {
+                    if ($if->getFolderName() == $newFolder) {
+                        $imapFolderId = $if->getConnectorImapFolderId();
+                    }
+                }
+            }
+            
+            $ma = new SolrMailActions();
+            if ($connector && $imapFolderId) {
+                $ma->moveMail($connector, $mail, $imapFolderId);
+            }
+            else {
+                $ma->updateSolrFolder($mail->getId(), $newFolder);
+            }
+            
+            return $this->json([
+                'success'   => true,
+                'email_id'  => $mail->getId(),
+                'newFolder' => $newFolder
+            ]);
+        } catch (\Exception $ex) {
+            return $this->json([
+                'error' => true,
+                'message' => $ex->getMessage()
+            ]);
+        } catch (\Error $err) {
+            return $this->json([
+                'error' => true,
+                'message' => $err->getMessage()
+            ]);
+        }
     }
     
     

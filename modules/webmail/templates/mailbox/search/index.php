@@ -46,8 +46,6 @@
 		<div class="split-pane-divider" id="my-divider"></div>
 		<div class="split-pane-component" id="bottom-component">
 			<div id="mail-content" class="pretty-split-pane-component-inner">
-				<?= $actionContainer->render() ?>
-				<iframe style="width:100%; height: calc(100% - 78px);" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox"></iframe>
 			</div>
 		</div>
 	</div>
@@ -137,13 +135,28 @@ t.setRowClick(function(row, evt) {
 	$('#emailheader-table-container tr.active').removeClass('active');
 	$(row).addClass('active');
 
-	$('#mail-content iframe').attr('src', appUrl('/?m=webmail&c=mailbox/mail&a=view&id=' + selectedMailId));
+	$.ajax({
+		type: 'POST',
+		url: appUrl('/?m=webmail&c=mailbox/search&a=view'),
+		data: {
+			id: selectedMailId
+		},
+		success: function(data, xhr, textStatus) {
+			$('#mail-content').html( data );
 
-	$('.action-box').show();
+			$('#mail-content').find('[name=move_imap_folder]').change(function() {
+				
+			});
+		}
+	});
 });
 
 t.setRowDblclick(function(row, evt) {
 	window.open(appUrl('/?m=webmail&c=mailbox/mail&a=view&id=' + $(row).data('record').email_id), '_blank');
+});
+
+t.setCallbackRenderRow(function(obj, row) {
+	$(row).attr('email-id', obj.email_id);
 });
 
 t.setConnectorUrl( '/?m=webmail&c=mailbox/search&a=search' );
@@ -236,6 +249,26 @@ t.load();
 $(window).on('webmail-reload', function() {
 	window.location = appUrl('/?m=webmail&c=mailbox/search');
 });
+
+function moveMail(email_id, targetFolder) {
+	
+	$.ajax({
+		url: appUrl('/?m=webmail&c=mailbox/mail&a=move_mail'),
+		type: 'POST',
+		data: {
+			email_id: email_id,
+			target_folder: targetFolder
+		},
+		success: function(data, xhr, textStatus) {
+			if (data.error) {
+				alert('Error: ' + data.message);
+			} else {
+				$('tr[email-id="' + data.email_id + '"]').find('.td-mailbox-name').text( data.newFolder );
+			}
+		}
+	});
+	
+}
 
 
 function markMailAsSpam(row, email_id) {

@@ -224,6 +224,11 @@ function IndexTable( container, opts ) {
 		this.callback_renderRows = callback;
 	};
 	
+	this.setCallbackRenderRow = function(callback) {
+		// callback(obj, row);
+		this.callback_renderRow = callback;
+	};
+	
 	
 	this.setCallbackRenderDone = function(callback) {
 		this.callback_renderDone = callback;

@@ -61,9 +61,14 @@ class SelectField extends BaseWidget {
 
         $extraClass = $this->hasError() ? 'error' : '';
         
+        $selectAttrs = '';
+        foreach($this->attributes as $key => $val) {
+            $selectAttrs .= ' ' . esc_attr($key).'="'.esc_attr($val).'" ';
+        }
+        
         $html .= '<div class="widget select-field-widget '.$extraClass.' widget-'.slugify($this->getName()).'">';
         $html .= '<label>'.esc_html($this->getLabel()).infopopup($this->getInfoText()).'</label>';
-        $html .= '<select name="'.esc_attr($this->getName()).'">';
+        $html .= '<select '.$selectAttrs.' name="'.esc_attr($this->getName()).'">';
         
         
         foreach($this->optionItems as $key => $val) {
