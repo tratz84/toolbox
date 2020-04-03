@@ -39,8 +39,8 @@
 			</td>
 			<td><?= esc_html($ph['project_name']) ?></td>
 			<td><?= esc_html($ph['short_description']) ?></td>
-			<td><?= format_datetime($ph['start_time']) ?></td>
-			<td><?= format_datetime($ph['end_time']) ?></td>
+			<td><?= format_datetime($ph['start_time'], 'd-m-Y H:i') ?></td>
+			<td><?= format_datetime($ph['end_time'], 'd-m-Y H:i') ?></td>
 			<td>
 				<?php $totalMinutes += (int)$ph['total_minutes']; ?>
 				<?= myround($ph['total_minutes']/60,2) ?>
