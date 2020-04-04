@@ -75,6 +75,8 @@ class MailProperties {
         if ($this->toolboxPropertiesChanged) {
             file_put_contents($this->tbfile, json_encode($this->toolboxProperties));
         }
+        
+        return $r;
     }
     
     public function getProperties() { return $this->serverProperties; }
