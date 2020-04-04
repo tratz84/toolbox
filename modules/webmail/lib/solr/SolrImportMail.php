@@ -20,6 +20,9 @@ class SolrImportMail {
     protected $updateMode = false;                      // false = post EVERYTHING to solr. true = new or .properties changed?
     protected $emlFilesUpdate = array();
     
+    protected $forcedAction = null;
+    
+    
     public function __construct($solrUrl) {
         $this->contextName = \core\Context::getInstance()->getContextName();
         
@@ -33,6 +36,7 @@ class SolrImportMail {
     public function setUpdateMode($bln) { $this->updateMode = $bln; }
     public function updateMode() { return $this->updateMode; }
     
+    public function setForcedAction($a) { $this->forcedAction = $a; }
     
     
     public function parseEml($emlFile) {
@@ -92,6 +96,13 @@ class SolrImportMail {
         $r['server_properties_checksum'] = MailProperties::checksumServerProperties($emlFile);
         
         $r['userId'] = $mp->getUserId();
+        
+        // forcedAction set?
+        if ($this->forcedAction && $mp->getAction() != $this->forcedAction) {
+            $mp->setAction( $this->forcedAction );
+            $mp->save();
+        }
+        
         $r['action'] = $mp->getAction();
         
         $r['fromName'] = '';
