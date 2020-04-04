@@ -18,6 +18,7 @@ use core\forms\validator\NotZeroValidator;
 use invoice\model\Invoice;
 use webmail\model\Email;
 use webmail\service\EmailService;
+use core\forms\HiddenField;
 
 class EmailForm extends BaseForm {
     
@@ -32,7 +33,7 @@ class EmailForm extends BaseForm {
         // used for new e-mails
         $this->addWidget(new InternalField('status'));
         $this->addWidget(new InternalField('incoming'));
-        $this->addWidget(new InternalField('solr_mail_id'));
+        $this->addWidget(new HiddenField('solr_mail_id'));
         
         
         

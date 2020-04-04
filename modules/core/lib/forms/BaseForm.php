@@ -71,6 +71,8 @@ class BaseForm extends WidgetContainer {
         $this->keyFields[] = $fieldName;
     }
     
+    public function clearKeyFields() { $this->keyFields = array(); }
+    
     public function renderKeyFields() {
         $html = '';
         

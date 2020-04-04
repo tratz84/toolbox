@@ -23,6 +23,7 @@ class viewController extends BaseController {
         $emailService = $this->oc->get(EmailService::class);
         
         if (get_var('id')) {
+            /** @var Email $email */
             $email = $emailService->readEmail($_REQUEST['id']);
         } else {
             $email = new Email();
@@ -85,6 +86,12 @@ class viewController extends BaseController {
         }
         
         $this->emailStatus = $email->getStatus();
+        
+        if ($email->getSolrMailId()) {
+            $this->form->getWidget('solr_mail_id')->setValue( $email->getSolrMailId() );
+            $this->form->clearKeyFields();
+            $this->form->addKeyField('solr_mail_id');
+        }
         
         $this->render();
     }
