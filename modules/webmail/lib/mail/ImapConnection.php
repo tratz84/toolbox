@@ -240,22 +240,22 @@ class ImapConnection {
     public function buildMessageProperties($emlFile, $folderName, $overview) {
         // $mp = message-properties
         $mp = new MailProperties($emlFile);
-        $mp->setProperty('connectorId',          $this->connector->getConnectorId());
-        $mp->setProperty('connectorDescription', $this->connector->getDescription());
+        $mp->setServerProperty('connectorId',          $this->connector->getConnectorId());
+        $mp->setServerProperty('connectorDescription', $this->connector->getDescription());
         
-        $mp->setProperty('folder',      $folderName);
-        $mp->setProperty('subject',     @$overview->subject);
-        $mp->setProperty('from',        @$overview->from);
-        $mp->setProperty('to',          @$overview->to);
-        $mp->setProperty('size',        @$overview->size);
-        $mp->setProperty('message_id',  @$overview->message_id);
-        $mp->setProperty('uid',         @$overview->uid);
-        $mp->setProperty('udate',       @$overview->udate);
-        $mp->setProperty('flagged',     @$overview->flagged);
-        $mp->setProperty('answered',    @$overview->answered);
-        $mp->setProperty('deleted',     @$overview->deleted);
-        $mp->setProperty('seen',        @$overview->seen);
-        $mp->setProperty('draft',       @$overview->draft);
+        $mp->setServerProperty('folder',      $folderName);
+        $mp->setServerProperty('subject',     @$overview->subject);
+        $mp->setServerProperty('from',        @$overview->from);
+        $mp->setServerProperty('to',          @$overview->to);
+        $mp->setServerProperty('size',        @$overview->size);
+        $mp->setServerProperty('message_id',  @$overview->message_id);
+        $mp->setServerProperty('uid',         @$overview->uid);
+        $mp->setServerProperty('udate',       @$overview->udate);
+        $mp->setServerProperty('flagged',     @$overview->flagged);
+        $mp->setServerProperty('answered',    @$overview->answered);
+        $mp->setServerProperty('deleted',     @$overview->deleted);
+        $mp->setServerProperty('seen',        @$overview->seen);
+        $mp->setServerProperty('draft',       @$overview->draft);
         
         return $mp;
     }

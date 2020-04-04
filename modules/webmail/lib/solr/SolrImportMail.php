@@ -34,33 +34,6 @@ class SolrImportMail {
     public function updateMode() { return $this->updateMode; }
     
     
-    public function getProperties($emlFile) {
-        $r = array();
-        
-        $pf = $emlFile . '.properties';
-        
-        if (file_exists($pf)) {
-            $r = json_decode( file_get_contents($pf), true );
-        }
-        
-        if (is_array($r)) {
-            return $r;
-        } else {
-            return array();
-        }
-    }
-    
-    public function getPropertiesChecksum($emlFile) {
-        $pf = $emlFile . '.properties';
-        
-        if (file_exists($pf)) {
-            return crc32_int32( file_get_contents($pf) );
-        } else {
-            return -1;
-        }
-        
-    }
-    
     
     public function parseEml($emlFile) {
         $mp = new MailProperties($emlFile);
@@ -116,7 +89,7 @@ class SolrImportMail {
         $r['isDeleted']            = isset($r['deleted']) && $r['deleted'] ? true : false;
         $r['status']               = array('imported');
         $r['permissions']          = array();
-        $r['properties_checksum']  = $this->getPropertiesChecksum($emlFile);
+        $r['server_properties_checksum'] = MailProperties::checksumServerProperties($emlFile);
         
         
         $r['fromName'] = '';
@@ -176,7 +149,7 @@ class SolrImportMail {
         
         if ($force || count($this->emlFilesUpdate) > 50) {
             // queue only files that must be updated
-            // lookup properties_checksum for alle eml-files
+            // lookup server_properties_checksum for all eml-files
             $q = '';
             foreach($this->emlFilesUpdate as $emlFile) {
                 $id = substr($emlFile, strlen(ctx()->getDataDir()));
@@ -189,7 +162,7 @@ class SolrImportMail {
             $sq = new SolrMailQuery();
             $sq->setRawQuery($q);
             $sq->addField('id');
-            $sq->addField('properties_checksum');
+            $sq->addField('server_properties_checksum');
             $sq->setRows(count($this->emlFilesUpdate));
             $smqr = $sq->search();
             
@@ -197,7 +170,7 @@ class SolrImportMail {
             $docs = $smqr->getDocuments();
             $map_docs = array();
             foreach($docs as $d) {
-                $map_docs[$d->id] = $d->properties_checksum;
+                $map_docs[$d->id] = $d->server_properties_checksum;
             }
             
             // queue changed/"new"
@@ -208,7 +181,7 @@ class SolrImportMail {
 //                     print "+ $id\n";
                     $this->queueEml( $emlFile );
                 }
-                else if ($this->getPropertiesChecksum($emlFile) != $map_docs[$id]) {
+                else if (MailProperties::checksumServerProperties($emlFile) != $map_docs[$id]) {
 //                     print "- $id\n";
                     $this->queueEml( $emlFile );
                 }

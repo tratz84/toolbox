@@ -9,51 +9,97 @@ use core\exception\FileException;
 
 class MailProperties {
 
-    protected $file = null;
-    protected $properties = array();
+    protected $sfile = null;
+    protected $tbfile = null;
+    
+    protected $serverProperties = array();              // imap-properties
+    protected $serverPropertiesChanged = false;
+    
+    protected $toolboxProperties = array();             // toolbox-specific properties (status, assigned user, etc..)
+    protected $toolboxPropertiesChanged = false;
 
     public function __construct($emlFile=null) {
         if (!$emlFile) {
             // null?
         }
         else if (strpos($emlFile, ctx()->getDataDir()) === 0) {
-            $this->file = $emlFile.'.properties';
+            $this->sfile = $emlFile.'.sproperties';
+            $this->tbfile = $emlFile.'.tbproperties';
         } else {
             $f = get_data_file( $emlFile );
             if ($f) {
-                $this->file = $f . '.properties';
+                $this->sfile = $f . '.sproperties';
+                $this->tbfile = $f . '.tbproperties';
             }
         }
     }
     
+    
+    public static function checksumServerProperties($emlFile) {
+        $pf = $emlFile . '.sproperties';
+        
+        if (file_exists($pf)) {
+            return crc32_int32( file_get_contents($pf) );
+        } else {
+            return -1;
+        }
+    }
+    
+    
     public function load() {
-        if ($this->file && file_exists($this->file)) {
-            $data = file_get_contents( $this->file );
-            $this->properties = json_decode( $data, true );
-            
-            return is_array($this->properties) ? true : false;
+        if ($this->sfile && file_exists($this->sfile)) {
+            $data = file_get_contents( $this->sfile );
+            $this->serverProperties = json_decode( $data, true );
+        }
+        if ($this->tbfile && file_exists($this->tbfile)) {
+            $data = file_get_contents( $this->tbfile );
+            $this->toolboxProperties = json_decode( $data, true );
+        }
+        
+        if (is_array($this->serverProperties)) {
+            return true;
         } else {
             return false;
         }
     }
     
     public function save() {
-        if (!$this->file) {
+        if (!$this->sfile) {
             throw new FileException('No file set');
         }
         
-        return file_put_contents($this->file, json_encode($this->properties));
+        if ($this->serverPropertiesChanged) {
+            file_put_contents($this->sfile, json_encode($this->serverProperties));
+        }
+        
+        if ($this->toolboxPropertiesChanged) {
+            file_put_contents($this->tbfile, json_encode($this->toolboxProperties));
+        }
     }
     
-    public function getProperties() { return $this->properties; }
+    public function getProperties() { return $this->serverProperties; }
     
-    public function setProperty($name, $val) {
-        $this->properties[$name] = $val;
+    public function setServerProperty($name, $val) {
+        if (isset($this->serverProperties[$name]) == false || $this->serverProperties[$name] != $val) {
+            $this->serverPropertiesChanged = true;
+        }
+        
+        $this->serverProperties[$name] = $val;
+    }
+    
+    public function setToolboxProperty($name, $val) {
+        if (isset($this->toolboxProperties[$name]) == false || $this->toolboxProperties[$name] != $val) {
+            $this->toolboxPropertiesChanged = true;
+        }
+        
+        $this->toolboxProperties[$name] = $val;
     }
     
     public function getProperty($name, $defaultValue=null) {
-        if (isset($this->properties[$name])) {
-            return $this->properties[$name];
+        if (isset($this->serverProperties[$name])) {
+            return $this->serverProperties[$name];
+        } else if (isset($this->toolboxProperties[$name])) {
+            return $this->toolboxProperties[$name];
         } else {
             return $defaultValue;
         }
@@ -61,13 +107,13 @@ class MailProperties {
     
     
     public function getConnectorId() { return $this->getProperty('connectorId'); }
-    public function setConnectorId($id) { $this->setProperty('connectorId', $id); }
+    public function setConnectorId($id) { $this->setServerProperty('connectorId', $id); }
     
     public function getUid() { return $this->getProperty('uid'); }
-    public function setUid($u) { return $this->setProperty('uid', $u); }
+    public function setUid($u) { return $this->setServerProperty('uid', $u); }
     
     public function getFolder() { return $this->getProperty('folder'); }
-    public function setFolder($f) { $this->setProperty('folder', $f); }
+    public function setFolder($f) { $this->setServerProperty('folder', $f); }
     
     // set in \webmai\mail\ImapConnection
     public function getConnectorDescription() { return $this->getProperty('connectorDescription'); }
