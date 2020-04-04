@@ -102,6 +102,7 @@ $tb_email->addColumn('deleted',                 'datetime');
 $tb_email->addColumn('status',                  'varchar(16)');
 $tb_email->addColumn('created',                 'datetime');
 $tb_email->addColumn('search_id',               'bigint');
+$tb_email->addColumn('solr_mail_id',            'varchar(255)');
 $tb_email->addIndex('webmail__email_ibfk_1', array('user_id'));
 $tb_email->addIndex('id_search_id', array('search_id'));
 $tb_email->addIndex('connector_imapfolder_id', array('connector_imapfolder_id'));

@@ -109,7 +109,17 @@ class EmailService extends ServiceBase {
         return $email;
     }
     
-    public function saveEmail(EmailForm $form) {
+    /**
+     * 
+     * @param EmailForm $form
+     * @param array $attachments, example:
+     *                  array(
+     *                      array('filename' => 'file.pdf', 'content' => '....'),
+     *                  )
+     *                  
+     * @return \webmail\model\Email|false
+     */
+    public function saveEmail(EmailForm $form, $attachments=array()) {
         $id = $form->getWidgetValue('email_id');
         if ($id) {
             $email = $this->readEmail($id);
@@ -118,6 +128,7 @@ class EmailService extends ServiceBase {
             
             $email->setStatus( $form->getWidgetValue('status') );
             $email->setIncoming( $form->getWidgetValue('incoming') ? true : false );
+            $email->setSolrMailId( $form->getWidgetValue('solr_mail_id') );
         }
         
         $form->fill($email, array('email_id', 'identity_id', 'subject', 'text_content', 'recipients', 'company_id', 'person_id'));
@@ -139,6 +150,11 @@ class EmailService extends ServiceBase {
         $etDao = new EmailToDAO();
         $arrRecipients = $form->getWidget('recipients')->getObjects();
         $etDao->mergeFormListMTO1('email_id', $email->getEmailId(), $arrRecipients);
+        
+        // add attachments
+        foreach($attachments as $att) {
+            $this->addFile($email->getEmailId(), $att['filename'], $att['content']);
+        }
         
         return $email;
     }

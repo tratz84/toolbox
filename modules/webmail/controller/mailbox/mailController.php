@@ -7,10 +7,11 @@ use core\controller\BaseController;
 use core\exception\ObjectNotFoundException;
 use webmail\form\EmailForm;
 use webmail\mail\SolrMailActions;
+use webmail\model\Email;
 use webmail\service\ConnectorService;
+use webmail\service\EmailService;
 use webmail\solr\SolrMail;
 use webmail\solr\SolrMailQuery;
-use webmail\service\EmailService;
 
 class mailController extends BaseController {
    
@@ -232,7 +233,7 @@ class mailController extends BaseController {
             throw new ObjectNotFoundException('Mail not found');
         }
         
-        $form = array();
+        $formData = array();
         
         
         // lookup identity
@@ -249,21 +250,21 @@ class mailController extends BaseController {
             }
         }
         if ($foundIdentity) {
-            $form['identity_id'] = $foundIdentity->getIdentityId();
+            $formData['identity_id'] = $foundIdentity->getIdentityId();
         }
         
         
         // set subject
         $subject = $mail->getSubject();
-        if (strpos($subject, 're:') === false && strpos($subject, 'antwd:') === false) {
+        if (stripos($subject, 're:') === false && stripos($subject, 'antwd:') === false) {
             $subject = 'Re: ' . $subject;
         }
-        $form['subject'] = $subject;
+        $formData['subject'] = $subject;
         
         
         // set to
-        $form['recipients'] = array();
-        $form['recipients'][] = array(
+        $formData['recipients'] = array();
+        $formData['recipients'][] = array(
             'to_type' => 'To',
             'to_name' => $mail->getFromName(),
             'to_email' => $mail->getFromEmail()
@@ -277,7 +278,7 @@ class mailController extends BaseController {
                 }
             }
             
-            $form['recipients'][] = array(
+            $formData['recipients'][] = array(
                 'to_type' => 'To',
                 'to_name' => $to['name'],
                 'to_email' => $to['email']
@@ -292,26 +293,101 @@ class mailController extends BaseController {
                 }
             }
             
-            $form['recipients'][] = array(
+            $formData['recipients'][] = array(
                 'to_type' => 'Cc',
                 'to_name' => $cc['name'],
                 'to_email' => $cc['email']
             );
         }
         
-        $form['companyId'] = '';
-        $form['personId'] = '';
+        $formData['companyId'] = '';
+        $formData['personId'] = '';
         
         // set content
-        $form['text_content'] = '<br/><br/><br/><hr/>'.$mail->getContentSafe();
+        $formData['text_content'] = '<br/><br/><br/><hr/>'.$mail->getContentSafe();
         
-        $_SESSION['webmail-form-data'] = $form;
+        // create form
+        $form = new EmailForm();
+        $form->addIdentities();
+        $form->bind( $formData );
+        $form->getWidget('status')->setValue(Email::STATUS_DRAFT);
+        $form->getWidget('incoming')->setValue(false);
+        $form->getWidget('solr_mail_id')->setValue($mail->getId());
         
-        redirect('/?m=webmail&c=view&r=1');
+        
+        /** @var EmailService $emailService */
+        $emailService = object_container_get(EmailService::class);
+        $email = $emailService->saveEmail($form);
+        
+        report_user_message(t('E-mail created'));
+        redirect('/?m=webmail&c=view&id='.$email->getEmailId());
     }
     
     public function action_forward() {
+        $smq = object_container_create(SolrMailQuery::class);
         
+        /** @var \webmail\solr\SolrMail $mail */
+        $mail = $smq->readById( get_var('email_id') );
+        
+        if (!$mail) {
+            throw new ObjectNotFoundException('Mail not found');
+        }
+        
+        $formData = array();
+        
+        
+        // lookup identity
+        $emailService = object_container_get(EmailService::class);
+        $identities = $emailService->readAllIdentities();
+        $recipients = $mail->getRecipients();
+        $foundIdentity = null;
+        foreach($identities as $i) {
+            foreach($recipients as $r) {
+                if (strtolower($r['email']) == $i->getFromEmail()) {
+                    $foundIdentity = $i;
+                    break 2;
+                }
+            }
+        }
+        if ($foundIdentity) {
+            $formData['identity_id'] = $foundIdentity->getIdentityId();
+        }
+        
+        
+        // set subject
+        $subject = $mail->getSubject();
+        if (stripos($subject, 'fwd:') === false) {
+            $subject = 'Fwd: ' . $subject;
+        }
+        $formData['subject'] = $subject;
+        
+        $formData['companyId'] = '';
+        $formData['personId'] = '';
+        
+        // set content
+        $formData['text_content'] = '<br/><br/><br/><hr/>'.$mail->getContentSafe();
+        
+        
+        $attachments = array();
+        $attachmentsMeta = $mail->getAttachments();
+        for($x=0; $x < count($attachmentsMeta); $x++) {
+            $attachments[] = $mail->getAttachmentFile( $x );
+        }
+        
+        // create form
+        $form = new EmailForm();
+        $form->bind( $formData );
+        $form->getWidget('status')->setValue(Email::STATUS_DRAFT);
+        $form->getWidget('incoming')->setValue(false);
+        $form->getWidget('solr_mail_id')->setValue($mail->getId());
+        
+
+        /** @var EmailService $emailService */
+        $emailService = object_container_get(EmailService::class);
+        $email = $emailService->saveEmail($form, $attachments);
+        
+        report_user_message(t('E-mail created'));
+        redirect('/?m=webmail&c=view&id='.$email->getEmailId());
     }
     
 }

@@ -35,8 +35,18 @@ $(document).ready(function() {
 				customer_id: $(this).val()
 			},
 			success: function(data, xhr, textStatus) {
+
+				var emailSet = false;
 				
-				if ($('.list-edit-widget-recipients').length == 0 && data.success && data.addresses.length) {
+				$('.list-edit-widget-recipients').each(function(index, node) {
+					var e = $.trim( $(node).find('.email-field-widget input').val() );
+					if (e != '') {
+						emailSet = true;
+						return false;
+					}
+				});
+				
+				if (emailSet == false && data.success && data.addresses.length) {
 					$('.list-edit-widget-recipients').empty();
 
 					var lefw = $('.list-edit-form-widget').get(0).lefw;

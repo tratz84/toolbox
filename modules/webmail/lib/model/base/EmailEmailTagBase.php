@@ -14,7 +14,7 @@ class EmailEmailTagBase extends \core\db\DBObject {
   'email_email_tag_id' => 
   array (
     'Field' => 'email_email_tag_id',
-    'Type' => 'bigint(20)',
+    'Type' => 'bigint',
     'Null' => 'NO',
     'Key' => 'PRI',
     'Default' => NULL,
@@ -23,7 +23,7 @@ class EmailEmailTagBase extends \core\db\DBObject {
   'email_id' => 
   array (
     'Field' => 'email_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => 'MUL',
     'Default' => NULL,
@@ -32,7 +32,7 @@ class EmailEmailTagBase extends \core\db\DBObject {
   'email_tag_id' => 
   array (
     'Field' => 'email_tag_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => 'MUL',
     'Default' => NULL,

@@ -14,7 +14,7 @@ class EmailBase extends \core\db\DBObject {
   'email_id' => 
   array (
     'Field' => 'email_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'NO',
     'Key' => 'PRI',
     'Default' => NULL,
@@ -23,7 +23,7 @@ class EmailBase extends \core\db\DBObject {
   'user_id' => 
   array (
     'Field' => 'user_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => 'MUL',
     'Default' => NULL,
@@ -32,7 +32,7 @@ class EmailBase extends \core\db\DBObject {
   'company_id' => 
   array (
     'Field' => 'company_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -41,7 +41,7 @@ class EmailBase extends \core\db\DBObject {
   'person_id' => 
   array (
     'Field' => 'person_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -50,7 +50,7 @@ class EmailBase extends \core\db\DBObject {
   'identity_id' => 
   array (
     'Field' => 'identity_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -59,7 +59,7 @@ class EmailBase extends \core\db\DBObject {
   'connector_id' => 
   array (
     'Field' => 'connector_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -68,7 +68,7 @@ class EmailBase extends \core\db\DBObject {
   'connector_imapfolder_id' => 
   array (
     'Field' => 'connector_imapfolder_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => 'MUL',
     'Default' => NULL,
@@ -77,7 +77,7 @@ class EmailBase extends \core\db\DBObject {
   'attributes' => 
   array (
     'Field' => 'attributes',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -185,9 +185,18 @@ class EmailBase extends \core\db\DBObject {
   'search_id' => 
   array (
     'Field' => 'search_id',
-    'Type' => 'bigint(20)',
+    'Type' => 'bigint',
     'Null' => 'YES',
     'Key' => 'MUL',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'solr_mail_id' => 
+  array (
+    'Field' => 'solr_mail_id',
+    'Type' => 'varchar(255)',
+    'Null' => 'YES',
+    'Key' => '',
     'Default' => NULL,
     'Extra' => '',
   ),
@@ -276,6 +285,10 @@ class EmailBase extends \core\db\DBObject {
 		
 	public function setSearchId($p) { $this->setField('search_id', $p); }
 	public function getSearchId() { return $this->getField('search_id'); }
+	
+		
+	public function setSolrMailId($p) { $this->setField('solr_mail_id', $p); }
+	public function getSolrMailId() { return $this->getField('solr_mail_id'); }
 	
 	
 }

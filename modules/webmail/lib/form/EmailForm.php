@@ -32,6 +32,7 @@ class EmailForm extends BaseForm {
         // used for new e-mails
         $this->addWidget(new InternalField('status'));
         $this->addWidget(new InternalField('incoming'));
+        $this->addWidget(new InternalField('solr_mail_id'));
         
         
         
@@ -144,7 +145,12 @@ class EmailForm extends BaseForm {
     }
     
     
-    protected function addIdentities() {
+    public function addIdentities() {
+        // identity already set? => skip
+        if ($this->getWidget('identity_id')) {
+            return;
+        }
+        
         $emailService = ObjectContainer::getInstance()->get(EmailService::class);
         
         $identities = $emailService->readActiveIdentities();
