@@ -91,6 +91,8 @@ class SolrImportMail {
         $r['permissions']          = array();
         $r['server_properties_checksum'] = MailProperties::checksumServerProperties($emlFile);
         
+        $r['userId'] = $mp->getUserId();
+        $r['action'] = $mp->getAction();
         
         $r['fromName'] = '';
         $r['fromEmail'] = '';
@@ -118,17 +120,6 @@ class SolrImportMail {
             }
         }
         
-//         if ($r['fromName'])
-//             $r['text'][] = $r['fromName'];
-//         if ($r['fromEmail'])
-//             $r['text'][] = $r['fromEmail'];
-        
-//         foreach($r['toName'] as $tn) {
-//             $r['text'][] = $tn;
-//         }
-//         foreach($r['toEmail'] as $tn) {
-//             $r['text'][] = $tn;
-//         }
 
         unset( $p );
 

@@ -13,6 +13,7 @@ use webmail\model\Connector;
 use webmail\service\ConnectorService;
 use webmail\solr\SolrMailQuery;
 use core\forms\SelectField;
+use webmail\solr\SolrMail;
 
 class searchController extends BaseController {
 
@@ -110,6 +111,8 @@ class searchController extends BaseController {
 	    }
 	    $mp = new MailProperties( $f );
 	    $mp->load();
+	    
+	    // move to folder
 	    if ($mp->getConnectorId()) {
 	        /** @var ConnectorService $connectorService */
 	        $connectorService = object_container_get(ConnectorService::class);
@@ -126,6 +129,17 @@ class searchController extends BaseController {
 	        
 	        $this->actionContainer->addItem('move-mail-to-folder', $selectFolders->render());
 	    }
+
+	    // Action-state
+	    $mapActions = array();
+	    $mapActions[ SolrMail::ACTION_OPEN ]      = t('Open');
+	    $mapActions[ SolrMail::ACTION_POSTPONED ] = t('Postponed');
+	    $mapActions[ SolrMail::ACTION_DONE ]      = t('Done');
+	    $mapActions[ SolrMail::ACTION_REPLIED ]   = t('Replied');
+	    $mapActions[ SolrMail::ACTION_IGNORED ]   = t('Ignored');
+	    $selectActions = new SelectField('set_action', $mp->getAction(), $mapActions);
+	    $selectActions->setAttribute('onchange', 'setMailAction('.json_encode($emailId).', this.value)');
+	    $this->actionContainer->addItem('set-mail-action', $selectActions->render());
 	    
 	    
 	    hook_eventbus_publish($this->actionContainer, 'webmail', 'mailbox-search');

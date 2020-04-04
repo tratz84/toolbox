@@ -20,12 +20,14 @@ class MailTabFilterListEdit extends \core\forms\ListEditWidget {
 		$w1 = new \core\forms\SelectField('filter_type', NULL, array (
 		  'email' => 'Email',
 		  'folder' => 'Mail folder',
+		  'action' => 'Action',
 		), 'E-mail');
 		$this->addWidget( $w1 );
 		$w2 = new \core\forms\TextField('filter_value', NULL, 'Filter string');
 		$this->addWidget( $w2 );
 		
 	}
+
 
 
 

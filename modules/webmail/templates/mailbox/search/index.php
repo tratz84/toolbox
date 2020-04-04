@@ -188,17 +188,11 @@ t.addColumn({
 	searchable: false
 });
 t.addColumn({
-	fieldName: 'status',
-	fieldDescription: 'Status',
+	fieldName: 'action',
+	fieldDescription: 'Action',
 	fieldType: 'text',
 	render: function(record) {
-		if (record.status == 'draft') {
-			return 'Concept';
-		} else if (record.status == 'sent') {
-			return 'Verzonden';
-		} else {
-			return record.status;
-		}
+		return record.action;
 	}
 });
 
@@ -268,6 +262,26 @@ function moveMail(email_id, targetFolder) {
 				alert('Error: ' + data.message);
 			} else {
 				$('tr[email-id="' + data.email_id + '"]').find('.td-mailbox-name').text( data.newFolder );
+			}
+		}
+	});
+	
+}
+
+function setMailAction(email_id, newAction) {
+	
+	$.ajax({
+		url: appUrl('/?m=webmail&c=mailbox/mail&a=mail_action'),
+		type: 'POST',
+		data: {
+			email_id: email_id,
+			action: newAction
+		},
+		success: function(data, xhr, textStatus) {
+			if (data.error) {
+				alert('Error: ' + data.message);
+			} else {
+				$('tr[email-id="' + data.email_id + '"]').find('.td-action').text( data.action );
 			}
 		}
 	});

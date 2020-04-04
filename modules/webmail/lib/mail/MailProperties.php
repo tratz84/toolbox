@@ -6,6 +6,7 @@ namespace webmail\mail;
 
 
 use core\exception\FileException;
+use core\exception\InvalidArgumentException;
 
 class MailProperties {
 
@@ -69,14 +70,14 @@ class MailProperties {
         }
         
         if ($this->serverPropertiesChanged) {
-            file_put_contents($this->sfile, json_encode($this->serverProperties));
+            $r = file_put_contents($this->sfile, json_encode($this->serverProperties));
         }
         
         if ($this->toolboxPropertiesChanged) {
             file_put_contents($this->tbfile, json_encode($this->toolboxProperties));
         }
         
-        return $r;
+        return true;
     }
     
     public function getProperties() { return $this->serverProperties; }
@@ -131,6 +132,17 @@ class MailProperties {
     public function getSeen() { return $this->getProperty('seen'); }
     public function getDraft() { return $this->getProperty('draft'); }
     
+    
+    public function setAction($a) {
+        if (in_array($a, ['open', 'done', 'ignored', 'replied', 'postponed']) == false) {
+            throw new InvalidArgumentException('Invalid action');
+        }
+        $this->setToolboxProperty('action', $a);
+    }
+    public function getAction() { return $this->getProperty('action', 'open'); }
+    
+    public function setUserId($id) { $this->setToolboxProperty('userId', $id); }
+    public function getUserId() { return $this->getProperty('userId'); }
     
 }
 

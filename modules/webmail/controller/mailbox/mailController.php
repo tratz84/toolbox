@@ -115,6 +115,46 @@ class mailController extends BaseController {
         }
     }
     
+    public function action_mail_action() {
+        $smq = object_container_create(SolrMailQuery::class);
+        
+        try {
+            /** @var \webmail\solr\SolrMail $mail */
+            $mail = $smq->readById( get_var('email_id') );
+            
+            if (!$mail) {
+                throw new ObjectNotFoundException('Mail not found');
+            }
+            
+            
+            /** @var \webmail\mail\MailProperties $mailProperties */
+            $mailProperties = $mail->getProperties();
+            
+            $mailProperties->setAction( get_var('action') );
+            $mailProperties->save();
+            
+            $ma = new SolrMailActions();
+            $ma->updateAction($mail->getId(), get_var('action'));
+            
+            
+            return $this->json([
+                'success'   => true,
+                'email_id'  => $mail->getId(),
+                'action' => get_var('action')
+            ]);
+        } catch (\Exception $ex) {
+            return $this->json([
+                'error' => true,
+                'message' => $ex->getMessage()
+            ]);
+        } catch (\Error $err) {
+            return $this->json([
+                'error' => true,
+                'message' => $err->getMessage()
+            ]);
+        }
+    }
+    
     
     public function action_mark_as_spam() {
         $smq = object_container_create(SolrMailQuery::class);

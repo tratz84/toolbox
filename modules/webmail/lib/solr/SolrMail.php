@@ -10,6 +10,13 @@ use webmail\mail\MailProperties;
 
 class SolrMail {
     
+    public const ACTION_OPEN      = 'open';
+    public const ACTION_REPLIED   = 'replied';
+    public const ACTION_IGNORED   = 'ignored';
+    public const ACTION_DONE      = 'done';
+    public const ACTION_POSTPONED = 'postponed';
+    
+    
     protected $jsonMail;
     
     protected $parsedMail = null;
@@ -50,6 +57,11 @@ class SolrMail {
         
         return $dt->format('Y-m-d H:i:s');
     }
+    
+    public function getUserId() { return @$this->jsonMail->userId; }
+    public function getAction() { return @$this->jsonMail->action; }
+    
+    
     
     public function getAttachments() { $this->parseMail(); return $this->attachments; }
     public function getAttachmentFile($fileno) {

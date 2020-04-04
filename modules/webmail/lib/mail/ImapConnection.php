@@ -6,6 +6,7 @@ namespace webmail\mail;
 use webmail\model\Connector;
 use core\ObjectContainer;
 use webmail\service\ConnectorService;
+use webmail\solr\SolrMail;
 
 class ImapConnection {
     
@@ -27,7 +28,7 @@ class ImapConnection {
     
     protected $callback_itemImported = null;
     
-    protected $messagePropertyChecksums = null;
+    protected $serverPropertyChecksums = null;
     
     
     public function __construct($hostname=null, $port=null, $username=null, $password=null) {
@@ -204,7 +205,7 @@ class ImapConnection {
                 $mp = $this->buildMessageProperties($emlfile, $folderName, $results[$y]);
                 
                 // check if mail (properties) are changed
-                $changed = $this->messagePropertiesChanged($emlfile, $mp);
+                $changed = $this->serverPropertiesChanged($emlfile, $mp);
                 
                 if ($changed) {
                     $mp->save();
@@ -257,6 +258,8 @@ class ImapConnection {
         $mp->setServerProperty('seen',        @$overview->seen);
         $mp->setServerProperty('draft',       @$overview->draft);
         
+        $mp->setAction(SolrMail::ACTION_OPEN);
+        
         return $mp;
     }
     
@@ -307,27 +310,32 @@ class ImapConnection {
         return $file;
     }
     
-    public function messagePropertiesChanged($filename, $data) {
+    public function serverPropertiesChanged($filename, $data) {
         $chksum = crc32_int32(serialize($data));
         
-        if ($this->messagePropertyChecksums === null) {
+        if ($this->serverPropertyChecksums === null) {
             $f = get_data_file('webmail/message-checksums');
-            if ($f)
-                $this->messagePropertyChecksums = unserialize( file_get_contents( $f ) );
+            if ($f) {
+                $this->serverPropertyChecksums = unserialize( file_get_contents( $f ) );
+            }
+            
+            if ($this->serverPropertyChecksums == false) {
+                $this->serverPropertyChecksums = array();
+            }
         }
         
-        if (isset($this->messagePropertyChecksums[ $filename ]) && $this->messagePropertyChecksums[ $filename ] == $chksum) {
+        if (isset($this->serverPropertyChecksums[ $filename ]) && $this->serverPropertyChecksums[ $filename ] == $chksum) {
             return false;
         }
         
-        $this->messagePropertyChecksums[ $filename ] = $chksum;
+        $this->serverPropertyChecksums[ $filename ] = $chksum;
         
         return true;
     }
     
-    public function saveMessagePropertyChecksums() {
+    public function saveServerPropertyChecksums() {
         
-        return save_data('webmail/message-checksums', serialize($this->messagePropertyChecksums));
+        return save_data('webmail/message-checksums', serialize($this->serverPropertyChecksums));
     }
     
     

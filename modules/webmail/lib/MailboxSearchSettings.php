@@ -96,6 +96,12 @@ class MailboxSearchSettings {
                 
                 $qs_inc[] = 'mailboxName:'.$v;
             }
+            
+            if ($filter['filter_type'] == 'action') {
+                $v = solr_escapePhrase( trim($filter['filter_value']) );
+                
+                $qs_inc[] = 'action:'.$v;
+            }
         }
         
 
@@ -121,6 +127,13 @@ class MailboxSearchSettings {
                 
                 $smq->addFacetQuery('-mailboxName:'.$v);
             }
+            
+            if ($filter['filter_type'] == 'action') {
+                $v = solr_escapePhrase( trim($filter['filter_value']) );
+                
+                $smq->addFacetQuery('-action:'.$v);
+            }
+            
         }
         
         

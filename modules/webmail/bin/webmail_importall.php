@@ -86,7 +86,7 @@ if ($argumentParser->hasOption('skip-connector-import') == false) {
             
             $ic->doImport( $c );
             $ic->disconnect();
-            $ic->saveMessagePropertyChecksums();
+            $ic->saveServerPropertyChecksums();
             
             $solrImportMail->purge( true );
         }

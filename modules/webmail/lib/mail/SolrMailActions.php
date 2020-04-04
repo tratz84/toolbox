@@ -64,7 +64,7 @@ class SolrMailActions {
         
         // connector not found? => just throw in 'Junk'
         if (!$connector) {
-            $solrMail->setProperty('folder', 'Junk');
+            $solrMail->getProperties()->setFolder('Junk');
             $solrMail->saveProperties();
             
             // update solr
@@ -164,7 +164,7 @@ class SolrMailActions {
         // just update solr? if mail is deleted, it's atleast in this mailbox in the right folder (especially in case of junk)
         // if this move is to the wrong folder, it will get synced automatically by modules/webmail/bin/webmail_importall.php-script
         
-        $solrMail->setProperty('folder', $if->getFolderName());
+        $solrMail->getProperties()->setFolder('Junk');
         $solrMail->saveProperties();
         
         $this->updateSolrFolder($solrMail->getId(), $if->getFolderName());
@@ -177,6 +177,16 @@ class SolrMailActions {
             [
                 'mailboxName' => $folderName
         ]);
+    }
+    
+    public function updateAction($emailId, $action) {
+        $this->updateSolrFields($emailId, ['action' => $action]);
+    }
+
+    protected function updateSolrFields($emailId, $fields) {
+        // update solr
+        $su = new SolrImportMail( WEBMAIL_SOLR );
+        $su->updateDoc($emailId, $fields);
     }
     
     

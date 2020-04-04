@@ -26,6 +26,9 @@
     <field name="isSeen"        type="boolean" indexed="true" stored="true" />
     <field name="isDeleted"     type="boolean" indexed="true" stored="true" />
 
+    <field name="action"        type="string" indexed="true" stored="true" />
+    <field name="userId"        type="pint"   indexed="true" stored="true" />
+    
     <field name="status"        type="string" indexed="true" stored="true" />
     <field name="permissions"   type="string" multiValued="true" indexed="true" stored="true" />
 
@@ -36,7 +39,8 @@
     <field name="toEmail"       type="string_ci" indexed="true" stored="true" multiValued="true" />
 
     <field name="content"       type="text_general" indexed="true" stored="false" />
-    <field name="properties_checksum" type="pint" indexed="false" stored="true" />
+    
+    <field name="server_properties_checksum" type="pint" indexed="false" stored="true" />
 
 
     <!-- This can be enabled, in case the client does not know what fields may be searched. It isn't enabled by default
