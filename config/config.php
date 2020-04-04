@@ -28,6 +28,8 @@ if (file_exists($file)) {
 //     die('Config not found: config-local.php');
 }
 
+// maybe make this configurable? Netherlands is main market, so oke for now..
+date_default_timezone_set('Europe/Amsterdam');
 
 if (!defined('SALT'))
     define('SALT', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
