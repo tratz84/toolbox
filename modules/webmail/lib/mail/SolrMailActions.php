@@ -75,7 +75,7 @@ class SolrMailActions {
         
         
         if ($connector->getConnectorType() == 'imap' && $connector->getJunkConnectorImapfolderId()) {
-            $this->moveMail($connector, $solrMail, $connector->getJunkConnectorImapfolderId());
+            $this->moveMail($connector, $solrMail, $connector->getJunkConnectorImapfolderId(), ['spam' => true]);
         }
         
     }
@@ -164,7 +164,7 @@ class SolrMailActions {
     
     
     
-    public function moveMail(Connector $connector, SolrMail $solrMail, $imapFolderId) {
+    public function moveMail(Connector $connector, SolrMail $solrMail, $imapFolderId, $opts=array()) {
         // connector inactive?
         if ($connector->getActive() == false) {
             return false;
@@ -192,11 +192,13 @@ class SolrMailActions {
             }
         }
         
-        // mark as spam
-        $this->imapConnection->setFlagByUid($props->getUid(),   $props->getFolder(), 'Junk');
-        $this->imapConnection->setFlagByUid($props->getUid(),   $props->getFolder(), '$Junk');
-        $this->imapConnection->clearFlagByUid($props->getUid(), $props->getFolder(), 'NonJunk');
-        $this->imapConnection->clearFlagByUid($props->getUid(), $props->getFolder(), '$NonJunk');
+        // spam?
+        if (isset($opts['spam']) && $opts['spam']) {
+            $this->imapConnection->setFlagByUid($props->getUid(),   $props->getFolder(), 'Junk');
+            $this->imapConnection->setFlagByUid($props->getUid(),   $props->getFolder(), '$Junk');
+            $this->imapConnection->clearFlagByUid($props->getUid(), $props->getFolder(), 'NonJunk');
+            $this->imapConnection->clearFlagByUid($props->getUid(), $props->getFolder(), '$NonJunk');
+        }
         
         // moved? => update properties-file
         if ($this->imapConnection->moveMailByUid($props->getUid(), $props->getFolder(), $if->getFolderName()) == false) {

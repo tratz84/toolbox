@@ -14,6 +14,7 @@ use webmail\service\ConnectorService;
 use webmail\solr\SolrMailQuery;
 use core\forms\SelectField;
 use webmail\solr\SolrMail;
+use webmail\mail\SolrMailActions;
 
 class searchController extends BaseController {
 
@@ -118,6 +119,17 @@ class searchController extends BaseController {
 	    
 	    $mp = new MailProperties( $f );
 	    $mp->load();
+	    
+	    
+	    if ($mp->getSeen() == false) {
+	        try {
+        	    $solrMail = SolrMailQuery::readStaticById($emailId);
+    	        $sma = new SolrMailActions();
+    	        $sma->markAsSeen($solrMail);
+	        } catch (\Exception|\Error $ex) { }
+	    }
+	    
+	    
 	    // move to folder
 	    if ($mp->getConnectorId()) {
 	        /** @var ConnectorService $connectorService */

@@ -29,6 +29,11 @@ class SolrMailQuery extends SolrQuery {
         $this->addFacetSearch('contextName', ':', ctx()->getContextName());
     }
     
+    
+    public static function readStaticById($id) {
+        $smq = new SolrMailQuery();
+        return $smq->readById($id);
+    }
 
     public function readById($id) {
         // reset query
