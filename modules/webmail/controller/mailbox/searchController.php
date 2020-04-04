@@ -109,9 +109,15 @@ class searchController extends BaseController {
 	    if (!$f) {
 	        throw new ObjectNotFoundException('Mail not found');
 	    }
+	    
+	    
+	    // TODO: implement..
+// 	    $this->actionContainer->addItem('mail-forward', '<button class="btn-reply-mail"><span class="fa fa-forward"></span>Forward</button>');
+// 	    $this->actionContainer->addItem('mail-reply', '<button class="btn-forward-mail"><span class="fa fa-reply"></span>Reply</button>');
+	    
+	    
 	    $mp = new MailProperties( $f );
 	    $mp->load();
-	    
 	    // move to folder
 	    if ($mp->getConnectorId()) {
 	        /** @var ConnectorService $connectorService */
