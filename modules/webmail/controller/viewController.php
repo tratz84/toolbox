@@ -11,6 +11,7 @@ use webmail\model\Email;
 use webmail\model\EmailTo;
 use webmail\service\EmailService;
 use webmail\solr\SolrMailQuery;
+use webmail\service\EmailTemplateService;
 
 class viewController extends BaseController {
     
@@ -75,6 +76,16 @@ class viewController extends BaseController {
         if (is_get() && get_var('r')) {
             //             var_export($_SESSION['webmail-form-data']);exit;
             $this->form->bind( $_SESSION['webmail-form-data'] );
+        } else if (is_get() && $email->isNew()) {
+            // template set? new e-mail? => set values
+            $templateService = object_container_get(EmailTemplateService::class);
+            $tpl = $templateService->readByTemplateCode('NEW_MAIL');
+            
+            if ($tpl) {
+                $this->form->getWidget('subject')->setValue( $tpl->getSubject() );
+                $this->form->getWidget('text_content')->setValue( $tpl->getContent() );
+            }
+            
         }
         
         
