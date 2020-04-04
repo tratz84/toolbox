@@ -32,7 +32,18 @@ class <?= $className ?>Base extends \core\db\DBObject {
 	
 	<?php foreach($columns as $c) : ?>
 	
-	public function set<?= dbCamelCase($c['Field']) ?>($p) { $this->setField('<?= $c['Field'] ?>', $p); }
+	public function set<?= dbCamelCase($c['Field']) ?>($p) {
+<?php if (strpos($c['Type'], 'int') === 0) {
+		    print "		if (\$p === '') {\n";
+		    print "			\$this->setField('{$c['Field']}', null);\n";
+		    print "		} else {\n";
+		    print "			\$this->setField('{$c['Field']}', \$p);\n";
+		    print "		}\n";
+		} else {
+		    print "		\$this->setField('{$c['Field']}', \$p);\n";
+		}
+		?>
+	}
 	public function get<?= dbCamelCase($c['Field']) ?>() { return $this->getField('<?= $c['Field'] ?>'); }
 	
 	<?php endforeach; ?>
