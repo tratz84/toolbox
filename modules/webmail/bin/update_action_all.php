@@ -23,6 +23,7 @@ include 'config/config.php';
 $contextName = $argv[1];
 bootstrapCli($contextName);
 
+ini_set('memory_limit', '2GB');
 
 
 print "START Folder import, importing webmail/inbox\n";
