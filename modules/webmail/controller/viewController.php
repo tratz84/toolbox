@@ -2,15 +2,15 @@
 
 
 use core\controller\BaseController;
-use webmail\service\EmailService;
 use core\exception\ObjectNotFoundException;
-use webmail\form\EmailForm;
-use webmail\form\EmailRecipientLineWidget;
-use webmail\model\EmailTo;
-use core\exception\InvalidStateException;
-use webmail\mail\SendMail;
-use webmail\model\Email;
 use core\forms\HtmlField;
+use webmail\form\EmailForm;
+use webmail\mail\SendMail;
+use webmail\mail\SolrMailActions;
+use webmail\model\Email;
+use webmail\model\EmailTo;
+use webmail\service\EmailService;
+use webmail\solr\SolrMailQuery;
 
 class viewController extends BaseController {
     
@@ -121,6 +121,7 @@ class viewController extends BaseController {
     public function action_send() {
         $emailService = $this->oc->get(EmailService::class);
         
+        /** @var Email $email */
         $email = $emailService->readEmail($_REQUEST['id']);
         
         if ($email === null) {
@@ -154,6 +155,21 @@ class viewController extends BaseController {
         
         // mark mail as sent
         $emailService->markMailAsSent( $email->getEmailId() );
+        
+        // mark mail as sent on imap-server/solr
+        if ($email->getSolrMailId()) {
+            try {
+                $smq = new SolrMailQuery();
+                $solrMail = $smq->readById($email->getSolrMailId());
+                
+                if ($solrMail) {
+                    $sma = new SolrMailActions();
+                    $sma->markAsAnswered($solrMail);
+                }
+            } catch (\Exception|\Error $ex) {
+                // mja
+            }
+        }
         
         
         // redirect to overview
