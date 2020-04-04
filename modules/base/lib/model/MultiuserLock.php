@@ -18,21 +18,23 @@ class MultiuserLock extends base\MultiuserLockBase {
     
     public function save() {
         
-        $this->setCreated(date('Y-m-d H:i:s'));
+//         $this->setCreated(date('Y-m-d H:i:s'));
         
-        $sql = "insert into base__multiuser_lock (username, tabuid, lock_key, ip, created) values (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE lock_key = ?, created = ?";
+        $sql = "insert into base__multiuser_lock (username, tabuid, lock_key, ip, created) values (?, ?, ?, ?, now()) ON DUPLICATE KEY UPDATE lock_key = ?, created = now()";
         
         $params = array();
         $params[] = $this->getUsername();
         $params[] = $this->getTabuid();
         $params[] = $this->getLockKey();
         $params[] = $this->getIp();
-        $params[] = $this->getCreated();
+//         $params[] = $this->getCreated();
         $params[] = $this->getLockKey();
-        $params[] = $this->getCreated();
+//         $params[] = $this->getCreated();
         
         $con = DatabaseHandler::getConnection($this->resourceName);
         $result = $con->query($sql, $params);
+        $this->lastQuery = $con->getLastQuery();
+        $this->lastEr = $con->getError();
         
         if ($result) {
             return true;
