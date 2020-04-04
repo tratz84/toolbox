@@ -16,7 +16,7 @@ Context::getInstance()->enableModule('webmail');
 // core\db\mysql\MysqlTableGenerator::updateModule('webmail', true);
 // die('done');
 
-module_update_handler('webmail', '20200319');
+module_update_handler('webmail', '20200404');
 
 
 $eb = ObjectContainer::getInstance()->get(EventBus::class);
