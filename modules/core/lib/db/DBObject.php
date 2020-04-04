@@ -35,6 +35,14 @@ class DBObject {
     
     protected function setDatabaseFields($arr) { $this->dbFields = $arr; }
     
+    public function getColumnType($columnName) {
+        if (isset($this->dbFields[$columnName]['Type'])) {
+            return $this->dbFields[$columnName]['Type'];
+        } else {
+            return null;
+        }
+    }
+    
     public function getLastError() { return $this->lastError; }
     public function getLastQuery() { return $this->lastQuery; }
     

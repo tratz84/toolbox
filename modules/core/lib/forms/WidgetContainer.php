@@ -172,6 +172,15 @@ class WidgetContainer extends BaseWidget {
                 
                 if (is_a($obj, DBObject::class)) {
                     
+                    // fetch columnType for binding rules
+                    $columnType = $obj->getColumnType( $f );
+    
+                    // set empty strings with type int to NULL
+                    if (strpos($columnType, 'int') === 0 && $val === '') {
+                        $val = null;
+                    }
+                    
+                    
                     $setFunction = 'set'.dbCamelCase($f);
                     
                     if (method_exists($obj, $setFunction)) {
