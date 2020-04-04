@@ -328,5 +328,15 @@ function markMailAsham(row, email_id) {
 }
 
 
+function replyMail(email_id) {
+	window.open(appUrl('/?m=webmail&c=mailbox/mail&a=reply&email_id=' + email_id), '_self');
+}
+
+function forwardMail(email_id) {
+	window.open(appUrl('/?m=webmail&c=mailbox/mail&a=forward&email_id=' + email_id), '_self');
+}
+
+
+
 </script>
 

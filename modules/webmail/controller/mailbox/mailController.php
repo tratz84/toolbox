@@ -4,10 +4,13 @@
 
 
 use core\controller\BaseController;
-use webmail\mail\SolrMailActions;
-use webmail\solr\SolrMailQuery;
 use core\exception\ObjectNotFoundException;
+use webmail\form\EmailForm;
+use webmail\mail\SolrMailActions;
 use webmail\service\ConnectorService;
+use webmail\solr\SolrMail;
+use webmail\solr\SolrMailQuery;
+use webmail\service\EmailService;
 
 class mailController extends BaseController {
    
@@ -218,6 +221,98 @@ class mailController extends BaseController {
         }
     }
     
+    
+    public function action_reply() {
+        $smq = object_container_create(SolrMailQuery::class);
+        
+        /** @var \webmail\solr\SolrMail $mail */
+        $mail = $smq->readById( get_var('email_id') );
+        
+        if (!$mail) {
+            throw new ObjectNotFoundException('Mail not found');
+        }
+        
+        $form = array();
+        
+        
+        // lookup identity
+        $emailService = object_container_get(EmailService::class);
+        $identities = $emailService->readAllIdentities();
+        $recipients = $mail->getRecipients();
+        $foundIdentity = null;
+        foreach($identities as $i) {
+            foreach($recipients as $r) {
+                if (strtolower($r['email']) == $i->getFromEmail()) {
+                    $foundIdentity = $i;
+                    break 2;
+                }
+            }
+        }
+        if ($foundIdentity) {
+            $form['identity_id'] = $foundIdentity->getIdentityId();
+        }
+        
+        
+        // set subject
+        $subject = $mail->getSubject();
+        if (strpos($subject, 're:') === false && strpos($subject, 'antwd:') === false) {
+            $subject = 'Re: ' . $subject;
+        }
+        $form['subject'] = $subject;
+        
+        
+        // set to
+        $form['recipients'] = array();
+        $form['recipients'][] = array(
+            'to_type' => 'To',
+            'to_name' => $mail->getFromName(),
+            'to_email' => $mail->getFromEmail()
+        );
+        
+        foreach($mail->getTo() as $to) {
+            // skip own addresses
+            foreach($identities as $i) {
+                if (strtolower($i->getFromEmail()) == strtolower($to['email'])) {
+                    continue 2;
+                }
+            }
+            
+            $form['recipients'][] = array(
+                'to_type' => 'To',
+                'to_name' => $to['name'],
+                'to_email' => $to['email']
+            );
+        }
+        
+        foreach($mail->getCc() as $cc) {
+            // skip own addresses
+            foreach($identities as $i) {
+                if (strtolower($i->getFromEmail()) == strtolower($cc['email'])) {
+                    continue 2;
+                }
+            }
+            
+            $form['recipients'][] = array(
+                'to_type' => 'Cc',
+                'to_name' => $cc['name'],
+                'to_email' => $cc['email']
+            );
+        }
+        
+        $form['companyId'] = '';
+        $form['personId'] = '';
+        
+        // set content
+        $form['text_content'] = '<br/><br/><br/><hr/>'.$mail->getContentSafe();
+        
+        $_SESSION['webmail-form-data'] = $form;
+        
+        redirect('/?m=webmail&c=view&r=1');
+    }
+    
+    public function action_forward() {
+        
+    }
     
 }
 

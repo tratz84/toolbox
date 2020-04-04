@@ -84,7 +84,8 @@ class EmailForm extends BaseForm {
         
         parent::bind($obj);
         
-        
+        $companyId = null;
+        $personId = null;
         
         if (is_a($obj, Email::class)) {
             $companyId = $obj->getCompanyId();

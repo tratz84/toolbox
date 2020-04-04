@@ -127,9 +127,16 @@ class MailProperties {
     public function getMessageId() { return $this->getProperty('message_id'); }
     public function getUDate() { return $this->getProperty('udate'); }
     public function getFlagged() { return $this->getProperty('flagged'); }
+
     public function getAnswered() { return $this->getProperty('answered'); }
+    public function setAnswered($bln) { $this->setServerProperty('answered', $bln ? true : false); }
+    
     public function getDeleted() { return $this->getProperty('deleted'); }
+    public function setDeleted($bln) { $this->setServerProperty('deleted', $bln ? true : false); }
+    
     public function getSeen() { return $this->getProperty('seen'); }
+    public function setSeen($bln) { $this->setServerProperty('seen', $bln ? true : false); }
+    
     public function getDraft() { return $this->getProperty('draft'); }
     
     

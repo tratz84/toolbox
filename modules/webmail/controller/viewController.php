@@ -71,6 +71,13 @@ class viewController extends BaseController {
         }
         $this->form->bind( $email );
         
+        if (is_get() && get_var('r')) {
+            //             var_export($_SESSION['webmail-form-data']);exit;
+            $this->form->bind( $_SESSION['webmail-form-data'] );
+        }
+        
+        
+        
         if ($email->isNew()) {
             $this->form->addWidget(new HtmlField('lblNew', t('New e-mail'), t('Id')));
             $this->form->getWidget('lblNew')->setPrio(5);

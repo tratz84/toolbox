@@ -94,6 +94,14 @@ class SolrMail {
     public function getCc() { $this->parseMail();  return $this->cc; }
     public function getBcc() { $this->parseMail(); return $this->bcc; }
     
+    public function getRecipients() {
+        $to  = $this->getTo();
+        $cc  = $this->getCc();
+        $bcc = $this->getBcc();
+        
+        return array_merge($to, $cc, $bcc);
+    }
+    
     
     public function getSubject() {
         return isset($this->jsonMail->subject) ? $this->jsonMail->subject : '';
@@ -184,7 +192,19 @@ class SolrMail {
             $el->setAttribute('rel', 'nofollow');
         }
         
-        return $dom->saveHTML();
+        $body = $dom->getElementsByTagName('body');
+        if ($body->count()) {
+            $body = $body[0];
+        } else {
+            $body = null;
+        }
+        
+        $html = $dom->saveHTML();
+        
+        $html = preg_replace('/<body.*?>/', '', $html);
+        $html = str_replace('</body>', '', $html);
+        
+        return $html;
     }
     
     protected function removeNodesByName( $childNodes, $nodeNames=array() ) {

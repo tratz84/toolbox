@@ -120,6 +120,49 @@ class SolrMailActions {
     }
     
     
+    public function markAsSeen(SolrMail $solrMail) {
+        $this->markMail($solrMail, '\\Seen');
+        
+        // update property
+        $mailProperties = $solrMail->getProperties();
+        $mailProperties->setSeen( true );
+        $mailProperties->save();
+    }
+    
+    public function markAsAnswered(SolrMail $solrMail) {
+        $this->markMail($solrMail, '\\Answered');
+        
+        // update property
+        $mailProperties = $solrMail->getProperties();
+        $mailProperties->setAnswered( true );
+        $mailProperties->save();
+    }
+    
+    
+    public function markMail(SolrMail $solrMail, $flag) {
+        // if Connector exists, connection is imap & message is in Junk-folder? => move to inbox
+        $mailProperties = $solrMail->getProperties();
+        $connector = null;
+        if ($mailProperties->getConnectorId()) {
+            /** @var ConnectorService $connectorService */
+            $connectorService = object_container_get(ConnectorService::class);
+            /** @var \webmail\model\Connector $connector */
+            $connector = $connectorService->readConnector( $mailProperties->getConnectorId() );
+        }
+        
+        if (!$connector || $connector->getConnectorType() != 'imap' || $connector->getActive() == false)
+            return;
+        
+        
+        // mark mail as answered
+        $ic = ImapConnection::createByConnector($connector);
+        if ($ic->connect()) {
+            $ic->setFlagByUid($mailProperties->getUid(), $mailProperties->getFolder(), $flag);
+            $ic->disconnect();
+        }
+    }
+    
+    
     
     public function moveMail(Connector $connector, SolrMail $solrMail, $imapFolderId) {
         // connector inactive?

@@ -35,7 +35,8 @@ $(document).ready(function() {
 				customer_id: $(this).val()
 			},
 			success: function(data, xhr, textStatus) {
-				if (data.success && data.addresses.length) {
+				
+				if ($('.list-edit-widget-recipients').length == 0 && data.success && data.addresses.length) {
 					$('.list-edit-widget-recipients').empty();
 
 					var lefw = $('.list-edit-form-widget').get(0).lefw;
