@@ -317,8 +317,8 @@ class ImapConnection {
         return $file;
     }
     
-    public function serverPropertiesChanged($filename, $data) {
-        $chksum = crc32_int32(serialize($data));
+    public function serverPropertiesChanged($filename, MailProperties $data) {
+        $chksum = crc32_int32(serialize($data->getServerProperties()));
         
         if ($this->serverPropertyChecksums === null) {
             $f = get_data_file('webmail/message-checksums');

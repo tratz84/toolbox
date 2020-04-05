@@ -82,6 +82,7 @@ class MailProperties {
     
     public function getProperties() { return $this->serverProperties; }
     
+    public function getServerProperties() { return $this->serverProperties; }
     public function setServerProperty($name, $val) {
         if (isset($this->serverProperties[$name]) == false || $this->serverProperties[$name] != $val) {
             $this->serverPropertiesChanged = true;
