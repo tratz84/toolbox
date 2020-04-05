@@ -46,6 +46,7 @@ class DynamicSelectField extends BaseWidget {
         $html = '';
 
         $extraClass = $this->hasError() ? 'error' : '';
+        $extraClass .= ' ' . slugify($this->getName()) . '-widget';
         
         $html .= '<div class="widget dynamic-select-field-widget '.$extraClass.'">';
         $html .= '<label>'.esc_html($this->getLabel()).'</label>';
