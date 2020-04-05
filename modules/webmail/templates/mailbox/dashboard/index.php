@@ -35,6 +35,13 @@
         		<td><?= format_date($obj['date'], 'd-m-Y H:i:s') ?></td>
         	</tr>
         	<?php endforeach; ?>
+        	<?php if (count($listResponse->getObjects()) == 0) : ?>
+        	<tr>
+        		<td colspan="6" style="text-align: center; font-style: italic;">
+        			<?= t('All e-mails handled') ?>
+        		</td>
+        	</tr>
+        	<?php endif; ?>
         </tbody>
 	</table>
 	

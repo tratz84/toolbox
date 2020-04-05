@@ -9,5 +9,6 @@ $lang['Mail server settings (out)'] = 'Mail server instellingen (uitgaand)';
 
 $lang['New e-mail']                 = 'Nieuwe e-mail';
 
+$lang['All e-mails handled']        = 'Alle berichten verwerkt';
 
 return $lang;
