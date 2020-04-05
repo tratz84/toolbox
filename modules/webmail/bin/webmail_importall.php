@@ -36,6 +36,7 @@ bootstrapCli($contextName);
 
 
 ini_set('memory_limit', '2GB');
+set_time_limit(60 * 5);
 
 $argumentParser = new ArgumentParser( $argv );
 
