@@ -74,6 +74,7 @@ class DatePickerField extends BaseWidget {
         
         $this->setAttribute('class', 'input-pickadate reset-field-button');
         $this->setAttribute('autocomplete', 'off');
+        $this->setAttribute('inputmode', 'none'); 
         
         $v = '';
         if ($this->getValue()) {

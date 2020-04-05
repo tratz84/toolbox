@@ -42,7 +42,7 @@ class DateTimePickerField extends BaseWidget {
         
         $html .= '<div class="widget datetimepicker-field-widget widget-'. slugify($this->getName()) . ' '.$extraClass.'">';
         $html .= '<label>'.esc_html($this->getLabel()).infopopup($this->getInfoText()).'</label>';
-        $html .= '<input type="text" autocomplete=off class="input-pickadatetime" name="'.esc_attr($this->getName()).'" value="'.esc_attr($v).'" />';
+        $html .= '<input type="text" autocomplete=off inputmode="none" class="input-pickadatetime" name="'.esc_attr($this->getName()).'" value="'.esc_attr($v).'" />';
         $html .= '</div>';
         
         return $html;

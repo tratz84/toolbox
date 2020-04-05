@@ -36,7 +36,7 @@ class TimePickerField extends BaseWidget {
         
         $html .= '<div class="widget timepicker-field-widget '.$extraClass.'">';
         $html .= '<label>'.esc_html($this->getLabel()).infopopup($this->getInfoText()).'</label>';
-        $html .= '<input type="text" autocomplete=off class="input-pickatime" name="'.esc_attr($this->getName()).'" value="'.esc_attr($v).'" />';
+        $html .= '<input type="text" autocomplete=off inputmode="none" class="input-pickatime" name="'.esc_attr($this->getName()).'" value="'.esc_attr($v).'" />';
         $html .= '</div>';
         
         return $html;
