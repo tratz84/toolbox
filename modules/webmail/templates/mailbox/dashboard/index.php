@@ -14,6 +14,7 @@
 		<thead>
 			<tr>
 				<th style="min-width: 25px;"></th>
+				<th><?= t('Box') ?></th>
 				<th><?= t('From') ?></th>
 				<th><?= t('Subject') ?></th>
 				<th><?= t('Action') ?></th>
@@ -27,6 +28,7 @@
         			<?php if ($obj['answered']) : ?>
         			<span class="fa fa-reply"></span>
         			<?php endif; ?>
+        		<td><?= esc_html($obj['mailbox_name']) ?></td>
         		<td><?= esc_html($obj['from_name']) ?></td>
         		<td><?= esc_html($obj['subject']) ?></td>
         		<td><?= esc_html($obj['action']) ?></td>
