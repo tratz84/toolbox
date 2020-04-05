@@ -141,7 +141,7 @@ class MailProperties {
     
     
     public function setAction($a) {
-        if (in_array($a, ['open', 'done', 'ignored', 'replied', 'postponed']) == false) {
+        if (in_array($a, ['open', 'urgent', 'done', 'ignored', 'replied', 'postponed']) == false) {
             throw new InvalidArgumentException('Invalid action');
         }
         $this->setToolboxProperty('action', $a);
