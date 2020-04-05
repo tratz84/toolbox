@@ -496,7 +496,7 @@ class ImapConnection {
     }
     
     public function imapAppend($mailbox, $message, $options=null, $internal_date=null) {
-        return imap_append($this->imap, $this->mailbox.$mailbox, $message);
+        return imap_append($this->imap, $this->mailbox.$mailbox, $message, "\\Seen");
     }
     
     
