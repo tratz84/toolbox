@@ -5,6 +5,7 @@ namespace core\db\mysql;
 use core\db\TableModel;
 use core\db\DatabaseHandler;
 use core\exception\DatabaseException;
+use core\exception\InvalidStateException;
 
 class MysqlTableGenerator {
     
@@ -152,12 +153,36 @@ class MysqlTableGenerator {
     public function buildAlter() {
         $this->loadTableProperties();
         
+        // check if tableModel is valid
+        $this->tableModel->checkSanity();
         
-        $sql1 = $this->buildAlterColumns();
-        $sql2 = $this->buildAlterIndexes();
-        $sql3 = $this->buildAlterForeignKeys();
+        $sql1 = $this->buildRenameColumns();
+        $sql2 = $this->buildAlterColumns();
+        $sql3 = $this->buildAlterIndexes();
+        $sql4 = $this->buildAlterForeignKeys();
         
-        return array_merge($sql1, $sql2, $sql3);
+        return array_merge($sql1, $sql2, $sql3, $sql4);
+    }
+    
+    
+    
+    protected function buildRenameColumns() {
+        $sql_statements = array();
+        
+        $renamedColumns = $this->tableModel->getRenamedColumns();
+        
+        foreach($renamedColumns as $old => $new) {
+            if (isset($this->dbColumns[ $new ]) == false) {
+                // create statement
+                $sql_statements[] = 'ALTER TABLE `'.$this->getTableName().'` RENAME COLUMN `'.$old.'` TO `'.$new.'`';
+                
+                // update db-model
+                $this->dbColumns[ $new ] = $this->dbColumns[ $old ];
+                unset( $this->dbColumns[ $old ] );
+            }
+        }
+        
+        return $sql_statements;
     }
     
     protected function buildAlterColumns() {

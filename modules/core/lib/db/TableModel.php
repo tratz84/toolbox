@@ -5,6 +5,7 @@ namespace core\db;
 
 use core\exception\InvalidStateException;
 use core\exception\DebugException;
+use core\exception\InvalidArgumentException;
 
 class TableModel {
     
@@ -26,6 +27,7 @@ class TableModel {
         $this->data['columns'] = array();
         $this->data['indexes'] = array();
         $this->data['foreignKeys'] = array();
+        $this->data['renamedColumns'] = array();
     }
     
     
@@ -186,6 +188,47 @@ class TableModel {
         
     }
     
+    
+    public function getRenamedColumns() {
+        return $this->data['renamedColumns'];
+    }
+    
+    public function isColumnRenamed($newColumnName) {
+        foreach($this->data['renamedColumns'] as $old => $new) {
+            if ($newColumnName == $new)
+                return true;
+        }
+        
+        return false;
+    }
+    
+    public function getOldColumnName($newColumnName) {
+        foreach($this->data['renamedColumns'] as $old => $new) {
+            if ($newColumnName == $new)
+                return $old;
+        }
+        
+        throw new InvalidArgumentException('Invalid column');
+    }
+    
+    public function renameColumn($oldName, $newName) {
+        $this->data['renamedColumns'][$oldName] = $newName;
+    }
+    
+    
+    /**
+     * checkSanity() - checks if model is ok
+     */
+    public function checkSanity() {
+        $renamedColumns = $this->getRenamedColumns();
+        
+        foreach($renamedColumns as $oldName => $newName) {
+            if ($this->hasColumn( $newName ) == false) {
+                throw new InvalidStateException('Renamed column '.$oldName.' => '.$newName.', but new column is not defined');
+            }
+        }
+        
+    }
     
 }
 
