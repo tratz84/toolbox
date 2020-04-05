@@ -62,6 +62,8 @@ class SolrMail {
     public function getUserId() { return @$this->jsonMail->userId; }
     public function getAction() { return @$this->jsonMail->action; }
     
+    public function isAnswered() { return @$this->jsonMail->isAnswered; }
+    public function isSeen() { return @$this->jsonMail->isSeen; }
     
     
     public function getAttachments() { $this->parseMail(); return $this->attachments; }

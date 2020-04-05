@@ -79,6 +79,9 @@ class SolrMailQuery extends SolrQuery {
             $mh['from_email']   = $mail->getFromEmail();
             $mh['action']       = $mail->getAction();
             
+            $mh['answered']     = $mail->isAnswered();
+            $mh['seen']         = $mail->isSeen();
+            
             if (strtolower($mail->getMailboxName()) == 'junk') {
                 $mh['junk'] = true;
             } else {

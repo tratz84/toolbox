@@ -161,11 +161,23 @@ t.setRowDblclick(function(row, evt) {
 
 t.setCallbackRenderRow(function(obj, row) {
 	$(row).attr('email-id', obj.email_id);
+
 });
 
 t.setConnectorUrl( '/?m=webmail&c=mailbox/search&a=search' );
 
-
+t.addColumn({
+	fieldName: 'status',
+	render: function(record) {
+		var c = $('<div class="webmail-mail-status" />');
+		
+		if (record.answered) {
+			c.append( '<span class="fa fa-reply"></span>' );
+		}
+		
+		return c;
+	}
+});
 
 t.addColumn({
 	fieldName: 'mailbox_name',
