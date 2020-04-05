@@ -86,11 +86,11 @@ class SolrImportMail {
         $r['connectorDescription'] = $mp->getConnectorDescription();
         $r['isJunk']               = $mp->getFolder() == 'Junk' || $mp->getFolder() == 'Spam';
         $r['isNotJunk']            = !$r['isJunk'];
-        $r['isAnswered']           = isset($r['answered']) && $r['answered'] ? true : false;
-        $r['isRead']               = isset($r['seen']) && $r['seen'] ? true : false;
+        $r['isAnswered']           = $mp->getAnswered() ? true : false;
+        $r['isRead']               = $mp->getSeen() ? true : false;
         $r['isForwarded']          = null;
         $r['isSeen']               = $r['isRead'];
-        $r['isDeleted']            = isset($r['deleted']) && $r['deleted'] ? true : false;
+        $r['isDeleted']            = $mp->getDeleted() ? true : false;
         $r['status']               = array('imported');
         $r['permissions']          = array();
         $r['server_properties_checksum'] = MailProperties::checksumServerProperties($emlFile);
