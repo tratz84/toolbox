@@ -127,6 +127,8 @@ class SolrMailActions {
         $mailProperties = $solrMail->getProperties();
         $mailProperties->setSeen( true );
         $mailProperties->save();
+        
+        $this->updateSolrFields($solrMail->getId(),[ 'isSeen' => true ]);
     }
     
     public function markAsAnswered(SolrMail $solrMail) {

@@ -138,6 +138,7 @@ t.setRowClick(function(row, evt) {
 	
 	$('#emailheader-table-container tr.active').removeClass('active');
 	$(row).addClass('active');
+	$(row).removeClass('unseen');
 
 	$.ajax({
 		type: 'POST',
@@ -162,6 +163,9 @@ t.setRowDblclick(function(row, evt) {
 t.setCallbackRenderRow(function(obj, row) {
 	$(row).attr('email-id', obj.email_id);
 
+	if (obj.seen == false) {
+		$(row).addClass('unseen');
+	}
 });
 
 t.setConnectorUrl( '/?m=webmail&c=mailbox/search&a=search' );
