@@ -68,7 +68,10 @@ class searchController extends BaseController {
 	    if (get_var('q')) {
 	        $smq->setQuery( get_var('q') );
             $smq->setSort('score desc, date desc');
-	        
+	    }
+	    
+	    if (get_var('action')) {
+	        $smq->addFacetSearch('action', ':', get_var('action'));
 	    }
 	    
 	    // TODO: hmz... this isn't the right way

@@ -130,7 +130,7 @@ var selectedMailId = null;
 var t = new IndexTable('#emailheader-table-container', {
 	autoloadNext: true,
 	fixedHeader: true,
-	searchContainer: '.search-fields'
+	searchContainer: '.search-fields, .list-response-table thead'
 });
 
 t.setRowClick(function(row, evt) {
@@ -190,7 +190,17 @@ t.addColumn({
 t.addColumn({
 	fieldName: 'action',
 	fieldDescription: 'Action',
-	fieldType: 'text',
+	fieldType: 'select',
+	filterOptions: [
+		{ value: '',          text: 'Action'    },
+		{ value: 'open',      text: 'Open'      },
+		{ value: 'urgent',    text: 'Urgent'    },
+		{ value: 'replied',   text: 'Replied'   },
+		{ value: 'ignored',   text: 'Ignored'   },
+		{ value: 'done',      text: 'Done'      },
+		{ value: 'postponed', text: 'Postponed' },
+	],
+	searchable: true,
 	render: function(record) {
 		return record.action;
 	}
