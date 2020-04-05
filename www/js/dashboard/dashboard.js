@@ -14,7 +14,7 @@ function Dashboard( containerId, config ) {
 		this.bindEvents();
 		
 	    $( this.containerId ).gridstack({
-	    	
+	    	draggable: '.ui-draggable'
 	    });
 	    
 	    this.renderDashboard();
