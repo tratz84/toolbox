@@ -64,7 +64,29 @@ $(document).ready(function() {
 				console.log( data );
 			}
 		});
+
+		if ($('[name=customer_id]').val() != '') {
+			$('.anch-view-customer').show();
+		} else {
+			$('.anch-view-customer').hide();
+		}
 	});
+	
+	$('.customer-id-widget').append(' <a href="javascript:void(0);" class="anch-view-customer fa fa-search" style="display: none;" />');
+	$('.anch-view-customer').click(function() {
+		var id = $('[name=customer_id]').val();
+		if (id.indexOf('company-') === 0) {
+			window.open(appUrl('/?m=base&c=company&a=edit&company_id='+id.substr(8)), '_blank');
+		}
+		if (id.indexOf('person-') === 0) {
+			window.open(appUrl('/?m=base&c=person&a=edit&person_id='+id.substr(7)), '_blank');
+		}
+	});
+	if ($('[name=customer_id]').val() != '') {
+		$('.anch-view-customer').show();
+	} else {
+		$('.anch-view-customer').hide();
+	}
 });
 
 function uploadFilesField_Click(obj) {
