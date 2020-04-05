@@ -36,7 +36,7 @@ function saveWebmailDashboard_settings() {
 			
 			close_popup();
 
-			dash.loadWidget('webmail-archive');
+			dash.loadWidget('webmail-mailbox-widget');
 		},
 		error: function(xhr, textStatus, err) {
 			showAlert('Error', 'Error: ' + xhr.responseText);
