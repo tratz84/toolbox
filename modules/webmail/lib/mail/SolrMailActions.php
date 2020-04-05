@@ -137,6 +137,13 @@ class SolrMailActions {
         // update property
         $mailProperties = $solrMail->getProperties();
         $mailProperties->setAnswered( true );
+        
+        // mark as replied
+        if ($solrMail->getAction() == 'open') {
+            $mailProperties->setAction('replied');
+            $this->updateSolrFields($solrMail->getId(), ['action' => 'replied']);
+        }
+        
         $mailProperties->save();
     }
     
