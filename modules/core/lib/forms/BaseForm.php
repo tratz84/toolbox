@@ -10,6 +10,7 @@ use core\db\DBObject;
 class BaseForm extends WidgetContainer {
     
     protected $submitButtons = array();
+    protected $showSubmitButtons = true;
     
     protected $htmlAttributes = array();
     
@@ -89,6 +90,9 @@ class BaseForm extends WidgetContainer {
     protected function enctypeToMultipartFormdata() {
         $this->enctype = 'multipart/form-data';
     }
+    
+    public function showSubmitButtons() { $this->showSubmitButtons = true; }
+    public function hideSubmitButtons() { $this->showSubmitButtons = false; }
     
     public function disableSubmit() {
         $this->setHtmlAttribute('onsubmit', 'return false;');
@@ -291,11 +295,13 @@ class BaseForm extends WidgetContainer {
             $html .= $w->render() . "\n";
         }
         
-        $html .= '<div class="submit-container">';
-        foreach($this->submitButtons as $key => $submitField) {
-            $html .= $submitField->render() . ' ';
+        if ($this->showSubmitButtons) {
+            $html .= '<div class="submit-container">';
+            foreach($this->submitButtons as $key => $submitField) {
+                $html .= $submitField->render() . ' ';
+            }
+            $html .= '</div>' . PHP_EOL;
         }
-        $html .= '</div>' . PHP_EOL;
 //         <input type="submit" value="'.esc_attr($this->submitText).'" /></div>' . "\n";
         
         $html .= '</form>' . "\n\n";

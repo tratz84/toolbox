@@ -17,18 +17,26 @@ class MailboxSearchSettings {
     protected $cache_defaultFilters = null;
     
     
-    public function __construct($userId=null) {
+    public function __construct($userId=null, $opts=array()) {
         if ($userId == null) {
             $userId = ctx()->getUser()->getUserId();
         }
         $this->userId = $userId;
         
-        $this->load();
+        if (isset($opts['data'])) {
+            $this->load( $opts['data'] );
+        } else {
+            $this->load();
+        }
     }
     
     
-    protected function load() {
-        $this->data = object_meta_get(User::class, $this->userId, 'mailbox-search-settings');
+    protected function load( $data = null) {
+        if ($data === null) {
+            $this->data = object_meta_get(User::class, $this->userId, 'mailbox-search-settings');
+        } else {
+            $this->data = $data;
+        }
         
         if (is_array($this->data) == false) {
             $this->data = array();

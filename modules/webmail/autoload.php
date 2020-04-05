@@ -125,5 +125,14 @@ $eb->subscribe('base', 'person-edit-footer', new CallbackPeopleEventListener(fun
 }));
     
 
+$eb->subscribe('base', 'dashboard', new CallbackPeopleEventListener(function($evt) {
+    $dashboardWidgets = $evt->getSource();
+    
+    $ctx = Context::getInstance();
+    if (ctx()->isExperimental()) {
+        $dashboardWidgets->addWidget('webmail-mailbox-widget', 'Webmail: Laatste e-mails', 'Overzicht van laatst binnengekomen e-mails', '/?m=webmail&c=mailbox/dashboard');
+    }
+}));
+
 
 

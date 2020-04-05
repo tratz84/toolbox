@@ -109,12 +109,22 @@ if (typeof less != 'undefined') {
 		$('[name=q]').focus();
 
 		execSplitPane();
+
+		if (email_id = getAjxParam('email_id')) {
+			viewMail( email_id );
+		}
+		
 	});
 } else {
 	$(document).ready(function() {
 		$('[name=q]').focus();
 		
 		execSplitPane();
+
+		if (email_id = getAjxParam('email_id')) {
+			viewMail( email_id );
+		}
+		
 	});
 }
 
@@ -135,25 +145,8 @@ var t = new IndexTable('#emailheader-table-container', {
 
 t.setRowClick(function(row, evt) {
 	selectedMailId = $(row).data('record').email_id;
-	
-	$('#emailheader-table-container tr.active').removeClass('active');
-	$(row).addClass('active');
-	$(row).removeClass('unseen');
 
-	$.ajax({
-		type: 'POST',
-		url: appUrl('/?m=webmail&c=mailbox/search&a=view'),
-		data: {
-			id: selectedMailId
-		},
-		success: function(data, xhr, textStatus) {
-			$('#mail-content').html( data );
-
-			$('#mail-content').find('[name=move_imap_folder]').change(function() {
-				
-			});
-		}
-	});
+	viewMail( selectedMailId );
 });
 
 t.setRowDblclick(function(row, evt) {
@@ -360,6 +353,27 @@ function replyMail(email_id) {
 
 function forwardMail(email_id) {
 	window.open(appUrl('/?m=webmail&c=mailbox/mail&a=forward&email_id=' + email_id), '_self');
+}
+
+
+function viewMail(email_id) {
+	var row = $('#emailheader-table-container tr[email-id="' + email_id + '"]');
+
+	$('#emailheader-table-container tr.active').removeClass('active');
+	$(row).addClass('active');
+	$(row).removeClass('unseen');
+
+	$.ajax({
+		type: 'POST',
+		url: appUrl('/?m=webmail&c=mailbox/search&a=view'),
+		data: {
+			id: email_id
+		},
+		success: function(data, xhr, textStatus) {
+			$('#mail-content').html( data );
+
+		}
+	});
 }
 
 
