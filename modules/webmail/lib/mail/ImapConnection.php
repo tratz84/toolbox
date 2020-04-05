@@ -258,11 +258,13 @@ class ImapConnection {
         $mp->setServerProperty('seen',        @$overview->seen);
         $mp->setServerProperty('draft',       @$overview->draft);
         
-        if (@$overview->answered && (!$mp->getAction() || $mp->getAction() == 'open')) {
-            // maybe also do this for ACTION_URGENT ?
-            $mp->setAction(SolrMail::ACTION_REPLIED);
-        } else {
-            $mp->setAction(SolrMail::ACTION_OPEN);
+        if ($mp->getAction() == '') {
+            if (@$overview->answered && ($mp->getAction() == '' || $mp->getAction() == 'open')) {
+                // maybe also do this for ACTION_URGENT ?
+                $mp->setAction(SolrMail::ACTION_REPLIED);
+            } else {
+                $mp->setAction(SolrMail::ACTION_OPEN);
+            }
         }
         
         return $mp;
