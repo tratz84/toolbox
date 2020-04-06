@@ -35,6 +35,7 @@ class MailProperties {
         }
     }
     
+    public function toolboxPropertyFileExists() { return file_exists($this->tbfile) ? true : false; }
     
     public static function checksumServerProperties($emlFile) {
         $pf = $emlFile . '.sproperties';
