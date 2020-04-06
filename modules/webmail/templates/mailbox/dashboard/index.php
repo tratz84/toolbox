@@ -56,6 +56,12 @@ function mailbox_showEmail(email_id) {
 	window.open( appUrl('/?m=webmail&c=mailbox/search#email_id=' + email_id), '_self' );
 }
 
+// refresh every minute
+if (typeof webmail_dashboard_refreshTimeout != 'undefined') clearTimeout(webmail_dashboard_refreshTimeout);
+webmail_dashboard_refreshTimeout = setTimeout(function() {
+	dash.loadWidget('webmail-mailbox-widget');
+}, 60000);
+
 </script>
 
 
