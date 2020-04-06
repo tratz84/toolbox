@@ -212,8 +212,8 @@ class SolrMailActions {
         // moved? => update properties-file
         if ($this->imapConnection->moveMailByUid($props->getUid(), $props->getFolder(), $if->getFolderName()) == false) {
             // ?
-            $this->imapConnection->expunge();
         }
+        $this->imapConnection->expunge();
         
         // move might fail if mail is already moved and mailbox is not in sink
         // just update solr? if mail is deleted, it's atleast in this mailbox in the right folder (especially in case of junk)
