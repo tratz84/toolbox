@@ -179,6 +179,13 @@ class ImapConnection {
     
     
     public function importItems($folderName) {
+        // INBOX has special business rules
+        // TODO: decide if this one has to be skipped? or maybe some sort of boolean? bin/webmail_connector.php should handle this folder..
+        if ($folderName == 'INBOX') {
+            return $this->importInbox($this->connector);
+        }
+        
+        
         if (!imap_reopen($this->imap, $this->mailbox.$folderName))
             return false;
             

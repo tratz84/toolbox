@@ -167,6 +167,7 @@ class SolrMailActions {
         $ic = ImapConnection::createByConnector($connector);
         if ($ic->connect()) {
             $ic->setFlagByUid($mailProperties->getUid(), $mailProperties->getFolder(), $flag);
+//             $ic->expunge();
             $ic->disconnect();
         }
     }
