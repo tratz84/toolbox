@@ -76,6 +76,9 @@ it_webmail.setRowClick(function(row, evt) {
 
 	var email_id = $(row).data('record').email_id;
 	$('#mail-content iframe').attr('src', appUrl('/?m=webmail&c=mailbox/mail&a=view&id=' + email_id));
+
+	$(this.container).find('tr.active').removeClass('active');
+	$(this.container).find('tr[email-id="'+email_id+'"]').addClass('active');
 });
 
 it_webmail.setRowDblclick(function(row, evt) {
@@ -84,6 +87,9 @@ it_webmail.setRowDblclick(function(row, evt) {
 
 it_webmail.setConnectorUrl( '/?m=webmail&c=mailbox/search&a=search' );
 
+it_webmail.setCallbackRenderRow( function(obj, row) {
+	$(row).attr('email-id', obj.email_id);
+});
 
 
 it_webmail.addColumn({
