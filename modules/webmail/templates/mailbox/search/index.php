@@ -109,22 +109,12 @@ if (typeof less != 'undefined') {
 		$('[name=q]').focus();
 
 		execSplitPane();
-
-		if (email_id = getAjxParam('email_id')) {
-			viewMail( email_id );
-		}
-		
 	});
 } else {
 	$(document).ready(function() {
 		$('[name=q]').focus();
 		
 		execSplitPane();
-
-		if (email_id = getAjxParam('email_id')) {
-			viewMail( email_id );
-		}
-		
 	});
 }
 
@@ -159,6 +149,17 @@ t.setCallbackRenderRow(function(obj, row) {
 	if (obj.seen == false) {
 		$(row).addClass('unseen');
 	}
+});
+
+t.setCallbackRenderRows(function() {
+	// highlight row if email_id is set in url
+	if (email_id = getAjxParam('email_id')) {
+		if (!this.emailFormUrlSet) {
+			this.emailFormUrlSet = true;
+			viewMail( email_id );
+		}
+	}
+	
 });
 
 t.setConnectorUrl( '/?m=webmail&c=mailbox/search&a=search' );
