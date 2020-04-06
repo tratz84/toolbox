@@ -100,10 +100,6 @@ class mailController extends BaseController {
                 $ma->moveMail($connector, $mail, $imapFolderId);
             }
             else {
-                // save properties
-                $mail->getProperties()->setFolder( $newFolder );
-                $mail->saveProperties();
-                
                 $ma->updateSolrFolder($mail->getId(), $newFolder);
             }
             
