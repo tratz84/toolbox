@@ -212,6 +212,7 @@ class SolrMailActions {
         // moved? => update properties-file
         if ($this->imapConnection->moveMailByUid($props->getUid(), $props->getFolder(), $if->getFolderName()) == false) {
             // ?
+            $this->imapConnection->expunge();
         }
         
         // move might fail if mail is already moved and mailbox is not in sink
