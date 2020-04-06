@@ -32,7 +32,7 @@ class mailController extends BaseController {
         $this->id          = $mail->getId();
         
         $this->html        = $mail->getContentSafe();
-        $this->date        = $mail->getDate();
+        $this->date        = format_date($mail->getDate(), 'd-m-Y H:i:s');
         
         $this->attachments = $mail->getAttachments();
         
