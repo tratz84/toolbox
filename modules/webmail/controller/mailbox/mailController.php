@@ -12,6 +12,8 @@ use webmail\service\ConnectorService;
 use webmail\service\EmailService;
 use webmail\solr\SolrMail;
 use webmail\solr\SolrMailQuery;
+use webmail\service\EmailTemplateService;
+use webmail\WebmailSettings;
 
 class mailController extends BaseController {
    
@@ -304,7 +306,9 @@ class mailController extends BaseController {
         $formData['personId'] = '';
         
         // set content
-        $formData['text_content'] = '<br/><br/><br/><hr/>'.$mail->getContentSafe();
+        $webmailSettings = object_container_get(WebmailSettings::class);
+        $text_content = $webmailSettings->getTemplateContentReplyMail();
+        $formData['text_content'] = $text_content . '<br/><hr/>'.$mail->getContentSafe();
         
         // create form
         $form = new EmailForm();
@@ -365,7 +369,9 @@ class mailController extends BaseController {
         $formData['personId'] = '';
         
         // set content
-        $formData['text_content'] = '<br/><br/><br/><hr/>'.$mail->getContentSafe();
+        $webmailSettings = object_container_get(WebmailSettings::class);
+        $text_content = $webmailSettings->getTemplateContentForwardMail();
+        $formData['text_content'] = $text_content.'<br/><hr/>'.$mail->getContentSafe();
         
         
         $attachments = array();

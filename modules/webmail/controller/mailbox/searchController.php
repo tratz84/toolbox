@@ -116,8 +116,8 @@ class searchController extends BaseController {
 	    
 	    
 	    // TODO: implement..
-	    $this->actionContainer->addItem('mail-forward', '<button class="btn-reply-mail" onclick="forwardMail('.esc_json_attr($emailId).');"><span class="fa fa-forward"></span>Forward</button>');
-	    $this->actionContainer->addItem('mail-reply', '<button class="btn-forward-mail" onclick="replyMail('.esc_json_attr($emailId).');"><span class="fa fa-reply"></span>Reply</button>');
+	    $this->actionContainer->addItem('mail-forward', '<button class="btn-forward-mail" onclick="forwardMail('.esc_json_attr($emailId).');"><span class="fa fa-forward"></span>Forward</button>');
+	    $this->actionContainer->addItem('mail-reply', '<button class="btn-reply-mail" onclick="replyMail('.esc_json_attr($emailId).');"><span class="fa fa-reply"></span>Reply</button>');
 	    
 	    
 	    $mp = new MailProperties( $f );

@@ -23,6 +23,7 @@ $eb = ObjectContainer::getInstance()->get(EventBus::class);
 
 $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($evt) {
     $src = $evt->getSource();
+    $src->addItem('E-mail', t('Settings'),          '/?m=webmail&c=settings');
     $src->addItem('E-mail', t('Identities'),        '/?m=webmail&c=identity');
     $src->addItem('E-mail', t('Templates'),         '/?m=webmail&c=template');
     $src->addItem('E-mail', t('Mail server (out)'), '/?m=webmail&c=settingsMailOut');

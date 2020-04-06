@@ -9,6 +9,8 @@ use webmail\model\TemplateDAO;
 use webmail\form\TemplateForm;
 use webmail\model\Template;
 use webmail\model\TemplateToDAO;
+use core\exception\DatabaseException;
+use webmail\WebmailSettings;
 
 class EmailTemplateService extends ServiceBase {
     
@@ -62,6 +64,10 @@ class EmailTemplateService extends ServiceBase {
         
         $r = $template->save();
         
+        if (!$r) {
+            throw new DatabaseException('Error saving Template');
+        }
+        
         $form->getWidget('template_id')->setValue($template->getTemplateId());
         
         
@@ -69,7 +75,7 @@ class EmailTemplateService extends ServiceBase {
         $arrTemplateTos = $form->getWidget('templateTos')->getObjects();
         $ttDao->mergeFormListMTO1('template_id', $template->getTemplateId(), $arrTemplateTos);
         
-        return $r;
+        return $template;
     }
     
     public function deleteTemplate($id) {

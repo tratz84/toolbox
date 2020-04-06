@@ -57,9 +57,10 @@ class templateController extends BaseController {
             $templateForm->bind($_REQUEST);
             
             if ($templateForm->validate()) {
-                $templateService->saveTemplate( $templateForm );
+                $template = $templateService->saveTemplate( $templateForm );
                 
-                redirect('/?m=webmail&c=template');
+                report_user_message(t('Changes saved'));
+                redirect('/?m=webmail&c=template&a=edit&id='.$template->getTemplateId());
             }
         }
         

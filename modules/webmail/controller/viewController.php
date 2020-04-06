@@ -4,14 +4,15 @@
 use core\controller\BaseController;
 use core\exception\ObjectNotFoundException;
 use core\forms\HtmlField;
+use webmail\WebmailSettings;
 use webmail\form\EmailForm;
 use webmail\mail\SendMail;
 use webmail\mail\SolrMailActions;
 use webmail\model\Email;
 use webmail\model\EmailTo;
 use webmail\service\EmailService;
-use webmail\solr\SolrMailQuery;
 use webmail\service\EmailTemplateService;
+use webmail\solr\SolrMailQuery;
 
 class viewController extends BaseController {
     
@@ -78,8 +79,8 @@ class viewController extends BaseController {
             $this->form->bind( $_SESSION['webmail-form-data'] );
         } else if (is_get() && $email->isNew()) {
             // template set? new e-mail? => set values
-            $templateService = object_container_get(EmailTemplateService::class);
-            $tpl = $templateService->readByTemplateCode('NEW_MAIL');
+            $webmailSettings = object_container_get(WebmailSettings::class);
+            $tpl = $webmailSettings->getTemplateNewMail();
             
             if ($tpl) {
                 $this->form->getWidget('subject')->setValue( $tpl->getSubject() );
