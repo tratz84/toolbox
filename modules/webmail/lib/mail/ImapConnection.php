@@ -262,6 +262,8 @@ class ImapConnection {
             if (@$overview->answered && ($mp->getAction() == '' || $mp->getAction() == 'open')) {
                 // maybe also do this for ACTION_URGENT ?
                 $mp->setAction(SolrMail::ACTION_REPLIED);
+            } else if ($folderName == 'Sent') {
+                $mp->setAction(SolrMail::ACTION_DONE);
             } else {
                 $mp->setAction(SolrMail::ACTION_OPEN);
             }
