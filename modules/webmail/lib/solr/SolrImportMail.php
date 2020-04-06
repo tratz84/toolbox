@@ -59,6 +59,7 @@ class SolrImportMail {
         $r['date'] = $dt->format('Y-m-d').'T'.$dt->format('H:i:s').'Z';
         
         // use cleanup_string(), else solr might not accept document. In that case, the whole document-batch is rejected!
+        $r['emlMessageId'] = cleanup_string( $p->getHeader('message-id') );
         $r['subject'] = cleanup_string( $p->getHeader('subject') );
         
         $r['content'] = $p->getMessageBody('html');

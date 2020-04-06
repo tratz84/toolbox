@@ -210,6 +210,8 @@ class ImapConnection {
                 if ($changed) {
                     $mp->save();
                     
+                    // TODO: if Folder = Sent, check 'In-Reply-To'-header & lookup replied e-mail. If status == 'open', set to REPLIED
+                    
                     $this->saveMessage($folderName, $results[$y], $x+$y);
                 }
                 

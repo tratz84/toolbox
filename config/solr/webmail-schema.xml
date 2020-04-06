@@ -11,12 +11,12 @@
     <field name="connectorId"          type="pint"   indexed="false" stored="true" />
     <field name="connectorDescription" type="string" indexed="true"  stored="true"/>
     
-    
-    <field name="mailboxName" type="string" indexed="true" stored="true"/>
-    <field name="file"        type="string" indexed="true" stored="true"/>
-    <field name="folderName"  type="string" indexed="true" stored="true"/>
-    <field name="date"        type="pdate" indexed="true" stored="true"/>
-    <field name="subject"     type="string_ci" indexed="true" stored="true"/>
+    <field name="emlMessageId" type="string" indexed="true" stored="true"/>
+    <field name="mailboxName"  type="string" indexed="true" stored="true"/>
+    <field name="file"         type="string" indexed="true" stored="true"/>
+    <field name="folderName"   type="string" indexed="true" stored="true"/>
+    <field name="date"         type="pdate" indexed="true" stored="true"/>
+    <field name="subject"      type="string_ci" indexed="true" stored="true"/>
 
     <field name="isJunk"        type="boolean" indexed="true" stored="true" />
     <field name="isNotJunk"     type="boolean" indexed="true" stored="true" />
