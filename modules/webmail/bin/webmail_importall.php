@@ -20,6 +20,7 @@ use webmail\solr\SolrImportMail;
 use webmail\solr\SolrMailQuery;
 use webmail\solr\SolrMailQueryResponse;
 use core\parser\ArgumentParser;
+use webmail\mail\SolrMailActions;
 
 if (count($argv) < 2) {
     print "Usage: {$argv[0]} <contextname> [-u] [--skip-folder-import] [--skip-connector-import]\n";
@@ -59,6 +60,7 @@ if ($argumentParser->hasOption('skip-connector-import') == false) {
     print "START Connector import\n";
     
     // loop through active Connectors to sync/fetch mail
+    /** @var ConnectorService $connectorService */
     $connectorService = ObjectContainer::getInstance()->get(ConnectorService::class);
     $cs = $connectorService->readActive();
     
@@ -75,16 +77,24 @@ if ($argumentParser->hasOption('skip-connector-import') == false) {
                 
             print "Connected to " . $c->getDescription() . "\n";
             
+            $sentImapFolder =  $connectorService->readImapFolder( $c->getSentConnectorImapfolderId() );
+            
+            
             $solrImportMail = new SolrImportMail(WEBMAIL_SOLR);
-            $ic->setCallbackItemImported(function($folderName, $overview, $file, $changed) use ($solrImportMail) {
+            $ic->setCallbackItemImported(function($folderName, $overview, $file, $changed) use ($solrImportMail, $sentImapFolder) {
                 // this callback is only called on new mail and changed (IMAP-properties like isRead & folderName can change)
 //                 print "Queueing file: $file\n";
                 if ($changed) {
                     $solrImportMail->queueEml( $file );
                     $solrImportMail->purge( );
+                    
+                    // new mail in Sent-folder? => mark In-Reply-To-mail as REPLIED if status is OPEN
+                    if ($sentImapFolder && $sentImapFolder->getFolderName() == $folderName) {
+                        $sma = new SolrMailActions();
+                        $sma->autoMarkMessageAsReplied( $solrImportMail->getLastInReplyTo() );
+                    }
                 }
             });
-            
             
             $ic->doImport( $c );
             $ic->disconnect();

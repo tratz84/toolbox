@@ -10,6 +10,7 @@ use webmail\service\ConnectorService;
 use webmail\service\EmailService;
 use webmail\solr\SolrImportMail;
 use webmail\solr\SolrMail;
+use webmail\solr\SolrMailQuery;
 
 class SolrMailActions {
     
@@ -312,6 +313,33 @@ class SolrMailActions {
         return $r;
     }
     
+    
+    /**
+     * autoMarkMessageAsReplied() - mark message as 'REPLIED'. $emlMessageId is In-Reply-To-id of imported
+     *                              mail. This function is used in modules/webmail/bin/webmail_importall.php
+     */
+    public function autoMarkMessageAsReplied($emlMessageId) {
+        if (!$emlMessageId) {
+            return false;
+        }
+        
+        // get mail by messageId
+        $smq = new SolrMailQuery();
+        $smq->addFacetSearch('emlMessageId', ':', $emlMessageId);
+        $smqr = $smq->search();
+        
+        if ($smqr->getNumFound() == 1) {
+            $solrMail = $smqr->getMail(0);
+            
+            // check if mail action == 'open', yes? => update to replied
+            if ($solrMail->getAction() == SolrMail::ACTION_OPEN) {
+                $this->updateAction($solrMail->getId(), SolrMail::ACTION_REPLIED);
+                return true;
+            }
+        }
+        
+        return false;
+    }
     
     
 }

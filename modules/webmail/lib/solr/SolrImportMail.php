@@ -22,6 +22,8 @@ class SolrImportMail {
     
     protected $forcedAction = null;
     
+    protected $lastInReplyTo = null;
+    
     
     public function __construct($solrUrl=null) {
         if ($solrUrl == null) {
@@ -42,6 +44,7 @@ class SolrImportMail {
     
     public function setForcedAction($a) { $this->forcedAction = $a; }
     
+    public function getLastInReplyTo() { return $this->lastInReplyTo; }
     
     public function parseEml($emlFile) {
         $mp = new MailProperties($emlFile);
@@ -65,6 +68,7 @@ class SolrImportMail {
         $r['emlMessageId'] = cleanup_string( $p->getHeader('Message-ID') );
         $r['emlThreadId'] = cleanup_string( $p->getHeader('Thread-Index') );
         $r['refMessageId'] = $this->buildRefMessageIds( $p );
+        $this->lastInReplyTo = $p->getHeader('In-Reply-To');
         
         $r['subject'] = cleanup_string( $p->getHeader('subject') );
         
