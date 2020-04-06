@@ -142,6 +142,9 @@ class MailProperties {
     public function getDraft() { return $this->getProperty('draft'); }
     
     
+    public function setJunk($bln) { $this->setToolboxProperty('junk', $bln ? true : false); }
+    public function isJunk() { return $this->getProperty('junk', false); }
+    
     public function setAction($a) {
         if (in_array($a, ['open', 'urgent', 'inprogress', 'done', 'ignored', 'replied', 'postponed']) == false) {
             throw new InvalidArgumentException('Invalid action');

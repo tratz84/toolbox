@@ -120,11 +120,9 @@ class searchController extends BaseController {
 	    $this->actionContainer->addItem('mail-reply', '<button class="btn-reply-mail" onclick="replyMail('.esc_json_attr($emailId).');"><span class="fa fa-reply"></span>Reply</button>');
 	    
 	    
-	    $mp = new MailProperties( $f );
-	    $mp->load();
-	    
 	    
 	    $solrMail = SolrMailQuery::readStaticById($emailId);
+	    $mp = $solrMail->getProperties();
 	    if ($mp->getSeen() == false) {
 	        try {
     	        $sma = new SolrMailActions();
@@ -165,7 +163,7 @@ class searchController extends BaseController {
 	    $this->actionContainer->addItem('set-mail-action', $selectActions->render());
 	    
 
-	    if ($solrMail->isJunk() == false) {
+	    if ($mp->isJunk() == false) {
     	    $spam_onclick = "if (confirm('Are you sure to mark this mail as spam?')) markMailAsSpam(".json_encode($emailId).");";
     	    $this->actionContainer->addItem('mark-as-spam', '<button onclick="' . esc_attr($spam_onclick) . '"><span class="fa fa-flag mark-as-spam"></span></button>');
 	    }

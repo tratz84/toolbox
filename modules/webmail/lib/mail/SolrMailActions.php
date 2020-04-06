@@ -66,6 +66,7 @@ class SolrMailActions {
         // connector not found? => just throw in 'Junk'
         if (!$connector) {
             $solrMail->getProperties()->setFolder('Junk');
+            $solrMail->getProperties()->setJunk(true);
             $solrMail->saveProperties();
             
             // update solr
@@ -105,6 +106,11 @@ class SolrMailActions {
             
             $junkImapFolder = $connectorService->readImapFolder( $connector->getJunkConnectorImapfolderId() );
         }
+        
+        // mark as non-junk
+        $mailProperties->setJunk(false);
+        $mailProperties->save();
+        
         
         if (!$connector || $connector->getConnectorType() != 'imap')
             return;
@@ -209,6 +215,8 @@ class SolrMailActions {
             $this->imapConnection->setFlagByUid($props->getUid(),   $props->getFolder(), '$Junk');
             $this->imapConnection->clearFlagByUid($props->getUid(), $props->getFolder(), 'NonJunk');
             $this->imapConnection->clearFlagByUid($props->getUid(), $props->getFolder(), '$NonJunk');
+        
+            $solrMail->getProperties()->setJunk(true);
         }
         
         // moved? => update properties-file

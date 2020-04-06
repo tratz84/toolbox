@@ -112,6 +112,10 @@ class SolrMail {
         return isset($this->jsonMail->subject) ? $this->jsonMail->subject : '';
     }
     
+    /**
+     * 
+     * @return \webmail\mail\MailProperties
+     */
     public function getProperties() {
         if ($this->properties === null) {
             $this->properties = new MailProperties( $this->getEmlFile() );

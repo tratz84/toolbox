@@ -30,6 +30,10 @@ class SolrMailQuery extends SolrQuery {
     }
     
     
+    /**
+     * 
+     * @return SolrMail
+     */
     public static function readStaticById($id) {
         $smq = new SolrMailQuery();
         return $smq->readById($id);

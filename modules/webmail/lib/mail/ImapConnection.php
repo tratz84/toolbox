@@ -409,6 +409,10 @@ class ImapConnection {
                                 $mp = new MailProperties($emlfile);
                                 $mp->load();
                                 $mp->setFolder($folderName);
+                                // mark as spam
+                                if (is_array($result) && $result['is_spam']) {
+                                    $mp->setJunk( true );
+                                }
                                 $mp->save();
                             }
                             // set default folder
@@ -479,7 +483,7 @@ class ImapConnection {
                             
                         }
                         
-                        return array('action' => 'move_to_folder', 'value' => $f->getFolderName());
+                        return array('action' => 'move_to_folder', 'value' => $f->getFolderName(), 'is_spam' => $isSpam);
                     }
                 }
                 
@@ -487,6 +491,7 @@ class ImapConnection {
             }
         }
         
+        return null;
     }
     
     
