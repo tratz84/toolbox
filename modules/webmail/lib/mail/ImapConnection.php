@@ -267,7 +267,7 @@ class ImapConnection {
         $mp->setServerProperty('seen',        @$overview->seen);
         $mp->setServerProperty('draft',       @$overview->draft);
         
-        if ($mp->getAction() == '') {
+        if ($mp->getProperty('action') == '') {
             if (@$overview->answered && ($mp->getAction() == '' || $mp->getAction() == 'open')) {
                 // maybe also do this for ACTION_URGENT ?
                 $mp->setAction(SolrMail::ACTION_REPLIED);
