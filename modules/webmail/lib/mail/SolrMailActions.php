@@ -218,7 +218,7 @@ class SolrMailActions {
         // just update solr? if mail is deleted, it's atleast in this mailbox in the right folder (especially in case of junk)
         // if this move is to the wrong folder, it will get synced automatically by modules/webmail/bin/webmail_importall.php-script
         
-        $solrMail->getProperties()->setFolder('Junk');
+        $solrMail->getProperties()->setFolder( $if->getFolderName() );
         $solrMail->saveProperties();
         
         $this->updateSolrFolder($solrMail->getId(), $if->getFolderName());
