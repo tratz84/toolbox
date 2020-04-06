@@ -10,12 +10,13 @@ use webmail\mail\MailProperties;
 
 class SolrMail {
     
-    public const ACTION_OPEN      = 'open';
-    public const ACTION_URGENT    = 'urgent';
-    public const ACTION_REPLIED   = 'replied';
-    public const ACTION_IGNORED   = 'ignored';
-    public const ACTION_DONE      = 'done';
-    public const ACTION_POSTPONED = 'postponed';
+    public const ACTION_OPEN       = 'open';
+    public const ACTION_URGENT     = 'urgent';
+    public const ACTION_INPROGRESS = 'inprogress';
+    public const ACTION_REPLIED    = 'replied';
+    public const ACTION_IGNORED    = 'ignored';
+    public const ACTION_DONE       = 'done';
+    public const ACTION_POSTPONED  = 'postponed';
     
     
     protected $jsonMail;
