@@ -172,6 +172,9 @@ t.addColumn({
 		if (record.answered) {
 			c.append( '<span class="fa fa-reply"></span>' );
 		}
+// 		if (record.forwarded) {
+// 			c.append( '<span class="fa fa-share"></span>' );
+// 		}
 		
 		return c;
 	}

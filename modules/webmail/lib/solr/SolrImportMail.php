@@ -23,7 +23,11 @@ class SolrImportMail {
     protected $forcedAction = null;
     
     
-    public function __construct($solrUrl) {
+    public function __construct($solrUrl=null) {
+        if ($solrUrl == null) {
+            $solrUrl = WEBMAIL_SOLR;
+        }
+        
         $this->contextName = \core\Context::getInstance()->getContextName();
         
         $this->setSolrUrl( $solrUrl );
@@ -46,7 +50,6 @@ class SolrImportMail {
         $p = new \PhpMimeMailParser\Parser();
         $p->setPath($emlFile);
         
-        
         $datadir = \core\Context::getInstance()->getDataDir();
         
         $r = array();
@@ -59,7 +62,10 @@ class SolrImportMail {
         $r['date'] = $dt->format('Y-m-d').'T'.$dt->format('H:i:s').'Z';
         
         // use cleanup_string(), else solr might not accept document. In that case, the whole document-batch is rejected!
-        $r['emlMessageId'] = cleanup_string( $p->getHeader('message-id') );
+        $r['emlMessageId'] = cleanup_string( $p->getHeader('Message-ID') );
+        $r['emlThreadId'] = cleanup_string( $p->getHeader('Thread-Index') );
+        $r['refMessageId'] = $this->buildRefMessageIds( $p );
+        
         $r['subject'] = cleanup_string( $p->getHeader('subject') );
         
         $r['content'] = $p->getMessageBody('html');
@@ -137,6 +143,32 @@ class SolrImportMail {
 
         return $r;
     }
+    
+    /**
+     * buildRefMessageIds() - returns array with all id's that reference this eml (In-Reply-To, References, Thread-Index)
+     * 
+     * @return string[]
+     */
+    protected function buildRefMessageIds(\PhpMimeMailParser\Parser $p) {
+        $ids = array();
+        
+        $str = '';
+        $str .= $p->getHeader('In-Reply-To') . "\n";
+        $str .= $p->getHeader('References') . "\n";
+        $str .= $p->getHeader('Thread-Index') . "\n";
+        
+        $raw_ids = preg_split("/(\n| )/", $str);
+        foreach($raw_ids as $ri) {
+            $ri = trim($ri);
+            
+            if ($ri && in_array($ri, $ids) == false) {
+                $ids[] = $ri;
+            }
+        }
+        
+        return $ids;
+    }
+    
     
     public function queueEml($emlFile) {
         $r = $this->parseEml( $emlFile );

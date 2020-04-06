@@ -12,6 +12,8 @@
     <field name="connectorDescription" type="string" indexed="true"  stored="true"/>
     
     <field name="emlMessageId" type="string" indexed="true" stored="true"/>
+    <field name="emlThreadId"  type="string" indexed="true" stored="true"/>
+    <field name="refMessageId" type="string" indexed="true" stored="true" multiValued="true" />
     <field name="mailboxName"  type="string" indexed="true" stored="true"/>
     <field name="file"         type="string" indexed="true" stored="true"/>
     <field name="folderName"   type="string" indexed="true" stored="true"/>
