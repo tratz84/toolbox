@@ -124,9 +124,9 @@ class searchController extends BaseController {
 	    $mp->load();
 	    
 	    
+	    $solrMail = SolrMailQuery::readStaticById($emailId);
 	    if ($mp->getSeen() == false) {
 	        try {
-        	    $solrMail = SolrMailQuery::readStaticById($emailId);
     	        $sma = new SolrMailActions();
     	        $sma->markAsSeen($solrMail);
 	        } catch (\Exception|\Error $ex) { }
@@ -163,6 +163,12 @@ class searchController extends BaseController {
 	    $selectActions = new SelectField('set_action', $mp->getAction(), $mapActions);
 	    $selectActions->setAttribute('onchange', 'setMailAction('.json_encode($emailId).', this.value)');
 	    $this->actionContainer->addItem('set-mail-action', $selectActions->render());
+	    
+
+	    if ($solrMail->isJunk() == false) {
+    	    $spam_onclick = "if (confirm('Are you sure to mark this mail as spam?')) markMailAsSpam(".json_encode($emailId).");";
+    	    $this->actionContainer->addItem('mark-as-spam', '<button onclick="' . esc_attr($spam_onclick) . '"><span class="fa fa-flag mark-as-spam"></span></button>');
+	    }
 	    
 	    
 	    hook_eventbus_publish($this->actionContainer, 'webmail', 'mailbox-search');

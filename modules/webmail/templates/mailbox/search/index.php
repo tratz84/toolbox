@@ -235,7 +235,7 @@ t.addColumn({
 		btnSpam.click(function() {
 			var c = confirm('Are you sure to mark this mail as spam?');
 			if (c) {
-				markMailAsSpam( $(this).closest('tr'), email_id );
+				markMailAsSpam( email_id );
 			}
 		});
 
@@ -310,7 +310,7 @@ function setMailAction(email_id, newAction) {
 }
 
 
-function markMailAsSpam(row, email_id) {
+function markMailAsSpam( email_id ) {
 	$.ajax({
 		url: appUrl('/?m=webmail&c=mailbox/mail&a=mark_as_spam'),
 		type: 'POST',
@@ -321,6 +321,8 @@ function markMailAsSpam(row, email_id) {
 			if (data.error) {
 				alert('Error: ' + data.message);
 			} else {
+            	var row = $('#emailheader-table-container tr[email-id="' + email_id + '"]');
+            	
 				$(row).find('.td-mailbox-name').text('Junk');
 				$(row).find('.mark-as-spam').hide();
 				$(row).find('.mark-as-ham').show();

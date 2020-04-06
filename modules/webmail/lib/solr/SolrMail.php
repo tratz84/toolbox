@@ -65,6 +65,7 @@ class SolrMail {
     
     public function isAnswered() { return @$this->jsonMail->isAnswered; }
     public function isSeen() { return @$this->jsonMail->isSeen; }
+    public function isJunk() { return @$this->jsonMail->isJunk; }
     
     
     public function getAttachments() { $this->parseMail(); return $this->attachments; }
