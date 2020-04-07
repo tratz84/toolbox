@@ -5,7 +5,6 @@ namespace webmail\solr;
 
 
 use core\exception\OutOfBoundException;
-use core\exception\InvalidStateException;
 use webmail\mail\MailProperties;
 
 class SolrMail {
@@ -48,6 +47,10 @@ class SolrMail {
 
     public function getId() { return $this->jsonMail->id; }
     public function getEmlFile() { return $this->jsonMail->file; }
+    public function getEmlMessageId() { return $this->jsonMail->emlMessageId; }
+    public function getEmlThreadId() { return $this->jsonMail->emlThreadId; }
+    public function getRefMessageId() { return $this->jsonMail->refMessageId; }
+    
     public function getMailboxName() { return @$this->jsonMail->mailboxName; }
     public function getDate() {
         if (!@$this->jsonMail->date) {

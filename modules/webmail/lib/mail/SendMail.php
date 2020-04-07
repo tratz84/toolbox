@@ -8,12 +8,16 @@ use core\Context;
 use webmail\model\Email;
 use core\exception\ResourceException;
 use webmail\service\ConnectorService;
+use webmail\solr\SolrMail;
+use webmail\solr\SolrMailQuery;
 
 class SendMail {
     
     protected $to = array();
     protected $cc = array();
     protected $bcc = array();
+    
+    protected $extraHeaders = array();
     
     protected $subject = '';
     protected $fromName = null;
@@ -53,6 +57,13 @@ class SendMail {
     public function getBcc() { return $this->to; }
     public function clearBcc() { $this->to = array(); }
     
+    public function addHeader($name, $val) {
+        $this->extraHeaders[] = array(
+            'name' => $name,
+            'value' => $val
+        );
+    }
+    
     public function setEmailId($id) { $this->emailId = $id; }
     public function getEmailId() { return $this->emailId; }
     
@@ -90,6 +101,11 @@ class SendMail {
     
     public function buildMessage() {
         $message = new \Swift_Message( $this->getSubject() );
+        
+        foreach($this->extraHeaders as $h) {
+            $message->getHeaders()->addTextHeader( $h['name'], $h['value'] );
+        }
+        
         $message->setFrom(array($this->getFromEmail() => $this->getFromName()));
         
         foreach($this->to as $m) {
@@ -196,6 +212,14 @@ class SendMail {
         $sm->setSubject($email->getSubject());
         $sm->setFromName($email->getFromName());
         $sm->setFromEmail($email->getFromEmail());
+        
+        // add In-Reply-To header if available
+        if ($email->getSolrMailId()) {
+            $solrMail = SolrMailQuery::readStaticById( $email->getSolrMailId() );
+            if ($solrMail && $solrMail->getEmlMessageId())
+                $sm->addHeader('In-Reply-To', $solrMail->getEmlMessageId());
+        }
+        
         
         foreach($email->getRecipients() as $r) {
             if (strtolower($r->getToType()) == 'to' || $r->getToType() == null) {
