@@ -13,6 +13,15 @@ class dashboardController extends BaseController {
     
     public function action_index() {
         
+        $this->action_search( ['render' => false] );
+        
+        $this->setShowDecorator(false);
+        return $this->render();
+    }
+    
+    public function action_search( $opts = array() ) {
+        if (isset($opts['render']) == false) $opts['render'] = true;
+        
         $smq = new SolrMailQuery();
         $smq->setRows( 25 );
         $smq->setSort('date desc');
@@ -21,15 +30,22 @@ class dashboardController extends BaseController {
         $mss = new MailboxSearchSettings(null, ['data' => $webmailSettings]);
         $mss->applyFilters($smq);
         
+        $this->mails = array();
+        
         try {
             $this->listResponse = $smq->searchListResponse();
             
+            $this->mails = $this->listResponse->getObjects();
         } catch(\Exception $ex) {
             $this->error = $ex->getMessage();
         }
         
-        $this->setShowDecorator(false);
-        return $this->render();
+        if ($opts['render']) {
+            $this->json([
+                'success' => true,
+                'mails' => $this->mails
+            ]);
+        }
     }
     
     

@@ -7,7 +7,7 @@
 
 * - junk markeren/afhandelen
 
-- geflikker dashboard
+* - geflikker dashboard
 
 - filters
 	- 'action' waarde zetten
@@ -15,6 +15,6 @@
 
 - search uitbreiden mailarchief (facet-search, zoeken op thread, ..?)
 
- - in-reply-to header zetten (+ message-id?)
+*  - in-reply-to header zetten (+ message-id?)
  
 
