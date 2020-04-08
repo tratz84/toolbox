@@ -32,21 +32,28 @@
 
 	#dayNameContainer td {
 		text-align: center;
+		&.week-no { text-align: left; }
 	}
 
-	#dayContainer td {
-		vertical-align: top;
-		position: relative;
-		height: 100px;
-		width: 14.28%;
-		.item {
-			cursor: pointer;
-			background-color: #ddeeff;
-			border-bottom: 1px solid #ccc;
-		}
+	#dayContainer {
+		td {
+			vertical-align: top;
+			position: relative;
+			height: 100px;
+			width: 14.28%;
+			.item {
+				cursor: pointer;
+				background-color: #ddeeff;
+				border-bottom: 1px solid #ccc;
+			}
 
-		div.item.cancelled {
-			text-decoration: line-through;
+			div.item.cancelled {
+				text-decoration: line-through;
+			}
+		}
+		tr td.week-no {
+			width: 35px;
+			padding-right: 12px;
 		}
 	}
 

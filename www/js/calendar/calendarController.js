@@ -306,6 +306,7 @@ function MonthViewRenderer(controller) {
 	this.renderHeaderDays = function(tbl) {
 		
 		tbl.append('<thead id="dayNameContainer"><tr /></thead>');
+		tbl.find('#dayNameContainer tr').append('<td class="week-no">Nr</td>');
 		for(var x=0; x <= 6; x++) {
 			daynr = (x + this.startWeekDay) % 7;
 			tbl.find('#dayNameContainer tr').append('<td>' + this.dayNames[daynr] + '</td>');
@@ -354,13 +355,21 @@ function MonthViewRenderer(controller) {
 		var curDate = new Date();		// today
 		var dates = this.datesToRender();
 		
-		for(var x=0; x < dates.length; x++) {
+		for(var x=0, cellCount=0; x < dates.length; cellCount++) {
 			var date = dates[x];
 			var strDate = format_date(date);
 			
 			// new <tr/> row?
-			if (x%7 == 0 && x != 0)
-				tbl.find('tbody[id=dayContainer]').append('<tr />');
+			if (cellCount%8 == 0 && cellCount != 0) {
+				tbl.find('tbody[id=dayContainer]').append( '<tr/>' );
+			}
+			
+			if (cellCount%8 == 0 || cellCount == 0) {
+				var tdWeekNo = $('<td class="week-no" />');
+				tdWeekNo.text( moment(date).week() );
+				tbl.find('#dayContainer tr').last().append( tdWeekNo );
+				continue;
+			}
 			
 			// fetch current row
 			var tr = tbl.find('#dayContainer tr').last();
@@ -374,10 +383,10 @@ function MonthViewRenderer(controller) {
 			
 			if (date.getFullYear() != curDate.getFullYear() || date.getMonth() != curDate.getMonth()) {
 				td.addClass('date-other-month');
-				if (x < 7)
-					td.addClass('date-previous-month');
-				else if (x > 7)
-					td.addClass('date-next-month');
+				// if (cellCount < 8)
+				// 	td.addClass('date-previous-month');
+				// else if (cellCount > 8)
+				// 	td.addClass('date-next-month');
 			}
 			
 			
@@ -395,6 +404,7 @@ function MonthViewRenderer(controller) {
 			});
 			td.html('<span class="daynr">' + date.getDate() + '</span>');
 
+			x++;
 		}
 	}
 	
