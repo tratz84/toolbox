@@ -7,6 +7,7 @@ use webmail\model\Connector;
 use core\ObjectContainer;
 use webmail\service\ConnectorService;
 use webmail\solr\SolrMail;
+use webmail\solr\SolrMailQuery;
 
 class ImapConnection {
     
@@ -557,7 +558,56 @@ class ImapConnection {
         }
     }
     
+    public function search($folder, $criteria=array()) {
+        if (!imap_reopen($this->imap, $this->mailbox.$folder))
+            return false;
+        
+        $str = '';
+        foreach($criteria as $crit) {
+            $key = $crit['key'];
+            
+            if ($str != '')
+                $str = $str . ' ';
+            
+            
+            if (in_array($key, ['BCC', 'BEFORE', 'BODY', 'CC', 'FROM', 'KEYWORD', 'ON', 'SINCE', 'SUBJECT', 'TEXT', 'TO', 'UNKEYWORD'])) {
+                $str .= $key . ' "' . addslashes($crit['value']) . '"';
+            }
+            else if (in_array($key, ['ALL', 'ANSWERED', 'DELETED', 'FLAGGED', 'NEW', 'OLD', 'RECENT', 'SEEN', 'UNANSWERED', 'UNDELETED', 'UNFLAGGED', 'UNSEEN'])) {
+                $str .= $key;
+            }
+            else {
+                throw new \core\exception\InvalidArgumentException('Invalid search keyword: ' . $key);
+            }
+        }
+        
+        return imap_search($this->imap, $str, SE_UID, 'UTF-8');
+    }
     
+    public function lookupUid($folder, SolrMail $solrMail) {
+        $solrMail->parseMail();
+        
+        if ($solrMail->getParsedMail() == null) {
+            return array();
+        }
+        
+        $uids = $this->search($folder, [
+              [ 'key' => 'ON',      'value' => $solrMail->getParsedMail()->getHeader('date') ]
+            , [ 'key' => 'SUBJECT', 'value' => $solrMail->getSubject()]
+            , [ 'key' => 'FROM',    'value' => $solrMail->getFromEmail()]
+        ]);
+        
+        
+        return $uids;
+    }
+    
+    public function test( ){
+        $s = SolrMailQuery::readStaticById('/webmail/inbox/2020/04/08/e4b1a9e45b5cb730866e44525bc218e0.eml');
+        
+        $uids = $this->lookupId('INBOX', $s);
+        
+        var_export($uids);
+    }
     
     
 }

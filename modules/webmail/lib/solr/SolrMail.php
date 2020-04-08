@@ -51,6 +51,8 @@ class SolrMail {
     public function getEmlThreadId() { return $this->jsonMail->emlThreadId; }
     public function getRefMessageId() { return $this->jsonMail->refMessageId; }
     
+    public function getParsedMail() { return $this->parsedMail; }
+    
     public function getMailboxName() { return @$this->jsonMail->mailboxName; }
     public function getDate() {
         if (!@$this->jsonMail->date) {
@@ -127,16 +129,8 @@ class SolrMail {
         
         return $this->properties;
     }
-    public function setProperty($name, $val) {
-        if ($this->properties === null) {
-            $this->getProperties();
-        }
-        
-        $this->properties->setProperty($name, $val);
-    }
-    
+
     public function saveProperties() {
-        
         return $this->properties->save();
     }
     
@@ -242,7 +236,7 @@ class SolrMail {
     
     
     
-    protected function parseMail( ) {
+    public function parseMail( ) {
         // max parse once
         if ($this->mailIsParsed) {
             return;
@@ -257,17 +251,17 @@ class SolrMail {
         }
         
         // parse
-        $p = new \PhpMimeMailParser\Parser();
-        $p->setPath($emlFile);
+        $this->parsedMail = new \PhpMimeMailParser\Parser();
+        $this->parsedMail->setPath($emlFile);
         
         $dt = new \DateTime(null, new \DateTimeZone('+0000'));
-        $dt->setTimestamp(strtotime($p->getHeader('date')));
+        $dt->setTimestamp(strtotime($this->parsedMail->getHeader('date')));
         
-        $this->subject = $p->getHeader('subject');
+        $this->subject = $this->parsedMail->getHeader('subject');
         
         
         $this->attachments = array();
-        $this->parserAttachments = $p->getAttachments(false);
+        $this->parserAttachments = $this->parsedMail->getAttachments(false);
         $pos=0;
         foreach($this->parserAttachments as $att) {
             $this->attachments[] = array(
@@ -279,27 +273,27 @@ class SolrMail {
         
         
         $this->to = $this->cc = $this->bcc = array();
-        foreach($p->getAddresses('to') as $ht) {
+        foreach($this->parsedMail->getAddresses('to') as $ht) {
             $this->to[] = array(
                 'name' => $ht['display'],
                 'email' => $ht['address'],
             );
         }
-        foreach($p->getAddresses('cc') as $ht) {
+        foreach($this->parsedMail->getAddresses('cc') as $ht) {
             $this->cc[] = array(
                 'name' => $ht['display'],
                 'email' => $ht['address'],
             );
         }
-        foreach($p->getAddresses('bcc') as $ht) {
+        foreach($this->parsedMail->getAddresses('bcc') as $ht) {
             $this->bcc[] = array(
                 'name' => $ht['display'],
                 'email' => $ht['address'],
             );
         }
         
-        $this->contentHtml = $p->getMessageBody('html');
-        $this->contentText = $p->getMessageBody('text');
+        $this->contentHtml = $this->parsedMail->getMessageBody('html');
+        $this->contentText = $this->parsedMail->getMessageBody('text');
     }
     
     

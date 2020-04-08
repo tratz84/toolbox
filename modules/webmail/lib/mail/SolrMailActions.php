@@ -220,12 +220,14 @@ class SolrMailActions {
         }
         
         // moved? => update properties-file
-        if ($this->imapConnection->moveMailByUid($props->getUid(), $props->getFolder(), $if->getFolderName())) {
-            // TODO: moving mail is actually a copy- + delete-action. After a move
-            // the UID of the message in mailbox must be updated
-            
-            // $solrMail->getProperties()->setUid('...');
+        if ($props->getUid() && $this->imapConnection->moveMailByUid($props->getUid(), $props->getFolder(), $if->getFolderName())) {
             $this->imapConnection->expunge();
+            
+            // moving mail is actually a copy- + delete-action. After a move
+            // the UID of the message in mailbox must be updated
+            $foundUids = $this->imapConnection->lookupUid($if->getFolderName(), $solrMail);
+            $newUid = count($foundUids) == 1 ? $foundUids[0] : null;
+            $solrMail->getProperties()->setUid( $newUid );
         }
         
         // move might fail if mail is already moved and mailbox is not in sink
