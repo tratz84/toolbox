@@ -70,7 +70,9 @@ while (true) {
                     print "Starting monitor for: " . $c->getDescription() . "\n";
                     $im = new ImapMonitor($c);
                     $im->setCallbackItemImported(function($folderName, $overview, $file, $changed) use ($c) {
-                        print "Importing mail, " . $c->getConnectorId() . ': ' . $overview->subject . " (".$overview->date.")\n";
+                        // decode subject
+                        $subject = imap_utf8( $overview->subject );
+                        print "Importing mail, " . $c->getConnectorId() . ': ' . $subject . " (".$overview->date.")\n";
                         
                         // update solr
                         if (defined('WEBMAIL_SOLR') && WEBMAIL_SOLR) {
