@@ -363,6 +363,7 @@ class SolrMailActions {
     
     public function deleteMail(SolrMail $mail) {
         $mp = new MailProperties($mail->getEmlFile());
+        $mp->load();
         
         // delete mail from imap-server
         /** @var ConnectorService $connectorService */
