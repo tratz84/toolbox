@@ -213,6 +213,11 @@ t.setCallbackRenderDone(function() {
 
 	var cff = $('<div class="facet-filter-item-container facet-folders" />');
 	cff.append('<div class="facet-header">'+_('Folders')+'</div>');
+	cff.append('<div><label><input type="radio" id="folder-show-all" name="folder" onchange="t.load();" value="" /> '+_('Show all')+'</label></div');
+	if (!prevState.folder) {
+		cff.find('#folder-show-all').prop('checked', true);
+	}
+	
 	// folder-filters
 	if (filters.folders) {
 		for(var i in filters.folders) {
