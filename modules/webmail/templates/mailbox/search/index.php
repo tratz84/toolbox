@@ -53,7 +53,7 @@
 			<div class="facet-filters"></div>
 			
 		</div>
-		<div class="split-pane-divider" id="vertical-divider"></div>
+		<div class="split-pane-divider context-background" id="vertical-divider"></div>
 		
 		<div class="split-pane-component mail-header-content-component" id="right-component">
 		
@@ -64,7 +64,7 @@
         			</div>
         			<div id="emailheader-table-container" style="max-height: calc(100% - 35px);"></div>
         		</div>
-        		<div class="split-pane-divider" id="my-divider"></div>
+        		<div class="split-pane-divider context-background" id="my-divider"></div>
         		<div class="split-pane-component pretty-split-pane-component-inner" id="bottom-component">
         			<div id="mail-content"></div>
         		</div>

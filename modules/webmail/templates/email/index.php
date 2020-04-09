@@ -37,7 +37,7 @@
 		<div class="split-pane-component" id="top-component">
 			<div id="emailheader-table-container" class="pretty-split-pane-component-inner"></div>
 		</div>
-		<div class="split-pane-divider" id="my-divider"></div>
+		<div class="split-pane-divider context-background" id="my-divider"></div>
 		<div class="split-pane-component" id="bottom-component">
 			<div id="mail-content" class="pretty-split-pane-component-inner"></div>
 		</div>

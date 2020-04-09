@@ -37,6 +37,10 @@ header .notifications-bar {
     background-color: rgba({$rgbMasterColor[0]}, {$rgbMasterColor[1]}, {$rgbMasterColor[2]}, 0.7) !important;
 }
 
+.context-background {
+    background-color: rgba({$rgbMasterColor[0]}, {$rgbMasterColor[1]}, {$rgbMasterColor[2]}, 1) !important;
+}
+
 CSS;
 hook_add_inline_css($coreCssText);
 
