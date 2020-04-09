@@ -111,6 +111,25 @@ class SolrQueryResponse {
     
     
     
+    public function getFacetField($fieldName) {
+        $fields = array();
+        
+        if (isset($this->response->facet_counts->facet_fields->{$fieldName})) {
+            $fr = $this->response->facet_counts->facet_fields->{$fieldName};
+            
+            $c = count($fr);
+            for($x=0; $x < $c; $x+=2) {
+                $fields[] = array(
+                    'name' => $fr[$x],
+                    'value' => $fr[$x+1]
+                );
+            }
+        }
+        
+        return $fields;
+    }
+    
+    
     
 }
 

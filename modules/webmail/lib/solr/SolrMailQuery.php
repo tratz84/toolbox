@@ -9,6 +9,7 @@ use webmail\MailTabSettings;
 
 class SolrMailQuery extends SolrQuery {
     
+    protected $lastQueryResponse = null;
     
     public function __construct() {
         parent::__construct( WEBMAIL_SOLR );
@@ -19,6 +20,10 @@ class SolrMailQuery extends SolrQuery {
         
         $this->setSort('date desc');
         $this->addFacetSearch('contextName', ':', $ctx->getContextName());
+        
+        $this->addFacetField('mailboxName');
+        $this->addFacetField('connectorId');
+        $this->addFacetField('connectorDescription');
     }
     
     
@@ -43,6 +48,7 @@ class SolrMailQuery extends SolrQuery {
         // reset query
         $this->clearFields();
         $this->clearFacetQueries();
+        $this->clearFacetFields();
         $this->setRawQuery('*:*');
 
         // add id-facet
@@ -61,9 +67,34 @@ class SolrMailQuery extends SolrQuery {
     }
     
     
+    
+    public function getFolders() {
+        
+        if ($this->lastQueryResponse == null) {
+            return array();
+        }
+        
+        $folders = $this->lastQueryResponse->getFacetField('mailboxName');
+        
+        usort($folders, function($o1, $o2) {
+            if ($o1['name'] == 'INBOX') {
+                return -1;
+            }
+            if ($o2['name'] == 'INBOX') {
+                return 1;
+            }
+            
+            return strcmp($o1['name'], $o2['name']);
+        });
+        
+        return $folders;
+    }
+    
+    
+    
     public function searchListResponse() {
         /** @var SolrMailQueryResponse $msqr */
-        $msqr = $this->search();
+        $this->lastQueryResponse = $msqr = $this->search();
         
         if ($msqr->hasError()) {
             throw new \core\exception\SolrException( $msqr->getError() );

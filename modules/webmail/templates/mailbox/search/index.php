@@ -50,6 +50,7 @@
 				<?= t('Apply default filters') ?>
 			</label>
 			
+			<div class="facet-filters"></div>
 			
 		</div>
 		<div class="split-pane-divider" id="vertical-divider"></div>
@@ -193,6 +194,46 @@ t.setCallbackRenderRows(function() {
 		if (!this.emailFormUrlSet) {
 			this.emailFormUrlSet = true;
 			viewMail( email_id );
+		}
+	}
+});
+
+t.setCallbackRenderDone(function() {
+	var prevState = serialize2object('.facet-filters');
+	
+	$('.facet-filters').empty();
+
+	console.log(this);
+
+	if (!this.lastResponse || !this.lastResponse.filters) {
+		return;
+	}
+	
+	var filters = this.lastResponse.filters;
+
+
+	// folder-filters
+	if (filters.folders) {
+		for(var i in filters.folders) {
+			// create radio-button
+			var inp = $('<input type="radio" name="folder" />');
+			inp.val( filters.folders[i].name );
+			inp.change(function() {
+				t.load();
+			});
+
+			if (prevState.folder == filters.folders[i].name)
+				inp.prop('checked', true);
+
+			// add label
+			var lbl = $('<label />');
+			lbl.append(inp);
+			lbl.append( ' ' + filters.folders[i].name );
+
+			// put it in a container
+			var c = $('<div />');
+			c.append( lbl );
+			$('.facet-filters').append( c );
 		}
 	}
 	

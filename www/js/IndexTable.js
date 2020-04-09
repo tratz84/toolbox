@@ -16,7 +16,8 @@ function IndexTable( container, opts ) {
 	if (typeof this.opts.autoloadNext == 'undefined')
 		this.opts.autoloadNext = false;
 	
-	this.listResponse = null;
+	this.listResponse = null;					// just contains listResponse-structure
+	this.lastResponse = null;					// contains complete last json-response
 	this.pageNo = 1;
 	this.loading = false;
 	this.sortField = null;
@@ -181,6 +182,7 @@ function IndexTable( container, opts ) {
 				}
 				else {
 					me.listResponse = data.listResponse;
+					me.lastResponse = data;						// complete response
 					console.log(me.listResponse);
 					me.render();
 					

@@ -33,7 +33,6 @@ class searchController extends BaseController {
 	
 
 	public function action_search() {
-	    
         $mailtabSettings = @json_decode( get_var('mailtabSettings', true) );
         if (is_object($mailtabSettings)) $mailtabSettings = (array)$mailtabSettings;
         
@@ -74,6 +73,11 @@ class searchController extends BaseController {
 	        $smq->addFacetSearch('action', ':', get_var('action'));
 	    }
 	    
+	    if (get_var('folder')) {
+	        $smq->addFacetSearch('mailboxName', ':', get_var('folder'));
+	    }
+	    
+	    
 	    // TODO: hmz... this isn't the right way
 	    if ($mts) {
 	        $mts->applyFilters( $smq );
@@ -89,6 +93,9 @@ class searchController extends BaseController {
     	    
     	    $arr = array();
     	    $arr['listResponse'] = $lr;
+    	    $arr['filters'] = array();
+    	    $arr['filters']['folders'] = $smq->getFolders();
+    	    
     	    $this->json($arr);
 	    } catch(\Exception $ex) {
 	        $this->json([

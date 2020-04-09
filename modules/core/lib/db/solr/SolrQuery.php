@@ -3,6 +3,8 @@
 namespace core\db\solr;
 
 
+use core\exception\InvalidArgumentException;
+
 class SolrQuery {
     
     protected $solrUrl;
@@ -17,6 +19,9 @@ class SolrQuery {
     
     protected $facetQueries = array();
     protected $query        = '*:*';
+    
+    protected $facetFields = array();
+    protected $facetLimit = -1;
     
     protected $responseClass = SolrQueryResponse::class;
     
@@ -61,6 +66,24 @@ class SolrQuery {
         $this->facetQueries[] = $fq;
     }
     
+    
+    public function setFacetLimit($l) {
+        if (is_numeric($l) == false) {
+            throw new InvalidArgumentException('Invalid limit');
+        }
+        $this->facetLimit = $l;
+    }
+    public function clearFacetFields() { $this->facetFields = array(); }
+    public function addFacetField($fieldName, $opts=array()) {
+        $field = array();
+        $field['name'] = $fieldName;
+        
+        // TODO: handle $opts? it may contain properties like ex-facetqueries for facet counting (TODO, implement)
+        
+        $this->facetFields[] = $field;
+    }
+    
+    
     public function search() {
         $url_params = array();
         
@@ -82,11 +105,22 @@ class SolrQuery {
             $url_params[] = 'fq='.urlencode( $fq );
         }
         
+        if (count($this->facetFields)) {
+            $url_params[] = 'facet=true';
+            $url_params[] = 'facet.limit=' . $this->facetLimit;
+            
+            foreach($this->facetFields as $ff) {
+                $url_params[] = 'facet.field='.urlencode($ff['name']);
+            }
+        }
+        
         if ($this->query) {
             $url_params[] = 'q='.urlencode( $this->query );
         }
         
         $url = $this->solrUrl . '/select?' . implode('&', $url_params);
+        
+//         print $url;exit;
         
         $data = get_url($url);
         
