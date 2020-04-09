@@ -374,7 +374,25 @@ class SolrMailActions {
             
             // try to connect
             if ($this->imapConnection->isConnected() || $this->imapConnection->connect()) {
-                $this->imapConnection->deleteMailByUid($mail->getMailboxName(), $mp->getUid());
+                
+                // get trash-folder if available
+                $trash_ifid = $connector->getTrashConnectorImapfolderId();
+                $trash_if = null;
+                if ($trash_ifid) {
+                    $trash_if = $connectorService->readImapFolder($trash_ifid);
+                }
+                
+                
+                // trash-folder exists? => move message to trash
+                if ($trash_if) {
+                    $this->imapConnection->moveMailByUid($mp->getUid(), $mail->getMailboxName(), $trash_if->getFolderName());
+                }
+                // no trash-folder? => delete
+                else {
+                    $this->imapConnection->deleteMailByUid($mail->getMailboxName(), $mp->getUid());
+                }
+                
+                $this->imapConnection->expunge();
                 
                 $this->imapConnection->disconnect();
             }
