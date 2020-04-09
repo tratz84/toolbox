@@ -16,8 +16,10 @@ function IndexTable( container, opts ) {
 	if (typeof this.opts.autoloadNext == 'undefined')
 		this.opts.autoloadNext = false;
 	
+	this.ajaxLoadRequest = null;
 	this.listResponse = null;					// just contains listResponse-structure
 	this.lastResponse = null;					// contains complete last json-response
+	
 	this.pageNo = 1;
 	this.loading = false;
 	this.sortField = null;
@@ -138,10 +140,22 @@ function IndexTable( container, opts ) {
 		opts = opts ? opts : { };
 		opts.force = opts.force ? true : false;
 		
+		// reset IndexTable? (used for queries with search-options..)
+		if (opts.reset) {
+			if (this.ajaxLoadRequest) {
+				this.ajaxLoadRequest.abort();
+			}
+			this.loading = false;
+			this.listResponse = null;
+			this.pageNo = 1;
+			$(this.table).find('tbody').empty();
+			$(this.container).scrollTop(0);
+		}
+		
 		if (this.loading == true) return;
 		
 		this.loading = true;
-		$('.load-more').remove();
+		$(this.container).find('.load-more').remove();
 		
 		
 		if (opts.force == false && this.opts.autoloadNext && this.listResponse != null && this.listResponse.objects.length == 0) {
@@ -172,7 +186,7 @@ function IndexTable( container, opts ) {
 			this.callback_pre_load(searchOpts);
 		}
 		
-		$.ajax({
+		this.ajaxLoadRequest = $.ajax({
 			type : 'POST',
 			url : this.connectorUrl,
 			data : searchOpts,

@@ -213,7 +213,7 @@ t.setCallbackRenderDone(function() {
 
 	var cff = $('<div class="facet-filter-item-container facet-folders" />');
 	cff.append('<div class="facet-header">'+_('Folders')+'</div>');
-	cff.append('<div><label><input type="radio" id="folder-show-all" name="folder" onchange="t.load();" value="" /> '+_('Show all')+'</label></div');
+	cff.append('<div><label><input type="radio" id="folder-show-all" name="folder" onchange="t.load({reset: true});" value="" /> '+_('Show all')+'</label></div');
 	if (!prevState.folder) {
 		cff.find('#folder-show-all').prop('checked', true);
 	}
@@ -225,7 +225,7 @@ t.setCallbackRenderDone(function() {
 			var inp = $('<input type="radio" name="folder" />');
 			inp.val( filters.folders[i].name );
 			inp.change(function() {
-				t.load();
+				t.load({reset: true});
 			});
 
 			if (prevState.folder == filters.folders[i].name)
