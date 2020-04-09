@@ -44,7 +44,13 @@
 
 	<div class="split-pane fixed-left">
 		<div class="split-pane-component filter-container" id="left-component">
-			left container
+			<a href="javascript:void(0);" onclick="show_popup(<?= esc_json_attr(appUrl('/?m=webmail&c=mailbox/search&a=settings')) ?>);" class="fa fa-cog" style="font-size: 20px;"></a>
+			<label>
+				<input type="checkbox" name="f" title="filters" <?= $filtersEnabled ? 'checked=checked':'' ?> />
+				<?= t('Apply default filters') ?>
+			</label>
+			
+			
 		</div>
 		<div class="split-pane-divider" id="vertical-divider"></div>
 		
@@ -53,12 +59,7 @@
         	<div class="split-pane horizontal-percent">
         		<div class="split-pane-component mail-headers" id="top-component">
         			<div class="search-fields">
-        				<div class="toolbox" style="padding: 5px 5px 0 3px;">
-        					<input type="checkbox" name="f" title="filters" <?= $filtersEnabled ? 'checked=checked':'' ?> />
-        					<a href="javascript:void(0);" onclick="show_popup(<?= esc_json_attr(appUrl('/?m=webmail&c=mailbox/search&a=settings')) ?>);" class="fa fa-cog" style="font-size: 20px;"></a>
-        				</div>
-        				
-        				<input type="text" name="q" placeholder="<?= t('Search') ?>" style="width: calc(100% - 50px);" />
+        				<input type="text" name="q" placeholder="<?= t('Search') ?>" style="width: calc(100% - 7px); margin-left: 5px;" />
         			</div>
         			<div id="emailheader-table-container" style="max-height: calc(100% - 35px);"></div>
         		</div>
@@ -165,7 +166,7 @@ var selectedMailId = null;
 var t = new IndexTable('#emailheader-table-container', {
 	autoloadNext: true,
 	fixedHeader: true,
-	searchContainer: '.search-fields, .list-response-table thead'
+	searchContainer: '.search-fields, .list-response-table thead, .filter-container'
 });
 
 t.setRowClick(function(row, evt) {
