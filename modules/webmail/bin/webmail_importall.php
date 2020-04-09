@@ -68,6 +68,9 @@ if ($argumentParser->hasOption('skip-connector-import') == false) {
         /** @var \webmail\model\Connector $c */
         $c = $connectorService->readConnector( $c->getConnectorId() );
         
+        // save last update time for incremental updates
+        object_meta_save(Connector::class, $c->getConnectorId(), 'webmail_importall-lastrun', time());
+        
         if ($c->getConnectorType() == 'imap') {
             $ic = ImapConnection::createByConnector($c);
             if (!$ic->connect()) {
