@@ -2,7 +2,7 @@
 
 namespace webmail\form;
 
-class PurgeJunkForm extends \core\forms\CodegenBaseForm {
+class PurgeFolderForm extends \core\forms\CodegenBaseForm {
 
 	public function __construct() {
 		
@@ -12,6 +12,7 @@ class PurgeJunkForm extends \core\forms\CodegenBaseForm {
 		
 		$this->disableSubmit();
 		$this->hideSubmitButtons();
+		
 	}
 	
 	
@@ -21,9 +22,14 @@ class PurgeJunkForm extends \core\forms\CodegenBaseForm {
 		
 		$w1 = new \core\forms\SelectField('connectorId', NULL, $func1(), t('Connector'));
 		$this->addWidget( $w1 );
+		$w2 = new \core\forms\SelectField('folderName', NULL, array (
+		  '' => 'Make your choice',
+		  'junk' => 'Junk',
+		  'trash' => 'Trash',
+		), t('Folder'));
+		$this->addWidget( $w2 );
 		
 	}
-
 
 
 }

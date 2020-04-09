@@ -3,18 +3,18 @@
 
 
 use core\controller\BaseController;
-use webmail\form\PurgeJunkForm;
+use webmail\form\PurgeFolderForm;
 use webmail\mail\ImapConnection;
-use webmail\service\ConnectorService;
 use webmail\mail\SolrMailActions;
+use webmail\service\ConnectorService;
 use webmail\solr\SolrMailQuery;
 
-class purgejunkController extends BaseController {
+class purgefolderController extends BaseController {
     
     
     public function action_index() {
         
-        $this->form = new PurgeJunkForm();
+        $this->form = new PurgeFolderForm();
         
         return $this->render();
     }
@@ -29,7 +29,6 @@ class purgejunkController extends BaseController {
     
     
     public function action_purge() {
-        
         $connectorService = object_container_get(ConnectorService::class);
         $connector = $connectorService->readConnector( get_var('connectorId') );
         
@@ -48,13 +47,21 @@ class purgejunkController extends BaseController {
             ]);
         }
         
+        // fetch folder
+        $imapFolderName = null;
+        if (get_var('folderName') == 'junk') {
+            $junkImapFolder = $connectorService->readImapFolder( $connector->getJunkConnectorImapfolderId() );
+            if ($junkImapFolder) {
+                $imapFolderName = $junkImapFolder->getFolderName();
+            }
+        }
         
-        $junkImapFolder = $connectorService->readImapFolder( $connector->getJunkConnectorImapfolderId() );
-        $junkFolderName = $junkImapFolder->getFolderName();
-        if (!$junkFolderName) {
+        
+        // validate folder
+        if (!$imapFolderName) {
             return $this->json([
                 'error' => true,
-                'message' => 'Invalid junk folder set'
+                'message' => 'Folder not found'
             ]);
         }
         
@@ -67,7 +74,7 @@ class purgejunkController extends BaseController {
         try {
             // solr-index + delete eml-files
             $smq = new SolrMailQuery();
-            $smq->addFacetSearch('mailboxName', ':', $junkFolderName);
+            $smq->addFacetSearch('mailboxName', ':', $imapFolderName);
             
             $sma = new SolrMailActions();
             $sma->deleteSolrMailByQuery($smq);
@@ -83,7 +90,7 @@ class purgejunkController extends BaseController {
                     ]);
                 }
                 
-                $ic->deleteFolder($junkFolderName);
+                $ic->deleteFolder($imapFolderName);
                 $ic->expunge();
                 
                 $ic->disconnect();
@@ -104,7 +111,7 @@ class purgejunkController extends BaseController {
         
         return $this->json([
             'success' => true,
-            'message' => 'Junk folder purged'
+            'message' => $imapFolderName.' purged'
         ]);
     }
     

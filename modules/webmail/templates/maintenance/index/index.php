@@ -22,7 +22,7 @@
 				<a href="<?= appUrl('/?m=webmail&c=maintenance/updateaction') ?>"><?= t('Update action') ?></a>
 			</li>
 			<li>
-				<a href="<?= appUrl('/?m=webmail&c=maintenance/purgejunk') ?>"><?= t('Purge junk') ?></a>
+				<a href="<?= appUrl('/?m=webmail&c=maintenance/purgefolder') ?>"><?= t('Purge folders') ?></a>
 			</li>
 		</ul>
 	</div>

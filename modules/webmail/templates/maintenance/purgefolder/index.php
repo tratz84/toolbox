@@ -5,7 +5,7 @@
 			class="fa fa-chevron-circle-left"></a>
 	</div>
 
-	<h1><?= t('Purge junk')?></h1>
+	<h1><?= t('Purge folders')?></h1>
 </div>
 
 
@@ -32,7 +32,7 @@ function purge_Click() {
 	
 	$.ajax({
 		type: 'POST',
-		url: appUrl('/?m=webmail&c=maintenance/purgejunk'),
+		url: appUrl('/?m=webmail&c=maintenance/purgefolder'),
 		data: {
 			a: 'purge',
 			connectorId: cid
@@ -41,12 +41,13 @@ function purge_Click() {
 			if (data.success) {
 				showAlert(_('Folder purged'), data.message);
 
-				// reset form
-				$('#btnPurge').prop('disabled', false);
-				$('#progress').empty();
 			} else {
 				showAlert(_('Error'), data.message);
 			}
+			
+			// reset form
+			$('#btnPurge').prop('disabled', false);
+			$('#progress').empty();
 		}
 	});
 	
