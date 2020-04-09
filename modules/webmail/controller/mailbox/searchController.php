@@ -188,8 +188,11 @@ class searchController extends BaseController {
 
 	    if ($mp->isJunk() == false) {
     	    $spam_onclick = "if (confirm('Are you sure to mark this mail as spam?')) markMailAsSpam(".json_encode($emailId).");";
-    	    $this->actionContainer->addItem('mark-as-spam', '<button onclick="' . esc_attr($spam_onclick) . '"><span class="fa fa-flag mark-as-spam"></span></button>');
+    	    $this->actionContainer->addItem('mark-as-spam', '<button title="'.esc_attr(t('Mark as spam')).'" onclick="' . esc_attr($spam_onclick) . '"><span class="fa fa-flag mark-as-spam"></span></button>');
 	    }
+	    
+	    // TODO: delete-button
+	    
 	    
 	    
 	    hook_eventbus_publish($this->actionContainer, 'webmail', 'mailbox-search');

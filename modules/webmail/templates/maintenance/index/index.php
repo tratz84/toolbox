@@ -19,6 +19,9 @@
 		<h2><?= t('Misc') ?></h2>
 		<ul class="">
 			<li>
+				<a href="<?= appUrl('/?m=webmail&c=maintenance/updateaction') ?>"><?= t('Update action') ?></a>
+			</li>
+			<li>
 				<a href="<?= appUrl('/?m=webmail&c=maintenance/purgejunk') ?>"><?= t('Purge junk') ?></a>
 			</li>
 		</ul>
