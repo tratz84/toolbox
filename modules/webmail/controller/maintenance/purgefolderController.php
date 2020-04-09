@@ -55,6 +55,12 @@ class purgefolderController extends BaseController {
                 $imapFolderName = $junkImapFolder->getFolderName();
             }
         }
+        if (get_var('folderName') == 'trash') {
+            $if = $connectorService->readImapFolder( $connector->getTrashConnectorImapfolderId() );
+            if ($if) {
+                $imapFolderName = $if->getFolderName();
+            }
+        }
         
         
         // validate folder
