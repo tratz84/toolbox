@@ -3,11 +3,11 @@
 namespace webmail\mail;
 
 
-use webmail\model\Connector;
 use core\ObjectContainer;
+use webmail\model\Connector;
 use webmail\service\ConnectorService;
 use webmail\solr\SolrMail;
-use webmail\solr\SolrMailQuery;
+use core\exception\NotForLiveException;
 
 class ImapConnection {
     
@@ -30,6 +30,12 @@ class ImapConnection {
     protected $callback_itemImported = null;
     
     protected $serverPropertyChecksums = null;
+    
+    protected $imapFetchListCount = -1;
+    protected $imapFetchOverviewOptions = 0;
+    
+    // just import messages 'SINCE'
+    protected $sinceUpdate = null;
     
     
     public function __construct($hostname=null, $port=null, $username=null, $password=null) {
@@ -75,6 +81,8 @@ class ImapConnection {
     public function getConnector() { return $this->connector; }
     
     public function getErrors() { return $this->errors; }
+    
+    public function setSinceUpdate($t) { $this->sinceUpdate = $t; }
     
     public function setCallbackItemImported($callback) {
         $this->callback_itemImported = $callback;
@@ -150,38 +158,11 @@ class ImapConnection {
     public function check() {
         return imap_check($this->imap);
     }
-    
-    public function listItems($folderName) {
-        if (!imap_reopen($this->imap, $this->mailbox.$folderName))
-            return false;
-        
-        $messageCount = imap_check($this->imap);
-        
-        $items = array();
-        
-        // Fetch an overview for all messages in INBOX
-        $pagesize = 50;
-        for($x=1; $x < $messageCount->Nmsgs; $x += $pagesize) {
-            $end = ($x + $pagesize) - 1;
-            if ($end > $messageCount->Nmsgs)
-                $end = $messageCount->Nmsgs;
-            
-            $results = imap_fetch_overview($this->imap, $x.':'.$end, 0);
-            
-            foreach ($results as $o) {
-                $items[] = $o;
-            }
-        }
-        
-        imap_gc($this->imap, IMAP_GC_ELT | IMAP_GC_ENV | IMAP_GC_TEXTS);
-        
-        return $items;
-    }
-    
+
     
     public function importItems($folderName) {
         // INBOX has special business rules
-        // TODO: decide if this one has to be skipped? or maybe some sort of boolean? bin/webmail_connector.php should handle this folder..
+        // TODO: decide if this one has to be skipped? or maybe some sort of boolean? bin/webmail_connector.php also handle this folder..
         if ($folderName == 'INBOX') {
             return $this->importInbox($this->connector);
         }
@@ -189,23 +170,21 @@ class ImapConnection {
         
         if (!imap_reopen($this->imap, $this->mailbox.$folderName))
             return false;
-            
+        
         $messageCount = imap_check($this->imap);
         
         $items = array();
         
         // Fetch an overview for all messages in INBOX
-        $pagesize = 500;
-        for($x=1; $x <= $messageCount->Nmsgs; $x += $pagesize) {
-            $end = ($x + $pagesize) - 1;
-            
-            if ($end > $messageCount->Nmsgs)
-                $end = $messageCount->Nmsgs;
-                
-            $results = imap_fetch_overview($this->imap, $x.':'.$end, 0);
+        $overviewList = $this->buildOverviewList( $messageCount );
+
+        // fetch messages
+        $x=0;
+        foreach($overviewList as $range) {
+            $results = imap_fetch_overview($this->imap, $range, $this->imapFetchOverviewOptions);
             
             if (is_cli()) {
-                print "Importing msg: " . $folderName . " (" . $x . "/" . $messageCount->Nmsgs . ')'."\n";
+                print "Importing msg: " . $folderName . " (" . $x . "/" . $this->imapFetchListCount . ')'."\n";
             }
             
             for($y=0; $y < count($results); $y++) {
@@ -219,8 +198,7 @@ class ImapConnection {
                     $mp->save();
                     
                     // TODO: if Folder = Sent, check 'In-Reply-To'-header & lookup replied e-mail. If status == 'open', set to REPLIED
-                    
-                    $this->saveMessage($folderName, $results[$y], $x+$y);
+                    $this->saveMessage($folderName, $results[$y]);
                 }
                 
                 // callback (probably Solr-import)
@@ -228,6 +206,8 @@ class ImapConnection {
             }
             
             imap_gc($this->imap, IMAP_GC_ELT | IMAP_GC_ENV | IMAP_GC_TEXTS);
+            
+            $x += count($results);
         }
         
         return $items;
@@ -285,7 +265,7 @@ class ImapConnection {
     /**
      * returns filename if new , else true/false
      */
-    protected function saveMessage($folderName, $overview, $seqNo) {
+    protected function saveMessage($folderName, $overview) {
         $file = $this->determineEmailPath($overview);
         
         if (is_dir(dirname($file)) == false) {
@@ -304,8 +284,8 @@ class ImapConnection {
             return false;
         }
         
-        $str = imap_fetchheader($this->imap, $seqNo);
-        $str .= imap_body($this->imap, $seqNo, FT_PEEK);
+        $str = imap_fetchheader($this->imap, $overview->uid, FT_UID);
+        $str .= imap_body($this->imap, $overview->uid, FT_PEEK | FT_UID);
         
         if (is_cli()) {
             print "Saving e-mail to file: $file\n";
@@ -358,26 +338,55 @@ class ImapConnection {
     }
     
     
+    protected function buildOverviewList( $check ) {
+        $list = array();
+        
+        if ($this->sinceUpdate) {
+            $uids = $this->search(null, [ ['key' => 'SINCE', 'value' => $this->sinceUpdate] ]);
+            $chunked_uids = $uids ? array_chunk($uids, 100) : array();
+            
+            foreach($chunked_uids as $cuid) {
+                $list[] = implode(',', $cuid);
+            }
+            
+            $this->imapFetchListCount = $uids ? count($uids) : 0;
+            $this->imapFetchOverviewOptions = FT_UID;
+        } else {
+            $this->imapFetchOverviewOptions = 0;
+            
+            $pagesize = 500;
+            
+            // build list
+            for($x=1; $x <= $check->Nmsgs; $x += $pagesize) {
+                $end = ($x + $pagesize) - 1;
+                
+                if ($end > $check->Nmsgs)
+                    $end = $check->Nmsgs;
+                   
+                $list[] = $x . ':' . $end;
+            }
+            
+            $this->imapFetchListCount = $check->Nmsgs;
+        }
+        
+        return $list;
+    }
+    
     public function importInbox(Connector $connector) {
         if (!imap_reopen($this->imap, $this->mailbox.'INBOX')) {
             return false;
         }
         
-        $check = imap_check($this->imap);
-        
         $items = array();
+        
+        $messageCount = imap_check($this->imap);
         
         $blnExpunge = false;
         
         // Fetch an overview for all messages in INBOX
-        $pagesize = 1000;
-        for($x=1; $x <= $check->Nmsgs; $x += $pagesize) {
-            $end = ($x + $pagesize) - 1;
-            
-            if ($end > $check->Nmsgs)
-                $end = $check->Nmsgs;
-            
-            $results = imap_fetch_overview($this->imap, $x.':'.$end, 0);
+        $listOverview = $this->buildOverviewList( $messageCount );
+        foreach($listOverview as $range) {
+            $results = imap_fetch_overview($this->imap, $range, $this->imapFetchOverviewOptions);
             
             for($y=0; $y < count($results); $y++) {
                 if ($results[$y]->deleted)
@@ -387,13 +396,13 @@ class ImapConnection {
                 $file = $this->determineEmailPath( $results[$y] );
                 
                 if (file_exists($file) == false) {
-                    $emlfile = $this->saveMessage('INBOX', $results[$y], $x+$y);
+                    $emlfile = $this->saveMessage('INBOX', $results[$y]);
                     
                     // new?
                     if ($emlfile) {
                         // apply filters
                         print "Applying filters\n";
-                        $result = $this->applyFilters($connector, $file, $x+$y);
+                        $result = $this->applyFilters($connector, $file, $results[$y]->uid);
                         
                         // filters applied? => expunge mailbox when finished
                         if (is_array($result)) {
@@ -437,7 +446,7 @@ class ImapConnection {
         return $items;
     }
     
-    protected function applyFilters($connector, $file, $messageNo) {
+    protected function applyFilters($connector, $file, $messageUid) {
         $isSpam = false;
         
         $p = new \PhpMimeMailParser\Parser();
@@ -476,11 +485,11 @@ class ImapConnection {
                     // found? => move
                     if ($f) {
                         if ($isSpam) {
-                            imap_setflag_full($this->imap, $messageNo, 'Junk');
-                            imap_setflag_full($this->imap, $messageNo, '$Junk');
+                            imap_setflag_full($this->imap, $messageUid, 'Junk', ST_UID);
+                            imap_setflag_full($this->imap, $messageUid, '$Junk', ST_UID);
                         }
                         
-                        if (imap_mail_move($this->imap, $messageNo, $f->getFolderName())) {
+                        if (imap_mail_move($this->imap, $messageUid, $f->getFolderName(), CP_UID)) {
                             
                         }
                         
@@ -559,9 +568,14 @@ class ImapConnection {
     }
     
     public function search($folder, $criteria=array()) {
-        if (!imap_reopen($this->imap, $this->mailbox.$folder))
-            return false;
+        // use current selected folder if $folder==null
+        if ($folder != null) {
+            if (imap_reopen($this->imap, $this->mailbox.$folder) == false) {
+                return false;
+            }
+        }
         
+        // build search criteria
         $str = '';
         foreach($criteria as $crit) {
             $key = $crit['key'];
@@ -601,13 +615,6 @@ class ImapConnection {
         return $uids;
     }
     
-    public function test( ){
-        $s = SolrMailQuery::readStaticById('/webmail/inbox/2020/04/08/e4b1a9e45b5cb730866e44525bc218e0.eml');
-        
-        $uids = $this->lookupId('INBOX', $s);
-        
-        var_export($uids);
-    }
     
     
 }

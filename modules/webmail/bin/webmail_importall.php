@@ -14,13 +14,12 @@
 
 
 use core\ObjectContainer;
+use core\parser\ArgumentParser;
 use webmail\mail\ImapConnection;
+use webmail\mail\SolrMailActions;
+use webmail\model\Connector;
 use webmail\service\ConnectorService;
 use webmail\solr\SolrImportMail;
-use webmail\solr\SolrMailQuery;
-use webmail\solr\SolrMailQueryResponse;
-use core\parser\ArgumentParser;
-use webmail\mail\SolrMailActions;
 
 if (count($argv) < 2) {
     print "Usage: {$argv[0]} <contextname> [-u] [--skip-folder-import] [--skip-connector-import]\n";
@@ -68,8 +67,9 @@ if ($argumentParser->hasOption('skip-connector-import') == false) {
         /** @var \webmail\model\Connector $c */
         $c = $connectorService->readConnector( $c->getConnectorId() );
         
+        
         // save last update time for incremental updates
-        object_meta_save(Connector::class, $c->getConnectorId(), 'webmail_importall-lastrun', time());
+        $start_time_run = time();
         
         if ($c->getConnectorType() == 'imap') {
             $ic = ImapConnection::createByConnector($c);
@@ -79,6 +79,12 @@ if ($argumentParser->hasOption('skip-connector-import') == false) {
             }
                 
             print "Connected to " . $c->getDescription() . "\n";
+            
+            // update only? just update messages from yesterday & today
+            if ( $updateOnly ) {
+                $ic->setSinceUpdate( date('Y-m-d', strtotime('-1 day')) );
+            }
+            
             
             $sentImapFolder =  $connectorService->readImapFolder( $c->getSentConnectorImapfolderId() );
             
@@ -109,6 +115,8 @@ if ($argumentParser->hasOption('skip-connector-import') == false) {
             
         }
         
+        // save time when run for Connector started, for incremental updates
+        object_meta_save(Connector::class, $c->getConnectorId(), 'webmail_importall-lastrun', $start_time_run);
     }
     
     print "DONE Connector import\n";
