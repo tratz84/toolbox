@@ -7,6 +7,7 @@ use core\controller\BaseController;
 use webmail\MailboxSearchSettings;
 use webmail\form\MailboxSearchSettingsForm;
 use webmail\solr\SolrMailQuery;
+use webmail\form\MailboxDashboardSettingsForm;
 
 class dashboardController extends BaseController {
     
@@ -56,10 +57,8 @@ class dashboardController extends BaseController {
             $formData = array();
         }
         
-        $this->form = new MailboxSearchSettingsForm();
+        $this->form = new MailboxDashboardSettingsForm();
         $this->form->bind( $formData );
-        $this->form->disableSubmit();
-        $this->form->hideSubmitButtons();
         
         $this->setShowDecorator(false);
         return $this->render();

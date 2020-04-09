@@ -50,6 +50,10 @@ class MailboxSearchSettings {
         if (isset($this->data['excludeFilters']) == false || is_array($this->data['excludeFilters']) == false) {
             $this->data['excludeFilters'] = array();
         }
+        
+        if (isset($this->data['hideFolderList']) == false || is_array($this->data['hideFolderList']) == false) {
+            $this->data['hideFolderList'] = array();
+        }
     }
     
     public function save() {
@@ -77,6 +81,21 @@ class MailboxSearchSettings {
             'filter_type' => $filter_type,
             'filter_value' => $filter_value
         );
+    }
+
+    public function clearHideFolders() { $this->data['hideFolderList'] = array(); }
+    public function getHideFolders() { return $this->data['hideFolderList']; }
+    public function addHideFolders($folderName) {
+        $this->data['hideFolderList'][] = array(
+            'folder_name' => trim( $folderName )
+        );
+    }
+    public function getHideFolderNameList() {
+        $l = array();
+        foreach($this->data['hideFolderList'] as $f) {
+            $l[] = $f['folder_name'];
+        }
+        return $l;
     }
     
     public function applyFilters(SolrMailQuery $smq) {

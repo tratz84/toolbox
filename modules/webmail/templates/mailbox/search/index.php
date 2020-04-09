@@ -211,7 +211,8 @@ t.setCallbackRenderDone(function() {
 	
 	var filters = this.lastResponse.filters;
 
-
+	var cff = $('<div class="facet-filter-item-container facet-folders" />');
+	cff.append('<div class="facet-header">'+_('Folders')+'</div>');
 	// folder-filters
 	if (filters.folders) {
 		for(var i in filters.folders) {
@@ -233,9 +234,10 @@ t.setCallbackRenderDone(function() {
 			// put it in a container
 			var c = $('<div />');
 			c.append( lbl );
-			$('.facet-filters').append( c );
+			cff.append( c );
 		}
 	}
+	$('.facet-filters').append(cff);
 	
 });
 

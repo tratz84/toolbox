@@ -31,8 +31,16 @@ class MailboxSearchSettingsForm extends \core\forms\CodegenBaseForm {
 		$w4->setName( 'excludeFilters' );
 		$w4->setMethodObjectList( 'excludeFilters' );
 		$this->addWidget( $w4 );
+		$w5 = new \core\forms\HtmlField('lblHide', NULL, t('Hide folders'));
+		$this->addWidget( $w5 );
+		$w6 = new \webmail\form\MailboxHideFolderListEdit();
+		$w6->setName( 'hideFolderList' );
+		$w6->setMethodObjectList( 'hideFolderList' );
+		$this->addWidget( $w6 );
 		
 	}
+
+
 
 
 }

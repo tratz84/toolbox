@@ -78,6 +78,8 @@ class searchController extends BaseController {
 	    }
 	    
 	    
+	    $mss = null;
+	    
 	    // TODO: hmz... this isn't the right way
 	    if ($mts) {
 	        $mts->applyFilters( $smq );
@@ -95,6 +97,20 @@ class searchController extends BaseController {
     	    $arr['listResponse'] = $lr;
     	    $arr['filters'] = array();
     	    $arr['filters']['folders'] = $smq->getFolders();
+    	    
+    	    // MailboxSearchSettings set? => apply filters
+    	    if ($mss) {
+    	        // folders to hide?
+    	        $listFoldersToHide = $mss->getHideFolderNameList();
+    	        $arr['filters']['folders'] = array_filter($arr['filters']['folders'], function($f) use ($listFoldersToHide) {
+    	            if (in_array($f['name'], $listFoldersToHide)) {
+    	                return false;
+    	            }
+    	            else {
+    	                return true;
+    	            }
+    	        });
+    	    }
     	    
     	    $this->json($arr);
 	    } catch(\Exception $ex) {
@@ -217,7 +233,6 @@ class searchController extends BaseController {
 	}
 	
 	public function action_settings_save() {
-	    
 	    $form = new MailboxSearchSettingsForm();
 	    $form->bind( $_REQUEST );
 	    
@@ -233,6 +248,7 @@ class searchController extends BaseController {
 	    $mss = new MailboxSearchSettings();
 	    $mss->clearIncludeFilters();
 	    $mss->clearExcludeFilters();
+	    $mss->clearHideFolders();
 	    
 	    /** @var \webmail\form\MailTabFilterListEdit $includeFilters */
 	    $includeFilters = $form->getWidget('includeFilters');
@@ -253,6 +269,18 @@ class searchController extends BaseController {
             
             $mss->addExcludeFilter($o['filter_type'], $o['filter_value']);
 	    }
+	    
+	    
+	    /** @var \webmail\form\MailboxHideFolderListEdit $hideFolders */
+	    $hideFolderList = $form->getWidget('hideFolderList');
+	    $objs = $hideFolderList->getObjects();
+	    foreach($objs as $o) {
+	        if (trim($o['folder_name']) == '')
+	            continue;
+	            
+            $mss->addHideFolders( $o['folder_name'] );
+	    }
+	    
 	    
 	    $mss->save();
 	    
