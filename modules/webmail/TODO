@@ -1,15 +1,16 @@
 
-- purge folders (Junk/Trash?)
 
 - assign to user (or usergroup?)
 - filters
 	- 'action' waarde zetten
 	- toewijzen gebruiker/groep (?)
 
-- search uitbreiden mailarchief (facet-search, zoeken op thread, ..?)
-	query voorbeeld, facet=true&facet.limit=-1&facet.field=action&facet.field=mailboxName
+- imap folder maintenance
 
 
+*- search uitbreiden mailarchief (facet-search, zoeken op thread, ..?)
+*	query voorbeeld, facet=true&facet.limit=-1&facet.field=action&facet.field=mailboxName
+* - purge folders (Junk/Trash?)
 * - junk markeren/afhandelen
 * - geflikker dashboard
 *  - in-reply-to header zetten (+ message-id?)
