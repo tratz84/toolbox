@@ -363,6 +363,8 @@ class SolrMailActions {
         $emlfile = get_data_file_safe('webmail/inbox', substr($id, 14)); // 14 = length of '/webmail/inbox'
         if ($emlfile) {
             unlink( $emlfile );
+            @unlink( $emlfile . '.sproperties' );
+            @unlink( $emlfile . '.tbproperties' );
         }
         
         return true;
