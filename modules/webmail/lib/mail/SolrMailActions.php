@@ -354,6 +354,45 @@ class SolrMailActions {
         return false;
     }
     
+    public function deleteSolrMail($id) {
+        // delete solr index
+        $sim = new SolrImportMail();
+        $sim->delete('id:'.solr_escapePhrase($id));
+        
+        // delete eml file
+        $emlfile = get_data_file_safe('webmail/inbox', substr($id, 14)); // 14 = length of '/webmail/inbox'
+        if ($emlfile) {
+            unlink( $emlfile );
+        }
+        
+        return true;
+    }
+    
+    
+    public function deleteSolrMailByQuery(SolrMailQuery $smq) {
+        $deleteCount = 0;
+        
+        // delete all documents in response
+        do {
+            $r = $smq->search();
+            $smq->setStart(0);
+            
+            // delete documents
+            $count = $smq->getRows();
+            for($x=0; $x < $count; $x++) {
+                $m = $r->getDocument($x);
+                
+                $this->deleteSolrMail( $m->id );
+                
+                $deleteCount++;
+            }
+            
+            // loop till 0 results
+        } while ($r->getNumFound() > 0);
+        
+        
+        return $deleteCount;
+    }
     
 }
 

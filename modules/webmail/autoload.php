@@ -11,6 +11,9 @@ use core\event\EventBus;
 use core\event\PeopleEvent;
 use webmail\service\ConnectorService;
 
+require_once __DIR__.'/lib/functions/misc.php';
+
+
 Context::getInstance()->enableModule('webmail');
 
 // core\db\mysql\MysqlTableGenerator::updateModule('webmail', true);
@@ -31,8 +34,9 @@ $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($e
     $ctx = Context::getInstance();
     
     if ($ctx->isExperimental()) {
-        $src->addItem('E-mail', 'Connectors',  '/?m=webmail&c=connector');
-        $src->addItem('E-mail', 'Filters',     '/?m=webmail&c=filter');
+        $src->addItem('E-mail', 'Connectors',     '/?m=webmail&c=connector');
+        $src->addItem('E-mail', 'Filters',        '/?m=webmail&c=filter');
+        $src->addItem('E-mail', t('Maintenance'), '/?m=webmail&c=maintenance/index');
     }
 }));
 

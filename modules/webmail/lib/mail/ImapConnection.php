@@ -532,6 +532,16 @@ class ImapConnection {
         return imap_append($this->imap, $this->mailbox.$mailbox, $message, "\\Seen");
     }
     
+    public function deleteFolder($folderName) {
+        if (!imap_reopen($this->imap, $this->mailbox.$folderName)) {
+            return false;
+        }
+        
+        $c = imap_check($this->imap);
+        
+        return imap_delete($this->imap, '1:'.$c->Nmsgs);
+    }
+    
     
     public function expunge() {
         return imap_expunge($this->imap);

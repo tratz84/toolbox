@@ -2,6 +2,8 @@
 
 namespace core\db\solr;
 
+use core\exception\InvalidArgumentException;
+
 class SolrQueryResponse {
     
     protected $solrQuery = null;
@@ -70,6 +72,13 @@ class SolrQueryResponse {
     }
     
     
+    public function getDocument($no) {
+        if (isset($this->response->response->docs) && $no >= 0 && $no < count($this->response->response->docs)) {
+            return $this->response->response->docs[$no];
+        }
+        
+        throw new InvalidArgumentException('Document not found');
+    }
     
     
     public function getDocuments() {

@@ -308,6 +308,15 @@ class SolrImportMail {
         get_url($this->solrUrl . '/update?commit=true');
     }
     
+    public function delete($rawQuery) {
+        post_url($this->solrUrl . '/update?commit=true', '<delete><query>'.$rawQuery.'</query></delete>', array(
+            'headers' => array('Content-type: text/xml')
+        ));
+        
+        return json_decode($d);
+    }
+    
+    
     public function truncate() {
         $d = post_url($this->solrUrl . '/update?commit=true', '<delete><query>*:*</query></delete>', array(
             'headers' => array('Content-type: text/xml')
