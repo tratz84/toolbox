@@ -180,14 +180,13 @@ class searchController extends BaseController {
 	
 	
 	public function action_savestate() {
+	    
+	    $ps = get_var('percentages');
+	    
 	    $state = array();
-	    
-	    $state['slider-ratio'] = array();
-	    if (is_array($_REQUEST['percentages'])) for($x=0; $x < count($_REQUEST['percentages']) && $x < 10; $x++) {
-	        if (!doubleval($_REQUEST['percentages'][$x])) break;
-	        $state['slider-ratio'][] = $_REQUEST['percentages'][$x];
-	    }
-	    
+	    $state['filterWidth'] = isset($ps['filterWidth']) ? $ps['filterWidth'] : 0.1;
+	    $state['mailHeaders'] = isset($ps['mailHeaders']) ? $ps['mailHeaders'] : 0.3;
+	    $state['mailContent'] = isset($ps['mailContent']) ? $ps['mailContent'] : 0.7;
 	    
 	    $user = $this->ctx->getUser();
 	    

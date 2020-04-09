@@ -6,7 +6,7 @@
 <style type="text/css">
 .pretty-split-pane-frame { padding: 0; }
 .pretty-split-pane-component-inner { padding: 0; }
-#mail-content { padding: 0 6px; }
+#mail-content { padding: 0 6px; height: calc(100% - 5px); }
 #top-component {
 	margin-bottom: 5px;
 	min-height: 50px;
@@ -21,6 +21,14 @@
 	min-height: 50px;
 }
 
+#left-component { width: 200px; min-width: 50px; }
+#vertical-divider { width: 5px; background-color: #f00; }
+
+.filter-container {
+    background-color: #fff;
+}
+
+
 </style>
 
 <div class="page-header">
@@ -33,26 +41,37 @@
 
 
 <div id="mail-container" class="pretty-split-pane-frame stretch-to-bottom">
-	<div class="split-pane horizontal-percent">
-		<div class="split-pane-component" id="top-component">
-			<div class="pretty-split-pane-component-inner">
-    			<div class="search-fields">
-    				<div class="toolbox" style="padding: 5px 5px 0 3px;">
-    					<input type="checkbox" name="f" title="filters" <?= $filtersEnabled ? 'checked=checked':'' ?> />
-    					<a href="javascript:void(0);" onclick="show_popup(<?= esc_json_attr(appUrl('/?m=webmail&c=mailbox/search&a=settings')) ?>);" class="fa fa-cog" style="font-size: 20px;"></a>
-    				</div>
-    				
-    				<input type="text" name="q" placeholder="<?= t('Search') ?>" style="width: calc(100% - 50px);" />
-    			</div>
-    			<div id="emailheader-table-container" style="max-height: calc(100% - 35px);"></div>
-			</div>
+
+	<div class="split-pane fixed-left">
+		<div class="split-pane-component filter-container" id="left-component">
+			left container
 		</div>
-		<div class="split-pane-divider" id="my-divider"></div>
-		<div class="split-pane-component" id="bottom-component">
-			<div id="mail-content" class="pretty-split-pane-component-inner">
-			</div>
+		<div class="split-pane-divider" id="vertical-divider"></div>
+		
+		<div class="split-pane-component mail-header-content-component" id="right-component">
+		
+        	<div class="split-pane horizontal-percent">
+        		<div class="split-pane-component mail-headers" id="top-component">
+        			<div class="search-fields">
+        				<div class="toolbox" style="padding: 5px 5px 0 3px;">
+        					<input type="checkbox" name="f" title="filters" <?= $filtersEnabled ? 'checked=checked':'' ?> />
+        					<a href="javascript:void(0);" onclick="show_popup(<?= esc_json_attr(appUrl('/?m=webmail&c=mailbox/search&a=settings')) ?>);" class="fa fa-cog" style="font-size: 20px;"></a>
+        				</div>
+        				
+        				<input type="text" name="q" placeholder="<?= t('Search') ?>" style="width: calc(100% - 50px);" />
+        			</div>
+        			<div id="emailheader-table-container" style="max-height: calc(100% - 35px);"></div>
+        		</div>
+        		<div class="split-pane-divider" id="my-divider"></div>
+        		<div class="split-pane-component pretty-split-pane-component-inner" id="bottom-component">
+        			<div id="mail-content"></div>
+        		</div>
+        	</div>
+		
 		</div>
+	
 	</div>
+
 </div>
 
 
@@ -64,20 +83,36 @@ var paneState = <?= json_encode($state) ?>;
 
 function execSplitPane() {
 	$('.split-pane').splitPane();
-	
-	if (paneState['slider-ratio'][0]) {
+
+	// set filter width
+	if (paneState['filterWidth']) {
+		var mcw = $('#mail-container').width();
+		var s = parseInt( mcw * paneState['filterWidth'] );
+		$('#mail-container .split-pane').splitPane('firstComponentSize', s);
+	}
+	// set mail header height
+	if (paneState['mailHeaders']) {
 		var mch = $('#mail-container').height();
-		
-		var s = parseInt( mch * paneState['slider-ratio'][0] );
-		$('.split-pane').splitPane('firstComponentSize', s);
+		var s = parseInt( mch * paneState['mailHeaders'] );
+		$('.mail-header-content-component .split-pane').splitPane('firstComponentSize', s);
 	}
 	
+	
 	$('.split-pane').on('dividerdragend', function() {
-		var p = [];
+		var p = {};
+
 		var totalHeight = $('#mail-container').height();
-		var tc = $('#mail-container #top-component').height();
-		p.push( tc / totalHeight );
-		p.push( 1-(tc / totalHeight) );
+		var totalWidth = $('#mail-container').width();
+		
+		// calculate percentages for filter-width + mail-container
+		var fw = $('.filter-container').width();
+		p.filterWidth = fw / totalWidth;
+		
+		
+		// calculate percentages for header + mail cnotent
+		var tc = $('#mail-container .mail-headers').height();
+		p.mailHeaders = tc / totalHeight;
+		p.mailContent = 1-(tc / totalHeight);
 		
 		$.ajax({
 			url: appUrl('/?m=webmail&c=mailbox/search&a=savestate'),
