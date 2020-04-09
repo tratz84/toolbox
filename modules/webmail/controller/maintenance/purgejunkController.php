@@ -62,6 +62,8 @@ class purgejunkController extends BaseController {
         // close session so user can continue
         session_write_close();
         
+        set_time_limit(0);
+        
         try {
             
             
