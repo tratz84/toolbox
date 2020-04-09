@@ -69,7 +69,7 @@ class purgejunkController extends BaseController {
             
             // solr-index + delete eml-files
             $smq = new SolrMailQuery();
-            $smq->addFacetSearch('mailboxName', ':', 'Blue Umbrella');
+            $smq->addFacetSearch('mailboxName', ':', $junkFolderName);
             
             $sma = new SolrMailActions();
             $sma->deleteSolrMailByQuery($smq);
