@@ -106,6 +106,8 @@ class SolrImportMail {
         $r['permissions']          = array();
         $r['server_properties_checksum'] = MailProperties::checksumServerProperties($emlFile);
         
+        $r['markDeleted'] = $mp->getMarkDeleted();
+        
         $r['userId'] = $mp->getUserId();
         
         // forcedAction set?

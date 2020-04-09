@@ -503,6 +503,15 @@ class ImapConnection {
         
         return null;
     }
+
+    
+    public function deleteMailByUid($folder, $uid) {
+        if (!imap_reopen($this->imap, $this->mailbox.$folder)) {
+            return false;
+        }
+        
+        return imap_delete($this->imap, $uid, FT_UID);
+    }
     
     
     public function moveMailByUid($uid, $sourceFolder, $targetFolder) {

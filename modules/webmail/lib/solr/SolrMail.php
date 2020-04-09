@@ -65,6 +65,7 @@ class SolrMail {
         return $dt->format('Y-m-d H:i:s');
     }
     
+    public function getConnectorId() { return @$this->jsonMail->connectorId; }
     public function getUserId() { return @$this->jsonMail->userId; }
     public function getAction() { return @$this->jsonMail->action; }
     

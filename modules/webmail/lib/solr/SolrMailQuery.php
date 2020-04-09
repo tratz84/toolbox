@@ -20,6 +20,7 @@ class SolrMailQuery extends SolrQuery {
         
         $this->setSort('date desc');
         $this->addFacetSearch('contextName', ':', $ctx->getContextName());
+        $this->addFacetSearch('markDeleted', ':', false);
         
         $this->addFacetField('mailboxName');
         $this->addFacetField('connectorId');
@@ -32,6 +33,7 @@ class SolrMailQuery extends SolrQuery {
         
         // MUST have
         $this->addFacetSearch('contextName', ':', ctx()->getContextName());
+        $this->addFacetSearch('markDeleted', ':', false);
     }
     
     

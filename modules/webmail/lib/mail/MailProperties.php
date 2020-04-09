@@ -145,6 +145,11 @@ class MailProperties {
     public function setJunk($bln) { $this->setToolboxProperty('junk', $bln ? true : false); }
     public function isJunk() { return $this->getProperty('junk', false); }
     
+    public function setMarkDeleted($bln) { $this->setToolboxProperty('markDeleted', $bln ? true : false); }
+    public function getMarkDeleted() { return $this->getProperty('markDeleted', false); }
+    
+    
+    
     public function setAction($a) {
         if (in_array($a, ['open', 'urgent', 'inprogress', 'done', 'ignored', 'replied', 'postponed']) == false) {
             throw new InvalidArgumentException('Invalid action');

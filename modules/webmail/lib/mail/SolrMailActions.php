@@ -11,6 +11,7 @@ use webmail\service\EmailService;
 use webmail\solr\SolrImportMail;
 use webmail\solr\SolrMail;
 use webmail\solr\SolrMailQuery;
+use core\exception\InvalidStateException;
 
 class SolrMailActions {
     
@@ -25,8 +26,14 @@ class SolrMailActions {
     
     public function setImapConnection($ic) { $this->imapConnection = $ic; }
     public function createImapConnection($connector) {
-        if ($this->imapConnection != null)
+        if ($this->imapConnection != null) {
+            if ($this->imapConnection->getConnector()->getConnectorId() != $connector->getConnectorId()) {
+                throw new InvalidStateException('debug this! returning wrong ImapConnection');
+            }
+            
             return $this->imapConnection;
+        }
+        
         
         $this->imapConnection = ImapConnection::createByConnector($connector);
     }
@@ -352,6 +359,34 @@ class SolrMailActions {
         }
         
         return false;
+    }
+    
+    public function deleteMail(SolrMail $mail) {
+        $mp = new MailProperties($mail->getEmlFile());
+        
+        // delete mail from imap-server
+        /** @var ConnectorService $connectorService */
+        $connectorService = object_container_get(ConnectorService::class);
+        
+        $connector = $connectorService->readConnector($mail->getConnectorId());
+        if ($connector && $connector->getConnectorType() == 'imap') {
+            $this->createImapConnection($connector);
+            
+            // try to connect
+            if ($this->imapConnection->isConnected() || $this->imapConnection->connect()) {
+                $this->imapConnection->deleteMailByUid($mail->getMailboxName(), $mp->getUid());
+                
+                $this->imapConnection->disconnect();
+            }
+        }
+        
+        
+        // mark as deleted
+        $mp->setMarkDeleted(true);
+        $mp->save();
+        
+        // update solr
+        $this->updateSolrFields($mail->getId(), ['markDeleted' => true]);
     }
     
     public function deleteSolrMail($id) {

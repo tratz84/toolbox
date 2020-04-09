@@ -437,7 +437,7 @@ function markMailAsham(row, email_id) {
 	});
 }
 
-function deleteMail(row, email_id) {
+function deleteMail(email_id) {
 	$.ajax({
 		url: appUrl('/?m=webmail&c=mailbox/mail&a=delete_mail'),
 		type: 'POST',

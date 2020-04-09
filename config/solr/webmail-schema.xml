@@ -26,7 +26,8 @@
     <field name="isRead"        type="boolean" indexed="true" stored="true" />
     <field name="isForwarded"   type="boolean" indexed="true" stored="true" />
     <field name="isSeen"        type="boolean" indexed="true" stored="true" />
-    <field name="isDeleted"     type="boolean" indexed="true" stored="true" />
+    <field name="isDeleted"     type="boolean" indexed="true" stored="true" />  <!-- IMAP property -->
+    <field name="markDeleted"   type="boolean" indexed="true" stored="true" />  <!-- toolbox property -->
 
     <field name="action"        type="string" indexed="true" stored="true" />
     <field name="userId"        type="pint"   indexed="true" stored="true" />
