@@ -448,8 +448,9 @@ function deleteMail(email_id) {
 			if (data.error) {
 				alert('Error: ' + data.message);
 			} else {
-// 				$(row).find('.td-mailbox-name').text('Junk');
-				$(row).remove();
+				// remove record & content from page
+				$('tr[email_id="'+email_id+'"]').remove();
+				$('#mail-content').empty();
 			}
 		}
 	});
