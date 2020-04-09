@@ -437,6 +437,24 @@ function markMailAsham(row, email_id) {
 	});
 }
 
+function deleteMail(row, email_id) {
+	$.ajax({
+		url: appUrl('/?m=webmail&c=mailbox/mail&a=delete_mail'),
+		type: 'POST',
+		data: {
+			email_id: email_id
+		},
+		success: function(data, xhr, textStatus) {
+			if (data.error) {
+				alert('Error: ' + data.message);
+			} else {
+// 				$(row).find('.td-mailbox-name').text('Junk');
+				$(row).remove();
+			}
+		}
+	});
+}
+
 
 function replyMail(email_id) {
 	window.open(appUrl('/?m=webmail&c=mailbox/mail&a=reply&email_id=' + email_id), '_self');

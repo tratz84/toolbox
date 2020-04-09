@@ -138,7 +138,7 @@ class searchController extends BaseController {
 	    }
 	    
 	    
-	    // TODO: implement..
+	    // forward/reply buttons
 	    $this->actionContainer->addItem('mail-forward', '<button class="btn-forward-mail" onclick="forwardMail('.esc_json_attr($emailId).');"><span class="fa fa-forward"></span>Forward</button>');
 	    $this->actionContainer->addItem('mail-reply', '<button class="btn-reply-mail" onclick="replyMail('.esc_json_attr($emailId).');"><span class="fa fa-reply"></span>Reply</button>');
 	    
@@ -190,9 +190,10 @@ class searchController extends BaseController {
     	    $spam_onclick = "if (confirm('Are you sure to mark this mail as spam?')) markMailAsSpam(".json_encode($emailId).");";
     	    $this->actionContainer->addItem('mark-as-spam', '<button title="'.esc_attr(t('Mark as spam')).'" onclick="' . esc_attr($spam_onclick) . '"><span class="fa fa-flag mark-as-spam"></span></button>');
 	    }
-	    
-	    // TODO: delete-button
-	    
+
+	    // delete-button
+	    $delete_onclick = "if (confirm('Are you sure to delete this mail?')) deleteMail(".json_encode($emailId).");";
+	    $this->actionContainer->addItem('delete-mail', '<button title="'.esc_attr(t('Delete mail')).'" onclick="' . esc_attr($delete_onclick) . '"><span class="fa fa-trash delete-mail"></span></button>');
 	    
 	    
 	    hook_eventbus_publish($this->actionContainer, 'webmail', 'mailbox-search');
