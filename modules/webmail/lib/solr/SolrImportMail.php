@@ -312,8 +312,6 @@ class SolrImportMail {
         post_url($this->solrUrl . '/update?commit=true', '<delete><query>'.$rawQuery.'</query></delete>', array(
             'headers' => array('Content-type: text/xml')
         ));
-        
-        return json_decode($d);
     }
     
     

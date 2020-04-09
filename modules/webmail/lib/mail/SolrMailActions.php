@@ -378,11 +378,9 @@ class SolrMailActions {
             $smq->setStart(0);
             
             // delete documents
-            $count = $smq->getRows();
-            for($x=0; $x < $count; $x++) {
-                $m = $r->getDocument($x);
-                
-                $this->deleteSolrMail( $m->id );
+            $docs = $smq->getDocuments();
+            foreach($docs as $doc) {
+                $this->deleteSolrMail( $doc->id );
                 
                 $deleteCount++;
             }

@@ -65,8 +65,6 @@ class purgejunkController extends BaseController {
         set_time_limit(0);
         
         try {
-            
-            
             // solr-index + delete eml-files
             $smq = new SolrMailQuery();
             $smq->addFacetSearch('mailboxName', ':', $junkFolderName);

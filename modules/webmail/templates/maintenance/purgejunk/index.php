@@ -28,7 +28,7 @@ function purge_Click() {
 	}
 
 	$('#btnPurge').prop('disabled', true);
-	$('#progress').html('<img src="'+appSettings.base_href+'images/ajax-loader-big.gif" /> Purging folder.. this can take a while (minuts)');
+	$('#progress').html('<img src="'+appSettings.base_href+'images/ajax-loader-big.gif" /> Purging folder.. this can take a while (minutes)');
 	
 	$.ajax({
 		type: 'POST',
