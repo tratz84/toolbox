@@ -15,6 +15,8 @@ use core\Context;
 
 Context::getInstance()->enableModule('base');
 
+module_update_handler('base', '20200410');
+
 
 $eb = ObjectContainer::getInstance()->get(EventBus::class);
 
@@ -67,6 +69,12 @@ $eb->subscribe('base', 'company-edit-footer', new CallbackPeopleEventListener(fu
     $companyId = $evt->getSource()->getSource()->getWidgetValue('company_id');
     if (!$companyId)
         return;
+
+    $html = get_component('base', 'notes', 'tab', array('companyId' => $companyId));
+    if ($html) {
+        $ftc->addTab(t('Notes'), $html, 5);
+    }
+
     
     if (hasCapability('base', 'list-activity')) {
         $html = get_component('base', 'activityOverview', 'index', array('companyId' => $companyId));

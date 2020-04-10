@@ -294,4 +294,15 @@ $tb_person_phone->addForeignKey('customer__person_phone_ibfk_2', 'phone_id', 'cu
 $tbs[] = $tb_person_phone;
 
 
+$tb_notes = new TableModel('base', 'note');
+$tb_notes->addColumn('note_id',    'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_notes->addColumn('ref_object', 'varchar(255)');
+$tb_notes->addColumn('ref_id',     'int');
+$tb_notes->addColumn('note',       'mediumtext');
+$tb_notes->addColumn('edited',     'datetime');
+$tb_notes->addColumn('created',    'datetime');
+$tb_notes->addIndex('index_ref_obj_id', array('ref_object', 'ref_id'), ['unique' => true]);
+$tbs[] = $tb_notes;
+
+
 return $tbs;
