@@ -1,6 +1,6 @@
 
 
-<div id="activity-table-container"></div>
+<div id="activity-table-container" class="stretch-to-bottom"></div>
 
 <script>
 
