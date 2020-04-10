@@ -138,6 +138,33 @@ class TableModel {
         $this->data['indexes'][$indexName] = array_merge($data, $props);
     }
     
+    public function hasIndexWithColumns($indexColumns) {
+        if (is_array($indexColumns) == false) {
+            $indexColumns = array($indexColumns);
+        }
+        
+        foreach($this->data['indexes'] as $indexName => $indexInfo) {
+            // column-count equal?
+            if (count($indexInfo['columns']) == count($indexColumns)) {
+                // count columns in index
+                $cnt = 0;
+                for($x=0; $x < count($indexColumns); $x++) {
+                    if (in_array($indexColumns[$x], $indexInfo['columns'])) {
+                        $cnt++;
+                    } else {
+                        break;
+                    }
+                }
+                
+                if ($cnt == count($indexColumns)) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+    
     
     public function getForeignKeys() {
         if (isset($this->data['foreignKeys'])) {
@@ -154,8 +181,9 @@ class TableModel {
         }
         
         // auto add index for foreign keys?
-        $this->addIndex($indexName, $columns);
-            
+        if ($this->hasIndexWithColumns($columns) == false) {
+            $this->addIndex($indexName, $columns);
+        }
         
         if (is_string($refColumns)) {
             $refColumns = array( $refColumns );
