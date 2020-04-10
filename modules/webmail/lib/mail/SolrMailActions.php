@@ -12,6 +12,7 @@ use webmail\solr\SolrImportMail;
 use webmail\solr\SolrMail;
 use webmail\solr\SolrMailQuery;
 use core\exception\InvalidStateException;
+use webmail\model\Email;
 
 class SolrMailActions {
     
@@ -284,7 +285,10 @@ class SolrMailActions {
     
     
     
-    public function saveEmailToConnector($connectorId, $emailId) {
+    /**
+     * $opts - 'use-email-created-date' - when true, use $email->getCreated() as Date-header in e-mail
+     */
+    public function saveEmailToConnector($connectorId, $emailId, $opts=array()) {
         /** @var ConnectorService $connectorService */
         $connectorService = object_container_get(ConnectorService::class);
         /** @var \webmail\model\Connector $connector */
@@ -304,6 +308,7 @@ class SolrMailActions {
         
         // get e-mail
         $emailService = object_container_get(EmailService::class);
+        /** @var Email $email */
         $email = $emailService->readEmail( $emailId );
    
         if (!$email) {
@@ -322,6 +327,12 @@ class SolrMailActions {
         // build eml-message
         $sendMail = SendMail::createMail($email);
         $emlMessage = $sendMail->buildMessage();
+        
+        // use created-date of email for sent-datetime? 
+        if (isset($opts['use-email-created-date']) && $opts['use-email-created-date']) {
+            $dt = new \DateTime($email->getCreated(), new \DateTimeZone('Europe/Amsterdam'));
+            $emlMessage->setDate($dt);
+        }
         
 //         $emlMessage = str_replace("\n", "\r\n", $emlMessage);
 //         print $emlMessage;exit; 
