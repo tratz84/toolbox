@@ -35,7 +35,8 @@ function purge_Click() {
 		url: appUrl('/?m=webmail&c=maintenance/purgefolder'),
 		data: {
 			a: 'purge',
-			connectorId: cid
+			connectorId: cid,
+			folderName: $('[name=folderName]').val()
 		},
 		success: function(data, xhr, textStatus) {
 			if (data.success) {
