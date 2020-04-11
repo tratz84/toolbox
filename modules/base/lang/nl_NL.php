@@ -83,9 +83,10 @@ $lang['Contact person']         = 'Contactpersoon';
 $lang['Coc number']             = 'Kvk nummer';
 $lang['VAT number']             = 'BTW nummer';
 $lang['Default selected']       = 'Standaard geselecteerd';
-
+$lang['Business customer']      = 'Zakelijk';
 
 // person
+$lang['Private customer']       = 'Particulier';
 $lang['Overview persons']       = 'Overzicht personen';
 $lang['Name']                   = 'Naam';
 $lang['Firstname']              = 'Voornaam';

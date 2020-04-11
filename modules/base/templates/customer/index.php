@@ -43,10 +43,10 @@ t.addColumn({
 	searchable: false,
 	render: function(record) {
 		if (record.type == 'person') {
-			return _('Person');
+			return _('Private customer');
 		}
 		else if (record.type == 'company') {
-			return _('Company');
+			return _('Business customer');
 		}
 		else {
 			return record.type;
