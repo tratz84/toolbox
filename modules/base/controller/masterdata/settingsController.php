@@ -41,7 +41,7 @@ class settingsController extends BaseController {
                 $settingsService->updateValue('PAGE_SIZE', $pageSize);
 
             $settingsService->updateValue('object_locking', get_var('object_locking')?1:0);
-            $settingsService->updateValue('customers_split', get_var('customer_split')?1:0);
+            $settingsService->updateValue('customers_split', get_var('customers_split')?1:0);
             $settingsService->updateValue('master_base_color', get_var('master_base_color'));
             
                 
