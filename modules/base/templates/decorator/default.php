@@ -31,7 +31,7 @@ $menuItems = $ms->listMainMenu();
 			var smallNavSideMenu = <?= json_encode( getJsState('small-nav-side-menu', 0) == '1' ? true : false ) ?>;
 		</script>
 
-		<script src="<?= appUrl('/?m=base&c=generatedjs&a=lang') ?>"></script>
+		<script src="<?= appUrl('/?m=base&c=js/dynamicscripts&a=lang') ?>"></script>
 		<script src="<?= BASE_HREF ?>js/jquery-3.3.1.min.js"></script>
 		<script src="<?= BASE_HREF ?>js/bootstrap.min.js"></script>
 

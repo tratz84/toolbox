@@ -3,7 +3,7 @@
 
 use core\controller\BaseController;
 
-class generatedjsController extends BaseController {
+class dynamicscriptsController extends BaseController {
     
     
     public function action_lang() {
