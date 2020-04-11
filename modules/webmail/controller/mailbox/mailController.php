@@ -56,7 +56,7 @@ class mailController extends BaseController {
         
         $f = $mail->getAttachmentFile( get_var('no') );
         
-        header('Content-type: ' . $f['contentType']);
+        header('Content-type: ' . file_mime_type($f['filename']));
         header('Content-disposition: inline; filename="' . $f['filename'] .'"');
         print $f['content'];
     }
