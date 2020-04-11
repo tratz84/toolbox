@@ -70,6 +70,8 @@ $lang['Remember me']            = 'Onthoud mij';
 $lang['Logon']                  = 'Aanmelden';
 $lang['Invalid username or password'] = 'Onjuiste gebruikersnaam of wachtwoord opgegeven';
 
+$lang['Person']                 = 'Persoon';
+$lang['Customers']              = 'Klanten';
 $lang['Overview customers']     = 'Overzicht klanten';
 $lang['Customer name']          = 'Klantnaam';
 $lang['Contact person']         = 'Contactpersoon';

@@ -16,8 +16,10 @@ class CustomerDAO extends \core\db\DAOObject {
     public function search($opts=array()) {
         $params = array();
  
-        if ($opts['companiesEnabled']) {
-            $sql1 = "select company_id id, 'company' as type, company_name as name, c.coc_number, c.vat_number, iban, bic, edited, created
+        $queryCompanies = true;
+        
+        if ($queryCompanies) {
+            $sql1 = "select company_id id, 'company' as type, company_name as name, contact_person, c.coc_number, c.vat_number, iban, bic, edited, created
                     from customer__company c ";
             
             $where1 = array();
@@ -32,22 +34,38 @@ class CustomerDAO extends \core\db\DAOObject {
                 $params[] = $opts['iban'];
             }
             
+            if (isset($opts['contact_person']) && $opts['contact_person']) {
+                $where1[] = ' c.contact_person LIKE ? ';
+                $params[] = '%'.str_replace(' ', '%', $opts['contact_person']).'%';
+            }
+        }
+        
+        
+        $queryPersons = true;
+        if (isset($opts['contact_person']) && $opts['contact_person']) {
+            $queryPersons = false;
         }
         
         $where2 = array();
-        if ($opts['personsEnabled']) {
+        $sql2='';
+        if ($queryPersons) {
             $where2[] = " customer__person.deleted = false ";
             
-            $sql2 = "select person_id id, 'person' as type, concat(lastname, ', ', insert_lastname, ' ', firstname) as name, '' as coc_number, '' as vat_number, iban, bic, edited, created
+            $sql2 = "select person_id id, 'person' as type, concat(lastname, ', ', insert_lastname, ' ', firstname) as name, '' as contact_person, '' as coc_number, '' as vat_number, iban, bic, edited, created
                     from customer__person ";
             if (isset($opts['name']) && trim($opts['name'])) {
-                $where2[] = ' concat(lastname, \', \', insert_lastname, \' \', firstname) like ? ';
-                $params[] = '%'.$opts['name'].'%';
+                $where2[] = ' concat(lastname, \', \', insert_lastname, \' \', firstname, \' \', insert_lastname, \' \', lastname) like ? ';
+                $params[] = '%'.str_replace(' ', '%', $opts['name']).'%';
             }
             
             if (isset($opts['iban']) && $opts['iban']) {
                 $where2[] = ' customer__person.iban = ? ';
                 $params[] = $opts['iban'];
+            }
+            
+            if (isset($opts['contact_person'])) {
+                $where2[] = ' concat(lastname, \', \', insert_lastname, \' \', firstname) like ? ';
+                $params[] = '%'.$opts['contact_person'].'%';
             }
             
             
@@ -64,7 +82,7 @@ class CustomerDAO extends \core\db\DAOObject {
         if (isset($sql1))
             $sql = $sql1;
         
-        if ($opts['personsEnabled']) {
+        if ($sql2) {
             if ($sql)
                 $sql .= ' union ';
             

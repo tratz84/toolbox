@@ -36,6 +36,25 @@ t.setConnectorUrl( '/?m=base&c=customer&a=search' );
 
 
 t.addColumn({
+	fieldName: 'type',
+	width: 40,
+	fieldDescription: 'Type',
+	fieldType: 'text',
+	searchable: false,
+	render: function(record) {
+		if (record.type == 'person') {
+			return _('Person');
+		}
+		else if (record.type == 'company') {
+			return _('Company');
+		}
+		else {
+			return record.type;
+		}
+	}
+});
+
+t.addColumn({
 	fieldName: 'name',
 	fieldDescription: _('Customer name'),
 	fieldType: 'text',
