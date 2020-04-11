@@ -33,8 +33,8 @@
     				<?php endif; ?>
     			</td>
     			<td><?= format_date($o['invoice_date']) ?></td>
-    			<td class="td-invoice">
-    				<a href="<?= appUrl('/?m=invoice&c=invoice&a=print&id='.$o['invoice_id']) ?>" class="fa fa-print" target="_blank"></a>
+    			<td class="td-invoice actions">
+    				<a href="<?= appUrl('/?m=invoice&c=invoice&a=edit&id='.$o['invoice_id']) ?>" class="fa fa-pencil"></a>
     			</td>
     		</tr>
     		<?php endforeach; ?>
@@ -59,6 +59,6 @@ function invoiceOverviewRow_Click(evt, invoiceId) {
 		return;
 	}
 	
-	window.location = appUrl('/?m=invoice&c=invoice&a=edit&id=' + invoiceId);
+	window.open( appUrl('/?m=invoice&c=invoice&a=print&id=' + invoiceId), '_blank' );
 }
 </script>

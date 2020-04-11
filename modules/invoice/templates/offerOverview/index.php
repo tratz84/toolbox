@@ -27,8 +27,8 @@
     			</td>
     			<td><?= esc_html($o['offer_status_description']) ?>
     			<td><?= format_date($o['created']) ?></td>
-    			<td class="td-offer">
-    				<a href="<?= appUrl('/?m=invoice&c=offer&a=print&id='.$o['offer_id']) ?>" class="fa fa-print" target="_blank"></a>
+    			<td class="td-offer actions">
+    				<a href="<?= appUrl('/?m=invoice&c=offer&a=edit&id='.$o['offer_id']) ?>" class="fa fa-pencil"></a>
     			</td>
     		</tr>
     		<?php endforeach; ?>
@@ -46,6 +46,6 @@ function offerOverviewRow_Click(evt, offerId) {
 		return;
 	}
 
-	window.location = appUrl('/?m=invoice&c=offer&a=edit&id=' + offerId);
+	window.open( appUrl('/?m=invoice&c=offer&a=print&id=' + offerId), '_blank' );
 }
 </script>
