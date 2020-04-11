@@ -2,22 +2,6 @@
 
 == Set up single-installation-mode ==
 
--- Create a MySQL database, restore the sql dumps in doc/sql --
-
-cat doc/sql/structure.sql | mysql -u root -p insights_github
-cat doc/sql/master.sql    | mysql -u root -p insights_github
-cat doc/sql/basedata.sql  | mysql -u root -p insights_github
-
-basedata.sql contains settings,
-- base__user-table, contains a default 'admin' user with password 'test123'. The application hashes passwords by default, but plain-text is also supported 
-- insights__customer-table, insights supports a multi-user/multi-database set-up. This table contains the databasename 'insights_github'. If you choose another database, change the value of the insights__customer.databaseName-column
-
-
--- Configure, copy config/config-sample.php to config/config-local.php --
-
-Read the instructions in the Php-file
-
-
 -- Composer packages
 
 run in the root of the project: composer install

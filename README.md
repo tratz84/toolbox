@@ -15,11 +15,15 @@ Currently the basis for an administrationsystem is build (in Dutch) with support
 
 
 ### TODO
-- most texts are in Dutch => translate to English
-- installation-mode / downloadable version with composer packages included
 - database editor
-- GUI-based form generator
 - GUI-based business rules system
+- calendar, link to customer
+- Customer (company/person) - tab Calendar events happened in past
+- Customer (company/person) - tab project-hours
+- Customer (company/person) - notes-tab
+- Notes
+	-- Basic message
+	-- checkbox 'important', shows a note prominent when viewing a customer
 
 
 
