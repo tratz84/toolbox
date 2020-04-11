@@ -125,28 +125,30 @@ class projectHourController extends BaseController {
             $ph = new ProjectHour();
         }
         
-        if (get_var('project_id')) {
-            $this->project = $projectService->readProject( get_var('project_id') );
-            $this->project_id = $this->project->getProjectId();
-            $this->company_id = $this->project->getCompanyId();
-            $this->person_id = $this->project->getPersonId();
-        }
-        if (get_var('company_id')) {
-            $this->company_id = (int)get_var('company_id');
-        }
-        if (get_var('person_id')) {
-            $this->person_id = (int)get_var('person_id');
+        if (is_get()) {
+            if (get_var('project_id')) {
+                $this->project = $projectService->readProject( get_var('project_id') );
+                $this->project_id = $this->project->getProjectId();
+                $this->company_id = $this->project->getCompanyId();
+                $this->person_id = $this->project->getPersonId();
+            }
+            if (get_var('company_id')) {
+                $this->company_id = (int)get_var('company_id');
+            }
+            if (get_var('person_id')) {
+                $this->person_id = (int)get_var('person_id');
+            }
         }
         
         $form = new ProjectHourForm( $this->company_id, $this->person_id );
         $form->bind($ph);
         
         if (isset($this->project_id) && $this->project_id) {
-            $form->getWidget('project_id')->setValue($this->project_id);
+            $form->bind(['project_id' => $this->project_id]);
         }
         
         if (is_post()) {
-            $form->bind($_REQUEST);
+            $form->bind($_POST);
             
             if ($form->validate()) {
                 $projectService->saveProjectHour($form);

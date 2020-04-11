@@ -18,6 +18,7 @@ use core\forms\validator\NotEmptyValidator;
 use project\service\ProjectService;
 use core\forms\DynamicSelectField;
 use project\model\ProjectHour;
+use base\service\CustomerService;
 
 class ProjectHourForm extends BaseForm {
     
@@ -144,8 +145,13 @@ class ProjectHourForm extends BaseForm {
 //                 if ($this->getWidget('person_name')) {
 //                     $name = $this->getWidgetValue('person_name');
 //                 }
-                if ($this->customerName)
+                if ($this->customerName) {
                     $name = $this->customerName . ' - ';
+                } else {
+                    $customerService = object_container_get( CustomerService::class );
+                    $customer = $customerService->readCustomerAuto( $project->getCompanyId(), $project->getPersonId() );
+                    $name = $customer->getName() . ' - ';
+                }
                 $name = $name . $project->getProjectName();
                 
                 $this->getWidget('project_id')->setDefaultText($name);
