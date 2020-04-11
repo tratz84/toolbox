@@ -60,7 +60,7 @@
 
 <script>
 
-var mailSplitPaneState = <?= json_encode($state) ?>;
+var mailSplitPaneState = <?= json_encode(getJsState('customer-mailbox-tab-state')) ?>;
 
 
 var it_webmail = new IndexTable('#emailheader-table-container', {
@@ -186,14 +186,9 @@ $(window).on('tabcontainer-item-click', function(e, f) {
 			var tc = $('#mail-container #top-component').height();
 			p.push( tc / totalHeight );
 			p.push( 1-(tc / totalHeight) );
-			
-			$.ajax({
-				url: appUrl('/?m=webmail&c=mailbox/tab&a=savestate'),
-				type: 'POST',
-				data: {
-					percentages: p
-				}
-			});
+
+			// save state
+			saveJsState('customer-mailbox-tab-state', p);
 		});
 
 		$(document).ready(function( ){
@@ -203,8 +198,12 @@ $(window).on('tabcontainer-item-click', function(e, f) {
 		// set focus to search-field
 		setTimeout(function() {
 			$('#mail-container [name=q]').focus();
-			var fcs = $('#mail-container').height() * mailSplitPaneState[0];
-			$('#mail-container .split-pane').splitPane('firstComponentSize', fcs);
+
+			// restore split pane state?
+			if (Array.isArray(mailSplitPaneState)) {
+    			var fcs = $('#mail-container').height() * mailSplitPaneState[0];
+    			$('#mail-container .split-pane').splitPane('firstComponentSize', fcs);
+			}
 		}, 500);
 	}
 	
