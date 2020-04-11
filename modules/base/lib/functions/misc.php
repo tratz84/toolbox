@@ -3,6 +3,7 @@
 
 
 
+use base\model\User;
 use core\db\DBObject;
 
 function format_customername($obj) {
@@ -26,4 +27,20 @@ function format_customername($obj) {
     
     return null;
 }
+
+
+
+function getJsState($key, $defaultValue=null, $userId=null) {
+    if ($userId == null) {
+        $userId = ctx()->getUser()->getUserId();
+    }
+    
+    $val = object_meta_get(User::class, $userId, 'js-'.$key);
+    if ($val !== null) {
+        return $val;
+    } else {
+        return $defaultValue;
+    }
+}
+
 

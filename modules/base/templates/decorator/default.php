@@ -27,6 +27,8 @@ $menuItems = $ms->listMainMenu();
 			     'standalone_installation' => is_standalone_installation(),
 			 ])
 			?>;
+
+			var smallNavSideMenu = <?= json_encode( getJsState('small-nav-side-menu', 0) == '1' ? true : false ) ?>;
 		</script>
 
 		<script src="<?= appUrl('/?m=base&c=generatedjs&a=lang') ?>"></script>
