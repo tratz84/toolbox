@@ -153,7 +153,9 @@ class projectHourController extends BaseController {
             if ($form->validate()) {
                 $projectService->saveProjectHour($form);
                 
-                redirect('/?m=project&c=projectHour&project_id='.$this->project->getProjectId());
+                $project_id = $form->getWidgetValue('project_id');
+                
+                redirect('/?m=project&c=projectHour&project_id=' . $project_id);
             }
         }
         
