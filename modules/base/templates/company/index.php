@@ -16,9 +16,7 @@
 
 <script>
 
-var t = new IndexTable('#company-table-container', {
-	focusSearchAterLoad: true
-});
+var t = new IndexTable('#company-table-container');
 
 t.setRowClick(function(row, evt) {
 	window.location = appUrl('/?m=base&c=company&a=edit&company_id=' + $(row).data('record').company_id);

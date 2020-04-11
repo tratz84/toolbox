@@ -39,7 +39,7 @@ $(document).ready(function() {
 	
 	autoformat_fields( $('.main-content form') );
 	
-	focusFirstField( $('.main-content form') );
+	focusFirstField( $('body.action-index table.list-response-table th, .main-content form') );
 	
 	var toolbox = $('.page-header .toolbox');
 	if (toolbox.length) {
@@ -292,13 +292,24 @@ function handle_resetFieldButton(objParent) {
 
 
 
-
 // development-environment only
+$(window).on('IndexTable-loaded-first-time', function(a, b) {
+	if (typeof less != 'undefined') {
+		less.pageLoadFinished.then(function() {
+			// form-page?
+			focusFirstField( $('body.action-index table.list-response-table th, .main-content form') );
+		});
+	}
+});
 if (typeof less != 'undefined') {
 	less.pageLoadFinished.then(function() {
-		focusFirstField( $('.main-content form') );
+		// form-page?
+		focusFirstField( $('body.action-index table.list-response-table th, .main-content form') );
 	});
 }
+
+
+
 
 /**
  * event handling submit-form-link rechtsboven formulier-pagina's

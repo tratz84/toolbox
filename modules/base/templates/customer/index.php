@@ -17,9 +17,7 @@
 
 <script>
 
-var t = new IndexTable('#person-table-container', {
-	focusSearchAterLoad: true
-});
+var t = new IndexTable('#person-table-container');
 
 t.setRowClick(function(row, evt) {
 	var type = $(row).data('record').type;

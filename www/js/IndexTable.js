@@ -22,6 +22,7 @@ function IndexTable( container, opts ) {
 	
 	this.pageNo = 1;
 	this.loading = false;
+	this.firstLoadCompleted = false;
 	this.sortField = null;
 	
 	this.callback_rowClick = null;
@@ -201,13 +202,11 @@ function IndexTable( container, opts ) {
 					me.render();
 					
 					me.loading = false;
-					
-					if (me.opts.focusSearchAterLoad) {
-						var els = $(me.container).find('thead').find('input[type=text]');
-						
-						if (els.length && els.is(':focus') == false)
-							els.get(0).focus();
-					}
+				}
+				
+				if (me.firstLoadCompleted == false) {
+					me.firstLoadCompleted = true;
+					$(window).trigger('IndexTable-loaded-first-time', this);
 				}
 			},
 			complete: function() {
