@@ -201,6 +201,12 @@ function IndexTable( container, opts ) {
 					me.render();
 					
 					me.loading = false;
+					
+					if (me.opts.focusSearchAterLoad) {
+						var els = $(me.container).find('thead').find('input[type=text]');
+						if (els.length)
+							els.get(0).focus();
+					}
 				}
 			},
 			complete: function() {
