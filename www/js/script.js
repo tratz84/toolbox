@@ -346,15 +346,6 @@ $(document).ready(function() {
 
 
 
-$(document).ready(function() {
-	if ( smallNavSideMenu ) {
-		$('body').addClass('small-nav-side-menu');
-		
-		$('.nav-side-menu-toggle').removeClass('fa-caret-left');
-		$('.nav-side-menu-toggle').addClass('fa-caret-right');
-
-	}
-});
 function navSideMenu_toggle() {
 	if ($('body').hasClass('small-nav-side-menu')) {
 		$('body').removeClass('small-nav-side-menu');

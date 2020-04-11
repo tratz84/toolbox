@@ -28,7 +28,6 @@ $menuItems = $ms->listMainMenu();
 			 ])
 			?>;
 
-			var smallNavSideMenu = <?= json_encode( getJsState('small-nav-side-menu', 0) == '1' ? true : false ) ?>;
 		</script>
 
 		<script src="<?= appUrl('/?m=base&c=js/dynamicscripts&a=lang') ?>"></script>
@@ -88,7 +87,7 @@ $menuItems = $ms->listMainMenu();
 		<?php print_htmlScriptLoader_inlineCss() ?>
 		
 	</head>
-<body class="<?= isset($body_class) ? $body_class : '' ?>">
+<body class="<?= isset($body_class) ? $body_class : '' ?> <?= getJsState('small-nav-side-menu', 0) == '1' ? 'small-nav-side-menu' : '' ?>">
     <header>
         <div class="notifications-bar">
             <div class="notifications-right">
@@ -99,7 +98,7 @@ $menuItems = $ms->listMainMenu();
                 <a href="<?= appUrl('/?m=base&c=auth&a=logoff') ?>" class="fa fa-sign-out" title="Afmelden"></a>
             </div>
             <div class="administration-name">
-	            <a href="javascript:void(0);" class="nav-side-menu-toggle fa fa-caret-left" onclick="navSideMenu_toggle();"></a>
+	            <a href="javascript:void(0);" class="nav-side-menu-toggle fa <?= getJsState('small-nav-side-menu', 0) == '1' ? 'fa-caret-right' : 'fa-caret-left' ?>" onclick="navSideMenu_toggle();"></a>
             
             	<div class="administration-name"><a href="<?= appUrl('/') ?>" title="Dashboard"><?= apply_filter('base-decorator-administration-name', esc_html($context->getCompanyName())) ?></a></div>
             </div>
