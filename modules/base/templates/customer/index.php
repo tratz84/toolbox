@@ -1,8 +1,8 @@
 
 <div class="page-header">
 	<div class="toolbox list-toolbox">
-		<a href="<?= appUrl('/?m=base&c=person&a=edit') ?>" class="fa fa-user"></a>
-		<a href="<?= appUrl('/?m=base&c=company&a=edit') ?>" class="fa fa-building-o"></a>
+		<a href="<?= appUrl('/?m=base&c=person&a=edit') ?>" class="fa fa-user" title="<?= t('New person') ?>"></a>
+		<a href="<?= appUrl('/?m=base&c=company&a=edit') ?>" class="fa fa-building-o" title="<?= t('New company') ?>"></a>
 	</div>
 	
     <h1><?= t('Overview customers') ?></h1>
