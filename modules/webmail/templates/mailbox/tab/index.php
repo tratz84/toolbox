@@ -128,18 +128,9 @@ it_webmail.addColumn({
 });
 
 it_webmail.addColumn({
-	fieldName: 'status',
-	fieldDescription: 'Status',
-	fieldType: 'text',
-	render: function(record) {
-		if (record.status == 'draft') {
-			return 'Concept';
-		} else if (record.status == 'sent') {
-			return 'Verzonden';
-		} else {
-			return record.status;
-		}
-	}
+	fieldName: 'action',
+	fieldDescription: 'Action',
+	fieldType: 'text'
 });
 
 it_webmail.addColumn({

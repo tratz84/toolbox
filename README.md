@@ -24,7 +24,7 @@ Currently the basis for an administrationsystem is build (in Dutch) with support
 - Notes
 	-- Basic message
 	-- checkbox 'important', shows a note prominent when viewing a customer
-
+- Option to show Companies & Persons in 1 overview instead of 2 separate pages
 
 
 ### Installation 
