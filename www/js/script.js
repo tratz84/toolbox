@@ -347,54 +347,28 @@ $(document).ready(function() {
 
 
 $(document).ready(function() {
-	
-	if (sessionStorage.getItem('floating-nav-side-menu') == true || sessionStorage.getItem('floating-nav-side-menu') == 'true') {
-		$('body').addClass('floating-nav-side-menu');
+	if (sessionStorage.getItem('small-nav-side-menu') == true || sessionStorage.getItem('small-nav-side-menu') == 'true') {
+		$('body').addClass('small-nav-side-menu');
 		
 		$('.nav-side-menu-toggle').removeClass('fa-caret-left');
 		$('.nav-side-menu-toggle').addClass('fa-caret-right');
 
 	}
-	
-	$(window).mousemove(function(evt) {
-		if ($('body').hasClass('floating-nav-side-menu') == false) {
-			return;
-		}
-		
-		if ($('.nav-side-menu').css('display') == 'block') {
-			var w = $('.nav-side-menu').width();
-			
-			// childmenu support
-			var cmw = $('.nav-side-menu .child-menu:visible').width();
-			if (isNaN(cmw) == false)
-				w += cmw;
-			
-			if (evt.clientX >= w) {
-				$('.nav-side-menu').css('display', 'none');
-			}
-		} else {
-			if (evt.clientX < 10) {
-				$('.nav-side-menu').css('display', 'block');
-			} else {
-				$('.nav-side-menu').css('display', 'none');
-			}
-		}
-	});
 });
 function navSideMenu_toggle() {
-	if ($('body').hasClass('floating-nav-side-menu')) {
-		$('body').removeClass('floating-nav-side-menu');
+	if ($('body').hasClass('small-nav-side-menu')) {
+		$('body').removeClass('small-nav-side-menu');
 		$('.nav-side-menu').css('display', 'block');
 		$('.nav-side-menu-toggle').removeClass('fa-caret-right');
 		$('.nav-side-menu-toggle').addClass('fa-caret-left');
 		
-		sessionStorage.setItem('floating-nav-side-menu', false);
+		sessionStorage.setItem('small-nav-side-menu', false);
 	} else {
-		$('body').addClass('floating-nav-side-menu');
+		$('body').addClass('small-nav-side-menu');
 		$('.nav-side-menu-toggle').removeClass('fa-caret-left');
 		$('.nav-side-menu-toggle').addClass('fa-caret-right');
 		
-		sessionStorage.setItem('floating-nav-side-menu', true);
+		sessionStorage.setItem('small-nav-side-menu', true);
 	}
 }
 

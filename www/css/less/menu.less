@@ -13,12 +13,22 @@ header .notifications-bar {
 		}
 	}
 }
-.floating-nav-side-menu {
+.small-nav-side-menu {
 	.nav-side-menu {
-		display: none;
+		width: 38px;
+		
+		> .menu-list > .menu-content > .menu-item {
+			> a > span { display: none; }
+			
+			> .nav-link {
+				padding-left: 4px;
+				padding-right: 5px;
+			}
+		}
+			
 	}
 	.main-content {
-		margin-left: 10px;
+		margin-left: 58px;
 	}
 }
 
@@ -178,8 +188,10 @@ header .notifications-bar {
 @media (max-width: 767px) {
 	.nav-side-menu {
 		position: relative;
-		width: 100%;
+		width: 100% !important;
 		margin-bottom: 10px;
+		
+		span { display: inline !important; }
 	}
 
 	.nav-side-menu .toggle-btn {
