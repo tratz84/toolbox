@@ -89,9 +89,6 @@ class SettingsService extends ServiceBase {
         
         $objMetas = array();
         
-        $objMetas[] = new ModuleMeta('companies', 'Bedrijven module', 'Beheer van bedrijven', 10);
-        $objMetas[] = new ModuleMeta('persons',   'Personen module',  'Naast beheer van bedrijven ook particulieren', 20);
-        
         
         $modules = module_list();
         foreach($modules as $moduleName => $path) {

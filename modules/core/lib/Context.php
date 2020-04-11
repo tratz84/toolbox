@@ -171,8 +171,12 @@ class Context
     }
     
     public function getPageSize() { return $this->getSetting('PAGE_SIZE'); }
-    public function isPersonsEnabled() { return $this->getSetting('personsEnabled') ? true : false; }
-    public function isCompaniesEnabled() { return $this->getSetting('companiesEnabled') ? true : false; }
+    // deprecated..
+    public function isPersonsEnabled() { return true; }   // $this->getSetting('personsEnabled') ? true : false; }
+    public function isCompaniesEnabled() { return true; } // $this->getSetting('companiesEnabled') ? true : false; }
+    
+    public function isCustomersSplit() { return $this->getSetting('customers_split', true); }
+    
     public function getLogoFile() { return $this->getSetting('logoFile'); }
     
     public function isInvoiceModuleEnabled() { return $this->getSetting('invoiceModuleEnabled', false); }

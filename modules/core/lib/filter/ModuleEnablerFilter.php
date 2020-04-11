@@ -39,6 +39,11 @@ class ModuleEnablerFilter {
             if (file_exists($path . '/autoload.php') == false)
                 continue;
             
+            // already loaded? => skip (base module..)
+            if (ctx()->isModuleEnabled($moduleName)) {
+                continue;
+            }
+            
             // load meta-info
             $meta = load_php_file( $path . '/meta.php' );
             

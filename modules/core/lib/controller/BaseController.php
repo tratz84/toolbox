@@ -71,7 +71,12 @@ class BaseController {
             $this->getModuleName();
         }
         
-        return $this->controllerPath;
+        $p = $this->controllerPath;
+        
+        if (endsWith($p, 'Controller'))
+            $p = substr($p, 0, strlen($p) - strlen('Controller'));
+        
+        return $p;
     }
     
     

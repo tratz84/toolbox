@@ -94,3 +94,17 @@ $eb->subscribe('base', 'person-edit-footer', new CallbackPeopleEventListener(fun
 }));
 
 
+// customers handles as one? => redirect links to company-/person-overview to customer-overview
+if (ctx()->isCustomersSplit() == false) {
+    add_filter('appUrl', function($url) {
+        if (endsWith($url, '/?m=base&c=company') || endsWith($url, '/?m=base&c=person')) {
+            return appUrl('/?m=base&c=customer');
+        }
+        
+        return $url;
+    });
+}
+
+
+
+

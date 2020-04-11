@@ -20,8 +20,14 @@ class MenuDAO extends \core\db\DAOObject {
 	    
 	    $arr = array();
 	    $arr[] = array('menu_code' => 'dashboard',       'sort' => 100, 'visible' => 1, 'icon' => 'fa-dashboard', 'label' => 'Dashboard', 'url' => '/');
-	    $arr[] = array('menu_code' => 'company',         'sort' => 200, 'visible' => 1, 'icon' => 'fa-user',      'label' => 'Bedrijven', 'url' => '/?m=base&c=company');
-	    $arr[] = array('menu_code' => 'person',          'sort' => 300, 'visible' => 1, 'icon' => 'fa-user',      'label' => 'Personen',  'url' => '/?m=base&c=person');
+	    
+	    if (ctx()->isCustomersSplit()) {
+    	    $arr[] = array('menu_code' => 'company',         'sort' => 200, 'visible' => 1, 'icon' => 'fa-user',      'label' => 'Bedrijven', 'url' => '/?m=base&c=company');
+    	    $arr[] = array('menu_code' => 'person',          'sort' => 300, 'visible' => 1, 'icon' => 'fa-user',      'label' => 'Personen',  'url' => '/?m=base&c=person');
+	    }
+	    else {
+	        $arr[] = array('menu_code' => 'customer',        'sort' => 200, 'visible' => 1, 'icon' => 'fa-user',      'label' => t('Customers'),  'url' => '/?m=base&c=customer');
+	    }
 // 	    $arr[] = array('menu_code' => 'webmail',         'sort' => 700, 'visible' => 1);
 	    $arr[] = array('menu_code' => 'todo',            'sort' => 800, 'visible' => 1);
 	    

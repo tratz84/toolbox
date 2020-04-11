@@ -35,11 +35,16 @@ class MenuService extends ServiceBase {
             if ($ctx->isModuleEnabled('base')) {
                 $enabledMenus[] = 'dashboard';
                 
-                if ($ctx->getSetting('companiesEnabled'))
+                if ($ctx->isCustomersSplit())
                     $enabledMenus[] = 'company';
+                
                 $enabledMenus[] = 'masterdata';
-                if ($ctx->isPersonsEnabled())
+                
+                if ($ctx->isCustomersSplit())
                     $enabledMenus[] = 'person';
+                
+                if (!$ctx->isCustomersSplit())
+                    $enabledMenus[] = 'customer';
             }
             
             if ($ctx->isModuleEnabled('invoice')) {

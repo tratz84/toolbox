@@ -9,6 +9,11 @@ use base\service\PersonService;
 class customerController extends BaseController {
     
     
+    public function action_index() {
+        
+        $this->render();
+    }
+    
     
     public function action_search() {
         $pageNo = isset($_REQUEST['pageNo']) ? (int)$_REQUEST['pageNo'] : 0;

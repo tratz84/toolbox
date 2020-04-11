@@ -41,6 +41,7 @@ class settingsController extends BaseController {
                 $settingsService->updateValue('PAGE_SIZE', $pageSize);
 
             $settingsService->updateValue('object_locking', get_var('object_locking')?1:0);
+            $settingsService->updateValue('customers_split', get_var('customer_split')?1:0);
             $settingsService->updateValue('master_base_color', get_var('master_base_color'));
             
                 
@@ -49,6 +50,9 @@ class settingsController extends BaseController {
         
         $this->checkboxObjectLocking = new CheckboxField('object_locking', @$this->settings['object_locking']?'1':'0', 'Object locking');
         $this->checkboxObjectLocking->setInfoText(t('Possibility to mark objects as "locked"'));
+
+        $this->checkboxSplitCustomers = new CheckboxField('customers_split', ctx()->isCustomersSplit(), 'Split customers');
+        $this->checkboxSplitCustomers->setInfoText(t('Split customers into persons/companies?'));
         
         $this->render();
     }
@@ -108,6 +112,12 @@ class settingsController extends BaseController {
         
         if (strrpos($moduleName, 'Module') !== false) {
             $moduleName = substr($moduleName, 0, strrpos($moduleName, 'Module'));
+        }
+        
+        // don't
+        if ($moduleName == 'base') {
+            report_user_error('Unable to de-activate base module');
+            redirect('/?m=base&c=masterdata/settings');
         }
         
         // de-activation script?
