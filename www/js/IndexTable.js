@@ -204,7 +204,8 @@ function IndexTable( container, opts ) {
 					
 					if (me.opts.focusSearchAterLoad) {
 						var els = $(me.container).find('thead').find('input[type=text]');
-						if (els.length)
+						
+						if (els.length && els.is(':focus') == false)
 							els.get(0).focus();
 					}
 				}
