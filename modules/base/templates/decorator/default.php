@@ -128,7 +128,9 @@ $menuItems = $ms->listMainMenu();
     			 }
     			?>
 				<li class="menu-item">
-					<a class="nav-link <?= $active ? 'active' : '' ?> weight-<?= $mi->getWeight() ?>" href="<?= appUrl($mi->getUrl()) ?>">
+					<a class="nav-link <?= $active ? 'active' : '' ?> weight-<?= $mi->getWeight() ?>" 
+						href="<?= appUrl($mi->getUrl()) ?>"
+						title="<?= esc_attr($mi->getLabel()) ?>">
 						<i class="fa <?= $mi->getIcon() ?>"></i> 
 						<span class="menu-label"><?= esc_html($mi->getLabel()) ?></span>
 					</a>
