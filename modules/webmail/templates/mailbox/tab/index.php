@@ -112,6 +112,21 @@ it_webmail.addColumn({
 	fieldType: 'text',
 	searchable: false
 });
+
+it_webmail.addColumn({
+	fieldName: 'props',
+	fieldDescription: '',
+	fieldType: 'text',
+	searchable: false,
+	render: function(row) {
+		var c = $('<div />');
+		if (row.has_file_attachments) {
+			c.append('<span class="fa fa-paperclip" />');
+		}
+		return c;
+	}
+});
+
 it_webmail.addColumn({
 	fieldName: 'status',
 	fieldDescription: 'Status',

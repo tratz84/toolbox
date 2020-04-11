@@ -115,6 +115,7 @@ class SolrMailQuery extends SolrQuery {
             $mh['from_name']    = $mail->getFromName();
             $mh['from_email']   = $mail->getFromEmail();
             $mh['action']       = $mail->getAction();
+            $mh['has_file_attachments'] = $mail->hasFileAttachments();
             
             $mh['answered']     = $mail->isAnswered();
             $mh['seen']         = $mail->isSeen();

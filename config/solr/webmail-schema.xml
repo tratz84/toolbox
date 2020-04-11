@@ -28,6 +28,8 @@
     <field name="isSeen"        type="boolean" indexed="true" stored="true" />
     <field name="isDeleted"     type="boolean" indexed="true" stored="true" />  <!-- IMAP property -->
     <field name="markDeleted"   type="boolean" indexed="true" stored="true" />  <!-- toolbox property -->
+    
+    <field name="attachmentCount" type="pint" indexed="true" stored="true" />  <!-- mail has attachments? -->
 
     <field name="action"        type="string" indexed="true" stored="true" />
     <field name="userId"        type="pint"   indexed="true" stored="true" />

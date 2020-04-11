@@ -73,6 +73,7 @@ class SolrMail {
     public function isSeen() { return @$this->jsonMail->isSeen; }
     public function isJunk() { return @$this->jsonMail->isJunk; }
     
+    public function hasFileAttachments() { return @$this->jsonMail->attachmentCount > 0 ? true : false; }
     
     public function getAttachments() { $this->parseMail(); return $this->attachments; }
     public function getAttachmentFile($fileno) {

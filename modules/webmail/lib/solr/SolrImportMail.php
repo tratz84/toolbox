@@ -106,7 +106,8 @@ class SolrImportMail {
         $r['permissions']          = array();
         $r['server_properties_checksum'] = MailProperties::checksumServerProperties($emlFile);
         
-        $r['markDeleted'] = $mp->getMarkDeleted();
+        $r['markDeleted']          = $mp->getMarkDeleted();
+        $r['attachmentCount']      = $this->attachmentCount($p);
         
         $r['userId'] = $mp->getUserId();
         
@@ -149,6 +150,30 @@ class SolrImportMail {
 
         return $r;
     }
+    
+    protected function attachmentCount(\PhpMimeMailParser\Parser $p) {
+        $att = $p->getAttachments(true);
+        
+        $attachmentCount = 0;
+        
+        foreach($att as $at) {
+            $attHeaders = $at->getHeaders();
+            
+            if (isset($attHeaders['content-id'])) {
+                // content-id set? => attachment used in e-mail. Don't count as attachment
+            }
+            else if (isset($attHeaders['content-disposition']) && stripos($attHeaders['content-disposition'], 'attachment') !== false) {
+                $attachmentCount++;
+            }
+            else if ($at->getContentDisposition() == 'attachment') {
+                // not sure to count this one
+                $attachmentCount++;
+            }
+        }
+        
+        return $attachmentCount;
+    }
+    
     
     /**
      * buildRefMessageIds() - returns array with all id's that reference this eml (In-Reply-To, References, Thread-Index)
