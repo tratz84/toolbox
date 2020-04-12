@@ -31,6 +31,7 @@ $dh = \core\db\DatabaseHandler::getInstance();
 $dh->addServer('default', DEFAULT_DATABASE_HOST, DEFAULT_DATABASE_USERNAME, DEFAULT_DATABASE_PASSWORD, \core\Context::getInstance()->getCustomer()->getDatabaseName());
 
 
+/** @var ConnectorService $connectorService */
 $connectorService = ObjectContainer::getInstance()->get(ConnectorService::class);
 
 $monitors = array();
@@ -54,7 +55,21 @@ while (true) {
             
             // monitor changed? => stop current
             if (isset($monitors[$connectorId])) {
+                $connectorChanged = false;
+                // connector edited?
                 if ($monitors[$connectorId]->getConnector()->getEdited() != $c->getEdited()) {
+                    $connectorChanged = true;
+                }
+                // filter has changed?
+                else {
+                    $lastFilterChange = $connectorService->lastFilterChange( $connectorId );
+                    if ($monitors[$connectorId]->getConnector()->getField('last_filter_change') != $lastFilterChange) {
+                        $connectorChanged = true;
+                    }
+                }
+                
+                // connector changed? => stop
+                if ($connectorChanged) {
                     print "Stopping monitor for: " . $c->getDescription() . " (changed)\n";
                     $monitors[$connectorId]->stop();
                     unset( $monitors[$connectorId] );
@@ -66,6 +81,11 @@ while (true) {
                 // get instance with all properties loaded
                 $c = $connectorService->readConnector( $connectorId );
                 
+                // save edited-field last changed filter
+                $lastFilterChange = $connectorService->lastFilterChange( $c->getConnectorId() );
+                $c->getField('last_filter_change', $lastFilterChange);
+                
+                // connect
                 if ($c->getConnectorType() == 'imap') {
                     print "Starting monitor for: " . $c->getDescription() . "\n";
                     $im = new ImapMonitor($c);
@@ -103,7 +123,7 @@ while (true) {
     }
     
     
-    foreach($monitors as $cid => $monitor) {
+    if (false) foreach($monitors as $cid => $monitor) {
         if ($monitor->poll()) {
             // TODO: fetch new mail
             print "Check it!\n";

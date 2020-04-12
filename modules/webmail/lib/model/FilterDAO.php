@@ -33,6 +33,14 @@ class FilterDAO extends \core\db\DAOObject {
 	    
 	    return intval($s) + 1;
 	}
+	
+	public function getLastFilterChangeForConnector($connectorId) {
+	    $sql = "select max(edited)
+                from webmail__filter 
+                where connector_id = ?";
+	    
+	    return $this->queryValue($sql, array($connectorId));
+	}
 
 }
 

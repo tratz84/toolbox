@@ -294,6 +294,11 @@ class ConnectorService extends ServiceBase {
 
     }
     
+    public function lastFilterChange($connectorId) {
+        $fDao = new FilterDAO();
+        
+        return $fDao->getLastFilterChangeForConnector( $connectorId );
+    }
     
     
     
