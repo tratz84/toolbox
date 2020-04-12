@@ -58,10 +58,12 @@ while (true) {
                 $connectorChanged = false;
                 // connector edited?
                 if ($monitors[$connectorId]->getConnector()->getEdited() != $c->getEdited()) {
+                    print "Connector settings changed for $connectorId\n";
                     $connectorChanged = true;
                 }
                 // filter has changed?
                 else {
+                    print "Filters changed for $connectorId\n";
                     $lastFilterChange = $connectorService->lastFilterChange( $connectorId );
                     if ($monitors[$connectorId]->getConnector()->getField('last_filter_change') != $lastFilterChange) {
                         $connectorChanged = true;
@@ -83,7 +85,7 @@ while (true) {
                 
                 // save edited-field last changed filter
                 $lastFilterChange = $connectorService->lastFilterChange( $c->getConnectorId() );
-                $c->getField('last_filter_change', $lastFilterChange);
+                $c->setField('last_filter_change', $lastFilterChange);
                 
                 // connect
                 if ($c->getConnectorType() == 'imap') {
@@ -123,7 +125,7 @@ while (true) {
     }
     
     
-    if (false) foreach($monitors as $cid => $monitor) {
+    foreach($monitors as $cid => $monitor) {
         if ($monitor->poll()) {
             // TODO: fetch new mail
             print "Check it!\n";
