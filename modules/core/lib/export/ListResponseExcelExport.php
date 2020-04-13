@@ -122,10 +122,10 @@ class ListResponseExcelExport {
         if ($no >= strlen($str)) {
             $no2 = ($no-($no%strlen($str))) / strlen($str);
             
-            $char .= $str{$no2-1};
+            $char .= $str[ $no2-1 ];
         }
         
-        $char = $char . $str{($no%26)};
+        $char = $char . $str[ ($no%26) ];
         
         return $char;
         

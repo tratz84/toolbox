@@ -270,7 +270,7 @@ class SqlQueryParser {
         
         while($state['pos'] < $len) {
             $p = $state['pos'];         // current pos`
-            $c = $sql{$p};              // current character
+            $c = $sql[$p];              // current character
             
             // ignore carriage returns
             if ($c == '\r') {

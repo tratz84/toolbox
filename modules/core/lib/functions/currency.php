@@ -30,7 +30,7 @@ function format_price($amount, $include_currency_sign = true, $opts=array())
             $a .= $thousands;
         }
         
-        $a .= $left{$x};
+        $a .= $left[ $x ];
     }
     
     $a .= ',' . $right;
@@ -302,7 +302,7 @@ function validate_iban($no) {
     $account_nr = $account_nr . $country . '00';
     $nr = '';
     for($x=0; $x < strlen($account_nr); $x++) {
-        $c = $account_nr{$x};
+        $c = $account_nr[ $x ];
         if (isset($char_to_num[$c])) {
             $nr .= $char_to_num[$c];
         } else {

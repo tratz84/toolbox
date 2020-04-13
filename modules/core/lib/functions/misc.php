@@ -1276,9 +1276,9 @@ function cleanup_string($string) {
     
     $str = '';
     for($x=0; $x < strlen($string); $x++) {
-        $c = ord($string{$x});
+        $c = ord($string[$x]);
         if ($c == 9 || $c == 10 || $c == 13 || ($c >= 32 && $c <= 126)) {
-            $str .= $string{$x};
+            $str .= $string[$x];
         }
     }
     

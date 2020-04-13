@@ -35,15 +35,15 @@ function dbCamelCase($tableName) {
     $blnPrevWasUnderscore = true;
     
     for($x=0; $x < strlen($tableName); $x++) {
-        if ($tableName{$x} != '_') {
+        if ($tableName[$x] != '_') {
             if ($blnPrevWasUnderscore) {
-                $str .= strtoupper($tableName{$x});
+                $str .= strtoupper($tableName[$x]);
             } else {
-                $str .= $tableName{$x};
+                $str .= $tableName[$x];
             }
         }
         
-        $blnPrevWasUnderscore = ($tableName{$x} == '_') ? true : false;
+        $blnPrevWasUnderscore = ($tableName[$x] == '_') ? true : false;
     }
     
     return $str;

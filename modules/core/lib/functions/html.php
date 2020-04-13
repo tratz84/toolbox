@@ -290,15 +290,15 @@ function hex2rgb($hexstr) {
         $hexstr = substr($hexstr, 1);
     
     if (preg_match('/^[0-9a-fA-F]{3}$/', $hexstr)) {
-        $p1 = $hexstr{0}.$hexstr{0};
-        $p2 = $hexstr{1}.$hexstr{1};
-        $p3 = $hexstr{2}.$hexstr{2};
+        $p1 = $hexstr[0].$hexstr[0];
+        $p2 = $hexstr[1].$hexstr[1];
+        $p3 = $hexstr[2].$hexstr[2];
         
         return array(hexdec($p1), hexdec($p2), hexdec($p3));
     } else if (preg_match('/^[0-9a-fA-F]{6}$/', $hexstr)) {
-        $p1 = $hexstr{0}.$hexstr{1};
-        $p2 = $hexstr{2}.$hexstr{3};
-        $p3 = $hexstr{4}.$hexstr{5};
+        $p1 = $hexstr[0].$hexstr[1];
+        $p2 = $hexstr[2].$hexstr[3];
+        $p3 = $hexstr[4].$hexstr[5];
         
         return array(hexdec($p1), hexdec($p2), hexdec($p3));
     }

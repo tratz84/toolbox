@@ -121,10 +121,11 @@ class MysqlConnection extends DBConnection {
             
         $dbh = $this->getResource();
         
+        $sql = (string)$sql;
         $markCount = 0;
         $str = '';
         for($x=0; $x < strlen($sql); $x++) {
-            if ($sql{$x} == '?') {
+            if ($sql[$x] == '?') {
                 // check if param is available
                 if (count($params) < $markCount+1)
                     throw new \core\exception\QueryException("Invalid ratio marks(?)/params");
@@ -132,7 +133,7 @@ class MysqlConnection extends DBConnection {
                     $str .= "'".$dbh->real_escape_string($params[$markCount])."'";
                     $markCount++;
             } else {
-                $str .= $sql{$x};
+                $str .= $sql[$x];
             }
         }
         

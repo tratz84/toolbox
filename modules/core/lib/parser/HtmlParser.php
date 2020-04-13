@@ -148,7 +148,7 @@ class HtmlParser {
                     // get tag name
                     $tag = '';
                     for($y=1; $y < strlen($trimmed_content); $y++) {
-                        $yc = $trimmed_content{$y};
+                        $yc = $trimmed_content[$y];
                         if ($yc == "\t" || $yc == "\n" || $yc == " " || $yc == ">")
                             break;
                         $tag .= $yc;
@@ -186,10 +186,10 @@ class HtmlParser {
         $html_len = strlen($this->html);
         $token_no = 0;
         for($pos=0; $pos < $html_len; $pos++) {
-            $char = $this->html{$pos};
+            $char = $this->html[$pos];
             $next_char = null;
             if ($pos+1 < $html_len) {
-                $next_char = $this->html{$pos+1};
+                $next_char = $this->html[$pos+1];
             }
             // print $char;
             

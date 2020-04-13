@@ -603,10 +603,15 @@ function IndexTable( container, opts ) {
 							fieldText = '';
 						} else {
 							dt = text2date(fieldText);
-							if (dt != null)
-								fieldText = format_datetime(dt, {skipSeconds: true});
-							else
+							if (dt != null) {
+								var skipSeconds = true;
+								if (typeof col.skipSeconds != 'undefined') {
+									skipSeconds = col.skipSeconds;
+								}
+								fieldText = format_datetime(dt, {skipSeconds: skipSeconds});
+							} else {
 								fieldText = '';
+							}
 						}
 					}
 

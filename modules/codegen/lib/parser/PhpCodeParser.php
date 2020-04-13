@@ -693,14 +693,14 @@ class PhpCodeParser {
             }
             
             if ($block['type'] == 'php') {
-                $content = $block['content'];
+                $content = (string)$block['content'];
                 
                 $contentlen = strlen($content);
                 $buf = '';
                 for($p=0; $p < $contentlen; $p++) {
                     $in_something = $state['in_string'] !== false || $state['in_datablock'] !== false || $state['in_comment'] !== false;
                     
-                    $c = $content{$p};
+                    $c = $content[$p];
                     if ($c == "\r") continue;
                     
                     if ($in_something == false && in_array($c, $whiteChars) && in_array($state['prev'], $whiteChars) == false) {
@@ -773,7 +773,7 @@ class PhpCodeParser {
                             $lastline = substr($buf, strrpos($buf, "\n")+1);
                             
                             // check if lastline doesn't start with a whitespace
-                            if ($lastline{0} != ' ' && $lastline{0} != "\t") {
+                            if ($lastline[0] != ' ' && $lastline[0] != "\t") {
                                 // spaces/tabs are ignored
                                 $lastline = str_replace(array(' ', "\t"), '', $lastline);
                                 
@@ -829,7 +829,7 @@ class PhpCodeParser {
         $state['in_comment'] = false;
         
         while ($state['pos'] < $state['len']) {
-            $c = $str{$state['pos']};
+            $c = $str[ $state['pos'] ];
             
             // skip carriage returns
             if ($c == "\r") {
@@ -869,7 +869,7 @@ class PhpCodeParser {
                         $lastline = substr($buf, strrpos($buf, "\n")+1);
                         
                         // check if lastline doesn't start with a whitespace
-                        if ($lastline{0} != ' ' && $lastline{0} != "\t") {
+                        if ($lastline[0] != ' ' && $lastline[0} != "\t") {
                             // spaces/tabs are ignored
                             $lastline = str_replace(array(' ', "\t"), '', $lastline);
                             

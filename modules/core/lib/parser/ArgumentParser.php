@@ -42,7 +42,7 @@ class ArgumentParser {
             }
             else if (strpos($t, '-') === 0 && strlen($t) > 1) {
                 if (strlen($t) > 1) {
-                    $c = $t{1};
+                    $c = $t[1];
                     $this->options[$c] = trim(substr($t, 2));
                     $key = trim( substr($t, 1) );
                     if ($key)

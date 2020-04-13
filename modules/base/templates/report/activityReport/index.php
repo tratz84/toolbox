@@ -79,7 +79,8 @@ t.addColumn({
 	fieldName: 'created',
 	fieldDescription: _('Run on'),
 	fieldType: 'datetime',
-	searchable: false
+	searchable: false,
+	skipSeconds: false
 });
 
 

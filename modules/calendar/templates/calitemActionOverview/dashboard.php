@@ -1,7 +1,7 @@
 
 
 <div class="widget-title">
-	Kalender: Actie punten
+	<?= t('Calendar: Cue points')?>
 </div>
 
 <div id="calendar-item-actions-table-container"></div>
@@ -30,7 +30,7 @@ it_itemActions.setCallbackRenderRows(function() {
 it_itemActions.addColumn({
 	fieldName: 'start_date',
 	width: 125,
-	fieldDescription: 'Date / time',
+	fieldDescription: t('Date / time'),
 	fieldType: 'date',
 	searchable: false,
 	render: function(record) {
@@ -44,7 +44,7 @@ it_itemActions.addColumn({
 });
 it_itemActions.addColumn({
 	fieldName: 'description',
-	fieldDescription: 'Description',
+	fieldDescription: t('Description'),
 	fieldType: 'text',
 	searchable: false
 });
