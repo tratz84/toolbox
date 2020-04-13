@@ -42,9 +42,9 @@ use core\forms\SelectField;
 var map_itemActions = <?= json_encode($map_itemActions) ?>;
 
 
-var t = new IndexTable('#calendar-item-table-container');
+var it = new IndexTable('#calendar-item-table-container');
 
-t.setRowClick(function(row, evt) {
+it.setRowClick(function(row, evt) {
 	// no selection in action-box
 	if ($(evt.target).hasClass('td-actions') || $(evt.target).closest('.td-actions').length > 1)
 		return;
@@ -58,9 +58,9 @@ t.setRowClick(function(row, evt) {
 	
 });
 
-t.setConnectorUrl( '/?m=calendar&c=calitemActionOverview&a=search&calendar_id=<?= $calendar_id ?>' );
+it.setConnectorUrl( '/?m=calendar&c=calitemActionOverview&a=search&calendar_id=<?= $calendar_id ?>' );
 
-t.setCallbackRenderRows(function() {
+it.setCallbackRenderRows(function() {
 	$('#calendar-item-table-container tbody tr').each(function(index, node) {
 		$(node).find('td.td-actions select').change(function() {
 			var tr = $(this).closest('tr');
@@ -91,7 +91,7 @@ t.setCallbackRenderRows(function() {
 });
 
 
-t.addColumn({
+it.addColumn({
 	fieldName: 'top-select-item-action',
 	width: 25,
 	fieldDescription: '',
@@ -106,27 +106,27 @@ t.addColumn({
 	}
 });
 
-t.addColumn({
+it.addColumn({
 	fieldName: 'start_date',
 	width: 125,
-	fieldDescription: 'Date',
+	fieldDescription: t('Date'),
 	fieldType: 'date',
 	searchable: false
 });
-t.addColumn({
+it.addColumn({
 	fieldName: 'start_time',
 	width: 125,
-	fieldDescription: 'Time',
+	fieldDescription: t('Time'),
 	fieldType: 'time',
 	searchable: false
 });
-t.addColumn({
+it.addColumn({
 	fieldName: 'description',
-	fieldDescription: 'Description',
+	fieldDescription: t('Description'),
 	fieldType: 'text',
 	searchable: false
 });
-t.addColumn({
+it.addColumn({
 	fieldName: 'actions',
 	width: 125,
 	fieldDescription: '',
@@ -152,7 +152,7 @@ t.addColumn({
 });
 
 
-t.load();
+it.load();
 
 
 
@@ -201,7 +201,7 @@ function update_itemAction( rowSelector, itemAction ) {
 		data: data,
 		success: function(data, textStatus, xhr) {
 			show_user_message('Changes saved');
-			t.load();
+			it.load();
 		},
 		error: function(xhr, textStatus, errorThrown) {
 			alert('Error: ' + xhr.responseText);
