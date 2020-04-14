@@ -144,7 +144,7 @@ class projectHourController extends BaseController {
         $form->bind($ph);
         
         if (isset($this->project_id) && $this->project_id) {
-            $form->bind(['project_id' => $this->project_id]);
+            $form->getWidget('project_id')->setValue($this->project_id);
         }
         
         if (is_post()) {
