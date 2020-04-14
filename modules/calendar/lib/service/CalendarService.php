@@ -145,7 +145,7 @@ class CalendarService extends ServiceBase {
             $end = date('Y-m-d', strtotime('+12 months'));
         }
         
-        // no items found? => skip
+        // no first-date? => skip
         if (!$start) {
             return array();
         }
