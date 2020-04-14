@@ -22,7 +22,7 @@ class SolrMailQuery extends SolrQuery {
         $this->addFacetSearch('contextName', ':', $ctx->getContextName());
         $this->addFacetSearch('markDeleted', ':', false);
         
-        $this->addFacetField('mailboxName');
+        $this->addFacetField('mailboxName', ['extags' => 'mailboxName']);
         $this->addFacetField('connectorId');
         $this->addFacetField('connectorDescription');
     }
@@ -34,6 +34,14 @@ class SolrMailQuery extends SolrQuery {
         // MUST have
         $this->addFacetSearch('contextName', ':', ctx()->getContextName());
         $this->addFacetSearch('markDeleted', ':', false);
+    }
+    
+    public function addFacetSearch($fieldName, $operator, $value, $opts=array()) {
+        if ($fieldName == 'mailboxName') {
+            $opts = array_merge($opts, ['tag' => 'mailboxName']);
+        }
+        
+        return parent::addFacetSearch($fieldName, $operator, $value, $opts);
     }
     
     
