@@ -27,9 +27,17 @@ class projectTabController extends BaseController {
         $projects = $projectService->readByCustomer( $this->companyId, $this->personId );
         
         $this->mapProjects = array();
-        $this->mapProjects[] = ['value' => '', 'text' => t('Make your choice') ];
+        $this->mapProjects[] = ['value' => '', 'text' => t('Project name') ];
         foreach($projects as $p) {
             $this->mapProjects[] = ['value' => $p->getProjectId(), 'text' => $p->getProjectName() ];
+        }
+        
+        // fetch statuses
+        $statuses = $projectService->readHourStatuses();
+        $this->mapStatuses = array();
+        $this->mapStatuses[] = ['value' => '', 'text' => t('Status')];
+        foreach($statuses as $s) {
+            $this->mapStatuses[] = ['value' => $s->getProjectHourStatusId(), 'text' => $s->getDescription()];
         }
         
         

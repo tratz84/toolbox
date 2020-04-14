@@ -75,14 +75,27 @@ t.addColumn({
 	fieldName: 'declarable',
 	fieldDescription: 'Declarabel',
 	fieldType: 'boolean',
-	searchable: false
+	searchable: true,
+	filterOptions: [
+		{ value: '',  'text': _('Declarable') },
+		{ value: '1', 'text': _('Yes') },
+		{ value: '0', 'text': _('No') },
+		
+	],
+	render: function(record) {
+		return record.declarable ? _('Yes') : _('No')
+	}
 });
 
 t.addColumn({
-	fieldName: 'status_description',
+	fieldName: 'project_hour_status_id',
 	fieldDescription: 'Status',
-	fieldType: 'text',
-	searchable: false
+	filterOptions: <?= json_encode($mapStatuses) ?>,
+	fieldType: 'select',
+	searchable: true,
+	render: function(record) {
+		return record.status_description
+	}
 });
 
 

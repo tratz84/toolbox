@@ -81,6 +81,14 @@ class ProjectHourDAO extends \core\db\DAOObject {
 	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('project__project_hour_status.project_hour_status_id', '=', $opts['project_hour_status_id']));
 	    }
 	    
+	    if (isset($opts['declarable'])) {
+	        $opts['declarable'] = (string)$opts['declarable'];
+	        if ($opts['declarable'] === '1' || $opts['declarable'] === '0') {
+	           $qb->addWhere(QueryBuilderWhere::whereRefByVal('project__project_hour.declarable', '=', $opts['declarable']));
+	        }
+	    }
+	    
+	    
 	    if (isset($opts['date']) && valid_date($opts['date'])) {
 	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('date(project__project_hour.start_time)', '=', format_date($opts['date'], 'Y-m-d')));
 	    }
