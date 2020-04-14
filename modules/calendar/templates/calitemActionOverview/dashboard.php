@@ -46,7 +46,21 @@ it_itemActions.addColumn({
 	fieldName: 'description',
 	fieldDescription: t('Description'),
 	fieldType: 'text',
-	searchable: false
+	searchable: false,
+	render: function(record) {
+		var span = $('<span />');
+		if (record.customerName) {
+			sc = $('<span style="font-weight: 600;" />');
+			sc.text( record.customerName );
+			span.append(sc);
+			span.append(': ');
+		}
+		var sd = $('<span />');
+		sd.text( record.description );
+		span.append( sd );
+		
+		return span;
+	}
 });
 it_itemActions.addColumn({
 	fieldName: 'actions',

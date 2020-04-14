@@ -13,6 +13,8 @@ use core\forms\validator\NotEmptyValidator;
 use core\forms\SelectField;
 use calendar\model\CalendarItem;
 use calendar\CalendarSettings;
+use base\forms\CustomerSelectWidget;
+use core\forms\InternalField;
 
 class CalendarItemForm extends BaseForm {
     
@@ -33,6 +35,7 @@ class CalendarItemForm extends BaseForm {
             $this->addWidget(new SelectField('item_action', '', $map_itemActions, t('Current action')));
         }
         
+        $this->addWidget(new CustomerSelectWidget('customer_id'));
         
         $this->addWidget(new TextField('title',    '', 'Titel'));
         $this->addWidget(new TextField('location', '', 'Locatie'));

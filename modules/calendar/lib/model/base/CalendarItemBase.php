@@ -218,6 +218,24 @@ class CalendarItemBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'company_id' => 
+  array (
+    'Field' => 'company_id',
+    'Type' => 'int',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'person_id' => 
+  array (
+    'Field' => 'person_id',
+    'Type' => 'int',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -315,6 +333,14 @@ class CalendarItemBase extends \core\db\DBObject {
 		
 	public function setItemAction($p) { $this->setField('item_action', $p); }
 	public function getItemAction() { return $this->getField('item_action'); }
+	
+		
+	public function setCompanyId($p) { $this->setField('company_id', $p); }
+	public function getCompanyId() { return $this->getField('company_id'); }
+	
+		
+	public function setPersonId($p) { $this->setField('person_id', $p); }
+	public function getPersonId() { return $this->getField('person_id'); }
 	
 	
 }

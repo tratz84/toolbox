@@ -36,7 +36,12 @@ class CalendarItemDAO extends \core\db\DAOObject {
 	
 	public function readByDate($calendarId, $start, $end) {
 	    
-	    $sql = "select * from cal__calendar_item ";
+	    $sql = "select cal__calendar_item.*, customer__company.company_name, customer__person.firstname, customer__person.insert_lastname, customer__person.lastname ";
+	    $sql .= " from cal__calendar_item ";
+	    
+	    $sql .= ' left join customer__company on (cal__calendar_item.company_id = customer__company.company_id) ';
+	    $sql .= ' left join customer__person on (cal__calendar_item.person_id = customer__person.person_id) ';
+	    
 	    
 	    $where = array();
 	    $params = array();
@@ -67,6 +72,10 @@ class CalendarItemDAO extends \core\db\DAOObject {
 	    }
 	    
 	    $r = $this->queryList($sql, $params);
+	    
+	    for($x=0; $x < count($r); $x++) {
+    	    $r[$x]->setField('customer_name', format_customername($r[$x]));
+	    }
 	    
 // 	    print DatabaseHandler::getInstance()->getLastQuery() . "\n\n";
 // var_export($r);exit;

@@ -429,18 +429,25 @@ function MonthViewRenderer(controller) {
 			if (i.cancelled)
 				item.addClass('cancelled');
 			
-			var shortDesc = '';
+			var shortDesc = $('<span />');
 			if (i.startTime || i.endTime) {
 				if (i.startTime)
-					shortDesc += i.startTime;
+					shortDesc.append( i.startTime );
 				if (i.endTime)
-					shortDesc += ' - ' + i.endTime;
+					shortDesc.append( ' - ' + i.endTime );
 				
-				shortDesc += ' ';
+				shortDesc.append(' ');
 			}
-			shortDesc += i.description;
 			
-			item.text(shortDesc)
+			if (i.customerName) {
+				shortDesc.append('<span style="font-weight: 600;">'+i.customerName + '</span>: ');
+			}
+			
+			var spanDesc = $('<span />');
+			spanDesc.text( i.description );
+			shortDesc.append( spanDesc );
+			
+			item.append(shortDesc)
 			item.data('item', i);
 			
 			item.click(function(evt) {

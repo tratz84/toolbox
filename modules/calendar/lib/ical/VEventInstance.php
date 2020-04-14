@@ -14,6 +14,7 @@ class VEventInstance {
     public $cancelled = false;
     public $recurrent = false;
     
+    public $customerName = null;
     public $description = null;
     
     
@@ -47,6 +48,9 @@ class VEventInstance {
         $this->endTime = $time;
     }
     public function getEndTime() { return $this->endTime; }
+    
+    public function setCustomerName($d) { $this->customerName = $d; }
+    public function getCustomerName() { return $this->customerName; }
     
     public function setDescription($d) { $this->description = $d; }
     public function getDescription() { return $this->description; }

@@ -26,6 +26,8 @@ $tb_ci->addColumn('calendar_id',               'int');
 $tb_ci->addColumn('item_action',               'varchar(16)');
 $tb_ci->addColumn('calendar_item_status_id',   'int');
 $tb_ci->addColumn('calendar_item_category_id', 'int');
+$tb_ci->addColumn('company_id',                'int');
+$tb_ci->addColumn('person_id',                 'int');
 $tb_ci->addColumn('title',                     'varchar(255)');
 $tb_ci->addColumn('location',                  'varchar(255)');
 $tb_ci->addColumn('all_day',                   'boolean');

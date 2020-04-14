@@ -38,6 +38,7 @@ class calitemActionOverviewController extends BaseController {
             $o['recurrent'] = $evt->getRecurrent() ? true : false;
             $o['start_date'] = $evt->getStartDate();
             $o['start_time'] = $evt->getStartTime();
+            $o['customerName'] = $evt->getCustomerName();
             $o['description'] = $evt->getDescription();
             $o['item_action'] = $evt->getItemAction();
             

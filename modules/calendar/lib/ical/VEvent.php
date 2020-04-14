@@ -108,6 +108,7 @@ class VEvent extends VEventInstance {
         
         $e->setId( $ci->getCalendarItemId() );
         $e->setItemAction( $ci->getItemAction() );
+        $e->setCustomerName( $ci->getField('customer_name') );
         $e->setDescription( $ci->getTitle() );
         $e->setStartTime( $ci->getStartTime() );
         $e->setEndDate( $ci->getEndDate() );
