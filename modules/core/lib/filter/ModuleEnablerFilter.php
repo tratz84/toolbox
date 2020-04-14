@@ -27,7 +27,6 @@ class ModuleEnablerFilter {
         
         // must have modules
         include ROOT . '/modules/core/autoload.php';
-//         include ROOT . '/modules/base/autoload.php';
         
         $modulesToLoad = array();
         
@@ -60,6 +59,11 @@ class ModuleEnablerFilter {
                     $moduleEnabled = true;
                     break;
                 }
+            }
+            
+            // mandatory modules
+            if (in_array($moduleName, ['base'])) {
+                $moduleEnabled = true;
             }
             
             // module enabled? => include autoload.php
