@@ -27,7 +27,7 @@ class ModuleEnablerFilter {
         
         // must have modules
         include ROOT . '/modules/core/autoload.php';
-        include ROOT . '/modules/base/autoload.php';
+//         include ROOT . '/modules/base/autoload.php';
         
         $modulesToLoad = array();
         
@@ -40,7 +40,7 @@ class ModuleEnablerFilter {
                 continue;
             
             // already loaded? => skip (base module..)
-            if (ctx()->isModuleEnabled($moduleName)) {
+            if (ctx()->isModuleEnabled($moduleName) && $moduleName != 'base') {
                 continue;
             }
             
