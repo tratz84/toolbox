@@ -19,27 +19,37 @@ class projectHourController extends BaseController {
     public function action_index() {
         $projectService = $this->oc->get(ProjectService::class);
         
-        $this->project_id = $this->company_id = $this->person_id = $this->date = '';
+        $this->project_id = $this->date = '';
 
+        $this->company_id = get_var('company_id');
+        $this->person_id = get_var('person_id');
+        
+        
         if (get_var('project_id')) {
             $this->project = $projectService->readProject( get_var('project_id') );
             if (!$this->project) {
                 throw new \core\exception\ObjectNotFoundException('Project not found');
             }
             $this->project_id = $this->project->getProjectId();
+            
+            $this->company_id = $this->project->getCompanyId();
+            $this->project->getCompanyId();
+            $this->person_id =  $this->project->getPersonId();
         }
-        if (get_var('company_id')) {
+        if ($this->company_id) {
             $companyService = $this->oc->get(CompanyService::class);
-            $company = $companyService->readCompany(get_var('company_id'));
+            $company = $companyService->readCompany($this->company_id);
             if ($company) {
                 $this->company_id = $company->getCompanyId();
+                $this->customerName = $company->getCompanyName();
             }
         }
-        if (get_var('person_id')) {
+        if ($this->person_id) {
             $personService = $this->oc->get(PersonService::class);
-            $person = $personService->readPerson(get_var('person_id'));
+            $person = $personService->readPerson($this->person_id);
             if ($person) {
                 $this->person_id = $person->getPersonId();
+                $this->customerName = $person->getFullname();
             }
         }
         

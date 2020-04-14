@@ -11,6 +11,9 @@
 
 	<h1>
 		Overzicht
+		<?php if (isset($customerName)) : ?>
+			<?= esc_html($customerName) . (isset($project)?':':'') ?>
+		<?php endif; ?>
 		<?php if (isset($project)) : ?> 
 		<?= esc_html($project->getProjectName()) ?>
 		<?php endif; ?>
