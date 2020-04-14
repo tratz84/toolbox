@@ -6,8 +6,11 @@ $lang = array();
 $lang['Description']          = 'Omschrijving';
 $lang['Date / time']          = 'Datum / tijd';
 $lang['Day']                  = 'Dag';
+$lang['Date']                 = 'Datum';
+$lang['Time']                 = 'Tijdstip';
 
 $lang['Calendar: Cue points'] = 'Kalender: Actie punten';
+$lang['Overview open calendar items'] = 'Overzicht openstaande kalenderitems';
 
 $lang['Upcoming agenda items']    = 'Opkomende agendapunten';
 $lang['No upcoming agenda items'] = 'Geen opkomende punten';

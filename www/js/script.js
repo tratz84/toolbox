@@ -361,14 +361,14 @@ function navSideMenu_toggle() {
 	if ($('body').hasClass('small-nav-side-menu')) {
 		$('body').removeClass('small-nav-side-menu');
 		$('.nav-side-menu').css('display', 'block');
-		$('.nav-side-menu-toggle').removeClass('fa-caret-right');
-		$('.nav-side-menu-toggle').addClass('fa-caret-left');
+		$('.nav-side-menu-toggle').removeClass('fa-bars');
+		$('.nav-side-menu-toggle').addClass('fa-minus');
 		
 		saveJsState('small-nav-side-menu', '0');
 	} else {
 		$('body').addClass('small-nav-side-menu');
-		$('.nav-side-menu-toggle').removeClass('fa-caret-left');
-		$('.nav-side-menu-toggle').addClass('fa-caret-right');
+		$('.nav-side-menu-toggle').removeClass('fa-minus');
+		$('.nav-side-menu-toggle').addClass('fa-bars');
 		
 		saveJsState('small-nav-side-menu', '1');
 	}
