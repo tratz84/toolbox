@@ -13,7 +13,7 @@ use calendar\CalendarSettings;
 
 Context::getInstance()->enableModule('calendar');
 
-module_update_handler('calendar', '20200323');
+module_update_handler('calendar', '20200414');
 
 $eb = ObjectContainer::getInstance()->get(EventBus::class);
 
