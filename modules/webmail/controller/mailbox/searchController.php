@@ -124,6 +124,8 @@ class searchController extends BaseController {
 	
 	public function action_view() {
 	    
+	    $this->setShowDecorator(false);
+	    
 	    $this->emailId = $emailId = get_var('id');
 	    
 	    $this->url_view_mail = appUrl( '/?m=webmail&c=mailbox/mail&a=view&id=' . $emailId );
@@ -145,6 +147,12 @@ class searchController extends BaseController {
 	    
 	    
 	    $solrMail = SolrMailQuery::readStaticById($emailId);
+	    
+	    if ($solrMail == null) {
+	        $this->setTemplateFile( module_file('webmail', 'templates/mailbox/search/not-found.php') );
+	        return $this->render();
+	    }
+	    
 	    $mp = $solrMail->getProperties();
 	    if ($mp->getSeen() == false) {
 	        try {
@@ -197,8 +205,6 @@ class searchController extends BaseController {
 	    
 	    
 	    hook_eventbus_publish($this->actionContainer, 'webmail', 'mailbox-search');
-	    
-	    $this->setShowDecorator(false);
 	    
 	    return $this->render();
 	}
