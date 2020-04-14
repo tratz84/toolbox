@@ -17,6 +17,8 @@ if (file_exists(dirname(__FILE__).'/../vendor/autoload.php')) {
 
 
 Context::getInstance()->addModuleDir( ROOT . '/modules' );
+
+// TODO: remove this
 Context::getInstance()->enableModule('base');
 
 

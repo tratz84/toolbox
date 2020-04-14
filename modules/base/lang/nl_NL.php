@@ -127,6 +127,10 @@ $lang['Username in use'] = 'Gebruikersnaam reeds in gebruik';
 $lang['User']            = 'Gebruiker';
 $lang['If IP addresses are entered, the user can only log in from these addresses'] = 'Indien hier ip-adressen staan ingevuld, mag de gebruiker alleen vanaf deze adressen zich aanmelden';
 
+$lang['New note']        = 'Nieuwe notitie';
+$lang['No notes']        = 'Geen notities';
+$lang['Important']       = 'Belangrijk';
+$lang['Long note']       = 'Lange notite';
 
 // activity report
 $lang['Activity']          = 'Activiteit';

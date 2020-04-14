@@ -7,13 +7,16 @@ require_once dirname(__FILE__).'/lib/functions/object_meta.php';
 require_once dirname(__FILE__).'/lib/functions/object_lock.php';
 
 
+use base\model\Company;
+use core\Context;
 use core\ObjectContainer;
 use core\event\CallbackPeopleEventListener;
 use core\event\EventBus;
 use core\event\PeopleEvent;
-use core\Context;
 
 Context::getInstance()->enableModule('base');
+
+module_update_handler('base', '20200415');
 
 
 $eb = ObjectContainer::getInstance()->get(EventBus::class);
@@ -67,6 +70,13 @@ $eb->subscribe('base', 'company-edit-footer', new CallbackPeopleEventListener(fu
     $companyId = $evt->getSource()->getSource()->getWidgetValue('company_id');
     if (!$companyId)
         return;
+
+    
+    $html = get_component('base', 'notes/notestab', 'index', array('company_id' => $companyId));
+    if ($html) {
+        $ftc->addTab('Notities', $html, 9);
+    }
+    
     
     if (hasCapability('base', 'list-activity')) {
         $html = get_component('base', 'activityOverview', 'index', array('companyId' => $companyId));
@@ -84,6 +94,12 @@ $eb->subscribe('base', 'person-edit-footer', new CallbackPeopleEventListener(fun
     if (!$personId)
         return;
 
+    $html = get_component('base', 'notes/notestab', 'index', array('person_id' => $personId));
+    if ($html) {
+        $ftc->addTab('Notities', $html, 9);
+    }
+    
+    
     if (hasCapability('base', 'list-activity')) {
         $html = get_component('base', 'activityOverview', 'index', array('personId' => $personId));
         
