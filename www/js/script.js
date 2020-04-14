@@ -74,7 +74,7 @@ $(document).ready(function() {
 
 	
 	setTimeout(function() {
-		$('.alert.alert-success').slideUp();
+		$('.alert.alert-success').not('.called-from-js').slideUp();
 	}, 3500);
 	
 });
@@ -850,8 +850,14 @@ function closeDialog() {
 }
 
 
-function show_user_message(msg) {
-	var d = $('<div class="global-message alert alert-success"><div class="msg" /></div>');
+function show_user_message(msg, opts) {
+	opts = opts ? opts : {};
+	
+	if (typeof opts.timeout == 'undefined') {
+		opts.timeout = 2000;
+	}
+	
+	var d = $('<div class="global-message alert alert-success called-from-js"><div class="msg" /></div>');
 	
 	d.find('.msg').text(msg);
 	
@@ -861,7 +867,27 @@ function show_user_message(msg) {
 		$(d).slideUp(function() {
 			$(this).remove();
 		});
-	}, 2000);
+	}, opts.timeout);
+}
+
+function show_user_warning(msg, opts) {
+	opts = opts ? opts : {};
+	
+	if (typeof opts.timeout == 'undefined') {
+		opts.timeout = 2000;
+	}
+	
+	var d = $('<div class="global-message alert alert-warning called-from-js"><div class="msg" /></div>');
+	
+	d.find('.msg').text(msg);
+	
+	$('.main-content').prepend(d);
+	
+	setTimeout(function() {
+		$(d).slideUp(function() {
+			$(this).remove();
+		});
+	}, opts.timeout);
 }
 
 

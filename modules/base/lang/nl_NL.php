@@ -132,6 +132,7 @@ $lang['New note']        = 'Nieuwe notitie';
 $lang['No notes']        = 'Geen notities';
 $lang['Important']       = 'Belangrijk';
 $lang['Long note']       = 'Lange notite';
+$lang['Please note']     = 'Let op';
 
 // activity report
 $lang['Activity']          = 'Activiteit';

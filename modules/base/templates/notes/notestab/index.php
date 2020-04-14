@@ -40,6 +40,9 @@ function reloadNotes() {
 }
 
 function renderNotes(listResponse) {
+
+	var importantMessage = '';
+	
 	$('.notes-table tbody').empty();
 	for(var x=0; x < listResponse.rowCount; x++) {
 		var o = listResponse.objects[x];
@@ -77,10 +80,27 @@ function renderNotes(listResponse) {
 		tr.append( tdActions);
 		
 		$('.notes-table tbody').append( tr );
+
+
+		if (o.important) {
+			if (importantMessage != '')
+				importantMessage += '\n';
+			importantMessage = importantMessage + o.summary;
+		}
 	}
 
 	if (listResponse.rowCount == 0) {
 		$('.notes-table tbody').append('<tr><td colspan="4" style="font-style: italic; text-align: center;">'+_('No notes')+'</td></tr>');
+	}
+	
+
+	var importantMessageShown = $('.notes-table').data('important-message-shown') ? true : false;
+	if (importantMessageShown == false) {
+		if (importantMessage != '') {
+			show_user_warning(t('Please note')+': ' + importantMessage, { timeout: 5000 });
+		}
+
+		$('.notes-table').data('important-message-shown', true);
 	}
 }
 
