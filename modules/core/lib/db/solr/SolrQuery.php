@@ -54,9 +54,21 @@ class SolrQuery {
     public function addField($fieldName) {
         $this->fields[] = $fieldName;
     }
-    
-    public function addFacetSearch($fieldName, $operator, $value) {
-        $fq = solr_escapeTerm($fieldName) . $operator . solr_escapePhrase($value);
+
+    /**
+     * 
+     * @param string $fieldName - field to search
+     * @param string $operator  - operator, like ':' for exact-search or '~' for fuzzy-search
+     * @param string $value     - value to search
+     * @param array $opts        - options: 'tag' for tagging facet-query
+     */
+    public function addFacetSearch($fieldName, $operator, $value, $opts=array()) {
+        $fq = solr_escapeTerm($fieldName) . $operator;
+        
+        if (isset($opts['tag']) && $opts['tag']) {
+            $fq .= '{!tag='.$opts['tag'].'}';
+        }
+        $fq .=  solr_escapePhrase($value);
         
         $this->addFacetQuery($fq);
     }
@@ -75,11 +87,22 @@ class SolrQuery {
         $this->facetLimit = $l;
     }
     public function clearFacetFields() { $this->facetFields = array(); }
+    
+    /**
+     * 
+     * @param string $fieldName - field for facet-counts
+     * @param array $opts       - 'extags' for excluding searches in facet-count
+     */
     public function addFacetField($fieldName, $opts=array()) {
         $field = array();
         $field['name'] = $fieldName;
         
-        // TODO: handle $opts? it may contain properties like ex-facetqueries for facet counting (TODO, implement)
+        // note, facet-query must be tagged for this to be working
+        $field['extags'] = array();
+        if (isset($opts['extags'])) {
+            $field['extags'] = is_array($opts['extags']) ? $opts['extags'] : explode(',', $opts['extags']);
+        }
+        
         
         $this->facetFields[] = $field;
     }
@@ -111,7 +134,17 @@ class SolrQuery {
             $url_params[] = 'facet.limit=' . $this->facetLimit;
             
             foreach($this->facetFields as $ff) {
-                $url_params[] = 'facet.field='.urlencode($ff['name']);
+                $ex = '';
+                if (is_array($ff['extags']) && count($ff['extags'])) {
+                    foreach($ff['extags'] as $extag) {
+                        if ($ex != '')
+                            $ex .= ',';
+                        $ex='!ex='.$extag;
+                    }
+                    $ex = '{'.$ex.'}';
+                }
+                
+                $url_params[] = 'facet.field='.urlencode($ex.$ff['name']);
             }
         }
         
