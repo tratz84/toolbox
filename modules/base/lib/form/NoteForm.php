@@ -23,8 +23,8 @@ class NoteForm extends \core\forms\CodegenBaseForm {
 		    }
 		});
 		
-		$this->addValidator('shortDescription', function($form) {
-		    $t1 = $form->getWidgetValue('shortDescription');
+		$this->addValidator('shortNote', function($form) {
+		    $t1 = $form->getWidgetValue('shortNote');
 		    $t2 = $form->getWidgetValue('longNote');
 		    
 		    if (trim($t1) == '' && trim($t2) == '') {

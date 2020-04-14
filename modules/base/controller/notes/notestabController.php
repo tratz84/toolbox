@@ -18,6 +18,9 @@ class notestabController extends BaseController {
         $this->companyId = isset($this->company_id) ? $this->company_id : null;
         $this->personId = isset($this->person_id) ? $this->person_id : null;
         
+        $this->ref_object = isset($this->ref_object) ? $this->ref_object : null;
+        $this->ref_id     = isset($this->ref_id)     ? $this->ref_id : null;
+        
         
         $notes = $notesService->readNotesByCustomer($this->companyId, $this->personId);
         

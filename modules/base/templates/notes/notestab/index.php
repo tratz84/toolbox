@@ -89,7 +89,9 @@ function newNote_Click() {
 	show_popup(appUrl('/?m=base&c=notes/notestab&a=edit_note'), {
 		data: {
 			company_id: <?= json_encode( $companyId ) ?>,
-			person_id:  <?= json_encode( $personId ) ?>
+			person_id:  <?= json_encode( $personId ) ?>,
+			ref_object: <?= json_encode($ref_object) ?>,
+			ref_id: <?= json_encode($ref_id) ?>
 		},
 		renderCallback: function(popup) {
 			$(popup).find('[type=text]').first().focus();
