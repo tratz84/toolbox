@@ -154,6 +154,7 @@ class VEvent extends VEventInstance {
             $i->setStartTime($this->getStartTime());
             $i->setEndTime($this->getEndTime());
             $i->setAllDay($this->getAllDay());
+            $i->setCustomerName($this->getCustomerName());
             $i->setDescription($this->getDescription());
             $i->setCancelled($this->getCancelled());
             $i->setRecurrent(true);
@@ -223,6 +224,7 @@ class VEvent extends VEventInstance {
                 $i->setStartTime($this->getStartTime());
                 $i->setEndTime($this->getEndTime());
                 $i->setAllDay($this->getAllDay());
+                $i->setCustomerName($this->getCustomerName());
                 $i->setDescription($this->getDescription());
                 $i->setCancelled($this->getCancelled());
                 $i->setRecurrent(true);
@@ -297,6 +299,7 @@ class VEvent extends VEventInstance {
                 $i->setStartTime($this->getStartTime());
                 $i->setEndTime($this->getEndTime());
                 $i->setAllDay($this->getAllDay());
+                $i->setCustomerName($this->getCustomerName());
                 $i->setDescription($this->getDescription());
                 $i->setCancelled($this->getCancelled());
                 $i->setRecurrent(true);
@@ -382,6 +385,7 @@ class VEvent extends VEventInstance {
                 $i->setStartTime($this->getStartTime());
                 $i->setEndTime($this->getEndTime());
                 $i->setAllDay($this->getAllDay());
+                $i->setCustomerName($this->getCustomerName());
                 $i->setDescription($this->getDescription());
                 $i->setCancelled($this->getCancelled());
                 $i->setRecurrent(true);

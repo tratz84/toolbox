@@ -451,7 +451,7 @@ function MonthViewRenderer(controller) {
 			item.data('item', i);
 			
 			item.click(function(evt) {
-				if (evt.target != this) return;
+				if (evt.target != this && $(evt.target).closest(this).length == 0) return;
 				
 				var data = $(this).data('item');
 				data.date = $(this).closest('td').data('date');
