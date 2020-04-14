@@ -28,6 +28,7 @@ $lang['View calendaritem'] = 'Agendapunt bekijken';
 $lang['Add calendaritem']  = 'Agendapunt toevoegen';
 $lang['Edit calendaritem'] = 'Agendapunt bewerken';
 
+$lang['No calendar items'] = 'Geen agendapunten';
 
 
 return $lang;

@@ -5,15 +5,16 @@ namespace calendar\service;
 
 use base\forms\FormChangesHtml;
 use base\util\ActivityUtil;
+use calendar\CalendarSettings;
 use calendar\form\CalendarItemForm;
 use calendar\ical\VEvent;
 use calendar\model\Calendar;
 use calendar\model\CalendarDAO;
 use calendar\model\CalendarItem;
 use calendar\model\CalendarItemDAO;
-use core\service\ServiceBase;
+use core\exception\InvalidArgumentException;
 use core\exception\InvalidStateException;
-use calendar\CalendarSettings;
+use core\service\ServiceBase;
 
 class CalendarService extends ServiceBase {
     
@@ -122,6 +123,73 @@ class CalendarService extends ServiceBase {
         
         return $events;
     }
+    
+    
+    public function readEventInstancesExplodedByCustomer($companyId, $personId, $start=null, $end) {
+        // validate
+        if (!$companyId && !$personId) {
+            throw new InvalidArgumentException('No company/person id set');
+        }
+        
+        $ciDao = new CalendarItemDAO();
+        $opts = array();
+        if ($companyId)
+            $opts['company_id'] = $companyId;
+        if ($personId)
+            $opts['person_id'] = $personId;
+        
+        if ($start == null) {
+            $start = $ciDao->getFirstCalendarDate( $opts );
+        }
+        if ($end == null) {
+            $end = date('Y-m-d', strtotime('+12 months'));
+        }
+        
+        // no items found? => skip
+        if (!$start) {
+            return array();
+        }
+        
+        $items = $ciDao->readByOpts($opts, $start, $end);
+        
+        $events = array();
+        foreach($items as $i) {
+            $evt = VEvent::generateByCalendarItem($i);
+            $eventInstances = $evt->generateEventInstances($start, $end);
+            
+            if (is_array($eventInstances)) {
+                $events = array_merge($events, $eventInstances);
+            }
+        }
+        
+        usort($events, function($obj1, $obj2) {
+            $r = strcmp($obj1->getStartDate(), $obj2->getStartDate());
+            
+            if ($r == 0) {
+                $t1 = $obj1->getStartTime();
+                $t2 = $obj2->getStartTime();
+                
+                if ($t1 && !$t2) {
+                    return 1;
+                }
+                if (!$t1 && $t2) {
+                    return -1;
+                }
+                
+                $r = strcmp($t1, $t2);
+                
+                if ($r != 0)
+                    return $r;
+                    
+                return strcmp($obj1->getDescription(), $obj2->getDescription());
+            }
+            
+            return $r;
+        });
+            
+        return $events;
+    }
+    
     
     
     public function deleteItem($calendarItemId, $editDerivedItem=null, $selectedDate=null) {

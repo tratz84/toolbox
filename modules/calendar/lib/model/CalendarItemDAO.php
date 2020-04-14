@@ -4,7 +4,6 @@
 namespace calendar\model;
 
 
-use core\db\DatabaseHandler;
 
 class CalendarItemDAO extends \core\db\DAOObject {
 
@@ -35,6 +34,10 @@ class CalendarItemDAO extends \core\db\DAOObject {
 	
 	
 	public function readByDate($calendarId, $start, $end) {
+	    return $this->readByOpts(['calendar_id' => $calendarId], $start, $end);
+	}
+	
+	public function readByOpts($opts=array(), $start, $end) {
 	    
 	    $sql = "select cal__calendar_item.*, customer__company.company_name, customer__person.firstname, customer__person.insert_lastname, customer__person.lastname ";
 	    $sql .= " from cal__calendar_item ";
@@ -46,8 +49,22 @@ class CalendarItemDAO extends \core\db\DAOObject {
 	    $where = array();
 	    $params = array();
 	    
-	    $where[] = "calendar_id = ?";
-	    $params[] = $calendarId;
+	    if (isset($opts['calendar_id'])) {
+    	    $where[] = "calendar_id = ?";
+    	    $params[] = $opts['calendar_id'];
+	    }
+	    if (isset($opts['company_id'])) {
+	        $where[] = "cal__calendar_item.company_id = ?";
+	        $params[] = $opts['company_id'];
+	    }
+	    else if (isset($opts['person_id'])) {
+	        $where[] = "cal__calendar_item.person_id = ?";
+	        $params[] = $opts['person_id'];
+	    }
+	    
+	    if (count($where) == 0) {
+	        // TODO: throw exception?
+	    }
 
 	    
 	    $sql_dates = '';
@@ -82,6 +99,35 @@ class CalendarItemDAO extends \core\db\DAOObject {
 
         return $r;
 	}
-
+	
+	
+	public function getFirstCalendarDate($opts) {
+	    $sql = "select min(start_date) from cal__calendar_item ";
+	    
+	    if (isset($opts['calendar_id'])) {
+	        $where[] = "calendar_id = ?";
+	        $params[] = $opts['calendar_id'];
+	    }
+	    if (isset($opts['company_id'])) {
+	        $where[] = "cal__calendar_item.company_id = ?";
+	        $params[] = $opts['company_id'];
+	    }
+	    else if (isset($opts['person_id'])) {
+	        $where[] = "cal__calendar_item.person_id = ?";
+	        $params[] = $opts['person_id'];
+	    }
+	    
+	    if (count($where) == 0) {
+	        // TODO: throw exception?
+	    }
+	    
+	    if (count($where)) {
+	        $sql .= " where (".implode(") AND (", $where) . ")";
+	    }
+	    
+	    return $this->queryValue($sql, $params);
+	}
+	
 }
+
 

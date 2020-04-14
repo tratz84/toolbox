@@ -5,11 +5,12 @@
 
 
 use base\model\Menu;
+use calendar\CalendarSettings;
 use core\Context;
 use core\ObjectContainer;
 use core\event\CallbackPeopleEventListener;
 use core\event\EventBus;
-use calendar\CalendarSettings;
+use core\event\PeopleEvent;
 
 Context::getInstance()->enableModule('calendar');
 
@@ -78,3 +79,37 @@ $eb->subscribe('base', 'user-capabilities', new CallbackPeopleEventListener(func
     
 }));
 
+
+
+
+
+$eb->subscribe('base', 'company-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+    $ftc = $evt->getSource();
+    
+    $companyId = $evt->getSource()->getSource()->getWidgetValue('company_id');
+    if (!$companyId)
+        return;
+        
+        
+    $html = get_component('calendar', 'calendarTab', 'index', array('companyId' => $companyId));
+    if ($html) {
+        $ftc->addTab(t('Calendar'), $html, 9.1);
+    }
+        
+}));
+
+
+$eb->subscribe('base', 'person-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+    $ftc = $evt->getSource();
+    
+    $personId = $evt->getSource()->getSource()->getWidgetValue('person_id');
+    if (!$personId)
+        return;
+    
+    $html = get_component('calendar', 'calendarTab', 'index', array('personId' => $personId));
+    if ($html) {
+        $ftc->addTab(t('Calendar'), $html, 9.1);
+    }
+    
+}));
+    

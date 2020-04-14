@@ -110,6 +110,7 @@ class VEvent extends VEventInstance {
         $e->setItemAction( $ci->getItemAction() );
         $e->setCustomerName( $ci->getField('customer_name') );
         $e->setDescription( $ci->getTitle() );
+        $e->setLocation( $ci->getLocation() );
         $e->setStartTime( $ci->getStartTime() );
         $e->setEndDate( $ci->getEndDate() );
         $e->setEndTime( $ci->getEndTime() );
@@ -156,6 +157,7 @@ class VEvent extends VEventInstance {
             $i->setAllDay($this->getAllDay());
             $i->setCustomerName($this->getCustomerName());
             $i->setDescription($this->getDescription());
+            $i->setLocation($this->getLocation());
             $i->setCancelled($this->getCancelled());
             $i->setRecurrent(true);
             $instances[] = $i;
@@ -226,6 +228,7 @@ class VEvent extends VEventInstance {
                 $i->setAllDay($this->getAllDay());
                 $i->setCustomerName($this->getCustomerName());
                 $i->setDescription($this->getDescription());
+                $i->setLocation($this->getLocation());
                 $i->setCancelled($this->getCancelled());
                 $i->setRecurrent(true);
                 $instances[] = $i;
@@ -301,6 +304,7 @@ class VEvent extends VEventInstance {
                 $i->setAllDay($this->getAllDay());
                 $i->setCustomerName($this->getCustomerName());
                 $i->setDescription($this->getDescription());
+                $i->setLocation($this->getLocation());
                 $i->setCancelled($this->getCancelled());
                 $i->setRecurrent(true);
                 $instances[] = $i;

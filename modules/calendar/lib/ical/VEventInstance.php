@@ -17,6 +17,7 @@ class VEventInstance {
     public $customerName = null;
     public $description = null;
     
+    public $location = null;
     
     public function __construct() {
         
@@ -54,6 +55,9 @@ class VEventInstance {
     
     public function setDescription($d) { $this->description = $d; }
     public function getDescription() { return $this->description; }
+    
+    public function setLocation($d) { $this->location = $d; }
+    public function getLocation() { return $this->location; }
     
     public function setAllDay($b) { $this->allDay = $b; }
     public function getAllDay() { return $this->allDay; }
