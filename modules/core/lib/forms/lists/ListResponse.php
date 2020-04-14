@@ -15,9 +15,44 @@ class ListResponse {
         $this->setRowCount($rowCount);
         $this->setObjects($objects);
     }
+
+    public static function fillByDBObjects($start, $pageSize, $dbobjects, $fields=array()) {
+        
+        // no pagesize given? => use all objects
+        if ($pageSize == null) {
+            $pageSize = count($dbobjects);
+        }
+        
+        
+        $objects = array();
+        
+        for($x=0; $x < $pageSize && $x < count($dbobjects); $x++) {
+            
+            $row = $dbobjects[$x];
+            
+            $obj = array();
+            foreach($fields as $f) {
+                
+                $func = 'get'.dbCamelCase($f);
+                if (method_exists($row, $func)) {
+                    $val = $row->$func();
+                    $obj[$f] = $val;
+                } else {
+                    $val = $row->getField($f);
+                    $obj[$f] = $val;
+                }
+            }
+            
+            $objects[] = $obj;
+        }
+        
+        $r = new ListResponse($start, $pageSize, count($dbobjects), $objects);
+        
+        return $r;
+        
+    }
     
     public static function fillByCursor($start, $pageSize, $cursor, $fields=array()) {
-        
         $rowCount = $cursor->numRows();
         
         $objects = array();
