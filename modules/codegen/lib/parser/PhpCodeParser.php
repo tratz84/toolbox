@@ -869,7 +869,7 @@ class PhpCodeParser {
                         $lastline = substr($buf, strrpos($buf, "\n")+1);
                         
                         // check if lastline doesn't start with a whitespace
-                        if ($lastline[0] != ' ' && $lastline[0} != "\t") {
+                        if ($lastline[0] != ' ' && $lastline[0] != "\t") {
                             // spaces/tabs are ignored
                             $lastline = str_replace(array(' ', "\t"), '', $lastline);
                             
