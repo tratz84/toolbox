@@ -97,7 +97,7 @@ function renderNotes(listResponse) {
 	var importantMessageShown = $('.notes-table').data('important-message-shown') ? true : false;
 	if (importantMessageShown == false) {
 		if (importantMessage != '') {
-			show_user_warning(t('Please note')+': ' + importantMessage, { timeout: 5000 });
+			show_user_warning(_('Please note')+': ' + importantMessage, { timeout: 5000 });
 		}
 
 		$('.notes-table').data('important-message-shown', true);
