@@ -3,9 +3,10 @@
 
 
 
+use core\Context;
 use core\ObjectContainer;
 use core\event\CallbackPeopleEventListener;
-use core\Context;
+use core\event\PeopleEvent;
 
 module_update_handler('project', '20200316');
 
@@ -47,4 +48,40 @@ $eb->subscribe('base', 'report-summaryPerMonth', new CallbackPeopleEventListener
     ]);
     
 }));
+
+
+
+    
+    
+$eb->subscribe('base', 'company-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+    $ftc = $evt->getSource();
+    
+    $companyId = $evt->getSource()->getSource()->getWidgetValue('company_id');
+    if (!$companyId)
+        return;
+    
+    
+    $html = get_component('project', 'projectTab', 'index', array('companyId' => $companyId));
+    if ($html) {
+        $ftc->addTab(t('Project hours'), $html, 9.2);
+    }
+        
+}));
+    
+
+$eb->subscribe('base', 'person-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+    $ftc = $evt->getSource();
+    
+    $personId = $evt->getSource()->getSource()->getWidgetValue('person_id');
+    if (!$personId)
+        return;
+    
+    $html = get_component('project', 'projectTab', 'index', array('personId' => $personId));
+    if ($html) {
+        $ftc->addTab(t('Project hours'), $html, 9.2);
+    }
+        
+}));
+    
+    
 

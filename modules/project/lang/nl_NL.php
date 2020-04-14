@@ -14,5 +14,7 @@ $lang['User shown']       = 'Getoonde gebruiker';
 
 $lang['Hourly rate']      = 'Uurtarief';
 
+$lang['Project hours']    = 'Projecturen';
+
 return $lang;
 
