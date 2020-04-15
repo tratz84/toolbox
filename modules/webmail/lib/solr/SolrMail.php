@@ -6,6 +6,7 @@ namespace webmail\solr;
 
 use core\exception\OutOfBoundException;
 use webmail\mail\MailProperties;
+use core\exception\DebugException;
 
 class SolrMail {
     
@@ -242,6 +243,11 @@ class SolrMail {
         // max parse once
         if ($this->mailIsParsed) {
             return;
+        }
+        
+        // this should NEVER EVER happen. If so, it's a bug that must be immediately fixed.
+        if (@$this->jsonMail->contextName != ctx()->getContextName()) {
+            throw new DebugException('!!! E-mail in wrong context, fix immediately !!!');
         }
         
         $this->mailIsParsed = true;
