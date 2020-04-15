@@ -152,10 +152,17 @@ class MailboxSearchSettings {
             if ($filter['filter_type'] == 'folder') {
                 $v = solr_escapePhrase( trim($filter['filter_value']) );
                 
-                // queries specific on mailbox? => skip exclusion
-                if (in_array('mailboxName:'.$v, $smq->getFacetQueries())) {
-                    continue;
+                // query specific on mailbox? => skip exclusion
+                $skip = false;
+                foreach($smq->getFacetQueries() as $fq) {
+                    if (endsWith($fq, 'mailboxName:'.$v)) {
+                        $skip = true;
+                        break;
+                    }
                 }
+                
+                if ($skip)
+                    continue;
                 
                 $smq->addFacetQuery('-mailboxName:'.$v);
             }
