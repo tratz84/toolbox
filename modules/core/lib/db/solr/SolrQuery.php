@@ -63,11 +63,14 @@ class SolrQuery {
      * @param array $opts        - options: 'tag' for tagging facet-query
      */
     public function addFacetSearch($fieldName, $operator, $value, $opts=array()) {
-        $fq = solr_escapeTerm($fieldName) . $operator;
+        $fq = '';
         
         if (isset($opts['tag']) && $opts['tag']) {
             $fq .= '{!tag='.$opts['tag'].'}';
         }
+        
+        $fq .= solr_escapeTerm($fieldName);
+        $fq .= $operator;
         $fq .=  solr_escapePhrase($value);
         
         $this->addFacetQuery($fq);
