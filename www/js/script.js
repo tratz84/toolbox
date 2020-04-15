@@ -39,7 +39,7 @@ $(document).ready(function() {
 	
 	autoformat_fields( $('.main-content form') );
 	
-	focusFirstField( $('body.action-index table.list-response-table th, .main-content form') );
+	focusFirstField( $('body.action-index table.list-response-table th, .autofocus-first-field th, .main-content form') );
 	
 	var toolbox = $('.page-header .toolbox');
 	if (toolbox.length) {
@@ -297,14 +297,14 @@ $(window).on('IndexTable-loaded-first-time', function(a, b) {
 	if (typeof less != 'undefined') {
 		less.pageLoadFinished.then(function() {
 			// form-page?
-			focusFirstField( $('body.action-index table.list-response-table th, .main-content form') );
+			focusFirstField( $('body.action-index table.list-response-table th, .autofocus-first-field th, .main-content form') );
 		});
 	}
 });
 if (typeof less != 'undefined') {
 	less.pageLoadFinished.then(function() {
 		// form-page?
-		focusFirstField( $('body.action-index table.list-response-table th, .main-content form') );
+		focusFirstField( $('body.action-index table.list-response-table th, .autofocus-first-field th, .main-content form') );
 	});
 }
 

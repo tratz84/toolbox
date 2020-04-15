@@ -9,7 +9,7 @@
 </div>
 
 
-<div id="storefile-table-container"></div>
+<div id="storefile-table-container" class="autofocus-first-field"></div>
 
 
 <script>
