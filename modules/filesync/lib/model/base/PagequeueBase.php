@@ -14,7 +14,7 @@ class PagequeueBase extends \core\db\DBObject {
   'pagequeue_id' => 
   array (
     'Field' => 'pagequeue_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'NO',
     'Key' => 'PRI',
     'Default' => NULL,
@@ -23,7 +23,7 @@ class PagequeueBase extends \core\db\DBObject {
   'ref_id' => 
   array (
     'Field' => 'ref_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -104,7 +104,7 @@ class PagequeueBase extends \core\db\DBObject {
   'degrees_rotated' => 
   array (
     'Field' => 'degrees_rotated',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -132,6 +132,15 @@ class PagequeueBase extends \core\db\DBObject {
   array (
     'Field' => 'created',
     'Type' => 'datetime',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'user_id' => 
+  array (
+    'Field' => 'user_id',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -198,6 +207,10 @@ class PagequeueBase extends \core\db\DBObject {
 		
 	public function setCreated($p) { $this->setField('created', $p); }
 	public function getCreated() { return $this->getField('created'); }
+	
+		
+	public function setUserId($p) { $this->setField('user_id', $p); }
+	public function getUserId() { return $this->getField('user_id'); }
 	
 	
 }

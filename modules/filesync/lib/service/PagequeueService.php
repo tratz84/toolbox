@@ -36,6 +36,8 @@ class PagequeueService extends ServiceBase {
         }
         
         $form->fill($pag, array('pagequeue_id', 'name', 'description', 'crop_x1', 'crop_y1', 'crop_x2', 'crop_y2', 'degrees_rotated', 'page_orientation'));
+        
+        $pag->setUserId( ctx()->getUser()->getUserId() );
         $pag->save();
         
         if (isset($_FILES['file']) && $_FILES['file']['error'] != UPLOAD_ERR_NO_FILE) {

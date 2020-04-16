@@ -9,6 +9,7 @@ $tb_pagequeue = new TableModel('filesync', 'pagequeue');
 $tb_pagequeue->addColumn('pagequeue_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
 $tb_pagequeue->addColumn('ref_id',           'int');
 $tb_pagequeue->addColumn('ref_object',       'varchar(255)');
+$tb_pagequeue->addColumn('user_id',          'int');
 $tb_pagequeue->addColumn('filename',         'varchar(255)');
 $tb_pagequeue->addColumn('name',             'varchar(255)');
 $tb_pagequeue->addColumn('description',      'text');
