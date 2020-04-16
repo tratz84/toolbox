@@ -12,7 +12,8 @@
 	<thead>
 		<tr>
 			<th><?= t('Note') ?></th>
-			<th style="width: 150px;"><?= t('Date') ?></th>
+			<th style="width: 150px;"><?= t('Edited') ?></th>
+			<th style="width: 150px;"><?= t('Created') ?></th>
 			<th style="width: 50px;"><?= t('Important') ?></th>
 			<th style="width: 200px;"></th>
 		</tr>
@@ -62,9 +63,12 @@ function renderNotes(listResponse) {
 		var tdNote      = $('<td class="td-summary" />');
 		tdNote.text( o.summary );
 		
-		var tdDate      = $('<td />');
-		tdDate.text( format_datetime(str2datetime(o.edited)) );
+		var tdEdited = $('<td />');
+		tdEdited.text( format_datetime(str2datetime(o.edited)) );
 
+		var tdCreated = $('<td />');
+		tdCreated.text( format_datetime(str2datetime(o.created)) );
+		
 		var tdImportant = $('<td />');
 		tdImportant.text( o.important ? _('Yes') : _('No') );
 		
@@ -75,7 +79,8 @@ function renderNotes(listResponse) {
 		});
 
 		tr.append( tdNote );
-		tr.append( tdDate );
+		tr.append( tdEdited );
+		tr.append( tdCreated );
 		tr.append( tdImportant );
 		tr.append( tdActions);
 		

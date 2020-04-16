@@ -8,6 +8,7 @@ $lang['Date / time']          = 'Datum / tijd';
 $lang['Day']                  = 'Dag';
 $lang['Date']                 = 'Datum';
 $lang['Time']                 = 'Tijdstip';
+$lang['End']                  = 'Eind';
 
 $lang['Calendar: Cue points'] = 'Kalender: Actie punten';
 $lang['Overview open calendar items'] = 'Overzicht openstaande kalenderitems';
@@ -17,6 +18,7 @@ $lang['No upcoming agenda items'] = 'Geen opkomende punten';
 
 $lang['Actions']           = 'Acties';
 $lang['Execute']           = 'Uitvoeren';
+$lang['Location']          = 'Locatie';
 
 $lang['Calendar']          = 'Kalender';
 $lang['Calendars']         = 'Kalenders';

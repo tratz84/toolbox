@@ -10,6 +10,9 @@ $lang['Load more']              = 'Laad meer';
 $lang['Active']                 = 'Actief';
 $lang['Changes saved']          = 'Wijzigingen opgeslagen';
 
+$lang['Edited']                 = 'Bewerkt op';
+$lang['Created']                = 'Aangemaakt op';
+
 $lang['Basic settings']         = 'Basis instellingen';
 
 $lang['Make your choice']       = 'Maak uw keuze';
