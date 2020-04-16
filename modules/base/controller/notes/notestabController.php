@@ -25,7 +25,7 @@ class notestabController extends BaseController {
         $notes = $notesService->readNotesByCustomer($this->companyId, $this->personId);
         
         
-        $this->listResponse = ListResponse::fillByDBObjects(0, null, $notes, ['note_id', 'summary', 'important', 'edited']);
+        $this->listResponse = ListResponse::fillByDBObjects(0, null, $notes, ['note_id', 'summary', 'important', 'edited', 'created']);
         
         $this->setShowDecorator(false);
         
@@ -37,7 +37,7 @@ class notestabController extends BaseController {
         
         $notes = $notesService->readNotesByCustomer( get_var('companyId'), get_var('personId') );
         
-        $lr = ListResponse::fillByDBObjects(0, null, $notes, ['note_id', 'summary', 'important', 'edited']);
+        $lr = ListResponse::fillByDBObjects(0, null, $notes, ['note_id', 'summary', 'important', 'edited', 'created']);
         
         return $this->json([
             'success' => true,
