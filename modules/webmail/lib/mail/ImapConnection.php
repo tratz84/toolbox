@@ -161,12 +161,6 @@ class ImapConnection {
 
     
     public function importItems($folderName) {
-        // INBOX has special business rules
-        // TODO: decide if this one has to be skipped? or maybe some sort of boolean? bin/webmail_connector.php also handle this folder..
-        if ($folderName == 'INBOX') {
-            return $this->importInbox($this->connector);
-        }
-        
         
         if (!imap_reopen($this->imap, $this->mailbox.$folderName))
             return false;
@@ -189,6 +183,12 @@ class ImapConnection {
             
             for($y=0; $y < count($results); $y++) {
                 $emlfile = $this->determineEmailPath( $results[$y] );
+                
+                // INBOX has special business rules. Skip import if e-mail is not yet imported by bin/webmail_connector.php
+                if ($folderName == 'INBOX' && file_exists($emlfile) == false) {
+                    continue;
+                }
+                
                 $mp = $this->buildMessageProperties($emlfile, $folderName, $results[$y]);
                 
                 // check if mail (properties) are changed
