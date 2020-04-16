@@ -10,6 +10,8 @@ use core\event\PeopleEvent;
 
 Context::getInstance()->enableModule('filesync');
 
+module_update_handler('filesync', '20200416');
+
 $eb = ObjectContainer::getInstance()->get(EventBus::class);
 
 
