@@ -1188,6 +1188,10 @@ function validate_email(mail)  {
 
 
 function valid_date(value) {
+	if (typeof value == 'undefined') {
+		return false;
+	}
+
 	if (value == '00-00-0000' || value == '0000-00-00')
 		return false;
 	if (value.match(/^\d{2}-\d{2}-\d{4}$/))
@@ -1199,6 +1203,10 @@ function valid_date(value) {
 }
 
 function valid_datetime(value) {
+	if (typeof value == 'undefined') {
+		return false;
+	}
+	
 	if (value == '00-00-0000 00:00:00' || value == '0000-00-00  00:00:00')
 		return false;
 	if (value.match(/^\d{2}-\d{2}-\d{4} \d{2}:\d{2}:\d{2}$/))
@@ -1269,6 +1277,12 @@ function str2date(str) {
 
 
 function format_date(date, opts) {
+	// only Date-objects can be formatted
+	if ((date instanceof Date) == false) {
+		console.error('format_date(), invalid object: ' + date);
+		return '';
+	}
+
 	var t = '';
 	
 	opts = opts ? opts : {};
@@ -1309,6 +1323,11 @@ function format_date(date, opts) {
 
 
 function format_datetime(date, opts) {
+	// only Date-objects can be formatted
+	if ((date instanceof Date) == false) {
+		console.error('format_datetime(), invalid object: ' + date);
+		return '';
+	}
 	
 	opts = opts ? opts : {};
 	if (typeof opts.skipSeconds == 'undefined') opts.skipSeconds = false;
