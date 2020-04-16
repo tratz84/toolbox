@@ -130,6 +130,10 @@ class TableModel {
         return $this->data['indexes'][$indexName];
     }
     public function addIndex($indexName, $columns=array(), $props=array()) {
+        if (is_array($columns) == false) {
+            throw new InvalidArgumentException('$columns-variable not an array');
+        }
+        
         $data = array(
             'columns' => $columns,
             'name' => $indexName,
