@@ -15,20 +15,16 @@ Currently the basis for an administrationsystem is build (in Dutch) with support
 
 
 ### TODO
+- accounting/finance
 - database editor
 - GUI-based business rules system
-* - calendar, link to customer
-*- Customer (company/person) - tab Calendar events happened in past
-*- Customer (company/person) - tab project-hours
-*- Customer (company/person) - notes-tab
-*- Notes
-*	-- Basic message
-*	-- checkbox 'important', shows a note prominent when viewing a customer
-* - Option to show Companies & Persons in 1 overview instead of 2 separate pages
 - incoming contracts?
 - subscriptions
-- accounting/finance
 - user groups support
+- incoming, stock, sales, production..
+- production, recipes, ...
+- monitoring tool
+- notification center (Telegram/SMS/... ?)
 
 ### Installation 
 
