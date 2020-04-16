@@ -184,7 +184,7 @@ class ImapConnection {
             for($y=0; $y < count($results); $y++) {
                 $emlfile = $this->determineEmailPath( $results[$y] );
                 
-                // INBOX has special business rules. Skip import if e-mail is not yet imported by bin/webmail_connector.php
+                // INBOX has special business rules. Skip update if e-mail is not yet imported by bin/webmail_connector.php
                 if ($folderName == 'INBOX' && file_exists($emlfile) == false) {
                     continue;
                 }
