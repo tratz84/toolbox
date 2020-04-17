@@ -299,20 +299,18 @@ t.addColumn({
 	}
 });
 
+var mapMailActions = <?= json_encode(mapMailActions()) ?>;
+var actionFilterOptions = [];
+actionFilterOptions.push( { value: '', text: 'Action' } );
+for (var key in mapMailActions) {
+	actionFilterOptions.push( { value: key, text: mapMailActions[key] } );
+}
+
 t.addColumn({
 	fieldName: 'action',
 	fieldDescription: 'Action',
 	fieldType: 'select',
-	filterOptions: [
-		{ value: '',          text: 'Action'      },
-		{ value: 'open',      text: 'Open'        },
-		{ value: 'urgent',    text: 'Urgent'      },
-		{ value: 'inprogess', text: 'In progress' },
-		{ value: 'replied',   text: 'Replied'     },
-		{ value: 'ignored',   text: 'Ignored'     },
-		{ value: 'done',      text: 'Done'        },
-		{ value: 'postponed', text: 'Postponed'   },
-	],
+	filterOptions: actionFilterOptions,
 	searchable: true,
 	render: function(record) {
 		return record.action;

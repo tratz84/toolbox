@@ -151,9 +151,11 @@ class MailProperties {
     
     
     public function setAction($a) {
-        if (in_array($a, ['open', 'urgent', 'inprogress', 'done', 'ignored', 'replied', 'postponed']) == false) {
+        $mailActions = mapMailActions();
+        if (isset($mailActions[$a]) == false) {
             throw new InvalidArgumentException('Invalid action');
         }
+        
         $this->setToolboxProperty('action', $a);
     }
     public function getAction() { return $this->getProperty('action', 'open'); }

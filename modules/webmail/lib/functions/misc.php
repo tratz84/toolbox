@@ -3,6 +3,7 @@
 
 
 use webmail\service\ConnectorService;
+use webmail\solr\SolrMail;
 
 function mapAllConnectors() {
     
@@ -17,4 +18,19 @@ function mapAllConnectors() {
     
     return $map;
 }
+
+function mapMailActions() {
+    $mapActions = array();
+    $mapActions[ SolrMail::ACTION_OPEN ]      = t('Open');
+    $mapActions[ SolrMail::ACTION_URGENT ]    = t('Urgent');
+    $mapActions[ SolrMail::ACTION_INPROGRESS ]= t('In progress');
+    $mapActions[ SolrMail::ACTION_POSTPONED ] = t('Postponed');
+    $mapActions[ SolrMail::ACTION_DONE ]      = t('Done');
+    $mapActions[ SolrMail::ACTION_REPLIED ]   = t('Replied');
+    $mapActions[ SolrMail::ACTION_IGNORED ]   = t('Ignored');
+    
+    return $mapActions;
+}
+
+
 

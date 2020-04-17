@@ -18,30 +18,16 @@ class WebmailUpdateActionForm extends \core\forms\CodegenBaseForm {
 	
 	
 	public function codegen() {
+		$func1 = function() {  return mapMailActions(); }; 
+		$func2 = function() {  return mapMailActions(); }; 
 		
-		
-		$w1 = new \core\forms\SelectField('old_action', NULL, array (
-		  'open' => 'Open',
-		  'urgent' => 'Urgent',
-		  'inprogress' => 'In progress',
-		  'postponed' => 'Postponed',
-		  'done' => 'Done',
-		  'replied' => 'Replied',
-		  'ignored' => 'Ignored',
-		), t('Old action'));
+		$w1 = new \core\forms\SelectField('old_action', NULL, $func1(), t('Old action'));
 		$this->addWidget( $w1 );
-		$w2 = new \core\forms\SelectField('new_action', NULL, array (
-		  'open' => 'Open',
-		  'urgent' => 'Urgent',
-		  'inprogress' => 'In progress',
-		  'postponed' => 'Postponed',
-		  'done' => 'Done',
-		  'replied' => 'Replied',
-		  'ignored' => 'Ignored',
-		), t('New action'));
+		$w2 = new \core\forms\SelectField('new_action', NULL, $func2(), t('New action'));
 		$this->addWidget( $w2 );
 		
 	}
+
 
 
 }

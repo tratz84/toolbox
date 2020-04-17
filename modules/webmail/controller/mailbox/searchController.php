@@ -181,14 +181,7 @@ class searchController extends BaseController {
 	    }
 
 	    // Action-state
-	    $mapActions = array();
-	    $mapActions[ SolrMail::ACTION_OPEN ]      = t('Open');
-	    $mapActions[ SolrMail::ACTION_URGENT ]    = t('Urgent');
-	    $mapActions[ SolrMail::ACTION_INPROGRESS ]= t('In progress');
-	    $mapActions[ SolrMail::ACTION_POSTPONED ] = t('Postponed');
-	    $mapActions[ SolrMail::ACTION_DONE ]      = t('Done');
-	    $mapActions[ SolrMail::ACTION_REPLIED ]   = t('Replied');
-	    $mapActions[ SolrMail::ACTION_IGNORED ]   = t('Ignored');
+	    $mapActions = mapMailActions();
 	    $selectActions = new SelectField('set_action', $mp->getAction(), $mapActions);
 	    $selectActions->setAttribute('onchange', 'setMailAction('.json_encode($emailId).', this.value)');
 	    $this->actionContainer->addItem('set-mail-action', $selectActions->render());
