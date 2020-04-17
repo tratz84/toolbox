@@ -16,18 +16,17 @@ Currently the basis for an administrationsystem is build (in Dutch) with support
 
 ### TODO
 - accounting/finance
+- script that handles cron-jobs & background processes
+
 - monitoring tool
 - notification center (Telegram/SMS/... ?)
 - user groups support
-- script that handles cron-jobs & background processes
 
 - incoming contracts?
 - subscriptions
 - incoming, stock, sales, production..
 - production, recipes, ...
 
-- database editor
-- GUI-based business rules system
 
 
 ### Installation 

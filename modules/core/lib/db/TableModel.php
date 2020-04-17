@@ -193,8 +193,9 @@ class TableModel {
             $refColumns = array( $refColumns );
         }
         
-        if ($onDelete == null) $onDelete = 'set default';
-        if ($onUpdate == null) $onUpdate = 'set default';
+        // 'NO ACTION' is mysql's default value if nothing is set
+        if ($onDelete == null) $onDelete = 'NO ACTION';
+        if ($onUpdate == null) $onUpdate = 'NO ACTION';
         
         $onDelete = strtoupper(trim($onDelete));
         $onUpdate = strtoupper(trim($onUpdate));
