@@ -404,40 +404,39 @@ class ImapConnection {
                         print "Applying filters\n";
                         $result = $this->applyFilters($connector, $file, $results[$y]->uid);
                         
-                        // filters applied? => expunge mailbox when finished
-                        if (is_array($result) && isset($result['move_to_folder'])) {
+                        // update propertiesName
+                        $mp = new MailProperties($emlfile);
+                        $mp->load();
+                        
+                        // message moved to another folder?
+                        if (isset($result['move_to_folder'])) {
+                            // set new folder name
+                            $mp->setFolder( $result['move_to_folder'] );
+                            $folderName = $result['move_to_folder'];
+                            
+                            // call imap_expunge
                             $blnExpunge = true;
                         }
+                        // set default folder
+                        else {
+                            $folderName = 'INBOX';
+                        }
+                        
+                        // mark as spam
+                        if (isset($result['is_spam']) && $result['is_spam']) {
+                            $mp->setJunk( true );
+                        }
+                        
+                        // set_action?
+                        if (isset($result['set_action']) && $result['set_action']) {
+                            $mp->setAction( $result['set_action'] );
+                        }
+                        
+                        $mp->save();
+                        
                         
                         // call callback
                         if ($this->callback_itemImported != null) {
-                            // update propertiesName
-                            $mp = new MailProperties($emlfile);
-                            $mp->load();
-                            
-                            // message moved to another folder?
-                            if (is_array($result) && isset($result['move_to_folder'])) {
-                                $mp->setFolder( $result['move_to_folder'] );
-                                $folderName = $result['move_to_folder'];
-                            }
-                            // set default folder
-                            else {
-                                $folderName = 'INBOX';
-                            }
-                            
-                            // mark as spam
-                            if (is_array($result['is_spam']) && $result['is_spam']) {
-                                $mp->setJunk( true );
-                            }
-                            
-                            // set_action?
-                            if (is_array($result['set_action']) && $result['set_action']) {
-                                $mp->setAction( $result['set_action'] );
-                            }
-                            
-                            $mp->save();
-                            
-                            
                             call_user_func($this->callback_itemImported, $folderName, $results[$y], $file, true);
                         }
                     }
