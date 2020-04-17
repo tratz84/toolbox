@@ -46,7 +46,8 @@ class filterController extends BaseController {
             if ($filterForm->validate()) {
                 $connectorService->saveFilter($filterForm);
                 
-                redirect('/?m=webmail&c=filter');
+                report_user_message(t('Changes saved'));
+                redirect('/?m=webmail&c=filter&a=edit&filter_id='.$filterForm->getWidgetValue('filter_id'));
             }
         }
         

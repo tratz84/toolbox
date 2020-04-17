@@ -71,7 +71,7 @@ class MailProperties {
         }
         
         if ($this->serverPropertiesChanged) {
-            $r = file_put_contents($this->sfile, json_encode($this->serverProperties));
+            file_put_contents($this->sfile, json_encode($this->serverProperties));
         }
         
         if ($this->toolboxPropertiesChanged) {

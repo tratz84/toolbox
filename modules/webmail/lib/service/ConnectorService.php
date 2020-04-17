@@ -267,7 +267,28 @@ class ConnectorService extends ServiceBase {
         
         $faDao = new FilterActionDAO();
         $actions = $form->getWidget('actions')->getObjects();
-        $faDao->mergeFormListMTO1('filter_id', $filter->getFilterId(), $actions);
+        
+        $actions2 = array();
+        foreach($actions as $a) {
+            $action = [
+                'filter_id'                => $a['filter_id']
+                , 'filter_action_id'       => $a['filter_action_id']
+                , 'filter_action'          => $a['filter_action']
+                , 'filter_action_property' => $a['filter_action_property']
+            ];
+            
+            // filter_action_value dependend of filter_action
+            if ($a['filter_action'] == 'move_to_folder') {
+                $action['filter_action_value'] = $a['move_to_folder_filter_action_value'];
+            }
+            if ($a['filter_action'] == 'set_action') {
+                $action['filter_action_value'] = $a['set_action_filter_action_value'];
+            }
+            
+            $actions2[] = $action;
+        }
+        
+        $faDao->mergeFormListMTO1('filter_id', $filter->getFilterId(), $actions2);
         
     }
     

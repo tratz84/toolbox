@@ -405,30 +405,38 @@ class ImapConnection {
                         $result = $this->applyFilters($connector, $file, $results[$y]->uid);
                         
                         // filters applied? => expunge mailbox when finished
-                        if (is_array($result)) {
+                        if (is_array($result) && isset($result['move_to_folder'])) {
                             $blnExpunge = true;
                         }
                         
                         // call callback
                         if ($this->callback_itemImported != null) {
+                            // update propertiesName
+                            $mp = new MailProperties($emlfile);
+                            $mp->load();
+                            
                             // message moved to another folder?
-                            if (is_array($result) && isset($result['action']) && $result['action'] == 'move_to_folder') {
-                                $folderName = $result['value'];
-                                
-                                // update properties
-                                $mp = new MailProperties($emlfile);
-                                $mp->load();
-                                $mp->setFolder($folderName);
-                                // mark as spam
-                                if (is_array($result) && $result['is_spam']) {
-                                    $mp->setJunk( true );
-                                }
-                                $mp->save();
+                            if (is_array($result) && isset($result['move_to_folder'])) {
+                                $mp->setFolder( $result['move_to_folder'] );
+                                $folderName = $result['move_to_folder'];
                             }
                             // set default folder
                             else {
                                 $folderName = 'INBOX';
                             }
+                            
+                            // mark as spam
+                            if (is_array($result['is_spam']) && $result['is_spam']) {
+                                $mp->setJunk( true );
+                            }
+                            
+                            // set_action?
+                            if (is_array($result['set_action']) && $result['set_action']) {
+                                $mp->setAction( $result['set_action'] );
+                            }
+                            
+                            $mp->save();
+                            
                             
                             call_user_func($this->callback_itemImported, $folderName, $results[$y], $file, true);
                         }
@@ -478,9 +486,22 @@ class ImapConnection {
                 if (count($actions) == 0)
                     return null;
                 
-                if ($actions[0]->getFilterAction() == 'move_to_folder') {
+                $return_value = array();
+                $return_value['is_spam'] = $isSpam;
+                
+                $moveFolderActionValue = null;
+                foreach($actions as $action) {
+                    if ($action->getFilterAction() == 'move_to_folder') {
+                        $moveFolderActionValue = $action->getFilterActionValue();               // this is an webmail__connector_imapfolder.connector_imapfolder_id
+                    }
+                    if ($action->getFilterAction() == 'set_action') {
+                        $return_value['set_action'] = $action->getFilterActionValue();
+                    }
+                }
+                
+                if ($moveFolderActionValue) {
                     $connectorService = ObjectContainer::getInstance()->get(ConnectorService::class);
-                    $f = $connectorService->readImapFolder( $actions[0]->getFilterActionValue() );
+                    $f = $connectorService->readImapFolder( $moveFolderActionValue );
                     
                     // found? => move
                     if ($f) {
@@ -493,15 +514,15 @@ class ImapConnection {
                             
                         }
                         
-                        return array('action' => 'move_to_folder', 'value' => $f->getFolderName(), 'is_spam' => $isSpam);
+                        $return_value['move_to_folder'] = $f->getFolderName();
                     }
                 }
                 
-                return null;
+                return $return_value;
             }
         }
         
-        return null;
+        return array();
     }
 
     
