@@ -63,9 +63,9 @@ while (true) {
                 }
                 // filter has changed?
                 else {
-                    print "Filters changed for $connectorId\n";
                     $lastFilterChange = $connectorService->lastFilterChange( $connectorId );
                     if ($monitors[$connectorId]->getConnector()->getField('last_filter_change') != $lastFilterChange) {
+                        print "Filters changed for $connectorId\n";
                         $connectorChanged = true;
                     }
                 }
