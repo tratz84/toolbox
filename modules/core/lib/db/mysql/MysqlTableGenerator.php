@@ -402,7 +402,7 @@ class MysqlTableGenerator {
                 }
                 
                 if ($changed) {
-                    $sql_statements[] = 'ALTER TABLE `'.$this->getTableName().'` DROP CONSTRAINT `'.$fkName.'`';
+                    $sql_statements[] = 'ALTER TABLE `'.$this->getTableName().'` DROP FOREIGN KEY `'.$fkName.'`';
                 } else {
                     // not changed? => skip
                     continue;
@@ -422,7 +422,7 @@ class MysqlTableGenerator {
 //         var_export($foreignKeys);exit;
         foreach($this->dbForeignKeys as $fkName => $props) {
             if (isset($foreignKeys[$fkName]) == false) {
-                $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` DROP CONSTRAINT `" . $fkName . "`;";
+                $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` DROP FOREIGN KEY `" . $fkName . "`;";
             }
         }
         
