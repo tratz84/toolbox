@@ -72,16 +72,22 @@ class SolrImportMail {
         
         $r['subject'] = cleanup_string( $p->getHeader('subject') );
         
-        $r['content'] = $p->getMessageBody('html');
+        // html mail?
+        $htmlMessageBody = $p->getMessageBody('html');
+        if (trim( $htmlMessageBody ) != '') {
+            $hp = new HtmlParser();
+            $hp->loadString( $htmlMessageBody );
+            $hp->parse();
+            
+            // use cleanup_string(), else solr might not accept document. In that case, the whole document-batch is rejected!
+            $r['content'] = cleanup_string( $hp->getBodyText() );
+        }
+        // text mail?
+        else {
+            // use cleanup_string(), else solr might not accept document. In that case, the whole document-batch is rejected!
+            $r['content'] = cleanup_string( $p->getMessageBody('text') );
+        }
         
-        
-        
-        $hp = new HtmlParser();
-        $hp->loadString( $r['content'] );
-        $hp->parse();
-        
-        // use cleanup_string(), else solr might not accept document. In that case, the whole document-batch is rejected!
-        $r['content'] = cleanup_string( $hp->getBodyText() );
         
 //         $r['text'] = array();
         

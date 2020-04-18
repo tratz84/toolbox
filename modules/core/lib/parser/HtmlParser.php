@@ -38,7 +38,12 @@ class HtmlParser {
     public function getElementText($elementName) {
         $el = $this->findElement(['element' => $elementName]);
         
-        $t = $this->parts2text( $el['childNodes'] );
+        if (isset($el['childNodes'])) {
+            $t = $this->parts2text( $el['childNodes'] );
+        } else {
+            $t = $this->parts2text( $this->parts );
+        }
+        
         
         $t = html_entity_decode($t, ENT_COMPAT, 'UTF-8');
         $t = str_replace("\r", "", $t);
@@ -64,6 +69,9 @@ class HtmlParser {
             }
             else if (@$parts[$x]['type'] == 'text') {
                 $text .= $parts[$x]['content'];
+            }
+            else if (@$parts[$x]['type'] == 'html' && stripos($parts[$x]['content'], '<br') === 0) {
+                $text .= PHP_EOL;
             }
         }
         
@@ -120,7 +128,7 @@ class HtmlParser {
             // print "$x\n";
             
             if ($t['type'] == 'html') {
-                $trimmed_content = trim($t['content']);
+                $trimmed_content = trim(strtolower($t['content']));
                 
                 if (strpos($trimmed_content, '</') === 0) {
                     $parts[] = $t;
