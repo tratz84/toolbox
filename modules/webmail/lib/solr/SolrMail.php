@@ -171,6 +171,35 @@ class SolrMail {
         $this->removeNodesByName( $dom->childNodes, array('#comment') );
         
         
+        $allowedElements = array(
+              'a', 'abbr', 'acronym', 'address', 'area', 'aside', 'b', 'bdi', 'big', 'blockquote', 'br', 'button'
+            , 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'data', 'datalist', 'dd', 'del', 'details'
+            , 'dfn', 'dir', 'div', 'dl', 'dt', 'em', 'fieldset', 'figcaption', 'figure', 'font', 'footer', 'form'
+            , 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hr', 'i', 'img', 'input', 'ins', 'kbd', 'keygen', 'label'
+            , 'legend', 'li', 'main', 'map', 'mark', 'menu', 'menuitem', 'meter', 'nav', 'ol', 'optgroup', 'option'
+            , 'output', 'p', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'section', 'select', 'small'
+            , 'span', 'strike', 'strong', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th'
+            , 'thead', 'time', 'tr', 'tt', 'u', 'ul', 'var', 'wbr', 'video'
+        );
+        
+        $allowedAttributes = array(
+            'abbr', 'accept', 'accept-charset', 'accesskey', 'action', 'align', 'alt', 'complete', 'autosave', 'axis'
+            , 'bgcolor', 'border', 'cellpadding', 'cellspacing', 'challenge', 'char', 'charoff', 'charset', 'checked'
+            , 'cite', 'clear', 'color', 'cols', 'colspan', 'compact', 'conteteditable', 'coords', 'datetime', 'dir'
+            , 'disabled', 'draggable', 'dropzone', 'enctype', 'for', 'frame', 'headers', 'height', 'high', 'href'
+            , 'hreflang', 'hspace', 'ismap', 'keytype', 'label', 'lang', 'list', 'longdesc', 'low', 'max', 'maxlength'
+            , 'media', 'method', 'min', 'multiple', 'name', 'nohref', 'noshade', 'novalidate', 'nowrap', 'open'
+            , 'optimum', 'pattern', 'placeholder', 'prompt', 'pubdate', 'radiogroup', 'readonly', 'rel', 'required'
+            , 'rev', 'reversed', 'rows', 'rowspan', 'rules', 'scope', 'selected', 'shape', 'size', 'span', 'spellcheck'
+            , 'start', 'step', 'style', 'summary', 'tabindex', 'title', 'type', 'usemap', 'valign', 'value', 'vspace'
+            , 'width', 'wrap', 'controls', 'class'
+        );
+        
+        // TODO: handle 'style'-attribute
+        
+        
+        
+        
         // remove elements
         $removeElements = array('script', 'style', 'link', 'base');
         foreach($removeElements as $re) {
