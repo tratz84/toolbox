@@ -71,6 +71,8 @@ class dashboardController extends BaseController {
         $formData['excludeFilters'] = get_var('excludeFilters');
         
         object_meta_save(User::class, ctx()->getUser()->getUserId(), 'webmail-dashboard', $formData);
+        
+        return $this->json(['success' => true]);
     }
     
     

@@ -26,7 +26,7 @@
 <script>
 
 function saveWebmailDashboard_settings() {
-	var data = $('.form-mailbox-search-settings-form').serialize();
+	var data = $('.form-mailbox-dashboard-settings-form').serialize();
 
 	$.ajax({
 		url: appUrl('/?m=webmail&c=mailbox/dashboard&a=settings_save'),
