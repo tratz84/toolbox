@@ -167,12 +167,9 @@ class SolrMail {
         @$dom->loadHTML( '<?xml version="1.0 encoding="utf-8"?>'.$this->contentHtml );
 
         
-        // remove comments
-        $this->removeNodesByName( $dom->childNodes, array('#comment') );
-        
-        
         $allowedElements = array(
-              'a', 'abbr', 'acronym', 'address', 'area', 'aside', 'b', 'bdi', 'big', 'blockquote', 'br', 'button'
+              '#text', 'html', 'body'
+            , 'a', 'abbr', 'acronym', 'address', 'area', 'aside', 'b', 'bdi', 'big', 'blockquote', 'br', 'button'
             , 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'data', 'datalist', 'dd', 'del', 'details'
             , 'dfn', 'dir', 'div', 'dl', 'dt', 'em', 'fieldset', 'figcaption', 'figure', 'font', 'footer', 'form'
             , 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hr', 'i', 'img', 'input', 'ins', 'kbd', 'keygen', 'label'
@@ -193,31 +190,27 @@ class SolrMail {
             , 'rev', 'reversed', 'rows', 'rowspan', 'rules', 'scope', 'selected', 'shape', 'size', 'span', 'spellcheck'
             , 'start', 'step', 'style', 'summary', 'tabindex', 'title', 'type', 'usemap', 'valign', 'value', 'vspace'
             , 'width', 'wrap', 'controls', 'class'
+            // , 'src'
         );
         
-        // TODO: handle 'style'-attribute
+        // filter nodes
+        $this->allowNodesByName( $dom->childNodes, $allowedElements );
         
         
-        
-        
-        // remove elements
-        $removeElements = array('script', 'style', 'link', 'base');
-        foreach($removeElements as $re) {
-            do {
-                $els = $dom->getElementsByTagName( $re );
-                if (count($els)) {
-                    $els[0]->parentNode->removeChild( $els[0] );
-                }
-            } while (count($els) > 0);
-        }
-        
-        // remove src=""-attributes
-        $removeAttributes = array('src');
+        // filter attributes
         $els = $dom->getElementsByTagName( '*' );
         foreach($els as $el) {
-            foreach($removeAttributes as $ra) {
-                if ($el->hasAttribute( $ra )) {
-                    $el->removeAttribute($ra);
+            if ($el->attributes) foreach($el->attributes as $attributeName => $val) {
+                // style-attribute special case. Removal of url's is the most important
+                if ($attributeName == 'style') {
+                    $val->value = preg_replace('/url\(.*?\)/', '', $val->value);
+                    
+                    // remove all '<protocol>://' (trying to be future proof? :)
+                    $val->value = preg_replace('/(\\S*):\\/\\/\\S*/', ';', $val->value);
+                }
+                // remove all not-allowed attrs
+                else if (in_array($attributeName, $allowedAttributes) == false) {
+                    $el->removeAttribute($attributeName);
                 }
             }
         }
@@ -237,7 +230,7 @@ class SolrMail {
             $body = null;
         }
         
-        $html = $dom->saveHTML();
+        $html = $dom->saveHTML( $body );
         
         $html = preg_replace('/<body.*?>/', '', $html);
         $html = str_replace('</body>', '', $html);
@@ -263,6 +256,24 @@ class SolrMail {
                 $this->removeNodesByName( $childNodes[$cnt]->childNodes, $nodeNames );
             }
         }
+    }
+    
+    public function allowNodesByName( $childNodes, $allowedElements=array()) {
+        $cnt = count($childNodes)-1;
+        for(; $cnt >= 0; $cnt--) {
+            // remove?
+            // print "nodename: " . $childNodes[$cnt]->nodeName . "\n";
+            
+            if ( in_array($childNodes[$cnt]->nodeName, $allowedElements) == false ) {
+                $childNodes[$cnt]->parentNode->removeChild( $childNodes[$cnt] );
+                continue;
+            }
+            
+            if (isset($childNodes[$cnt]->childNodes) && count($childNodes[$cnt]->childNodes) > 0) {
+                $this->allowNodesByName( $childNodes[$cnt]->childNodes, $allowedElements );
+            }
+        }
+        
     }
     
     
