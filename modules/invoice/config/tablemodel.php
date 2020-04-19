@@ -48,8 +48,8 @@ $tb_art->addForeignKey('article__article_ibfk_1', 'vat_id', 'invoice__vat', 'vat
 $tbs[] = $tb_art;
 
 $tb_aag = new TableModel('article', 'article_article_group');
-$tb_aag->addColumn('article_group_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
-$tb_aag->addColumn('article_id',       'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_aag->addColumn('article_group_id', 'int', ['key' => 'PRIMARY KEY']);
+$tb_aag->addColumn('article_id',       'int', ['key' => 'PRIMARY KEY']);
 $tb_aag->addColumn('sort',             'int');
 $tb_aag->addForeignKey('article__article_article_group_ibfk_1', 'article_group_id', 'article__article_group', 'article_group_id', 'CASCADE', 'RESTRICT');
 $tb_aag->addForeignKey('article__article_article_group_ibfk_2', 'article_id', 'article__article', 'article_id', 'CASCADE', 'RESTRICT');
@@ -201,7 +201,7 @@ $tb_to_bill->addColumn('deleted',           'datetime');
 $tb_to_bill->addColumn('edited',            'datetime');
 $tb_to_bill->addColumn('created',           'datetime');
 $tb_to_bill->addForeignKey('invoice__to_bill_ibfk_1', 'company_id', 'customer__company', 'company_id', 'SET NULL', 'CASCADE');
-$tb_to_bill->addForeignKey('invoice__to_bill_ibfk_2', 'project_id', 'project__project', 'project_id', 'SET NULL', 'CASCADE');
+// $tb_to_bill->addForeignKey('invoice__to_bill_ibfk_2', 'project_id', 'project__project', 'project_id', 'SET NULL', 'CASCADE');
 $tb_to_bill->addForeignKey('invoice__to_bill_ibfk_3', 'user_id', 'base__user', 'user_id', 'SET NULL', 'CASCADE');
 $tb_to_bill->addForeignKey('invoice__to_bill_ibfk_4', 'invoice_line_id', 'invoice__invoice_line', 'invoice_line_id', 'SET NULL', 'CASCADE');
 $tbs[] = $tb_to_bill;

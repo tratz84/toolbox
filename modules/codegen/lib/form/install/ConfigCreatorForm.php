@@ -72,10 +72,10 @@ class ConfigCreatorForm extends \core\forms\CodegenBaseForm {
 	    
 	    // core stuff
 	    $sql = '';
-	    $core_tms = load_php_file( module_file('core', 'core/tablemodel.php'));
+	    $core_tms = load_php_file( module_file('core', 'config/tablemodel.php') );
 	    foreach($core_tms as $tm) {
     	    $mtg = new MysqlTableGenerator($tm);
-    	    $sql .= $mtg->buildCreateTable() . "\n";
+    	    $sql .= implode(";\n", $mtg->buildCreateTable()) . ";\n";
 	    }
 	    
 	    $r = mysqli_multi_query($dbh, $sql);
@@ -86,10 +86,10 @@ class ConfigCreatorForm extends \core\forms\CodegenBaseForm {
 	    
 	    // base stuff
 	    $sql = '';
-	    $core_tms = load_php_file( module_file('core', 'base/tablemodel.php'));
+	    $core_tms = load_php_file( module_file('base', 'config/tablemodel.php'));
 	    foreach($core_tms as $tm) {
 	        $mtg = new MysqlTableGenerator($tm);
-	        $sql .= $mtg->buildCreateTable() . "\n";
+	        $sql .= implode(";\n", $mtg->buildCreateTable()) . ";\n";
 	    }
 	    
 	    $r = mysqli_multi_query($dbh, $sql);
@@ -103,6 +103,8 @@ class ConfigCreatorForm extends \core\forms\CodegenBaseForm {
 	    //       this controller contains a check if default password is set & gives a warning!!!
 	    $sql_user = "insert into base__user set username='admin', password='admin123', edited=now(), created=now(), user_type='admin'";
 	    mysqli_query($dbh, $sql_user);
+	    
+	    // TODO: fill customer__country-table
 	    
 	    
 	    // create data-dir
