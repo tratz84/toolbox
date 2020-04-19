@@ -30,6 +30,12 @@ class SolrMailQuery extends SolrQuery {
         $this->addFacetField('connectorDescription');
     }
     
+    public function setQuery($q) {
+        $this->query = solr_escapeTerm($q);
+        $this->query = str_replace(['\\+', '\\*'], ['+', '*'], $this->query);
+    }
+    
+    
     
     public function clearFacetQueries() {
         $this->facetQueries = array();
