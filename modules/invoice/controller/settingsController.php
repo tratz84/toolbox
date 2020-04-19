@@ -45,10 +45,12 @@ class settingsController extends BaseController
                     save_upload_to('fileAttachmentInvoice', 'attachments/invoice/');
                 }
                 
+                report_user_message(t('Changes saved'));
                 redirect('/?m=invoice&c=settings');
             }
-                
-            redirect('/?m=base&c=masterdata/index');
+            
+            report_user_message(t('Changes saved'));
+            redirect('/?m=invoice&c=settings');
         }
 
         $this->render();
