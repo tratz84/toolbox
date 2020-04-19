@@ -32,7 +32,7 @@ class SolrMailQuery extends SolrQuery {
     
     public function setQuery($q) {
         $this->query = solr_escapeTerm($q);
-        $this->query = str_replace(['\\+', '\\*'], ['+', '*'], $this->query);
+        $this->query = str_replace(['\\+', '\\*', '\\-', '\\?'], ['+', '*', '-', '?'], $this->query);
     }
     
     
