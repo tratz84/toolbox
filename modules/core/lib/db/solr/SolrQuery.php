@@ -18,6 +18,7 @@ class SolrQuery {
     protected $fields      = array();   // fields returned
     
     protected $facetQueries = array();
+    protected $queryPrefix  = null;
     protected $query        = '*:*';
     
     protected $facetFields = array();
@@ -152,7 +153,11 @@ class SolrQuery {
         }
         
         if ($this->query) {
-            $url_params[] = 'q='.urlencode( $this->query );
+            $q = $this->query;
+            if ($this->queryPrefix)
+                $q = $this->queryPrefix . $q;
+            
+            $url_params[] = 'q='.urlencode( $q );
         }
         
         $url = $this->solrUrl . '/select?' . implode('&', $url_params);

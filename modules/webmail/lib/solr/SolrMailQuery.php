@@ -18,6 +18,9 @@ class SolrMailQuery extends SolrQuery {
         
         $ctx = \core\Context::getInstance();
         
+        // boost newer documents
+        $this->queryPrefix = '{!boost b=recip(ms(NOW,date),3.16e-12,1,1)}';
+        
         $this->setSort('date desc');
         $this->addFacetSearch('contextName', ':', $ctx->getContextName());
         $this->addFacetSearch('markDeleted', ':', false);
