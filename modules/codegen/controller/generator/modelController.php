@@ -21,6 +21,9 @@ class modelController extends BaseController {
     	        if (strpos($slug, '.') !== false) {
     	            $slug = substr($slug, strrpos($slug, '.')+1);
     	        }
+    	        if (strpos($slug, '__') !== false) {
+    	            $slug = substr($slug, strpos($slug, '__')+2);
+    	        }
     	        $slug = str_replace('-', '_', slugify($slug));
     	        
     	        $tblname = $this->tbl;
