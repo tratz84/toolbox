@@ -13,6 +13,8 @@ $oc = ObjectContainer::getInstance();
 
 $eb = $oc->get(\core\event\EventBus::class);
 
+module_update_handler('signrequest', '20200419');
+
 
 $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($evt) {
     $src = $evt->getSource();

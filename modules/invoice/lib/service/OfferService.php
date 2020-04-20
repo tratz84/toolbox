@@ -245,7 +245,8 @@ class OfferService extends ServiceBase {
         $invoiceSettings = $this->oc->get(InvoiceSettings::class);
         
 //         $offerPdf = $this->oc->create( \context\ptw\pdf\LandscapeOfferPdf::class );
-        $offerPdf = $this->oc->create( $invoiceSettings->getOfferPdfClass() );
+        $offerPdf = @$this->oc->create( $invoiceSettings->getOfferPdfClass() );
+            
         
         $offerPdf->setOffer($offer);
         $offerPdf->render();

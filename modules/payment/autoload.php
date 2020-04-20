@@ -11,6 +11,7 @@ Context::getInstance()->enableModule('payment');
 
 require_once __DIR__.'/lib/functions/misc.php';
 
+module_update_handler('payment', '20200419');
 
 
 $eb = ObjectContainer::getInstance()->get(EventBus::class);

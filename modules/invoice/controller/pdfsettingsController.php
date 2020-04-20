@@ -10,6 +10,7 @@ class pdfsettingsController extends BaseController {
     
     public function action_index() {
         $settings = object_meta_get('invoice-pdfsettings', 0, 'color');
+        if (is_array($settings) == false) $settings = array();
         
         $form = new InvoicePdfSettingsForm();
         $form->bind($settings);
@@ -21,7 +22,8 @@ class pdfsettingsController extends BaseController {
             
             object_meta_save('invoice-pdfsettings', 0, 'color', $settings);
 
-            redirect('/?m=invoice&c=settings');
+            report_user_message(t('Changes saved'));
+            redirect('/?m=invoice&c=pdfsettings');
         }
         
         

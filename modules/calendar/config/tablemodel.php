@@ -18,6 +18,26 @@ $tb_cal->addIndex('cal__calendar_ibfk_1', array('user_id'));
 $tb_cal->addForeignKey('cal__calendar_ibfk_1', 'user_id', 'base__user', 'user_id', 'restrict', 'restrict');
 $tbs[] = $tb_cal;
 
+// unused at the moment
+$tb_cic = new TableModel('cal', 'calendar_item_category');
+$tb_cic->addColumn('calendar_item_category_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_cic->addColumn('category_name',             'varchar(255)');
+$tb_cic->addColumn('visible',                   'boolean');
+$tb_cic->addColumn('deleted',                   'datetime');
+$tb_cic->addColumn('edited',                    'datetime');
+$tb_cic->addColumn('created',                   'datetime');
+$tbs[] = $tb_cic;
+
+
+// unused at the moment
+$tb_cis = new TableModel('cal', 'calendar_item_status');
+$tb_cis->addColumn('calendar_item_status_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_cis->addColumn('status_name',             'varchar(255)');
+$tb_cis->addColumn('visible',                 'boolean');
+$tb_cis->addColumn('deleted',                 'datetime');
+$tb_cis->addColumn('edited',                  'datetime');
+$tb_cis->addColumn('created',                 'datetime');
+$tbs[] = $tb_cis;
 
 $tb_ci = new TableModel('cal', 'calendar_item');
 $tb_ci->addColumn('calendar_item_id',          'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
@@ -50,28 +70,6 @@ $tb_ci->addIndex('cal__calendar_item_ibfk_2', array('calendar_item_category_id')
 $tb_ci->addForeignKey('cal__calendar_item_ibfk_1', 'calendar_item_status_id', 'cal__calendar_item_status', 'calendar_item_status_id', 'restrict', 'restrict');
 $tb_ci->addForeignKey('cal__calendar_item_ibfk_2', 'calendar_item_category_id', 'cal__calendar_item_category', 'calendar_item_category_id', 'restrict', 'restrict');
 $tbs[] = $tb_ci;
-
-
-// unused at the moment
-$tb_cic = new TableModel('cal', 'calendar_item_category');
-$tb_cic->addColumn('calendar_item_category_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
-$tb_cic->addColumn('category_name',             'varchar(255)');
-$tb_cic->addColumn('visible',                   'boolean');
-$tb_cic->addColumn('deleted',                   'datetime');
-$tb_cic->addColumn('edited',                    'datetime');
-$tb_cic->addColumn('created',                   'datetime');
-$tbs[] = $tb_cic;
-
-
-// unused at the moment
-$tb_cis = new TableModel('cal', 'calendar_item_status');
-$tb_cis->addColumn('calendar_item_status_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
-$tb_cis->addColumn('status_name',             'varchar(255)');
-$tb_cis->addColumn('visible',                 'boolean');
-$tb_cis->addColumn('deleted',                 'datetime');
-$tb_cis->addColumn('edited',                  'datetime');
-$tb_cis->addColumn('created',                 'datetime');
-$tbs[] = $tb_cis;
 
 
 

@@ -72,10 +72,10 @@ class ConfigCreatorForm extends \core\forms\CodegenBaseForm {
 	    
 	    // core stuff
 	    $sql = '';
-	    $core_tms = load_php_file( module_file('core', 'core/tablemodel.php'));
+	    $core_tms = load_php_file( module_file('core', 'config/tablemodel.php') );
 	    foreach($core_tms as $tm) {
     	    $mtg = new MysqlTableGenerator($tm);
-    	    $sql .= $mtg->buildCreateTable() . "\n";
+    	    $sql .= implode(";\n", $mtg->buildCreateTable()) . ";\n";
 	    }
 	    
 	    $r = mysqli_multi_query($dbh, $sql);
@@ -86,10 +86,10 @@ class ConfigCreatorForm extends \core\forms\CodegenBaseForm {
 	    
 	    // base stuff
 	    $sql = '';
-	    $core_tms = load_php_file( module_file('core', 'base/tablemodel.php'));
+	    $core_tms = load_php_file( module_file('base', 'config/tablemodel.php'));
 	    foreach($core_tms as $tm) {
 	        $mtg = new MysqlTableGenerator($tm);
-	        $sql .= $mtg->buildCreateTable() . "\n";
+	        $sql .= implode(";\n", $mtg->buildCreateTable()) . ";\n";
 	    }
 	    
 	    $r = mysqli_multi_query($dbh, $sql);
@@ -104,6 +104,9 @@ class ConfigCreatorForm extends \core\forms\CodegenBaseForm {
 	    $sql_user = "insert into base__user set username='admin', password='admin123', edited=now(), created=now(), user_type='admin'";
 	    mysqli_query($dbh, $sql_user);
 	    
+	    // fill customer__country-table
+	    mysqli_multi_query($dbh, file_get_contents(module_file('core', 'config/customer_country.sql')));
+	    $this->fetch_mysqli_results($dbh);
 	    
 	    // create data-dir
 	    $data_dir = trim($this->getWidgetValue('data_dir'));

@@ -556,7 +556,7 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
 
         $invoiceSettings = $this->oc->get(InvoiceSettings::class);
 
-        $invoicePdf = $this->oc->create( $invoiceSettings->getInvoicePdfClass() );
+        $invoicePdf = @$this->oc->create( $invoiceSettings->getInvoicePdfClass() );
 
         $invoicePdf->setInvoice($invoice);
         $invoicePdf->render();

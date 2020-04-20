@@ -169,7 +169,7 @@ class offerController extends BaseController {
         $offer = $offerService->readOffer((int)$_REQUEST['id']);
         $offerPdf = $offerService->createPdf((int)$_REQUEST['id']);
         
-        $offerPdf->Output('I', 'offerte-'.$offer->getOfferNumberText().'.pdf', true);
+        @$offerPdf->Output('I', 'offerte-'.$offer->getOfferNumberText().'.pdf', true);
     }
     
  
