@@ -28,6 +28,7 @@ function mapMailActions() {
     $mapActions[ SolrMail::ACTION_DONE ]      = t('Done');
     $mapActions[ SolrMail::ACTION_REPLIED ]   = t('Replied');
     $mapActions[ SolrMail::ACTION_IGNORED ]   = t('Ignored');
+    $mapActions[ SolrMail::ACTION_PENDING ]   = t('Pending');
     
     return $mapActions;
 }

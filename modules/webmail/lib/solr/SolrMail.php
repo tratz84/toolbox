@@ -17,6 +17,7 @@ class SolrMail {
     public const ACTION_IGNORED    = 'ignored';
     public const ACTION_DONE       = 'done';
     public const ACTION_POSTPONED  = 'postponed';
+    public const ACTION_PENDING    = 'pending';
     
     
     protected $jsonMail;
