@@ -158,8 +158,17 @@ class MysqlTableGenerator {
         
         $sql1 = $this->buildRenameColumns();
         $sql2 = $this->buildAlterColumns();
-        $sql3 = $this->buildAlterIndexes();
-        $sql4 = $this->buildAlterForeignKeys();
+        $sql3 = $this->buildAlterForeignKeys();
+        $sql4 = $this->buildAlterIndexes();
+        
+        // TODO: sort sql-queries?
+        //       => renames @ top
+        //       => DROP foreign keys before dropping indexes
+        //       => DROP indexes before drop-columns
+        //       => DROP columns
+        //       => ADD columns
+        //       => ADD FK's
+        //       => ADD indexes
         
         return array_merge($sql1, $sql2, $sql3, $sql4);
     }
