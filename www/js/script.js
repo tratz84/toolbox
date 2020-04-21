@@ -713,9 +713,10 @@ function show_popup(url, opts) {
 			var bg = $('<div class="popup-element popup-background" />');
 			
 			bg.click(function() {
-				$('.popup-element').remove();
+				close_popup();
 			});
 			
+			$(document.body).addClass('popup-container-visible');
 			
 			var popup = $('<div class="popup-element popup-container" />');
 			popup.html( data );
@@ -748,6 +749,7 @@ $(document).keydown(function(evt) {
 
 function close_popup() {
 	$('.popup-element').remove();
+	$(document.body).removeClass('popup-container-visible');
 }
 
 
@@ -813,6 +815,8 @@ function showDialog(opts) {
 		containerControls.append(btnOk);
 	}
 	
+	$(document.body).addClass('popup-container-visible');
+	
 	// container
 	var container = $('<div class="popup-element popup-container" />');
 	container.css('overflow', 'auto');
@@ -826,7 +830,7 @@ function showDialog(opts) {
 	var bg = $('<div class="popup-element popup-background" />');
 	
 	bg.click(function() {
-		$('.popup-element').remove();
+		close_popup();
 	});
 	
 	
@@ -907,6 +911,7 @@ function show_user_error(msg) {
 
 function closeFullscreenPopup() {
 	$('.confirmation-dialog, .popup-element.popup-background').remove();
+	$(document.body).removeClass('popup-container-visible');
 }
 
 function fullscreenPopup(title, body) {
