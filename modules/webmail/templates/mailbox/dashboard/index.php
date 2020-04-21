@@ -11,12 +11,13 @@
 <table class="list-response-table">
 	<thead>
 		<tr>
-			<th style="min-width: 25px;"></th>
-			<th><?= t('Box') ?></th>
-			<th><?= t('From') ?></th>
-			<th><?= t('Subject') ?></th>
-			<th><?= t('Action') ?></th>
-			<th><?= t('Date') ?></th>
+			<th class="th-icons" style="min-width: 25px;"></th>
+			<th class="th-folder-from-subject"></th>
+			<th class="th-folder"><?= t('Box') ?></th>
+			<th class="th-from"><?= t('From') ?></th>
+			<th class="th-subject"><?= t('Subject') ?></th>
+			<th class="th-action"><?= t('Action') ?></th>
+			<th class="th-date"><?= t('Date') ?></th>
 		</tr>
 	</thead>
 	<tbody class="mailbox-dashboard">
@@ -38,24 +39,35 @@ function renderMails(mails) {
 		for(var i in mails) {
 			var m = mails[i];
 
-			var tdAnswered    = $('<td />');
+			var tdAnswered    = $('<td class="td-icons" />');
 			if (m.answered) {
 				tdAnswered.append('<span class="fa fa-reply" />');
 			}
 			
-			var tdMailboxName = $('<td />');
+			var tdFolderFromSubject = $('<td class="td-folder-from-subject"><div class="date" /><div class="action" /><div class="folder" /><div class="from" /><div class="subject" /></td>');
+
+			tdFolderFromSubject.find('.date').text( format_datetime(str2datetime(m.date), {skipSeconds: true}) );
+			tdFolderFromSubject.find('.action').text( m.action );
+			
+			tdFolderFromSubject.find('.folder').text( m.mailbox_name + ' - ' );
+			tdFolderFromSubject.find('.from').text( m.from_name );
+			tdFolderFromSubject.find('.subject').text( m.subject );
+			
+			
+			var tdMailboxName = $('<td class="td-folder" />');
 			tdMailboxName.text( m.mailbox_name );
 			
-			var tdFromName    = $('<td />');
+			var tdFromName    = $('<td class="td-from" />');
 			tdFromName.text( m.from_name );
+
 			
-			var tdSubject     = $('<td />');
+			var tdSubject     = $('<td class="td-subject" />');
 			tdSubject.text( m.subject );
 			
-			var tdAction      = $('<td />');
+			var tdAction      = $('<td class="td-action" />');
 			tdAction.text( m.action );
 			
-			var tdDate        = $('<td style="white-space: nowrap;" />');
+			var tdDate        = $('<td class="td-date" style="white-space: nowrap;" />');
 			tdDate.text(format_datetime(str2datetime(m.date), {skipSeconds: true}));
 
 			var tr = $('<tr />');
@@ -68,6 +80,7 @@ function renderMails(mails) {
 			
 			
 			tr.append(tdAnswered);
+			tr.append(tdFolderFromSubject);
 			tr.append(tdMailboxName);
 			tr.append(tdFromName);
 			tr.append(tdSubject);

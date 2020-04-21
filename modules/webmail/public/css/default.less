@@ -1,5 +1,35 @@
 
 
+.module-base.base-dashboard-controller {
+	
+	.widget-item-content-webmail-mailbox-widget {
+		
+		.th-folder-from-subject, .td-folder-from-subject { display: none; }
+		
+		@media (max-width: 768px) {
+			.th-folder-from-subject, .td-folder-from-subject {
+				display: block;
+				
+				.folder { float: left; margin-right: 5px; }
+				
+				.date { float: right; }
+				.action  { float: right; margin-right: 10px; }
+			}
+			
+			.th-folder, .th-from, .th-subject
+			, .td-folder, .td-from, .td-subject
+			, .th-action, .td-action
+			, .th-date, .td-date { display: none; }
+
+		}
+	}
+	
+	
+}
+
+
+
+
 // outbox
 .webmail-view-controller {
 	form.form-email-form {
