@@ -25,13 +25,13 @@ t.setRowClick(function(row, evt) {
 t.setConnectorUrl( '/?m=base&c=person&a=search' );
 
 
-t.addColumn({
-	fieldName: 'person_id',
-	width: 40,
-	fieldDescription: 'Id',
-	fieldType: 'text',
-	searchable: false
-});
+// t.addColumn({
+// 	fieldName: 'person_id',
+// 	width: 40,
+// 	fieldDescription: 'Id',
+// 	fieldType: 'text',
+// 	searchable: false
+// });
 
 t.addColumn({
 	fieldName: 'lastname',
