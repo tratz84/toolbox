@@ -1,0 +1,21 @@
+
+
+
+.module-base.base-dashboard-controller {
+	
+	.widget-item-content-invoice-recent-invoices {
+		
+		.th-invoice-nr-name, .td-invoice-nr-name { display: none; }
+		
+		@media (max-width: 768px) {
+			.th-description, .td-description {
+				display: none;
+			}
+			.th-invoice-nr, .td-invoice-nr
+			, .th-name, .td-name { display: none; }
+			.th-invoice-nr-name, .td-invoice-nr-name { display: block; }
+		}
+	}
+	
+	
+}
