@@ -46,7 +46,7 @@
 	    			<?= esc_html(format_personname($i)) ?>
 				</div>
 			</td>
-    		<td class="td-invoice-nr" style="padding-right: 10px;">
+    		<td class="td-invoice-nr" style="padding-right: 10px; padding-left: 5px;">
     			<?= esc_html( $i['invoiceNumberText'] ) ?>
     		</td>
     		<td class="td-name">
