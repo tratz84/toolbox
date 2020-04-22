@@ -55,7 +55,7 @@ class ActionContainer {
         
         $items = $this->getItems();
         
-        $html = '<div class="action-box">';
+        $html = '<div class="action-box '.slugify($this->objectType).'">';
         for($x=0; $x < count($items); $x++) {
             $html .= '<span class="'.slugify($items[$x]['name']).'">' . $items[$x]['html'] . '</span> ';
         }

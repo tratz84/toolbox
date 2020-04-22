@@ -3,17 +3,19 @@
 
 
 
+use core\container\ActionContainer;
 use core\controller\BaseController;
 use core\exception\ObjectNotFoundException;
+use core\forms\SelectField;
+use webmail\WebmailSettings;
 use webmail\form\EmailForm;
 use webmail\mail\SolrMailActions;
+use webmail\model\Connector;
 use webmail\model\Email;
 use webmail\service\ConnectorService;
 use webmail\service\EmailService;
 use webmail\solr\SolrMail;
 use webmail\solr\SolrMailQuery;
-use webmail\service\EmailTemplateService;
-use webmail\WebmailSettings;
 
 class mailController extends BaseController {
    
@@ -22,6 +24,88 @@ class mailController extends BaseController {
         $smq = new SolrMailQuery();
         
         return $smq->readById($id);
+    }
+    
+    public function action_mailactions() {
+        if (isset($this->emailId) == false) {
+            print 'mailbox/mail::action_mailactions(), no emailId set';
+            return;
+        }
+        
+        $emailId = $this->emailId;
+        
+        // action buttons for e-mail
+        $actionContainer = new ActionContainer('mail-actions', null);
+        
+        
+        $f = get_data_file_safe('webmail/inbox', substr($emailId, strlen('/webmail/inbox')));
+        if (!$f) {
+            throw new ObjectNotFoundException('Mail not found');
+        }
+        
+        
+        // forward/reply buttons
+        $actionContainer->addItem('mail-forward', '<button class="btn-forward-mail" onclick="forwardMail('.esc_json_attr($emailId).');"><span class="fa fa-forward"></span>Forward</button>');
+        $actionContainer->addItem('mail-reply', '<button class="btn-reply-mail" onclick="replyMail('.esc_json_attr($emailId).');"><span class="fa fa-reply"></span>Reply</button>');
+        
+        
+        $solrMail = SolrMailQuery::readStaticById($emailId);
+        
+        if ($solrMail == null) {
+            $this->setTemplateFile( module_file('webmail', 'templates/mailbox/search/not-found.php') );
+            return $this->render();
+        }
+        
+        $mp = $solrMail->getProperties();
+        if ($mp->getSeen() == false) {
+            try {
+                $sma = new SolrMailActions();
+                $sma->markAsSeen($solrMail);
+            } catch (\Exception|\Error $ex) { }
+        }
+        
+        
+        // move to folder
+        if ($mp->getConnectorId()) {
+            /** @var ConnectorService $connectorService */
+            $connectorService = object_container_get(ConnectorService::class);
+            /** @var Connector $connector */
+            $connector = $connectorService->readConnector($mp->getConnectorId());
+            
+            $mapFolders = array();
+            if ($connector) foreach($connector->getImapfolders() as $if) {
+                $mapFolders[$if->getFolderName()] = $if->getFolderName();
+            }
+            
+            $selectFolders = new SelectField('move_imap_folder', $mp->getFolder(), $mapFolders, null, ['add-unlisted' => true]);
+            $selectFolders->setAttribute('onchange', 'moveMail('.json_encode($emailId).', this.value)');
+            
+            $actionContainer->addItem('move-mail-to-folder', $selectFolders->render());
+        }
+        
+        // Action-state
+        $mapActions = mapMailActions();
+        $selectActions = new SelectField('set_action', $mp->getAction(), $mapActions);
+        $selectActions->setAttribute('onchange', 'setMailAction('.json_encode($emailId).', this.value)');
+        $actionContainer->addItem('set-mail-action', $selectActions->render());
+        
+        
+        if ($mp->isJunk() == false) {
+            $spam_onclick = "if (confirm('Are you sure to mark this mail as spam?')) markMailAsSpam(".json_encode($emailId).");";
+            $actionContainer->addItem('mark-as-spam', '<button title="'.esc_attr(t('Mark as spam')).'" onclick="' . esc_attr($spam_onclick) . '"><span class="fa fa-flag mark-as-spam"></span></button>');
+        }
+        
+        // delete-button
+        $delete_onclick = "if (confirm('Are you sure to delete this mail?')) deleteMail(".json_encode($emailId).");";
+        $actionContainer->addItem('delete-mail', '<button title="'.esc_attr(t('Delete mail')).'" onclick="' . esc_attr($delete_onclick) . '"><span class="fa fa-trash delete-mail"></span></button>');
+        
+        
+        hook_eventbus_publish($actionContainer, 'webmail', 'mailbox-mailactions');
+        
+        $this->actionContainer = $actionContainer;
+        
+        $this->setShowDecorator(false);
+        return $this->render();
     }
     
     

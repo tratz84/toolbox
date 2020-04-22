@@ -88,7 +88,7 @@ $eb->subscribe('base', 'dashboard', new CallbackPeopleEventListener(function($ev
 /**
  * Webmail action-button for importing e-mail attachments or e-mail itself
  */
-$eb->subscribe('webmail', 'mailbox-search', new CallbackPeopleEventListener(function($evt) {
+$eb->subscribe('webmail', 'mailbox-mailactions', new CallbackPeopleEventListener(function($evt) {
     /** @var \core\container\ActionContainer $actionContainer */
     $actionContainer = $evt->getSource();
     

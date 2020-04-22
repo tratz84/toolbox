@@ -1,6 +1,6 @@
 
 
-<?= $actionContainer->render() ?>
+<?= include_component('webmail', 'mailbox/mail', 'mailactions', ['emailId' => $emailId]) ?>
 
 <input type="hidden" id="emailId" value="<?= esc_attr($emailId) ?>" />
 

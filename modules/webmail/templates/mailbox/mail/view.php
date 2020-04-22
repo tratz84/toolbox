@@ -1,4 +1,8 @@
 
+<?php if (get_var('skip_mailactions') == false) : ?>
+	<?= include_component('webmail', 'mailbox/mail', 'mailactions', ['emailId' => $id]) ?>
+<?php endif; ?>
+
 <div style="font-family: -apple-system,BlinkMacSystemFont, 'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji' ">
 
     <br/>
