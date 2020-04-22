@@ -7,24 +7,24 @@
 <table class="list-widget" style="width: 100%;">
 	<thead>
 		<tr>
-			<th>Naam</th>
-			<th>Omschrijving</th>
-			<th>Status</th>
-			<th>Gewijzigd op</th>
+			<th class="th-name-description">Naam / Betreft</th>
+			<th class="th-name">Naam</th>
+			<th class="th-subject">Betreft</th>
+			<th class="th-status">Status</th>
+			<th class="th-edited">Gewijzigd op</th>
 		</tr>
 	</thead>
 	<tbody>
     	<?php foreach($offers->getObjects() as $o) : ?>
     	<tr onclick="window.location=appUrl('/?m=invoice&c=offer&a=edit&id=<?= $o['offer_id'] ?>')" class="clickable">
-    		<td>
-    			<?= esc_html($o['company_name']) ?>
-    			<?= esc_html($o['lastname']) ?>
-    			<?= $o['insert_lastname']?', '.esc_html($o['insert_lastname']):'' ?>
-    			<?= esc_html($o['firstname']) ?>
+    		<td class="td-name-description">
+    			<div class="customer-name"><?= esc_html(format_customername($o)) ?></div>
+    			<div class="description"><?= esc_html($o['subject']) ?></div>
     		</td>
-    		<td><?= esc_html($o['subject']) ?></td>
-    		<td><?= esc_html($o['offer_status_description']) ?></td>
-    		<td><?= date('d-m-Y H:i:s', date2unix($o['edited'])) ?></td>
+    		<td style="padding-left: 5px;" class="td-name"><?= esc_html(format_customername($o)) ?></td>
+    		<td class="td-subject"><?= esc_html($o['subject']) ?></td>
+    		<td class="td-status"><?= esc_html($o['offer_status_description']) ?></td>
+    		<td class="td-edited"><?= date('d-m-Y H:i:s', date2unix($o['edited'])) ?></td>
     	</tr>
     	<?php endforeach; ?>
         <?php if (count($offers->getObjects())==0) : ?>
