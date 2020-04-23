@@ -19,8 +19,8 @@
 var fpt = new IndexTable('#filesync-popup-table');
 
 fpt.setRowClick(function(row, evt) {
-
-	filesyncArchivePopup_Click( $(row).data('record') );
+	
+	filesyncArchiveFile_Select( $(row).data('record').store_file_id );
 	
 });
 

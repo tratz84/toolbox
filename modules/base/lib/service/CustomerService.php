@@ -120,6 +120,19 @@ class CustomerService extends ServiceBase {
         return $lr;
     }
 
+    public function readCustomerStrId($strCustomerId) {
+        if (strpos($strCustomerId, 'company-') === 0) {
+            $cid = substr($strCustomerId, strlen('company-'));
+            return $this->readCustomerAuto($cid, null);
+        }
+        
+        if (strpos($strCustomerId, 'person-') === 0) {
+            $pid = substr($strCustomerId, strlen('person-'));
+            return $this->readCustomerAuto(null, $pid);
+        }
+        
+        return null;
+    }
     
     public function readCustomerAuto($companyId=null, $personId=null) {
         
