@@ -37,4 +37,14 @@ class archiveController extends BaseController {
     
     
     
+    public function action_popup() {
+        
+        
+        
+        $this->setShowDecorator(false);
+        return $this->render();
+    }
+    
+    
+    
 }

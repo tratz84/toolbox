@@ -7,6 +7,7 @@ use core\ObjectContainer;
 use core\event\CallbackPeopleEventListener;
 use core\event\EventBus;
 use core\event\PeopleEvent;
+use filesync\form\FilesyncSelectForm;
 
 Context::getInstance()->enableModule('filesync');
 
@@ -100,6 +101,19 @@ $eb->subscribe('webmail', 'mailbox-mailactions', new CallbackPeopleEventListener
     
 }));
 
+
+// list of extra form-widgets for codegen-module
+add_filter('form-generator-form-widgets', function($formWidgets) {
+    
+    $formWidgets[] = array(
+        'type' => 'widget',
+        'class' => \filesync\form\FilesyncSelectField::class,
+        'label' => 'FilesyncSelectField'
+    );
+    
+    
+    return $formWidgets;
+});
 
 
 
