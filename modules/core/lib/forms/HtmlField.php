@@ -25,9 +25,9 @@ class HtmlField extends BaseWidget {
         $html .= '<label>'.esc_html($this->getLabel()).infopopup($this->getInfoText()).'</label>';
         
         if ($this->escapeValue) {
-            $html .= '<span>'.esc_html($this->getValue()).'</span>';
+            $html .= '<span class="value">'.esc_html($this->getValue()).'</span>';
         } else {
-            $html .= '<span>'.$this->getValue().'</span>';
+            $html .= '<span class="value">'.$this->getValue().'</span>';
         }
         $html .= '</div>';
         
