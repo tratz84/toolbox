@@ -258,11 +258,12 @@ class mailController extends BaseController {
             
             
             $ma = new SolrMailActions();
-            $ma->markAsSpam($mail);
+            $r = $ma->markAsSpam($mail);
             $ma->closeConnection();
             
             return $this->json([
-                'success' => true
+                'success' => true,
+                'folder' => isset($r['folder']) ? $r['folder'] : null
             ]);
         } catch (\Exception $ex) {
             return $this->json([
