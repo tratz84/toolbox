@@ -84,6 +84,8 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
             $oDao = new VatDAO();
             $oDao->unsetDefaultSelected($vat->getVatId());
         }
+        
+        return $vat;
     }
 
 

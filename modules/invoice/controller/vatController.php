@@ -38,7 +38,7 @@ class vatController extends BaseController {
         }
         
         
-        $vatForm = new VatForm();
+        $vatForm = object_container_create( VatForm::class );
         $vatForm->bind($vat);
         
         if (is_post()) {
