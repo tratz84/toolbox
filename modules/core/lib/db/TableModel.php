@@ -76,6 +76,11 @@ class TableModel {
         );
         
         $this->data['columns'][$columnName] = array_merge($coldata, $props);
+        
+        // unique? => create unique-index
+        if (isset($props['unique']) && $props['unique']) {
+            $this->addIndex('uq_'.$columnName, [$columnName], ['unique' => true]);
+        }
     }
     
     

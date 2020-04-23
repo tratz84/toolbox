@@ -125,7 +125,7 @@ class FormGenerator {
             }
         }
 
-//         $formdir = module_file($module, 'lib/form');
+        $formdir = module_file($module, 'lib/form');
         
         file_put_contents($formdir.'/'.$classname.'.php', $tpl);
     }
