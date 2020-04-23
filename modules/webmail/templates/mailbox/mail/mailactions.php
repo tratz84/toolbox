@@ -67,10 +67,14 @@ function markMailAsSpam( email_id ) {
 				alert('Error: ' + data.message);
 			} else {
             	var row = $('#emailheader-table-container tr[email-id="' + email_id + '"]');
+
+            	var newFolder = data.folder ? data.folder : 'Junk';
             	
-				$(row).find('.td-mailbox-name').text('Junk');
+				$(row).find('.td-mailbox-name').text( newFolder );
 				$(row).find('.mark-as-spam').hide();
 				$(row).find('.mark-as-ham').show();
+
+				$('.action-box.mail-actions [name=move_imap_folder]').val( newFolder );
 			}
 		}
 	});
