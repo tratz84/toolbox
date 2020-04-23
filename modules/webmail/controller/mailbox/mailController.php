@@ -26,6 +26,10 @@ class mailController extends BaseController {
         return $smq->readById($id);
     }
     
+    /**
+     * TODO: rename to 'mailactions_box' or something?
+     * 
+     */
     public function action_mailactions() {
         if (isset($this->emailId) == false) {
             print 'mailbox/mail::action_mailactions(), no emailId set';
@@ -36,6 +40,7 @@ class mailController extends BaseController {
         
         // action buttons for e-mail
         $actionContainer = new ActionContainer('mail-actions', null);
+        $actionContainer->setAttribute('data-email-id', $emailId);
         
         
         $f = get_data_file_safe('webmail/inbox', substr($emailId, strlen('/webmail/inbox')));

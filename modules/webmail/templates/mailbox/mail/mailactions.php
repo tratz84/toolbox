@@ -74,7 +74,11 @@ function markMailAsSpam( email_id ) {
 				$(row).find('.mark-as-spam').hide();
 				$(row).find('.mark-as-ham').show();
 
-				$('.action-box.mail-actions [name=move_imap_folder]').val( newFolder );
+				// update folder select-box
+				var actionBox = $('.action-box.mail-actions');
+				if (actionBox.data('email-id') == email_id) {
+    				$(actionBox).find('[name=move_imap_folder]').val( newFolder );
+				}
 			}
 		}
 	});
