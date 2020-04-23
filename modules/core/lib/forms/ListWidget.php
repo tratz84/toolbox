@@ -50,6 +50,11 @@ class ListWidget extends WidgetContainer {
             //             throw new InvalidStateException('methodObjectList not found on object - ' . $this->methodObjectList);
         }
         
+        // empty?
+        if ($objects == null) {
+            $objects = array();
+        }
+        
         return $objects;
     }
     
