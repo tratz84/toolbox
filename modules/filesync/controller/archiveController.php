@@ -6,6 +6,7 @@ use core\controller\BaseController;
 use filesync\service\StoreService;
 use core\exception\ObjectNotFoundException;
 use filesync\form\ArchiveFileUploadForm;
+use core\forms\SelectField;
 
 class archiveController extends BaseController {
     
@@ -39,6 +40,24 @@ class archiveController extends BaseController {
     
     public function action_popup() {
         
+        $this->setShowDecorator(false);
+        return $this->render();
+    }
+    
+    public function action_popup_new_file( ){
+        
+        $this->form = new ArchiveFileUploadForm();
+        $this->form->hideSubmitButtons();
+        
+        $this->form->removeWidget('store_id');
+        
+//         public function __construct($name, $value=null, $optionItems=array(), $label=null, $opts=array()) {
+        $mapStores = mapArchiveStores();
+        
+        $storeId = get_var('store_id');
+        $selectStoreId = new SelectField('store_id', $storeId, $mapStores, 'Store');
+        $selectStoreId->setPrio(5);
+        $this->form->addWidget($selectStoreId);
         
         
         $this->setShowDecorator(false);

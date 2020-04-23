@@ -11,13 +11,15 @@ class FilesyncSelectField extends BaseWidget {
     protected $opts = array();
     
     public function __construct($name, $value=null, $label=null, $opts=array()) {
-        
         $this->setName($name);
         $this->setValue($value);
         $this->setLabel($label);
         $this->opts = $opts;
         
     }
+    
+    
+    public function setSelectedStoreId($id) { $this->opts['selectedStoreId'] = $id; }
     
     
     public function renderAsText() {
@@ -40,12 +42,12 @@ class FilesyncSelectField extends BaseWidget {
             // TODO: show preview
         }
         
-        
+        $selectedStoreId = isset($this->opts['selectedStoreId']) ? $this->opts['selectedStoreId'] : '';
         
         // buttons
         $html .= '<div class="filesync-select-field-buttons">';
-            $html .= '<button class="btnNewFile">New file</button> ';
-            $html .= '<button class="btnExistingFile">Existing file</button> ';
+            $html .= '<input type="button" class="btnNewFile" value="New file" data-store-id="'.esc_attr($selectedStoreId).'" /> ';
+            $html .= '<input type="button" class="btnExistingFile" value="Existing file" /> ';
         $html .= '</div>';
         
         $html .= '</div>';
