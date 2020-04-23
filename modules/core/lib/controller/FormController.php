@@ -6,6 +6,7 @@ use core\container\ActionContainer;
 use core\event\ActionValidationEvent;
 use core\event\EventBus;
 use core\exception\ObjectNotFoundException;
+use core\db\DBObject;
 
 class FormController extends BaseController {
     
@@ -79,10 +80,12 @@ class FormController extends BaseController {
                 $objId = null;
                 if (is_numeric($r)) {
                     $objId = $r;
+                } else if (is_a($r, DBObject::class)) {
+                    $objId = $r->getPrimaryKeyValue();
                 }
                 
                 if (isset($opts['stay_after_save']) && $opts['stay_after_save'] && $objId != null) {
-                    report_user_message(t('Changed saved'));
+                    report_user_message(t('Changes saved'));
                     redirect('/?m='.$this->getModuleName().'&c='.$this->getControllerPath().'&a=edit&'.$this->varNameId.'='.$objId);
                 } else {
                     redirect('/?m='.$this->getModuleName().'&c='.$this->getControllerPath());
