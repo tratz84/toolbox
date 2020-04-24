@@ -31,7 +31,7 @@
 
 </style>
 
-<div class="page-header">
+<div class="page-header hidden">
 	<div class="toolbox">
 		<a href="<?= appUrl('/?m=webmail&c=view') ?>" class="fa fa-plus"></a>
 	</div>
@@ -44,14 +44,19 @@
 
 	<div class="split-pane fixed-left">
 		<div class="split-pane-component filter-container" id="left-component">
-			<a href="javascript:void(0);" onclick="show_popup(<?= esc_json_attr(appUrl('/?m=webmail&c=mailbox/search&a=settings')) ?>);" class="fa fa-cog" style="font-size: 20px;"></a>
-			<label>
-				<input type="checkbox" name="f" title="filters" <?= $filtersEnabled ? 'checked=checked':'' ?> />
-				<?= t('Apply default filters') ?>
-			</label>
-			
-			<div class="facet-filters"></div>
-			
+			<div class="action-box" style="margin: 20px 0 20px;">
+				<span><a href="<?= appUrl('/?m=webmail&c=view') ?>"> <?= t('New1') ?></a></span>
+			</div>
+			<hr style="margin-bottom: 9px;" />
+			<div>
+    			<a href="javascript:void(0);" onclick="show_popup(<?= esc_json_attr(appUrl('/?m=webmail&c=mailbox/search&a=settings')) ?>);" class="fa fa-cog" style="font-size: 20px;"></a>
+    			<label>
+    				<input type="checkbox" name="f" title="filters" <?= $filtersEnabled ? 'checked=checked':'' ?> />
+    				<?= t('Apply default filters') ?>
+    			</label>
+    			
+    			<div class="facet-filters"></div>
+			</div>
 		</div>
 		<div class="split-pane-divider context-background" id="vertical-divider"></div>
 		
