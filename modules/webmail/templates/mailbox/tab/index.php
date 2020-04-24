@@ -48,7 +48,7 @@
 		<div class="split-pane-divider context-background" id="my-divider"></div>
 		<div class="split-pane-component" id="bottom-component">
 			<div id="mail-content" class="pretty-split-pane-component-inner">
-				<iframe style="width:100%; height: calc(100% - 10px);" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox"></iframe>
+				<iframe style="width:100%; height: calc(100% - 10px);" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin"></iframe>
 			</div>
 		</div>
 	</div>
