@@ -63,6 +63,14 @@ class viewController extends BaseController {
         $this->form->getWidget('edit_derived_item')->setValue( $edit_derived_item );
         if (isset($_REQUEST['startDate'])) {
             $this->form->getWidget('selected_date')->setValue($_REQUEST['startDate']);
+            
+            // derived item? & item-action set? => check/set item_action-value
+            if ($this->form->getWidget('item_action')) {
+                $item_action = object_meta_get( CalendarItem::class, $calendarItem->getCalendarItemId(), 'action-occurrence-'.$_REQUEST['startDate'] );
+                if ($item_action) {
+                   $this->form->getWidget('item_action')->setValue( $item_action );
+                }
+            }
         }
         
         // existing item with recurrence-rule, but editing 'Exemplaar' => set start_date to selected_date
