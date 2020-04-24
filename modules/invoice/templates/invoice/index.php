@@ -9,13 +9,8 @@
 </div>
 
 
-<div class="action-box">
+<?= $actionContainer->render() ?>
 
-	<span><a href="javascript:void(0);" id="btnChangeStatus">Status bijwerken</a></span>
-	
-</div>
-
-<hr/>
 
 <div id="invoice-table-container"></div>
 

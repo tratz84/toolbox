@@ -253,7 +253,7 @@ class StoreService extends ServiceBase {
         
         $cursor = $sfDao->search($opts);
         
-        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('store_id', 'rev', 'company_id', 'company_name', 'firstname', 'insert_lastname', 'lastname', 'document_date', 'edited', 'created', 'subject', 'document_date', 'long_description', 'filesize', 'store_file_id', 'path', 'deleted', 'encrypted', 'lastmodified'));
+        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('store_id', 'rev', 'store_name', 'company_id', 'company_name', 'firstname', 'insert_lastname', 'lastname', 'document_date', 'edited', 'created', 'subject', 'document_date', 'long_description', 'filesize', 'store_file_id', 'path', 'deleted', 'encrypted', 'lastmodified'));
         
         $objects = $r->getObjects();
         foreach($objects as &$obj) {

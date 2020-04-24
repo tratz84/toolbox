@@ -114,8 +114,11 @@ class mailboxController extends BaseController {
         
         unlink($fullpath);
         
-        
-        redirect('/?m=filesync&c=storefile&a=edit_meta&store_file_id='.$storefile->getStoreFileId());
+        if (get_var('redir') == 'vat') {
+            redirect('/?m=finance&c=import/filesync&store_file_id='.$storefile->getStoreFileId());
+        } else {
+            redirect('/?m=filesync&c=storefile&a=edit_meta&store_file_id='.$storefile->getStoreFileId());
+        }
     }
     
     

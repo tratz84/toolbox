@@ -41,8 +41,10 @@ class StoreFileDAO extends \core\db\DAOObject {
                 . "customer__person.lastname, "
                 . "sfr.filesize, "
                 . "sfr.encrypted, "
-                . "sfr.lastmodified "
+                . "sfr.lastmodified, "
+                . "filesync__store.store_name "
                 . "from filesync__store_file "
+                . "left join filesync__store on (filesync__store.store_id = filesync__store_file.store_id) "
                 . "left join filesync__store_file_meta on (filesync__store_file.store_file_id = filesync__store_file_meta.store_file_id) "
                 . "left join filesync__store_file_rev sfr on (filesync__store_file.store_file_id = sfr.store_file_id and filesync__store_file.rev = sfr.rev) "
                 . "left join customer__company on (customer__company.company_id = filesync__store_file_meta.company_id) "
@@ -53,7 +55,7 @@ class StoreFileDAO extends \core\db\DAOObject {
         
         
         if (isset($opts['storeId']) && $opts['storeId']) {
-            $where[] = " store_id = ? ";
+            $where[] = " filesync__store_file.store_id = ? ";
             $params[] = $opts['storeId'];
         }
         
@@ -63,8 +65,13 @@ class StoreFileDAO extends \core\db\DAOObject {
                 $storeIds[] = (int)$id;
             }
             
-            $where[] = " store_id IN ( " . implode(', ', $storeIds) . ") ";
+            $where[] = " filesync__store_file.store_id IN ( " . implode(', ', $storeIds) . ") ";
         }
+        
+        if (isset($opts['archiveOnly']) && $opts['archiveOnly']) {
+            $where[] = " filesync__store.store_type = 'archive' ";
+        }
+        
         
         if (isset($opts['path']) && $opts['path']) {
             $where[] = 'path LIKE ? ';//COLLATE utf8mb4_general_ci';

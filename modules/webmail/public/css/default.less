@@ -71,27 +71,6 @@
 		font-weight: bold;
 	}
 	
-	#mail-content .action-box {
-		padding: 10px 0 0;
-		overflow-y: auto;
-		
-		span {
-			float: left;
-			margin-right: 10px;
-			
-			button, input[type=button] { margin-top: 2px; }
-		}
-		.mark-as-spam span.mark-as-spam
-		, .delete-mail span.delete-mail {
-			margin: 4px 0 3px;
-		}
-		
-		.mail-reply, .mail-forward {
-			 float: right;
-			span { position: relative; top: 5px; margin-right: 3px; }
-		}
-	}
-	
 	#emailheader-table-container {
 		.webmail-mail-status { min-width: 20px; }
 		tbody tr.unseen { font-weight: bold; }
@@ -101,5 +80,27 @@
 	
 	.form-mailbox-search-settings-form .submit-container { display: none; }
 }
+
+.action-box.mail-actions {
+	padding: 10px 0 0;
+	overflow-y: auto;
+	
+	span {
+		float: left;
+		margin-right: 10px;
+		
+		button, input[type=button] { margin-top: 2px; }
+	}
+	.mark-as-spam span.mark-as-spam
+	, .delete-mail span.delete-mail {
+		margin: 4px 0 3px;
+	}
+	
+	.mail-reply, .mail-forward {
+		 float: right;
+		span { position: relative; top: 5px; margin-right: 3px; }
+	}
+}
+
 
 

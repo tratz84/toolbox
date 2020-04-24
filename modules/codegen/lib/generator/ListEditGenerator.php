@@ -160,7 +160,11 @@ class ListEditGenerator {
             foreach($cm->getParameters() as $func_param) {
                 // optionItems? (SelectField etc)
                 if ($func_param->name == 'optionItems') {
-                    $params[] = $this->optionsToArray( $item->optionItems);
+                    if (isset($item->optionItems) && $item->optionItems) {
+                        $params[] = $this->optionsToArray( $item->optionItems );
+                    } else {
+                        $params[] = '[]';
+                    }
                     $lastNonDefaultParam = $cnt;
                 }
                 // value found?

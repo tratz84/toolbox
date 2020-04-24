@@ -44,6 +44,11 @@ class invoiceController extends BaseController {
             );
         }
         
+        
+        $this->actionContainer = new ActionContainer('invoice-index-actions', null);
+        $this->actionContainer->addItem('update-status', '<a href="javascript:void(0);" id="btnChangeStatus">Status bijwerken</a>');
+        hook_eventbus_publish($this->actionContainer, 'invoice', 'invoice-index-container');
+        
         $this->render();
     }
     

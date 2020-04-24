@@ -125,7 +125,7 @@ class FormGenerator {
             }
         }
 
-//         $formdir = module_file($module, 'lib/form');
+        $formdir = module_file($module, 'lib/form');
         
         file_put_contents($formdir.'/'.$classname.'.php', $tpl);
     }
@@ -174,7 +174,10 @@ class FormGenerator {
             foreach($cm->getParameters() as $func_param) {
                 // optionItems? (SelectField etc)
                 if ($func_param->name == 'optionItems') {
-                    $params[] = $this->optionsToArray( $item->data->optionItems);
+                    if (isset($item->data->optionItems))
+                        $params[] = $this->optionsToArray( $item->data->optionItems );
+                    else
+                        $params[] = '[]';
                     $lastNonDefaultParam = $cnt;
                 }
                 // value found?

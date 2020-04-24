@@ -9,6 +9,8 @@ class ActionContainer {
     
     protected $items = array();
     
+    protected $attributes = array();
+    
     public function __construct($objectType, $objectId) {
         $this->objectType = $objectType;
         $this->objectId = $objectId;
@@ -18,6 +20,14 @@ class ActionContainer {
     public function getObjectType() { return $this->objectType; }
     public function getObjectId() { return $this->objectId; }
     
+    public function setAttribute($name, $value) { $this->attributes[$name] = $value; }
+    public function getAttribute($name, $defaultValue=null) {
+        if (isset($this->attributes[$name])) {
+            return $this->attributes[$name];
+        } else {
+            return $defaultValue;
+        }
+    }
     
     public function hasItems() {
         return count($this->items) > 0 ? true : false;
@@ -53,9 +63,14 @@ class ActionContainer {
             return '';
         }
         
-        $items = $this->getItems();
+        // build attributes html
+        $strAttrs = '';
+        foreach($this->attributes as $key => $val) {
+            $strAttrs .= ' ' . esc_attr($key) . '="' . esc_attr($val) . '"';
+        }
         
-        $html = '<div class="action-box">';
+        $html = '<div class="action-box '.slugify($this->objectType).'"'.$strAttrs.'>';
+        $items = $this->getItems();
         for($x=0; $x < count($items); $x++) {
             $html .= '<span class="'.slugify($items[$x]['name']).'">' . $items[$x]['html'] . '</span> ';
         }

@@ -118,6 +118,10 @@ function hook_loader($folder, $opts=array()) {
     }
 }
 
+/**
+ * @param unknown $className
+ * @return $className
+ */
 function object_container_get($className) {
     return ObjectContainer::getInstance()->get($className);
 }

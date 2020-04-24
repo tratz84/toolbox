@@ -1,14 +1,16 @@
 <?php
 
-
 use base\model\Menu;
 use core\Context;
 use core\ObjectContainer;
 use core\event\CallbackPeopleEventListener;
 use core\event\EventBus;
 use core\event\PeopleEvent;
+use filesync\form\FilesyncSelectForm;
 
 Context::getInstance()->enableModule('filesync');
+
+require_once __DIR__.'/lib/functions/misc.php';
 
 module_update_handler('filesync', '20200416');
 
@@ -88,7 +90,7 @@ $eb->subscribe('base', 'dashboard', new CallbackPeopleEventListener(function($ev
 /**
  * Webmail action-button for importing e-mail attachments or e-mail itself
  */
-$eb->subscribe('webmail', 'mailbox-search', new CallbackPeopleEventListener(function($evt) {
+$eb->subscribe('webmail', 'mailbox-mailactions', new CallbackPeopleEventListener(function($evt) {
     /** @var \core\container\ActionContainer $actionContainer */
     $actionContainer = $evt->getSource();
     
@@ -100,6 +102,19 @@ $eb->subscribe('webmail', 'mailbox-search', new CallbackPeopleEventListener(func
     
 }));
 
+
+// list of extra form-widgets for codegen-module
+add_filter('form-generator-form-widgets', function($formWidgets) {
+    
+    $formWidgets[] = array(
+        'type' => 'widget',
+        'class' => \filesync\form\FilesyncSelectField::class,
+        'label' => 'FilesyncSelectField'
+    );
+    
+    
+    return $formWidgets;
+});
 
 
 
