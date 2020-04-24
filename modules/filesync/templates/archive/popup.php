@@ -49,12 +49,6 @@ fpt.addColumn({
 });
 
 
-fpt.addColumn({
-	fieldName: 'document_date',
-	fieldDescription: 'Datum',
-	fieldType: 'date'
-});
-
 
 fpt.addColumn({
 	fieldName: 'company_name',
