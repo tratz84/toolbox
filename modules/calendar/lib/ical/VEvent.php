@@ -193,12 +193,6 @@ class VEvent extends VEventInstance {
         }
 
         while ((int)$dt->format('Ymd') <= $ymdend && (!$ymditemEnd || (int)$dt->format('Ymd') <= $ymditemEnd)) {
-            // skip EXDATE's
-            if (in_array($dt->format('Y-m-d'), $exDates)) {
-                $dt->modify('+' . $this->interval . ' week');
-                continue;
-            }
-            
             $days = explode(',', $this->byDay);
             foreach ($days as $d) {
                 if (isset($this->daysToNum[$d]) == false) continue;
@@ -231,7 +225,11 @@ class VEvent extends VEventInstance {
                 $i->setLocation($this->getLocation());
                 $i->setCancelled($this->getCancelled());
                 $i->setRecurrent(true);
-                $instances[] = $i;
+                
+                // skip EX-dates
+                if (in_array($dt->format('Y-m-d'), $exDates) == false) {
+                    $instances[] = $i;
+                }
             }
             
             $dt->modify('+' . $this->interval . ' week');
@@ -259,12 +257,6 @@ class VEvent extends VEventInstance {
         
 
         while ((int)$dt->format('Ymd') <= $ymdend && (!$ymditemEnd || (int)$dt->format('Ymd') <= $ymditemEnd)) {
-            // skip EXDATE's
-            if (in_array($dt->format('Y-m-d'), $exDates)) {
-                $dt->modify('+' . $this->interval . ' month');
-                continue;
-            }
-            
             // determine day-number by day-name
             if ($this->byDay && isset($this->daysToNum[$this->byDay])) {
                 $pos = !$this->bySetPos ? 1 : (int)$this->bySetPos;
@@ -296,6 +288,7 @@ class VEvent extends VEventInstance {
             }
             
             if ((int)$dt->format('Ymd') >= $ymdstart && (int)$dt->format('Ymd') <= $ymdend) {
+                
                 $i = new VEventInstance();
                 $i->setId($this->getId());
                 $i->setStartDate($dt->format('Y-m-d'));
@@ -307,7 +300,11 @@ class VEvent extends VEventInstance {
                 $i->setLocation($this->getLocation());
                 $i->setCancelled($this->getCancelled());
                 $i->setRecurrent(true);
-                $instances[] = $i;
+                
+                // skip EXDATE's
+                if (in_array($dt->format('Y-m-d'), $exDates) == false) {
+                    $instances[] = $i;
+                }
             }
             
             $dt->modify('+' . $this->interval . ' month');

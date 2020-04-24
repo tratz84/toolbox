@@ -274,6 +274,7 @@ class CalendarService extends ServiceBase {
             $ci->setRecurrenceRule(null);
             $ci->setRecurrenceType(null);
             
+            $rrule = '';
             $addExDate = true;
         } else {
             $rrule = $form->getWidget('recurrence_type')->getRecurrenceRule();
