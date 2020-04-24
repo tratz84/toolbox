@@ -2,6 +2,8 @@
 
 namespace core\event;
 
+use ReflectionFunction;
+
 
 class VariableFilter {
     
@@ -21,7 +23,7 @@ class VariableFilter {
         $this->filtersSorted[$filterName] = false;
     }
     
-    public function applyFilter($filterName, $value) {
+    public function applyFilter($filterName, $value, $opts=array()) {
         // no filter set? => return value
         if (isset($this->filters[$filterName]) == false) {
             return $value;
@@ -38,7 +40,12 @@ class VariableFilter {
         
         foreach($this->filters[$filterName] as $filter) {
             $callback = $filter['callback'];
-            $value = $callback( $value );
+            
+            $ref = new ReflectionFunction( $callback );
+            if ($ref->getNumberOfParameters() == 2)
+                $value = $callback( $value, $opts );
+            else
+                $value = $callback( $value );
         }
         
         return $value;

@@ -104,11 +104,17 @@ class InvoiceSettings {
             return false;
         }
         
-        // invoice older then 90 days? => auto-lock
-        $days = days_between( $invoice_date, date('Y-m-d') );
-        if ($days > 90) {
+        $locked = apply_filter('invoice-locked', false, ['invoice' => $invoice]);
+        
+        if ($locked) {
             return true;
         }
+        
+        // invoice older then 90 days? => auto-lock
+//         $days = days_between( $invoice_date, date('Y-m-d') );
+//         if ($days > 90) {
+//             return true;
+//         }
         
         return false;
     }

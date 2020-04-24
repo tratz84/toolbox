@@ -144,10 +144,10 @@ function add_filter($filterName, $callback, $prio=10) {
  * 
  * @return mixed
  */
-function apply_filter($filterName, $value) {
+function apply_filter($filterName, $value, $opts=array()) {
     $vf = object_container_get(VariableFilter::class);
     
-    return $vf->applyFilter($filterName, $value);
+    return $vf->applyFilter($filterName, $value, $opts);
 }
 
 
