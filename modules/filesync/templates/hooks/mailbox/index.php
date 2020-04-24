@@ -40,10 +40,23 @@
         	<tr>
         		<th>Attachment #<?= $x+1 ?></th>
         		<td>
+    				<?= $attachments[$x]['filename'] ? $attachments[$x]['filename'] : 'Not named' ?>
+        		</td>
+        		<td style="padding-left: 20px;">
         			<a href="javascript:void(0);" data-email-id="<?= esc_attr($mail->getId()) ?>" data-attachment-no="<?= $x ?>" onclick="filesync_mailbox_Click(this);">
-        				<?= $attachments[$x]['filename'] ? $attachments[$x]['filename'] : 'Not named' ?>
+        				<span class="fa fa-download"></span>
+        				Filesync
         			</a>
         		</td>
+        		<?php /* hmmzz, this should be handled with hooks */ ?>
+        		<?php if ($ctx->isModuleEnabled('finance')) : ?>
+        		<td style="padding-left: 20px;">
+        			<a href="javascript:void(0);" data-email-id="<?= esc_attr($mail->getId()) ?>" data-attachment-no="<?= $x ?>" onclick="filesync_mailbox_Click(this, 'vat');">
+        				<span class="fa fa-download"></span>
+        				Vat
+        			</a>
+        		</td>
+        		<?php endif; ?>
         	</tr>
         	<?php endfor; ?>
         	
@@ -51,10 +64,23 @@
         	<tr>
         		<th>E-mail</th>
         		<td>
+        			E-mail as PDF
+            	</td>
+            	<td style="padding-left: 20px;">
             		<a href="javascript:void(0);" data-email-id="<?= esc_attr($mail->getId()) ?>" data-attachment-no="-1" onclick="filesync_mailbox_Click(this);">
-            			Import e-mail as PDF
+	            		<span class="fa fa-download"></span>
+            			Filesync
             		</a>
             	</td>
+        		<?php if ($ctx->isModuleEnabled('finance')) : ?>
+            	<td style="padding-left: 20px;">
+            		<a href="javascript:void(0);" data-email-id="<?= esc_attr($mail->getId()) ?>" data-attachment-no="-1" onclick="filesync_mailbox_Click(this, 'vat');">
+	            		<span class="fa fa-download"></span>
+            			Vat
+            		</a>
+            	</td>
+        		<?php endif; ?>
+            	
         	</tr>
         	<?php endif; ?>
         </table>
@@ -68,12 +94,16 @@
 
 <script>
 
-function filesync_mailbox_Click(anch) {
+function filesync_mailbox_Click(anch, redir) {
 	var email_id = $(anch).data('email-id');
 	var attachment_no = $(anch).data('attachment-no');
 	var storeid = $('.filesync-mailbox-import-container [name=store_id]').val();
 
 	var url = appUrl('/?m=filesync&c=hooks/mailbox&a=import&email_id=' + email_id + '&attachmentNo=' + attachment_no + '&store_id=' + storeid);
+
+	if (redir)
+		url = url + '&redir=' + redir;
+	
 	window.open(url, '_blank');
 
 	close_popup();
