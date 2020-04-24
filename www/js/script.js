@@ -732,6 +732,8 @@ function show_popup(url, opts) {
 			
 			$(window).trigger('popup-container-created', popup);
 			
+			focusFirstField( popup );
+			
 			if (opts.renderCallback)
 				opts.renderCallback(popup, data, xhr, textStatus);
 		},
