@@ -11,6 +11,13 @@ AddDefaultCharSet UTF-8
 	php_value display_errors on
 </IfModule>
 
+<IfModule mod_headers.c>
+	<FilesMatch "\.(eot|font.css|otf|ttc|ttf|woff)$">
+		Header set Access-Control-Allow-Origin "*"
+	</FilesMatch>
+</IfModule>
+
+
 RewriteEngine On
 
 #RewriteCond %{HTTPS} off
