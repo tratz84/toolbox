@@ -3,7 +3,6 @@
 
 
 function markMailAsSpam( email_id ) {
-	alert('jojo');return;
 	$.ajax({
 		url: appUrl('/?m=webmail&c=mailbox/mail&a=mark_as_spam'),
 		type: 'POST',
