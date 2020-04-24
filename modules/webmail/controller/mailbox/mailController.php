@@ -133,6 +133,8 @@ class mailController extends BaseController {
         $this->bcc         = $mail->getBcc();
         $this->subject     = $mail->getSubject();
         
+        hook_htmlscriptloader_enableGroup('webmail');
+        
         $this->setDecoratorFile( module_file('base', 'templates/decorator/blank.php') );
         
         return $this->render();

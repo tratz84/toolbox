@@ -28,6 +28,8 @@ class searchController extends BaseController {
 	    
 	    $this->filtersEnabled = isset($_GET['filters']) == false || $_GET['filters'] ? true : false;
 	    
+	    hook_htmlscriptloader_enableGroup('webmail');
+	    
 		$this->render();
 	}
 	
