@@ -75,7 +75,21 @@ it_webmail.setRowClick(function(row, evt) {
 	$(row).addClass('active');
 
 	var email_id = $(row).data('record').email_id;
-	$('#mail-content iframe').attr('src', appUrl('/?m=webmail&c=mailbox/mail&a=view&id=' + email_id));
+// 	$('#mail-content iframe').attr('src', appUrl('/?m=webmail&c=mailbox/mail&a=view&id=' + email_id));
+
+	$.ajax({
+		type: 'POST',
+		url: appUrl('/?m=webmail&c=mailbox/search&a=view'),
+		data: {
+			id: email_id
+		},
+		success: function(data, xhr, textStatus) {
+			$('#mail-content').html( data );
+
+		}
+	});
+	
+	
 
 	$(this.container).find('tr.active').removeClass('active');
 	$(this.container).find('tr[email-id="'+email_id+'"]').addClass('active');

@@ -18,6 +18,8 @@ class tabController extends BaseController {
         
         $this->mailtabSettings = $mts->getData();
         
+        hook_htmlscriptloader_enableGroup('webmail');
+        
         $this->setShowDecorator(false);
         return $this->render();
     }
