@@ -10,6 +10,7 @@
 	<h1>Metadata bewerken</h1>
 </div>
 
+<?= $actionContainer->render() ?>
 
 
 <?= $form->render() ?>

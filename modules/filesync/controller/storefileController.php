@@ -6,6 +6,7 @@ use core\controller\BaseController;
 use core\exception\ObjectNotFoundException;
 use filesync\service\StoreService;
 use core\exception\InvalidStateException;
+use core\container\ActionContainer;
 
 class storefileController extends BaseController {
     
@@ -80,6 +81,11 @@ class storefileController extends BaseController {
                 redirect('/?m=filesync&c=storefile&id=' . $storeId);
             }
         }
+        
+        
+        $this->actionContainer = new ActionContainer('store-file-meta-edit', $this->form->getWidgetValue('store_file_id'));
+        hook_eventbus_publish($this->actionContainer, 'filesync', 'store-file-meta-edit');
+        
         
         $this->render();
     }
