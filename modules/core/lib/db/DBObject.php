@@ -104,10 +104,10 @@ class DBObject {
             // cast value
             if ($val === null) {
                 
-            } else if (strpos($meta['Type'], 'int(') === 0) {
+            } else if (strpos($meta['Type'], 'int') === 0) {
                 $val = (int)$val;
             }
-            else if (strpos($meta['Type'], 'bigint(') === 0) {
+            else if (strpos($meta['Type'], 'bigint') === 0) {
                 $val = (int)$val;
             }
             else if ($meta['Type'] == 'double') {
