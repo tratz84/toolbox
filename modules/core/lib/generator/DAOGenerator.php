@@ -4,6 +4,7 @@
 namespace core\generator;
 
 use core\template\DefaultTemplate;
+use core\exception\FileException;
 
 class DAOGenerator {
     
@@ -46,7 +47,9 @@ class DAOGenerator {
         
         
         $file = $modelDir . '/base/' . dbCamelCase($this->tableName) . 'Base.php';
-        file_put_contents($file, $tpl->getTemplate());
+        if (file_put_contents($file, $tpl->getTemplate()) === false) {
+            throw new FileException('Unable to write DBBase-object');
+        }
         
         
 
@@ -60,7 +63,9 @@ class DAOGenerator {
             $tpl->setVar('columns', $this->columns);
             
             
-            file_put_contents($file, $tpl->getTemplate());
+            if (file_put_contents($file, $tpl->getTemplate()) === false) {
+                throw new FileException('Unable to create DBObject');
+            }
         }
         
         
@@ -74,7 +79,9 @@ class DAOGenerator {
             $tpl->setVar('columns', $this->columns);
             
             
-            file_put_contents($file, $tpl->getTemplate());
+            if (file_put_contents($file, $tpl->getTemplate()) === false) {
+                throw new FileException('Unable to create DAOObject');
+            }
         }
         
         
