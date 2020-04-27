@@ -303,7 +303,12 @@ class FormGenerator {
                 $map[$key] = $val;
             }
             
-            return var_export($map, true);
+            $export = '';
+            foreach($map as $key => $val) {
+                $export .= var_export($key, true) . ' => ' . "t(".var_export($val, true).")" . ', ' . PHP_EOL;
+            }
+            
+            return '[' . $export . ']';
         }
         
     }
