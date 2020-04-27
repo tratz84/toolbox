@@ -9,6 +9,7 @@ class MenuGeneratorItemForm extends \core\forms\CodegenBaseForm {
 		parent::__construct();
 		
 		$this->disableSubmit();
+		$this->hideSubmitButtons();
 		
 		$this->codegen();
 		
@@ -34,19 +35,23 @@ class MenuGeneratorItemForm extends \core\forms\CodegenBaseForm {
 		  'fa-signal' => 'fa-signal',
 		  'fa-wrench' => 'fa-wrench',
 		  'fa-file' => 'fa-file',
-		), 'Icon');
+		), t('Icon'));
 		$this->addWidget( $w1 );
-		$w2 = new \core\forms\TextField('label', NULL, 'Label');
+		$w2 = new \core\forms\TextField('label', NULL, t('Label'));
 		$this->addWidget( $w2 );
-		$w3 = new \core\forms\TextField('url', NULL, 'Url');
+		$w3 = new \core\forms\TextField('url', NULL, t('Url'));
 		$this->addWidget( $w3 );
-		$w4 = new \core\forms\NumberField('weight', NULL, 'Weight');
+		$w4 = new \core\forms\NumberField('weight', NULL, t('Weight'));
 		$this->addWidget( $w4 );
-		$w5 = new \core\forms\CheckboxField('as_first_child', NULL, 'As first child');
+		$w5 = new \core\forms\CheckboxField('as_first_child', NULL, t('As first child'));
 		$this->addWidget( $w5 );
 		$w5->setInfoText( 'In case of a submenu, this menu-item on top?' );
+		$w6 = new \core\forms\TextareaField('menuPermission', NULL, t('Permission'));
+		$this->addWidget( $w6 );
 		
 	}
+
+
 
 
 

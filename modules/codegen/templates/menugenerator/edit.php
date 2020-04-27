@@ -20,11 +20,10 @@
     		<a href="javascript:void(0);" onclick="btnAddMenu_Click();">Add menu</a>
     	</div>
     	<div id="tree"></div>
-    	
-    	<div id="menu-info"></div>
     </div>
     
     <div class="col-xs-9">
+    	<div id="menu-info"></div>
 		<div id="form-preview" class="form-preview"></div>
 	</div>
 </div>

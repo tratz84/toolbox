@@ -82,6 +82,13 @@ class ModuleLoader {
             foreach($data['menu'] as $menu) {
                 $data = @$menu['data'];
                 
+                // check permission
+                if (isset($data['menuPermission']) && $data['menuPermission']) {
+                    $permission = eval($data['menuPermission']);
+                    if (!$permission)
+                        continue;
+                }
+                
                 $m = new Menu();
                 $m->setIconLabelUrl(@$data['icon'], @$data['label'], @$data['url']);
                 $m->setWeight( @$data['weight'] );
