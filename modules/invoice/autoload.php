@@ -50,6 +50,9 @@ $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($e
 $eb->subscribe('base', 'dashboard', new CallbackPeopleEventListener(function($evt) {
     $dashboardWidgets = $evt->getSource();
     
+    if (!hasCapability('core', 'userType.user'))
+        return;
+
     $ctx = Context::getInstance();
     if ($ctx->getSetting('offerModuleEnabled')) {
         $dashboardWidgets->addWidget('invoice-recent-offers', 'Offerte: Laatst toegevoegde offertes', 'Overzicht van recent toegevoegde offertes', '/?m=invoice&c=dashboardWidgets&a=lastOffers');
@@ -80,7 +83,7 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
         $src->add($menuInvoice);
     }
 
-    if ($ctx->isExperimental()) {
+    if ($ctx->isExperimental() && hasCapability('core', 'userType.user')) {
         $menuBillable = new Menu();
         $menuBillable->setIconLabelUrl('fa-money', 'Billable', '/?m=invoice&c=tobill');
         $menuBillable->setWeight(37);

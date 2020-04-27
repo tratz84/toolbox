@@ -56,7 +56,10 @@ class MenuDAO extends \core\db\DAOObject {
 	        $m->setFields($a);
 	        $m->setWeight($weight);
 	        
-	        $menus[] = $m;
+	        if (hasCapability('core', 'userType.user') || $m->getMenuCode() == 'dashboard') {
+    	        $menus[] = $m;
+	        }
+	        
 	        $weight += 10;
 	    }
 	    

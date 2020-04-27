@@ -32,6 +32,11 @@ $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($e
     
 $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListener(function($evt) {
     
+    // permissions?
+    if (hasCapability('core', 'userType.user') == false) {
+        return;
+    }
+    
     $calendarSettings = object_container_get(CalendarSettings::class);
     
     $calitemActionsEnabled = $calendarSettings->calendarItemActionsEnabled();

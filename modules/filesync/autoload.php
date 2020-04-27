@@ -6,7 +6,6 @@ use core\ObjectContainer;
 use core\event\CallbackPeopleEventListener;
 use core\event\EventBus;
 use core\event\PeopleEvent;
-use filesync\form\FilesyncSelectForm;
 
 Context::getInstance()->enableModule('filesync');
 
@@ -24,6 +23,11 @@ hook_htmlscriptloader_enableGroup('filesync');
 
 // $arr[] = array('menu_code' => 'filesync',        'sort' => 1600, 'visible' => 1, 'icon' => 'fa-file',      'label' => 'Filesync',       'url' => '/?m=filesync&c=store');
 $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListener(function($evt) {
+    // permissions?
+    if (hasCapability('core', 'userType.user') == false) {
+        return;
+    }
+    
     $src = $evt->getSource();
     
     $menuFilesync = new Menu();
@@ -76,6 +80,10 @@ $eb->subscribe('base', 'person-edit-footer', new CallbackPeopleEventListener(fun
 
 
 $eb->subscribe('base', 'dashboard', new CallbackPeopleEventListener(function($evt) {
+    if (hasCapability('core', 'userType.user') == false) {
+        return;
+    }
+    
     $dashboardWidgets = $evt->getSource();
     
     $ctx = Context::getInstance();

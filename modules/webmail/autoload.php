@@ -132,6 +132,9 @@ $eb->subscribe('base', 'person-edit-footer', new CallbackPeopleEventListener(fun
     
 
 $eb->subscribe('base', 'dashboard', new CallbackPeopleEventListener(function($evt) {
+    if (!hasCapability('core', 'userType.user'))
+        return;
+    
     $dashboardWidgets = $evt->getSource();
     
     $ctx = Context::getInstance();

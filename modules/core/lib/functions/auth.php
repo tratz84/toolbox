@@ -23,6 +23,9 @@ function hasCapability($module, $capabilityCode=null) {
     if ($user->getUserType() == 'admin')
         return true;
     
+    if ($module == 'core' && $capabilityCode == 'userType.user' && $user->getUserType() == 'user')
+        return true;
+    
     // publish capability event
     $cc = new CapabilityEvent($module, $capabilityCode);
     hook_eventbus_publish($cc, 'core', 'has-capability');
