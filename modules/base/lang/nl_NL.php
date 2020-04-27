@@ -3,6 +3,9 @@
 
 $lang = array();
 
+$lang['userType.admin']         = 'Administrator';
+$lang['userType.user']          = 'Gebruiker';
+$lang['userType.external_user'] = 'Externe gebruiker';
 
 $lang['Yes']                    = 'Ja';
 $lang['No']                     = 'Nee';

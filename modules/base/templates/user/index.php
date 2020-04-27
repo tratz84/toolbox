@@ -48,7 +48,10 @@ t.addColumn({
 	fieldName: 'user_type',
 	fieldDescription: 'Type',
 	fieldType: 'text',
-	searchable: true
+	searchable: true,
+	render: function(row) {
+		return _('userType.'+row.user_type);
+	}
 });
 t.addColumn({
 	fieldName: '',

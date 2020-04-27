@@ -35,7 +35,8 @@ class UserForm extends BaseForm {
         
         $this->addWidget( new PasswordField('password', '', t('Password')) );
         
-        $this->addWidget( new SelectField('user_type', '', array('admin' => 'Administrator', 'user' => t('User')), t('Usertype')) );
+        $mapUserTypes = mapUserTypes();
+        $this->addWidget( new SelectField('user_type', '', $mapUserTypes, t('Usertype')) );
         
         $this->addUserCapabilities();
         

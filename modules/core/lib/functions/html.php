@@ -6,6 +6,8 @@ use core\container\TabContainer;
 use core\event\EventBus;
 use core\template\DefaultTemplate;
 use core\template\HtmlScriptLoader;
+use core\security\AuthorizationCheck;
+use core\exception\AuthorizationException;
 
 function esc_html($str) {
     return htmlentities($str, ENT_COMPAT, 'UTF-8');
@@ -111,6 +113,16 @@ function print_htmlScriptLoader_bottom() {
 
 
 function include_component($module, $controller, $action, $vars=array()) {
+    
+    $user = ctx()->getUser();
+    if ($user && in_array($user->getUserType(), ['admin', 'user']) == false) {
+        $ac = new AuthorizationCheck( $user );
+        $ac->setModule($module);
+        $ac->setController($controller);
+        $ac->setAction($action);
+        
+        $ac->checkAuthorization();
+    }
     
     $oc = \core\ObjectContainer::getInstance();
     $controllerInstance = $oc->getController($module, $controller);

@@ -3,11 +3,11 @@
 
 require_once dirname(__FILE__).'/lib/functions/person.php';
 require_once dirname(__FILE__).'/lib/functions/misc.php';
+require_once dirname(__FILE__).'/lib/functions/user.php';
 require_once dirname(__FILE__).'/lib/functions/object_meta.php';
 require_once dirname(__FILE__).'/lib/functions/object_lock.php';
 
 
-use base\model\Company;
 use core\Context;
 use core\ObjectContainer;
 use core\event\CallbackPeopleEventListener;
@@ -18,6 +18,7 @@ Context::getInstance()->enableModule('base');
 
 module_update_handler('base', '20200415');
 
+hook_loader(__DIR__.'/hook');
 
 $eb = ObjectContainer::getInstance()->get(EventBus::class);
 
