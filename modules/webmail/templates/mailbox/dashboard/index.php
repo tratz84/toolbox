@@ -28,7 +28,11 @@
 <script>
 
 function mailbox_showEmail(email_id) {
-	window.open( appUrl('/?m=webmail&c=mailbox/search#email_id=' + email_id), '_self' );
+	if ($(window).width() <= 780) {
+		window.open( appUrl('/?m=webmail&c=mailbox/mail&a=view&id=' + email_id), '_self');
+	} else {
+		window.open( appUrl('/?m=webmail&c=mailbox/search#email_id=' + email_id), '_self' );
+	}
 }
 
 function renderMails(mails) {
