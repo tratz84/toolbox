@@ -77,7 +77,7 @@ class CronService {
                 if ($c->getTimeout() !== null && time()-$timeLastRunning > $c->getTimeout()) {
                     $runCron = true;
                 }
-                else if ($c->runJob()) {
+                else if ($c->checkJob()) {
                     $runCron = true;
                 }
                 
