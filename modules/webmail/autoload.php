@@ -6,9 +6,11 @@ use base\model\Menu;
 use core\Context;
 use core\ObjectContainer;
 use core\container\ArrayContainer;
+use core\container\CronContainer;
 use core\event\CallbackPeopleEventListener;
 use core\event\EventBus;
 use core\event\PeopleEvent;
+use webmail\cron\WebmailSyncJob;
 use webmail\service\ConnectorService;
 
 require_once __DIR__.'/lib/functions/misc.php';
@@ -143,5 +145,10 @@ $eb->subscribe('base', 'dashboard', new CallbackPeopleEventListener(function($ev
     }
 }));
 
+
+// webmail imap/pop3 sync
+hook_eventbus_subscribe('croncontainer', 'init', function(CronContainer $cronContainer) {
+    $cronContainer->addCronjob( new WebmailSyncJob() );
+});
 
 

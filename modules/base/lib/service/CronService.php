@@ -73,8 +73,16 @@ class CronService {
                     
                 }
             } else {
+                $runCron = false;
+                if ($c->getTimeout() !== null && time()-$timeLastRunning > $c->getTimeout()) {
+                    $runCron = true;
+                }
+                else if ($c->runJob()) {
+                    $runCron = true;
+                }
+                
                 // daily cron, not yet run today & after 05:00 ? => run cronjob
-                if (time()-$timeLastRunning > $c->getTimeout()) {
+                if ( $runCron ) {
                     $dbcron->setRunning(true);
                     $dbcron->setLastStatus('started');
                     $dbcron->setLastRun(date('Y-m-d H:i:s'));
