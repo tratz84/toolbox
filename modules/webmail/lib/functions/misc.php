@@ -74,7 +74,9 @@ function webmail_import_connectors($updateOnly) {
                 continue;
             }
             
-            print "Connected to " . $c->getDescription() . "\n";
+            if (is_cli()) {
+                print "Connected to " . $c->getDescription() . "\n";
+            }
             
             // update only? just update messages from yesterday & today
             if ( $updateOnly ) {
