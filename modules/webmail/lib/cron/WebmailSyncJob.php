@@ -14,7 +14,7 @@ class WebmailSyncJob extends CronJobBase {
     
     
     public function run() {
-        
+        webmail_import_connectors(true);
     }
 
     public function checkJob() {

@@ -99,11 +99,11 @@ function webmail_import_connectors($updateOnly) {
                 }
             });
                 
-                $ic->doImport( $c );
-                $ic->disconnect();
-                $ic->saveServerPropertyChecksums();
-                
-                $solrImportMail->purge( true );
+            $ic->doImport( $c );
+            $ic->disconnect();
+            $ic->saveServerPropertyChecksums();
+            
+            $solrImportMail->purge( true );
         }
         else if ($c->getConnectorType() == 'pop3') {
             

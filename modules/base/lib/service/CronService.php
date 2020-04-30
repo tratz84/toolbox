@@ -99,6 +99,8 @@ class CronService {
                     
                     $c->run();
                     
+                    $con->commitTransaction();
+                    
                     $cr = new CronRun();
                     $cr->setCronId($dbcron->getCronId());
                     $cr->setMessage($c->getMessage());
