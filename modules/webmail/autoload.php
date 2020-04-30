@@ -148,6 +148,11 @@ $eb->subscribe('base', 'dashboard', new CallbackPeopleEventListener(function($ev
 
 // webmail imap/pop3 sync
 hook_eventbus_subscribe('croncontainer', 'init', function(CronContainer $cronContainer) {
+    
+    if (ctx()->isExperimental() == false) {
+        return;
+    }
+    
     $cronContainer->addCronjob( new WebmailSyncJob() );
 });
 
