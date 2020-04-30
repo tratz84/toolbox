@@ -83,14 +83,16 @@ class CronService {
                 
                 // daily cron, not yet run today & after 05:00 ? => run cronjob
                 if ( $runCron ) {
+                    // disconnect, start cron with fresh connection
+                    DatabaseHandler::getInstance()->closeAll();
+                    
                     $dbcron->setRunning(true);
                     $dbcron->setLastStatus('started');
                     $dbcron->setLastRun(date('Y-m-d H:i:s'));
                     $dbcron->save();
                     
+                    
                     $con = DatabaseHandler::getInstance()->getConnection('default');
-                    // commit updated last_run-field, to prevent running cronjob twice
-                    $con->commitTransaction();
                     
                     // start transaction again
                     $con->beginTransaction();
