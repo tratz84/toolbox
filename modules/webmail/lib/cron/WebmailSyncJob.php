@@ -15,12 +15,13 @@ class WebmailSyncJob extends CronJobBase {
     
     public function run() {
         webmail_import_connectors(true);
+        
+        object_meta_save('webmail', null, 'last-webmail-sync', time());
     }
 
     public function checkJob() {
-        // between 07.00 & 18.00
-        // minuts, 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55
-        if (date('G') >= 7 && date('G') <= 18 && intval(date('i'))%5 == 0) {
+        $lastSync = object_meta_get('webmail', null, 'last-webmail-sync');
+        if ($lastSync == null || (time() - (60*4.5)) > $lastSync) {
             return true;
         }
         
