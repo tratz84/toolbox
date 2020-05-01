@@ -10,6 +10,7 @@ require_once '../config/config.php';
 try {
     $fc = object_container_create( \core\filter\FilterChain::class );
     
+    $fc->addFilter( new \core\filter\UrlSecurityFilter() );
     $fc->addFilter( new \core\filter\ModulePublicFilter() );
     $fc->addFilter( new \core\filter\SessionFilter() );
     $fc->addFilter( new \core\filter\DatabaseFilter() );
