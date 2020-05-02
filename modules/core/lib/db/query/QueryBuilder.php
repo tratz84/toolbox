@@ -101,7 +101,10 @@ abstract class QueryBuilder {
         
         return $this;
     }
-    public function clearSelectFields() { $this->selectFields = array(); }
+    public function clearSelectFields() {
+        $this->selectFields = array();
+        $this->selectFunctions = array();
+    }
     
     // used for count(), max(), etc
     public function selectFunction($func) {
