@@ -53,9 +53,16 @@ class CustomerService extends ServiceBase {
         $opts['companiesEnabled'] = Context::getInstance()->isCompaniesEnabled();
         $opts['personsEnabled'] = Context::getInstance()->isPersonsEnabled();
         
+        $opts['start'] = $start;
+        $opts['limit'] = $limit;
         $cursor = $cDao->search($opts);
         
-        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('id', 'type', 'name', 'contact_person'));
+        $cursor = $cDao->search($opts);
+        $count = $cDao->searchCount($opts);
+        
+        $r = ListResponse::fillByCursor(0, $limit, $cursor, array('id', 'type', 'name', 'contact_person'));
+        $r->setStart($start);
+        $r->setRowCount($count);
         
         return $r;
         

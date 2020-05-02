@@ -5,6 +5,8 @@ namespace base\model;
 
 
 
+use core\db\query\QueryBuilderWhere;
+
 class CustomerDAO extends \core\db\DAOObject {
     
     public function __construct() {
@@ -12,88 +14,136 @@ class CustomerDAO extends \core\db\DAOObject {
         $this->setObjectName( '\\base\\model\\Customer' );
     }
     
+
+    public function searchCount($opts=array()) {
+        $qbs = $this->searchQueries($opts);
+        
+        $count = 0;
+        foreach($qbs as $qb) {
+            $qb->clearSelectFields();
+            $qb->selectFunction('count(*)');
+            
+            $sql = $qb->createSelect();
+            $params = $qb->getParams();
+            
+            $count += (int)$this->queryValue($sql, $params);
+        }
+        
+        return $count;
+    }
+    
     
     public function search($opts=array()) {
+        $qbs = $this->searchQueries($opts);
+        
         $params = array();
- 
+        $sqls = array();
+        foreach($qbs as $qb) {
+            $sqls[] = $qb->createSelect();
+            $params = array_merge($params, $qb->getParams());
+        }
+        
+        $sql = implode("\nUNION\n\n", $sqls);
+        $sql .= ' order by name ';
+        
+        if (isset($opts['limit'])) {
+            $start = isset($opts['start']) ? intval($opts['start']) : 0;
+            $limit = intval($opts['limit']);
+            
+            $sql .= " LIMIT {$start}, {$limit}";
+        }
+        
+        return $this->queryCursor($sql, $params);
+    }
+    
+    protected function searchQueries($opts=array()) {
         $queryCompanies = true;
         
+        $qb1 = $qb2 = null;
+        
         if ($queryCompanies) {
-            $sql1 = "select company_id id, 'company' as type, company_name as name, contact_person, c.coc_number, c.vat_number, iban, bic, edited, created
-                    from customer__company c ";
+            $qb1 = $this->createQueryBuilder();
             
-            $where1 = array();
-            $where1[] = " c.deleted = false ";
+            $qb1->selectField('company_id',     'customer__company', 'id');
+            $qb1->selectField('\'company\'',    '', 'type');
+            $qb1->selectField('coc_number',     'customer__company');
+            $qb1->selectField('vat_number',     'customer__company');
+            $qb1->selectField('iban',           'customer__company');
+            $qb1->selectField('bic',            'customer__company');
+            $qb1->selectField('edited',         'customer__company');
+            $qb1->selectField('created',        'customer__company');
+            $qb1->selectField('contact_person', 'customer__company');
+            $qb1->selectField('company_name',   'customer__company', 'name');
+            
+            $qb1->setTable('customer__company');
+            
+            $qb1->addWhere(QueryBuilderWhere::whereRefByVal('deleted', '=', 'false'));
+            
             if (isset($opts['name']) && trim($opts['name'])) {
-                $where1[] = ' c.company_name like ? ';
-                $params[] = '%'.$opts['name'].'%';
+                $qb1->addWhere(QueryBuilderWhere::whereRefByVal('company_name', 'LIKE', '%'.$opts['name'].'%'));
             }
             
             if (isset($opts['iban']) && $opts['iban']) {
-                $where1[] = ' c.iban = ? ';
-                $params[] = $opts['iban'];
+                $qb1->addWhere(QueryBuilderWhere::whereRefByVal('iban', 'LIKE', '%'.$opts['iban'].'%'));
             }
             
             if (isset($opts['contact_person']) && $opts['contact_person']) {
-                $where1[] = ' c.contact_person LIKE ? ';
-                $params[] = '%'.str_replace(' ', '%', $opts['contact_person']).'%';
+                $qb1->addWhere(QueryBuilderWhere::whereRefByVal('contact_person', 'LIKE', '%'.$opts['contact_person'].'%'));
             }
         }
-        
         
         $queryPersons = true;
         if (isset($opts['contact_person']) && $opts['contact_person']) {
             $queryPersons = false;
         }
         
-        $where2 = array();
-        $sql2='';
         if ($queryPersons) {
-            $where2[] = " customer__person.deleted = false ";
+            $qb2 = $this->createQueryBuilder();
             
-            $sql2 = "select person_id id, 'person' as type, concat(lastname, ', ', insert_lastname, ' ', firstname) as name, '' as contact_person, '' as coc_number, '' as vat_number, iban, bic, edited, created
-                    from customer__person ";
+            $qb2->selectField('person_id',    'customer__person', 'id');
+            $qb2->selectField('\'person\'',   '', 'type');
+            $qb2->selectField("'coc_number'", '', 'coc_number');
+            $qb2->selectField("'vat_number'", '', 'vat_number');
+            $qb2->selectField('iban',         'customer__person');
+            $qb2->selectField('bic',          'customer__person');
+            $qb2->selectField('edited',       'customer__person');
+            $qb2->selectField('created',      'customer__person');
+            $qb2->selectField("''",           '', 'contact_person');
+            $qb2->selectFunction("concat(lastname, ', ', insert_lastname, ' ', firstname) as name");
+            
+            $qb2->setTable('customer__person');
+            
+            $qb2->addWhere(QueryBuilderWhere::whereRefByVal('deleted', '=', 'false'));
+            
+            
             if (isset($opts['name']) && trim($opts['name'])) {
-                $where2[] = ' concat(lastname, \', \', insert_lastname, \' \', firstname, \' \', insert_lastname, \' \', lastname) like ? ';
-                $params[] = '%'.str_replace(' ', '%', $opts['name']).'%';
+                $qb2->addWhere(QueryBuilderWhere::whereRefByVal(
+                    ' concat(lastname, \', \', insert_lastname, \' \', firstname, \' \', insert_lastname, \' \', lastname)'
+                    , 'LIKE'
+                    , '%'.str_replace(' ', '%', $opts['name']).'%'));
             }
             
             if (isset($opts['iban']) && $opts['iban']) {
-                $where2[] = ' customer__person.iban = ? ';
-                $params[] = $opts['iban'];
+                $qb2->addWhere(QueryBuilderWhere::whereRefByVal('iban', '=', $opts['iban']));
             }
             
             if (isset($opts['contact_person'])) {
-                $where2[] = ' concat(lastname, \', \', insert_lastname, \' \', firstname) like ? ';
-                $params[] = '%'.$opts['contact_person'].'%';
-            }
-            
-            
-            if (count($where2)) {
-                $sql2 .= " WHERE (" . implode(") AND (", $where2) . " ) ";
+                $qb2->addWhere(QueryBuilderWhere::whereRefByVal(
+                    ' concat(lastname, \', \', insert_lastname, \' \', firstname, \' \', insert_lastname, \' \', lastname)'
+                    , 'LIKE'
+                    , '%'.str_replace(' ', '%', $opts['contact_person']).'%'));
             }
         }
         
-        if (isset($where1) && count($where1)) {
-            $sql1 .= " WHERE (" . implode(") AND (", $where1) . " ) ";
+        $qbs = array();
+        if ($qb1) {
+            $qbs[] = $qb1;
+        }
+        if ($qb2) {
+            $qbs[] = $qb2;
         }
         
-        $sql = '';
-        if (isset($sql1))
-            $sql = $sql1;
-        
-        if ($sql2) {
-            if ($sql)
-                $sql .= ' union ';
-            
-            $sql .= $sql2;
-        }
-        
-        
-        $sql .= ' order by name ';
-//         print $sql;exit;
-        
-        return $this->queryCursor($sql, $params);
+        return $qbs;
     }
     
 }
