@@ -171,6 +171,9 @@ function module_update_handler($moduleName, $version) {
     if ($curVer != $version) {
         lock_system('module-update');
         
+        // update? => no timelimit.. this may take a while for big updates
+        set_time_limit( 0 );
+        
         $updatefile = module_file($moduleName, '/update.php');
         
         // check if file is found & include
