@@ -35,7 +35,7 @@ t.setConnectorUrl( '/?m=base&c=customer&a=search' );
 
 t.addColumn({
 	fieldName: 'type',
-	width: 40,
+	width: 100,
 	fieldDescription: 'Type',
 	fieldType: 'text',
 	searchable: false,
