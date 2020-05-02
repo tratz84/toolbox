@@ -44,8 +44,8 @@ class settingsController extends BaseController {
             $settingsService->updateValue('customers_split', get_var('customers_split')?1:0);
             $settingsService->updateValue('master_base_color', get_var('master_base_color'));
             
-                
-            redirect('/?m=base&c=masterdata/index');
+            report_user_message(t('Changes saved'));
+            redirect('/?m=base&c=masterdata/settings');
         }
         
         $this->checkboxObjectLocking = new CheckboxField('object_locking', @$this->settings['object_locking']?'1':'0', 'Object locking');
