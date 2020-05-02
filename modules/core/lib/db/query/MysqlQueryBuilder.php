@@ -49,10 +49,13 @@ class MysqlQueryBuilder extends QueryBuilder {
             if ($arr['tableName'])
                 $f .= '`'.$arr['tableName'].'`.';
             
-            if ($arr['field'] == '*')
+            if ($arr['field'] == '*') {
                 $f .= '*';
-            else
+            } else if (strpos($arr['field'], "'") === 0 && endsWith($arr['field'], "'") == true) {
+                $f .= $arr['field'];
+            } else {
                 $f .= '`'.$arr['field'].'`';
+            }
             
             if ($arr['label'])
                 $f .= ' ' . $arr['label'];
@@ -60,12 +63,8 @@ class MysqlQueryBuilder extends QueryBuilder {
             $fields[] = $f;
         }
         
-        $fields = array_merge($fields, $this->selectFunctions);
-        
         // add functions
-        foreach($this->selectFunctions as $func) {
-            $fields[] = $func;
-        }
+        $fields = array_merge($fields, $this->selectFunctions);
         
         
         if (count($fields) == 0) {
