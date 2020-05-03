@@ -1610,6 +1610,29 @@ function fill_form(form, obj) {
 	}
 }
 
+
+function clickableRow_Click( objRow ) {
+	var evt = window.event;
+	
+	if ($(evt.target).hasClass('no-click') || $(evt.target).closest('.no-click').length > 0) {
+		return;
+	}
+	
+	if ($(objRow).find('a.anch-edit').length) {
+		window.location = $(objRow).find('a.anch-edit').attr('href');
+	}
+	else if ($(objRow).find('a.fa-pencil').length) {
+		window.location = $(objRow).find('a.fa-pencil').attr('href');
+	}
+	else {
+		// TODO: report error?
+		alert('No edit-link found. Please report');
+	}
+	
+}
+
+
+
 function link_input2text(src, dst) {
 	var obj1 = $(src);
 	
