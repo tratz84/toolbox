@@ -348,7 +348,11 @@ function toolbox_html2pdf_available() {
         return PATH_WKHTMLTOPDF;
     }
     
-    return which_exec('wkhtmltopdf');
+    if (is_windows()) {
+        return which_exec('wkhtmltopdf.exe');
+    } else {
+        return which_exec('wkhtmltopdf');
+    }
 }
 
 function toolbox_html2pdf( $html ) {
