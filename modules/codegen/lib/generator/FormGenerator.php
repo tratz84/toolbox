@@ -141,7 +141,15 @@ class FormGenerator {
         $path = module_file($module, '/lib/form/'.($ns?str_replace('\\','/',$ns).'/':'').$classname.'.php');
         $json = json_decode( $this->data['treedata'] );
         
-        $code = $this->addJsonItems( $json );
+        $code = '';
+        
+        // $this->addKeyField('..')
+        if (isset($this->data['key_fields'])) {
+            $code .= $this->addKeyFields( $this->data['key_fields'] );
+        }
+        
+        // form widgets
+        $code .= $this->addJsonItems( $json );
         
         
         $pcp = new PhpCodeParser();
@@ -152,6 +160,21 @@ class FormGenerator {
         
 //         print $phpcode;
         file_put_contents($path, $phpcode);
+    }
+    
+    public function addKeyFields($fields) {
+        $fields = explode(',', $fields);
+        $code = '';
+        
+        foreach($fields as $f) {
+            $f = trim($f);
+            
+            if ($f) {
+                $code .= '$this->addKeyField('.var_export($f, true).');'.PHP_EOL;
+            }
+        }
+        
+        return $code;
     }
     
     protected function addJsonItems($items, $parentVariable=null) {
