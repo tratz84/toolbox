@@ -8,6 +8,7 @@ use webmail\model\Connector;
 use webmail\service\ConnectorService;
 use webmail\solr\SolrImportMail;
 use webmail\solr\SolrMail;
+use core\exception\InvalidStateException;
 
 function mapAllConnectors() {
     
@@ -44,6 +45,9 @@ function mapMailActions() {
  * @param boolean $updateOnly
  */
 function webmail_import_folder($updateOnly) {
+    if (defined('WEBMAIL_SOLR') == false)
+        throw new InvalidStateException('Solr not configured');
+    
     $solrImportMail = new SolrImportMail(WEBMAIL_SOLR);
     $solrImportMail->setUpdateMode( $updateOnly );
     $solrImportMail->importFolder( ctx()->getDataDir().'/webmail/inbox' );
@@ -55,6 +59,9 @@ function webmail_import_folder($updateOnly) {
  * @param boolean $updateOnly
  */
 function webmail_import_connectors($updateOnly) {
+    if (defined('WEBMAIL_SOLR') == false)
+        throw new InvalidStateException('Solr not configured');
+    
     // loop through active Connectors to sync/fetch mail
     /** @var ConnectorService $connectorService */
     $connectorService = object_container_get( ConnectorService::class );
