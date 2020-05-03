@@ -130,7 +130,7 @@ class settingsController extends BaseController {
         $settingsService = $this->oc->get(SettingsService::class);
         $settingsService->updateValue($mod.'Enabled', 0);
         
-        report_user_message('Module "'.$mod.'" disabled');
+        report_user_message(tf('Module "%s" disabled', $mod));
    
         redirect('/?m=base&c=masterdata/settings');
     }

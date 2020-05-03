@@ -23,6 +23,9 @@ $lang['Make your choice']       = 'Maak uw keuze';
 $lang['Activate']               = 'Activeer';
 $lang['Deactivate']             = 'Deactiveer';
 
+$lang['Module "%s" enabled']    = 'Module "%s" geactiveerd';
+$lang['Module "%s" disabled']   = 'Module "%s" gedeactiveerd';
+
 $lang['Subject']                = 'Onderwerp';
 $lang['Time']                   = 'Tijdstip';
 
