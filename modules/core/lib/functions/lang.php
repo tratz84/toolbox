@@ -26,6 +26,17 @@ function t_loadlang() {
     return $lang;
 }
 
+function tf($str) {
+    $arguments = func_get_args();
+    
+    $str = t( $arguments[0] );
+    
+    // skip first argument
+    $params = array_splice($arguments, 1);
+    
+    // format & return
+    return vsprintf($str, $params);
+}
 
 function t($str) {
     static $lang = null;
