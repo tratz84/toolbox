@@ -35,7 +35,7 @@ $contextName = $argv[1];
 bootstrapCli($contextName);
 
 
-ini_set('memory_limit', '2GB');
+ini_set('memory_limit', '2048M');
 // set_time_limit(60 * 5);              // DONT set a timelimit, script might run longer and MUST finish, because it creates a checksum-file for updates
 
 
