@@ -36,6 +36,7 @@ bootstrapCli($contextName);
 
 
 ini_set('memory_limit', '2048M');
+ini_set('xdebug.max_nesting_level', 500);
 // set_time_limit(60 * 5);              // DONT set a timelimit, script might run longer and MUST finish, because it creates a checksum-file for updates
 
 

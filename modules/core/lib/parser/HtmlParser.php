@@ -117,7 +117,14 @@ class HtmlParser {
     /**
      * parseTokens() - parse tokens into a tree
      */
-    protected function parseTokens($tokens, $startpos=0) {
+    protected function parseTokens($tokens, $startpos=0, $stackCount=0) {
+
+        // set a max on depth
+        if ($stackCount > 450) {
+            return array($startpos+1, array());
+        }
+        
+        
         $parts = array();
         
         // var_export($tokens);exit;
@@ -149,7 +156,7 @@ class HtmlParser {
                         }
                     }
                     
-                    list($pos, $childNodes) = $this->parseTokens($tokens, $x+1);
+                    list($pos, $childNodes) = $this->parseTokens($tokens, $x+1, $stackCount+1);
                     
                     $x = $pos;
                     
