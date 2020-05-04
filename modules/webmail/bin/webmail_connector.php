@@ -26,10 +26,6 @@ include 'config/config.php';
 $contextName = $argv[1];
 bootstrapCli($contextName);
 
-// connect to database for current context
-$dh = \core\db\DatabaseHandler::getInstance();
-$dh->addServer('default', DEFAULT_DATABASE_HOST, DEFAULT_DATABASE_USERNAME, DEFAULT_DATABASE_PASSWORD, \core\Context::getInstance()->getCustomer()->getDatabaseName());
-
 
 /** @var ConnectorService $connectorService */
 $connectorService = ObjectContainer::getInstance()->get(ConnectorService::class);
