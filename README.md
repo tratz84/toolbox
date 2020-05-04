@@ -18,6 +18,7 @@ Currently the basis for an administrationsystem is build (in Dutch) with support
 - accounting/finance
 - incoming contracts?
 - script that handles cron-jobs & background processes
+- link - persons/company
 
 - monitoring tool
 - notification center (Telegram/SMS/... ?)
