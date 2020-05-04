@@ -156,4 +156,16 @@ hook_eventbus_subscribe('croncontainer', 'init', function(CronContainer $cronCon
     $cronContainer->addCronjob( new WebmailSyncJob() );
 });
 
+hook_eventbus_subscribe('core', 'background-jobs', function(\core\container\ArrayContainer $ac) {
+    $cs = object_container_get( ConnectorService::class );
+    $connectors = $cs->readActive();
+    
+    // any active connectors? => register background job
+    if (count($connectors)) {
+        $bj = new \core\cron\BackgroundJob('modules/webmail/bin/webmail_connector.php '.ctx()->getContextName(), 'Webmail mailbox monitor');
+        $ac->add($bj);
+    }
+});
+
+
 
