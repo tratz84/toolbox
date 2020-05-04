@@ -309,16 +309,12 @@ jQuery(document).ready(function($) {
 		
 		tr.remove();
 	}
-	
-	
-	$(window).trigger('form-actions-set');
-});
 
+	
 
-/**
- * list-edit-form-widget event handling
- */
-$(document).ready(function() {
+	/**
+	 * list-edit-form-widget event handling
+	 */
 	$('.widget.list-edit-form-widget').each(function(index, node) {
 		var lefw = new ListEditFormWidget( node );
 		node.lefw = lefw;
@@ -330,7 +326,11 @@ $(document).ready(function() {
 			node.lefw = lefw;
 		});
 	});
+
+	
+	$(window).trigger('form-actions-set');
 });
+
 
 
 function ListEditFormWidget(container) {
@@ -387,6 +387,8 @@ function ListEditFormWidget(container) {
 				if (me.callback_addRecord) {
 					me.callback_addRecord( row );
 				}
+				
+				$(me).trigger('list-edit-add-record');
 			}
 		});
 	};
