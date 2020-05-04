@@ -92,11 +92,13 @@ $lang['Duplicate company']      = 'Bedrijf reeds toegevoegd';
 
 // company
 $lang['Companyname']            = 'Bedrijfsnaam';
+$lang['Company name']           = 'Bedrijfsnaam';
 $lang['Contact person']         = 'Contactpersoon';
 $lang['Coc number']             = 'Kvk nummer';
 $lang['VAT number']             = 'BTW nummer';
 $lang['Default selected']       = 'Standaard geselecteerd';
 $lang['Business customer']      = 'Zakelijk';
+$lang['Select company']         = 'Kies bedrijf';
 
 // person
 $lang['Private customer']       = 'Particulier';
