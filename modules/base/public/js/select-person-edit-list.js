@@ -23,7 +23,7 @@ $(window).on('form-actions-set', function() {
 			var pid = $(node).find('.hidden-field-widget-person-id input').val();
 			
 			if (personIds.indexOf(pid) != -1) {
-				show_user_warning('Duplicate person');
+				show_user_warning(_('Duplicate person'));
 				$(node).remove();
 			}
 			

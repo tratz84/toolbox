@@ -86,6 +86,10 @@ $lang['Customer name']          = 'Klantnaam';
 $lang['Contact person']         = 'Contactpersoon';
 
 
+$lang['Duplicate person']       = 'Persoon reeds toegevoegd';
+$lang['Duplicate company']      = 'Bedrijf reeds toegevoegd';
+
+
 // company
 $lang['Companyname']            = 'Bedrijfsnaam';
 $lang['Contact person']         = 'Contactpersoon';
