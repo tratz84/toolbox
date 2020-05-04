@@ -10,6 +10,7 @@ class Company extends base\CompanyBase {
     protected $emailList = array();
     protected $phoneList = array();
     
+    protected $personList = array();
     
     public function __construct($id=null) {
         parent::__construct($id);
@@ -28,6 +29,8 @@ class Company extends base\CompanyBase {
     public function getPhoneList() { return $this->phoneList; }
     public function setPhoneList($l) { $this->phoneList = $l; }
     
+    public function getPersonList() { return $this->personList; }
+    public function setPersonList($l) { $this->personList = $l; }
     
     public function getEditedFormat($f='d-m-Y H:i:s') {
         return format_datetime($this->getEdited(), $f);

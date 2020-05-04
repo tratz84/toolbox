@@ -19,6 +19,8 @@ use core\forms\lists\ListResponse;
 use core\service\ServiceBase;
 use base\forms\FormChangesHtml;
 use base\forms\CompanyForm;
+use base\model\CompanyPersonDAO;
+use base\model\PersonDAO;
 
 class CompanyService extends ServiceBase implements ObjectHookable {
     
@@ -48,6 +50,10 @@ class CompanyService extends ServiceBase implements ObjectHookable {
         $phoneDao = new PhoneDAO();
         $phones = $phoneDao->readByCompany($id);
         $company->setPhoneList($phones);
+        
+        $pDao = new PersonDAO();
+        $persons = $pDao->readByCompany($id);
+        $company->setPersonList( $persons );
         
         return $company;
     }
@@ -90,6 +96,11 @@ class CompanyService extends ServiceBase implements ObjectHookable {
         $phoneDao = new PhoneDAO();
         $newPhones = $companyForm->getWidget('phoneList')->asArray();
         $phoneDao->mergeFormListMTON('customer__company_phone', 'company_id', $company->getCompanyId(), $newPhones, 'sort');
+        
+        $companyPersonDao = new CompanyPersonDAO();
+        $newPersons = $companyForm->getWidget('personList')->asArray();
+        $companyPersonDao->mergeFormListMTO1('company_id', $company->getCompanyId(), $newPersons);
+        
         
         if ($isNew) {
             ActivityUtil::logActivityCompany($company->getCompanyId(), 'customer__company', null, 'company-created', 'Bedrijf aangemaakt', $fch->getHtml());

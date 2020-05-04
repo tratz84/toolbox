@@ -311,7 +311,7 @@ jQuery(document).ready(function($) {
 	}
 	
 	
-	
+	$(window).trigger('form-actions-set');
 });
 
 

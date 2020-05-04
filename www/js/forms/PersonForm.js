@@ -29,3 +29,19 @@ function cp_validateIban() {
 	
 }
 
+
+
+$(window).on('form-actions-set', function() {
+	$('.base-form-select-company-list-edit .add-record').hide();
+	
+	$('.add-entry-container.action-box').append('<span><a class="select-company" href="javascript:void(0);">'+_('Select company')+'</a></span>');
+	
+	$('.base-form-select-company-list-edit .select-company').click(function() {
+		show_popup( appUrl('/?m=base&c=company&a=popup') );
+	});
+	
+});
+
+
+
+

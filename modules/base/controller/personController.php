@@ -78,5 +78,15 @@ class personController extends FormController {
 
         $this->render();
     }
+    
+    
+    
+    public function action_popup() {
+        
+        $this->setShowDecorator(false);
+        
+        return $this->render();
+    }
+    
 
 }

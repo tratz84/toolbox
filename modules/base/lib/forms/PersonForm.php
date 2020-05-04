@@ -9,6 +9,7 @@ use core\forms\ListFormWidget;
 use core\forms\TextField;
 use core\forms\TextareaField;
 use core\forms\validator\NotEmptyValidator;
+use base\form\SelectCompanyListEdit;
 
 class PersonForm extends BaseForm {
     
@@ -62,6 +63,9 @@ class PersonForm extends BaseForm {
         $phoneList->setFields(array('phonenr', 'note'));
         $phoneList->setPublicFields(array('phone_id', 'person_phone_id'));
         $this->addWidget($phoneList);
+        
+        $companyList = new SelectCompanyListEdit('companyList');
+        $this->addWidget($companyList);
         
         
         $this->addValidator('lastname', new NotEmptyValidator());

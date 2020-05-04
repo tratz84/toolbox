@@ -14,6 +14,16 @@ class CompanyDAO extends \core\db\DAOObject {
 	}
 	
 	
+	public function readByPerson($personId) {
+	    $sql = "select c.*
+                from customer__company c
+                join customer__company_person cp on (c.company_id = cp.company_id)
+                where cp.person_id = ?";
+	    
+	    return $this->queryList($sql, array($personId));
+	}
+	
+	
 	public function search($opts=array()) {
 	    $qb = $this->createQueryBuilder();
 	    

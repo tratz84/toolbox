@@ -20,6 +20,9 @@ module_update_handler('base', '20200415');
 
 hook_loader(__DIR__.'/hook');
 
+hook_register_javascript('select-person-list-edit', '/module/base/js/select-person-edit-list.js');
+
+
 $eb = ObjectContainer::getInstance()->get(EventBus::class);
 
 $eb->subscribe('report', 'menu-list', new CallbackPeopleEventListener(function($evt) {

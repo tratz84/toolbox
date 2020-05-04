@@ -3,17 +3,19 @@
 
 namespace base\service;
 
+use base\forms\FormChangesHtml;
+use base\forms\PersonForm;
 use base\model\AddressDAO;
+use base\model\CompanyDAO;
+use base\model\CompanyPersonDAO;
 use base\model\EmailDAO;
+use base\model\ObjectMetaDAO;
 use base\model\Person;
 use base\model\PersonDAO;
 use base\model\PhoneDAO;
 use base\util\ActivityUtil;
 use core\forms\lists\ListResponse;
 use core\service\ServiceBase;
-use base\model\ObjectMetaDAO;
-use base\forms\FormChangesHtml;
-use base\forms\PersonForm;
 
 class PersonService extends ServiceBase {
     
@@ -38,6 +40,11 @@ class PersonService extends ServiceBase {
         $phoneDao = new PhoneDAO();
         $phones = $phoneDao->readByPerson($id);
         $person->setPhoneList($phones);
+        
+        $companyDao = new CompanyDAO();
+        $companies = $companyDao->readByPerson($id);
+        $person->setCompanyList($companies);
+        
         
         return $person;
     }
@@ -80,6 +87,10 @@ class PersonService extends ServiceBase {
         $phoneDao = new PhoneDAO();
         $newPhones = $personForm->getWidget('phoneList')->asArray();
         $phoneDao->mergeFormListMTON('customer__person_phone', 'person_id', $person->getPersonId(), $newPhones, 'sort');
+        
+        $companyPersonDao = new CompanyPersonDAO();
+        $newCompanies = $personForm->getWidget('companyList')->asArray();
+        $companyPersonDao->mergeFormListMTO1('person_id', $person->getPersonId(), $newCompanies);
         
         
         if ($isNew) {

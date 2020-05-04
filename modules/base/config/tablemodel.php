@@ -294,6 +294,16 @@ $tb_person_phone->addForeignKey('customer__person_phone_ibfk_2', 'phone_id', 'cu
 $tbs[] = $tb_person_phone;
 
 
+$tb_company_person = new TableModel('customer', 'company_person');
+$tb_company_person->addColumn('company_person_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_company_person->addColumn('company_id',       'int');
+$tb_company_person->addColumn('person_id',        'int');
+$tb_company_person->addColumn('sort',             'int');
+$tb_company_person->addForeignKey('fk_person',  'person_id',  'customer__person',  'person_id',  'cascade', 'cascade');
+$tb_company_person->addForeignKey('fk_company', 'company_id', 'customer__company', 'company_id', 'cascade', 'cascade');
+$tbs[] = $tb_company_person;
+
+
 $tb_note = new TableModel('base', 'note');
 $tb_note->addColumn('note_id',           'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
 $tb_note->addColumn('ref_object',        'varchar(32)');

@@ -10,6 +10,8 @@ class Person extends base\PersonBase {
     protected $emailList = array();
     protected $phoneList = array();
     
+    protected $companyList = array();
+    
     
     public function __construct($id=null) {
         parent::__construct($id);
@@ -27,6 +29,9 @@ class Person extends base\PersonBase {
     
     public function getPhoneList() { return $this->phoneList; }
     public function setPhoneList($l) { $this->phoneList = $l; }
+    
+    public function getCompanyList() { return $this->companyList; }
+    public function setCompanyList($l) { $this->companyList = $l; }
     
     
     public function getFullname() {

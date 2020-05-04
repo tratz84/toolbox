@@ -172,6 +172,16 @@ class companyController extends BaseController {
         
         $this->json( $r );
     }
+    
+    
+    
+    public function action_popup() {
+        
+        $this->setShowDecorator(false);
+        
+        return $this->render();
+    }
+    
 }
 
 

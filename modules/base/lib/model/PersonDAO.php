@@ -14,6 +14,15 @@ class PersonDAO extends \core\db\DAOObject {
 	}
 	
 	
+	public function readByCompany($companyId) {
+	    $sql = "select p.*
+                from customer__person p
+                join customer__company_person cp ON (p.person_id = cp.person_id)
+                where p.deleted = false and company_id = ?";
+	    
+	    return $this->queryList($sql, array($companyId));
+	}
+	
 	
 	public function search($opts=array()) {
 	    

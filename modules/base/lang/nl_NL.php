@@ -97,6 +97,7 @@ $lang['Business customer']      = 'Zakelijk';
 // person
 $lang['Private customer']       = 'Particulier';
 $lang['Overview persons']       = 'Overzicht personen';
+$lang['Fullname']               = 'Volledige naam';
 $lang['Name']                   = 'Naam';
 $lang['Firstname']              = 'Voornaam';
 $lang['Middle name']            = 'Tussenvoegsel';
@@ -120,6 +121,7 @@ $lang['Phonenr']                = 'Telnr';
 $lang['Add person']             = 'Persoon toevoegen';
 $lang['Personal data']          = 'Persoonsgegevens';
 $lang['This person is deleted'] = 'Deze persoon is verwijderd';
+$lang['Select person']          = 'Kies persoon';
 
 // user
 $lang['Overview users']  = 'Overzicht gebruikers';
