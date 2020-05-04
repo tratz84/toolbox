@@ -28,7 +28,8 @@ it_person.setRowClick(function(row, evt) {
 
 	lefw.addRecord(function(row) {
 		$(row).find('.hidden-field-widget-person-id input').val( record.person_id );
-		$(row).find('.input-full-name .value').text( record.fullname );
+		$(row).find('.widget-full-name input').val( record.fullname );
+		$(row).find('.widget-full-name .value').text( record.fullname );
 	});
 	
 	close_popup();
