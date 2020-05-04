@@ -128,7 +128,9 @@ class ListEditGenerator {
         
 //         var_export($json);exit;
         
-        $code = $this->addJsonItems( $json );
+        $code = "\n";
+        $code .= $this->addCodeProperties( $this->data );
+        $code .= $this->addJsonItems( $json );
         
         $pcp = new PhpCodeParser();
         $pcp->parse( $path );
@@ -139,6 +141,15 @@ class ListEditGenerator {
         
         //         print $phpcode;
         file_put_contents($path, $phpcode);
+    }
+    
+    protected function addCodeProperties($data) {
+        $code = '';
+        if (@$data['no_results_message']) {
+            $code = '$this->setShowNoResultsMessage( true );' . PHP_EOL;
+        }
+        
+        return $code;
     }
     
     protected function addJsonItems($items, $parentVariable=null) {

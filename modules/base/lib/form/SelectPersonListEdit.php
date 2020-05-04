@@ -13,12 +13,13 @@ class SelectPersonListEdit extends \core\forms\ListEditWidget {
 		
 		$this->codegen();
 		
-		$this->setShowNoResultsMessage(true);
 	}
 	
 	
 	
 	public function codegen() {
+		
+		$this->setShowNoResultsMessage( true );
 		
 		
 		$w1 = new \core\forms\HiddenField('company_person_id', NULL, t('Hidden field'));
@@ -29,6 +30,13 @@ class SelectPersonListEdit extends \core\forms\ListEditWidget {
 		$this->addWidget( $w3 );
 		
 	}
+
+
+
+
+
+
+
 
 
 

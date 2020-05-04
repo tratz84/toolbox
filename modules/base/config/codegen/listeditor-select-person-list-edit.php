@@ -6,5 +6,6 @@ return array (
   'name' => 'SelectPersonListEdit',
   'short_description' => 'Person selection',
   'objects_getter' => 'personList',
+  'no_results_message' => 1,
 );
 

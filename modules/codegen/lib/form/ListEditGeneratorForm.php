@@ -34,18 +34,26 @@ class ListEditGeneratorForm extends \core\forms\CodegenBaseForm {
 		return codegen_map_modules();
 		 }; 
 		
-		$w1 = new \core\forms\HiddenField('data', NULL, '');
+		$w1 = new \core\forms\HiddenField('data', NULL, t(''));
 		$this->addWidget( $w1 );
-		$w2 = new \core\forms\SelectField('module_name', NULL, $func1(), 'Module');
+		$w2 = new \core\forms\SelectField('module_name', NULL, $func1(), t('Module'));
 		$this->addWidget( $w2 );
-		$w3 = new \core\forms\TextField('name', NULL, 'Name');
+		$w3 = new \core\forms\TextField('name', NULL, t('Name'));
 		$this->addWidget( $w3 );
-		$w4 = new \core\forms\TextField('short_description', NULL, 'Short description');
+		$w4 = new \core\forms\TextField('short_description', NULL, t('Short description'));
 		$this->addWidget( $w4 );
-		$w5 = new \core\forms\TextField('objects_getter', NULL, 'Objects getter-name');
+		$w5 = new \core\forms\TextField('objects_getter', NULL, t('Objects getter-name'));
 		$this->addWidget( $w5 );
+		$w6 = new \core\forms\CheckboxField('no_results_message', NULL, t('No-results message'));
+		$this->addWidget( $w6 );
+		$w6->setInfoText( 'Show \'no results found\'-message when table is empty' );
 		
 	}
+
+
+
+
+
 
 
 

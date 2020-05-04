@@ -6,5 +6,6 @@ return array (
   'name' => 'SelectCompanyListEdit',
   'short_description' => 'Company selection',
   'objects_getter' => 'companyList',
+  'no_results_message' => 1,
 );
 

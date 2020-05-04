@@ -12,13 +12,14 @@ class SelectCompanyListEdit extends \core\forms\ListEditWidget {
         hook_htmlscriptloader_enableGroup('select-company-list-edit');
 		
 		$this->codegen();
-		
-		$this->setShowNoResultsMessage(true);
+
 	}
 	
 	
 	
 	public function codegen() {
+		
+		$this->setShowNoResultsMessage( true );
 		
 		
 		$w1 = new \core\forms\HiddenField('company_person_id', NULL, t('Hidden field'));
@@ -29,6 +30,10 @@ class SelectCompanyListEdit extends \core\forms\ListEditWidget {
 		$this->addWidget( $w3 );
 		
 	}
+
+
+
+
 
 
 
