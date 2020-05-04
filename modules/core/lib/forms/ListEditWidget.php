@@ -16,6 +16,8 @@ abstract class ListEditWidget extends ListWidget {
     protected $tableHeader = true;
     protected $strNewEntry = 'Add line';
     protected $sortable = true;
+    
+    protected $showNoResultsMessage = false;
 
 
     public function __construct($methodObjectList) {
@@ -25,6 +27,8 @@ abstract class ListEditWidget extends ListWidget {
 
         $this->methodObjectList = $methodObjectList;
     }
+    
+    public function setShowNoResultsMessage($bln) { $this->showNoResultsMessage = $bln; }
 
     public function getObjects() {
         $l = array();
@@ -112,6 +116,7 @@ abstract class ListEditWidget extends ListWidget {
         if ($this->objects) foreach($this->objects as $o) {
             $html .= $this->renderRowAsText( $o );
         }
+        
         $html .= '</tbody>';
         
         $html .= '<tfoot>';
@@ -126,6 +131,16 @@ abstract class ListEditWidget extends ListWidget {
         $html .= '</div>';
 
         return $html;
+    }
+    
+    public function getColumnCount() {
+        $cnt=1;
+        foreach($this->widgets as $w) {
+            if (is_a($w, HiddenField::class)) continue;
+            $cnt++;
+        }
+        
+        return $cnt;
     }
     
     public function renderHeader($method='default') {
@@ -164,6 +179,11 @@ abstract class ListEditWidget extends ListWidget {
         if ($this->objects) foreach($this->objects as $o) {
             $html .= $this->renderRow( $o );
         }
+        
+        if ($this->showNoResultsMessage) {
+            $html .= "<tr class=\"no-results\"><td colspan=\"".$this->getColumnCount()."\">".t('No results found')."</tr>";
+        }
+        
         $html .= '</tbody>';
         
         $html .= '<tfoot></tfoot>';

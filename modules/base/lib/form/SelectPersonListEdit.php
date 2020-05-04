@@ -12,6 +12,8 @@ class SelectPersonListEdit extends \core\forms\ListEditWidget {
         hook_htmlscriptloader_enableGroup('select-person-list-edit');
 		
 		$this->codegen();
+		
+		$this->setShowNoResultsMessage(true);
 	}
 	
 	

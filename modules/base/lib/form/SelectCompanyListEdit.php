@@ -10,6 +10,8 @@ class SelectCompanyListEdit extends \core\forms\ListEditWidget {
 		parent::__construct( self::$getterName );
 		
 		$this->codegen();
+		
+		$this->setShowNoResultsMessage(true);
 	}
 	
 	
