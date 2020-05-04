@@ -21,6 +21,7 @@ module_update_handler('base', '20200504');
 hook_loader(__DIR__.'/hook');
 
 hook_register_javascript('select-person-list-edit', '/module/base/js/select-person-edit-list.js');
+hook_register_javascript('select-company-list-edit', '/module/base/js/select-company-edit-list.js');
 
 
 $eb = ObjectContainer::getInstance()->get(EventBus::class);

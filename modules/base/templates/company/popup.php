@@ -28,6 +28,7 @@ it_company.setRowClick(function(row, evt) {
 
 	lefw.addRecord(function(row) {
 		$(row).find('.hidden-field-widget-company-id input').val( record.company_id );
+		$(row).find('.widget-company-name input').val( record.company_name );
 		$(row).find('.widget-company-name .value').text( record.company_name );
 	});
 	

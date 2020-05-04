@@ -8,6 +8,8 @@ class SelectCompanyListEdit extends \core\forms\ListEditWidget {
 
 	public function __construct() {
 		parent::__construct( self::$getterName );
+
+        hook_htmlscriptloader_enableGroup('select-company-list-edit');
 		
 		$this->codegen();
 		
