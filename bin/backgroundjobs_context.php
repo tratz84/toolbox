@@ -146,5 +146,5 @@ while ( true ) {
         \core\db\DatabaseHandler::getInstance()->closeAll();
     }
     
-    sleep(5);
+    sleep(30);
 }
