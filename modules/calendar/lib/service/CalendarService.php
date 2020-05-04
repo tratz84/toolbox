@@ -213,11 +213,11 @@ class CalendarService extends ServiceBase {
             // add EXDATE
             $this->addExDate($calendarItemId, $selectedDate);
             
-            ActivityUtil::logActivity(null, null, 'cal__calendar_item', $ci->getCalendarItemId(), 'calendar-exdate', 'Agendapunt verwijderd: ' . $ci->getTitle() . ' ('.$datetime.')', $fch->getHtml());
+            ActivityUtil::logActivity($ci->getCompanyId(), $ci->getPersonId(), 'cal__calendar_item', $ci->getCalendarItemId(), 'calendar-exdate', 'Agendapunt verwijderd: ' . $ci->getTitle() . ' ('.$datetime.')', $fch->getHtml());
         } else {
             $ciDao->delete($calendarItemId);
             
-            ActivityUtil::logActivity(null, null, 'cal__calendar_item', $ci->getCalendarItemId(), 'calendar-delete', 'Agendapunt verwijderd: ' . $ci->getTitle() . ' ('.$datetime.')', $fch->getHtml());
+            ActivityUtil::logActivity($ci->getCompanyId(), $ci->getPersonId(), 'cal__calendar_item', $ci->getCalendarItemId(), 'calendar-delete', 'Agendapunt verwijderd: ' . $ci->getTitle() . ' ('.$datetime.')', $fch->getHtml());
         }
     }
     
@@ -308,9 +308,9 @@ class CalendarService extends ServiceBase {
             $datetime .= ' ' . $ci->getStartTime();
         
         if ($isNew) {
-            ActivityUtil::logActivity(null, null, 'cal__calendar_item', $ci->getCalendarItemId(), 'calendar-created', 'Agendapunt toegevoegd: ' . $ci->getTitle() . ' ('.$datetime.')', $fch->getHtml());
+            ActivityUtil::logActivity($ci->getCompanyId(), $ci->getPersonId(), 'cal__calendar_item', $ci->getCalendarItemId(), 'calendar-created', 'Agendapunt toegevoegd: ' . $ci->getTitle() . ' ('.$datetime.')', $fch->getHtml());
         } else {
-            ActivityUtil::logActivity(null, null, 'cal__calendar_item', $ci->getCalendarItemId(), 'calendar-created', 'Agendapunt gewijzigd: ' . $ci->getTitle() . ' ('.$datetime.')', $fch->getHtml());
+            ActivityUtil::logActivity($ci->getCompanyId(), $ci->getPersonId(), 'cal__calendar_item', $ci->getCalendarItemId(), 'calendar-created', 'Agendapunt gewijzigd: ' . $ci->getTitle() . ' ('.$datetime.')', $fch->getHtml());
         }
         
         
