@@ -169,7 +169,12 @@ class ListEditGenerator {
                 }
                 // value found?
                 else if (isset($item->{$func_param->name})) {
-                    $params[] = var_export($item->{$func_param->name}, true);
+                    
+                    if ($func_param->name == 'label') {
+                        $params[] = 't('.var_export($item->{$func_param->name}, true).')';
+                    } else {
+                        $params[] = var_export($item->{$func_param->name}, true);
+                    }
                     $lastNonDefaultParam = $cnt;
                 }
                 // default parameter-value?
