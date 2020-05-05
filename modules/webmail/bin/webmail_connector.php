@@ -8,6 +8,7 @@
 
 
 use core\ObjectContainer;
+use core\db\DatabaseHandler;
 use webmail\mail\ImapMonitor;
 use webmail\service\ConnectorService;
 use webmail\service\EmailService;
@@ -36,6 +37,15 @@ $cnt=0;
 while (true) {
     
     if ($cnt == 0) {
+        
+        // check database connection
+        $con = DatabaseHandler::getConnection('default');
+        if ($con->ping() == false) {
+            print_info('Exit... MySQL ping failed');
+            exit;
+        }
+        
+        
         $connectors = $connectorService->readActive();
 
         if (count($connectors) == 0) {
