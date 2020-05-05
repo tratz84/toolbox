@@ -68,5 +68,8 @@ function log_to_filesystem($fullpath, $message) {
     }
 }
 
+function print_info($str) {
+    print '[' . ctx()->getContextName() . '][' . date('Y-m-d H:i:s') . '] ' . $str . "\n";
+}
 
 
