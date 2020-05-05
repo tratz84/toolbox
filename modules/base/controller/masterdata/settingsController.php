@@ -5,6 +5,7 @@
 use base\service\SettingsService;
 use core\controller\BaseController;
 use core\forms\CheckboxField;
+use core\forms\SelectField;
 use core\exception\InvalidStateException;
 
 class settingsController extends BaseController {
@@ -42,17 +43,30 @@ class settingsController extends BaseController {
 
             $settingsService->updateValue('object_locking', get_var('object_locking')?1:0);
             $settingsService->updateValue('customers_split', get_var('customers_split')?1:0);
+            $settingsService->updateValue('pdf_print_date_footer', get_var('pdf_print_date_footer')?1:0);
+            $settingsService->updateValue('pdf_print_paging', get_var('pdf_print_paging', 'always'));
+            
             $settingsService->updateValue('master_base_color', get_var('master_base_color'));
             
             report_user_message(t('Changes saved'));
             redirect('/?m=base&c=masterdata/settings');
         }
         
-        $this->checkboxObjectLocking = new CheckboxField('object_locking', @$this->settings['object_locking']?'1':'0', 'Object locking');
+        $this->checkboxObjectLocking = new CheckboxField('object_locking', @$this->settings['object_locking']?'1':'0', t('Object locking'));
         $this->checkboxObjectLocking->setInfoText(t('Possibility to mark objects as "locked"'));
 
-        $this->checkboxSplitCustomers = new CheckboxField('customers_split', ctx()->isCustomersSplit(), 'Split customers');
+        $this->checkboxSplitCustomers = new CheckboxField('customers_split', ctx()->isCustomersSplit(), t('Split customers'));
         $this->checkboxSplitCustomers->setInfoText(t('Split customers into persons/companies?'));
+        
+        $this->checkboxDateOnPdf = new CheckboxField('pdf_print_date_footer', ctx()->pdfPrintDateFooter(), t('PDF: Print date in footer'));
+        $this->checkboxDateOnPdf->setInfoText(t('Put date in footer of generated PDF files?'));
+        
+        $options = ['always' => t('Always')
+                    , 'never' => t('Never')
+                    // , 'multi-page' => t('Multi-page documents')
+                ];
+        $this->selectPdfPrintPaging = new SelectField('pdf_print_paging', ctx()->pdfPrintPaging(), $options, t('PDF: paging'));
+        $this->selectPdfPrintPaging->setInfoText(t('Print paging in PDF files'));
         
         $this->render();
     }

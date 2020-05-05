@@ -43,6 +43,10 @@
 		<?= $checkboxObjectLocking->render() ?>
 		
 		<?= $checkboxSplitCustomers->render() ?>
+		
+		<?= $checkboxDateOnPdf->render() ?>
+		
+		<?= $selectPdfPrintPaging->render() ?>
 	</div>
 
 	<div class="clear"></div>

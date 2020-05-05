@@ -9,6 +9,7 @@ class BasePdf extends \FPDF {
     protected $lineHeight = 6;
     protected $angle=0;
     
+    protected $isMultiPage = null;
     
     function __construct($orientation='P', $unit='mm', $size='A4') {
         parent::__construct($orientation, $unit, $size);
@@ -58,21 +59,35 @@ class BasePdf extends \FPDF {
 //         $this->SetX(10);
 //         $this->Cell(0, 3.5, date('d-m-Y'), 0, 0, 'L');
 
-        $date = date('d-m-Y');
-//         $date = '';
+        if (ctx()->pdfPrintDateFooter())
+            $date = date('d-m-Y');
+        else
+            $date = '';
+
+        $printPaging = true;
+        if (ctx()->pdfPrintPaging() == 'never') {
+            $printPaging = false;
+        }
+        else if (ctx()->pdfPrintPaging() == 'multi-page' && $this->isMultiPage == false) {
+            $printPaging = false;
+        }
         
         if ($this->DefOrientation == 'P') {
             $this->SetX(0);
             $this->SetY(280);
             $this->Cell(100, $this->lineHeight, $date, 0, 0, 'L');
-            $this->Cell(95, $this->lineHeight, 'Pagina ' . $this->PageNo() . ' van {nb}', 0, 0, 'R');
+            
+            if ($printPaging)
+                $this->Cell(95, $this->lineHeight, 'Pagina ' . $this->PageNo() . ' van {nb}', 0, 0, 'R');
         }
         
         if ($this->DefOrientation == 'L') {
             $this->SetX(2);
             $this->SetY(200);
             $this->Cell(100, $this->lineHeight, $date, 0, 0, 'L');
-            $this->Cell(180, $this->lineHeight, 'Pagina ' . $this->PageNo() . ' van {nb}', 0, 0, 'R');
+            
+            if ($printPaging)
+                $this->Cell(180, $this->lineHeight, 'Pagina ' . $this->PageNo() . ' van {nb}', 0, 0, 'R');
         }
     }
     

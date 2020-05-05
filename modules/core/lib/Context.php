@@ -177,6 +177,14 @@ class Context
     
     public function isCustomersSplit() { return $this->getSetting('customers_split', true); }
     
+    public function pdfPrintDateFooter() { return $this->getSetting('pdf_print_date_footer', true); }
+    public function pdfPrintPaging() {
+        $v = $this->getSetting('pdf_print_paging', 'always');
+        if ($v != 'always' && $v != 'never' && $v != 'multi-page')
+            $v = 'always';
+        return $v;
+    }
+    
     public function getLogoFile() { return $this->getSetting('logoFile'); }
     
     public function isInvoiceModuleEnabled() { return $this->getSetting('invoiceModuleEnabled', false); }
