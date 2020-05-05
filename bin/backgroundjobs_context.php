@@ -109,6 +109,7 @@ while ( true ) {
 
             // check pid
             $status = null;
+            $pid = $startedProcesses[$cmd]['pid'];
             $r = pcntl_waitpid($pid, $status, WNOHANG);
             
             print_info("$cmd: Stopping proces..");
@@ -123,7 +124,7 @@ while ( true ) {
             
             if ($r !== 0) {
                 print_info("$cmd: Stopped..");
-                unset( $startedProcesses[$cmd]['proces'] );
+                unset( $startedProcesses[$cmd] );
             }
             else {
                 print_info("$cmd: Process still running, kill takes some time..");
