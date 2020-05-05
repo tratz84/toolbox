@@ -49,7 +49,7 @@ while (true) {
         $connectors = $connectorService->readActive();
 
         if (count($connectors) == 0) {
-            print "No active connectors\n";
+            print_info("No active connectors");
         }
         
         // check if connectors are changed
@@ -64,21 +64,21 @@ while (true) {
                 $connectorChanged = false;
                 // connector edited?
                 if ($monitors[$connectorId]->getConnector()->getEdited() != $c->getEdited()) {
-                    print "Connector settings changed for $connectorId\n";
+                    print_info("Connector settings changed for $connectorId");
                     $connectorChanged = true;
                 }
                 // filter has changed?
                 else {
                     $lastFilterChange = $connectorService->lastFilterChange( $connectorId );
                     if ($monitors[$connectorId]->getConnector()->getField('last_filter_change') != $lastFilterChange) {
-                        print "Filters changed for $connectorId\n";
+                        print_info("Filters changed for $connectorId");
                         $connectorChanged = true;
                     }
                 }
                 
                 // connector changed? => stop
                 if ($connectorChanged) {
-                    print "Stopping monitor for: " . $c->getDescription() . " (changed)\n";
+                    print_info("Stopping monitor for: " . $c->getDescription() . " (changed)");
                     $monitors[$connectorId]->stop();
                     unset( $monitors[$connectorId] );
                 }
@@ -95,12 +95,12 @@ while (true) {
                 
                 // connect
                 if ($c->getConnectorType() == 'imap') {
-                    print "Starting monitor for: " . $c->getDescription() . "\n";
+                    print_info("Starting monitor for: " . $c->getDescription());
                     $im = new ImapMonitor($c);
                     $im->setCallbackItemImported(function($folderName, $overview, $file, $changed) use ($c) {
                         // decode subject
                         $subject = imap_utf8( $overview->subject );
-                        print "Importing mail, " . $c->getConnectorId() . ': ' . $subject . " (".$overview->date.")\n";
+                        print_info("Importing mail, " . $c->getConnectorId() . ': ' . $subject . " (".$overview->date.")");
                         
                         // update solr
                         if (defined('WEBMAIL_SOLR') && WEBMAIL_SOLR) {
@@ -123,7 +123,7 @@ while (true) {
         // check for removed
         foreach($monitors as $connectorId => $monitor) {
             if (in_array($connectorId, $connectorIds) == false) {
-                print "Removing monitor for: " . $monitor->getConnector()->getDescription() . "\n";
+                print_info("Removing monitor for: " . $monitor->getConnector()->getDescription());
                 $monitors[$connectorId]->stop();
                 unset( $monitors[$connectorId] );
             }
@@ -134,7 +134,7 @@ while (true) {
     foreach($monitors as $cid => $monitor) {
         if ($monitor->poll()) {
             // TODO: fetch new mail
-            print "Check it!\n";
+            print_info("Check it!");
             $monitor->import();
         }
     }
@@ -147,7 +147,7 @@ while (true) {
 }
 
 // shouldn't be reached
-print "Done.. :)\n";
+print_info("Done.. :)");
 
 
 

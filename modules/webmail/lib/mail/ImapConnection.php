@@ -178,7 +178,7 @@ class ImapConnection {
             $results = imap_fetch_overview($this->imap, $range, $this->imapFetchOverviewOptions);
             
             if (is_cli()) {
-                print "Importing msg: " . $folderName . " (" . $x . "/" . $this->imapFetchListCount . ')'."\n";
+                print_info("Importing msg: " . $folderName . " (" . $x . "/" . $this->imapFetchListCount . ')');
             }
             
             for($y=0; $y < count($results); $y++) {
@@ -288,12 +288,12 @@ class ImapConnection {
         $str .= imap_body($this->imap, $overview->uid, FT_PEEK | FT_UID);
         
         if (is_cli()) {
-            print "Saving e-mail to file: $file\n";
+            print_info("Saving e-mail to file: $file");
         }
         
         $fh = fopen($file, 'w');
         if (!$fh) {
-            print "ERROR: Unable to open file: $file\n"; 
+            print_info("ERROR: Unable to open file: $file"); 
             return false;
         }
         
@@ -401,7 +401,7 @@ class ImapConnection {
                     // new?
                     if ($emlfile) {
                         // apply filters
-                        print "Applying filters\n";
+                        print_info("Applying filters");
                         $result = $this->applyFilters($connector, $file, $results[$y]->uid);
                         
                         // update propertiesName
@@ -600,7 +600,7 @@ class ImapConnection {
             }
             
             if (is_cli())
-                print "Importing: " . $if->getFolderName() . "\n";
+                print_info("Importing: " . $if->getFolderName());
             
             $this->importItems( $if->getFolderName() );
         }

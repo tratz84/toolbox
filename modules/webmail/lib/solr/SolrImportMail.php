@@ -298,7 +298,7 @@ class SolrImportMail {
         $json = json_decode($r);
         
         if (is_cli()) {
-            print "Document no: " . $this->documentCount . PHP_EOL;
+            print_info("Document no: " . $this->documentCount);
         }
         $this->commit();
         
