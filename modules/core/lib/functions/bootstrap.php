@@ -22,7 +22,10 @@ function bootstrapContext($contextName) {
     
     if ($customer == null)
         throw new InvalidStateException('customer not found');
-        
+    
+    if ($customer->getActive() == false)
+        throw new InvalidStateException('customer not active');
+    
     $ctx = Context::getInstance();
     $ctx->setCustomer($customer);
     $ctx->setContextName($contextName);
