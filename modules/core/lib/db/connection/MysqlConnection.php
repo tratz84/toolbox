@@ -78,6 +78,9 @@ class MysqlConnection extends DBConnection {
         return $r;
     }
     
+    public function ping() {
+        return $this->mysqli->ping();
+    }
     
     public function commitTransaction() {
         $this->transactionCount--;

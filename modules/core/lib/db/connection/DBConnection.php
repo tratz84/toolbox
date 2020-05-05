@@ -15,6 +15,8 @@ abstract class DBConnection {
     public abstract function connect();
     public abstract function disconnect();
     
+    public abstract function ping();
+    
     public abstract function beginTransaction();
     public abstract function commitTransaction();
     public abstract function rollbackTransaction();
