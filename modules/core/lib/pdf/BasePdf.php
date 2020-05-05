@@ -9,7 +9,7 @@ class BasePdf extends \FPDF {
     protected $lineHeight = 6;
     protected $angle=0;
     
-    protected $isMultiPage = null;
+    protected $outputCalled = false;
     
     function __construct($orientation='P', $unit='mm', $size='A4') {
         parent::__construct($orientation, $unit, $size);
@@ -68,7 +68,7 @@ class BasePdf extends \FPDF {
         if (ctx()->pdfPrintPaging() == 'never') {
             $printPaging = false;
         }
-        else if (ctx()->pdfPrintPaging() == 'multi-page' && $this->isMultiPage == false) {
+        else if (ctx()->pdfPrintPaging() == 'multi-page' && $this->outputCalled && count($this->pages) <= 1) {
             $printPaging = false;
         }
         
@@ -194,6 +194,11 @@ class BasePdf extends \FPDF {
         }
     }
     
+    function Output($dest='', $name='', $isUTF8=false) {
+        $this->outputCalled = true;
+        
+        return parent::Output( $dest, $name, $isUTF8 );
+    }
     
 }
 

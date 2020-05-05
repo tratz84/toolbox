@@ -63,7 +63,7 @@ class settingsController extends BaseController {
         
         $options = ['always' => t('Always')
                     , 'never' => t('Never')
-                    // , 'multi-page' => t('Multi-page documents')
+                    , 'multi-page' => t('Multi-page documents')
                 ];
         $this->selectPdfPrintPaging = new SelectField('pdf_print_paging', ctx()->pdfPrintPaging(), $options, t('PDF: paging'));
         $this->selectPdfPrintPaging->setInfoText(t('Print paging in PDF files'));
