@@ -26,11 +26,10 @@ while ( true ) {
     try {
         
         // publish event for starting any crons
-        print "Lookup background-jobs.. ";
         $ac = new \core\container\ArrayContainer();
         hook_eventbus_publish($ac, 'core', 'background-jobs');
         
-        print $ac->count() . "\n";
+        print_info("Lookup background-jobs.. ".$ac->count());
 
         // check which crons has to be started
         $currentProcesses = array();
@@ -70,7 +69,7 @@ while ( true ) {
             
             // check if command is found
             if ($cmd == false) {
-                print "Error: Unable to execute " . $bj->getCmd();
+                print_info("Error: Unable to execute " . $bj->getCmd());
                 continue;
             }
             
@@ -80,7 +79,7 @@ while ( true ) {
             }
             
             // start proces
-            print "$cmd: Starting proces..\n";
+            print_info("$cmd: Starting proces..");
             $descriptorspec = array(
                // 0 => array("pipe", "r"),  // stdin is a pipe that the child will read from
                // 1 => array("pipe", "w"),  // stdout is a pipe that the child will write to
@@ -112,7 +111,7 @@ while ( true ) {
             $status = null;
             $r = pcntl_waitpid($pid, $status, WNOHANG);
             
-            print "$cmd: Stopping proces..\n";
+            print_info("$cmd: Stopping proces..");
             
             if ($r === 0) {
                 posix_kill( $pid, 7 );
@@ -123,18 +122,18 @@ while ( true ) {
             $r = pcntl_waitpid($pid, $status, WNOHANG);
             
             if ($r !== 0) {
-                print "$cmd: Stopped..\n";
+                print_info("$cmd: Stopped..");
                 unset( $startedProcesses[$cmd]['proces'] );
             }
             else {
-                print "$cmd: Process still running, kill takes some time..\n";
+                print_info("$cmd: Process still running, kill takes some time..");
             }
         }
 
         
         // run cron every 5 minuts
         if ($lastCronRun == null || $lastCronRun+(60*5) < time()) {
-            print "CronService::runCron()\n";
+            print_info("CronService::runCron()");
             $cronService = object_container_get(\base\service\CronService::class);
             $cronService->runCron();
             
@@ -142,7 +141,7 @@ while ( true ) {
         }
     } catch (\Exception $ex) {
         // Exception.. close all database connections to reset state
-        print "Error: " . $ex->getMessage() . "\n";
+        print_info("Error: " . $ex->getMessage());
         \core\db\DatabaseHandler::getInstance()->closeAll();
     }
     
