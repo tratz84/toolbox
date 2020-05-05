@@ -77,12 +77,12 @@ function webmail_import_connectors($updateOnly) {
         if ($c->getConnectorType() == 'imap') {
             $ic = ImapConnection::createByConnector($c);
             if (!$ic->connect()) {
-                print "Unable to connect to " . $c->getDescription() . "\n";
+                print_info("Unable to connect to " . $c->getDescription());
                 continue;
             }
             
             if (is_cli()) {
-                print "Connected to " . $c->getDescription() . "\n";
+                print_info("Connected to " . $c->getDescription());
             }
             
             // update only? just update messages from yesterday & today

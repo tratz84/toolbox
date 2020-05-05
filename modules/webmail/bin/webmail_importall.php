@@ -47,16 +47,16 @@ $updateOnly = $argumentParser->hasOption('u');
 
 // import folder
 if ($argumentParser->hasOption('skip-folder-import') == false) {
-    print "START Folder import, importing webmail/inbox\n";
+    print_info("START Folder import, importing webmail/inbox");
     webmail_import_folder( $updateOnly );
-    print "DONE Folder import\n";
+    print_info("DONE Folder import");
 }
 
 
 if ($argumentParser->hasOption('skip-connector-import') == false) {
-    print "START Connector import\n";
+    print_info("START Connector import");
     webmail_import_connectors($updateOnly);
-    print "DONE Connector import\n";
+    print_info("DONE Connector import");
 }
 
 
