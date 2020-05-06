@@ -37,6 +37,14 @@
         
         <table>
         	<?php for($x=0; $x < count($attachments); $x++) : ?>
+        	<?php 
+        	   $ac =  new \core\container\ArrayContainer();
+        	   $ac->setAttribute('mail', $mail);
+        	   $ac->setAttribute('attachment', $attachments[$x]);
+        	   $ac->setAttribute('attachment-no', $x);
+        	   
+        	   hook_eventbus_publish($ac, 'filesync', 'mailbox-attachment');
+        	?>
         	<tr>
         		<th>Attachment #<?= $x+1 ?></th>
         		<td>
@@ -48,19 +56,21 @@
         				Filesync
         			</a>
         		</td>
-        		<?php /* hmmzz, this should be handled with hooks */ ?>
-        		<?php if ($ctx->isModuleEnabled('finance')) : ?>
+        		<?php foreach($ac->getItems() as $i) : ?>
         		<td style="padding-left: 20px;">
-        			<a href="javascript:void(0);" data-email-id="<?= esc_attr($mail->getId()) ?>" data-attachment-no="<?= $x ?>" onclick="filesync_mailbox_Click(this, 'vat');">
-        				<span class="fa fa-download"></span>
-        				Vat
-        			</a>
+        			<?= $i ?>
         		</td>
-        		<?php endif; ?>
+        		<?php endforeach; ?>
         	</tr>
         	<?php endfor; ?>
         	
         	<?php if ($htmlToPdfAvailable) : ?>
+        	<?php 
+        	   $ac =  new \core\container\ArrayContainer();
+        	   $ac->setAttribute('mail', $mail);
+        	   hook_eventbus_publish($ac, 'filesync', 'mailbox-mail');
+        	?>
+        	
         	<tr>
         		<th>E-mail</th>
         		<td>
@@ -72,15 +82,13 @@
             			Filesync
             		</a>
             	</td>
-        		<?php if ($ctx->isModuleEnabled('finance')) : ?>
-            	<td style="padding-left: 20px;">
-            		<a href="javascript:void(0);" data-email-id="<?= esc_attr($mail->getId()) ?>" data-attachment-no="-1" onclick="filesync_mailbox_Click(this, 'vat');">
-	            		<span class="fa fa-download"></span>
-            			Vat
-            		</a>
-            	</td>
-        		<?php endif; ?>
             	
+        		<?php foreach($ac->getItems() as $i) : ?>
+        		<td style="padding-left: 20px;">
+        			<?= $i ?>
+        		</td>
+        		<?php endforeach; ?>
+        		
         	</tr>
         	<?php endif; ?>
         </table>
