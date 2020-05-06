@@ -10,9 +10,21 @@ class ArrayContainer {
     
     protected $items;
     
+    protected $attributes = array();
+    
     
     public function __construct($items=array()) {
         $this->items = $items;
+    }
+    
+    
+    public function setAttribute($name, $value) { $this->attributes[$name] = $value; }
+    public function getAttribute($name, $defaultValue=null) {
+        if (isset($this->attributes[$name])) {
+            return $this->attributes[$name];
+        } else {
+            return $defaultValue;
+        }
     }
     
     
