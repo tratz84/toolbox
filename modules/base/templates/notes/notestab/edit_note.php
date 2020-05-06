@@ -33,6 +33,8 @@ function saveNote() {
 				reloadNotes();
 
 				close_popup();
+				
+				show_user_message(_('Note saved'));
 			}
 			else {
 				$('.popup-container .errors.error-list').remove();
