@@ -12,6 +12,7 @@ $lang['No']                     = 'Nee';
 $lang['Load more']              = 'Laad meer';
 $lang['Active']                 = 'Actief';
 $lang['Changes saved']          = 'Wijzigingen opgeslagen';
+$lang['No results found']       = 'Geen resultaten gevonden';
 
 $lang['Edited']                 = 'Bewerkt op';
 $lang['Created']                = 'Aangemaakt op';

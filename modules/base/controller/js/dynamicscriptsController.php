@@ -32,6 +32,13 @@ class dynamicscriptsController extends BaseController {
                 } else {
                     return str;
                 }
+            }
+            function toolbox_t(str) {
+                if (typeof lang_toolbox[str] != \'undefined\') {
+                    return lang_toolbox[str];
+                } else {
+                    return str;
+                }
             }';
         
         

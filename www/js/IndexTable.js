@@ -499,7 +499,7 @@ function IndexTable( container, opts ) {
 		if (this.listResponse.start == 0 && this.listResponse.objects.length == 0) {
 			var td = $('<td class="no-results-found" />');
 			td.attr('colspan', this.columns.length + (this.sortable?1:0) );
-			td.text(_('No results found'));
+			td.text(toolbox_t('No results found'));
 
 			var tr = $('<tr class="no-results" />');
 			tr.append( td );
