@@ -16,6 +16,7 @@ Currently the basis for an administrationsystem is build (in Dutch) with support
 
 ### TODO
 - accounting/finance
+- support adding calendar items in webmails with vcalendar-attachment
 
 - knowledge base
 - monitoring tool
