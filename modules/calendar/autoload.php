@@ -123,3 +123,11 @@ $eb->subscribe('base', 'person-edit-footer', new CallbackPeopleEventListener(fun
     
 }));
     
+
+hook_eventbus_subscribe('base', 'render-webmail-searchController-index', function($src) {
+    hook_htmlscriptloader_enableGroup('calendar');
+});
+
+
+
+
