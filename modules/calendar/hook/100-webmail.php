@@ -4,6 +4,7 @@
 
 
 use calendar\helper\SabreVEventParser;
+use base\service\CustomerService;
 
 hook_eventbus_subscribe('webmail', 'mailbox-mailactions', function($actionContainer) {
     
@@ -42,10 +43,32 @@ hook_eventbus_subscribe('webmail', 'mailbox-mailactions', function($actionContai
                 
                 hook_htmlscriptloader_enableGroup('calendar');
                 
+                $company_id = '';
+                $person_id = '';
+                
+                // lookup customer by email
+                $email = trim($email->getFromEmail());
+                if (validate_email($email)) {
+                    $customerService = object_container_get(CustomerService::class);
+                    $customer = $customerService->readCustomerByEmail( $email );
+                    
+                    if ($customer) {
+                        if ($customer->getCompany()) {
+                            $company_id = $customer->getCompany()->getCompanyId();
+                        }
+                        if ($customer->getPerson()) {
+                            $person_id = $customer->getPerson()->getPersonId();
+                        }
+                    }
+                }
+                
+                
                 $html = '<input type="button" value="Calendar" ';
                 $html .= ' data-start="'.esc_attr($attrStart).'" ';
                 $html .= ' data-end="'.esc_attr($attrEnd).'" ';
                 $html .= ' data-title="'.esc_attr($summary).'" ';
+                $html .= ' data-company-id="'.esc_attr($company_id).'" ';
+                $html .= ' data-person-id="'.esc_attr($person_id).'" ';
                 $html .= 'onclick="'.esc_attr('hook_addCalendarItem_Click(this);').'" />';
                 
                 $actionContainer->addItem('filesync-import-file', $html, 100);

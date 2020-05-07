@@ -53,6 +53,15 @@ class viewController extends BaseController {
             } else {
                 $calendarItem->setCalendarId($_REQUEST['calendarId']);
             }
+            
+            if (get_var('company_id')) {
+                $calendarItem->setCompanyId( get_var('company_id') );
+            }
+            if (get_var('person_id')) {
+                $calendarItem->setPersonId( get_var('person_id') );
+            }
+            
+            
             $calendarItem->setStartDate($_REQUEST['startDate']);
         }
         

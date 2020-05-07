@@ -57,5 +57,15 @@ class EmailDAO extends \core\db\DAOObject {
 	public function delete($emailId) {
 	    $this->query("delete from customer__email where email_id = ?", array($emailId));
 	}
+	
+	public function readByEmail($email) {
+	    $sql = "select e.*, ce.company_id, pe.person_id
+                from customer__email e
+                left join customer__company_email ce on (ce.email_id = e.email_id)
+                left join customer__person_email pe on (pe.email_id = e.email_id)
+                where email_address = ?";
+	    
+	    return $this->queryList($sql, array( $email ));
+	}
 }
 

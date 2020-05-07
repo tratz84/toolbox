@@ -43,8 +43,20 @@ function hook_addCalendarItem_Click( obj ) {
 	if (endDate == startDate) {
 		endDate = '';
 	}
+	
+	var company_id = $(obj).data('company-id');
+	var person_id = $(obj).data('person-id');
+	
 
-	var url = appUrl('/?m=calendar&c=view&a=edit&edit_derived_item=0&calendarId=first&startDate='+startDate+'&start_time='+startTime+'&end_date='+endDate+'&end_time='+endTime+'&title='+encodeURIComponent(title));
+	var url = appUrl('/?m=calendar&c=view&a=edit&edit_derived_item=0&calendarId=first');
+	url += '&startDate='  + startDate;
+	url += '&start_time=' + startTime;
+	url += '&end_date='   + endDate;
+	url += '&end_time='   + endTime;
+	url += '&title='      + encodeURIComponent(title);
+	url += '&company_id=' + company_id;
+	url += '&person_id='  + person_id;
+	
 
 	var opts = {};
 	opts.renderCallback = function() {

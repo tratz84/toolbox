@@ -9,6 +9,7 @@ use core\Context;
 use core\ObjectContainer;
 use core\forms\lists\ListResponse;
 use core\service\ServiceBase;
+use base\model\EmailDAO;
 
 class CustomerService extends ServiceBase {
     
@@ -170,5 +171,21 @@ class CustomerService extends ServiceBase {
         return null;
     }
     
+    /**
+     * readCustomerByEmail() - reads first company/person by emailaddress
+     */
+    public function readCustomerByEmail($email) {
+        $eDao = new EmailDAO();
+        
+        $emails = $eDao->readByEmail($email);
+        
+        foreach($emails as $e) {
+            if ($e->getField('company_id') || $e->getField('person_id')) {
+                return $this->readCustomerAuto($e->getField('company_id'), $e->getField('person_id'));
+            }
+        }
+        
+        return null;
+    }
     
 }
