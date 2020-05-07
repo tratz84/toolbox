@@ -8,6 +8,9 @@ $lang['Mail server (out)']          = 'Mail server (uitgaand)';
 $lang['Mail server settings (out)'] = 'Mail server instellingen (uitgaand)';
 
 $lang['New1']                       = 'Nieuw';
+$lang['To1']                        = 'Aan';
+
+$lang['Attachments']                = 'Bijlages';
 
 $lang['From']                       = 'Van';
 $lang['Date']                       = 'Datum';
