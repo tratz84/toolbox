@@ -63,13 +63,14 @@ hook_eventbus_subscribe('webmail', 'mailbox-mailactions', function($actionContai
                 }
                 
                 
-                $html = '<input type="button" value="'.t('Calendar item').'" ';
+                $html = '<button value="'.t('Calendar item').'" ';
+                $html .= ' title="'.t('Create calendar item').'" ';
                 $html .= ' data-start="'.esc_attr($attrStart).'" ';
                 $html .= ' data-end="'.esc_attr($attrEnd).'" ';
                 $html .= ' data-title="'.esc_attr($summary).'" ';
                 $html .= ' data-company-id="'.esc_attr($company_id).'" ';
                 $html .= ' data-person-id="'.esc_attr($person_id).'" ';
-                $html .= 'onclick="'.esc_attr('hook_addCalendarItem_Click(this);').'" />';
+                $html .= 'onclick="'.esc_attr('hook_addCalendarItem_Click(this);').'"><span class="fa fa-calendar webmail-import-calendar-item"></span></button>';
                 
                 $actionContainer->addItem('filesync-import-file', $html, 100);
                 

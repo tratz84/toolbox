@@ -18,6 +18,7 @@ $lang['No upcoming agenda items'] = 'Geen opkomende punten';
 
 $lang['Calendar item']       = 'Agendapunt';
 $lang['Calendar item saved'] = 'Agendapunt opgeslagen';
+$lang['Create calendar item']= 'Maak agendapunt aan';
 
 $lang['Actions']           = 'Acties';
 $lang['Execute']           = 'Uitvoeren';
