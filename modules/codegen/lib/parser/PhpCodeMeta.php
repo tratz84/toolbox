@@ -14,6 +14,10 @@ class PhpCodeMeta {
         foreach($mods as $modname => $path) {
             $files = list_files($path . '/lib', ['recursive' => true]);
             
+            // module not having a '/lib'-folder? => skip
+            if ($files == false)
+                continue;
+            
             foreach($files as $f) {
                 $p = $path.'/lib/'.$f;
                 
