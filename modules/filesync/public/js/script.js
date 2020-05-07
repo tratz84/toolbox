@@ -13,6 +13,8 @@ $(document).ready(function() {
 	
 	
 	$('.filesync-select-widget .btnNewFile').click(function() {
+		selectedFilesyncWidget = $(this).closest('.filesync-select-widget');
+		
 		var store_id = $(this).data('store-id');
 		if (!store_id) store_id = '';
 		
