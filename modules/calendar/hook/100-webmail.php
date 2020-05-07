@@ -63,7 +63,7 @@ hook_eventbus_subscribe('webmail', 'mailbox-mailactions', function($actionContai
                 }
                 
                 
-                $html = '<input type="button" value="Calendar" ';
+                $html = '<input type="button" value="'.t('Calendar item').'" ';
                 $html .= ' data-start="'.esc_attr($attrStart).'" ';
                 $html .= ' data-end="'.esc_attr($attrEnd).'" ';
                 $html .= ' data-title="'.esc_attr($summary).'" ';
