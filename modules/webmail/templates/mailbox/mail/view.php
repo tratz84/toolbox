@@ -92,5 +92,9 @@
     	<pre><?= esc_html($text) ?></pre>
     <?php endif; ?>
 
+	<?php foreach ($attachmentsRendered as $ar) : ?>
+		<hr/>
+		<?= $ar ?>
+	<?php endforeach; ?>
 
 </div>

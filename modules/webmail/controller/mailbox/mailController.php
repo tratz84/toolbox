@@ -16,6 +16,9 @@ use webmail\service\ConnectorService;
 use webmail\service\EmailService;
 use webmail\solr\SolrMail;
 use webmail\solr\SolrMailQuery;
+use Sabre\VObject\Property\ICalendar\CalAddress;
+use Sabre\VObject\Property\FlatText;
+use Sabre\VObject\Component\VAlarm;
 
 class mailController extends BaseController {
    
@@ -134,6 +137,89 @@ class mailController extends BaseController {
         $this->subject     = $mail->getSubject();
         
         hook_htmlscriptloader_enableGroup('webmail');
+
+        $this->attachmentsRendered = array();
+        
+        $atts = $mail->getAttachments();
+        for($x=0; $x < count($atts); $x++) {
+            $att = $mail->getAttachmentFile( $x );
+            
+            if (isset($att['contentType']) && $att['contentType'] == 'text/calendar') {
+                $obj = null;
+                try {
+                    $obj = \Sabre\VObject\Reader::read( $att['content'] );
+                } catch (\Exception $ex) { }
+                
+                // parse failed? => skip
+                if (!$obj) {
+                    continue;
+                }
+                
+                // TODO: get events
+                $it = $obj->getIterator();
+                do {
+                    $comp = $it->current();
+                    
+                    if ($comp->name == 'VCALENDAR') {
+                        /** @var \Sabre\VObject\Component\VCalendar $comp */
+                        
+                        $html = '';
+                        $txt = '';
+                        foreach($comp->VEVENT as $evt) {
+                            foreach($evt->children() as $c) {
+                                
+                                $txtName = ucfirst(strtolower($c->name));
+                                
+                                if (is_a($c, \Sabre\VObject\Property\ICalendar\CalAddress::class)) {
+                                    /** @var \Sabre\VObject\Property\ICalendar\CalAddress $c */
+                                    if (strpos($c->getValue(), 'mailto:') === 0) {
+                                        $html .= $txtName . ': '.'<a href="'.esc_attr($c->getValue()).'">'.esc_html(substr($c->getValue(), 7)).'</a>'. "<br/>" . PHP_EOL;
+                                    }
+                                    else {
+                                        $html .= $txtName . ': '.esc_html($c->getValue()) . "<br/>" . PHP_EOL;
+                                    }
+                                }
+                                if (is_a($c, \Sabre\VObject\Property\FlatText::class)) {
+                                    /** @var \Sabre\VObject\Property\FlatText $c */
+                                    
+                                    if (substr_count($c->getValue(), "\n") > 1) {
+                                        $txt .= '<b>'.$txtName . '</b><br/>'.nl2br(esc_html($c->getValue())) . "<br/>" . PHP_EOL;
+                                    }
+                                    else {
+                                        $txt .= $txtName . ': '.esc_html($c->getValue()) . "<br/>" . PHP_EOL;
+                                    }
+                                }
+                                if (is_a($c, \Sabre\VObject\Property\ICalendar\DateTime::class)) {
+                                    /** @var \Sabre\VObject\Property\ICalendar\DateTime $c */
+                                    
+                                    $type = $c->name;
+                                    if ($type == 'DTSTART') {
+                                        $txtName = 'Start';
+                                    }
+                                    if ($type == 'DTEND') {
+                                        $txtName = 'End';
+                                    }
+                                    if ($type == 'DTSTAMP') {
+                                        $txtName = 'Created on';
+                                    }
+                                    
+                                    $dt = new DateTime($c->getValue(), new DateTimeZone(date_default_timezone_get()));
+                                    $html .= $txtName . ': '. $dt->format('d-m-Y H:i:s') .'<br/>'.PHP_EOL;
+                                    
+                                }
+                                if (is_a($c, \Sabre\VObject\Component\VAlarm::class)) {
+                                    /** @var \Sabre\VObject\Component\VAlarm $c */
+                                }
+                                
+                            }
+                        }
+                        
+                    }
+                    $this->attachmentsRendered[] = $html . $txt;
+                } while ($it->next());
+            }
+            
+        }
         
         $this->setDecoratorFile( module_file('base', 'templates/decorator/blank.php') );
         
