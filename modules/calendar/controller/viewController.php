@@ -46,7 +46,13 @@ class viewController extends BaseController {
             $calendarItem = $calendarService->readItem($_REQUEST['calendar_item_id']);
         } else {
             $calendarItem = new CalendarItem();
-            $calendarItem->setCalendarId($_REQUEST['calendarId']);
+            
+            if ($_REQUEST['calendarId'] == 'first') {
+                $this->calendar = $calendarService->readFirstCalendar();
+                $calendarItem->setCalendarId($this->calendar->getCalendarId());
+            } else {
+                $calendarItem->setCalendarId($_REQUEST['calendarId']);
+            }
             $calendarItem->setStartDate($_REQUEST['startDate']);
         }
         

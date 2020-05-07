@@ -867,7 +867,7 @@ function show_user_message(msg, opts) {
 	
 	d.find('.msg').text(msg);
 	
-	$('.main-content').prepend(d);
+	$('.main-content, .blank-main-content').prepend(d);
 	
 	setTimeout(function() {
 		$(d).slideUp(function() {

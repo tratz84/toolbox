@@ -16,6 +16,8 @@ $lang['Overview open calendar items'] = 'Overzicht openstaande kalenderitems';
 $lang['Upcoming agenda items']    = 'Opkomende agendapunten';
 $lang['No upcoming agenda items'] = 'Geen opkomende punten';
 
+$lang['Calendar item saved'] = 'Agendapunt opgeslagen';
+
 $lang['Actions']           = 'Acties';
 $lang['Execute']           = 'Uitvoeren';
 $lang['Location']          = 'Locatie';

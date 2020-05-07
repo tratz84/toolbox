@@ -16,6 +16,11 @@ Context::getInstance()->enableModule('calendar');
 
 module_update_handler('calendar', '20200414');
 
+hook_loader(__DIR__.'/hook/');
+
+hook_register_javascript('calendar', '/js/calendar/calendarController.js');
+hook_register_javascript('calendar', '/module/calendar/js/calendar.js');
+
 $eb = ObjectContainer::getInstance()->get(EventBus::class);
 
 $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($evt) {
