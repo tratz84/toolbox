@@ -29,7 +29,7 @@
 				<?php endif; ?>
 			</td>
 			<td><?= esc_html($c->getLastStatus()) ?></td>
-			<td><?= esc_html($c->getLastRun()) ?></td>
+			<td><?= format_date($c->getLastRun(), 'd-m-Y H:i:s') ?></td>
 			<td><?= $c->getRunning()?t('Yes'):t('No')?></td>
 		</tr>
 		<?php endforeach; ?>
