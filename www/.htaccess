@@ -3,11 +3,11 @@ AddDefaultCharSet UTF-8
 
 # yup, still Php5 support (20200329)
 <IfModule mod_php5.c>
-	php_value memory_limit 256M
+	php_value memory_limit 512M
 	php_value display_errors on
 </IfModule>
 <IfModule mod_php7.c>
-	php_value memory_limit 256M
+	php_value memory_limit 512M
 	php_value display_errors on
 </IfModule>
 
