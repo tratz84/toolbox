@@ -34,27 +34,27 @@ class ProjectForm extends BaseForm {
 	function codegen() {
 		
 		
-		$w1 = new \core\forms\HiddenField('project_id', NULL, 'Hidden field');
+		$w1 = new \core\forms\HiddenField('project_id', NULL, t('Hidden field'));
 		$this->addWidget( $w1 );
-		$w2 = new \core\forms\CheckboxField('active', NULL, 'Active');
+		$w2 = new \core\forms\CheckboxField('active', NULL, t('Active'));
 		$this->addWidget( $w2 );
-		$w3 = new \base\forms\CustomerSelectWidget('customer_id', NULL, NULL, NULL, 'Klant');
+		$w3 = new \base\forms\CustomerSelectWidget('customer_id', NULL, NULL, NULL, t('Klant'));
 		$this->addWidget( $w3 );
-		$w4 = new \core\forms\TextField('project_name', NULL, 'Name');
+		$w4 = new \core\forms\TextField('project_name', NULL, t('Name'));
 		$this->addWidget( $w4 );
-		$w5 = new \core\forms\RadioField('project_billable_type', NULL, array (
-		  'fixed' => 'Fixed price',
-		  'ongoing' => 'Ongoing',
-		), 'Project type');
+		$w5 = new \core\forms\RadioField('project_billable_type', NULL, ['fixed' => t('Fixed price'), 
+		'ongoing' => t('Ongoing'), 
+		], t('Project type'));
 		$this->addWidget( $w5 );
-		$w6 = new \core\forms\NumberField('project_hours', NULL, 'Max. hours');
+		$w6 = new \core\forms\NumberField('project_hours', NULL, t('Max. hours'));
 		$this->addWidget( $w6 );
-		$w7 = new \core\forms\EuroField('hourly_rate', NULL, 'Hourly rate');
+		$w7 = new \core\forms\EuroField('hourly_rate', NULL, t('Hourly rate'));
 		$this->addWidget( $w7 );
-		$w8 = new \core\forms\TextareaField('note', NULL, 'Note');
+		$w8 = new \core\forms\TextareaField('note', NULL, t('Note'));
 		$this->addWidget( $w8 );
 		
 	}
+
 
 
 
