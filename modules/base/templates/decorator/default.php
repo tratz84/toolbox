@@ -25,6 +25,7 @@ $menuItems = $ms->listMainMenu();
 			     'username' => $context->getUser() ? $context->getUser()->getUsername() : '',
 			     'multiuser_check_interval' => MULTIUSER_CHECK_INTERVAL,
 			     'standalone_installation' => is_standalone_installation(),
+			     'currency_symbol' => CURRENCY_SYMBOL
 			 ])
 			?>;
 

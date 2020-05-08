@@ -1034,7 +1034,7 @@ function format_price(val, currency, opts) {
 	}
 	
 	if (currency)
-		s2 = '€ ' + s2;
+		s2 = appSettings.currency_symbol + ' ' + s2;
 	
 	s2 = s2.replace('- ', '-');
 	var dotPos = s2.lastIndexOf('.');

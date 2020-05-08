@@ -40,7 +40,7 @@ function format_price($amount, $include_currency_sign = true, $opts=array())
         $a = '-' . $a;
     
     if ($include_currency_sign)
-        $a = "€ " . $a;
+        $a = CURRENCY_SYMBOL . " " . $a;
     
     return $a;
     

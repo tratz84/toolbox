@@ -48,4 +48,6 @@ if (defined('BASE_HREF') == false)
 if (defined('DEBUG') == false)
     define('DEBUG', false);
 
+if (defined('CURRENCY_SYMBOL') == false)
+    define('CURRENCY_SYMBOL', '€');
 
