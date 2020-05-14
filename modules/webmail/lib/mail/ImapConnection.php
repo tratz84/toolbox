@@ -96,6 +96,8 @@ class ImapConnection {
         }
         
         
+        imap_timeout( IMAP_OPENTIMEOUT | IMAP_READTIMEOUT | IMAP_WRITETIMEOUT | IMAP_CLOSETIMEOUT, 10 );
+        
         $strOpts = implode('/', $this->connectionOptions);
         $strOpts = '/' . $strOpts;
         

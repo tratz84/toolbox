@@ -36,7 +36,7 @@ class CronService {
             }
             
             // already running? => skip if it's less then 1 hour
-            if ($dbcron->getRunning()) {
+            if (is_debug() == false && $dbcron->getRunning()) {
                 if ((time() - $timeLastRunning) < 60 * 60)
                     continue;
             }
