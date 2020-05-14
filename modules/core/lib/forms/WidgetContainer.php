@@ -42,6 +42,11 @@ class WidgetContainer extends BaseWidget {
             $this->autoPrio += 10;
         }
     }
+    public function addWidgets($widgets) {
+        foreach($widgets as $w) {
+            $this->addWidget($w);
+        }
+    }
     public function getWidgets() { return $this->widgets; }
     
     public function getWidgetsRecursive() {
