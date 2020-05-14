@@ -1072,6 +1072,7 @@ function timediff_minuts($start, $end) {
 function slugify($str) {
     
     $str = lcfirst($str);
+    $str = str_replace(['[', ']'], '-', $str);
     $str = preg_replace_callback('/[A-Z]/', function($str) { return '-'.strtolower($str[0]); }, $str);
     
     $str = strtolower($str);

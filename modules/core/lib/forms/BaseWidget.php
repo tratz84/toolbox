@@ -112,8 +112,9 @@ class BaseWidget {
         // remove var/index
         $className = $this->getName();
         $posRightBracket = strrpos($className, ']');
-        if ($posRightBracket !== false)
+        if ($posRightBracket !== false && $posRightBracket != strlen($className)-1) {
             $className = substr($className, $posRightBracket);
+        }
         
         $this->addContainerClass( slugify($className) . '-widget' );
         
