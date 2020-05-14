@@ -762,10 +762,12 @@ function IndexTable( container, opts ) {
 	};
 	
 	
-	this.createColumnSelection = function() {
+	this.createColumnSelection = function(opts) {
 		var me = this;
+		opts = opts ? opts : {};
+		if (typeof opts.forcePopup == 'undefined') opts.forcePopup = false;
 		
-		if (this.columns.length <= 30) {
+		if (opts.forcePopup == false && this.columns.length <= 30) {
 			for(var i in this.columns) {
 				var c = this.columns[i];
 				
