@@ -60,6 +60,7 @@ class formgeneratorController extends BaseController {
                     $generator->generate();
                 }
                 
+                report_user_message(t('Changes saved'));
                 redirect( '/?m=codegen&c=formgenerator&fm='.urlencode($module_name).'&ff='.urlencode($formfile) );
             }
         }
