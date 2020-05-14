@@ -28,6 +28,11 @@ function get_url($url, $opts=array()) {
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     
+    if (isset($opts['timeout'])) {
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $opts['timeout']);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $opts['timeout']);
+    }
+    
     return curl_exec($ch);
 }
 
