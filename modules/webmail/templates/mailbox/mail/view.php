@@ -86,11 +86,20 @@
     	<hr />
     </div>
     
-    <?php if (isset($html)) : ?>
-    	<?php print $html ?>
-    <?php else : ?>
-    	<pre><?= esc_html($text) ?></pre>
-    <?php endif; ?>
+	<div class="webmail-mail-content">
+		<style type="text/css">
+		blockquote {
+			padding: 5px 0 5px 10px;
+			margin: 5px 0 5px 5px;
+			border-left: 2px solid #4d82ff;
+		}
+		</style>
+	    <?php if (isset($html)) : ?>
+	    	<?php print $html ?>
+	    <?php else : ?>
+	    	<pre><?= esc_html($text) ?></pre>
+	    <?php endif; ?>
+	</div>
 
 	<?php foreach ($attachmentsRendered as $ar) : ?>
 		<hr/>
