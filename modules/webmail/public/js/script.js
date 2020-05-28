@@ -31,7 +31,7 @@ function markMailAsSpam( email_id ) {
 	});
 }
 
-function markMailAsham(row, email_id) {
+function markMailAsHam(row, email_id) {
 	$.ajax({
 		url: appUrl('/?m=webmail&c=mailbox/mail&a=mark_as_ham'),
 		type: 'POST',
