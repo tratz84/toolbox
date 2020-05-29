@@ -29,6 +29,8 @@ class ArgumentParser {
     
     
     protected function parse() {
+        $prevKey = null;
+        
         for($x=0; $x < count($this->tokens); $x++) {
             $t = $this->tokens[$x];
             
@@ -39,6 +41,8 @@ class ArgumentParser {
                     $key = trim( trim(substr($t, 2)) );
                     $this->options[$key] = true;
                 }
+                
+                $prevKey = $key;
             }
             else if (strpos($t, '-') === 0 && strlen($t) > 1) {
                 if (strlen($t) > 1) {
@@ -48,7 +52,17 @@ class ArgumentParser {
                     if ($key)
                         $this->options[$key] = true;
                 }
+                
+                $prevKey = $key;
             }
+            else {
+                if ($prevKey) {
+                    $this->options[$prevKey] = $t;
+                }
+                
+                $prevKey = null;
+            }
+            
         }
     }
     
@@ -56,6 +70,14 @@ class ArgumentParser {
     
     public function hasOption($optionName) {
         return array_key_exists($optionName, $this->options) ? true : false;
+    }
+    
+    public function getOption($optionName, $defaultValue = null) {
+        if (isset($this->options[$optionName])) {
+            return $this->options[$optionName];
+        } else {
+            return $defaultValue;
+        }
     }
     
 }
