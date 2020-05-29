@@ -212,7 +212,18 @@ class MysqlConnection extends DBConnection {
         return new MysqlQueryBuilder( $this );
     }
     
-    
+    public function getPrimaryKey($tableName) {
+        $pks = array();
+        $rows = $this->queryList('describe '.$this->escape($tableName));
+        
+        foreach($rows as $r) {
+            if ($r['Key'] == 'PRI') {
+                $pks[] = $r['Field'];
+            }
+        }
+        
+        return $pks;
+    }
     
     public function getColumnProperties($tableName, $columnName) {
         $rows = $this->queryList('describe '.$this->escape($tableName));
