@@ -16,6 +16,8 @@ class MysqlTableArchiver {
     protected $outputdir = null;
     
     protected $primaryKey;
+    protected $query = null;
+    protected $datetimeColumn = 'created';
     
     public function __construct($tableName, $beforeDatetime, $outputdir=null) {
         $this->setTableName($tableName);
@@ -33,9 +35,12 @@ class MysqlTableArchiver {
     public function setOutputdir($d) { $this->outputdir = $d; }
     public function getOutputdir() { return $this->outputdir; }
     
+    public function setQuery($q) { $this->query = $q; }
+    public function getQuery() { return $this->query; }
     
-    protected function determinePrimaryKey() {
-    }
+    public function setDatetimeColumn($c) { $this->datetimeColumn = $c; }
+    public function getDatetimeColumn() { return $this->datetimeColumn; }
+    
     
     
     public function execute() {
@@ -55,7 +60,15 @@ class MysqlTableArchiver {
         
         
         // query table
-        $cursor = $dbcon->queryCursor(DBObject::class, 'select * from `'.$this->tableName.'` where created < ? order by created asc', array($this->beforeDatetime));
+        if ($this->query == null) {
+            $sql = 'select *
+                    from `'.$this->tableName.'`
+                    where '.$this->datetimeColumn.' < \'' . $dbcon->escape( $this->beforeDatetime ) . '\'
+                    order by '.$this->datetimeColumn.' asc';
+        } else {
+            $sql = $this->query;
+        }
+        $cursor = $dbcon->queryCursor(DBObject::class, $sql);
         
         
         // archive
@@ -70,7 +83,7 @@ class MysqlTableArchiver {
                 $fields = array_keys( $obj->getFields() );
             }
             
-            $ymd = format_date( $obj->getField('created'), 'Y-m-d' );
+            $ymd = format_date( $obj->getField( $this->datetimeColumn ), 'Y-m-d' );
             
             if ($ymd != $prevYmd) {
                 // file already open?
@@ -80,7 +93,7 @@ class MysqlTableArchiver {
                 }
                 
                 // open/create file
-                $file = $this->getOutputdir() . '/' . $this->tableName . '-' . format_date($obj->getField('created'), 'Y-m-d') . '.log';
+                $file = $this->getOutputdir() . '/' . $this->tableName . '-' . format_date($obj->getField( $this->datetimeColumn ), 'Y-m-d') . '.log';
                 $fh = fopen($file, 'a');
                 if (!$fh) {
                     throw new FileException( "Unable to open log-file: $file" );
