@@ -1281,6 +1281,67 @@ function str2date(str) {
 	}
 }
 
+function previous_month(date, no) {
+	return next_month(date, no*-1);
+}
+
+function next_month(date, no) {
+	if (typeof date == 'string') {
+		date = str2date( date );
+	}
+
+	var calcDate = new Date( date.getFullYear(), date.getMonth() + no, 15, 12 );
+
+	var dim = days_in_month( calcDate );
+	if (date.getDate() <= dim) {
+		calcDate.setDate( date.getDate() );
+	} else {
+		calcDate.setDate( dim );
+	}
+	
+	return format_date( calcDate );
+}
+
+function days_in_month( date ) { 
+	return new Date(date.getFullYear(), date.getMonth()+1, 0, 12).getDate(); 
+} 
+
+function next_day(date, no=1) {
+	if (typeof date == 'string') {
+		date = str2date( date );
+	}
+
+	var c = new Date( date.getFullYear(), date.getMonth(), date.getDate()+no, 12);
+
+	return format_date( c );
+}
+
+function date2number(date) {
+	if (typeof date == 'string') {
+		date = str2date( date );
+	}
+	
+	// year
+	var year = date.getFullYear();
+	
+	// month
+	var month = '';
+	if (date.getMonth() < 9) {					// month = 0-11
+		month = '0' + (date.getMonth()+1);
+	} else {
+		month = (date.getMonth()+1);
+	}
+	
+	// day
+	var day = '';
+	if (date.getDate() < 10) {
+		day = '0' + date.getDate();
+	} else {
+		day = date.getDate();
+	}
+
+	return parseInt( year + '' + month + '' + day );
+}
 
 
 function format_date(date, opts) {
