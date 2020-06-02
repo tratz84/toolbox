@@ -1292,11 +1292,13 @@ function next_month(date, no) {
 
 	var calcDate = new Date( date.getFullYear(), date.getMonth() + no, 15, 12 );
 
-	var dim = days_in_month( calcDate );
-	if (date.getDate() <= dim) {
-		calcDate.setDate( date.getDate() );
+	var dim = days_in_month( date );
+	var calcDim = days_in_month( calcDate );
+	
+	if (date.getDate() == dim || date.getDate() > calcDim) {
+		calcDate.setDate( calcDim );
 	} else {
-		calcDate.setDate( dim );
+		calcDate.setDate( date.getDate() );
 	}
 	
 	return format_date( calcDate );
