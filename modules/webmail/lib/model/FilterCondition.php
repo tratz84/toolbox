@@ -66,7 +66,7 @@ class FilterCondition extends base\FilterConditionBase {
                 return stripos($val, $this->getFilterPattern()) === 0 ? true : false;
                 break;
             case 'ends_with' :
-                return endsWith($val, $this->getFilterPattern()) ? true : false;
+                return endsiWith($val, $this->getFilterPattern()) ? true : false;
                 break;
             case 'contains' :
                 return stripos($val, $this->getFilterPattern()) !== false ? true : false;
