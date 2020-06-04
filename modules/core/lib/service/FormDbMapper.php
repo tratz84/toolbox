@@ -10,6 +10,7 @@ use core\db\DBObject;
 use core\exception\DatabaseException;
 use core\forms\HiddenField;
 use core\forms\lists\ListResponse;
+use core\container\ArrayContainer;
 
 class FormDbMapper {
     
@@ -174,7 +175,7 @@ class FormDbMapper {
             }
         }
 
-        hook_eventbus_publish($obj, 'core', 'FormDbMapper::readObject');
+        hook_eventbus_publish([$this, $obj], 'core', 'FormDbMapper::readObject');
         
         return $obj;
     }
@@ -186,7 +187,7 @@ class FormDbMapper {
         $form = object_container_create( $this->formClass );
         $form->bind ( $obj );
         
-        hook_eventbus_publish($form, 'core', 'FormDbMapper::readForm');
+        hook_eventbus_publish([$this, $form], 'core', 'FormDbMapper::readForm');
         
         return $form;
     }
@@ -244,7 +245,7 @@ class FormDbMapper {
     
     
     public function saveForm($form) {
-        hook_eventbus_publish($form, 'core', 'FormDbMapper::saveForm-start');
+        hook_eventbus_publish([$this, $form], 'core', 'FormDbMapper::saveForm-start');
         
         $dao = object_container_create( $this->daoClass );
         $dbObj = object_container_create( $dao->getObjectName() );
@@ -311,7 +312,7 @@ class FormDbMapper {
             ActivityUtil::logActivity($company_id, $person_id, $this->getLogRefObject(), null, $this->getLogUpdatedCode(), $this->getLogUpdatedText(), $fch->getHtml());
         }
         
-        hook_eventbus_publish($dbObj, 'core', 'FormDbMapper::saveForm-end');
+        hook_eventbus_publish([$this, $dbObj], 'core', 'FormDbMapper::saveForm-end');
         
         return $dbObj;
     }
@@ -333,7 +334,7 @@ class FormDbMapper {
         
         $r = ListResponse::fillByCursor( $start, $limit, $cursor, $this->publicFields );
         
-        hook_eventbus_publish($r, 'core', 'FormDbMapper::search');
+        hook_eventbus_publish([$this, $r], 'core', 'FormDbMapper::search');
         
         
         return $r;
