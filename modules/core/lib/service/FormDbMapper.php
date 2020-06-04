@@ -9,6 +9,7 @@ use base\util\ActivityUtil;
 use core\db\DBObject;
 use core\exception\DatabaseException;
 use core\forms\HiddenField;
+use core\forms\lists\ListResponse;
 
 class FormDbMapper {
     
@@ -43,8 +44,6 @@ class FormDbMapper {
         // default to all fields in form
         $objForm = new $this->formClass();
         foreach($objForm->getWidgetsRecursive() as $w) {
-            if (is_a($w, HiddenField::class)) continue;
-            
             if ($w->getName()) {
                 $this->publicFields[] = $w->getName();
             }
@@ -174,6 +173,8 @@ class FormDbMapper {
                 $obj->$func( $list );
             }
         }
+
+        hook_eventbus_publish($obj, 'core', 'FormDbMapper::readObject');
         
         return $obj;
     }
@@ -184,6 +185,8 @@ class FormDbMapper {
         
         $form = object_container_create( $this->formClass );
         $form->bind ( $obj );
+        
+        hook_eventbus_publish($form, 'core', 'FormDbMapper::readForm');
         
         return $form;
     }
@@ -241,6 +244,8 @@ class FormDbMapper {
     
     
     public function saveForm($form) {
+        hook_eventbus_publish($form, 'core', 'FormDbMapper::saveForm-start');
+        
         $dao = object_container_create( $this->daoClass );
         $dbObj = object_container_create( $dao->getObjectName() );
         
@@ -306,15 +311,34 @@ class FormDbMapper {
             ActivityUtil::logActivity($company_id, $person_id, $this->getLogRefObject(), null, $this->getLogUpdatedCode(), $this->getLogUpdatedText(), $fch->getHtml());
         }
         
+        hook_eventbus_publish($dbObj, 'core', 'FormDbMapper::saveForm-end');
         
         return $dbObj;
     }
     
     
     public function saveObject(DBObject $obj) {
+        $form = object_container_create( $this->formClass );
+        $form->bind( $obj );
         
-        
+        return $this->saveForm( $obj );
     }
+    
+    
+    
+    public function search($start, $limit, $opts) {
+        $dao = object_container_get( $this->daoClass );
+        
+        $cursor = $dao->search($opts);
+        
+        $r = ListResponse::fillByCursor( $start, $limit, $cursor, $this->publicFields );
+        
+        hook_eventbus_publish($r, 'core', 'FormDbMapper::search');
+        
+        
+        return $r;
+    }
+    
     
     
 }

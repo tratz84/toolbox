@@ -12,7 +12,6 @@ use base\model\ObjectMetaDAO;
 use base\util\ActivityUtil;
 use core\container\ObjectHookable;
 use core\exception\ObjectNotFoundException;
-use core\forms\lists\ListResponse;
 use core\service\ServiceBase;
 
 class CompanyService extends ServiceBase implements ObjectHookable {
@@ -43,13 +42,9 @@ class CompanyService extends ServiceBase implements ObjectHookable {
     
     
     public function search($start, $limit, $opts = array()) {
-        $cDao = new CompanyDAO();
+        $fdm = form_mapping( Company::class );
         
-        $cursor = $cDao->search($opts);
-        
-        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('company_id', 'company_name', 'contact_person', 'coc_number', 'vat_number', 'edited', 'created', 'company_type_id'));
-        
-        return $r;
+        return $fdm->search($start, $limit, $opts);
     }
     
     
