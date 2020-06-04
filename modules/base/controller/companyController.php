@@ -68,19 +68,16 @@ class companyController extends BaseController {
             $company = new Company();
         }
         
-        $companyForm = $this->oc->create(CompanyForm::class);
+        $companyForm = object_container_create(CompanyForm::class);
         $companyForm->bind($company);
 
         if (is_post()) {
-            
             $companyForm->bind($_REQUEST);
-            
             
             if ($companyForm->validate()) {
                 $companyId = $companyService->save($companyForm);
                 
                 report_user_message(t('Changes saved'));
-                
                 redirect('/?m=base&c=company&a=edit&company_id='.$companyId);
             }
             

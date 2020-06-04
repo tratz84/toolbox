@@ -4,31 +4,25 @@
 namespace base\service;
 
 use base\forms\CompanyTypeForm;
-use base\model\AddressDAO;
 use base\model\Company;
 use base\model\CompanyDAO;
 use base\model\CompanyType;
 use base\model\CompanyTypeDAO;
-use base\model\EmailDAO;
 use base\model\ObjectMetaDAO;
-use base\model\PhoneDAO;
 use base\util\ActivityUtil;
 use core\container\ObjectHookable;
 use core\exception\ObjectNotFoundException;
 use core\forms\lists\ListResponse;
 use core\service\ServiceBase;
-use base\forms\FormChangesHtml;
-use base\forms\CompanyForm;
-use base\model\CompanyPersonDAO;
-use base\model\PersonDAO;
 
 class CompanyService extends ServiceBase implements ObjectHookable {
     
     
     public function readCompany($id, $opts=array()) {
+        $fm = form_mapping (Company::class);
+        $company = $fm->readObject( $id );
         
-        $company = new Company($id);
-        if ($company->read() == false) {
+        if (!$company) {
             if (isset($opts['null-if-not-found']) && $opts['null-if-not-found']) {
                 return null;
             } else {
@@ -36,80 +30,15 @@ class CompanyService extends ServiceBase implements ObjectHookable {
             }
         }
         
-//         if ($company->getDeleted())
-//             throw new ObjectNotFoundException('Requested company not found');
-        
-        $addressDao = new AddressDAO();
-        $addresses = $addressDao->readByCompany($id);
-        $company->setAddressList($addresses);
-        
-        $emailDao = new EmailDAO();
-        $emails = $emailDao->readByCompany($id);
-        $company->setEmailList($emails);
-        
-        $phoneDao = new PhoneDAO();
-        $phones = $phoneDao->readByCompany($id);
-        $company->setPhoneList($phones);
-        
-        $pDao = new PersonDAO();
-        $persons = $pDao->readByCompany($id);
-        $company->setPersonList( $persons );
-        
         return $company;
     }
     
     public function save(\base\forms\CompanyForm $companyForm) {
-        $companyId = $companyForm->getWidgetValue('company_id');
-        if ($companyId) {
-            $company = $this->oc->get(CompanyService::class)->readCompany($companyId);
-        } else {
-            $company = new Company();
-        }
+        $fm = form_mapping( Company::class );
         
-        $isNew = $company->isNew();
+        $obj = $fm->saveForm( $companyForm );
         
-        if ($isNew) {
-            $fch = FormChangesHtml::formNew($companyForm);
-        } else {
-            $oldForm = CompanyForm::createAndBind($company);
-            $fch = FormChangesHtml::formChanged($oldForm, $companyForm);
-        }
-        
-        $companyForm->fill($company, array('company_type_id', 'company_name', 'contact_person', 'coc_number', 'vat_number', 'note', 'iban', 'bic'));
-        
-        if (!$company->save()) {
-            // exception would also be on it's place
-            return false;
-        }
-        
-        $companyForm->getWidget('company_id')->setValue($company->getCompanyId());
-        
-        $addressDao = new AddressDAO();
-        $newAddresses = $companyForm->getWidget('addressList')->asArray();
-        $addressDao->mergeFormListMTON('customer__company_address', 'company_id', $company->getCompanyId(), $newAddresses, 'sort');
-        
-        
-        $emailDao = new EmailDAO();
-        $newEmails = $companyForm->getWidget('emailList')->asArray();
-        $emailDao->mergeFormListMTON('customer__company_email', 'company_id', $company->getCompanyId(), $newEmails, 'sort');
-        
-        $phoneDao = new PhoneDAO();
-        $newPhones = $companyForm->getWidget('phoneList')->asArray();
-        $phoneDao->mergeFormListMTON('customer__company_phone', 'company_id', $company->getCompanyId(), $newPhones, 'sort');
-        
-        $companyPersonDao = new CompanyPersonDAO();
-        $newPersons = $companyForm->getWidget('personList')->asArray();
-        $companyPersonDao->mergeFormListMTO1('company_id', $company->getCompanyId(), $newPersons);
-        
-        
-        if ($isNew) {
-            ActivityUtil::logActivityCompany($company->getCompanyId(), 'customer__company', null, 'company-created', 'Bedrijf aangemaakt', $fch->getHtml());
-        } else {
-            // TODO: check of er wijzigingen zijn
-            ActivityUtil::logActivityCompany($company->getCompanyId(), 'customer__company', null, 'company-edited', 'Bedrijf aangepast', $fch->getHtml());
-        }
-        
-        return $company->getCompanyId();
+        return $obj->getCompanyId();
     }
     
     

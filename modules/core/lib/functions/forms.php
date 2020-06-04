@@ -31,3 +31,34 @@ function render_colorpicker($name, $label, $value) {
     return $cp->render();
 }
 
+
+/**
+ * 
+ * @param string $formClass form-class or dbobject-class
+ */
+function form_mapping( $class ) {
+    static $cache = null;
+    
+    if ($cache === null) {
+        $cache = array();
+        
+        $ml = module_list();
+        
+        foreach($ml as $moduleName => $dir) {
+            $fm = module_file($moduleName, 'config/formmapping.php');
+            if ($fm) {
+                $r = include $fm;
+                $cache = array_merge($r, $cache);
+            }
+        }
+    }
+    
+    if (isset($cache[$class])) {
+        return $cache[$class];
+    }
+    
+    return null;
+}
+
+
+
