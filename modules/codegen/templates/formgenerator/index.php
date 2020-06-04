@@ -161,9 +161,12 @@ function widget_properties(node) {
 					selectedNode.text = t;
 					var n = $('#tree').jstree(true).redraw( true );
 				}
-				
+
 				update_form();
 			});
+
+			$('[name=relationType]').change( function() { handle_linkDao(); } );
+			handle_linkDao();
 		}
 	});
 }
@@ -197,6 +200,18 @@ function update_form() {
 			
 		}
 	});
+}
+
+
+function handle_linkDao() {
+	var relationType = $('[name=relationType]:checked').val();
+	
+	if (relationType == 'MTON') {
+		$('.widget-link-dao-class').show();
+	}
+	else if (relationType == 'MTO1') {
+		$('.widget-link-dao-class').hide();
+	}
 }
 
 
