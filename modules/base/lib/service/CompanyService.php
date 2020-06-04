@@ -3,6 +3,7 @@
 
 namespace base\service;
 
+use base\forms\CompanyForm;
 use base\forms\CompanyTypeForm;
 use base\model\Company;
 use base\model\CompanyDAO;
@@ -13,12 +14,13 @@ use base\util\ActivityUtil;
 use core\container\ObjectHookable;
 use core\exception\ObjectNotFoundException;
 use core\service\ServiceBase;
+use function form_mapping;
 
 class CompanyService extends ServiceBase implements ObjectHookable {
     
     
     public function readCompany($id, $opts=array()) {
-        $fm = form_mapping (Company::class);
+        $fm = form_mapping ( CompanyForm::class );
         $company = $fm->readObject( $id );
         
         if (!$company) {
@@ -33,7 +35,7 @@ class CompanyService extends ServiceBase implements ObjectHookable {
     }
     
     public function save(\base\forms\CompanyForm $companyForm) {
-        $fm = form_mapping( Company::class );
+        $fm = form_mapping( CompanyForm::class );
         
         $obj = $fm->saveForm( $companyForm );
         
@@ -42,7 +44,7 @@ class CompanyService extends ServiceBase implements ObjectHookable {
     
     
     public function search($start, $limit, $opts = array()) {
-        $fdm = form_mapping( Company::class );
+        $fdm = form_mapping( CompanyForm::class );
         
         return $fdm->search($start, $limit, $opts);
     }
