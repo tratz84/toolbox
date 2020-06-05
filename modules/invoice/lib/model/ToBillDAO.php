@@ -41,8 +41,8 @@ class ToBillDAO extends \core\db\DAOObject {
 	    }
 	    
 	    
-	    if (isset($opts['billed']) && $opts['billed'] !== '') {
-	        $where[] = 'tb.billed = ' . ($opts['billed']?'1':'0');
+	    if (isset($opts['paid']) && $opts['paid'] !== '') {
+	        $where[] = 'tb.paid = ' . ($opts['paid']?'1':'0');
 	    }
 	    
 	    

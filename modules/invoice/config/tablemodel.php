@@ -186,17 +186,19 @@ $tbs[] = $tb_pa;
 
 
 $tb_to_bill = new TableModel('invoice', 'to_bill');
+$tb_to_bill->renameColumn('billed', 'paid');
 $tb_to_bill->addColumn('to_bill_id',        'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
 $tb_to_bill->addColumn('company_id',        'int');
 $tb_to_bill->addColumn('person_id',         'int');
 $tb_to_bill->addColumn('project_id',        'int');
 $tb_to_bill->addColumn('user_id',           'int');
+$tb_to_bill->addColumn('type',              "enum('bill','invoice')");
 $tb_to_bill->addColumn('short_description', 'varchar(255)');
 $tb_to_bill->addColumn('long_description',  'text');
 $tb_to_bill->addColumn('amount',            'double');
 $tb_to_bill->addColumn('price',             'decimal(10,2)');
 $tb_to_bill->addColumn('invoice_line_id',   'int');
-$tb_to_bill->addColumn('billed',            'boolean');
+$tb_to_bill->addColumn('paid',              'boolean');
 $tb_to_bill->addColumn('deleted',           'datetime');
 $tb_to_bill->addColumn('edited',            'datetime');
 $tb_to_bill->addColumn('created',           'datetime');

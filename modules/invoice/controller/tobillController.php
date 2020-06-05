@@ -69,11 +69,11 @@ class tobillController extends BaseController {
     
     
     
-    public function action_toggle_billed() {
+    public function action_toggle_paid() {
         $invoiceService = $this->oc->get(InvoiceService::class);
         
         $tobill = $invoiceService->readToBill(get_var('id'));
-        $tobill->setBilled( $tobill->getBilled() ? 0 : 1 );
+        $tobill->setPaid( $tobill->getPaid() ? 0 : 1 );
         
         $form = new ToBillForm();
         $form->bind($tobill);
@@ -81,7 +81,7 @@ class tobillController extends BaseController {
         $invoiceService->saveToBill($form);
         
         $this->json(
-            array('status' => 'OK', 'billed' => $tobill->getBilled())
+            array('status' => 'OK', 'paid' => $tobill->getPaid())
         );
     }
     
