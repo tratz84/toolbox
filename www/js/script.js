@@ -1292,11 +1292,13 @@ function next_month(date, no) {
 
 	var calcDate = new Date( date.getFullYear(), date.getMonth() + no, 15, 12 );
 
-	var dim = days_in_month( calcDate );
-	if (date.getDate() <= dim) {
-		calcDate.setDate( date.getDate() );
+	var dim = days_in_month( date );
+	var calcDim = days_in_month( calcDate );
+	
+	if (date.getDate() == dim || date.getDate() > calcDim) {
+		calcDate.setDate( calcDim );
 	} else {
-		calcDate.setDate( dim );
+		calcDate.setDate( date.getDate() );
 	}
 	
 	return format_date( calcDate );
@@ -1635,8 +1637,12 @@ function fill_form(form, obj) {
 		// input is <select>? make sure <option> is visible
 		if (inp.is('select')) {
 			inp.find('option').each(function(index, node) {
-			if ($(node).attr('value') == obj[i])
-				$(node).css('display', '');
+				// remove 'selected'-tag. if set, chrome 84 does weird things when setting value on <select>
+				$(node).removeAttr('selected', '');
+				
+				if ($(node).attr('value') == obj[i]) {
+					$(node).css('display', '');
+				}
 			});
 		}
 

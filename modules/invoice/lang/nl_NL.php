@@ -42,5 +42,7 @@ $lang['Description']            = 'Omschrijving';
 $lang['State']                  = 'Status';
 $lang['date']                   = 'datum';
 
+$lang['Bill']                   = 'Rekening';
+$lang['Invoice']                = 'Factuur';
 
 return $lang;

@@ -1,22 +1,12 @@
 
 == TODO ==
-- database editor <= postponed. First implement it with code. Maybe after that create GUI
-- form generator  <= TODO: ListFormWidget
-- webmail         <= in progres
-- sales           <= ?
+- automate/auto-generate Service-classes
+- automate/auto-generate list-pages
+- automate/auto-generate form-pages
 
 
-== Finance-module ==
-- Example ledger account nr's, http://home.hccnet.nl/van.asperen/Boekhouden/Cursus/vrbrekschema.htm
+== Future ==
 
-
-== Calendar ==
-- Add feature to calendar. Give calendar-items a status, ie.
-	- Open
-	- Postponed
-	- Done
-
-Based on status create a list: 'Calendar items to be addressed'
-
+- GUI's for development databases, Service-classes & index-pages + edit-pages
 
 

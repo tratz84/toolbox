@@ -17,15 +17,15 @@
 <script>
 
 
-function toggleBilled(anchor, toBillId) {
+function togglePaid(anchor, toBillId) {
 	console.log( toBillId );
 
 	$.ajax({
 		type: 'POST',
-		url: appUrl('/?m=invoice&c=tobill&a=toggle_billed&id=' + toBillId),
+		url: appUrl('/?m=invoice&c=tobill&a=toggle_paid&id=' + toBillId),
 		success: function(data, xhr, textStatus) {
 			console.log( anchor );
-			$(anchor).closest('.td-billed').find('.state-text').text( data.billed?'Ja':'Nee' );
+			$(anchor).closest('.td-paid').find('.state-text').text( data.paid?'Ja':'Nee' );
 		}
 	});
 }
@@ -36,7 +36,7 @@ var t = new IndexTable('#tobill-table-container');
 
 t.setRowClick(function(row, evt) {
 
-	if ($(evt.target).hasClass('td-billed') || $(evt.target).closest('.td-billed').length) {
+	if ($(evt.target).hasClass('td-paid') || $(evt.target).closest('.td-paid').length) {
 		return;
 	}
 
@@ -45,6 +45,21 @@ t.setRowClick(function(row, evt) {
 
 t.setConnectorUrl( '/?m=invoice&c=tobill&a=search' );
 
+t.addColumn({
+	fieldName: 'type',
+	fieldDescription: toolbox_t('Type'),
+	fieldType: 'select',
+	filterOptions: [{ 'value':'', 'text': 'Type'}, { 'value': 'invoice', 'text': toolbox_t('Invoice') }, { 'value' : 'bill', 'text': toolbox_t('Bill') } ],
+	searchable: true,
+	render: function(row) {
+		if (row.type == 'bill') {
+			return toolbox_t('Bill');
+		} else if (row.type == 'invoice') {
+			return toolbox_t('Invoice');
+		}
+		return '';
+	}
+});
 t.addColumn({
 	fieldName: 'customer_name',
 	fieldDescription: 'Klant',
@@ -81,17 +96,17 @@ t.addColumn({
 });
 
 t.addColumn({
-	fieldName: 'billed',
-	fieldDescription: 'Gefactureerd',
+	fieldName: 'paid',
+	fieldDescription: toolbox_t('Paid'),
 	fieldType: 'select',
-	filterOptions: [{ 'value':'', 'text': 'Gefactureerd'}, { 'value': '1', 'text': 'Ja' }, { 'value' : '0', 'text': 'Nee' } ],
+	filterOptions: [{ 'value':'', 'text': 'Paid'}, { 'value': '1', 'text': 'Ja' }, { 'value' : '0', 'text': 'Nee' } ],
 	searchable: true,
 	render: function(record) {
 		var t = '';
 
-		t += '<a href="javascript:void(0);" onclick="toggleBilled(this, '+record.to_bill_id+');" class="fa fa-repeat"></a> ';
+		t += '<a href="javascript:void(0);" onclick="togglePaid(this, '+record.to_bill_id+');" class="fa fa-repeat"></a> ';
 
-		t += '<span class="state-text">' + (record.billed ? 'Ja' : 'Nee') + '</span>'
+		t += '<span class="state-text">' + (record.paid ? 'Ja' : 'Nee') + '</span>'
 
 		return t;
 	}

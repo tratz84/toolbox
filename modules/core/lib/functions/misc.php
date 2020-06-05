@@ -1125,6 +1125,12 @@ function endsWith($haystack, $val) {
     }
 }
 
+function endsiWith($haystack, $val) {
+    $haystack = strtolower($haystack);
+    $val = strtolower($val);
+    
+    return endsWith($haystack, $val);
+}
 
 if (function_exists('mb_trim') == false) {
     function mb_trim($str) {
