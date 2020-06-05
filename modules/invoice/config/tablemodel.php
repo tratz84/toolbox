@@ -198,7 +198,7 @@ $tb_to_bill->addColumn('long_description',  'text');
 $tb_to_bill->addColumn('amount',            'double');
 $tb_to_bill->addColumn('price',             'decimal(10,2)');
 $tb_to_bill->addColumn('invoice_line_id',   'int');
-$tb_to_bill->addColumn('paid',              'boolean');
+$tb_to_bill->addColumn('paid',              'boolean', ['default' => 0]);
 $tb_to_bill->addColumn('deleted',           'datetime');
 $tb_to_bill->addColumn('edited',            'datetime');
 $tb_to_bill->addColumn('created',           'datetime');
