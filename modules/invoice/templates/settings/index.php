@@ -82,6 +82,32 @@ use invoice\pdf\DefaultInvoicePdf;
         	<label class="checkbox-ui-placeholder" for="invoice__prices_inc_vat"></label>
         </div>
         
+        <br/><br/>
+
+        <div class="widget checkbox-field-widget">
+        	<label>
+        		Billable
+        		<?= infopopup(t('Notes for bills to pay and services/work to invoice')) ?>
+    		</label>
+        	
+        	<input type="checkbox" class="checkbox-ui" 
+        			id="invoice__billable_enabled" name="invoice__billable_enabled" 
+        			<?= $invoiceSettings->getBillableEnabled() ? 'checked="checked"' : '' ?> />
+        	<label class="checkbox-ui-placeholder" for="invoice__billable_enabled"></label>
+        </div>
+        <div class="billable-options">
+            <div class="widget checkbox-field-widget">
+            	<label style="padding-left: 5px;">
+            		Default 'Not paid' only
+            		<?= infopopup('Standaard alleen opstaande betalingen/facturatie records tonen?') ?>
+        		</label>
+            	
+            	<input type="checkbox" class="checkbox-ui" 
+            			id="invoice__billable_only_open" name="invoice__billable_only_open" 
+            			<?= $invoiceSettings->getBillableOnlyOpen() ? 'checked="checked"' : '' ?> />
+            	<label class="checkbox-ui-placeholder" for="invoice__billable_only_open"></label>
+            </div>
+        </div>
         
 		
 		<br/><br/><br/>
@@ -129,4 +155,27 @@ use invoice\pdf\DefaultInvoicePdf;
 
     </form>
 </div>
+
+
+
+<script>
+
+$(document).ready(function() {
+	$('[name=invoice__billable_enabled]').change(function() {
+		handleBillableOptions();
+	});
+	handleBillableOptions();
+});
+function handleBillableOptions() {
+	if ($('[name=invoice__billable_enabled]').prop('checked')) {
+		$('.billable-options').show();
+	} else {
+		$('.billable-options').hide();
+	}
+}
+
+
+</script>
+
+
 

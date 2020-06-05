@@ -414,6 +414,11 @@ function IndexTable( container, opts ) {
 						var opt = $('<option />');
 						opt.val( fo.value );
 						opt.text( fo.text );
+						
+						if (col.defaultValue && fo.value == col.defaultValue) {
+							opt.prop('selected', true);
+						}
+						
 						s.append(opt);
 					}
 					td.append(s);

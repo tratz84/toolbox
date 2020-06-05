@@ -120,5 +120,16 @@ class InvoiceSettings {
     }
     
     
+    public function getBillableEnabled() {
+        $ctx = Context::getInstance();
+        return $ctx->getSetting('invoice__billable_enabled', false);
+    }
+    
+    public function getBillableOnlyOpen() {
+        $ctx = Context::getInstance();
+        return $ctx->getSetting('invoice__billable_only_open', false);
+    }
+    
+    
 }
 

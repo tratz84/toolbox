@@ -7,6 +7,7 @@ use core\Context;
 use core\ObjectContainer;
 use core\event\CallbackPeopleEventListener;
 use core\event\EventBus;
+use core\event\LookupObject;
 use core\event\PeopleEvent;
 use invoice\InvoiceSettings;
 use invoice\model\CompanySetting;
@@ -26,6 +27,10 @@ $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($e
     $ctx = Context::getInstance();
     
     $src = $evt->getSource();
+
+    if ($ctx->getSetting('invoiceModuleEnabled') || $ctx->getSetting('offerModuleEnabled')) {
+        $src->addItem('Facturatie', 'Instellingen',     '/?m=invoice&c=settings');
+    }
     
     if ($ctx->getSetting('offerModuleEnabled')) {
         $src->addItem('Facturatie', 'Offerte statussen',     '/?m=invoice&c=offerStatus');
@@ -37,10 +42,6 @@ $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($e
     
     if ($ctx->getSetting('offerModuleEnabled') || $ctx->getSetting('invoiceModuleEnabled')) {
         $src->addItem('Facturatie', 'Btw %',     '/?m=invoice&c=vat');
-    }
-    
-    if ($ctx->getSetting('invoiceModuleEnabled') || $ctx->getSetting('offerModuleEnabled')) {
-        $src->addItem('Facturatie', 'Instellingen',     '/?m=invoice&c=settings');
     }
     
     $src->addItem('Artikelen', 'Artikelen',     '/?m=invoice&c=article');
@@ -69,6 +70,9 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
     $ctx = \core\Context::getInstance();
     $src = $evt->getSource();
     
+    $invoiceSettings = object_container_get(InvoiceSettings::class);
+    
+    
     if (hasCapability('invoice', 'edit-offer')) {
         $menuOffers = new Menu();
         $menuOffers->setIconLabelUrl('fa-share-alt', 'Offertes', '/?m=invoice&c=offer');
@@ -83,7 +87,7 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
         $src->add($menuInvoice);
     }
 
-    if ($ctx->isExperimental() && hasCapability('core', 'userType.user')) {
+    if ($invoiceSettings->getBillableEnabled() && hasCapability('core', 'userType.user')) {
         $menuBillable = new Menu();
         $menuBillable->setIconLabelUrl('fa-money', 'Billable', '/?m=invoice&c=tobill');
         $menuBillable->setWeight(37);
