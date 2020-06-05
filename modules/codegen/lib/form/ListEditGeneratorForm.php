@@ -33,6 +33,7 @@ class ListEditGeneratorForm extends \core\forms\CodegenBaseForm {
 		
 		return codegen_map_modules();
 		 }; 
+		$func2 = function() {  return codegen_map_dao_classes(); }; 
 		
 		$w1 = new \core\forms\HiddenField('data', NULL, t(''));
 		$this->addWidget( $w1 );
@@ -40,15 +41,19 @@ class ListEditGeneratorForm extends \core\forms\CodegenBaseForm {
 		$this->addWidget( $w2 );
 		$w3 = new \core\forms\TextField('name', NULL, t('Name'));
 		$this->addWidget( $w3 );
-		$w4 = new \core\forms\TextField('short_description', NULL, t('Short description'));
+		$w4 = new \core\forms\SelectField('daoObject', NULL, $func2(), t('DAO Object'));
 		$this->addWidget( $w4 );
-		$w5 = new \core\forms\TextField('objects_getter', NULL, t('Objects getter-name'));
+		$w5 = new \core\forms\TextField('short_description', NULL, t('Short description'));
 		$this->addWidget( $w5 );
-		$w6 = new \core\forms\CheckboxField('no_results_message', NULL, t('No-results message'));
+		$w6 = new \core\forms\TextField('objects_getter', NULL, t('Objects getter-name'));
 		$this->addWidget( $w6 );
-		$w6->setInfoText( 'Show \'no results found\'-message when table is empty' );
+		$w7 = new \core\forms\CheckboxField('no_results_message', NULL, t('No-results message'));
+		$this->addWidget( $w7 );
+		$w7->setInfoText( 'Show \'no results found\'-message when table is empty' );
 		
 	}
+
+
 
 
 
