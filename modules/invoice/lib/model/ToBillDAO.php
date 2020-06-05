@@ -40,6 +40,10 @@ class ToBillDAO extends \core\db\DAOObject {
 	        $params[] = '%'.$opts['short_description'].'%';
 	    }
 	    
+	    if (isset($opts['type']) && $opts['type'] !== '') {
+	        $where[] = 'tb.`type` =  ?';
+	        $params[] = $opts['type'];
+	    }
 	    
 	    if (isset($opts['paid']) && $opts['paid'] !== '') {
 	        $where[] = 'tb.paid = ' . ($opts['paid']?'1':'0');

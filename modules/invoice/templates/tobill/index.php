@@ -48,7 +48,9 @@ t.setConnectorUrl( '/?m=invoice&c=tobill&a=search' );
 t.addColumn({
 	fieldName: 'type',
 	fieldDescription: toolbox_t('Type'),
-	fieldType: 'text',
+	fieldType: 'select',
+	filterOptions: [{ 'value':'', 'text': 'Type'}, { 'value': 'invoice', 'text': toolbox_t('Invoice') }, { 'value' : 'bill', 'text': toolbox_t('Bill') } ],
+	searchable: true,
 	render: function(row) {
 		if (row.type == 'bill') {
 			return toolbox_t('Bill');
