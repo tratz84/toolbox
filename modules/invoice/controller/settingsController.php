@@ -35,6 +35,9 @@ class settingsController extends BaseController
             $settingsService->updateValue('invoice__prices_inc_vat', get_var('invoice__prices_inc_vat'));
             
 
+            $settingsService->updateValue('invoice__billable_enabled', get_var('invoice__billable_enabled'));
+            $settingsService->updateValue('invoice__billable_only_open', get_var('invoice__billable_only_open'));
+            
                 
             if (has_file('fileAttachmentOffer') || has_file('fileAttachmentInvoice')) {
                 

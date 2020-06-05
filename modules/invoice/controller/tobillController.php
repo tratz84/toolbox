@@ -6,11 +6,15 @@ use invoice\service\InvoiceService;
 use invoice\form\ToBillForm;
 use invoice\model\ToBill;
 use core\exception\ObjectNotFoundException;
+use invoice\InvoiceSettings;
 
 class tobillController extends BaseController {
     
     
     public function action_index() {
+        
+        $invoiceSettings = object_container_get(InvoiceSettings::class);
+        $this->defaultValuePaid = $invoiceSettings->getBillableOnlyOpen()?'0':'';
         
         $this->render();
     }
