@@ -182,8 +182,18 @@ class MysqlTableGenerator {
         
         foreach($renamedColumns as $old => $new) {
             if (isset($this->dbColumns[ $new ]) == false) {
-                // create statement
-                $sql_statements[] = 'ALTER TABLE `'.$this->getTableName().'` RENAME COLUMN `'.$old.'` TO `'.$new.'`';
+                // rename-statement (mysql 8)
+                // $sql_statements[] = 'ALTER TABLE `'.$this->getTableName().'` RENAME COLUMN `'.$old.'` TO `'.$new.'`';
+                
+                // rename-statement (mysql 5 support)
+                $sql = 'ALTER TABLE `'.$this->getTableName().'` CHANGE COLUMN `'.$old.'` `'.$new.'` ' . $this->tableModel->getColumnProperty($new, 'type');
+                
+                $model_default_val = $this->tableModel->getColumnProperty($new, 'default' );
+                if ($model_default_val) {
+                    $sql .= ' default \''.$model_default_val.'\'';
+                }
+                
+                $sql_statements[] = $sql;
                 
                 // update db-model
                 $this->dbColumns[ $new ] = $this->dbColumns[ $old ];
@@ -203,7 +213,7 @@ class MysqlTableGenerator {
             $columnName = $columns[$x];
             
             $model_type = $this->tableModel->getColumnProperty($columnName, 'type');
-            $model_default_val = $this->tableModel->getColumnProperty($columnName,  $this->resourceName );
+            $model_default_val = $this->tableModel->getColumnProperty($columnName, 'default' );
             
             if (isset($this->dbColumns[ $columnName ])) {
                 if ($this->columnTypeChanged($columnName) == false) {

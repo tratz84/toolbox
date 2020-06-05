@@ -19,6 +19,7 @@ use core\forms\validator\NotEmptyValidator;
 use invoice\model\ToBill;
 use core\forms\DoubleField;
 use core\forms\TextareaField;
+use core\forms\SelectField;
 
 class ToBillForm extends BaseForm {
     
@@ -29,7 +30,8 @@ class ToBillForm extends BaseForm {
         $this->addKeyField('to_bill_id');
         
         $this->addWidget(new HiddenField('to_bill_id'));
-        $this->addWidget(new CheckboxField('billed', '', 'Gefactureerd'));
+        $this->addWidget(new CheckboxField('paid', '', t('Paid')));
+        $this->addWidget(new SelectField('type', '', ['' => t('Make your choice'), 'bill' => t('Bill'), 'invoice' => t('Invoice')], t('Type')));
         $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=base&c=customer&a=select2', 'Klant') );
         
         $this->addWidget(new TextField('short_description', '', 'Korte omschrijving'));
@@ -38,7 +40,7 @@ class ToBillForm extends BaseForm {
         
         $this->addWidget(new TextareaField('long_description', '', 'Notitie'));
         
-
+        $this->addValidator('type', new NotEmptyValidator());
         $this->addValidator('customer_id', new NotEmptyValidator());
         $this->addValidator('short_description', new NotEmptyValidator());
 //         $this->addValidator('amount', new DoubleNumberValidator());

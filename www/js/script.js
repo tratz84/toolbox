@@ -1637,8 +1637,12 @@ function fill_form(form, obj) {
 		// input is <select>? make sure <option> is visible
 		if (inp.is('select')) {
 			inp.find('option').each(function(index, node) {
-			if ($(node).attr('value') == obj[i])
-				$(node).css('display', '');
+				// remove 'selected'-tag. if set, chrome 84 does weird things when setting value on <select>
+				$(node).removeAttr('selected', '');
+				
+				if ($(node).attr('value') == obj[i]) {
+					$(node).css('display', '');
+				}
 			});
 		}
 

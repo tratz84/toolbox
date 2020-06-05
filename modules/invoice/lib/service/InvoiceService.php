@@ -592,7 +592,7 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
 
 
         $cursor = $tbDao->search($opts);
-        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('to_bill_id', 'company_id', 'company_name', 'firstname', 'insert_lastname', 'lastname', 'user_id', 'short_description', 'amount', 'price', 'billed', 'edited', 'created'));
+        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('to_bill_id', 'type', 'company_id', 'company_name', 'firstname', 'insert_lastname', 'lastname', 'user_id', 'short_description', 'amount', 'price', 'paid', 'edited', 'created'));
 
         return $r;
     }
@@ -615,7 +615,7 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
 
         $changes = $form->changes($tobill);
 
-        $form->fill($tobill, array('to_bill_id', 'company_id', 'person_id', 'firstname', 'insert_lastname', 'lastname', 'short_description', 'long_description', 'billed', 'amount', 'price'));
+        $form->fill($tobill, array('to_bill_id', 'company_id', 'person_id', 'type', 'firstname', 'insert_lastname', 'lastname', 'short_description', 'long_description', 'paid', 'amount', 'price'));
 
         if (!$tobill->save()) {
             return false;

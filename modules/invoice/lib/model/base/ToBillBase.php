@@ -14,7 +14,7 @@ class ToBillBase extends \core\db\DBObject {
   'to_bill_id' => 
   array (
     'Field' => 'to_bill_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'NO',
     'Key' => 'PRI',
     'Default' => NULL,
@@ -23,7 +23,7 @@ class ToBillBase extends \core\db\DBObject {
   'company_id' => 
   array (
     'Field' => 'company_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => 'MUL',
     'Default' => NULL,
@@ -32,7 +32,7 @@ class ToBillBase extends \core\db\DBObject {
   'person_id' => 
   array (
     'Field' => 'person_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -41,16 +41,16 @@ class ToBillBase extends \core\db\DBObject {
   'project_id' => 
   array (
     'Field' => 'project_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
-    'Key' => 'MUL',
+    'Key' => '',
     'Default' => NULL,
     'Extra' => '',
   ),
   'user_id' => 
   array (
     'Field' => 'user_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => 'MUL',
     'Default' => NULL,
@@ -60,15 +60,6 @@ class ToBillBase extends \core\db\DBObject {
   array (
     'Field' => 'short_description',
     'Type' => 'varchar(255)',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
-  ),
-  'long_description' => 
-  array (
-    'Field' => 'long_description',
-    'Type' => 'text',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -95,15 +86,15 @@ class ToBillBase extends \core\db\DBObject {
   'invoice_line_id' => 
   array (
     'Field' => 'invoice_line_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => 'MUL',
     'Default' => NULL,
     'Extra' => '',
   ),
-  'billed' => 
+  'paid' => 
   array (
-    'Field' => 'billed',
+    'Field' => 'paid',
     'Type' => 'tinyint(1)',
     'Null' => 'YES',
     'Key' => '',
@@ -132,6 +123,24 @@ class ToBillBase extends \core\db\DBObject {
   array (
     'Field' => 'created',
     'Type' => 'datetime',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'long_description' => 
+  array (
+    'Field' => 'long_description',
+    'Type' => 'text',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'type' => 
+  array (
+    'Field' => 'type',
+    'Type' => 'enum(\'bill\',\'invoice\')',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -168,10 +177,6 @@ class ToBillBase extends \core\db\DBObject {
 	public function getShortDescription() { return $this->getField('short_description'); }
 	
 		
-	public function setLongDescription($p) { $this->setField('long_description', $p); }
-	public function getLongDescription() { return $this->getField('long_description'); }
-	
-		
 	public function setAmount($p) { $this->setField('amount', $p); }
 	public function getAmount() { return $this->getField('amount'); }
 	
@@ -184,8 +189,8 @@ class ToBillBase extends \core\db\DBObject {
 	public function getInvoiceLineId() { return $this->getField('invoice_line_id'); }
 	
 		
-	public function setBilled($p) { $this->setField('billed', $p); }
-	public function getBilled() { return $this->getField('billed'); }
+	public function setPaid($p) { $this->setField('paid', $p); }
+	public function getPaid() { return $this->getField('paid'); }
 	
 		
 	public function setDeleted($p) { $this->setField('deleted', $p); }
@@ -198,6 +203,14 @@ class ToBillBase extends \core\db\DBObject {
 		
 	public function setCreated($p) { $this->setField('created', $p); }
 	public function getCreated() { return $this->getField('created'); }
+	
+		
+	public function setLongDescription($p) { $this->setField('long_description', $p); }
+	public function getLongDescription() { return $this->getField('long_description'); }
+	
+		
+	public function setType($p) { $this->setField('type', $p); }
+	public function getType() { return $this->getField('type'); }
 	
 	
 }
