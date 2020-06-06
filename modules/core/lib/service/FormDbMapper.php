@@ -289,7 +289,7 @@ class FormDbMapper {
             
             $newList = $form->getWidget( $rel['name'] )->asArray();
             $sortfield = null;
-            if (count($newList) && isset($newList[0]['sort'])) {
+            if ($linkObj->hasDatabaseField('sort')) {
                 $sortfield = 'sort';
             }
             $objDao->mergeFormListMTON( $linkTable, $pk, $pk_id, $newList, $sortfield );
