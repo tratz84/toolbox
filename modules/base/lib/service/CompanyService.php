@@ -15,14 +15,15 @@ use core\container\ObjectHookable;
 use core\exception\ObjectNotFoundException;
 use core\service\ServiceBase;
 use function form_mapping;
+use core\service\FormDbHandler;
 
 class CompanyService extends ServiceBase implements ObjectHookable {
     
     
     public function readCompany($id, $opts=array()) {
-        $fm = CompanyForm::getDbMapper();
+        $fh = FormDbHandler::getHandler( CompanyForm::class );
         
-        $company = $fm->readObject( $id );
+        $company = $fh->readObject( $id );
         
         if (!$company) {
             if (isset($opts['null-if-not-found']) && $opts['null-if-not-found']) {
@@ -36,18 +37,18 @@ class CompanyService extends ServiceBase implements ObjectHookable {
     }
     
     public function save(\base\forms\CompanyForm $companyForm) {
-        $fm = CompanyForm::getDbMapper();
+        $fh = FormDbHandler::getHandler( CompanyForm::class );
         
-        $obj = $fm->saveForm( $companyForm );
+        $obj = $fh->saveForm( $companyForm );
         
         return $obj->getCompanyId();
     }
     
     
     public function search($start, $limit, $opts = array()) {
-        $fdm = CompanyForm::getDbMapper();
+        $fh = FormDbHandler::getHandler( CompanyForm::class );
         
-        return $fdm->search($start, $limit, $opts);
+        return $fh->search($start, $limit, $opts);
     }
     
     
