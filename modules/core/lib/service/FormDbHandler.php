@@ -7,6 +7,8 @@ use base\util\ActivityUtil;
 use core\db\DBObject;
 use core\exception\DatabaseException;
 use core\forms\lists\ListResponse;
+use core\exception\ObjectNotFoundException;
+use base\model\ObjectMetaDAO;
 
 
 class FormDbHandler {
@@ -71,6 +73,13 @@ class FormDbHandler {
         $form->bind ( $obj );
         
         hook_eventbus_publish([$this, $form], 'core', 'FormDbHandler::readForm');
+        
+        return $form;
+    }
+    
+    public function formForObject( $obj ) {
+        $form = object_container_create( $this->mapper->getFormClass() );
+        $form->bind ( $obj );
         
         return $form;
     }
@@ -186,18 +195,19 @@ class FormDbHandler {
         $person_id = null;
         if (method_exists($dbObj, 'getCompanyId'))
             $company_id = $dbObj->getCompanyId();
-            if (method_exists($dbObj, 'getPersonId'))
-                $person_id = $dbObj->getPersonId();
-                if ($isNew) {
-                    ActivityUtil::logActivity($company_id, $person_id, $this->mapper->getLogRefObject(), null, $this->mapper->getLogCreatedCode(), $this->mapper->getLogCreatedText(), $fch->getHtml());
-                } else {
-                    // TODO: check if object is actually changed (or always create a record, so it's logged that someone clicked 'save' ?)
-                    ActivityUtil::logActivity($company_id, $person_id, $this->mapper->getLogRefObject(), null, $this->mapper->getLogUpdatedCode(), $this->mapper->getLogUpdatedText(), $fch->getHtml());
-                }
-                
-                hook_eventbus_publish([$this, $dbObj], 'core', 'FormDbHandler::saveForm-end');
-                
-                return $dbObj;
+        if (method_exists($dbObj, 'getPersonId'))
+            $person_id = $dbObj->getPersonId();
+        
+        if ($isNew) {
+            ActivityUtil::logActivity($company_id, $person_id, $this->mapper->getLogRefObject(), null, $this->mapper->getLogCreatedCode(), $this->mapper->getLogCreatedText(), $fch->getHtml());
+        } else {
+            // TODO: check if object is actually changed (or always create a record, so it's logged that someone clicked 'save' ?)
+            ActivityUtil::logActivity($company_id, $person_id, $this->mapper->getLogRefObject(), null, $this->mapper->getLogUpdatedCode(), $this->mapper->getLogUpdatedText(), $fch->getHtml());
+        }
+        
+        hook_eventbus_publish([$this, $dbObj], 'core', 'FormDbHandler::saveForm-end');
+        
+        return $dbObj;
     }
     
     
@@ -210,15 +220,59 @@ class FormDbHandler {
     
     
     public function deleteById( $id ) {
-        // TODO:
+        // fetch object
+        $dbObj = $this->readObject( $id );
+        if (!$dbObj) {
+            throw new ObjectNotFoundException('Object not found');
+        }
         
-        // check if there's a 'deleted' column? => might be DATETIME/TIMESTAMP/DATE  or BOOLEAN
+        // get form
+        $form = $this->formForObject( $dbObj );
         
-        // ObjectMetaDAO()
-        // relationMTON
-        // relationMTO1
-        // Object itself
+        // object has deleted-flag? => just mark deleted
+        if ($dbObj->hasDatabaseField('deleted')) {
+            // delete
+            $dao = object_container_get( $this->mapper->getDaoClass() );
+            $dao->delete( $id );
+        }
+        else {
+            $objectName = $this->mapper->getName();
+            
+            // delete relationMTO1
+            foreach($this->mapper->getMTO1() as $rel) {
+                $dao = object_container_get( $rel['daoObject'] );
+                
+                $func = 'deleteBy'.$objectName;
+                if (method_exists($dao, $func))
+                    $dao->func( $id );
+            }
+            
+            // delete relationMTON
+            foreach($this->mapper->getMTON() as $rel) {
+                $dao = object_container_get( $rel['daoObject'] );
+                
+                $func = 'deleteBy'.$objectName;
+                if (method_exists($dao, $func))
+                    $dao->func( $id );
+            }
+            
+            // delete object_meta
+            $omDao = object_container_get(ObjectMetaDAO::class);
+            $omDao->deleteByObject( $this->mapper->getDbClass(), $id );
+            
+            // Object itself
+            $dbObj->delete();
+        }
         
+        // logging
+        $company_id = $person_id = null;
+        if (method_exists($dbObj, 'getCompanyId'))
+            $company_id = $dbObj->getCompanyId();
+        if (method_exists($dbObj, 'getPersonId'))
+            $person_id = $dbObj->getPersonId();
+        
+        $fch = FormChangesHtml::formDeleted($form);
+        ActivityUtil::logActivity($company_id, $person_id, $this->mapper->getLogRefObject(), null, $this->mapper->getLogDeletedCode(), $this->mapper->getLogDeletedText(), $fch->getHtml());
     }
     
     

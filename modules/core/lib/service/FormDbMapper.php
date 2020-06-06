@@ -57,6 +57,17 @@ class FormDbMapper {
     public function getForm() { return $this->form; }
     public function setForm($f) { $this->form = $f; }
     
+    public function getName() {
+        $n = $this->getFormClass();
+        if (strpos($n, '\\') !== false)
+            $n = substr($n, strrpos($n, '\\')+1);
+        $n = substr($n, 0, strlen($n)-4); // 4 = length of string 'Form'
+        
+        return $n;
+    }
+    
+    public function getDbClass() { return $this->dbClass; }
+    
     public function getDaoClass() { return $this->daoClass; }
     public function setDaoClass($class) { $this->daoClass = $class; }
     
