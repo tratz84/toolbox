@@ -2,6 +2,14 @@
 
 namespace base\forms;
 
+use base\form\SelectCompanyListEdit;
+use base\model\AddressDAO;
+use base\model\EmailDAO;
+use base\model\PersonAddressDAO;
+use base\model\PersonDAO;
+use base\model\PersonEmailDAO;
+use base\model\PersonPhoneDAO;
+use base\model\PhoneDAO;
 use core\forms\BaseForm;
 use core\forms\HiddenField;
 use core\forms\HtmlDatetimeField;
@@ -9,7 +17,9 @@ use core\forms\ListFormWidget;
 use core\forms\TextField;
 use core\forms\TextareaField;
 use core\forms\validator\NotEmptyValidator;
-use base\form\SelectCompanyListEdit;
+use core\service\FormDbMapper;
+use base\model\CompanyPersonDAO;
+use base\model\CompanyDAO;
 
 class PersonForm extends BaseForm {
     
@@ -69,6 +79,27 @@ class PersonForm extends BaseForm {
         
         
         $this->addValidator('lastname', new NotEmptyValidator());
+    }
+    
+    
+    public static function getDbMapper() {
+        $fdm = new FormDbMapper( self::class, PersonDAO::class );
+        $fdm->setLogRefObject('customer__person');
+        $fdm->setLogCreatedCode('person-created');
+        $fdm->setLogCreatedText('Persoon aangemaakt');
+        $fdm->setLogUpdatedCode('person-edited');
+        $fdm->setLogUpdatedText('Persoon aangepast');
+        $fdm->setLogDeletedCode('person-deleted');
+        $fdm->setLogDeletedText('Persoon verwijderd');
+        
+        $fdm->addPublicField('fullname');
+        
+        $fdm->addMTON(PersonAddressDAO::class, AddressDAO::class, 'addressList');
+        $fdm->addMTON(PersonEmailDAO::class,   EmailDAO::class,   'emailList');
+        $fdm->addMTON(PersonPhoneDAO::class,   PhoneDAO::class,   'phoneList');
+        $fdm->addMTON(CompanyPersonDAO::class, CompanyDAO::class,  'companyList');
+        
+        return $fdm;
     }
     
 }
