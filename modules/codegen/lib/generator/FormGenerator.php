@@ -180,6 +180,11 @@ class FormGenerator {
             
             $mapping_code .= 'return $fdm;';
             $pcp->setFunction($classname.'::codegenDbMapper', null, $mapping_code, ['static' => true]);
+            
+            // generate ::getDbMapper()-function for programmer to adjust
+            if ($pcp->getFunctionCode($classname.'::getDbMapper') === null) {
+                $pcp->setFunction($classname.'::getDbMapper', null, '$m = self::codegenDbMapper();'.PHP_EOL.'return $m;', ['static' => true]);
+            }
         }
         
         
