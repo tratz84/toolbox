@@ -209,6 +209,18 @@ class FormDbHandler {
     }
     
     
+    public function deleteById( $id ) {
+        // TODO:
+        
+        // check if there's a 'deleted' column? => might be DATETIME/TIMESTAMP/DATE  or BOOLEAN
+        
+        // ObjectMetaDAO()
+        // relationMTON
+        // relationMTO1
+        // Object itself
+        
+    }
+    
     
     public function search($start, $limit, $opts) {
         $dao = object_container_get( $this->mapper->getDaoClass() );
