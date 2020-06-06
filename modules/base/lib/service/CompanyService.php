@@ -20,7 +20,8 @@ class CompanyService extends ServiceBase implements ObjectHookable {
     
     
     public function readCompany($id, $opts=array()) {
-        $fm = form_mapping ( CompanyForm::class );
+        $fm = CompanyForm::getDbMapper();
+        
         $company = $fm->readObject( $id );
         
         if (!$company) {
@@ -35,7 +36,7 @@ class CompanyService extends ServiceBase implements ObjectHookable {
     }
     
     public function save(\base\forms\CompanyForm $companyForm) {
-        $fm = form_mapping( CompanyForm::class );
+        $fm = CompanyForm::getDbMapper();
         
         $obj = $fm->saveForm( $companyForm );
         
@@ -44,7 +45,7 @@ class CompanyService extends ServiceBase implements ObjectHookable {
     
     
     public function search($start, $limit, $opts = array()) {
-        $fdm = form_mapping( CompanyForm::class );
+        $fdm = CompanyForm::getDbMapper();
         
         return $fdm->search($start, $limit, $opts);
     }

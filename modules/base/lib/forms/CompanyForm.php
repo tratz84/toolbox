@@ -2,6 +2,16 @@
 
 namespace base\forms;
 
+use base\form\SelectPersonListEdit;
+use base\model\AddressDAO;
+use base\model\CompanyAddressDAO;
+use base\model\CompanyDAO;
+use base\model\CompanyEmailDAO;
+use base\model\CompanyPersonDAO;
+use base\model\CompanyPhoneDAO;
+use base\model\EmailDAO;
+use base\model\PersonDAO;
+use base\model\PhoneDAO;
 use base\service\CompanyService;
 use core\ObjectContainer;
 use core\forms\BaseForm;
@@ -12,8 +22,7 @@ use core\forms\SelectField;
 use core\forms\TextField;
 use core\forms\TextareaField;
 use core\forms\validator\NotEmptyValidator;
-use core\forms\HtmlField;
-use base\form\SelectPersonListEdit;
+use core\service\FormDbMapper;
 
 class CompanyForm extends BaseForm {
     
@@ -92,6 +101,24 @@ class CompanyForm extends BaseForm {
         
         $this->addWidget( new SelectField('company_type_id', $defaultSelected, $options, 'Bedrijfssoort'));
         
+    }
+    
+    
+    public static function getDbMapper() {
+        $fdm = new FormDbMapper( self::class, CompanyDAO::class );
+        $fdm->setLogCreatedCode('company-created');
+        $fdm->getLogCreatedText('Bedrijf aangemaakt');
+        $fdm->setLogUpdatedCode('company-edited');
+        $fdm->setLogUpdatedText('Bedrijf aangepast');
+        $fdm->setLogDeletedCode('company-deleted');
+        $fdm->setLogDeletedText('Bedrijf verwijderd');
+        
+        $fdm->addMTON(CompanyAddressDAO::class, AddressDAO::class, 'addressList');
+        $fdm->addMTON(CompanyEmailDAO::class,   EmailDAO::class,   'emailList');
+        $fdm->addMTON(CompanyPhoneDAO::class,   PhoneDAO::class,   'phoneList');
+        $fdm->addMTON(CompanyPersonDAO::class,  PersonDAO::class,  'personList');
+        
+        return $fdm;
     }
     
     
