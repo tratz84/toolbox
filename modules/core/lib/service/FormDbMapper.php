@@ -58,10 +58,9 @@ class FormDbMapper {
     public function setForm($f) { $this->form = $f; }
     
     public function getName() {
-        $n = $this->getFormClass();
+        $n = $this->getDbClass();
         if (strpos($n, '\\') !== false)
             $n = substr($n, strrpos($n, '\\')+1);
-        $n = substr($n, 0, strlen($n)-4); // 4 = length of string 'Form'
         
         return $n;
     }
