@@ -62,6 +62,7 @@ class FormDbMapper {
     
     public function getPublicFields() { return $this->publicFields; }
     public function setPublicFields($fields) { $this->publicFields = $fields; }
+    public function addPublicField($name) { $this->publicFields[] = $name; }
     
     public function getMTON() { return $this->relationMTON; }
     public function getMTO1() { return $this->relationMTO1; }
