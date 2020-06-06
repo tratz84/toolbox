@@ -130,6 +130,18 @@ class ListFormGenerator {
         $pcp->parse( $path );
         $pcp->setFunction($classname.'::codegen', null, $code);
         
+        // class::codegenDbMapper-function
+        if ($this->data['daoObject']) {
+            $mapping_code = '$fdm = new \\core\\service\\FormDbMapper( self::class, \\'.$this->data['daoObject'].'::class );' . PHP_EOL;
+            $mapping_code .= 'return $fdm;';
+            $pcp->setFunction($classname.'::codegenDbMapper', null, $mapping_code, ['static' => true]);
+            
+            // generate ::getDbMapper()-function for programmer to adjust
+            if ($pcp->getFunctionCode($classname.'::getDbMapper') === null) {
+                $pcp->setFunction($classname.'::getDbMapper', null, '$m = self::codegenDbMapper();'.PHP_EOL.'return $m;', ['static' => true]);
+            }
+        }
+        
         $phpcode = $pcp->toString();
         
         //         print $phpcode;
