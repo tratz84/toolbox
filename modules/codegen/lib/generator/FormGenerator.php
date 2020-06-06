@@ -156,11 +156,55 @@ class FormGenerator {
         $pcp->parse( $path );
         $pcp->setFunction($classname.'::codegen', null, $code);
         
+        // generate ::getDbMapper
+        $widgets = $this->flattenWidgets( $json );
+        if ($this->data['daoClass']) {
+            $mapping_code = '$fdm = new \\core\\service\\FormDbMapper( self::class, \\'.$this->data['daoClass'].'::class );' . PHP_EOL;
+            
+            foreach($widgets as $w) {
+                if (isset($w->data->relationType) == false || $w->data->relationType == '')
+                    continue;
+                
+                $mapperFunc = '\\'.$w->data->class.'::codegenDbMapper';
+                $fdm = $mapperFunc();
+                
+                $widgetDao = $fdm->getDaoClass();
+                
+                if ($w->data->relationType == 'MTO1') {
+                    $mapping_code .= '$fdm->addMTO1( \\'.$widgetDao.'::class, '.var_export($w->data->name, true).');' . PHP_EOL;
+                } else if ($w->data->relationType == 'MTON') {
+                    $mapping_code .= '$fdm->addMTON( \\'.$widgetDao.'::class, \\'.$w->data->class.'::class, '.var_export($w->data->name, true).');' . PHP_EOL;
+                }
+                
+            }
+            
+            $mapping_code .= 'return $fdm;';
+            $pcp->setFunction($classname.'::codegenDbMapper', null, $mapping_code, ['static' => true]);
+        }
+        
+        
         $phpcode = $pcp->toString();
         
 //         print $phpcode;
         file_put_contents($path, $phpcode);
     }
+    
+    protected function flattenWidgets($json) {
+        $r = array();
+        
+        
+        foreach($json as $j) {
+            if (isset($j->children)) {
+                $r = array_merge($r, $this->flattenWidgets($j->children));
+            }
+            
+            unset($j->children);
+            $r[] = $j;
+        }
+        
+        return $r;
+    }
+    
     
     public function addKeyFields($fields) {
         $fields = explode(',', $fields);
