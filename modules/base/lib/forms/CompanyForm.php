@@ -107,7 +107,7 @@ class CompanyForm extends BaseForm {
     public static function getDbMapper() {
         $fdm = new FormDbMapper( self::class, CompanyDAO::class );
         $fdm->setLogCreatedCode('company-created');
-        $fdm->getLogCreatedText('Bedrijf aangemaakt');
+        $fdm->setLogCreatedText('Bedrijf aangemaakt');
         $fdm->setLogUpdatedCode('company-edited');
         $fdm->setLogUpdatedText('Bedrijf aangepast');
         $fdm->setLogDeletedCode('company-deleted');
