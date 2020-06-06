@@ -112,7 +112,7 @@ class PhpCodeParser {
     }
     
     
-    public function setFunction($p_functionname, $params, $code, &$parts=null, $currentClass = null) {
+    public function setFunction($p_functionname, $params, $code, $opts=array(), &$parts=null, $currentClass = null) {
         $firstCall = $parts === null ? true : false;
         
         if ($parts === null) {
@@ -176,7 +176,7 @@ class PhpCodeParser {
             
             
             if (isset($parts[$x]['subs']) && count($parts[$x]['subs'])) {
-                $r = $this->setFunction( $p_functionname, $params, $code, $parts[$x]['subs'], $currentClass );
+                $r = $this->setFunction( $p_functionname, $params, $code, $opts, $parts[$x]['subs'], $currentClass );
                 
                 if ($r)
                     return true;
@@ -191,14 +191,14 @@ class PhpCodeParser {
         
         // add?
         if ($firstCall) {
-            return $this->addFunction($p_functionname, $params, $code);
+            return $this->addFunction($p_functionname, $params, $code, $opts);
         }
         
         return false;
     }
     
     
-    public function addFunction($p_functionname, $params, $code, &$parts=null, $currentClass = null) {
+    public function addFunction($p_functionname, $params, $code, $opts, &$parts=null, $currentClass = null) {
         if ($parts === null) {
             $parts = &$this->parts;
         }
@@ -228,7 +228,14 @@ class PhpCodeParser {
                             
                             $codeLines = explode("\n", $code);
                             $str = PHP_EOL;
-                            $str .= "\tfunction ".$functionname.'('.$params.') {'.PHP_EOL;
+                            
+                            // add function
+                            if (isset($opts['static']) && $opts['static'])
+                                $str .= "\tpublic static function ";
+                            else
+                                $str .= "\tfunction ";
+                            $str .= $functionname.'('.$params.') {'.PHP_EOL;
+                            
                             foreach($codeLines as $cl) {
                                 $str .= "\t\t".$cl.PHP_EOL;
                             }
@@ -259,7 +266,7 @@ class PhpCodeParser {
                 
                 
                 if (isset($parts[$x]['subs']) && count($parts[$x]['subs'])) {
-                    $r = $this->addFunction( $p_functionname, $params, $code, $parts[$x]['subs'], $currentClass );
+                    $r = $this->addFunction( $p_functionname, $params, $code, $opts, $parts[$x]['subs'], $currentClass );
                     
                     if ($r)
                         return true;
