@@ -190,6 +190,8 @@ function module_update_handler($moduleName, $version) {
         
         $updateExecuted = true;
         
+        hook_eventbus_publish(null, $moduleName, 'module-update-executed');
+        
         // note: update might throw an error and this point isn't reached, so
         //       the lock isn't released. This is design on purpose, if an
         //       update failes manual action is required
