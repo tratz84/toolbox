@@ -11,7 +11,7 @@ $tb_activity->addColumn('user_id',           'int');
 $tb_activity->addColumn('username',          'varchar(128)');
 $tb_activity->addColumn('company_id',        'int');
 $tb_activity->addColumn('person_id',         'int');
-$tb_activity->addColumn('ref_object',        'varchar(32)');
+$tb_activity->addColumn('ref_object',        'varchar(48)');
 $tb_activity->addColumn('ref_id',            'int');
 $tb_activity->addColumn('code',              'varchar(32)');
 $tb_activity->addColumn('short_description', 'text');

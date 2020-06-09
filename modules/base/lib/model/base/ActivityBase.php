@@ -14,7 +14,7 @@ class ActivityBase extends \core\db\DBObject {
   'activity_id' => 
   array (
     'Field' => 'activity_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'NO',
     'Key' => 'PRI',
     'Default' => NULL,
@@ -23,7 +23,7 @@ class ActivityBase extends \core\db\DBObject {
   'user_id' => 
   array (
     'Field' => 'user_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -41,7 +41,7 @@ class ActivityBase extends \core\db\DBObject {
   'company_id' => 
   array (
     'Field' => 'company_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -50,7 +50,7 @@ class ActivityBase extends \core\db\DBObject {
   'person_id' => 
   array (
     'Field' => 'person_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -59,7 +59,7 @@ class ActivityBase extends \core\db\DBObject {
   'ref_object' => 
   array (
     'Field' => 'ref_object',
-    'Type' => 'varchar(32)',
+    'Type' => 'varchar(48)',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -68,7 +68,7 @@ class ActivityBase extends \core\db\DBObject {
   'ref_id' => 
   array (
     'Field' => 'ref_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
