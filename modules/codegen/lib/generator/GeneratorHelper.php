@@ -17,6 +17,7 @@ use core\forms\ColorPickerField;
 use core\forms\DatePickerField;
 use core\forms\HiddenField;
 use core\forms\HtmlField;
+use core\forms\MonthField;
 use core\forms\RadioField;
 use core\forms\SelectField;
 use core\forms\TextField;
@@ -155,6 +156,11 @@ class GeneratorHelper {
             'class' => TimePickerField::class,
             'editor' => TimePickerOptionsForm::class,
             'label' => 'TimePicker'
+        );
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => MonthField::class,
+            'label' => 'MonthField'
         );
         $formWidgets[] = array(
             'type' => 'widget',
