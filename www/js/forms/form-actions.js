@@ -442,3 +442,42 @@ function uploadFilesFieldDelete_Click(obj) {
 	
 }
 
+
+
+
+function monthField_prev_option(obj) {
+	var s = $(obj).parent().find('select');
+	
+	var selectedOption = s.val();
+	s.find('option').removeAttr('selected');
+	
+	var options = s.find('option');
+	for(var i=0; i < options.length; i++) {
+		if (options.get(i).value == selectedOption && i-1 >= 0) {
+			s.val( options.get(i-1).value );
+			s.trigger('change');
+			break;
+		}
+	}
+}
+function monthField_next_option(obj) {
+	var s = $(obj).parent().find('select');
+	
+	var selectedOption = s.val();
+	s.find('option').removeAttr('selected');
+	
+	var options = s.find('option');
+	for(var i=0; i < options.length; i++) {
+		if (options.get(i).value == selectedOption && i+1 < options.length) {
+			s.val( options.get(i+1).value );
+			s.trigger('change');
+			break;
+		}
+	}
+}
+
+
+
+
+
+
