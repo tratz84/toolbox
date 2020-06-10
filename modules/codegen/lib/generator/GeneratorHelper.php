@@ -2,31 +2,27 @@
 
 namespace codegen\generator;
 
-use core\forms\CheckboxField;
-use core\forms\ColorPickerField;
-use core\forms\SelectField;
-use core\forms\TextField;
-use core\forms\HiddenField;
-use core\forms\NumberField;
-use core\forms\WidgetContainer;
-use core\forms\HtmlField;
-use codegen\form\widgetoptions\DefaultWidgetOptionsForm;
+use base\forms\CustomerSelectWidget;
 use codegen\form\widgetoptions\CheckboxOptionsForm;
-use codegen\form\widgetoptions\DatePickerOptionsForm;
 use codegen\form\widgetoptions\ContainerOptionsForm;
-use codegen\form\widgetoptions\SelectOptionsForm;
+use codegen\form\widgetoptions\DatePickerOptionsForm;
 use codegen\form\widgetoptions\HiddenOptionsForm;
 use codegen\form\widgetoptions\ListEditWidgetsOptionsForm;
-use codegen\form\widgetoptions\TextareaOptionsForm;
-use codegen\form\widgetoptions\NumberOptionsForm;
-use codegen\form\widgetoptions\HtmlOptionsForm;
-use core\forms\TextareaField;
-use base\forms\CustomerSelectWidget;
-use core\forms\RadioField;
 use codegen\form\widgetoptions\RadioOptionsForm;
-use core\forms\ListEditWidget;
-use core\forms\ListWidget;
+use codegen\form\widgetoptions\SelectOptionsForm;
+use codegen\form\widgetoptions\TextareaOptionsForm;
+use codegen\form\widgetoptions\TimePickerOptionsForm;
+use core\forms\CheckboxField;
+use core\forms\ColorPickerField;
 use core\forms\DatePickerField;
+use core\forms\HiddenField;
+use core\forms\HtmlField;
+use core\forms\RadioField;
+use core\forms\SelectField;
+use core\forms\TextField;
+use core\forms\TextareaField;
+use core\forms\TimePickerField;
+use core\forms\WidgetContainer;
 
 class GeneratorHelper {
     
@@ -153,6 +149,12 @@ class GeneratorHelper {
             'class' => DatePickerField::class,
             'editor' => DatePickerOptionsForm::class,
             'label' => 'DatePicker'
+        );
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => TimePickerField::class,
+            'editor' => TimePickerOptionsForm::class,
+            'label' => 'TimePicker'
         );
         $formWidgets[] = array(
             'type' => 'widget',
