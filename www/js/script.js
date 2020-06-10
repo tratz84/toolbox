@@ -449,7 +449,7 @@ function focusFirstField(container) {
 	if (inputs.length) {
 		
 		// pickadate opens calendar on focus, which can be irritating
-		if ($(inputs.get(0)).hasClass('input-pickadate') || $(inputs.get(0)).hasClass('input-pickadatetime'))
+		if ($(inputs.get(0)).hasClass('input-pickadate') || $(inputs.get(0)).hasClass('input-pickadatetime') || $(inputs.get(0)).hasClass('input-pickatime'))
 			return;
 		
 		inputs.get(0).focus();
