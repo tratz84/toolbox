@@ -844,7 +844,12 @@ function next_day($date, $no=1) {
 
 function date_add_hours( $date, $hours, $format='Y-m-d H:i:s' ) {
     $dt = new DateTime( $date, new DateTimeZone(date_default_timezone_get()) );
-    $dt->add(new DateInterval('PT'.$hours.'H'));
+    if ($hours > 0) {
+        $dt->add(new DateInterval('PT'.$hours.'H'));
+    }
+    else if ($hours < 0) {
+        $dt->sub(new DateInterval('PT'.abs($hours).'H'));
+    }
     
     return $dt->format( $format );
 }
