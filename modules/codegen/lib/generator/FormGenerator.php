@@ -317,7 +317,7 @@ class FormGenerator {
             
             
             if (@$item->data->info_text) {
-                $html .= $varname.'->setInfoText( '.var_export($item->data->info_text, true).' );' . PHP_EOL;
+                $html .= $varname.'->setInfoText( t('.var_export($item->data->info_text, true).') );' . PHP_EOL;
             }
             
             if (@$item->data->defaultValue) {
