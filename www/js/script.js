@@ -245,6 +245,22 @@ function applyWidgetFields(container) {
 		});
 	});
 	
+	
+	$('.image-selector-field').each(function(index, node) {
+		$(node).find('li').click(function() {
+			var val = $(this).data('value');
+			$(this).closest('div.widget').find('input.hidden-value').val( val );
+			
+			$(this).closest('ul').find('li').removeClass('selected');
+			$(this).addClass('selected');
+			
+			$(this).closest('div.widget').find('input.hidden-value').trigger( 'change' );
+		});
+		
+	});
+	
+	// event for hooking modules
+	$(window).trigger( 'applyWidgetFields' );
 
 	handle_resetFieldButton( container );
 }
