@@ -243,7 +243,10 @@ class MysqlQueryBuilder extends QueryBuilder {
     }
     
     
-    public function queryCursor($objectName) {
+    public function queryCursor($objectName=null) {
+        if ($objectName == null)
+            $objectName = $this->getObjectName();
+        
         $sql = $this->createSelect();
         $params = $this->getParams();
         
@@ -252,7 +255,10 @@ class MysqlQueryBuilder extends QueryBuilder {
         return $cursor;
     }
     
-    public function queryList($objectName) {
+    public function queryList($objectName=null) {
+        if ($objectName == null)
+            $objectName = $this->getObjectName();
+        
         $sql = $this->createSelect();
         $params = $this->getParams();
         
@@ -269,7 +275,10 @@ class MysqlQueryBuilder extends QueryBuilder {
         return $list;
     }
     
-    public function queryOne($objectName) {
+    public function queryOne($objectName=null) {
+        if ($objectName == null)
+            $objectName = $this->getObjectName();
+        
         $sql = $this->createSelect();
         $params = $this->getParams();
         

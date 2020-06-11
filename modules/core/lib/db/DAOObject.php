@@ -19,7 +19,9 @@ class DAOObject
      * @return QueryBuilder
      */
     protected function createQueryBuilder() {
-        return DatabaseHandler::getConnection($this->resourceName)->createQueryBuilder();
+        $qb = DatabaseHandler::getConnection($this->resourceName)->createQueryBuilder();
+        $qb->setObjectName( $this->objectName );
+        return $qb;
     }
     
     protected function query($query, $params=array()) {

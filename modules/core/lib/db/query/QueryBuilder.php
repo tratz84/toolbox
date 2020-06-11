@@ -18,6 +18,8 @@ abstract class QueryBuilder {
     protected $rightJoin = array();
     protected $join = array();
     
+    protected $objectName = null;
+    
     /**
      * @var QueryBuilderWhereContainer
      */
@@ -39,6 +41,10 @@ abstract class QueryBuilder {
     }
     
     public function getConnection() { return $this->dbconnection; }
+    
+    public function setObjectName($n) { $this->objectName = $n; }
+    public function getObjectName() { return $this->objectName; }
+    
     
     public function setFieldValue($fieldName, $value) {
         $this->fieldValues[$fieldName] = $value;
