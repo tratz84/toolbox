@@ -696,7 +696,7 @@ function showInfo(obj, html) {
 	var d = $('<div class="show-info-container" />');
 	d.html( html );
 	d.css('position', 'absolute');
-	d.css('z-index', '20000');
+	d.css('z-index', '99000');
 	d.css('background-color', '#fff');
 	d.css('padding', '5px 5px');
 	d.css('box-shadow', '0px 0px 5px #000')
