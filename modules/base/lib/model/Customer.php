@@ -92,5 +92,11 @@ class Customer extends \core\db\DBObject {
     public function getCreatedFormat($f='d-m-Y H:i:s') {
         return format_datetime($this->getField('created'), $f);
     }
+    
+    
+    public function __toString() {
+        return $this->getName();
+    }
+    
 }
 
