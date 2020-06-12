@@ -272,6 +272,9 @@ class mailController extends BaseController {
                 }
             }
             
+            // close session to prevent hanging
+            session_write_close();
+            
             $ma = new SolrMailActions();
             if ($connector && $imapFolderId) {
                 $ma->moveMail($connector, $mail, $imapFolderId);
@@ -309,6 +312,8 @@ class mailController extends BaseController {
                 throw new ObjectNotFoundException('Mail not found');
             }
             
+            // close session to prevent hanging
+            session_write_close();
             
             /** @var \webmail\mail\MailProperties $mailProperties */
             $mailProperties = $mail->getProperties();
@@ -349,6 +354,8 @@ class mailController extends BaseController {
                 throw new ObjectNotFoundException('Mail not found');
             }
             
+            // close session to prevent hanging
+            session_write_close();
             
             $ma = new SolrMailActions();
             $r = $ma->markAsSpam($mail);
