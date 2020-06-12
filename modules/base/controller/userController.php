@@ -41,6 +41,38 @@ class userController extends FormController {
         return $this->render();
     }
     
+    
+    
+    
+    public function action_select2() {
+        
+        $userService = object_container_get(UserService::class);
+        
+        $r = $userService->search(0, 20, $_REQUEST);
+        
+        
+        $arr = array();
+        
+        if (isset($_REQUEST['name']) == false || trim($_REQUEST['name']) == '') {
+            $arr[] = array(
+                'id' => '0',
+                'text' => t('Make your choice'),
+            );
+        }
+        foreach($r->getObjects() as $user) {
+            $arr[] = array(
+                'id' => $user['user_id'],
+                'text' => $user['username']
+            );
+        }
+        
+        
+        $result = array();
+        $result['results'] = $arr;
+        
+        $this->json($result);
+        
+    }
 }
 
 

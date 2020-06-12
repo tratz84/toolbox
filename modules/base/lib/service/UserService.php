@@ -26,7 +26,7 @@ class UserService extends ServiceBase {
     
     
     public function search($start, $limit, $opts=array()) {
-        $fields = array('user_id', 'username', 'email', 'edited', 'created', 'user_type', 'firstname', 'lastname');
+        $fields = array('user_id', 'username', 'email', 'edited', 'created', 'user_type', 'firstname', 'lastname', 'fullname');
         
         return $this->daoSearch(UserDAO::class, $opts, $fields, $start, $limit);
     }

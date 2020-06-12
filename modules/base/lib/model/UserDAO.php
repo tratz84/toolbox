@@ -5,6 +5,7 @@ namespace base\model;
 
 
 use core\db\query\QueryBuilderWhere;
+use core\db\query\QueryBuilderWhereContainer;
 
 class UserDAO extends \core\db\DAOObject {
 
@@ -28,6 +29,20 @@ class UserDAO extends \core\db\DAOObject {
 	    
 	    $qb = $this->createQueryBuilder();
 	    $qb->setTable('base__user');
+	    
+	    if (isset($opts['name']) && trim($opts['name']) != '') {
+	        $q1 = QueryBuilderWhere::whereRefByVal('username', 'LIKE', '%'.$opts['name'].'%');
+	        $q2 = QueryBuilderWhere::whereRefByVal("concat(firstname, ' ', lastname, ' ', firstname)"
+	            , 'LIKE', '%'.$opts['name'].'%');
+	        
+	        $qbwc = new QueryBuilderWhereContainer();
+	        $qbwc->setJoinMethod('OR');
+	        $qbwc->addWhere( $q1 );
+	        $qbwc->addWhere( $q2 );
+	        
+	        $qb->addWhere( $qbwc );
+	    }
+	    
 	    
 	    if (isset($opts['username']) && trim($opts['username']) != '') {
 	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('username', 'LIKE', '%'.$opts['username'].'%'));
