@@ -18,23 +18,17 @@ class ModuleUserCapabilityForm extends \core\forms\CodegenBaseForm {
 	
 	
 	public function codegen() {
-		$func1 = function() {  
+		$func1 = function() {  return codegen_map_modules(); }; 
 		
-		$map = array();
-		$map[''] = 'Make your choice';
-		foreach(module_list() as $m => $p) {
-		$map[$m] = $m;
-		}
-		
-		return $map;
-		 }; 
-		
-		$w1 = new \core\forms\SelectField('module_name', NULL, $func1(), 'Module');
+		$w1 = new \core\forms\SelectField('module_name', NULL, $func1(), t('Module'));
 		$this->addWidget( $w1 );
 		$w2 = new \codegen\form\UserCapabilityListEdit();
+		$w2->setName( NULL );
+		$w2->setMethodObjectList( NULL );
 		$this->addWidget( $w2 );
 		
 	}
+
 
 
 
