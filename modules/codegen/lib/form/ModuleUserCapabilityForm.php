@@ -23,11 +23,12 @@ class ModuleUserCapabilityForm extends \core\forms\CodegenBaseForm {
 		$w1 = new \core\forms\SelectField('module_name', NULL, $func1(), t('Module'));
 		$this->addWidget( $w1 );
 		$w2 = new \codegen\form\UserCapabilityListEdit();
-		$w2->setName( NULL );
-		$w2->setMethodObjectList( NULL );
+		$w2->setName( 'capabilities' );
+		$w2->setMethodObjectList( 'capabilities' );
 		$this->addWidget( $w2 );
 		
 	}
+
 
 
 
