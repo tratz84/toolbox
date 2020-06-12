@@ -49,6 +49,7 @@ class RadioField extends BaseWidget {
         $html = '';
 
         $extraClass = $this->hasError() ? 'error' : '';
+        $extraClass .= ' ' . slugify($this->getName()).'-widget';
         
         $html .= '<div class="widget radio-field-widget '.$extraClass.'">';
         $html .= '<label>'.esc_html($this->getLabel()).'</label>';
