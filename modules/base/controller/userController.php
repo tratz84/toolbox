@@ -28,7 +28,7 @@ class userController extends FormController {
     }
     
     public function action_edit($opts = array()) {
-        parent::action_edit(['render' => false]);
+        parent::action_edit(['render' => false, 'stay_after_save' => true]);
         
         
         if ($this->object->getPassword() != '') {
