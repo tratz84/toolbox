@@ -768,6 +768,8 @@ $(document).keydown(function(evt) {
 function close_popup() {
 	$('.popup-element').remove();
 	$(document.body).removeClass('popup-container-visible');
+	
+	$(window).trigger('close-popup');
 }
 
 
