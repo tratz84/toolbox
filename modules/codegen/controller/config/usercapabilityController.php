@@ -20,6 +20,11 @@ class usercapabilityController extends BaseController {
             }
         }
         
+        // sort
+        usort($this->capabilities, function($o1, $o2) {
+            return strcmp($o1['name'], $o2['name']);
+        });
+        
         
         return $this->render();
     }
