@@ -3,6 +3,8 @@
 
 $lang = array();
 
+$lang['modulename.payment']     = 'Betalingen';
+
 $lang['Import payments'] = 'Betalingen importeren';
 $lang['Payment methods'] = 'Betalingsmogelijkheden';
 
