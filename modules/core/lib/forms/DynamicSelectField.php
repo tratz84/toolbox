@@ -51,7 +51,13 @@ class DynamicSelectField extends BaseWidget {
         $html .= '<div class="widget dynamic-select-field-widget '.$extraClass.'">';
         $html .= '<label>'.esc_html($this->getLabel()).'</label>';
         
-        $html .= '<select name="'.esc_attr($this->getName()).'" class="select2-widget" data-url="'.esc_attr($this->endpoint).'">';
+        $extraAttributes = '';
+        foreach($this->attributes as $name => $val) {
+            $extraAttributes .= esc_attr($name).'="'.esc_attr($val).'" ';
+        }
+        
+        
+        $html .= '<select name="'.esc_attr($this->getName()).'" class="select2-widget" data-url="'.esc_attr($this->endpoint).'" '.$extraAttributes.'>';
         if ($this->getValue() || $this->defaultText) {
             $html .= '<option value="'.esc_attr($val).'">'.esc_html($this->defaultText).'</option>';
         }
