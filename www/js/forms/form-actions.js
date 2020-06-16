@@ -152,30 +152,6 @@ jQuery(document).ready(function($) {
 		});
 	}
 	
-	function setPopupFormErrors(container, errorList) {
-
-		// remove old errors
-		var pelc = $('.popup-error-list-container');
-		pelc.html('');
-		
-		$(container).find('.widget.error').removeClass('error');
-		
-		// set new errors
-		pelc.append('<div class="errors error-list"><ul></ul></div>');
-		
-		for(var i in errorList) {
-			var err = errorList[i];
-			
-			var li = $('<li />');
-			li.text(err.label + ' - ' + err.message);
-			
-			pelc.find('ul').append( li );
-			
-			$(container).find('input[name=' + err.field + ']').closest('.widget').addClass('error');
-		}
-		
-	}
-	
 	
 	function setPopupFields(tr, popup) {
 		// loop through popup fields
@@ -438,6 +414,29 @@ function ListEditFormWidget(container) {
 }
 
 
+function setPopupFormErrors(container, errorList) {
+
+	// remove old errors
+	var pelc = $('.popup-error-list-container');
+	pelc.html('');
+	
+	$(container).find('.widget.error').removeClass('error');
+	
+	// set new errors
+	pelc.append('<div class="errors error-list"><ul></ul></div>');
+	
+	for(var i in errorList) {
+		var err = errorList[i];
+		
+		var li = $('<li />');
+		li.text(err.label + ' - ' + err.message);
+		
+		pelc.find('ul').append( li );
+		
+		$(container).find('input[name=' + err.field + ']').closest('.widget').addClass('error');
+	}
+	
+}
 
 function uploadFilesFieldDelete_Click(obj) {
 	var container = $(obj).closest('.upload-files-field-widget');
