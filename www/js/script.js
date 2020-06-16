@@ -668,7 +668,7 @@ function showInfoByUrl(obj, url, opts) {
 			type: 'POST',
 			data: opts.data ? opts.data : {},
 			success: function(data, xhr, textStatus) {
-				showInfo(obj, data);
+				showInfo(obj, data, opts);
 			}
 		});
 	}, opts.timeout ? opts.timeout : 1);
@@ -688,7 +688,9 @@ function hideInfo() {
 	$('.show-info-container').remove();
 }
 
-function showInfo(obj, html) {
+function showInfo(obj, html, opts) {
+	opts = opts ? opts : {};
+	
 	hideInfo();
 	
 	var offset = $(obj).offset();
@@ -704,14 +706,24 @@ function showInfo(obj, html) {
 	
 	$(document.body).prepend(d);
 
-	// align above
-	d.css('top', offset.top - ($(d).outerHeight(true)+3));
+	if (opts.top) {
+		opts.top -= ($(d).outerHeight(true)+3);
+		d.css('top', opts.top);
+	} else {
+		// align above
+		d.css('top', offset.top - ($(d).outerHeight(true)+3));
+	}
 	
 	// center
-	var center = offset.left + ($(obj).outerWidth(true)/2);
-	center = center - $(d).outerWidth(true) / 2;
-	
-	d.css('left', center);
+	if (opts.middle) {
+		opts.middle -= $(d).outerWidth(true) / 2;
+		d.css('left', opts.middle);
+	} else {
+		var center = offset.left + ($(obj).outerWidth(true)/2);
+		center = center - $(d).outerWidth(true) / 2;
+		
+		d.css('left', center);
+	}
 }
 
 
