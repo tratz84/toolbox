@@ -179,7 +179,7 @@ jQuery(document).ready(function($) {
 	
 	function setPopupFields(tr, popup) {
 		// loop through popup fields
-		$(popup).find('input, select').each(function(index, node) {
+		$(popup).find('input, select, textarea').each(function(index, node) {
 			
 			// set hidden fields in main form
 			$(tr).find('input[type=hidden]').each(function(index2, node2) {
@@ -258,7 +258,9 @@ jQuery(document).ready(function($) {
 					var inputName = allFields[cnt];
 					var inp = $('<input type="hidden" />');
 					inp.attr('name', inputName);
-					inp.val( popup.find('[name='+allFields[cnt]+']').val() )
+					
+					var obj = popup.find('[name='+allFields[cnt]+']');
+					inp.val( obj.val() )
 					
 					$(td).append(inp);
 				}
