@@ -3,6 +3,8 @@
 
 $lang = array();
 
+$lang['Year']                   = 'Jaar';
+
 $lang['userType.admin']         = 'Administrator';
 $lang['userType.user']          = 'Gebruiker';
 $lang['userType.external_user'] = 'Externe gebruiker';
