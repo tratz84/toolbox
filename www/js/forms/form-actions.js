@@ -264,6 +264,8 @@ jQuery(document).ready(function($) {
 				}
 			}
 			
+			$(td).addClass(slugify(fields[i]));
+
 			
 			var s = $('<span class="field-value" />');
 			s.data('fieldname', fields[i]);
@@ -301,6 +303,8 @@ jQuery(document).ready(function($) {
 		$(listFormWidget).find('tr.empty-list').remove();
 		
 		handleCounters( listFormWidget );
+		
+		$(window).trigger('list-form-updated');
 	}
 	
 	

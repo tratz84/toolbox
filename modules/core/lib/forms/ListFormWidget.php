@@ -146,7 +146,7 @@ class ListFormWidget extends ListWidget {
             }
             
             foreach($this->fieldLabels as $l) {
-                $html .= '<th>'.esc_html($l).'</th>';
+                $html .= '<th>'.esc_html(t($l)).'</th>';
             }
             
             $html .= '<th class="actions"></th>';
