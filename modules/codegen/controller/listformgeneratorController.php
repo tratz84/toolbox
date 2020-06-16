@@ -30,9 +30,9 @@ class listformgeneratorController extends BaseController {
         }
         
         
-        $this->form->bind( $_REQUEST );
-        
         if (is_post()) {
+            $this->form->bind( $_REQUEST );
+            
             if ($this->form->validate()) {
                 // save
                 $module_name = $this->form->getWidgetValue('module_name');

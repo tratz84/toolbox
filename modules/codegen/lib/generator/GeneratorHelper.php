@@ -44,6 +44,10 @@ class GeneratorHelper {
     public static function getFormClassesMap() {
         $classes = self::getFormClasses();
         
+        usort($classes, function($c1, $c2) {
+            return strcmp($c1['class'], $c2['class']);
+        });
+        
         $map = array();
         foreach($classes as $cl) {
             $map[$cl['class']] = $cl['class'];
