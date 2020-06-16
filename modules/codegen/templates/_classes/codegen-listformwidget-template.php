@@ -4,10 +4,10 @@
 namespace <?= $namespace ?>;
 
 
-class ListInvoiceLineWidget extends \core\forms\ListFormWidget {
+class <?= $classname ?> extends \core\forms\ListFormWidget {
     
     public function __construct() {
-        parent::__construct('<?= $formClass ?>', 'objectList');
+        parent::__construct(<?= var_export($formClass, true) ?>, 'objectList');
         
         $this->codegen();
     }

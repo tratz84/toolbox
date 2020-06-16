@@ -9,6 +9,7 @@ use codegen\form\widgetoptions\ContainerOptionsForm;
 use codegen\form\widgetoptions\DatePickerOptionsForm;
 use codegen\form\widgetoptions\HiddenOptionsForm;
 use codegen\form\widgetoptions\ListEditWidgetsOptionsForm;
+use codegen\form\widgetoptions\ListFormWidgetsOptionsForm;
 use codegen\form\widgetoptions\RadioOptionsForm;
 use codegen\form\widgetoptions\SelectOptionsForm;
 use codegen\form\widgetoptions\TextareaOptionsForm;
@@ -99,6 +100,18 @@ class GeneratorHelper {
         }]);
             
         $classes = $pcm->classesWithBaseClass( \core\forms\ListEditWidget::class, ['recursive' => false] );
+        
+        return $classes;
+    }
+
+    
+    public static function getListFormWidgetClasses() {
+        $pcm = new \codegen\parser\PhpCodeMeta();
+        $pcm->parseFiles(['filter' => function($f ){
+            return endsWith($f, 'ListForm.php');
+        }]);
+            
+        $classes = $pcm->classesWithBaseClass( \core\forms\ListFormWidget::class, ['recursive' => false] );
         
         return $classes;
     }
@@ -220,6 +233,16 @@ class GeneratorHelper {
                 'class' => $lew['class'],
                 'editor' => ListEditWidgetsOptionsForm::class,
                 'label' => $lew['class']                        // TODO.. set to description or something?
+            );
+        }
+        
+        $lfwClasses = self::getListFormWidgetClasses();
+        foreach($lfwClasses as $lfw) {
+            $formWidgets[] = array(
+                'type' => 'widget',
+                'class' => $lfw['class'],
+                'editor' => ListFormWidgetsOptionsForm::class,
+                'label' => $lfw['class']                        // TODO.. set to description or something?
             );
         }
         

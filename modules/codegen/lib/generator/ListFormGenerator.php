@@ -71,9 +71,9 @@ class ListFormGenerator {
         $classname = preg_replace_callback('/(-.)/', function($word) { return strtoupper(substr($word[0], 1)); }, $classname);
         $classname = ucfirst($classname);
         
-        if (endsWith($classname, 'List') == false) {
-            $classname = $classname . 'List';
-        }
+//         if (endsWith($classname, 'List') == false) {
+//             $classname = $classname . 'List';
+//         }
         
         return $classname;
     }
@@ -95,6 +95,7 @@ class ListFormGenerator {
         $vars = array();
         $vars['namespace'] = $module.'\\form';
         $vars['classname'] = $classname;
+        $vars['formClass'] = $this->data['form_class'];
         $tpl = get_template(module_file('codegen', 'templates/_classes/codegen-listformwidget-template.php'), $vars);
         
         $libdir = module_file($module, 'lib');
@@ -119,12 +120,31 @@ class ListFormGenerator {
         $module = $this->data['module_name'];
         $classname = $this->getClassName();
         
+        $code = '';
+        
+        // set fields
+        $fields = array();
+        $fieldLabels = array();
+        foreach($this->data['fields'] as $arr) {
+            $fields[] = $arr['fieldname'];
+            $fieldLabels[] = $arr['label'];
+        }
+        
+        $code .= '$this->setFields(' . var_export( $fields, true ) . ');' . PHP_EOL;
+        $code .= '$this->setFieldLabels(' . var_export( $fieldLabels, true ) . ');' . PHP_EOL;
+        
+        
+        // set public-fields
+        $publicFields = array();
+        foreach($this->data['publicfields'] as $pf) {
+            $publicFields[] = $pf['publicfieldname'];
+        }
+        $code .= '$this->setPublicFields(' . var_export( $publicFields, true ) . ');' . PHP_EOL;
+        
+        
+        
         $path = module_file($module, '/lib/form/'.$classname.'.php');
-        $json = json_decode( $this->data['data'] );
         
-        //         var_export($json);exit;
-        
-        $code = $this->addJsonItems( $json );
         
         $pcp = new PhpCodeParser();
         $pcp->parse( $path );
@@ -148,74 +168,6 @@ class ListFormGenerator {
         file_put_contents($path, $phpcode);
     }
     
-    protected function addJsonItems($items, $parentVariable=null) {
-        $html = '';
-        
-        for($x=0; $x < count($items); $x++) {
-            $item = $items[$x];
-            
-            $classname = $item->class;
-            
-            // create object
-            $rf = new \ReflectionClass($classname);
-            $cm = $rf->getConstructor();
-            
-            // build params-array for constructor parameters
-            $params = array();
-            $lastNonDefaultParam = 0;
-            $cnt=0;
-            foreach($cm->getParameters() as $func_param) {
-                // optionItems? (SelectField etc)
-                if ($func_param->name == 'optionItems') {
-                    $params[] = $this->optionsToArray( $item->optionItems);
-                    $lastNonDefaultParam = $cnt;
-                }
-                // value found?
-                else if (isset($item->{$func_param->name})) {
-                    $params[] = var_export($item->{$func_param->name}, true);
-                    $lastNonDefaultParam = $cnt;
-                }
-                // default parameter-value?
-                else if ($func_param->isOptional()) {
-                    $params[] = var_export($func_param->getDefaultValue(), true);
-                }
-                // default to null
-                else {
-                    $params[] = var_export(null, true);
-                    $lastNonDefaultParam = $cnt;
-                }
-                
-                $cnt++;
-            }
-            
-            
-            
-            // initiate
-            $varname = '$w'.$this->widgetNo;
-            $this->widgetNo++;
-            
-            $html .= $varname.' = new \\' . $classname . '(';
-            for($z=0; $z < count($params) && $z <= $lastNonDefaultParam; $z++) {
-                if ($z > 0) $html .= ', ';
-                $html .= $params[$z];
-            }
-            $html .= ');' . PHP_EOL;
-            
-            $html .= ($parentVariable?$parentVariable:'$this').'->addWidget( '.$varname.' );' . PHP_EOL;
-            
-            
-            //             if (isset($item->children) && count($item->children)) {
-            //                 $html .= "\n";
-            //                 $html .= $this->addJsonItems($item->children, $varname);
-            //             }
-        }
-        
-        if ($parentVariable == null) {
-            $html = implode("\n", $this->anonymousFunctions) . "\n\n" . $html;
-        }
-        
-        return $html;
-    }
     
     protected function optionsToArray($str) {
         $map = array();
