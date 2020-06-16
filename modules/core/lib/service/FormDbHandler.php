@@ -187,8 +187,20 @@ class FormDbHandler {
             $objDao->mergeFormListMTON( $linkTable, $pk, $pk_id, $newList, $sortfield );
         }
         
-        // TODO: save MTO1 relations
-        
+        // save MTO1 relations
+        foreach($this->mapper->getMTO1() as $rel) {
+            $objDao = object_container_get( $rel['daoObject'] );
+            $linkObj = object_container_create( $objDao->getObjectName() );
+            $linkTable = $linkObj->getTableName();
+            
+            $newList = $form->getWidget( $rel['name'] )->asArray();
+            $sortfield = null;
+            if ($linkObj->hasDatabaseField('sort')) {
+                $sortfield = 'sort';
+            }
+            
+            $objDao->mergeFormListMTO1($pk, $pk_id, $newList, $sortfield );
+        }
         
         // logging
         $company_id = null;
