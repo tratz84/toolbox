@@ -58,7 +58,7 @@ class RadioField extends BaseWidget {
             
             $html .= '<input type="radio" class="radio-ui" id="'.esc_attr($idslug).'" name="'.$this->getName().'" value="'.esc_attr($key).'" '.($key == $this->getValue()?'checked="checked"':'').' /> ';
             $html .= '<label for="'.esc_attr($idslug).'" class="radio-ui-placeholder"></label> ';
-            $html .= '<label style="float: none; width: auto;" for="'.esc_attr($idslug).'" >'.esc_html($val).'</label> ';
+            $html .= '<label class="widget-text" for="'.esc_attr($idslug).'" >'.esc_html($val).'</label> ';
         }
         $html .= '</div>';
         
