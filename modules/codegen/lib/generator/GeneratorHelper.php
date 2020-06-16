@@ -20,6 +20,7 @@ use core\forms\HiddenField;
 use core\forms\HtmlField;
 use core\forms\MonthField;
 use core\forms\RadioField;
+use core\forms\Select2Field;
 use core\forms\SelectField;
 use core\forms\TextField;
 use core\forms\TextareaField;
@@ -168,6 +169,12 @@ class GeneratorHelper {
             'class' => SelectField::class,
             'editor' => SelectOptionsForm::class,
             'label' => 'Select'
+        );
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => Select2Field::class,
+            'editor' => SelectOptionsForm::class,
+            'label' => 'Select2'
         );
         $formWidgets[] = array(
             'type' => 'widget',
