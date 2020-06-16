@@ -122,6 +122,12 @@ class ListFormGenerator {
         
         $code = '';
         
+        // sortable?
+        if (@$this->data['sortable']) {
+            $code .= '$this->setSortable( true );' . PHP_EOL;
+        }
+        
+        
         // set fields
         $fields = array();
         $fieldLabels = array();
