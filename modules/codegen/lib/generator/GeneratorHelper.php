@@ -3,6 +3,7 @@
 namespace codegen\generator;
 
 use base\forms\CustomerSelectWidget;
+use base\forms\UserSelectWidget;
 use codegen\form\widgetoptions\CheckboxOptionsForm;
 use codegen\form\widgetoptions\ContainerOptionsForm;
 use codegen\form\widgetoptions\DatePickerOptionsForm;
@@ -192,6 +193,12 @@ class GeneratorHelper {
             'class' => HtmlField::class,
 //             'editor' => HtmlOptionsForm::class,
             'label' => 'Html-field'
+        );
+        
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => UserSelectWidget::class,
+            'label' => 'User select'
         );
         
         

@@ -43,7 +43,7 @@ class ListWidget extends WidgetContainer {
             $objects = $obj->$get_func();
         } else if (isset($obj->{$this->methodObjectList})) {
             $objects = $obj->{$this->methodObjectList};
-        } else if (isset($obj[$this->methodObjectList])) {
+        } else if (is_array($obj) && isset($obj[$this->methodObjectList])) {
             $objects = $obj[$this->methodObjectList];
         } else {
             // might happen if field list-field is empty
