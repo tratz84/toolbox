@@ -41,9 +41,9 @@ class FilesyncSelectField extends BaseWidget {
         
         // buttons
         $html .= '<div class="filesync-select-field-buttons">';
-        $html .= '<input type="button" class="btnNewFile" value="New file" data-store-id="'.esc_attr($selectedStoreId).'" /> ';
-        $html .= '<input type="button" class="btnExistingFile" value="Existing file" /> ';
-        $html .= '<input type="button" class="btnUnset" value="Unset" /> ';
+        $html .= '<input type="button" class="btnNewFile" value="'.esc_attr(t('New file')).'" data-store-id="'.esc_attr($selectedStoreId).'" /> ';
+        $html .= '<input type="button" class="btnExistingFile" value="'.esc_attr(t('Existing file')).'" /> ';
+        $html .= '<input type="button" class="btnUnset" value="'.esc_attr(t('Unset')).'" /> ';
         $html .= '</div>';
         
         
