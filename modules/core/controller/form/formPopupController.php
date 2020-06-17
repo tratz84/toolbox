@@ -18,12 +18,14 @@ class formPopupController extends BaseController {
         
         $formClassName = $_REQUEST['formClass'];
         
-        // TODO: check if formClassName ends with 'Form' ?
-        
-        $this->form = new $formClassName();
-        if (is_a($this->form, BaseForm::class) == false) {
+        // check if formClassName is instance of BaseForm
+        $ref = new ReflectionClass( $formClassName );
+        if ($ref->isSubclassOf( BaseForm::class ) == false) {
+            // TODO: blacklist user?
             throw new SecurityException('Non-form instantiated');
         }
+        
+        $this->form = new $formClassName();
         
         $fieldSet = $this->form->bind( $_REQUEST );
         
@@ -42,13 +44,15 @@ class formPopupController extends BaseController {
         
         $formClassName = $_REQUEST['formClass'];
         
-        // TODO: check if formClassName ends with 'Form' ?
-        
-        $form = new $formClassName();
-        if (is_a($form, BaseForm::class) == false) {
+        // check if formClassName is instance of BaseForm
+        $ref = new ReflectionClass( $formClassName );
+        if ($ref->isSubclassOf( BaseForm::class ) == false) {
+            // TODO: blacklist user?
             throw new SecurityException('Non-form instantiated');
         }
         
+        
+        $form = new $formClassName();
         
         $form->bind( $_REQUEST );
         

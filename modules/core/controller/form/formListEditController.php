@@ -18,12 +18,14 @@ class formListEditController extends BaseController {
         
         $formClassName = $_REQUEST['formClass'];
         
-        // TODO: check if formClassName ends with 'Form' ?
-        
-        $listEditWidget = new $formClassName();
-        if (is_a($listEditWidget, ListEditWidget::class) == false) {
+        // check if formClassName is instance of ListEditWidget
+        $ref = new ReflectionClass( $formClassName );
+        if ($ref->isSubclassOf( ListEditWidget::class ) == false) {
+            // TODO: blacklist user?
             throw new SecurityException('Non-form instantiated');
         }
+        
+        $listEditWidget = new $formClassName();
         
         
         
