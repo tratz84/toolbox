@@ -85,6 +85,14 @@ class archiveController extends BaseController {
         $this->form->addWidget($selectStoreId);
         
         
+        if (get_var('customer_id'))
+            $this->form->getWidget('customer_id')->bindObject([ 'customer_id' => get_var('customer_id') ]);
+        if (get_var('company_id'))
+            $this->form->getWidget('customer_id')->bindObject([ 'customer_id' => 'company-'.get_var('company_id') ]);
+        if (get_var('person_id'))
+            $this->form->getWidget('customer_id')->bindObject([ 'customer_id' => 'person-'.get_var('person_id') ]);
+        
+        
         $this->setShowDecorator(false);
         return $this->render();
     }
