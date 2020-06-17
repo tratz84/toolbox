@@ -1176,14 +1176,20 @@ function valid_regexp($pattern) {
 }
 
 
-function days_between($start, $end) {
+function days_between($start, $end, $absolute=true) {
     $s = date2unix($start);
     $e = date2unix($end);
     
     $dt1 = new DateTime(date('Y-m-d', $s));
     $dt2 = new DateTime(date('Y-m-d', $e));
     
-    return $dt1->diff($dt2, true)->days;
+    if ($absolute) {
+        return $dt1->diff($dt2, true)->days;
+    } else {
+        $diff = $dt1->diff($dt2, false);
+        
+        return $diff->days * ($diff->invert?-1:1);
+    }
 }
 
 function months_between($start, $end) {

@@ -362,6 +362,8 @@ function ListEditFormWidget(container) {
 				
 				$(me.container).find('tbody').append( row );
 				
+				applyWidgetFields( row );
+				
 				me.handleCounters();
 				
 				if (callback) {
