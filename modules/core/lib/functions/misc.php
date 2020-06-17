@@ -841,6 +841,10 @@ function next_day($date, $no=1) {
     return date('Y-m-d', $t);
 }
 
+function next_week($date, $no) {
+    return next_day($date, $no * 7);
+}
+
 
 function date_add_hours( $date, $hours, $format='Y-m-d H:i:s' ) {
     $dt = new DateTime( $date, new DateTimeZone(date_default_timezone_get()) );
