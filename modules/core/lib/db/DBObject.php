@@ -259,6 +259,7 @@ class DBObject {
         }
         
         $res = DatabaseHandler::getInstance()->getResource($this->resourceName);
+        
         $this->lastError = $res->error;
         
         return false;

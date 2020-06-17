@@ -312,7 +312,9 @@ class MysqlQueryBuilder extends QueryBuilder {
     public function queryUpdate() {
         $sql = $this->createUpdate();
         
-        return $this->dbconnection->query($sql, $this->params);
+        $this->dbconnection->query($sql, $this->params);
+        
+        return $this->dbconnection->getAffectedRows();
     }
     
 }

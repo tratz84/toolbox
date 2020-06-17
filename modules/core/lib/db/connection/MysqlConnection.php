@@ -22,6 +22,8 @@ class MysqlConnection extends DBConnection {
     protected $lastQuery = null;
     protected $transactionCount = 0;
     
+    protected $affected_rows;
+    
     public function __construct() {
         
     }
@@ -44,6 +46,7 @@ class MysqlConnection extends DBConnection {
     public function getDatabaseName() { return $this->databaseName; }
     
     public function getLastQuery() { return $this->lastQuery; }
+    public function getAffectedRows() { return $this->affected_rows; }
     
     public function connect() {
         $this->mysqli = new \mysqli($this->host, $this->username, $this->password, $this->databaseName);
@@ -147,6 +150,8 @@ class MysqlConnection extends DBConnection {
         DatabaseHandler::getInstance()->setLastQuery($str);
         
         $r = $dbh->query($str);
+        
+        $this->affected_rows = $dbh->affected_rows;
         
         if ($r === false) {
             $ex = new DatabaseException('SQL error: ' . $dbh->error . ' ('.$dbh->errno.')');
