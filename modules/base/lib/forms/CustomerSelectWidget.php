@@ -13,7 +13,7 @@ class CustomerSelectWidget extends DynamicSelectField {
 
     public function __construct($name='customer_id', $defaultValue=null, $defaultText=null, $endpoint=null, $label=null) {
         
-        if ($defaultText == null) $defaultText = 'Maak uw keuze';
+        if ($defaultText == null) $defaultText = t('Make your choice');
         if ($endpoint == null) $endpoint = '/?m=base&c=customer&a=select2';
         if ($label == null) $label = 'Klant';
         
@@ -59,6 +59,8 @@ class CustomerSelectWidget extends DynamicSelectField {
             $fullname = $ps->getFullname($personId);
             
             $this->setDefaultText( $fullname );
+        } else {
+            $this->setDefaultText( t('Make your choice') );
         }
     }
     
