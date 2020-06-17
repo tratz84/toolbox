@@ -44,7 +44,7 @@ class ActivityDAO extends \core\db\DAOObject {
 	    }
 	    
 	    if (isset($opts['ref_object']) && trim($opts['ref_object'])) {
-	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('base__activity.ref_object', 'LIKE', '%'.$opts['ref_object']));
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('base__activity.ref_object', 'LIKE', '%'.addslashes($opts['ref_object'])));
 	    }
 	    
 	    if (isset($opts['ref_id']) && trim($opts['ref_id'])) {
