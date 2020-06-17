@@ -179,7 +179,7 @@ class ListFormWidget extends ListWidget {
                         $v = $this->getValueObject($o, $f);
                         
                         
-                        $html .= '<td class="list-field">';
+                        $html .= '<td class="list-field '.slugify($f).'">';
                         
                         if ($fieldNo == 0) {
                             foreach($this->getHiddenFields() as $pb) {

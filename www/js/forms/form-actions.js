@@ -183,6 +183,8 @@ jQuery(document).ready(function($) {
 			});
 			
 		});
+		
+		$(window).trigger('list-form-updated');
 	}
 	
 	
