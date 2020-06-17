@@ -210,11 +210,17 @@ class FormDbHandler {
         if (method_exists($dbObj, 'getPersonId'))
             $person_id = $dbObj->getPersonId();
         
+        // ref_id set?
+        $refId = null;
+        if ($this->mapper->getLogRefIdField()) {
+            $refId = $dbObj->getField( $this->mapper->getLogRefIdField() );
+        }
+        
         if ($isNew) {
-            ActivityUtil::logActivity($company_id, $person_id, $this->mapper->getLogRefObject(), null, $this->mapper->getLogCreatedCode(), $this->mapper->getLogCreatedText(), $fch->getHtml());
+            ActivityUtil::logActivity($company_id, $person_id, $this->mapper->getLogRefObject(), $refId, $this->mapper->getLogCreatedCode(), $this->mapper->getLogCreatedText(), $fch->getHtml());
         } else {
             // TODO: check if object is actually changed (or always create a record, so it's logged that someone clicked 'save' ?)
-            ActivityUtil::logActivity($company_id, $person_id, $this->mapper->getLogRefObject(), null, $this->mapper->getLogUpdatedCode(), $this->mapper->getLogUpdatedText(), $fch->getHtml());
+            ActivityUtil::logActivity($company_id, $person_id, $this->mapper->getLogRefObject(), $refId, $this->mapper->getLogUpdatedCode(), $this->mapper->getLogUpdatedText(), $fch->getHtml());
         }
         
         hook_eventbus_publish([$this, $dbObj], 'core', 'FormDbHandler::saveForm-end');
@@ -283,8 +289,15 @@ class FormDbHandler {
         if (method_exists($dbObj, 'getPersonId'))
             $person_id = $dbObj->getPersonId();
         
+        // ref_id set?
+        $refId = null;
+        if ($this->mapper->getLogRefIdField()) {
+            $refId = $dbObj->getField( $this->mapper->getLogRefIdField() );
+        }
+        
+        
         $fch = FormChangesHtml::formDeleted($form);
-        ActivityUtil::logActivity($company_id, $person_id, $this->mapper->getLogRefObject(), null, $this->mapper->getLogDeletedCode(), $this->mapper->getLogDeletedText(), $fch->getHtml());
+        ActivityUtil::logActivity($company_id, $person_id, $this->mapper->getLogRefObject(), $refId, $this->mapper->getLogDeletedCode(), $this->mapper->getLogDeletedText(), $fch->getHtml());
     }
     
     

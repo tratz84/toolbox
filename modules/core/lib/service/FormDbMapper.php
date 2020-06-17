@@ -23,6 +23,7 @@ class FormDbMapper {
     protected $relationMTO1 = array();
     
     protected $logRefObject = null;
+    protected $logRefIdField = null;
     protected $logCreatedCode = null;
     protected $logUpdatedCode = null;
     protected $logDeletedCode = null;
@@ -98,6 +99,10 @@ class FormDbMapper {
             'opts'      => $opts
         ];
     }
+    
+
+    public function setLogRefIdField( $fieldName ) { $this->logRefIdField = $fieldName; }
+    public function getLogRefIdField() { return $this->logRefIdField; }
     
     
     public function setLogRefObject( $str ) { $this->logRefObject = $str; }
