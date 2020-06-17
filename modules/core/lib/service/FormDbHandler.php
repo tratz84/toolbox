@@ -29,6 +29,11 @@ class FormDbHandler {
     }
     
     
+    /**
+     * 
+     * @return \core\service\FormDbMapper
+     */
+    public function getMapper() { return $this->mapper; }
     
     
     public function readObject($id) {
