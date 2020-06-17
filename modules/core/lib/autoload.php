@@ -65,6 +65,9 @@ spl_autoload_register(function($name) {
     
     // strip module-name @ classname
     foreach($modules as $moduleName => $modulePath) {
+        // TODO: check if module is enabled?
+//         if (in_array($moduleName, ['admin']) == false && ctx()->isModuleEnabled($moduleName) == false) continue;
+        
         if (strpos($classPath, $moduleName.'/') === 0) {
             $classPath = substr($classPath, strlen($moduleName)+1);
             $moduleClassName = $moduleName;
