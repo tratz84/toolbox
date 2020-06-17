@@ -1225,7 +1225,7 @@ function validate_email(mail)  {
 
 
 function valid_date(value) {
-	if (typeof value == 'undefined') {
+	if (typeof value == 'undefined' || value === null) {
 		return false;
 	}
 
