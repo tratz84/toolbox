@@ -15,6 +15,11 @@ class activityOverviewController extends BaseController {
         if (isset($this->personId) == false)
             $this->personId = 0;
         
+        if (isset($this->ref_object) == false)
+            $this->ref_object = '';
+        if (isset($this->ref_id) == false)
+            $this->ref_id = '';
+        
         
         $this->setShowDecorator(false);
         $this->render();

@@ -12,7 +12,7 @@ atc.setRowClick(function(row, evt) {
 	show_popup(appUrl('/?m=base&c=report/activityReport&a=popup&id=' + $(row).data('record').activity_id));
 });
 
-atc.setConnectorUrl( '/?m=base&c=activityOverview&a=search&company_id=<?= (int)$companyId ?>&person_id=<?= (int)$personId ?>' );
+atc.setConnectorUrl( '/?m=base&c=activityOverview&a=search&company_id=<?= (int)$companyId ?>&person_id=<?= (int)$personId ?>&ref_object=<?= $ref_object ?>&ref_id=<?= $ref_id ?>' );
 
 
 atc.addColumn({
