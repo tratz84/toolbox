@@ -37,11 +37,10 @@ class SettingsService extends ServiceBase {
         if (isset($map['companiesEnabled']) == false)
             $map['companiesEnabled'] = 0;
                 
-        if (isset($map['offerModuleEnabled']) == false)
+        if (isset($map['invoiceModuleEnabled']) == false) {
             $map['offerModuleEnabled'] = 0;
-        
-        if (isset($map['invoiceModuleEnabled']) == false)
             $map['invoiceModuleEnabled'] = 0;
+        }
                 
         if (isset($map['rentalModuleEnabled']) == false)
             $map['rentalModuleEnabled'] = 0;

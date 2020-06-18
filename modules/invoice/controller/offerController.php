@@ -131,9 +131,7 @@ class offerController extends BaseController {
         $eb = $this->oc->get(EventBus::class);
         $this->actionContainer = new ActionContainer('offer', $offer->getOfferId());
         
-        if ($this->ctx->getSetting('invoiceModuleEnabled')) {
-            $this->actionContainer->addItem('create-invoice', '<a href="javascript:void(0);" onclick="generateInvoice();">'.strOrder(1).' aanmaken</a>', 5);
-        }
+        $this->actionContainer->addItem('create-invoice', '<a href="javascript:void(0);" onclick="generateInvoice();">'.strOrder(1).' aanmaken</a>', 5);
         
         $eb->publishEvent($this->actionContainer, 'invoice', 'offer-edit');
         

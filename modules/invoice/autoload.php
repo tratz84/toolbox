@@ -28,21 +28,13 @@ $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($e
     
     $src = $evt->getSource();
 
-    if ($ctx->getSetting('invoiceModuleEnabled') || $ctx->getSetting('offerModuleEnabled')) {
-        $src->addItem('Facturatie', 'Instellingen',     '/?m=invoice&c=settings');
-    }
+    $src->addItem('Facturatie', 'Instellingen',     '/?m=invoice&c=settings');
     
-    if ($ctx->getSetting('offerModuleEnabled')) {
-        $src->addItem('Facturatie', 'Offerte statussen',     '/?m=invoice&c=offerStatus');
-    }
+    $src->addItem('Facturatie', 'Offerte statussen',     '/?m=invoice&c=offerStatus');
     
-    if ($ctx->getSetting('invoiceModuleEnabled')) {
-        $src->addItem('Facturatie', strOrder(1).' statussen',     '/?m=invoice&c=invoiceStatus');
-    }
+    $src->addItem('Facturatie', strOrder(1).' statussen',     '/?m=invoice&c=invoiceStatus');
     
-    if ($ctx->getSetting('offerModuleEnabled') || $ctx->getSetting('invoiceModuleEnabled')) {
-        $src->addItem('Facturatie', 'Btw %',     '/?m=invoice&c=vat');
-    }
+    $src->addItem('Facturatie', 'Btw %',     '/?m=invoice&c=vat');
     
     $src->addItem('Artikelen', 'Artikelen',     '/?m=invoice&c=article');
     $src->addItem('Artikelen', 'Artikelgroepen',     '/?m=invoice&c=articleGroup');
@@ -55,14 +47,10 @@ $eb->subscribe('base', 'dashboard', new CallbackPeopleEventListener(function($ev
         return;
 
     $ctx = Context::getInstance();
-    if ($ctx->getSetting('offerModuleEnabled')) {
-        $dashboardWidgets->addWidget('invoice-recent-offers', 'Offerte: Laatst toegevoegde offertes', 'Overzicht van recent toegevoegde offertes', '/?m=invoice&c=dashboardWidgets&a=lastOffers');
-        $dashboardWidgets->addWidget('invoice-recent-changed-offers', 'Offerte: Laatst gewijzigde offertes', 'Overzicht van recent gewijzigde offertes', '/?m=invoice&c=dashboardWidgets&a=lastChangedOffers');
-    }
-    
-    if ($ctx->getSetting('invoiceModuleEnabled')) {
-        $dashboardWidgets->addWidget('invoice-recent-invoices', strOrder(3).': Laatste '.strtolower(strOrder(2)), 'Overzicht recent aangemaakte '.strtolower(strOrder(2)), '/?m=invoice&c=dashboardWidgets&a=lastInvoices');
-    }
+    $dashboardWidgets->addWidget('invoice-recent-offers', 'Offerte: Laatst toegevoegde offertes', 'Overzicht van recent toegevoegde offertes', '/?m=invoice&c=dashboardWidgets&a=lastOffers');
+    $dashboardWidgets->addWidget('invoice-recent-changed-offers', 'Offerte: Laatst gewijzigde offertes', 'Overzicht van recent gewijzigde offertes', '/?m=invoice&c=dashboardWidgets&a=lastChangedOffers');
+
+    $dashboardWidgets->addWidget('invoice-recent-invoices', strOrder(3).': Laatste '.strtolower(strOrder(2)), 'Overzicht recent aangemaakte '.strtolower(strOrder(2)), '/?m=invoice&c=dashboardWidgets&a=lastInvoices');
 }));
 
     
