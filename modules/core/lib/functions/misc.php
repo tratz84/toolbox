@@ -626,6 +626,20 @@ function pos_in_array($needle, $array) {
     return false;
 }
 
+
+function in_iarray($needle, $haystack) {
+    $needle = strtolower($needle);
+    
+    foreach($haystack as $k) {
+        if ($k == $needle) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+
 /**
  * check_array() - checks if $variable[..] is an array and contains min-count elements
  */
