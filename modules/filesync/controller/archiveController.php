@@ -92,6 +92,7 @@ class archiveController extends BaseController {
         if (get_var('person_id'))
             $this->form->getWidget('customer_id')->bindObject([ 'customer_id' => 'person-'.get_var('person_id') ]);
         
+        $this->callback_func = get_var('callback') ? get_var('callback') : 'filesyncArchiveFile_Select';
         
         $this->setShowDecorator(false);
         return $this->render();

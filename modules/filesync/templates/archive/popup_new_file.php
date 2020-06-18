@@ -29,7 +29,7 @@ $('.popup-container .submit-form').click(function() {
         success: function ( data ) {
             if (data.success) {
                 // some callback
-                filesyncArchiveFile_Select( data.storeFileId );
+                <?= $callback_func ?>( data.storeFileId );
 
                 close_popup();
             }
