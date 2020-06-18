@@ -93,7 +93,7 @@ class paymentController extends BaseController {
         if (get_var('back_url')) {
             redirect(get_var('back_url'));
         } else {
-            redirect('/?m=payment&c=payment');
+            redirect('/?m=payment&c=paymentOverview');
         }
     }
     
