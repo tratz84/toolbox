@@ -28,6 +28,10 @@ class dashboardController extends BaseController {
             $this->dwc->addUserWidget($key, $arr['x'], $arr['y'], $arr['width'], $arr['height']);
         }
         
+        // sort by name
+        usort($this->dwc->widgets, function($w1, $w2) {
+            return strcmp($w1['name'], $w2['name']);
+        });
         
         
         $this->render();
