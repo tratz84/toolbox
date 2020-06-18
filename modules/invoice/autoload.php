@@ -183,9 +183,7 @@ $eb->subscribe('report', 'menu-list', new CallbackPeopleEventListener(function($
      */
     $reportMenuList = $evt->getSource();
     
-    if ($ctx->getSetting('invoiceModuleEnabled')) {
-        $reportMenuList->addMenuItem(strOrder(3) . ' - totalen',   'invoice', 'report/invoiceTotals');
-    }
+    $reportMenuList->addMenuItem(strOrder(3) . ' - totalen',   'invoice', 'report/invoiceTotals');
 }));
     
 
