@@ -39,7 +39,7 @@ function address_form_postcodecheck() {
 function check_zipcode(zipcode, nr, callback) {
 	$.ajax({
 		type: 'POST',
-		url: appUrl('/?m=base&c=connect/zipcode'),
+		url: appUrl('/?m=customer&c=connect/zipcode'),
 		data: {
 			zipcode: zipcode,
 			nr: nr
