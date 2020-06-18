@@ -108,6 +108,23 @@ class EmailService extends ServiceBase {
         
         return $email;
     }
+
+    public function saveEmailObject( $email, $attachments=array() ) {
+        
+        if (!$email->save()) {
+            return false;
+        }
+        
+        
+        $etDao = new EmailToDAO();
+        $arrRecipients = $email->getRecipients();
+        $etDao->mergeFormListMTO1('email_id', $email->getEmailId(), $arrRecipients);
+        
+        // add attachments
+        foreach($attachments as $att) {
+            $this->addFile($email->getEmailId(), $att['filename'], $att['content']);
+        }
+    }
     
     /**
      * 
@@ -141,6 +158,10 @@ class EmailService extends ServiceBase {
                 $email->setFromEmail($identity->getFromEmail());
             }
         }
+        
+        
+        // TODO: bind recipients + attachments to e-mail object
+        // TODO: return $this->saveEmailObject( $email ); ....
         
         if (!$email->save()) {
             return false;
