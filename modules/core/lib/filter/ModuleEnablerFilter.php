@@ -52,19 +52,12 @@ class ModuleEnablerFilter {
             $meta = load_php_file( $path . '/meta.php' );
             
             // invalid response? => skip
-            if (is_a($meta, ModuleMeta::class) == false && is_array($meta) == false)
+            if (is_a($meta, ModuleMeta::class) == false)
                 continue;
             
             // set moduleMetas
-            if (is_array($meta)) {
-                foreach($meta as $m) {
-                    $m->setProperty('path', $path);
-                    $moduleMetas[ $m->getTag() ] = $m;
-                }
-            } else {
-                $meta->setProperty('path', $path);
-                $moduleMetas[ $meta->getTag() ] = $meta;
-            }
+            $meta->setProperty('path', $path);
+            $moduleMetas[ $meta->getTag() ] = $meta;
         }
         
         $loadedModules = array();
@@ -118,17 +111,9 @@ class ModuleEnablerFilter {
         });
         
         // load autoload.php for modules
-        $autoloadFile = array();
         foreach($modulesToLoad as $m) {
-            // 1 module can at the moment contain multiple ModuleMeta-instances. THIS IS DEPRECATED AND WONT BE SUPPORTED IN THE FUTURE
-            if (isset($autoloadFile[ $m['autoload'] ]) == true) {
-                continue;
-            }
-            
             $ml = new ModuleLoader($m['meta'], $m['autoload']);
             $ml->load();
-            
-            $autoloadFile[ $m['autoload'] ] = true;
         }
     }
     
