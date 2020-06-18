@@ -16,6 +16,7 @@ use core\forms\TextareaField;
 use core\forms\validator\DateTimeValidator;
 use core\forms\validator\NotEmptyValidator;
 use project\service\ProjectService;
+use project\model\ProjectHour;
 
 class ProjectHourForm extends BaseForm {
     
@@ -30,7 +31,8 @@ class ProjectHourForm extends BaseForm {
         
         $this->addUsers();
         
-        $this->addWidget(new CheckboxField('declarable', '', 'Declarabel'));
+//         $this->addWidget(new CheckboxField('declarable', '', 'Declarabel'));
+        $this->addWidget(new RadioField('declarable', '', ['y' => t('Yes'), 'n' => t('No')], 'Declarabel'));
         
         if ($company_id) {
             $companyService = ObjectContainer::getInstance()->get(\customer\service\CompanyService::class);
@@ -60,6 +62,8 @@ class ProjectHourForm extends BaseForm {
         $this->addWidget(new TextField('short_description', '', 'Korte omschrijving'));
         $this->addWidget(new TextareaField('long_description', '', 'Lange omschrijving'));
         
+        
+        $this->addValidator('declarable', new NotEmptyValidator());
         
         $this->addValidator('short_description', new NotEmptyValidator());
         
@@ -116,6 +120,23 @@ class ProjectHourForm extends BaseForm {
         });
         
     }
+    
+    
+    
+    public function bind($obj) {
+        parent::bind( $obj );
+        
+        if (is_a($obj, ProjectHour::class) && $obj->isNew() == false) {
+            if ($obj->getDeclarable()) {
+                $this->getWidget('declarable')->setValue('y');
+            }
+            else {
+                $this->getWidget('declarable')->setValue('n');
+            }
+        }
+        
+    }
+    
     
     
     protected function addUsers() {
