@@ -94,16 +94,20 @@ class ModuleEnablerFilter {
                 
                 // loop through dependencies
                 foreach( $meta->getDependencies() as $tag ) {
-                    if (isset($loadedModules[ $tag ]) == false) {
-                        // module not found? => throw exception
-                        if (isset($moduleMetas[ $tag ]) == false) {
-                            throw new InvalidStateException('Sub module not found: '.var_export($tag, true));
-                        }
-                        
-                        $loadedModules[ $tag ] = true;
-                        $depmod = $moduleMetas[ $tag ];
-                        $modulesToLoad[] = array('meta' => $depmod, 'autoload' => $depmod->getProperty('path').'/autoload.php');
+                    // already marked to load? => skip
+                    if (isset($loadedModules[ $tag ])) {
+                        continue;
                     }
+                    
+                    // module not found? => throw exception
+                    if (isset($moduleMetas[ $tag ]) == false) {
+                        throw new InvalidStateException('Sub module not found: '.var_export($tag, true));
+                    }
+                    
+                    
+                    $loadedModules[ $tag ] = true;
+                    $depmod = $moduleMetas[ $tag ];
+                    $modulesToLoad[] = array('meta' => $depmod, 'autoload' => $depmod->getProperty('path').'/autoload.php');
                 }
             }
         }
@@ -114,11 +118,18 @@ class ModuleEnablerFilter {
         });
         
         // load autoload.php for modules
+        $autoloadFile = array();
         foreach($modulesToLoad as $m) {
+            // 1 module can at the moment contain multiple ModuleMeta-instances. THIS IS DEPRECATED AND WONT BE SUPPORTED IN THE FUTURE
+            if (isset($autoloadFile[ $m['autoload'] ]) == true) {
+                continue;
+            }
+            
             $ml = new ModuleLoader($m['meta'], $m['autoload']);
             $ml->load();
+            
+            $autoloadFile[ $m['autoload'] ] = true;
         }
-        
     }
     
 }
