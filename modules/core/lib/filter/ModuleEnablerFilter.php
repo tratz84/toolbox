@@ -81,21 +81,27 @@ class ModuleEnablerFilter {
                 $moduleEnabled = true;
             }
             
+            // already marked to load? => skip
+            if (isset($loadedModules[ $meta->getTag() ])) {
+                continue;
+            }
+            
             // module enabled? => include autoload.php
             if ($moduleEnabled) {
                 $modulesToLoad[] = array('meta' => $meta, 'autoload' => $meta->getProperty('path').'/autoload.php');
                 
                 $loadedModules[ $meta->getTag() ] = true;
                 
+                // loop through dependencies
                 foreach( $meta->getDependencies() as $tag ) {
                     if (isset($loadedModules[ $tag ]) == false) {
+                        // module not found? => throw exception
                         if (isset($moduleMetas[ $tag ]) == false) {
                             throw new InvalidStateException('Sub module not found: '.var_export($tag, true));
                         }
                         
                         $loadedModules[ $tag ] = true;
                         $depmod = $moduleMetas[ $tag ];
-                        
                         $modulesToLoad[] = array('meta' => $depmod, 'autoload' => $depmod->getProperty('path').'/autoload.php');
                     }
                 }
