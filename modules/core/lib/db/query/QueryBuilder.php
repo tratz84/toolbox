@@ -194,6 +194,9 @@ abstract class QueryBuilder {
     
     
     public function setOrderBy($o) {
+        // TODO: apply filter
+        $o = addslashes($o);
+        
         $this->orderBy = $o;
         return $this;
     }
