@@ -89,6 +89,22 @@ function module_file_safe($module, $path, $subpath) {
 }
 
 
+function meta_active_modules() {
+    $meta = array();
+    
+    $modules = module_list();
+    foreach($modules as $moduleName => $path) {
+        if (ctx()->isModuleEnabled($moduleName)) {
+            if (file_exists($path . '/meta.php')) {
+                $meta[$moduleName] = include $path . '/meta.php';
+            }
+        }
+    }
+    
+    return $meta;
+}
+
+
 
 /**
  * public_module_file_by_url() - returns public-module-file by given url

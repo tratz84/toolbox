@@ -18,7 +18,7 @@
     
     <div class="list-available-modules">
         <?php foreach($availableModules as $m) : ?>
-        <?php $moduleEnabled = @$settings[$m->getTag().'Enabled'] ? true : false; ?>
+        <?php $moduleEnabled = @$settings[$m->getTag().'Enabled'] || ctx()->isModuleEnabled($m->getTag()) ? true : false; ?>
         <div class="widget text-field-widget module-line module-<?= slugify($m->getName()) ?> <?= $moduleEnabled ? 'module-enabled' : '' ?>">
         	<label>
         		<?= esc_html($m->getName()) ?>

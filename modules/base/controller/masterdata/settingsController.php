@@ -134,6 +134,26 @@ class settingsController extends BaseController {
             redirect('/?m=base&c=masterdata/settings');
         }
         
+        // check dependencies
+        $mam = meta_active_modules();
+        if (isset($mam[ $mod ])) {
+            foreach($mam as $m_name => $m) {
+                // current module? => skip
+                if ($m_name == $mod) {
+                    continue;
+                }
+                
+                // TODO: deprecated.. remove
+                $m = is_array($m) ? $m[0] : $m;
+                
+                if (in_array($mod, $m->getDependencies())) {
+                    report_user_error(t('Unable to disable module, required by') . ': ' . $m_name);
+                    redirect('/?m=base&c=masterdata/settings');
+                }
+            }
+        }
+        
+        
         // de-activation script?
         $deactivationFile = module_file($moduleName, 'deactivate.php');
         if ($deactivationFile) {
