@@ -63,7 +63,12 @@ class ProjectHourForm extends BaseForm {
         $this->addWidget(new TextareaField('long_description', '', 'Lange omschrijving'));
         
         
-        $this->addValidator('declarable', new NotEmptyValidator());
+        $this->addValidator('declarable', function($form) {
+            $v = $form->getWidgetValue('declarable');
+            if ($v !== 'y' && $v !== 'n') {
+                return t('required');
+            }
+        });
         
         $this->addValidator('short_description', new NotEmptyValidator());
         
