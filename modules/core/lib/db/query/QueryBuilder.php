@@ -196,7 +196,7 @@ abstract class QueryBuilder {
     
     public function setOrderBy($o) {
         // accept limited characters
-        if (preg_match('/[^a-zA-Z0-9_\\.` ]/', $o)) {
+        if (preg_match('/[^a-zA-Z0-9_\\.` \\(\\)]/', $o)) {
             throw new QueryException('Invalid order-by value: '.$o);
         }
         
