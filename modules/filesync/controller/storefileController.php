@@ -78,6 +78,7 @@ class storefileController extends BaseController {
                 
                 $storeId = $this->form->getWidgetValue('store_id');
                 
+                report_user_message(t('Changes saved'));
                 redirect('/?m=filesync&c=storefile&id=' . $storeId);
             }
         }
@@ -150,8 +151,10 @@ class storefileController extends BaseController {
             $storeService->deleteStoreFileRev( get_var('store_file_rev_id') );
             
             if (count($storeFile->getRevisions()) == 1) {
+                report_user_message(t('File deleted'));
                 redirect('/?m=filesync&c=storefile&id=' . $storeFile->getStoreId());
             } else {
+                report_user_message(t('Revision deleted'));
                 redirect('/?m=filesync&c=storefile&a=edit&store_file_id='.$storeFile->getStoreFileId());
             }
        
@@ -164,6 +167,7 @@ class storefileController extends BaseController {
             
             $storeService->deleteFile(get_var('store_file_id'));
             
+            report_user_message(t('File deleted'));
             redirect('/?m=filesync&c=storefile&id=' . $storeFile->getStoreId());
         }
         

@@ -13,6 +13,7 @@ $l['Filename']      = 'Bestandsnaam';
 $l['File size']     = 'Bestandsgrootte';
 $l['Document date'] = 'Document datum';
 
+$l['File deleted']  = 'Bestand verwijderd';
 
 
 return $l;
