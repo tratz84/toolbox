@@ -251,18 +251,17 @@ class DBObject {
         
         $qb->addWhere(QueryBuilderWhere::whereRefByVal($this->primaryKey, '=', $this->getField($this->primaryKey)));
         
-        $result = $qb->queryUpdate();
+        // note, affected_rows might be '0' if update is succesfully called, but no columns/rows are changed
+        $affected_rows = $qb->queryUpdate();
+        
         $this->lastQuery = DatabaseHandler::getInstance()->getLastQuery();
         
-        if ($result) {
-            return true;
-        }
         
         $res = DatabaseHandler::getInstance()->getResource($this->resourceName);
-        
         $this->lastError = $res->error;
         
-        return false;
+        
+        return true;
     }
     
     
