@@ -65,7 +65,7 @@ function Dashboard( containerId, config ) {
 		
 		// no widgets? => show message
 		if (jQuery.isEmptyObject( this.config.userWidgets )) {
-			var c = $('<div class="widgets-empty-note" style="font-style: italic;"><br/>'+_('You don\'t have any widgets on your dashboard yet. Click the wheel at the top right to add widgets.')+'</div>');
+			var c = $('<div class="widgets-empty-note" style="font-style: italic;"><br/>'+toolbox_t('You don\'t have any widgets on your dashboard yet. Click the wheel at the top right to add widgets.')+'</div>');
 			$('.dashboard-widgets').prepend( c );
 		} else {
 			$('.dashboard-widgets .widgets-empty-note').remove();
@@ -236,7 +236,7 @@ function Dashboard( containerId, config ) {
 		
 		
 		showDialog({
-			title: _('Choose Widgets'),
+			title: toolbox_t('Choose Widgets'),
 			html: container,
 			callback_ok: function(objDialog) {
 				$('.dashboard-widget-settings .widget-item').each(function(index, node) {

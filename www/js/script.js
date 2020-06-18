@@ -44,17 +44,17 @@ $(document).ready(function() {
 	var toolbox = $('.page-header .toolbox');
 	if (toolbox.length) {
 		if (toolbox.find('.fa.fa-chevron-circle-left').attr('title') != '')
-			toolbox.find('.fa.fa-chevron-circle-left').attr('title', _('Back'));
+			toolbox.find('.fa.fa-chevron-circle-left').attr('title', toolbox_t('Back'));
 		if (toolbox.find('.fa.fa-send').attr('title') != '')
-			toolbox.find('.fa.fa-send').attr('title', _('Send by mail'));
+			toolbox.find('.fa.fa-send').attr('title', toolbox_t('Send by mail'));
 		if (toolbox.find('.fa.fa-print').attr('title') != '')
-			toolbox.find('.fa.fa-print').attr('title', _('Print'));
+			toolbox.find('.fa.fa-print').attr('title', toolbox_t('Print'));
 		if (toolbox.find('.fa.fa-save').attr('title') != '')
-			toolbox.find('.fa.fa-save').attr('title', _('Save'));
+			toolbox.find('.fa.fa-save').attr('title', toolbox_t('Save'));
 		if (toolbox.find('.fa.fa-plus').attr('title') != '')
-			toolbox.find('.fa.fa-plus').attr('title', _('Add'));
+			toolbox.find('.fa.fa-plus').attr('title', toolbox_t('Add'));
 		if (toolbox.find('.fa.fa-cog').attr('title') == '')
-			toolbox.find('.fa.fa-cog').attr('title', _('Settings'));
+			toolbox.find('.fa.fa-cog').attr('title', toolbox_t('Settings'));
 	}
 	
 	$(document).ajaxSend(function(evt, xhr, opts) {
@@ -503,15 +503,15 @@ function handle_deleteConfirmation_event(evt) {
 	var me = this;
 	
 	
-	var deleteText = _('Are you sure to delete this record?');
+	var deleteText = toolbox_t('Are you sure to delete this record?');
 	if ($(this).data('confirmationMessage')) {
 		deleteText = $(this).data('confirmationMessage');
 	} else if ($(this).data('description')) {
-		deleteText = _('Are you sure to delete this record:')+' "'+$(this).data('description')+'" ?';
+		deleteText = toolbox_t('Are you sure to delete this record:')+' "'+$(this).data('description')+'" ?';
 	}
 	
 	
-	showConfirmation(_('Are you sure?'), deleteText, function() {
+	showConfirmation(toolbox_t('Are you sure?'), deleteText, function() {
 		window.location = $(me).attr('href');
 	});
 	
@@ -550,7 +550,7 @@ function showConfirmation(title, body, callback_ok) {
 //	html += '        <p>One fine body&hellip;</p>';
 	html += '      </div>';
 	html += '      <div class="modal-footer">';
-	html += '        <button type="button" class="btn btn-default" data-dismiss="modal">'+_('Cancel')+'</button>';
+	html += '        <button type="button" class="btn btn-default" data-dismiss="modal">'+toolbox_t('Cancel')+'</button>';
 	html += '        <button type="button" class="btn btn-primary">Ok</button>';
 	html += '      </div>';
 	html += '    </div>';	// <!-- /.modal-content -->
@@ -826,9 +826,9 @@ function showDialog(opts) {
 	
 	// cancel/save buttons
 	if (opts.showCancelSave) {
-		var btnCancel = $('<input type="button" class="btn-cancel" value="'+_('Cancel')+'" />');
+		var btnCancel = $('<input type="button" class="btn-cancel" value="'+toolbox_t('Cancel')+'" />');
 		btnCancel.click(function() { closeDialog(); });
-		var btnOk = $('<input type="button" class="btn-save" value="'+_('Save')+'" />');
+		var btnOk = $('<input type="button" class="btn-save" value="'+toolbox_t('Save')+'" />');
 		btnOk.click(function() {
 			if (opts.callback_ok) {
 				var objDialog = $('.pwdialog-container');
