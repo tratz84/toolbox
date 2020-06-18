@@ -30,7 +30,7 @@ $(document).ready(function() {
 	$('[name=customer_id]').change(function() {
 		$.ajax({
 			type: 'POST',
-			url: appUrl('/?m=base&c=customer&a=emailaddresses'),
+			url: appUrl('/?m=customer&c=customer&a=emailaddresses'),
 			data: {
 				customer_id: $(this).val()
 			},
@@ -76,10 +76,10 @@ $(document).ready(function() {
 	$('.anch-view-customer').click(function() {
 		var id = $('[name=customer_id]').val();
 		if (id.indexOf('company-') === 0) {
-			window.open(appUrl('/?m=base&c=company&a=edit&company_id='+id.substr(8)), '_blank');
+			window.open(appUrl('/?m=customer&c=company&a=edit&company_id='+id.substr(8)), '_blank');
 		}
 		if (id.indexOf('person-') === 0) {
-			window.open(appUrl('/?m=base&c=person&a=edit&person_id='+id.substr(7)), '_blank');
+			window.open(appUrl('/?m=customer&c=person&a=edit&person_id='+id.substr(7)), '_blank');
 		}
 	});
 	if ($('[name=customer_id]').val() != '') {

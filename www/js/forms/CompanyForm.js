@@ -24,7 +24,7 @@ $(document).ready(function() {
 			return;
 		}
 		
-		window.open( appUrl('/?m=base&c=company&a=view_vat_number&nr=' + encodeURI(nr)), '_blank' );
+		window.open( appUrl('/?m=customer&c=company&a=view_vat_number&nr=' + encodeURI(nr)), '_blank' );
 	});
 	objVatnr.parent().append('&nbsp;');
 	objVatnr.parent().append( anchLookup );
@@ -60,7 +60,7 @@ function cf_validateVatNumber() {
 	}
 	
 	$.ajax({
-		url: appUrl('/?m=base&c=company'),
+		url: appUrl('/?m=customer&c=company'),
 		data: {
 			a: 'check_vat_number',
 			vat_number: vatnr

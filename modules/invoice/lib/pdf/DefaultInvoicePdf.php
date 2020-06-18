@@ -2,7 +2,7 @@
 
 namespace invoice\pdf;
 
-use base\service\CustomerService;
+use customer\service\CustomerService;
 use core\ObjectContainer;
 use core\pdf\BasePdf;
 use core\Context;

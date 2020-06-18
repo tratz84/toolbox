@@ -34,7 +34,7 @@
 				<?php if ($ph['company_name']) : ?>
 					<?= esc_html($ph['company_name']) ?>
 				<?php else : ?>
-					<?= esc_html(format_personname($ph)) ?>
+					<?= function_exists('format_personname') ? esc_html(format_personname($ph)) : '' ?>
 				<?php endif; ?>
 			</td>
 			<td><?= esc_html($ph['project_name']) ?></td>

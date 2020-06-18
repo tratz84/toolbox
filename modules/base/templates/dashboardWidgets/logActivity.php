@@ -19,7 +19,7 @@
     		<td class="td-user"><?= esc_html($a->getUsername()) ?></td>
     		<td class="td-customer">
     			<?= esc_html($a->getField('company_name')) ?>
-    			<?= esc_html(format_personname($a)) ?>
+    			<?= function_exists('format_personname') ? esc_html(format_personname($a)) : '' ?>
     		</td>
     		<td class="td-description"><?= esc_html($a->getShortDescription()) ?></td>
     		<td class="td-run-on"><?= $a->getCreatedFormat() ?></td>

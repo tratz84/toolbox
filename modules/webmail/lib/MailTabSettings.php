@@ -3,10 +3,10 @@
 
 namespace webmail;
 
-use base\model\Company;
-use base\model\Person;
-use base\service\CompanyService;
-use base\service\PersonService;
+use customer\model\Company;
+use customer\model\Person;
+use customer\service\CompanyService;
+use customer\service\PersonService;
 use webmail\solr\SolrMailQuery;
 
 

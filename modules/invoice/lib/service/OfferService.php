@@ -3,7 +3,7 @@
 namespace invoice\service;
 
 use base\forms\FormChangesHtml;
-use base\service\CustomerService;
+use customer\service\CustomerService;
 use base\service\MetaService;
 use base\util\ActivityUtil;
 use core\ObjectContainer;

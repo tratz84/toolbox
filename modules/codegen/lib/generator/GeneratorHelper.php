@@ -2,7 +2,7 @@
 
 namespace codegen\generator;
 
-use base\forms\CustomerSelectWidget;
+use customer\forms\CustomerSelectWidget;
 use base\forms\UserSelectWidget;
 use codegen\form\widgetoptions\CheckboxOptionsForm;
 use codegen\form\widgetoptions\ContainerOptionsForm;

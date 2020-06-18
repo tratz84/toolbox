@@ -5,8 +5,8 @@
  * fillperson - testdata for person-module
  */
 
-use base\forms\PersonForm;
-use base\service\PersonService;
+use customer\forms\PersonForm;
+use customer\service\PersonService;
 use core\ObjectContainer;
 
 include dirname(__FILE__).'/../bootstrap.php';

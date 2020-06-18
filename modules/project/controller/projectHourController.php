@@ -2,9 +2,9 @@
 
 
 
-use base\service\CompanyService;
-use base\service\CustomerService;
-use base\service\PersonService;
+use customer\service\CompanyService;
+use customer\service\CustomerService;
+use customer\service\PersonService;
 use core\controller\BaseController;
 use project\form\ProjectHourForm;
 use project\model\ProjectHour;
@@ -104,7 +104,7 @@ class projectHourController extends BaseController {
             if ($project['company_id']) {
                 $name = $project['company_name'];
             } else {
-                $name = format_personname($project);
+                $name = function_exists('format_personname') ? format_personname($project) : '?';
             }
             
             $name = $name . ' - ' . $project['project_name'];

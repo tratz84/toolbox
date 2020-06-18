@@ -1,7 +1,7 @@
 <?php
 
 
-use base\forms\CompanyForm;
+use customer\forms\CompanyForm;
 use base\model\Menu;
 use core\Context;
 use core\ObjectContainer;
@@ -97,7 +97,7 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
 }));
 
 
-$eb->subscribe('base', 'company-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+$eb->subscribe('customer', 'company-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
     $ftc = $evt->getSource();
     
     if (hasCapability('invoice', 'edit-invoice')) {
@@ -115,7 +115,7 @@ $eb->subscribe('base', 'company-edit-footer', new CallbackPeopleEventListener(fu
 }));
     
     
-$eb->subscribe('base', 'person-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+$eb->subscribe('customer', 'person-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
     $ftc = $evt->getSource();
     
     if (hasCapability('invoice', 'edit-invoice')) {
@@ -147,7 +147,7 @@ if ($invoiceSettings->getIntracommunautair()) {
         $form->addWidget($w);
     });
     
-    $eb->subscribe('core', 'post-call-base\\service\\CompanyService::readCompany', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+    $eb->subscribe('core', 'post-call-customer\\service\\CompanyService::readCompany', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
         $ohc = $evt->getSource();
         $company = $ohc->getReturnValue();
         
@@ -162,7 +162,7 @@ if ($invoiceSettings->getIntracommunautair()) {
         }
     }));
     // handle saveCompany
-    $eb->subscribe('core', 'post-call-base\\service\\CompanyService::save', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+    $eb->subscribe('core', 'post-call-customer\\service\\CompanyService::save', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
         $ohc = $evt->getSource();
         $arguments = $ohc->getArguments();
         

@@ -2,8 +2,8 @@
 
 namespace invoice\form;
 
-use base\service\CompanyService;
-use base\service\PersonService;
+use customer\service\CompanyService;
+use customer\service\PersonService;
 use core\ObjectContainer;
 use core\db\DBObject;
 use core\forms\BaseForm;
@@ -42,7 +42,7 @@ class InvoiceForm extends BaseForm {
         
         $this->addWidget( new DatePickerField('invoice_date', '', 'Datum') );
 
-        $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=base&c=customer&a=select2', 'Klant') );
+        $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=customer&c=customer&a=select2', 'Klant') );
 
         $this->addInvoiceStatus();
         $this->addWidget( new TextField('subject', '', 'Betreft') );

@@ -1,7 +1,7 @@
 <?php
 
 
-use base\service\CustomerService;
+use customer\service\CustomerService;
 use core\controller\BaseController;
 use invoice\service\OfferService;
 use signrequest\form\SignRequestForm;

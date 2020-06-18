@@ -7,7 +7,7 @@ use filesync\service\StoreService;
 use core\exception\ObjectNotFoundException;
 use filesync\form\ArchiveFileUploadForm;
 use core\forms\SelectField;
-use base\service\CustomerService;
+use customer\service\CustomerService;
 
 class archiveController extends BaseController {
     

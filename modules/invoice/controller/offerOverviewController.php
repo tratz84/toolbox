@@ -1,8 +1,8 @@
 <?php
 
 
-use base\forms\CompanyForm;
-use base\forms\PersonForm;
+use customer\forms\CompanyForm;
+use customer\forms\PersonForm;
 use core\controller\BaseController;
 use invoice\InvoiceSettings;
 use invoice\service\OfferService;

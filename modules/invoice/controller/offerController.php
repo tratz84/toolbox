@@ -203,13 +203,13 @@ class offerController extends BaseController {
         if (strpos($_REQUEST['customerCode'], 'company-') === 0) {
             $companyId = substr($_REQUEST['customerCode'], strlen('company-'));
             
-            include_component('base', 'company', 'widget', array('company_id' => $companyId));
+            include_component('customer', 'company', 'widget', array('company_id' => $companyId));
         }
         
         if (strpos($_REQUEST['customerCode'], 'person-') === 0) {
             $personId = substr($_REQUEST['customerCode'], strlen('person-'));
             
-            include_component('base', 'person', 'widget', array('person_id' => $personId));
+            include_component('customer', 'person', 'widget', array('person_id' => $personId));
         }
         
     }

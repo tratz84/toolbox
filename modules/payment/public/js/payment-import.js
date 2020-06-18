@@ -59,10 +59,10 @@ function PaymentImportTable(container, opts) {
 				var tr = $(this).closest('tr');
 				var pil = tr.data('pil');
 				if (pil['company_id']) {
-					window.open(appUrl('/?m=base&c=company&a=edit&company_id='+pil['company_id']), '_blank');
+					window.open(appUrl('/?m=customer&c=company&a=edit&company_id='+pil['company_id']), '_blank');
 				}
 				if (pil['person_id']) {
-					window.open(appUrl('/?m=base&c=person&a=edit&person_id='+pil['person_id']), '_blank');
+					window.open(appUrl('/?m=customer&c=person&a=edit&person_id='+pil['person_id']), '_blank');
 				}
 			});
 			
@@ -288,7 +288,7 @@ function PaymentImportTable(container, opts) {
 		// init select2
 		$(s).select2({
 			ajax: {
-	    		url: appUrl('/?m=base&c=customer&a=select2'),
+	    		url: appUrl('/?m=customer&c=customer&a=select2'),
 	    		type: 'POST',
 	    		data: function(params) {
 					var d = {};

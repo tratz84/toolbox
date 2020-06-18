@@ -6,8 +6,8 @@
  */
 
 use core\ObjectContainer;
-use base\service\CompanyService;
-use base\forms\CompanyForm;
+use customer\service\CompanyService;
+use customer\forms\CompanyForm;
 
 include dirname(__FILE__).'/../bootstrap.php';
 

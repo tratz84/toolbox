@@ -89,7 +89,7 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
 
 
     
-$eb->subscribe('base', 'company-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+$eb->subscribe('customer', 'company-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
     if (!hasCapability('webmail', 'send-mail'))
         return;
     
@@ -111,7 +111,7 @@ $eb->subscribe('base', 'company-edit-footer', new CallbackPeopleEventListener(fu
 }));
 
 
-$eb->subscribe('base', 'person-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+$eb->subscribe('customer', 'person-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
     if (!hasCapability('webmail', 'send-mail'))
         return;
     

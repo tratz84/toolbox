@@ -18,7 +18,7 @@ use webmail\model\EmailToDAO;
 use webmail\model\Identity;
 use webmail\model\IdentityDAO;
 use webmail\form\EmailForm;
-use base\model\CompanyEmailDAO;
+use customer\model\CompanyEmailDAO;
 use webmail\form\MailSettingsOutForm;
 use base\service\SettingsService;
 use webmail\mail\SendMail;

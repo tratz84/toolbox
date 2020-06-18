@@ -2,7 +2,7 @@
 
 namespace project\form;
 
-use base\service\CustomerService;
+use customer\service\CustomerService;
 use core\forms\DynamicSelectField;
 use project\model\ProjectHour;
 use project\service\ProjectService;

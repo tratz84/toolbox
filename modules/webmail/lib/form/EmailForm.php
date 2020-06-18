@@ -2,8 +2,8 @@
 
 namespace webmail\form;
 
-use base\service\CompanyService;
-use base\service\PersonService;
+use customer\service\CompanyService;
+use customer\service\PersonService;
 use core\ObjectContainer;
 use core\forms\BaseForm;
 use core\forms\DynamicSelectField;
@@ -43,7 +43,7 @@ class EmailForm extends BaseForm {
         
         $this->addWidget(new HtmlField('statusAsText', '', 'Status'));
         
-        $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=base&c=customer&a=select2', 'Klant') );
+        $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=customer&c=customer&a=select2', 'Klant') );
         
         $this->addWidget(new EmailRecipientLineWidget('recipients'));
         

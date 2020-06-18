@@ -4,8 +4,8 @@ namespace invoice\form;
 
 
 
-use base\service\CompanyService;
-use base\service\PersonService;
+use customer\service\CompanyService;
+use customer\service\PersonService;
 use core\ObjectContainer;
 use core\forms\BaseForm;
 use core\forms\CheckboxField;
@@ -32,7 +32,7 @@ class ToBillForm extends BaseForm {
         $this->addWidget(new HiddenField('to_bill_id'));
         $this->addWidget(new CheckboxField('paid', '', t('Paid')));
         $this->addWidget(new SelectField('type', '', ['' => t('Make your choice'), 'bill' => t('Bill'), 'invoice' => t('Invoice')], t('Type')));
-        $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=base&c=customer&a=select2', 'Klant') );
+        $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=customer&c=customer&a=select2', 'Klant') );
         
         $this->addWidget(new TextField('short_description', '', 'Korte omschrijving'));
         $this->addWidget(new DoubleField('amount', '', 'Aantal'));

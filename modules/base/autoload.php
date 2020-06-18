@@ -1,7 +1,6 @@
 <?php
 
 
-require_once dirname(__FILE__).'/lib/functions/person.php';
 require_once dirname(__FILE__).'/lib/functions/misc.php';
 require_once dirname(__FILE__).'/lib/functions/user.php';
 require_once dirname(__FILE__).'/lib/functions/object_meta.php';
@@ -20,8 +19,6 @@ module_update_handler('base', '20200609');
 
 hook_loader(__DIR__.'/hook');
 
-hook_register_javascript('select-person-list-edit', '/module/base/js/select-person-edit-list.js');
-hook_register_javascript('select-company-list-edit', '/module/base/js/select-company-edit-list.js');
 
 
 $eb = ObjectContainer::getInstance()->get(EventBus::class);
@@ -33,8 +30,6 @@ $eb->subscribe('report', 'menu-list', new CallbackPeopleEventListener(function($
     $reportMenuList = $evt->getSource();
     
     $reportMenuList->addMenuItem('Algemeen - Maandoverzicht', 'base', 'report/summaryPerMonthController');
-    
-    $reportMenuList->addMenuItem('Klantenoverzicht', 'base', 'report/customerReportController', '/?m=base&c=report/customerReport&a=xls');
     
     if (hasCapability('base', 'list-activity')) {
         $reportMenuList->addMenuItem(t('Event viewer'), 'base', 'report/activityReportController');
@@ -69,7 +64,7 @@ $eb->subscribe('base', 'user-capabilities', new CallbackPeopleEventListener(func
 
 
 
-$eb->subscribe('base', 'company-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+$eb->subscribe('customer', 'company-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
     $ftc = $evt->getSource();
     
     $companyId = $evt->getSource()->getSource()->getWidgetValue('company_id');
@@ -92,7 +87,7 @@ $eb->subscribe('base', 'company-edit-footer', new CallbackPeopleEventListener(fu
 }));
     
     
-$eb->subscribe('base', 'person-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+$eb->subscribe('customer', 'person-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
     $ftc = $evt->getSource();
     
     $personId = $evt->getSource()->getSource()->getWidgetValue('person_id');
@@ -113,18 +108,6 @@ $eb->subscribe('base', 'person-edit-footer', new CallbackPeopleEventListener(fun
         }
     }
 }));
-
-
-// customers handles as one? => redirect links to company-/person-overview to customer-overview
-if (ctx()->isCustomersSplit() == false) {
-    add_filter('appUrl', function($url) {
-        if (endsWith($url, '/?m=base&c=company') || endsWith($url, '/?m=base&c=person')) {
-            return appUrl('/?m=base&c=customer');
-        }
-        
-        return $url;
-    });
-}
 
 
 

@@ -93,7 +93,7 @@ $eb->subscribe('base', 'user-capabilities', new CallbackPeopleEventListener(func
 
 
 
-$eb->subscribe('base', 'company-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+$eb->subscribe('customer', 'company-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
     $ftc = $evt->getSource();
     
     $companyId = $evt->getSource()->getSource()->getWidgetValue('company_id');
@@ -109,7 +109,7 @@ $eb->subscribe('base', 'company-edit-footer', new CallbackPeopleEventListener(fu
 }));
 
 
-$eb->subscribe('base', 'person-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+$eb->subscribe('customer', 'person-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
     $ftc = $evt->getSource();
     
     $personId = $evt->getSource()->getSource()->getWidgetValue('person_id');

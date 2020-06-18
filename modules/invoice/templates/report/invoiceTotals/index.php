@@ -76,10 +76,10 @@ $(document).ready(function() {
 
 function record_Click(tr) {
 	if ($(tr).data('company-id')) {
-		window.open(appUrl('/?m=base&c=company&a=edit&company_id=' + $(tr).data('company-id'), '_blank'));
+		window.open(appUrl('/?m=customer&c=company&a=edit&company_id=' + $(tr).data('company-id'), '_blank'));
 	}
 	if ($(tr).data('person-id')) {
-		window.open(appUrl('/?m=base&c=person&a=edit&person_id=' + $(tr).data('person-id'), '_blank'));
+		window.open(appUrl('/?m=customer&c=person&a=edit&person_id=' + $(tr).data('person-id'), '_blank'));
 	}
 	
 }

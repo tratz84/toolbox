@@ -86,7 +86,7 @@ class MasterDataMenu {
     public static function generate() {
         $mdm = new MasterDataMenu();
         $mdm->addItem(t('Settings'), t('User Management'), '/?m=base&c=user');
-        $mdm->addItem(t('Settings'), t('Company settings'), '/?m=base&c=masterdata/companySettings');
+        $mdm->addItem(t('Settings'), t('Company settings'), '/?m=company&c=masterdata/companySettings');
         $mdm->addItem(t('Settings'), t('Application settings'), '/?m=base&c=masterdata/settings');
         
         $eb = ObjectContainer::getInstance()->get(\core\event\EventBus::class);

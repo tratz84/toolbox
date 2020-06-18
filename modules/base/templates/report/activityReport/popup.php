@@ -23,7 +23,7 @@
 		<th><?= t('Name') ?></th>
 		<td>
 			<?= esc_html($activity->getField('company_name')) ?>
-			<?= esc_html(format_personname($activity)) ?>
+			<?= function_exists('format_personname') ? esc_html(format_personname($activity)) : '' ?>
 		</td>
 	</tr>
 	<tr class="tr-ref-object">

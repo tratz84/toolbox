@@ -4,7 +4,7 @@
 
 
 use calendar\helper\SabreVEventParser;
-use base\service\CustomerService;
+use customer\service\CustomerService;
 
 hook_eventbus_subscribe('webmail', 'mailbox-mailactions', function($actionContainer) {
     

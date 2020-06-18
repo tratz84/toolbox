@@ -55,7 +55,7 @@ $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($e
 
 
 
-$eb->subscribe('base', 'company-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+$eb->subscribe('customer', 'company-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
     $ftc = $evt->getSource();
     
     
@@ -67,7 +67,7 @@ $eb->subscribe('base', 'company-edit-footer', new CallbackPeopleEventListener(fu
 
 
 
-$eb->subscribe('base', 'person-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
+$eb->subscribe('customer', 'person-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
     $ftc = $evt->getSource();
     
     

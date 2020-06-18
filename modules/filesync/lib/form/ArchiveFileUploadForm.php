@@ -14,7 +14,7 @@ use core\forms\TextField;
 use core\forms\TextareaField;
 use core\forms\validator\DateValidator;
 use filesync\service\StoreService;
-use base\forms\CustomerSelectWidget;
+use customer\forms\CustomerSelectWidget;
 
 class ArchiveFileUploadForm extends BaseForm {
     

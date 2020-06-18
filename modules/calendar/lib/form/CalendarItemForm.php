@@ -13,7 +13,7 @@ use core\forms\validator\NotEmptyValidator;
 use core\forms\SelectField;
 use calendar\model\CalendarItem;
 use calendar\CalendarSettings;
-use base\forms\CustomerSelectWidget;
+use customer\forms\CustomerSelectWidget;
 use core\forms\InternalField;
 
 class CalendarItemForm extends BaseForm {

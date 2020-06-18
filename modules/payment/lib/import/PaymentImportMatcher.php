@@ -4,7 +4,7 @@ namespace payment\import;
 
 use payment\service\PaymentImportService;
 use payment\model\PaymentImportLine;
-use base\service\CustomerService;
+use customer\service\CustomerService;
 use invoice\service\InvoiceService;
 use payment\service\PaymentService;
 use core\exception\ObjectNotFoundException;

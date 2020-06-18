@@ -4,7 +4,7 @@
 
 use core\module\ModuleMeta;
 
-return new ModuleMeta('base', 'Base module', 'Beheer van bedrijven & personen', 10);
+return new ModuleMeta('base', 'Base module', 'Basisfunctionaliteiten toolbox', 10);
 
 
 // $objMetas[] = new ModuleMeta('companies', 'Bedrijven module', 'Beheer van bedrijven', 10);

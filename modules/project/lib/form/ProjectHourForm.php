@@ -33,13 +33,13 @@ class ProjectHourForm extends BaseForm {
         $this->addWidget(new CheckboxField('declarable', '', 'Declarabel'));
         
         if ($company_id) {
-            $companyService = ObjectContainer::getInstance()->get(\base\service\CompanyService::class);
+            $companyService = ObjectContainer::getInstance()->get(\customer\service\CompanyService::class);
             $company = $companyService->readCompany($company_id);
 //             $this->addWidget(new HtmlField('company_name', $company->getCompanyName(), 'Bedrijfsnaam'));
             $this->customerName = $company->getCompanyName();
         }
         if ($person_id) {
-            $personService = ObjectContainer::getInstance()->get(\base\service\PersonService::class);
+            $personService = ObjectContainer::getInstance()->get(\customer\service\PersonService::class);
             $person = $personService->readPerson($person_id);
 //             $this->addWidget(new HtmlField('person_name', $person->getFullname(), 'Naam'));
             $this->customerName = $person->getFullname();
