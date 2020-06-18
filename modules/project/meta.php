@@ -1,9 +1,9 @@
 <?php
 
-use core\Context;
 use core\module\ModuleMeta;
 
-$ctx = Context::getInstance();
 
-return new ModuleMeta('projectModule', 'Projecten module',   'Tijdsregistratie voor projecten');
+$m = new ModuleMeta('projectModule', 'Projecten module',   'Tijdsregistratie voor projecten');
+$m->addDependency( 'customer');
 
+return $m;

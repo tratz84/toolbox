@@ -11,6 +11,9 @@ class ModuleMeta {
     protected $infoText;
     protected $prio = 0;
     
+    protected $dependentModules = array();
+    protected $props = array();
+    
     public function __construct($tag, $name, $infoText, $prio=999) {
         $this->setTag($tag);
         $this->setName($name);
@@ -31,5 +34,20 @@ class ModuleMeta {
     
     public function setPrio($p) { $this->prio = $p; }
     public function getPrio() { return $this->prio; }
+    
+    
+    public function addDependency($n) { $this->dependentModules[] = $n; }
+    public function getDependencies() { return $this->dependentModules; }
+    
+    
+    public function setProperty($key, $val) { $this->props[$key] = $val; }
+    public function getProperty($key, $defaultValue=null) {
+        if (isset($this->props[$key])) {
+            return $this->props[$key];
+        } else {
+            return $defaultValue;
+        }
+    }
+    
 }
 
