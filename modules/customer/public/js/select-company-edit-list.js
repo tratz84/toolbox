@@ -1,6 +1,12 @@
 
 
 $(window).on('form-actions-set', function() {
+	// select-person-edit-list.js might be loaded when a 'Person'-object is loaded, because FormDbMapper initiates Form-objects
+	// TODO: fix this that this js is only loaded at the right time
+	if ($('.customer-form-select-company-list-edit').length == 0) {
+		return;
+	}
+	
 	var lefw = $('.customer-form-select-company-list-edit').get(0).lefw;
 	
 	$('.customer-form-select-company-list-edit .add-record').hide();
