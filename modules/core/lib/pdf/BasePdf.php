@@ -96,6 +96,17 @@ class BasePdf extends \FPDF {
         return format_price($p, true, array('thousands' => '.'));
     }
 
+    function formatNumber($p, $removeZeroDecimals=false) {
+        $n = strtodouble($p);
+        $n = str_replace('.', ',', $n);
+        
+        if (endsWith($n, ',00')) {
+            $n = substr($n, 0, strlen($n)-3);
+        }
+        
+        return $n;
+    }
+    
     function MultiCell($w, $h, $txt, $border=0, $align='J', $fill=false) {
         $txt = str_replace('–', '-', $txt);
         $txt = iconv('UTF-8', 'CP1252', $txt);

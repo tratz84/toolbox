@@ -382,7 +382,7 @@ class LandscapeOfferPdf extends BasePdf {
                     $this->Cell(171.9,  $lh, $l->getDescription(), $border, 0, 'L', true);
                 }
             if ($l->getType() != 'text') {
-                $this->Cell(15,     $lh, $l->getAmount(), $border, 0, 'R', true);
+                $this->Cell(15,     $lh, $this->formatNumber($l->getAmount()), $border, 0, 'R', true);
                 $this->Cell(30-0.1, $lh, $l->getPrice(), $border, 0, 'R', true);
                 $this->Cell(30-0.1, $lh, $l->getVatAmount(), $border, 0, 'R', true);
                 $this->Cell(30-0.1, $lh, $l->getTotalPrice(), $border, 0, 'R', true);

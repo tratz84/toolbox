@@ -143,7 +143,7 @@ class DefaultOfferPdf extends DefaultInvoicePdf {
             }
             
             if ($l->getLineType() != 'text') {
-                $this->Cell(20, $lh, $l->getAmount(), $border, 0, 'R');
+                $this->Cell(20, $lh, $this->formatNumber($l->getAmount()), $border, 0, 'R');
                 $this->Cell(30, $lh, $this->formatPrice($l->getPrice()), $border, 0, 'R');
                 $this->Cell(30, $lh, $this->formatPrice($l->getVatAmount()), $border, 0, 'R');
                 

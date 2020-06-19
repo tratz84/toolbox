@@ -200,7 +200,7 @@ class DefaultInvoicePdf extends BasePdf {
             $this->Cell(85, $lh, $l->getShortDescription(), $border, 0, 'L');
             
             if ($l->getAmount() != 0 || $l->getPrice() != 0) {
-                $this->Cell(15, $lh, str_replace(',00', '', format_number($l->getAmount())), $border, 0, 'R', true);
+                $this->Cell(15, $lh, $this->formatNumber($l->getAmount()), $border, 0, 'R', true);
                 $this->Cell(30, $lh, $this->formatPrice($l->getPrice()), $border, 0, 'R', true);
                 $this->Cell(30, $lh, $this->formatPrice($l->getVatAmount()), $border, 0, 'R', true);
                 $this->Cell(30, $lh, $this->formatPrice(($l->getPrice()*$l->getAmount()) + $l->getVatAmount()), $border, 0, 'R', true);
