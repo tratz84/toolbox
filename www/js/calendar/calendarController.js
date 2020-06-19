@@ -14,6 +14,8 @@ function CalendarController(container, opts) {
 	this.currentMonth = null;
 	this.currentWeek = null;
 	
+	this.today = {};
+	
 	this.loadTimeout = null;
 	
 	this.viewMode = 'monthly';
@@ -366,6 +368,12 @@ function MonthViewRenderer(controller) {
 			
 			if (cellCount%8 == 0 || cellCount == 0) {
 				var tdWeekNo = $('<td class="week-no" />');
+				
+				// current week? => highlight
+				if (this.controller.today && this.controller.today.week == moment(date).week() && this.controller.today.year == moment(date).year()) {
+					tdWeekNo.addClass('current-week');
+				}
+				
 				tdWeekNo.text( moment(date).week() );
 				tbl.find('#dayContainer tr').last().append( tdWeekNo );
 				continue;

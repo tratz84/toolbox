@@ -19,6 +19,8 @@ class viewController extends BaseController {
     public function action_index() {
         $calendarService = $this->oc->get(CalendarService::class);
         
+        $this->today = new DateTime('now', new DateTimeZone(date_default_timezone_get()));
+        
         $this->calendar = $calendarService->readFirstCalendar();
         
         $this->addTitle($this->calendar->getName());

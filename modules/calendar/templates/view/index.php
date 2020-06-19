@@ -24,6 +24,13 @@ var controller = null;
 $(document).ready(function() {
 	
 	controller = new CalendarController('#calendar-container');
+
+	controller.today = <?= json_encode([
+	    'week'    => $today->format('W')
+	    , 'month' => $today->format('n')
+	    , 'year'  => $today->format('Y')
+    ]) ?>;
+	
 	
 	controller.setCalendarId( <?= (int)$calendar->getCalendarId() ?> );
 	
