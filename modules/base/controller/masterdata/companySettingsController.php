@@ -46,8 +46,8 @@ class companySettingsController extends BaseController {
                 }
             }
             
-            
-            redirect('/?m=base&c=masterdata/index');
+            report_user_message(t('Changes saved'));
+            redirect('/?m=base&c=masterdata/companySettings');
         }
         
         
