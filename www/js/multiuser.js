@@ -69,6 +69,8 @@ function multiuser_tabuid() {
 	return tabUid;
 }
 
+var multiuser_lock_message = 'Let op, andere gebruiker actief in dit scherm: ';
+
 function multiuser_checkLock(key) {
 	$.ajax({
 		type: 'POST',
@@ -89,7 +91,7 @@ function multiuser_checkLock(key) {
 				}
 				
 				if (users.length) {
-					var msg = 'Let op, andere gebruiker actief in dit scherm: ';
+					var msg = multiuser_lock_message;
 					
 					for(var i=0; i < users.length; i++) {
 						if (i > 0 && i == users.length-1) {
