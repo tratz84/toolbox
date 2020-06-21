@@ -134,6 +134,9 @@ function multiuser_resetLock() {
 			// ?
 		}
 	});
+	
+	$('.js-inline-warning').remove();
+	multiuser_warningPopupShown = false;
 }
 
 
