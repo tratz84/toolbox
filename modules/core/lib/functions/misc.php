@@ -1001,6 +1001,15 @@ function week_diff($p_startYear, $p_startWeek, $p_endYear, $p_endWeek) {
 }
 
 
+function week2date($year, $week) {
+    $dt = new DateTime($year.'-01-01', new DateTimeZone(date_default_timezone_get()));
+    $dt->setISODate($year, $week);
+    
+    return $dt->format('Y-m-d');
+}
+
+
+
 
 function valid_date($str) {
     if ($str == '0000-00-00' || $str == false)

@@ -680,12 +680,12 @@ function hideInfoByUrl() {
 	if (showInfoByUrl_xhr)
 		showInfoByUrl_xhr.abort();
 	
-	hideInfo();
+	$('.show-info-container').remove();
 }
 
 
 function hideInfo() {
-	$('.show-info-container').remove();
+	hideInfoByUrl();
 }
 
 function showInfo(obj, html, opts) {
@@ -731,6 +731,8 @@ function showInfo(obj, html, opts) {
 function show_popup(url, opts) {
 	opts = opts || {};
 	console.log(opts);
+	
+	hideInfo();
 	
 	$.ajax({
 		type: 'POST',

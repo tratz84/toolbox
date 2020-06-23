@@ -26,6 +26,20 @@ $lang['month.7'] = 'Juli';
 $lang['month.8'] = 'Augustus';
 $lang['month.9'] = 'September';
 
+$lang['month-short.1'] = $lang['month-short.01'] = 'Jan';
+$lang['month-short.2'] = $lang['month-short.02'] = 'Feb';
+$lang['month-short.3'] = $lang['month-short.03'] = 'Mrt';
+$lang['month-short.4'] = $lang['month-short.04'] = 'Apr';
+$lang['month-short.5'] = $lang['month-short.05'] = 'Mei';
+$lang['month-short.6'] = $lang['month-short.06'] = 'Jun';
+$lang['month-short.7'] = $lang['month-short.07'] = 'Jul';
+$lang['month-short.8'] = $lang['month-short.08'] = 'Aug';
+$lang['month-short.9'] = $lang['month-short.09'] = 'Sep';
+$lang['month-short.10'] = 'Okt';
+$lang['month-short.11'] = 'Nov';
+$lang['month-short.12'] = 'Dec';
+
+
 $lang['dayno.1'] = 'Maandag';
 $lang['dayno.2'] = 'Dinsdag';
 $lang['dayno.3'] = 'Woensdag';

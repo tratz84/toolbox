@@ -56,7 +56,7 @@ class WeekField extends BaseWidget {
         for($x=0; $x < 500 && ($curYear < $this->endYear) || ($curYear == $this->endYear && $curWeek <= $this->endWeek) ; $x++) {
             
             $map_weeks[$curYear . '-' . $curWeek ] = [
-                'description' => $curYear . ' -  ' . $curWeek
+                'description' => t('Week') . ' ' . $curWeek . ' - ' . $curYear
             ];
             
             // determine next week
