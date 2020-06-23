@@ -119,6 +119,14 @@ class UserForm extends BaseForm {
         
         foreach($capabilities as $c) {
             $w = new CheckboxField('capability_' . $c['module_name'].'-'.$c['capability_code'], '', t('modulename.'.$c['module_name']) . ' - ' . $c['short_description']);
+            $w->addContainerClass('user-capability');
+            
+            if (isset($c['user_types']) && is_array($c['user_types'])) {
+                foreach($c['user_types'] as $ut) {
+                    $w->addContainerClass( $ut );
+                }
+            }
+            
             $w->setInfoText($c['infotext']);
             $w->setField('module_name', $c['module_name']);
             $w->setField('capability_code', $c['capability_code']);

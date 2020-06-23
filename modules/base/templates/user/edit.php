@@ -32,9 +32,18 @@ function autosetUserCapabilityContainer() {
 	if ($('[name=user_type]').val() == 'admin') {
 		$('.widget-container-user-capabilities').hide();
 		$('.base-forms-list-user-ip-line-widget').hide();
-	} else {
+	} else if ($('[name=user_type]').val() == 'user') {
 		$('.widget-container-user-capabilities').show();
 		$('.base-forms-list-user-ip-line-widget').show();
+		$('.widget-container-user-capabilities div.user-capability').show();
+	} else {
+		var type = $('[name=user_type]').val();
+		
+		$('.widget-container-user-capabilities').show();
+		$('.base-forms-list-user-ip-line-widget').show();
+
+		$('.widget-container-user-capabilities div.user-capability').hide();
+		$('.widget-container-user-capabilities div.user-capability.'+type).show();
 	}
 }
 

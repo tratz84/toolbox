@@ -65,7 +65,13 @@ class ModuleLoader {
             $capabilities = include $file;
             
             foreach($capabilities as $cap) {
-                $ucc->addCapability($moduleName, $cap['capability_code'], $cap['short_description'], $cap['infotext']);
+                $opts = array();
+                
+                if (isset($cap['user_types'])) {
+                    $opts['user_types'] = $cap['user_types'];
+                }
+                
+                $ucc->addCapability($moduleName, $cap['capability_code'], $cap['short_description'], $cap['infotext'], $opts);
             }
             
         });

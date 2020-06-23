@@ -11,13 +11,15 @@ class UserCapabilityContainer {
     }
     
     
-    public function addCapability($moduleName, $capabilityCode, $shortDescription, $infotext=null) {
-        $this->capabilities[] = array(
-            'module_name' => $moduleName,
-            'capability_code' => $capabilityCode,
-            'short_description' => $shortDescription,
-            'infotext' => $infotext
-        );
+    public function addCapability($moduleName, $capabilityCode, $shortDescription, $infotext=null, $opts=array()) {
+        $cap = $opts;
+        
+        $cap['module_name']       = $moduleName;
+        $cap['capability_code']   = $capabilityCode;
+        $cap['short_description'] = $shortDescription;
+        $cap['infotext']          = $infotext;
+        
+        $this->capabilities[] = $cap;
     }
     
     public function getCapabilities() {
