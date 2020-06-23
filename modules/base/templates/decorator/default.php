@@ -12,6 +12,7 @@ $menuItems = $ms->listMainMenu();
 
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+		<script src="<?= BASE_HREF ?>lib/mobile-detect.min.js"></script>
 		<script>
 			var contextName = <?= json_encode($context->getContextName()) ?>;
 			var username = <?= json_encode($context->getUser() ? $context->getUser()->getUsername() : '') ?>;
@@ -28,6 +29,8 @@ $menuItems = $ms->listMainMenu();
 			     'currency_symbol' => CURRENCY_SYMBOL
 			 ])
 			?>;
+
+			appSettings.is_mobile = new MobileDetect( window.navigator.userAgent ).phone() !== null ? true : false;
 
 		</script>
 
@@ -89,6 +92,9 @@ $menuItems = $ms->listMainMenu();
 		
 	</head>
 <body class="<?= isset($body_class) ? $body_class : '' ?> <?= getJsState('small-nav-side-menu', 0) == '1' ? 'small-nav-side-menu' : '' ?>">
+    <script>
+    if (appSettings.is_mobile) $(document.body).addClass('mobile');
+    </script>
     <header>
         <div class="notifications-bar">
             <div class="notifications-right">
