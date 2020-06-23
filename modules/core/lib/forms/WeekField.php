@@ -10,6 +10,8 @@ class WeekField extends BaseWidget {
     protected $endYear;
     protected $endWeek;
     
+    protected $thisWeek = null;
+    
     
     public function __construct($name, $value=null, $label=null) {
         $this->setName($name);
@@ -20,6 +22,7 @@ class WeekField extends BaseWidget {
         
         $this->startYear = $dt->format('Y');
         $this->startWeek = $dt->format('W');
+        $this->thisWeek = $dt->format('Y-W');
         
         $this->endYear = $dt->format('Y')+1;
         $this->endMonth = weeks_in_year($this->endYear);
@@ -68,9 +71,16 @@ class WeekField extends BaseWidget {
             }
         }
         
-        if ( $this->getValue() && preg_match('/^\\d{4}-\\d{1,2}$/', $this->getValue()) && isset($map_weeks[$this->getValue()]) == false ) {
-            list($y, $w) = explode('-', $this->getValue());
-            $map_weeks[ $this->getValue() ] = $y . ' - ' . $w;
+        $val = $this->getValue();
+        if ($this->getValue() && preg_match('/^\\d{4}-\\d{1,2}$/', $this->getValue())) {
+            $val = $this->getValue();
+        } else {
+            $val = $this->thisWeek;
+        }
+        
+        if ( isset($map_weeks[$val]) == false ) {
+            list($y, $w) = explode('-', $val);
+            $map_weeks[ $val ] = t('Week') . ' ' . $w . ' - ' . $y;
         }
         
         
@@ -82,9 +92,10 @@ class WeekField extends BaseWidget {
         $html .= '<a href="javascript:void(0);" class="fa fa-angle-left week-field-prev-option" onclick="weekField_prev_option(this);"></a>';
         
         $html .= '<select name="'.esc_attr($this->getName()).'">';
-        foreach($map_weeks as $key => $val) {
-            $html .= '<option value="'.esc_attr($key).'" '.($key == $this->getValue()?'selected="selected"':'').'>'
-                . esc_html($val['description'])
+        foreach($map_weeks as $key => $props) {
+            $html .= '<option value="'.esc_attr($key).'" '.($key == $val?'selected="selected"':'').' 
+                        class="' . ($key == $this->thisWeek?'current-week':'') . '">'
+                . esc_html($props['description'])
                 . '</option>';
         }
         $html .= '</select>';
