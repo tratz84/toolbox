@@ -780,6 +780,11 @@ $(document).keydown(function(evt) {
 });
 
 function close_popup() {
+	// no popup? => skip
+	if ($('.popup-element').length == 0) {
+		return;
+	}
+	
 	$('.popup-element').remove();
 	$(document.body).removeClass('popup-container-visible');
 	
