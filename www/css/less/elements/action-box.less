@@ -3,17 +3,25 @@
 
 
 .action-box {
+	overflow: auto;
 
-	span a {
-	    background: linear-gradient(#ededed, #ccc);
-	    padding: 6px 10px;
-	    border: 1px solid #ddd;
-	    color: #000;
-		text-decoration: none;
-		white-space: nowrap;
-
-	    &:hover {
-			background: linear-gradient(#ededed, #aaa);
+	span {
+		display: block;
+		float: left;
+		margin-right: 5px;
+		
+		a {
+			display: block;
+		    background: linear-gradient(#ededed, #ccc);
+		    padding: 6px 10px;
+		    border: 1px solid #ddd;
+		    color: #000;
+			text-decoration: none;
+			white-space: nowrap;
+	
+		    &:hover {
+				background: linear-gradient(#ededed, #aaa);
+			}
 		}
 	}
 

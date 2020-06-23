@@ -2,7 +2,6 @@
 
 namespace codegen\generator;
 
-use customer\forms\CustomerSelectWidget;
 use base\forms\UserSelectWidget;
 use codegen\form\widgetoptions\CheckboxOptionsForm;
 use codegen\form\widgetoptions\ContainerOptionsForm;
@@ -26,7 +25,9 @@ use core\forms\SelectField;
 use core\forms\TextField;
 use core\forms\TextareaField;
 use core\forms\TimePickerField;
+use core\forms\WeekField;
 use core\forms\WidgetContainer;
+use customer\forms\CustomerSelectWidget;
 
 class GeneratorHelper {
     
@@ -175,6 +176,11 @@ class GeneratorHelper {
             'class' => TimePickerField::class,
             'editor' => TimePickerOptionsForm::class,
             'label' => 'TimePicker'
+        );
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => WeekField::class,
+            'label' => 'WeekField'
         );
         $formWidgets[] = array(
             'type' => 'widget',

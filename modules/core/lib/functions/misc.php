@@ -874,7 +874,11 @@ function date_add_hours( $date, $hours, $format='Y-m-d H:i:s' ) {
 
 
 
-function weeks_in_year($year, $timezone='Europe/Amsterdam') {
+function weeks_in_year($year, $timezone=null) {
+    if ($timezone === null) {
+        $timezone = date_default_timezone_get();
+    }
+    
     $dt = new DateTime($year . '-12-30', new DateTimeZone($timezone));
     
     // ISO-8601 specification, 28 dec always last week

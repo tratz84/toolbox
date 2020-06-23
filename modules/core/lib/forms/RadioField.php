@@ -52,7 +52,7 @@ class RadioField extends BaseWidget {
         $extraClass .= ' ' . slugify($this->getName()).'-widget';
         
         $html .= '<div class="widget radio-field-widget '.$extraClass.'">';
-        $html .= '<label>'.esc_html($this->getLabel()).'</label>';
+        $html .= '<label class="radio-field-label">'.esc_html($this->getLabel()).'</label>';
         foreach($this->optionItems as $key => $val) {
             $idslug = slugify($this->getName().'-'.$key);
             
