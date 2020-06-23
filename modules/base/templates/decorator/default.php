@@ -30,7 +30,7 @@ $menuItems = $ms->listMainMenu();
 			 ])
 			?>;
 
-			appSettings.is_mobile = new MobileDetect( window.navigator.userAgent ).phone() !== null ? true : false;
+			appSettings.is_mobile = new MobileDetect( window.navigator.userAgent ).phone() !== null ? 1 : 0;
 
 		</script>
 
