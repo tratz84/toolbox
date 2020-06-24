@@ -54,6 +54,40 @@ t.addColumn({
 	}
 });
 t.addColumn({
+	fieldName: 'edited',
+	fieldDescription: toolbox_t('Edited'),
+	fieldType: 'datetime',
+	searchable: false
+});
+t.addColumn({
+	fieldName: '',
+	width: 30,
+	fieldDescription: 'Reset&nbsp;password',
+	fieldType: 'actions',
+	searchable: false,
+	css: 'text-align: left;',
+	render: function(row) {
+		var inp = $('<input type="button" value="Reset" />');
+		inp.data('record', row);
+		inp.click(function() {
+			var rec = $(this).data('record');
+
+			if (validate_email( rec.email ) == false) {
+				alert(toolbox_t('User has no valid e-mail address configured'));
+				return;
+			}
+
+			var c = confirm(toolbox_t('Are you sure to send this user a password-reset e-mail?') + ' - ' + row.username);
+			if (!c) {
+				return;
+			}
+
+			window.location = appUrl( '/?m=base&c=user&a=reset_password&id=' + rec.user_id );
+		});
+		return inp;
+	}
+});
+t.addColumn({
 	fieldName: '',
 	fieldDescription: '',
 	fieldType: 'actions',

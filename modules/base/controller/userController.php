@@ -42,6 +42,18 @@ class userController extends FormController {
     }
     
     
+    public function action_reset_password() {
+        
+        $userService = object_container_get(UserService::class);
+        
+        $user = $userService->readUser( get_var('id') );
+        $userService->resetPassword( get_var('id') );
+        
+        report_user_message(t('Password reset e-mail sent') . ': ' . $user->getUsername());
+        redirect('/?m=base&c=user');
+    }
+    
+    
     
     
     public function action_select2() {

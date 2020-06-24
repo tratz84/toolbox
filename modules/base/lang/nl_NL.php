@@ -171,6 +171,10 @@ $lang['Long note']       = 'Lange notite';
 $lang['Please note']     = 'Let op';
 $lang['Note saved']      = 'Notitie opgeslagen';
 
+$lang['User has no valid e-mail address configured'] = 'Gebruiker heeft geen geldig e-mailadres geconfigureerd';
+$lang['Are you sure to send this user a password-reset e-mail?'] = 'Weet je zeker dat je deze gebruiker een wachtwoord-reset e-mail wilt sturen?';
+$lang['Password reset e-mail sent'] = 'Wachtwoord reset e-mail verstuurd';
+
 // activity report
 $lang['Activity']          = 'Activiteit';
 $lang['Short description'] = 'Korte omschrijving';
