@@ -24,9 +24,11 @@ class IdentityForm extends BaseForm {
         
         $this->addWidget( new HiddenField('identity_id', '', 'Id') );
         
-        $this->addWidget( new CheckboxField('active', '', 'Actief'));
-        $this->addWidget( new TextField('from_name', '', 'Naam') );
-        $this->addWidget( new EmailField('from_email', '', 'E-mail'));
+        $this->addWidget( new CheckboxField('active', '', t('Active')));
+        $this->addWidget( new CheckboxField('system_messages', '', t('System messages')));
+        $this->getWidget('system_messages')->setInfoText( t('Use this identity for system-messages? ie. password-reset mails') );
+        $this->addWidget( new TextField('from_name', '', t('Name')) );
+        $this->addWidget( new EmailField('from_email', '', t('E-mail')));
         
         if (ctx()->isExperimental()) {
             $this->addLinkedConnectorId();

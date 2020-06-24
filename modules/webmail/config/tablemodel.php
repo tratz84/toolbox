@@ -200,6 +200,7 @@ $tb_identity->addColumn('connector_id', 'int');
 $tb_identity->addColumn('from_name',    'varchar(255)');
 $tb_identity->addColumn('from_email',   'varchar(255)');
 $tb_identity->addColumn('active',       'boolean');
+$tb_identity->addColumn('system_messages','boolean');
 $tb_identity->addColumn('sort',         'int');
 $tb_identity->addColumn('edited',       'datetime');
 $tb_identity->addColumn('created',      'datetime');

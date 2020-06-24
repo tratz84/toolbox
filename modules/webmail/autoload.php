@@ -21,7 +21,7 @@ Context::getInstance()->enableModule('webmail');
 // core\db\mysql\MysqlTableGenerator::updateModule('webmail', true);
 // die('done');
 
-module_update_handler('webmail', '20200404');
+module_update_handler('webmail', '20200624');
 
 hook_register_javascript('webmail', '/module/webmail/js/script.js');
 

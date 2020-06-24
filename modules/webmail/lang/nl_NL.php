@@ -19,5 +19,8 @@ $lang['New e-mail']                 = 'Nieuwe e-mail';
 $lang['All e-mails handled']        = 'Alle berichten verwerkt';
 $lang['Recent e-mails']             = 'Recente e-mails';
 
+$lang['System messages']            = 'Systeem berichten';
+$lang['Use this identity for system-messages? ie. password-reset mails'] = 'Gebruik deze identiteit voor systeem-berichten? B.v. wachtwooord-reset mails';
+
 
 return $lang;

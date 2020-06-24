@@ -51,7 +51,7 @@ t.setConnectorUrl( '/?m=webmail&c=identity&a=search' );
 // });
 t.addColumn({
 	fieldName: 'from_name',
-	fieldDescription: 'Naam',
+	fieldDescription: toolbox_t('Name'),
 	fieldType: 'text'
 });
 t.addColumn({
@@ -59,9 +59,17 @@ t.addColumn({
 	fieldDescription: 'E-mail',
 	fieldType: 'text'
 });
+
+t.addColumn({
+	fieldName: 'system_messages',
+	fieldDescription: toolbox_t('System messages'),
+	fieldType: 'boolean',
+	searchable: false
+});
+
 t.addColumn({
 	fieldName: 'active',
-	fieldDescription: 'Actief',
+	fieldDescription: toolbox_t('Active'),
 	fieldType: 'boolean',
 	searchable: false
 });

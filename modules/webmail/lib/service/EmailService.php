@@ -55,6 +55,20 @@ class EmailService extends ServiceBase {
         return $iDao->read($id);
     }
     
+    public function readSystemMessagesIdentity() {
+        $iDao = new IdentityDAO();
+        
+        $i = $iDao->readSystemMessages();
+        
+        if ($i === null) {
+            $i = new Identity();
+            $i->setFromName('Toolbox - Admin');
+            $i->setFromEmail('no-reply@localhost');
+        }
+        
+        return $i;
+    }
+    
     public function saveIdentity(IdentityForm $form) {
         $id = $form->getWidgetValue('identity_id');
         if ($id) {
@@ -63,14 +77,22 @@ class EmailService extends ServiceBase {
             $identity = new Identity();
         }
         
-        $form->fill($identity, array('identity_id', 'connector_id', 'from_name', 'from_email', 'active'));
+        $form->fill($identity, array('identity_id', 'connector_id', 'from_name', 'from_email', 'active', 'system_messages'));
         
         // set to null if not set
         if (!$identity->getConnectorId()) {
             $identity->setConnectorId(null);
         }
         
-        return $identity->save();
+        
+        if ($identity->getSystemMessages()) {
+            $iDao = object_container_create(IdentityDAO::class);
+            $iDao->unsetSystemMessageFlag();
+        }
+        
+        $identity->save();
+        
+        return $identity;
     }
     
     public function deleteIdentity($id) {

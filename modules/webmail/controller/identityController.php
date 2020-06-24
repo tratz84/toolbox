@@ -23,7 +23,7 @@ class identityController extends BaseController {
         
         $list = array();
         foreach($identities as $i) {
-            $list[] = $i->getFields(array('identity_id', 'from_name', 'from_email', 'active'));
+            $list[] = $i->getFields(array('identity_id', 'from_name', 'from_email', 'active', 'system_messages'));
         }
         
         

@@ -23,6 +23,7 @@ use webmail\mail\SendMail;
 use webmail\model\Email;
 use webmail\model\EmailTo;
 use core\db\DatabaseHandler;
+use webmail\service\EmailService;
 
 
 
@@ -260,12 +261,18 @@ class UserService extends ServiceBase {
         $rp->setRequestIp( remote_addr() );
         $rp->save();
         
+        // fetch system identity
+        $emailService = object_container_get(EmailService::class);
+        $systemIdentity = $emailService->readSystemMessagesIdentity();
         
         // send e-mail
         $email = new Email();
         $email->setStatus(Email::STATUS_SENT);
-        $email->setFromName('Toolbox - Admin');
-        $email->setFromEmail('no-reply@localhost');
+        
+        $email->setIdentityId( $systemIdentity->getIdentityId() );
+        $email->setFromName( $systemIdentity->getFromName() );
+        $email->setFromEmail( $systemIdentity->getFromEmail() );
+        
         $email->setSubject( t('Password reset requested for') . ' '  . $user->getUsername() );
         $email->setIncoming(false);
         

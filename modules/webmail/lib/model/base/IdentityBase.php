@@ -14,7 +14,7 @@ class IdentityBase extends \core\db\DBObject {
   'identity_id' => 
   array (
     'Field' => 'identity_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'NO',
     'Key' => 'PRI',
     'Default' => NULL,
@@ -23,7 +23,7 @@ class IdentityBase extends \core\db\DBObject {
   'connector_id' => 
   array (
     'Field' => 'connector_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => 'MUL',
     'Default' => NULL,
@@ -59,7 +59,7 @@ class IdentityBase extends \core\db\DBObject {
   'sort' => 
   array (
     'Field' => 'sort',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => '0',
@@ -78,6 +78,15 @@ class IdentityBase extends \core\db\DBObject {
   array (
     'Field' => 'created',
     'Type' => 'datetime',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'system_messages' => 
+  array (
+    'Field' => 'system_messages',
+    'Type' => 'tinyint(1)',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -120,6 +129,10 @@ class IdentityBase extends \core\db\DBObject {
 		
 	public function setCreated($p) { $this->setField('created', $p); }
 	public function getCreated() { return $this->getField('created'); }
+	
+		
+	public function setSystemMessages($p) { $this->setField('system_messages', $p); }
+	public function getSystemMessages() { return $this->getField('system_messages'); }
 	
 	
 }
