@@ -82,8 +82,6 @@ $lang['modulename.calendar'] = 'Kalender';
 
 $lang['Add line']      = 'Nieuwe regel';
 
-$lang['Current week']  = 'Huidige week';
-
 $lang['Add']           = 'Toevoegen';
 $lang['Edit']          = 'Bewerk';
 $lang['Edit2']         = 'Bewerken';
