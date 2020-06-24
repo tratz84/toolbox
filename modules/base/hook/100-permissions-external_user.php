@@ -10,6 +10,9 @@ hook_eventbus_subscribe('core', 'authorization-check', function($ac) {
         if ($ac->getController() == 'js/dynamicscripts') {
             $ac->allowPermission();
         }
+        if ($ac->getController() == 'auth') {
+            $ac->allowPermission();
+        }
     }
     
 });

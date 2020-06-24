@@ -160,6 +160,15 @@ $menuItems = $ms->listMainMenu();
 					<?php endif; ?>
 				</li>
     		<?php endforeach; ?>
+    		
+				<li class="menu-item menu-item-sign-out">
+					<a class="nav-link" 
+						href="<?= appUrl('/?m=base&c=auth&a=logoff') ?>"
+						title="<?= t('Log out') ?>">
+						<i class="fa fa-sign-out"></i> 
+						<span class="menu-label"><?= esc_html(t('Log out')) ?></span>
+					</a>
+    			</li>
 			</ul>
 		</div>
 	</div>
