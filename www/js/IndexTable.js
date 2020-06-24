@@ -379,6 +379,7 @@ function IndexTable( container, opts ) {
 					var t = $('<input type="text" />');
 					t.attr('name', col.fieldName);
 					t.attr('placeholder', col.fieldDescription);
+					t.attr('autocomplete', 'off');
 
 					if (typeof col.width != 'undefined') {
 						t.css('width', col.width);
