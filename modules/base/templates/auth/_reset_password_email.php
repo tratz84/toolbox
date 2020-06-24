@@ -20,7 +20,7 @@ $reset_url = BASE_URL.appUrl('/?m=base&c=auth&a=reset_link&id='.$reset_password_
 	<br/>
 	<br/>
 	
-	Om het wachtwoord te resetten klik op deze link: <a href="<?= $reset_url ?>" target="_blank"><?= $reset_url ?></a>
+	Met de volgende link kunt u uw wachtwoord resetten: <a href="<?= $reset_url ?>" target="_blank"><?= $reset_url ?></a>
 	
 	<br/>
 	<br/>
