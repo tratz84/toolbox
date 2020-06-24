@@ -175,7 +175,14 @@ class Context
     public function isPersonsEnabled() { return true; }   // $this->getSetting('personsEnabled') ? true : false; }
     public function isCompaniesEnabled() { return true; } // $this->getSetting('companiesEnabled') ? true : false; }
     
-    public function isResetPasswordEnabled() { return $this->getSetting('reset_password', false); }
+    public function isResetPasswordEnabled() {
+        // this is a requirement for password resets
+        if ($this->isModuleEnabled('webmail') == false) {
+            return false;
+        }
+        
+        return $this->getSetting('reset_password', false);
+    }
     public function isCustomersSplit() { return $this->getSetting('customers_split', true); }
     
     public function pdfPrintDateFooter() { return $this->getSetting('pdf_print_date_footer', true); }

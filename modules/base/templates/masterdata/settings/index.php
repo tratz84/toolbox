@@ -40,7 +40,9 @@
 <?php ob_start() ?>
 
 	<div style="padding: 5px 5px 15px 5px; margin-bottom: 15px;">
-		<?= $checkboxResetPassword->render() ?>
+		<?php if (isset($checkboxResetPassword)) : ?>
+			<?= $checkboxResetPassword->render() ?>
+		<?php endif; ?>
 		
 		<?= $checkboxObjectLocking->render() ?>
 		

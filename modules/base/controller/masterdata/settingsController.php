@@ -41,7 +41,10 @@ class settingsController extends BaseController {
             if ($pageSize >= 10 && $_REQUEST['PAGE_SIZE'] < 100)
                 $settingsService->updateValue('PAGE_SIZE', $pageSize);
 
-            $settingsService->updateValue('reset_password', get_var('reset_password')?1:0);
+            // webmail-module required for password resets
+            if (ctx()->isModuleEnabled('webmail')) {
+                $settingsService->updateValue('reset_password', get_var('reset_password')?1:0);
+            }
             $settingsService->updateValue('object_locking', get_var('object_locking')?1:0);
             $settingsService->updateValue('customers_split', get_var('customers_split')?1:0);
             $settingsService->updateValue('pdf_print_date_footer', get_var('pdf_print_date_footer')?1:0);
@@ -53,8 +56,11 @@ class settingsController extends BaseController {
             redirect('/?m=base&c=masterdata/settings');
         }
         
-        $this->checkboxResetPassword = new CheckboxField('reset_password', ctx()->isResetPasswordEnabled()?'1':'0', t('Reset password'));
-        $this->checkboxResetPassword->setInfoText(t('Reset password support on login-page'));
+        // webmail-module required for password resets
+        if (ctx()->isModuleEnabled('webmail')) {
+            $this->checkboxResetPassword = new CheckboxField('reset_password', ctx()->isResetPasswordEnabled()?'1':'0', t('Reset password'));
+            $this->checkboxResetPassword->setInfoText(t('Reset password support on login-page'));
+        }
         
         $this->checkboxObjectLocking = new CheckboxField('object_locking', @$this->settings['object_locking']?'1':'0', t('Object locking'));
         $this->checkboxObjectLocking->setInfoText(t('Possibility to mark objects as "locked"'));
