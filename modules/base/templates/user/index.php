@@ -59,6 +59,8 @@ t.addColumn({
 	fieldType: 'datetime',
 	searchable: false
 });
+
+<?php if (ctx()->isResetPasswordEnabled()) : ?>
 t.addColumn({
 	fieldName: '',
 	width: 30,
@@ -87,6 +89,8 @@ t.addColumn({
 		return inp;
 	}
 });
+<?php endif; ?>
+
 t.addColumn({
 	fieldName: '',
 	fieldDescription: '',
