@@ -52,6 +52,11 @@
     			</td>
     		</tr>
     	</table>
+    	
+    	<br/>
+    	<br/>
+    	
+    	<a href="<?= appUrl('/?m=base&c=auth&a=reset_password') ?>"><?= t('Reset password') ?></a>
 	</div>
 
 </form>

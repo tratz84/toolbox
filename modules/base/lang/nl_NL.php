@@ -3,6 +3,17 @@
 
 $lang = array();
 
+$lang['Reset password']         = 'Reset wachtwoord';
+$lang['Username or e-mail']     = 'Gebruikersnaam of e-mail';
+
+$lang['New password']           = 'Nieuw wachtwoord';
+$lang['Password confirmation']  = 'Bevestiging wachtwoord';
+
+$lang['Link already used']      = 'Link reeds gebruikt';
+$lang['Back to home']           = 'Terug naar homepage';
+$lang['If the given username or e-mail is valid, you should receive an e-mail within seconds'] = 'Als het opgegeven gebruikersnaam of e-mail juist is, ontvangt u binnen enkele seconden een e-mail';
+$lang['Success: password set']  = 'Succes: Wachtwoord ingesteld';
+
 $lang['Year']                   = 'Jaar';
 
 $lang['userType.admin']         = 'Administrator';

@@ -2,6 +2,8 @@
 
 namespace core\forms\lists;
 
+use core\exception\InvalidArgumentException;
+
 class ListResponse {
     
     public $rowCount;
@@ -99,5 +101,13 @@ class ListResponse {
     
     public function getObjects() { return $this->objects; }
     public function setObjects($p) { $this->objects = $p; }
+    
+    public function getObject($no) {
+        if (is_array($this->objects) && $no >= 0 && $no < count($this->objects)) {
+            return $this->objects[$no];
+        }
+        
+        throw new InvalidArgumentException('Invalid object-no');
+    }
     
 }

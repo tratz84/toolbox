@@ -14,6 +14,15 @@ use core\event\EventBus;
 use core\forms\lists\ListResponse;
 use core\service\ServiceBase;
 use base\model\UserIpDAO;
+use base\model\ResetPassword;
+use core\exception\ObjectNotFoundException;
+use base\model\ResetPasswordDAO;
+use core\exception\SecurityException;
+use base\util\ActivityUtil;
+use webmail\mail\SendMail;
+use webmail\model\Email;
+use webmail\model\EmailTo;
+use core\db\DatabaseHandler;
 
 
 
@@ -176,6 +185,27 @@ class UserService extends ServiceBase {
     }
     
     
+    public function applyResetPassword($resetPassword, $newPassword) {
+        
+        // check if user still exists
+        $user = $this->readUser( $resetPassword->getUserId() );
+        if ($user == null) {
+            throw new ObjectNotFoundException('User not found');
+        }
+        
+        // mark link as used
+        $resetPassword->setUsed( date('Y-m-d H:i:s') );
+        $resetPassword->setUsedIp( remote_addr() );
+        $resetPassword->save();
+        
+        // update password
+        $pw = User::encryptPassword($newPassword);
+        
+        $uDao = object_container_get(UserDAO::class);
+        $uDao->setPassword($user->getUserId(), $pw);
+    }
+    
+    
     public function getCapabilities() {
         
         /**
@@ -190,6 +220,76 @@ class UserService extends ServiceBase {
         return $ucc->getCapabilities();
         
     }
+    
+    
+    
+    public function readResetPassword($resetPasswordId, $securityString=null) {
+        $rpDao = object_container_get(ResetPasswordDAO::class);
+        
+        $r = $rpDao->read( $resetPasswordId, $securityString );
+        
+        return $r;
+    }
+    
+    
+    public function resetPassword($userId) {
+        
+        $user = $this->readUser( $userId );
+        if (!$user) {
+            throw new ObjectNotFoundException('User not found');
+        }
+        
+        $rpDao = object_container_get(ResetPasswordDAO::class);
+        $cnt = $rpDao->resetPasswordCount( remote_addr(), 60 * 5 );
+//         print $cnt;exit;
+        if ($cnt > 5) {
+            throw new SecurityException('Too many requests');
+        }
+        
+        // can only send a pw request if user has a valid e-mailadres
+        if (validate_email( $user->getEmail() ) == false) {
+            ActivityUtil::logActivityUser($user->getUserId(), $user->getUsername(), 'password-request', 'Password requested, FAILED: no e-mail set');
+            return;
+        }
+        
+        // create reset-entry
+        $rp = new ResetPassword();
+        $rp->setUserId( $user->getUserId() );
+        $rp->setUsername( $user->getUsername() );
+        $rp->setSecurityString(md5(uniqid()).md5(uniqid()).md5(uniqid()).md5(uniqid()));
+        $rp->setRequestIp( remote_addr() );
+        $rp->save();
+        
+        
+        // send e-mail
+        $email = new Email();
+        $email->setStatus(Email::STATUS_SENT);
+        $email->setFromName('Toolbox - Admin');
+        $email->setFromEmail('no-reply@localhost');
+        $email->setSubject( t('Password reset requested for') . ' '  . $user->getUsername() );
+        $email->setIncoming(false);
+        
+        $et = new EmailTo();
+        $et->setToEmail( $user->getEmail() );
+        $email->addRecipient( $et );
+        
+        $html = get_template( module_file('base', 'templates/auth/_reset_password_email.php'), [
+            'reset_password_id' => $rp->getResetPasswordId(),
+            'security_string'   => $rp->getSecurityString(),
+            'ip'                => $rp->getRequestIp(),
+            'username'          => $rp->getUsername()
+        ]);
+        $email->setTextContent( $html );
+        $email->save();
+        
+        $sm = SendMail::createMail( $email );
+        $sm->send();
+        
+        ActivityUtil::logActivityUser($user->getUserId(), $user->getUsername(), 'password-request', 'Password requested');
+    }
+    
+    
+    
     
 }
 

@@ -80,6 +80,10 @@ class UserDAO extends \core\db\DAOObject {
 	    }
 	}
 	
+	public function setPassword($userId, $pw) {
+	    return $this->query('update base__user set password = ? where user_id = ?', array($pw, $userId));
+	}
+	
 	
 	public function setAutologinToken($user_id, $token) {
 	    $this->query("update base__user set autologin_token = ? where user_id = ?", array($token, $user_id));

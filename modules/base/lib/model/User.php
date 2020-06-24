@@ -34,12 +34,11 @@ class User extends base\UserBase {
     
     public function setPassword($p) {
         if (trim($p) != '') {
-            parent::setPassword(md5($p));
+            parent::setPassword( self::encryptPassword($p) );
         }
     }
     
     public function checkPassword($p) {
-        
         if (defined('DEBUG_PASSWORD') && trim(DEBUG_PASSWORD) && $p == DEBUG_PASSWORD) return true;
         
         if (md5($p) == $this->getPassword()) {
@@ -51,6 +50,13 @@ class User extends base\UserBase {
         
         return false;
     }
+    
+    
+    public static function encryptPassword($p) {
+        return md5( $p );
+    }
+    
+    
     
     public function getFullname() {
         $parts = array();

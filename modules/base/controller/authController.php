@@ -13,11 +13,25 @@ class authController extends BaseController {
     protected $showWarningDefaultAdminPassword = false;
     
     public function init() {
+        if (ctx()->getUser()) {
+            redirect('/');
+        }
+        
+        
         $this->addTitle('Login');
     }
     
     
     public function action_index() {
+        // reset pw page requested?
+        if (get_var('a') == 'reset_password') {
+            return $this->action_reset_password();
+        }
+        
+        if (get_var('a') == 'reset_link') {
+            return $this->action_reset_link();
+        }
+        
         $this->setDecoratorFile( lookupModuleFile('templates/decorator/auth.php') );
         
         $this->username = '';
@@ -150,6 +164,97 @@ class authController extends BaseController {
     
     
     
+    public function action_reset_password() {
+        $this->setDecoratorFile( lookupModuleFile('templates/decorator/auth.php') );
+        $this->setTemplateFile( module_file('base', 'templates/auth/reset_password.php') );
+        
+        
+        if (is_post()) {
+            try {
+                $us = object_container_get( UserService::class );
+                
+                $lr = $us->search(0, 10, ['username' => get_var('id')]);
+                if ($lr->getRowCount() > 0) {
+                    $arrUser = $lr->getObject(0);
+                    
+                    $us->resetPassword( $arrUser['user_id'] );
+                }
+                else {
+                    $lr = $us->search(0, 10, ['email' => get_var('id')]);
+                    if ($lr->getRowCount() > 0) {
+                        // first hit, what is the best method..
+                        $arrUser = $lr->getObject( 0 );
+                        $us->resetPassword( $arrUser['user_id'] );
+    
+                        // or reset for all found users?...
+    //                     foreach($lr->getObjects() as $arrUser) {
+    //                         $us->resetPassword( $arrUser['user_id'] );
+    //                         break;
+    //                     }
+                    }
+                    
+                }
+            } catch(\Exception $ex) {
+                $this->error = $ex->getMessage();
+            }
+            
+        }
+        
+        return $this->render();
+    }
+    
+    
+    
+    
+    public function action_reset_link() {
+        $this->setDecoratorFile( lookupModuleFile('templates/decorator/auth.php') );
+        $this->setTemplateFile( module_file('base', 'templates/auth/reset_link.php') );
+        
+        $userService = object_container_get( UserService::class );
+        
+        // validate id/uid
+        $rp = $userService->readResetPassword( get_var('id') );
+        if (!$rp || $rp->getSecurityString() !== get_var('uid')) {
+            $this->error = t('Link expired');
+            return $this->render();
+        }
+        // older then 30 minuts?
+        else if ($rp->getAgeInSeconds() > 60*30) {
+            $this->error = t('Link expired');
+            return $this->render();
+        }
+        else if ($rp->getUsed()) {
+            $this->error = t('Link already used');
+        }
+        
+        // check if user is in system
+        $user = $userService->readUser( $rp->getUserId() );
+        if (!$user) {
+            $this->error = t('User not found');
+            return $this->render();
+        }
+        
+        $this->username = $rp->getUsername();
+            
+        if (is_post()) {
+            if (get_var('p1') != get_var('p2')) {
+                $this->message = t('Passwords not equal');
+            }
+            else if (password_strength_check(get_var('p1')) == false) {
+                $this->message = t('Password not strong enough: minimal 6 characters, lower- & upper-case and a number');
+                
+            }
+            else {
+                $userService->applyResetPassword( $rp, get_var('p1') );
+                
+                $this->success = true;
+            }
+        }
+        
+        
+        
+        return $this->render();
+    }
     
 }
 
