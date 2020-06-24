@@ -147,12 +147,26 @@ class DAOObject
             }
         }
         
-        $sql = "delete from `".$tbl."` where `".$linkKey."` = ? ";
-        if (count($currentIds)) {
-            $sql .= " AND `".$pk."` NOT IN (" . implode(', ', $currentIds) . ") ";
+        // deleted-field? => mark as deleted
+        if ($obj->hasDatabaseField('deleted')) {
+            // mark as deleted
+            if (count($currentIds)) {
+                $sql = "update `".$tbl."` set deleted=now() where `".$linkKey."` = ? ";
+                if (count($currentIds)) {
+                    $sql .= " AND `".$pk."` NOT IN (" . implode(', ', $currentIds) . ") ";
+                }
+                $this->query($sql, array($linkKeyValue));
+            }
         }
-        
-        $this->query($sql, array($linkKeyValue));
+        // delete objects
+        else {
+            // delete
+            $sql = "delete from `".$tbl."` where `".$linkKey."` = ? ";
+            if (count($currentIds)) {
+                $sql .= " AND `".$pk."` NOT IN (" . implode(', ', $currentIds) . ") ";
+            }
+            $this->query($sql, array($linkKeyValue));
+        }
     }
     
     
