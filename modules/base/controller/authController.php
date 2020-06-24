@@ -6,6 +6,7 @@ use core\Context;
 use core\controller\BaseController;
 use core\exception\AuthenticationException;
 use base\util\ActivityUtil;
+use core\exception\SecurityException;
 
 class authController extends BaseController {
     
@@ -13,10 +14,10 @@ class authController extends BaseController {
     protected $showWarningDefaultAdminPassword = false;
     
     public function init() {
-        if (ctx()->getUser()) {
+        // .. ?
+        if (ctx()->getUser() && in_array()) {
             redirect('/');
         }
-        
         
         $this->addTitle('Login');
     }
@@ -165,6 +166,10 @@ class authController extends BaseController {
     
     
     public function action_reset_password() {
+        if (ctx()->isResetPasswordEnabled() == false) {
+            throw new SecurityException('Requested link disabled');
+        }
+        
         $this->setDecoratorFile( lookupModuleFile('templates/decorator/auth.php') );
         $this->setTemplateFile( module_file('base', 'templates/auth/reset_password.php') );
         
@@ -207,6 +212,10 @@ class authController extends BaseController {
     
     
     public function action_reset_link() {
+        if (ctx()->isResetPasswordEnabled() == false) {
+            throw new SecurityException('Requested link disabled');
+        }
+        
         $this->setDecoratorFile( lookupModuleFile('templates/decorator/auth.php') );
         $this->setTemplateFile( module_file('base', 'templates/auth/reset_link.php') );
         

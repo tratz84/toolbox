@@ -56,7 +56,9 @@
     	<br/>
     	<br/>
     	
+    	<?php if (ctx()->isResetPasswordEnabled()) : ?>
     	<a href="<?= appUrl('/?m=base&c=auth&a=reset_password') ?>"><?= t('Reset password') ?></a>
+    	<?php endif; ?>
 	</div>
 
 </form>

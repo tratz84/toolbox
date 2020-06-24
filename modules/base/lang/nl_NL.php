@@ -13,6 +13,9 @@ $lang['Link already used']      = 'Link reeds gebruikt';
 $lang['Back to home']           = 'Terug naar homepage';
 $lang['If the given username or e-mail is valid, you should receive an e-mail within seconds'] = 'Als het opgegeven gebruikersnaam of e-mail juist is, ontvangt u binnen enkele seconden een e-mail';
 $lang['Success: password set']  = 'Succes: Wachtwoord ingesteld';
+$lang['Password not strong enough: minimal 6 characters, lower- & upper-case and a number'] = 'Wachtwoord niet sterk genoeg: minimaal 6 karakters, hoofdletter & kleine letter, plus een getal';
+$lang['Passwords not equal']    = 'Wachtwoorden niet gelijk aan elkaar';
+
 
 $lang['Year']                   = 'Jaar';
 
