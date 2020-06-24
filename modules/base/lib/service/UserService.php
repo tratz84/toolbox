@@ -249,7 +249,7 @@ class UserService extends ServiceBase {
         
         // can only send a pw request if user has a valid e-mailadres
         if (validate_email( $user->getEmail() ) == false) {
-            ActivityUtil::logActivityUser($user->getUserId(), $user->getUsername(), 'password-request', 'Password requested, FAILED: no e-mail set');
+            ActivityUtil::logActivityUser($user->getUserId(), $user->getUsername(), 'password-request', 'Password requested, FAILED: no e-mail set', 'IP: ' . remote_addr());
             return;
         }
         
@@ -292,7 +292,15 @@ class UserService extends ServiceBase {
         $sm = SendMail::createMail( $email );
         $sm->send();
         
-        ActivityUtil::logActivityUser($user->getUserId(), $user->getUsername(), 'password-request', 'Password requested');
+        $longdesc = '';
+        if (ctx()->getUser()) {
+            $longdesc = 'Requested by ' . ctx()->getUser()->getUsername() . "\n<br/>IP: " . remote_addr();
+        }
+        else {
+            $longdesc = "Requested by an unauthenticated user\n<br/>IP: " . remote_addr();
+        }
+        
+        ActivityUtil::logActivityUser($user->getUserId(), $user->getUsername(), 'password-request', 'Password requested', $longdesc);
     }
     
     
