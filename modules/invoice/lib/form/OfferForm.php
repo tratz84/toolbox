@@ -20,6 +20,7 @@ use core\forms\validator\NotEmptyValidator;
 use invoice\model\Invoice;
 use invoice\model\Offer;
 use invoice\service\OfferService;
+use customer\forms\CustomerSelectWidget;
 
 class OfferForm extends BaseForm {
     
@@ -38,7 +39,8 @@ class OfferForm extends BaseForm {
         
         $this->addWidget( new DatePickerField('offer_date', '', 'Datum') );
         
-        $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=customer&c=customer&a=select2', 'Klant') );
+        $this->addWidget( new CustomerSelectWidget() );
+//         $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=customer&c=customer&a=select2', 'Klant') );
         
         $this->addOfferStatus();
         $this->addWidget( new TextField('subject', '', 'Betreft') );
@@ -58,27 +60,6 @@ class OfferForm extends BaseForm {
     }
     
     
-    
-    public function changes(DBObject $obj) {
-        $c = parent::changes($obj);
-        
-        // customer_id-field is a special case, check it against Invoice::getCompanyId() & Invoice::getPersonId()
-        if (is_a($obj, Offer::class)) {
-            $customer_id = $this->getWidgetValue('customer_id');
-            
-            if ($obj->getCompanyId() && $customer_id != 'company-'.$obj->getCompanyId()) {
-                $c[] = array('field_name' => 'customer_id', 'old' => 'company-'.$obj->getCompanyId(), 'new' => $customer_id);
-            }
-            else if ($obj->getPersonId() && $customer_id != 'person-'.$obj->getPersonId()) {
-                $c[] = array('field_name' => 'customer_id', 'old' => 'person-'.$obj->getPersonId(), 'new' => $customer_id);
-            }
-            else if (!$obj->getCompanyId() && !$obj->getPersonId() && $customer_id) {
-                $c[] = array('field_name' => 'customer_id', 'old' => '', 'new' => $customer_id);
-            }
-        }
-        
-        return $c;
-    }
     
     public function bind($obj) {
         parent::bind($obj);
