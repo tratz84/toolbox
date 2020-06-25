@@ -32,7 +32,10 @@ function reloadNotes() {
 		url: appUrl('/?m=base&c=notes/notestab&a=search'),
 		data: {
 			companyId: <?= json_encode($companyId) ?>,
-			personId: <?= json_encode($personId) ?>
+			personId: <?= json_encode($personId) ?>,
+			ref_object: <?= json_encode($ref_object) ?>,
+			ref_id: <?= json_encode($ref_id) ?>,
+			save_by_ref: <?= json_encode($save_by_ref?1:0) ?>
 		},
 		success: function(data, xhr, textStatus) {
 			renderNotes( data.listResponse );
@@ -116,7 +119,8 @@ function newNote_Click() {
 			company_id: <?= json_encode( $companyId ) ?>,
 			person_id:  <?= json_encode( $personId ) ?>,
 			ref_object: <?= json_encode($ref_object) ?>,
-			ref_id: <?= json_encode($ref_id) ?>
+			ref_id: <?= json_encode($ref_id) ?>,
+			save_by_ref: <?= json_encode($save_by_ref?1:0) ?>
 		},
 		renderCallback: function(popup) {
 			$(popup).find('[type=text]').first().focus();
@@ -127,7 +131,10 @@ function newNote_Click() {
 function editNote( note_id ) {
 	show_popup(appUrl('/?m=base&c=notes/notestab&a=edit_note'), {
 		data: {
-			note_id: note_id
+			note_id: note_id,
+			ref_object: <?= json_encode($ref_object) ?>,
+			ref_id: <?= json_encode($ref_id) ?>,
+			save_by_ref: <?= json_encode($save_by_ref?1:0) ?>
 		},
 		renderCallback: function(popup) {
 			$(popup).find('[type=text]').first().focus();

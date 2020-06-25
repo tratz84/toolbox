@@ -35,6 +35,13 @@ class NotesService extends ServiceBase {
             throw new InvalidArgumentException('No company/person set');
         }
     }
+
+    
+    public function readNotesByRef( $refObject, $refId ) {
+        $nDao = new NoteDAO();
+        
+        return $nDao->readByRef($refObject, $refId);
+    }
     
     
     public function readNote($note_id) {

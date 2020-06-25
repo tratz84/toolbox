@@ -21,9 +21,13 @@ class notestabController extends BaseController {
         $this->ref_object = isset($this->ref_object) ? $this->ref_object : null;
         $this->ref_id     = isset($this->ref_id)     ? $this->ref_id : null;
         
+        if (isset($this->save_by_ref) == false) $this->save_by_ref = false;
         
-        $notes = $notesService->readNotesByCustomer($this->companyId, $this->personId);
-        
+        if ($this->save_by_ref) {
+            $notes = $notesService->readNotesByRef($this->ref_object, $this->ref_id);
+        } else {
+            $notes = $notesService->readNotesByCustomer( $this->companyId, $this->personId );
+        }
         
         $this->listResponse = ListResponse::fillByDBObjects(0, null, $notes, ['note_id', 'summary', 'important', 'edited', 'created']);
         
@@ -35,7 +39,11 @@ class notestabController extends BaseController {
     public function action_search() {
         $notesService = object_container_get(NotesService::class);
         
-        $notes = $notesService->readNotesByCustomer( get_var('companyId'), get_var('personId') );
+        if (get_var('save_by_ref')) {
+            $notes = $notesService->readNotesByRef(get_var('ref_object'), get_var('ref_id'));
+        } else {
+            $notes = $notesService->readNotesByCustomer( get_var('companyId'), get_var('personId') );
+        }
         
         $lr = ListResponse::fillByDBObjects(0, null, $notes, ['note_id', 'summary', 'important', 'edited', 'created']);
         
@@ -64,6 +72,7 @@ class notestabController extends BaseController {
         $this->form = new NoteForm();
         $this->form->bind( $this->note );
         
+        $this->form->getWidget('save_by_ref')->setValue( get_var('save_by_ref') ? 1 : 0);
         
         $this->isNew = $this->note->isNew();
         $this->setShowDecorator(false);
