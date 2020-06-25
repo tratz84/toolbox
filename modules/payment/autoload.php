@@ -78,7 +78,10 @@ hook_eventbus_subscribe('invoice', 'invoice-edit', function($actionContainer) {
 
 hook_eventbus_subscribe('customer', 'company-edit-footer', function($ftc) {
     $form = $ftc->getSource();
-    
+
+    if (!$form->getWidgetValue('company_id'))
+        return;
+        
     $html = get_component('payment', 'tabOverviewController', 'index', array('companyId' => $form->getWidgetValue('company_id')));
     
     if ($html) {
@@ -89,6 +92,10 @@ hook_eventbus_subscribe('customer', 'company-edit-footer', function($ftc) {
 
 hook_eventbus_subscribe('customer', 'person-edit-footer', function($ftc) {
     $form = $ftc->getSource();
+    
+    if (!$form->getWidgetValue('person_id'))
+        return;
+    
     
     $html = get_component('payment', 'tabOverviewController', 'index', array('personId' => $form->getWidgetValue('person_id')));
     
