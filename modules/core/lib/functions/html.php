@@ -37,8 +37,13 @@ function infopopup($t) {
 
 
 function report_user_message($msg) {
-    if (isset($_SESSION['user_errors']) == false) {
+    if (isset($_SESSION['user_message']) == false) {
         $_SESSION['user_message'] = array();
+    }
+    
+    // prevent duplicate messages
+    if (in_array($msg, $_SESSION['user_message'])) {
+        return;
     }
     
     if (is_array($msg)) foreach($msg as $m) {
@@ -66,6 +71,11 @@ function output_user_messages() {
 function report_user_error($msg) {
     if (isset($_SESSION['user_errors']) == false) {
         $_SESSION['user_errors'] = array();
+    }
+    
+    // prevent duplicate messages
+    if (in_array($msg, $_SESSION['user_errors'])) {
+        return;
     }
     
     if (is_array($msg)) foreach($msg as $m) {
