@@ -76,7 +76,11 @@ function renderNotes(listResponse) {
 		tdImportant.text( o.important ? _('Yes') : _('No') );
 		
 		var tdActions   = $('<td class="actions" />');
+		tdActions.append('<a href="javascript:void(0);" class="fa fa-pencil edit"></a>');
 		tdActions.append('<a href="javascript:void(0);" class="fa fa-trash delete"></a>');
+		tdActions.find('.edit').click(function() {
+			$(this).closest('tr').trigger('click');
+		});
 		tdActions.find('.delete').click(function() {
 			deleteNote_Click( $(this).closest('tr').data('note-id') );
 		});
