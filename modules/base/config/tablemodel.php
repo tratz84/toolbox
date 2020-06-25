@@ -27,6 +27,7 @@ $tb_cron->addColumn('cron_name',   'varchar(128)');
 $tb_cron->addColumn('last_status', 'varchar(128)');
 $tb_cron->addColumn('last_run',    'datetime');
 $tb_cron->addColumn('running',     'boolean');
+$tb_cron->addIndex('index_cron_name', ['cron_name'], ['unique' => true]);
 $tbs[] = $tb_cron;
 
 

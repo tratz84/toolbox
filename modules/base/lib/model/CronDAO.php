@@ -23,13 +23,7 @@ class CronDAO extends \core\db\DAOObject {
 	public function readByName($name) {
 	    $sql = "select * from base__cron where cron_name = ?";
 	    
-	    $l = $this->queryList($sql, array($name));
-	    
-	    if (count($l)) {
-	        return $l[0];
-	    } else {
-	        return null;
-	    }
+	    return $this->queryOne($sql, array($name));
 	}
 
 }

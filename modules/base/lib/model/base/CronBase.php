@@ -14,7 +14,7 @@ class CronBase extends \core\db\DBObject {
   'cron_id' => 
   array (
     'Field' => 'cron_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'NO',
     'Key' => 'PRI',
     'Default' => NULL,
@@ -25,7 +25,7 @@ class CronBase extends \core\db\DBObject {
     'Field' => 'cron_name',
     'Type' => 'varchar(128)',
     'Null' => 'YES',
-    'Key' => '',
+    'Key' => 'UNI',
     'Default' => NULL,
     'Extra' => '',
   ),

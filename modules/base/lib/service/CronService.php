@@ -175,6 +175,12 @@ class CronService {
     }
     
     
+    public function readCronByName($name) {
+        $cDao = object_container_get( CronDAO::class );
+        return $cDao->readByName( $name );
+    }
+    
+    
 }
 
 
