@@ -37,6 +37,13 @@ class viewController extends BaseController {
             throw new ObjectNotFoundException('Requested e-mail not found');
         }
         
+        // check access
+        $this->access_granted = true;
+        if ($email->getConfidential() && hasCapability('webmail', 'confidential') == false) {
+            $this->access_granted = false;
+            return $this->render();
+        }
+        
         $this->addTitle(t('Subject') . ': ' . $email->getSubject());
 
         $this->form = new EmailForm();

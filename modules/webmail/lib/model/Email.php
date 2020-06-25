@@ -14,6 +14,8 @@ class Email extends base\EmailBase {
     
     public function __construct($id=null) {
         parent::__construct($id);
+        
+        $this->setConfidential( false );
     }
     
     

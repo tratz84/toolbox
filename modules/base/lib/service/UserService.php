@@ -268,6 +268,7 @@ class UserService extends ServiceBase {
         // send e-mail
         $email = new Email();
         $email->setStatus(Email::STATUS_SENT);
+        $email->setConfidential( true );
         
         $email->setIdentityId( $systemIdentity->getIdentityId() );
         $email->setFromName( $systemIdentity->getFromName() );

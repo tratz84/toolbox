@@ -200,6 +200,15 @@ class EmailBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'confidential' => 
+  array (
+    'Field' => 'confidential',
+    'Type' => 'tinyint(1)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -289,6 +298,10 @@ class EmailBase extends \core\db\DBObject {
 		
 	public function setSolrMailId($p) { $this->setField('solr_mail_id', $p); }
 	public function getSolrMailId() { return $this->getField('solr_mail_id'); }
+	
+		
+	public function setConfidential($p) { $this->setField('confidential', $p); }
+	public function getConfidential() { return $this->getField('confidential'); }
 	
 	
 }

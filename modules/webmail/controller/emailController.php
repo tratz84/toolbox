@@ -46,6 +46,13 @@ class emailController extends BaseController {
         $emailService = $this->oc->get(EmailService::class);
         $email = $emailService->readEmail($_REQUEST['id']);
         
+        // check access
+        $this->access_granted = true;
+        if ($email->getConfidential() && hasCapability('webmail', 'confidential') == false) {
+            $this->access_granted = false;
+            return $this->render();
+        }
+
         $this->form = new EmailForm();
         $this->form->bind( $email );
         

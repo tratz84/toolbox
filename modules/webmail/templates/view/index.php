@@ -3,15 +3,24 @@
 
 	<div class="toolbox">
 		<a href="<?= appUrl('/?m=webmail&c=email') ?>" class="fa fa-chevron-circle-left"></a>
-		<a href="<?= appUrl('/?m=webmail&c=email&a=delete&id='.$form->getWidgetValue('email_id')) ?>" class="fa fa-trash delete-email"></a>
-		<?php if (hasCapability('webmail', 'send-mail')) : ?>
-			<a href="javascript:void(0);" onclick="sendEmail_Click();" class="fa fa-send"></a>
+		<?php if ($access_granted) : ?>
+			<a href="<?= appUrl('/?m=webmail&c=email&a=delete&id='.$form->getWidgetValue('email_id')) ?>" class="fa fa-trash delete-email"></a>
+			<?php if (hasCapability('webmail', 'send-mail')) : ?>
+				<a href="javascript:void(0);" onclick="sendEmail_Click();" class="fa fa-send"></a>
+			<?php endif; ?>
+			<a href="javascript:void(0);" class="fa fa-save submit-form"></a>
 		<?php endif; ?>
-		<a href="javascript:void(0);" class="fa fa-save submit-form"></a>
 	</div>
 
 	<h1>E-mail</h1>
 </div>
+
+
+<?php if ($access_granted == false) : ?>
+	<?= t('E-mail is marked as confidential. No access to view e-mail.') ?>
+<?php endif; ?>
+
+<?php if ($access_granted) : ?>
 
 <div class="container-mailing-form">
 	
@@ -117,3 +126,4 @@ function sendEmail_Click() {
 
 </script>
 
+<?php endif; ?>

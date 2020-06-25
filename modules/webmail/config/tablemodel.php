@@ -93,6 +93,7 @@ $tb_email->addColumn('attributes',              'int');
 $tb_email->addColumn('message_id',              'varchar(255)');
 $tb_email->addColumn('spam',                    'boolean');
 $tb_email->addColumn('incoming',                'boolean');
+$tb_email->addColumn('confidential',            'boolean');
 $tb_email->addColumn('from_name',               'varchar(255)');
 $tb_email->addColumn('from_email',              'varchar(255)');
 $tb_email->addColumn('subject',                 'varchar(255)');
