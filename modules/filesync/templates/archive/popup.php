@@ -80,6 +80,26 @@ fpt.addColumn({
 	fieldType: 'text'
 });
 
+fpt.addColumn({
+	fieldName: 'actions',
+	fieldDescription: '',
+	fieldType: 'actions',
+	render: function(rec) {
+		var aView = $('<a href="javascript:void(0);" class="fa fa-search" />');
+		aView.click(function() {
+			var r = $(this).closest('tr').data('record');
+			
+			var url = appUrl('/?m=filesync&c=storefile&a=download&inline=1&id=' + r.store_file_id);
+			window.open( url, '_blank' );
+		});
+		
+		
+		var c = $('<div />');
+		c.append( aView );
+		return c;
+	}
+});
+
 fpt.load();
 
 </script>
