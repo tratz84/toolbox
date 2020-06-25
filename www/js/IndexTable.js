@@ -604,13 +604,13 @@ function IndexTable( container, opts ) {
 						}
 					}
 
-					if (col.fieldType == 'datetime') {
+					if (col.fieldType == 'datetime' || col.fieldType == 'datetimesec') {
 						if (typeof fieldText == 'undefined') {
 							fieldText = '';
 						} else {
 							dt = text2date(fieldText);
 							if (dt != null) {
-								var skipSeconds = true;
+								var skipSeconds = col.fieldType == 'datetime' ? true : false;
 								if (typeof col.skipSeconds != 'undefined') {
 									skipSeconds = col.skipSeconds;
 								}

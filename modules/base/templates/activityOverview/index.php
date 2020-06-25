@@ -43,7 +43,7 @@ atc.addColumn({
 atc.addColumn({
 	fieldName: 'created',
 	fieldDescription: '<?= t('Time') ?>',
-	fieldType: 'datetime',
+	fieldType: 'datetimesec',
 	searchable: false
 });
 
