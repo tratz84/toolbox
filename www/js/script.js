@@ -1715,6 +1715,15 @@ function fill_form(form, obj) {
 }
 
 
+
+function set_select2_val(selector, val, text) {
+	var opt = $('<option />').val( val ).text( text );
+	$( selector ).html( opt );
+	$( selector ).val( val ).trigger('change');
+}
+
+
+
 function clickableRow_Click( objRow ) {
 	var evt = window.event;
 	

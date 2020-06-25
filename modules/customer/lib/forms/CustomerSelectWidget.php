@@ -18,6 +18,9 @@ class CustomerSelectWidget extends DynamicSelectField {
         if ($label == null) $label = 'Klant';
         
         parent::__construct($name, $defaultValue, $defaultText, $endpoint, $label);
+        
+        
+        hook_htmlscriptloader_enableGroup('customer-select-widget');
     }
     
     
@@ -83,6 +86,22 @@ class CustomerSelectWidget extends DynamicSelectField {
             }
         }
     }
+    
+    
+    
+    public function render() {
+        $html = parent::render();
+        
+        
+        $i = ' <a href="javascript:void(0);" onclick="newCustomerPopup_Click();" class="fa fa-plus"></a>';
+        
+        $html = str_replace('</select>', '</select>'.$i, $html);
+        
+        return $html;
+    }
+    
+    
+    
 }
 
 

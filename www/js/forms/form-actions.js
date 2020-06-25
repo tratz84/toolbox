@@ -421,7 +421,10 @@ function ListEditFormWidget(container) {
 function setPopupFormErrors(container, errorList) {
 
 	// remove old errors
-	var pelc = $('.popup-error-list-container');
+	var pelc = $(container).find('.popup-error-list-container');
+	if (pelc.length == 0) {
+		var pelc = $('.popup-error-list-container');
+	}
 	pelc.html('');
 	
 	$(container).find('.widget.error').removeClass('error');
