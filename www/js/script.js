@@ -235,7 +235,16 @@ function applyWidgetFields(container) {
 	
 	$(container).find('.stretch-to-bottom').each(function(index, node) {
 		$(node).addClass('stretch-to-bottom-autoresize');
-		var wh = $(window).height() - $(node).offset().top;
+		
+		// inside a tab-pane? => use boundary of tab-content holder
+		var wh;
+		if ($(node).closest('.tab-pane').length) {
+			wh = $(window).height() - $(node).closest('.tab-content').offset().top;
+		}
+		else {
+			wh = $(window).height() - $(node).offset().top;
+		}
+		
 		$(node).css('height', wh);
 	});
 	$(window).resize(function() {
