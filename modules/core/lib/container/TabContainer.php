@@ -72,7 +72,9 @@ class TabContainer {
         $html .= '<div class="tab-content" id="nav-tabContent">' . PHP_EOL;
         foreach($this->tabs as $x => $tab) {
             $slug = slugify($tab['title']);
-            $html .= '<div class="tab-pane '.($x==0?'show active':'').'" id="nav-'.$slug.'" role="tabpanel" aria-labelledby="'.$slug.'-tab">' . PHP_EOL;
+            $tab_name = isset($tab['name']) ? $tab['name'] : $slug;
+            
+            $html .= '<div class="tab-pane '.($x==0?'show active':'').' tab-name-'.$tab_name.'" id="nav-'.$slug.'" role="tabpanel" aria-labelledby="'.$slug.'-tab">' . PHP_EOL;
             $html .= $tab['content'] . PHP_EOL;
             $html .= '</div>' . PHP_EOL;
         }
