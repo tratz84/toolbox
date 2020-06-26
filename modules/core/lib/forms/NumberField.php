@@ -49,7 +49,7 @@ class NumberField extends BaseWidget {
         
         
         
-        $html .= '<div class="widget text-field-widget '.slugify($this->getName()).'-widget '.$extraClass.'">';
+        $html .= '<div class="widget number-field-widget '.slugify($this->getName()).'-widget '.$extraClass.'">';
         $html .= '<label>'.esc_html($this->getLabel()).infopopup($this->getInfoText()).'</label>';
         $html .= '<input '.explode_attributes($attributes).' />';
         $html .= '</div>';
