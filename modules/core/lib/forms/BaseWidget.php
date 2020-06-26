@@ -122,9 +122,11 @@ class BaseWidget {
             $this->setAttribute('name', $this->getName());
         }
         
+        $for_name = isset($this->attributes['name']) ? $this->attributes['name'] : '';
+        
         $html = '';
         $html .= '<div class="'.implode(' ', $this->containerClasses).'">';
-        $html .= '<label>'.esc_html($this->getLabel()).infopopup($this->getInfoText()).'</label>';
+        $html .= '<label for="'.esc_attr($for_name).'">'.esc_html($this->getLabel()).infopopup($this->getInfoText()).'</label>';
         $html .= $this->renderTag();
         $html .= '</div>';
         
