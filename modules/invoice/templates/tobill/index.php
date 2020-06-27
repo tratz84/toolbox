@@ -100,7 +100,7 @@ t.addColumn({
 	fieldDescription: toolbox_t('Paid'),
 	fieldType: 'select',
 	defaultValue: <?= json_encode($defaultValuePaid) ?>,
-	filterOptions: [{ 'value':'', 'text': 'Paid'}, { 'value': '1', 'text': 'Ja' }, { 'value' : '0', 'text': 'Nee' } ],
+	filterOptions: [{ 'value':'', 'text': toolbox_t('Paid')}, { 'value': '1', 'text': toolbox_t('Yes') }, { 'value' : '0', 'text': toolbox_t('No') } ],
 	searchable: true,
 	render: function(record) {
 		var t = '';

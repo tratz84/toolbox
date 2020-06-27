@@ -13,6 +13,7 @@ $lang['Import Payments']        = 'Importeer betalingen';
 $lang['Payment method']         = 'Betaalmethode';
 $lang['Payment amount']         = 'Bedrag';
 $lang['New payment']            = 'Nieuwe betaling';
+$lang['Paid']                   = 'Betaald';
 
 $lang['Articles']               = 'Artikelen';
 $lang['New article']            = 'Nieuw artikel';
