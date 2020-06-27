@@ -49,13 +49,13 @@ t.addColumn({
 	fieldName: 'type',
 	fieldDescription: toolbox_t('Type'),
 	fieldType: 'select',
-	filterOptions: [{ 'value':'', 'text': 'Type'}, { 'value': 'invoice', 'text': toolbox_t('Debit') }, { 'value' : 'bill', 'text': toolbox_t('Credit') } ],
+	filterOptions: [{ 'value':'', 'text': 'Type'}, { 'value': 'debet', 'text': toolbox_t('Debet') }, { 'value' : 'credit', 'text': toolbox_t('Credit') } ],
 	searchable: true,
 	render: function(row) {
-		if (row.type == 'bill') {
+		if (row.type == 'credit') {
 			return toolbox_t('Credit');
-		} else if (row.type == 'invoice') {
-			return toolbox_t('Debit');
+		} else if (row.type == 'debet') {
+			return toolbox_t('Debet');
 		}
 		return '';
 	}

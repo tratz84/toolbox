@@ -10,6 +10,15 @@ class ToBill extends base\ToBillBase {
         parent::__construct($id);
         
     }
+    
+    
+    public function setCompanyId($p) {
+        return parent::setCompanyId( $p ? $p : null );
+    }
+    
+    public function setPersonId($p) {
+        return parent::setPersonId( $p ? $p : null );
+    }
 
 }
 

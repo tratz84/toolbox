@@ -615,7 +615,7 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
 
         $changes = $form->changes($tobill);
 
-        $form->fill($tobill, array('to_bill_id', 'company_id', 'person_id', 'type', 'firstname', 'insert_lastname', 'lastname', 'short_description', 'long_description', 'paid', 'amount', 'price'));
+        $form->fill($tobill, array('to_bill_id', 'customer_id', 'type', 'firstname', 'insert_lastname', 'lastname', 'short_description', 'long_description', 'paid', 'amount', 'price'));
 
         if (!$tobill->save()) {
             return false;

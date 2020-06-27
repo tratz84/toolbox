@@ -192,7 +192,7 @@ $tb_to_bill->addColumn('company_id',        'int');
 $tb_to_bill->addColumn('person_id',         'int');
 $tb_to_bill->addColumn('project_id',        'int');
 $tb_to_bill->addColumn('user_id',           'int');
-$tb_to_bill->addColumn('type',              "enum('bill','invoice')");
+$tb_to_bill->addColumn('type',              "enum('debet','credit')");
 $tb_to_bill->addColumn('short_description', 'varchar(255)');
 $tb_to_bill->addColumn('long_description',  'text');
 $tb_to_bill->addColumn('amount',            'double');

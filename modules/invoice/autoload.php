@@ -20,7 +20,7 @@ Context::getInstance()->enableModule('invoice');
 
 $eb = ObjectContainer::getInstance()->get(EventBus::class);
 
-module_update_handler('invoice', '20200607-2');
+module_update_handler('invoice', '20200627');
 
 
 $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($evt) {

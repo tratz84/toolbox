@@ -32,8 +32,8 @@ class ToBillForm extends BaseForm {
         
         $this->addWidget(new HiddenField('to_bill_id'));
         $this->addWidget(new CheckboxField('paid', '', t('Paid')));
-        $this->addWidget(new SelectField('type', '', ['' => t('Make your choice'), 'bill' => t('Credit'), 'invoice' => t('Debit')], t('Type')));
-        $this-> addWidget(new CustomerSelectWidget());
+        $this->addWidget(new SelectField('type', '', ['' => t('Make your choice'), 'credit' => t('Credit'), 'debet' => t('Debet')], t('Type')));
+        $this->addWidget(new CustomerSelectWidget());
 //         $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=customer&c=customer&a=select2', 'Klant') );
         
         $this->addWidget(new TextField('short_description', '', 'Korte omschrijving'));
