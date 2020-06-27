@@ -159,7 +159,13 @@ class UserService extends ServiceBase {
     
     public function readByUsername($u) {
         $uDao = new UserDAO();
-        return $uDao->readByUsername($u);
+        $user = $uDao->readByUsername($u);
+        
+        if ($user == null) {
+            return null;
+        }
+        
+        return $this->readUser( $user->getUserId() );
     }
     
     
