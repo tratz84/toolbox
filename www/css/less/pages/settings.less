@@ -37,14 +37,21 @@
 
 
 .base-settings-controller .module-line {
-	padding: 0px 0 2px 5px;
+	padding: 5px 0 5px 5px;
 	line-height: 22px;
+	overflow: visible;
+	border-bottom: 1px solid #ddd;
+	&:last-child { border-bottom: 0; }
+	
+	&::after { clear: both; display: block; content: ''; }
+	
 	label { margin-top: 0; }
 	
 	&.module-enabled {
 		background-color: #c6f3ce;
 	}
 	&:hover { background-color: #eee; }
+	
 }
 
 
