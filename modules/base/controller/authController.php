@@ -14,16 +14,17 @@ class authController extends BaseController {
     protected $showWarningDefaultAdminPassword = false;
     
     public function init() {
-        // .. ?
-        if (ctx()->getUser() && in_array()) {
-            redirect('/');
-        }
         
         $this->addTitle('Login');
     }
     
     
     public function action_index() {
+        // already authenticated?
+        if (ctx()->getUser()) {
+            redirect('/');
+        }
+        
         // reset pw page requested?
         if (get_var('a') == 'reset_password') {
             return $this->action_reset_password();
@@ -57,7 +58,7 @@ class authController extends BaseController {
                         
                         ctx()->setUser( $user );
                         
-                        redirect('/?redir-auth');
+                        $this->redirect_auth_success();
                     }
                 }
             }
@@ -101,7 +102,7 @@ class authController extends BaseController {
                 
                 ctx()->setUser( $user );
                 
-                redirect('/?redir-auth');
+                $this->redirect_auth_success();
             }
             
             // failed? => set error
@@ -132,6 +133,17 @@ class authController extends BaseController {
         $this->render();
     }
     
+    protected function redirect_auth_success() {
+        $url = appUrl('/?redir-auth');
+        
+        if (endsWith($url, '/?redir-auth')) {
+            $url = $_SERVER['REQUEST_URI'];
+        }
+        
+        header('Location: ' . $url);
+        exit;
+    }
+    
     public function action_logo() {
         $f = $this->ctx->getLogoFile();
         
@@ -148,7 +160,6 @@ class authController extends BaseController {
     
     
     public function action_logoff() {
-        
         $ctx = $this->oc->get(Context::class);
         
         // remove autologin entries
