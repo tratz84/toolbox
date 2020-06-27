@@ -428,46 +428,65 @@ function MonthViewRenderer(controller) {
 			var i = lastResponse.events[i];
 			
 			var start = new Date(i.startDate);
-			var end = new Date(i.endDate);
+			var dates = [];
 			
-			var strDate = format_date(start);
-			
-			var item = $('<div class="item" />');
-			
-			if (i.cancelled)
-				item.addClass('cancelled');
-			
-			var shortDesc = $('<span />');
-			if (i.startTime || i.endTime) {
-				if (i.startTime)
-					shortDesc.append( i.startTime );
-				if (i.endTime)
-					shortDesc.append( ' - ' + i.endTime );
+			if (i.endDate != null) {
+				var end = new Date(i.endDate);
 				
-				shortDesc.append(' ');
+				var days = days_between( start, i.endDate );
+				for(var x=0; x <= days && days >= 0; x++) {
+					var d = next_day( i.startDate, x );
+					d = str2date( d );
+					
+					dates.push( d );
+				}
+			} else {
+				dates.push( start );
 			}
 			
-			if (i.customerName) {
-				shortDesc.append('<span style="font-weight: 600;">'+i.customerName + '</span>: ');
+			
+			for(var j in dates) {
+				start = dates[j];
+				
+				var strDate = format_date(start);
+				
+				var item = $('<div class="item" />');
+				
+				if (i.cancelled)
+					item.addClass('cancelled');
+				
+				var shortDesc = $('<span />');
+				if (i.startTime || i.endTime) {
+					if (i.startTime)
+						shortDesc.append( i.startTime );
+					if (i.endTime)
+						shortDesc.append( ' - ' + i.endTime );
+					
+					shortDesc.append(' ');
+				}
+				
+				if (i.customerName) {
+					shortDesc.append('<span style="font-weight: 600;">'+i.customerName + '</span>: ');
+				}
+				
+				var spanDesc = $('<span />');
+				spanDesc.text( i.description );
+				shortDesc.append( spanDesc );
+				
+				item.append(shortDesc)
+				item.data('item', i);
+				
+				item.click(function(evt) {
+					if (evt.target != this && $(evt.target).closest(this).length == 0) return;
+					
+					var data = $(this).data('item');
+					data.date = $(this).closest('td').data('date');
+					
+					me.controller.editItem( data );
+				});
+			
+				$(this.container).find('#date-' + strDate).append(item);
 			}
-			
-			var spanDesc = $('<span />');
-			spanDesc.text( i.description );
-			shortDesc.append( spanDesc );
-			
-			item.append(shortDesc)
-			item.data('item', i);
-			
-			item.click(function(evt) {
-				if (evt.target != this && $(evt.target).closest(this).length == 0) return;
-				
-				var data = $(this).data('item');
-				data.date = $(this).closest('td').data('date');
-				
-				me.controller.editItem( data );
-			});
-		
-			$(this.container).find('#date-' + strDate).append(item);
 		}
 		
 	}

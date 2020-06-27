@@ -411,6 +411,15 @@ class VEvent extends VEventInstance {
             if ($ymdstart <= $ymd && $ymdend >= $ymd) {
                 return array($this);
             }
+            
+            // start/end of event around requested start/end date?
+            if (valid_date($this->getEndDate())) {
+                $ymd2 = (int)str_replace('-', '', $this->getEndDate());
+                
+                if ($ymdstart >= $ymd && $ymdstart <= $ymd2) {
+                    return array( $this );
+                }
+            }
         }
         
         // generate recurrent items

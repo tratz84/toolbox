@@ -1352,7 +1352,25 @@ function next_month(date, no) {
 
 function days_in_month( date ) { 
 	return new Date(date.getFullYear(), date.getMonth()+1, 0, 12).getDate(); 
-} 
+}
+
+function days_between(d1, d2) {
+	if (typeof d1 == 'string') {
+		d1 = str2date( d1 );
+	}
+	if (typeof d2 == 'string') {
+		d2 = str2date( d2 );
+	}
+
+	var msinday = 1000 * 60 * 60 * 24;
+
+	var s = Date.UTC(d1.getFullYear(), d1.getMonth(), d1.getDate());
+	var e = Date.UTC(d2.getFullYear(), d2.getMonth(), d2.getDate());
+
+	return (e - s) / msinday;
+}
+
+
 
 function next_day(date, no=1) {
 	if (typeof date == 'string') {
