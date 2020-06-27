@@ -55,7 +55,9 @@ class authController extends BaseController {
                         $_SESSION['user_id'] = $user->getUserId();
                         $_SESSION['contextName'] = Context::getInstance()->getContextName();
                         
-                        redirect('/');
+                        ctx()->setUser( $user );
+                        
+                        redirect('/?redir-auth');
                     }
                 }
             }
@@ -97,7 +99,9 @@ class authController extends BaseController {
                     }
                 }
                 
-                redirect('/');
+                ctx()->setUser( $user );
+                
+                redirect('/?redir-auth');
             }
             
             // failed? => set error
