@@ -96,7 +96,10 @@ class ImapConnection {
         }
         
         
-        imap_timeout( IMAP_OPENTIMEOUT | IMAP_READTIMEOUT | IMAP_WRITETIMEOUT | IMAP_CLOSETIMEOUT, 10 );
+        imap_timeout( IMAP_OPENTIMEOUT , 10 );
+        imap_timeout( IMAP_READTIMEOUT , 10 );
+        imap_timeout( IMAP_WRITETIMEOUT , 10 );
+        imap_timeout( IMAP_CLOSETIMEOUT , 5 );
         
         $strOpts = implode('/', $this->connectionOptions);
         $strOpts = '/' . $strOpts;
