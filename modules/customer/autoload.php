@@ -3,7 +3,28 @@
 
 
 
+use core\db\DatabaseHandler;
+
 ctx()->enableModule('customer');
+
+
+// init customer__country-table on activation
+hook_eventbus_subscribe('customer', 'module-update-executed', function($null) {
+    include __DIR__.'/config/base_sql.php';
+    
+    $mysqlcon = DatabaseHandler::getConnection('default');
+    
+    $countryCount = $mysqlcon->queryValue('select count(*) from customer__country');
+    
+    if ($countryCount == 0) {
+        foreach($sql_country as $sc) {
+            $mysqlcon->query( $sc );
+        }
+    }
+    
+});
+
+module_update_handler('customer', '20200630');
 
 
 require_once __DIR__.'/lib/functions/misc.php';

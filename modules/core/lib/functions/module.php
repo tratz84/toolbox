@@ -174,11 +174,15 @@ function module_less_defaults() {
  *   the current (both DOWN and UPgrades!). Good place to call 
  *   this function is in the autoload.php
  */
-function module_update_handler($moduleName, $version) {
+function module_update_handler($moduleName, $version, $opts=array()) {
     $settingsKey = 'module-'.$moduleName.'-version';
     
     $ctx = \core\Context::getInstance();
-    $curVer = $ctx->getSetting( $settingsKey );
+    if (isset($opts['init']) && $opts['init']) {
+        $curVer = '-';
+    } else {
+        $curVer = $ctx->getSetting( $settingsKey );
+    }
     
     $updateExecuted = false;
     $changedTableModels = array();

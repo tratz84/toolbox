@@ -179,6 +179,21 @@ class MysqlConnection extends DBConnection {
         return null;
     }
     
+    function queryValue($sql, $params=array(), $defaultValue=null) {
+        $r = $this->queryOne($sql, $params);
+        
+        if (is_array($r) == false) {
+            return $defaultValue;
+        }
+        
+        $vals = array_values( $r );
+        if (count($vals)) {
+            return $vals[0];
+        } else {
+            return $defaultValue;
+        }
+    }
+    
     function queryList($sql, $params=array()) {
         $res = $this->query($sql, $params);
         
