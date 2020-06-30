@@ -61,8 +61,8 @@ var paneState = <?= json_encode($state) ?>;
 function execSplitPane() {
 	
 	$('.split-pane').splitPane();
-	
-	if (paneState['slider-ratio'][0]) {
+
+	if (paneState && paneState['slider-ratio'][0]) {
 		var mch = $('#mail-container').height();
 		
 		var s = parseInt( mch * paneState['slider-ratio'][0] );

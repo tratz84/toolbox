@@ -23,7 +23,9 @@ class viewController extends BaseController {
         
         $this->calendar = $calendarService->readFirstCalendar();
         
-        $this->addTitle($this->calendar->getName());
+        if ($this->calendar) {
+            $this->addTitle($this->calendar->getName());
+        }
         
         $this->render();
     }
