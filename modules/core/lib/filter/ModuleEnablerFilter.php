@@ -57,6 +57,7 @@ class ModuleEnablerFilter {
             
             // set moduleMetas
             $meta->setProperty('path', $path);
+            $meta->setProperty('moduleName', $moduleName);
             $moduleMetas[ $meta->getTag() ] = $meta;
         }
         
@@ -64,6 +65,7 @@ class ModuleEnablerFilter {
         foreach($moduleMetas as $meta) {
             // check of a ModuleMeta-instance is enabled
             $moduleEnabled = false;
+            $moduleName = $meta->getProperty('moduleName');
             
             if ($ctx->getSetting($meta->getTag().'Enabled')) {
                 $moduleEnabled = true;
