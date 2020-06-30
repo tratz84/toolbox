@@ -104,10 +104,6 @@ class ConfigCreatorForm extends \core\forms\CodegenBaseForm {
 	    $sql_user = "insert into base__user set username='admin', password='admin123', edited=now(), created=now(), user_type='admin'";
 	    mysqli_query($dbh, $sql_user);
 	    
-	    // fill customer__country-table
-	    mysqli_multi_query($dbh, file_get_contents(module_file('core', 'config/customer_country.sql')));
-	    $this->fetch_mysqli_results($dbh);
-	    
 	    // create data-dir
 	    $data_dir = trim($this->getWidgetValue('data_dir'));
 	    if (file_exists($data_dir) == false) {
