@@ -95,10 +95,15 @@ class searchController extends BaseController {
 	    try {
     	    $lr = $smq->searchListResponse();
     	    
+    	    $smq_folders = new SolrMailQuery();
+    	    $smq_folders->setRows(0);
+    	    $smq_folders->searchListResponse();
+    	    
+    	    
     	    $arr = array();
     	    $arr['listResponse'] = $lr;
     	    $arr['filters'] = array();
-    	    $arr['filters']['folders'] = $smq->getFolders();
+    	    $arr['filters']['folders'] = $smq_folders->getFolders();
     	    
     	    // MailboxSearchSettings set? => apply filters
     	    if ($mss) {
