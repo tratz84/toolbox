@@ -17,7 +17,7 @@ if (DEBUG) {
 }
 
 
-define('BASE_URL', 'http://'.$_SERVER['HTTP_HOST']);
+define('BASE_URL', '<?= @$_SERVER['HTTPS']?'https':'http' ?>://<?= $_SERVER['HTTP_HOST'] ?>');
 define('BASE_HREF', <?= var_export($base_href) ?>);
 
 
