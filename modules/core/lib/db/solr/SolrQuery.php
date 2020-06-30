@@ -23,6 +23,8 @@ class SolrQuery {
     
     protected $facetFields = array();
     protected $facetLimit = -1;
+    protected $facetMincount = null;
+    
     
     protected $responseClass = SolrQueryResponse::class;
     
@@ -92,6 +94,11 @@ class SolrQuery {
     }
     public function clearFacetFields() { $this->facetFields = array(); }
     
+    public function setFacetMincount($c) { $this->facetMincount = $c; }
+    public function getFacetMincount() { return $this->facetMincount; }
+    
+    
+    
     /**
      * 
      * @param string $fieldName - field for facet-counts
@@ -131,6 +138,10 @@ class SolrQuery {
         }
         foreach($this->facetQueries as $fq) {
             $url_params[] = 'fq='.urlencode( $fq );
+        }
+        
+        if ($this->facetMincount !== null) {
+            $url_params[] = 'facet.mincount='.intval($this->facetMincount);
         }
         
         if (count($this->facetFields)) {

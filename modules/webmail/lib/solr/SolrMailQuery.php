@@ -22,6 +22,7 @@ class SolrMailQuery extends SolrQuery {
         $this->queryPrefix = '{!boost b=recip(ms(NOW,date),3.16e-12,1,1)}';
         
         $this->setSort('date desc');
+        $this->setFacetMincount(1);
         $this->addFacetSearch('contextName', ':', $ctx->getContextName());
         $this->addFacetSearch('markDeleted', ':', false);
         
