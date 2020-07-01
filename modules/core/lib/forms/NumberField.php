@@ -45,8 +45,10 @@ class NumberField extends BaseWidget {
             $attributes['min'] = $this->min;
         if (is_numeric($this->max))
             $attributes['max'] = $this->max;
-                    
         
+        if (count($this->containerClasses)) {
+            $extraClass .= ' ' . implode(' ', $this->containerClasses);
+        }
         
         
         $html .= '<div class="widget number-field-widget '.slugify($this->getName()).'-widget '.$extraClass.'">';
