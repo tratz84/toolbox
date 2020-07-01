@@ -477,6 +477,11 @@ function focusFirstField(container) {
 		if ($(inputs.get(0)).hasClass('input-pickadate') || $(inputs.get(0)).hasClass('input-pickadatetime') || $(inputs.get(0)).hasClass('input-pickatime'))
 			return;
 		
+		// no-auto-focus class set on widget?
+		if ($(inputs.get(0)).closest('div.widget.no-auto-focus').length > 0) {
+			return;
+		}
+		
 		inputs.get(0).focus();
 	}
 }
