@@ -84,6 +84,9 @@ class archiveController extends BaseController {
         $selectStoreId->setPrio(5);
         $this->form->addWidget($selectStoreId);
         
+        if (get_var('document_date')) {
+            $this->form->getWidget('document_date')->setValue( get_var('document_date') );
+        }
         
         if (get_var('customer_id'))
             $this->form->getWidget('customer_id')->bindObject([ 'customer_id' => get_var('customer_id') ]);
