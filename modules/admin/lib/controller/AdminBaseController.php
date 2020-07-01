@@ -31,10 +31,6 @@ class AdminBaseController extends BaseController {
         $m1->setIconLabelUrl('fa-dashboard', 'Dashboard', '/');
         $this->menuItems[] = $m1;
         
-        $m15 = new Menu();
-        $m15->setIconLabelUrl('fa-bar-chart', 'Rapportage', '/?m=admin&c=report');
-        $this->menuItems[] = $m15;
-        
         if ($user && $user->getUserType() == 'admin') {
             $m2 = new Menu();
             $m2->setIconLabelUrl('fa-user', 'Gebruikers', '/?m=admin&c=user');
