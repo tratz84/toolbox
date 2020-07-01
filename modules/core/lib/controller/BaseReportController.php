@@ -32,8 +32,8 @@ abstract class BaseReportController extends BaseController {
         switch($field) {
             case 'datetime' :
                 if (valid_datetime($val)) {
-                    $val = Date::PHPToExcel($val);
-                    $sheet->setCellValue($this->colCode($rowno, $colno), $val);
+                    $val = Date::PHPToExcel($val, true, \date_default_timezone_get());
+                    @$sheet->setCellValue($this->colCode($rowno, $colno), $val);
                     
                     $sheet->getStyle($this->colCode($rowno, $colno))->getNumberFormat()->setFormatCode('dd-mm-yyyy hh:mm:ss');
                 }
@@ -41,13 +41,13 @@ abstract class BaseReportController extends BaseController {
             case 'date' :
                 if (valid_date($val)) {
                     $val = Date::PHPToExcel($val);
-                    $sheet->setCellValue($this->colCode($rowno, $colno), $val);
+                    @$sheet->setCellValue($this->colCode($rowno, $colno), $val);
                     
                     $sheet->getStyle($this->colCode($rowno, $colno))->getNumberFormat()->setFormatCode('dd-mm-yyyy');
                 }
             break;
             default :
-                $sheet->setCellValue($this->colCode($rowno, $colno), $val);
+                @$sheet->setCellValue($this->colCode($rowno, $colno), $val);
         }
     }
     
