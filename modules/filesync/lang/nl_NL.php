@@ -5,6 +5,8 @@ $l = array();
 
 $l['Select file']   = 'Kies bestand';
 
+$l['File archive']  = 'Bestandsarchief';
+
 $l['New file']      = 'Nieuw bestand';
 $l['Existing file'] = 'Bestaand bestand';
 $l['Unset']         = 'Reset';
