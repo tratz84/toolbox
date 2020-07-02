@@ -43,7 +43,9 @@ class EmailForm extends BaseForm {
         
         $this->addWidget(new HtmlField('statusAsText', '', 'Status'));
         
-        $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=customer&c=customer&a=select2', 'Klant') );
+        if (ctx()->isModuleEnabled('customer')) {
+            $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=customer&c=customer&a=select2', 'Klant') );
+        }
         
         $this->addWidget(new EmailRecipientLineWidget('recipients'));
         

@@ -4,6 +4,8 @@
 namespace webmail\model;
 
 
+use core\db\query\QueryBuilderWhere;
+
 class EmailDAO extends \core\db\DAOObject {
 
 	public function __construct() {
@@ -13,30 +15,32 @@ class EmailDAO extends \core\db\DAOObject {
 	
 	
 	public function search($opts) {
-	    $sql = "select e.*, c.company_name, p.firstname, p.insert_lastname, p.lastname
-                from webmail__email e
-                left join customer__company c using (company_id)
-                left join customer__person p using (person_id) ";
+	    $qb = $this->createQueryBuilder();
 	    
-	    $where = array();
-	    $params = array();
+	    $qb->setTable('webmail__email');
+	    $qb->selectField('*', 'webmail__email');
+	    
+	    if (ctx()->isModuleEnabled('customer')) {
+    	    $qb->leftJoin('customer__company', 'company_id');
+    	    $qb->selectField('company_name', 'customer__company');
+    	    
+    	    $qb->leftJoin('customer__person', 'person_id');
+    	    $qb->selectField('person_id',       'customer__person');
+    	    $qb->selectField('firstname',       'customer__person');
+    	    $qb->selectField('insert_lastname', 'customer__person');
+    	    $qb->selectField('lastname',        'customer__person');
+	    }
 	    
 	    if (array_key_exists('incoming', $opts)) {
-	        $where[] = " e.incoming = " . ($opts['incoming'] ? 1 : 0);
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('webmail__email.incoming', '=', ($opts['incoming'] ? 1 : 0)));
 	    }
 	    
 	    
-	    if (count($where)) {
-	        $sql .= " WHERE (" . implode(") AND (", $where) . ")";
+	    if (isset($opts['orderby']) && $opts['orderby']) {
+	        $qb->setOrderBy( $opts['orderby'] );
 	    }
 	    
-	    if (isset($opts['orderby'])) {
-	        if (preg_match('/^[a-zA-Z_ ]+$/', $opts['orderby'])) {
-	            $sql .= ' order by '.$opts['orderby'];
-	        }
-	    }
-	    
-	    return $this->queryCursor($sql, $params);
+	    return $qb->queryCursor();
 	}
 	
 	public function read($id) {

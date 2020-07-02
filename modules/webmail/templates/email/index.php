@@ -145,6 +145,8 @@ t.addColumn({
 	fieldType: 'text',
 	searchable: false
 });
+
+<?php if (ctx()->isModuleEnabled('customer')) : ?>
 t.addColumn({
 	fieldName: 'customer_name',
 	fieldDescription: 'Klant',
@@ -168,6 +170,7 @@ t.addColumn({
 	},
 	searchable: false
 });
+<?php endif; ?>
 
 t.addColumn({
 	fieldName: 'subject',
