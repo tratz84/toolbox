@@ -34,7 +34,7 @@ $menuItems = $ms->listMainMenu();
 
 		</script>
 
-		<script src="<?= appUrl('/?m=base&c=js/dynamicscripts&a=lang') ?>"></script>
+		<script src="<?= appUrl('/?m=base&c=js/dynamicscripts&a=lang&v='.crc32(serialize(t_loadlang())) ) ?>"></script>
 		<script src="<?= BASE_HREF ?>js/jquery-3.3.1.min.js"></script>
 		<script src="<?= BASE_HREF ?>js/bootstrap.min.js"></script>
 
