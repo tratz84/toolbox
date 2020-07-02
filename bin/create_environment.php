@@ -19,13 +19,13 @@ $contextName = $argv[1];
 
 
 // check if database exists
-$dbcount = DatabaseHandler::getConnection('default')->queryValue("select count(*) from information_schema.schemata where schema_name=?", array('toolbox_'.$contextName));
+$dbcount = DatabaseHandler::getConnection('admin')->queryValue("select count(*) from information_schema.schemata where schema_name=?", array('toolbox_'.$contextName));
 if ($dbcount == 0) {
     die("Error: Database not yet created\n");
 }
 
 // insert customer
-DatabaseHandler::getConnection('default')->query('insert into insights__customer set contextName=?, databaseName=?, active=1, experimental=0', array($contextName, 'toolbox_'.$contextName));
+DatabaseHandler::getConnection('admin')->query('insert into insights__customer set contextName=?, databaseName=?, active=1, experimental=0', array($contextName, 'toolbox_'.$contextName));
 
 
 // bootstrap
