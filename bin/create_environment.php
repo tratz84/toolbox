@@ -40,7 +40,5 @@ $fc->execute();
 
 module_update_handler('base', 'init', ['init' => true]);
 
-$sqldata = file_get_contents(__DIR__.'/../doc/sql/basedata.sql');
-
 DatabaseHandler::getConnection('default')->query( "insert into base__user set username='admin', password='admin123', edited=now(), created=now(), user_type='admin'" );
 
