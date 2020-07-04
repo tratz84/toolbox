@@ -29,6 +29,7 @@ class UserCustomerSelectWidget extends DynamicSelectField {
         
         $companyId = null;
         $personId = null;
+        $userId = null;
         
         if (method_exists($obj, 'getCompanyId')) {
             $companyId = $obj->getCompanyId();
