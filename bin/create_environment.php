@@ -10,12 +10,13 @@ if (is_standalone_installation() == true) {
     die("Error: Standalone installation, unable to create new environment\n");
 }
 
-if (count($argv) < 2) {
-    print "Usage: {$argv[0]} <contextname>\n";
+if (count($argv) != 3) {
+    print "Usage: {$argv[0]} <contextname> <admin-password>\n";
     exit;
 }
 
 $contextName = $argv[1];
+$adminPassword = $argv[2];
 
 
 // check if database exists
@@ -40,5 +41,5 @@ $fc->execute();
 
 module_update_handler('base', 'init', ['init' => true]);
 
-DatabaseHandler::getConnection('default')->query( "insert into base__user set username='admin', password='admin123', edited=now(), created=now(), user_type='admin'" );
+DatabaseHandler::getConnection('default')->query( "insert into base__user set username='admin', password=?, edited=now(), created=now(), user_type='admin'", array($adminPassword) );
 
