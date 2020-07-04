@@ -201,7 +201,12 @@ class SolrMail {
         // filter attributes
         $els = $dom->getElementsByTagName( '*' );
         foreach($els as $el) {
-            if ($el->attributes) foreach($el->attributes as $attributeName => $val) {
+            $attrs = $el->attributes;
+
+            for($x=$attrs->length-1; $x >= 0; $x--) {
+                $val = $attrs->item($x);
+                $attributeName = $val->nodeName;
+
                 // style-attribute special case. Removal of url's is the most important
                 if ($attributeName == 'style') {
                     $val->value = preg_replace('/url\(.*?\)/', '', $val->value);
