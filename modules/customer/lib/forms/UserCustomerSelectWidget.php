@@ -43,15 +43,16 @@ class UserCustomerSelectWidget extends DynamicSelectField {
             $userId = $obj->getUserId();
         }
         
-        if (is_array($obj) && isset($obj['usercustomer_id'])) {
-            if (strpos($obj['usercustomer_id'], 'company-') === 0) {
-                $companyId = str_replace('company-', '', $obj['usercustomer_id']);
+        $widget_name = $this->getName();
+        if (is_array($obj) && isset($obj[$widget_name])) {
+            if (strpos($obj[$widget_name], 'company-') === 0) {
+                $companyId = str_replace('company-', '', $obj[$widget_name]);
             }
-            else if (strpos($obj['usercustomer_id'], 'person-') === 0) {
-                $personId = str_replace('person-', '', $obj['usercustomer_id']);
+            else if (strpos($obj[$widget_name], 'person-') === 0) {
+                $personId = str_replace('person-', '', $obj[$widget_name]);
             }
-            else if (strpos($obj['usercustomer_id'], 'user-') === 0) {
-                $personId = str_replace('user-', '', $obj['usercustomer_id']);
+            else if (strpos($obj[$widget_name], 'user-') === 0) {
+                $userId = str_replace('user-', '', $obj[$widget_name]);
             }
         }
         
@@ -75,7 +76,7 @@ class UserCustomerSelectWidget extends DynamicSelectField {
             $this->setValue('user-'.$userId);
             
             $us = ObjectContainer::getInstance()->get(UserService::class);
-            $user = $ps->readUser($userId);
+            $user = $us->readUser($userId);
             
             $this->setDefaultText( (string)$user );
         } else {
