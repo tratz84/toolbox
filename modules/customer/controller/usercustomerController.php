@@ -12,15 +12,15 @@ class usercustomerController extends BaseController {
     
     public function action_select2() {
         
-        $sql = "select user_id id, username name, 'user' as type, concat('user-', user_id) usercustomer_id
+        $sql = "select user_id id, username name, 'user' as type
                 from base__user
                 where username LIKE ? OR concat(firstname, lastname) LIKE ?
                 union
-                select company_id id, company_name name, concat('company-', company_id) usercustomer_id, 'company' as type
+                select company_id id, company_name name, 'company' as type
                 from customer__company
                 where company_name LIKE ?
                 union
-                select person_id id, concat(lastname, ' ', insert_lastname, ', ', firstname) name, concat('person-', person_id) usercustomer_id, 'person' as type
+                select person_id id, concat(lastname, ' ', insert_lastname, ', ', firstname) name, 'person' as type
                 from customer__person
                 where concat(lastname, ' ', insert_lastname, firstname, ' ', insert_lastname, ' ', lastname) LIKE ?
                 ";
