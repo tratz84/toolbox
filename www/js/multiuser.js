@@ -1,9 +1,13 @@
 
 
 
-
+$(window).data('multiuser_auto', true);
 $(document).ready(function() {
 	if (!window.sessionStorage) {
+		return;
+	}
+	
+	if (!$(window).data('multiuser_auto')) {
 		return;
 	}
 	
