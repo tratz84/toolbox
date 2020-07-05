@@ -98,6 +98,15 @@
 				padding: 10px 0;
 			}
 		}
+		
+		// checkbox placeholder not working in a list-edit-form-widget
+		.checkbox-ui-container {
+			>input[type=checkbox] {
+				position: inherit;
+				opacity: 1;
+			}
+			label.checkbox-ui-placeholder { display: none; }
+		}
 	}
 	
 	
