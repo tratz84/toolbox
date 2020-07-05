@@ -89,9 +89,9 @@ function multiuser_checkLock(key) {
 				var users = [];
 				
 				for(var i in data.locks) {
-					if (i == username && data.locks[username] == 1) continue;
+					if (i == username && data.locks[i] == 1) continue;
 					
-					users.push(username);
+					users.push(i);
 				}
 				
 				if (users.length) {
