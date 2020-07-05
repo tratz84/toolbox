@@ -15,7 +15,8 @@
 			objWindow: window,
 			scrollableArea: window,
 			cacheHeaderHeight: false,
-			zIndex: 3
+			zIndex: 3,
+			topExtraPx: 0
 		};
 
 	function Plugin (el, options) {
@@ -145,7 +146,7 @@
 								base.$scrollableArea.offset().top + (!isNaN(base.options.fixedOffset) ? base.options.fixedOffset : 0),
 						offset = $this.offset(),
 
-						scrollTop = base.$scrollableArea.scrollTop() + newTopOffset,
+						scrollTop = base.$scrollableArea.scrollTop() + base.options.topExtraPx + newTopOffset,
 						scrollLeft = base.$scrollableArea.scrollLeft(),
 
 						headerHeight,
