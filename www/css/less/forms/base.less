@@ -140,7 +140,21 @@
 		}
 	}
 
-
+	&.form-object-locked {
+		.datepicker-field-widget {
+			.prev-month, .next-month { display: none; }
+		}
+		.customer-id-widget {
+			a { display: none; }
+		}
+		
+		.filesync-select-field-buttons { display: none; }
+		.list-edit-form-widget {
+			td.action a { display: none; }
+			.add-entry-container { display: none; }
+		}
+		.submit-container { display: none; }
+	}
 }
 
 .widget {

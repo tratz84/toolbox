@@ -280,7 +280,7 @@ class BaseForm extends WidgetContainer {
         }
         
         
-        $html .= '<form method="POST" enctype="'.$this->enctype.'" action="'.esc_attr($this->action).'" class="form-generator form-'.slugify($className).'" ';
+        $html .= '<form method="POST" enctype="'.$this->enctype.'" action="'.esc_attr($this->action).'" class="form-generator form-'.slugify($className).($this->isObjectLocked()?' form-object-locked':'').'" ';
         
         foreach($this->htmlAttributes as $key => $val) {
             $html .= ' ' . esc_attr($key) . '="' . esc_attr($val) . '"';
