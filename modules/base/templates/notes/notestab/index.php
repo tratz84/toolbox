@@ -1,9 +1,10 @@
 
+<?php if (isset($readonly) == false || $readonly == false) : ?>
 <div class="action-box" style="padding: 15px 0 0 5px;">
 	
 	<button onclick="newNote_Click();"><?= t('New note') ?></button>
-	
 </div>
+<?php endif; ?>
 
 
 <hr/>
