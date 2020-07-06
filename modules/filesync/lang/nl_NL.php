@@ -3,6 +3,8 @@
 
 $l = array();
 
+$l['modulename.filesync'] = 'Filesync';
+
 $l['Select file']   = 'Kies bestand';
 
 $l['File archive']  = 'Bestandsarchief';

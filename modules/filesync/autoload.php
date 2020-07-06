@@ -24,6 +24,12 @@ hook_register_javascript('filesync', BASE_HREF.'module/filesync/js/script.js'.$j
 hook_htmlscriptloader_enableGroup('filesync');
 
 
+hook_eventbus_subscribe('base', 'user-capabilities', function($ucc) {
+    $opts = array();
+    
+    $ucc->addCapability('filesync', 'manager', t('manager'), t('Manage files'));
+});
+
 
 // $arr[] = array('menu_code' => 'filesync',        'sort' => 1600, 'visible' => 1, 'icon' => 'fa-file',      'label' => 'Filesync',       'url' => '/?m=filesync&c=store');
 $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListener(function($evt) {
@@ -31,6 +37,9 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
     if (hasCapability('core', 'userType.user') == false) {
         return;
     }
+    if (hasCapability('filesync', 'manager') == false)
+        return;
+    
     
     $src = $evt->getSource();
     
@@ -62,6 +71,8 @@ $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($e
 $eb->subscribe('customer', 'company-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
     $ftc = $evt->getSource();
     
+    if (hasCapability('filesync', 'manager') == false)
+        return;
     
     $html = get_component('filesync', 'archiveOverviewController', 'index', array('form' => $ftc->getSource()));
     if ($html) {
@@ -73,6 +84,9 @@ $eb->subscribe('customer', 'company-edit-footer', new CallbackPeopleEventListene
 
 $eb->subscribe('customer', 'person-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
     $ftc = $evt->getSource();
+    
+    if (hasCapability('filesync', 'manager') == false)
+        return;
     
     
     $html = get_component('filesync', 'archiveOverviewController', 'index', array('form' => $ftc->getSource()));
@@ -87,6 +101,10 @@ $eb->subscribe('base', 'dashboard', new CallbackPeopleEventListener(function($ev
     if (hasCapability('core', 'userType.user') == false) {
         return;
     }
+    
+    if (hasCapability('filesync', 'manager') == false)
+        return;
+    
     
     $dashboardWidgets = $evt->getSource();
     
