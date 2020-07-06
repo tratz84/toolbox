@@ -383,5 +383,60 @@ function toolbox_html2pdf( $html ) {
 
 
 
-
+function parse_shortcode($str) {
+    $str = trim($str);
+    
+    $state = array('instring' => false, 'escape' => false);
+    
+    $parts = array();
+    
+    $cur = '';
+    for($x=0; $x < strlen($str); $x++) {
+        $c = $str{$x};
+        
+        $cur .= $c;
+        
+        if (($c == '"' || $c == "'") && $state['escape'] == false) {
+            if ($state['instring'] && $c != $state['instring']) {
+                // nothing to see here
+            }
+            else if ($state['instring']) {
+                $state['instring'] = false;
+            } else {
+                $state['instring'] = $c;
+            }
+        }
+        
+        if (!$state['instring'] && $c == ' ' || $c == "\t") {
+            $part = trim($cur);
+            if ($part != '') {
+                if (count($parts) == 0) $part = ltrim($part, '[');
+                $parts[] = $part;
+            }
+            $cur = '';
+        }
+        
+        if ($state['escape'] == false && $c == "\\")
+            $state['escape'] = true;
+            else
+                $state['escape'] = false;
+                
+    }
+    if (($part = trim($cur)) != '') $parts[] = rtrim($part, ']');
+    
+    $params = array();
+    foreach($parts as $p) {
+        $tokens = explode('=', $p, 2);
+        
+        $key = trim($tokens[0], '"\'');
+        
+        if (count($tokens) == 2) {
+            $params[$key] = trim($tokens[1], '"\'');
+        } else {
+            $params[$key] = null;
+        }
+    }
+    
+    return $params;
+}
 
