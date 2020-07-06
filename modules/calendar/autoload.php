@@ -42,6 +42,10 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
         return;
     }
     
+    if (hasCapability('calendar', 'edit-calendar') == false) {
+        return;
+    }
+    
     $calendarSettings = object_container_get(CalendarSettings::class);
     
     $calitemActionsEnabled = $calendarSettings->calendarItemActionsEnabled();
