@@ -10,6 +10,11 @@ use core\container\ActionContainer;
 
 class storefileController extends BaseController {
     
+    public function init() {
+        checkCapability('filesync', 'manager');
+    }
+    
+    
     public function action_index() {
         $storeService = $this->oc->get(StoreService::class);
         

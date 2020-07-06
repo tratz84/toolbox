@@ -7,6 +7,10 @@ use filesync\service\StoreService;
 
 class archiveOverviewController extends BaseController {
     
+    public function init() {
+        checkCapability('filesync', 'manager');
+    }
+    
     
     public function action_index() {
         

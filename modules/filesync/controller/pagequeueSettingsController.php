@@ -8,6 +8,11 @@ use base\service\SettingsService;
 
 class pagequeueSettingsController extends BaseController {
     
+    public function init() {
+        checkCapability('filesync', 'manager');
+    }
+    
+    
     public function action_index() {
         
         $this->form = new PagequeueSettingsForm();

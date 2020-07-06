@@ -11,6 +11,10 @@ use customer\service\CustomerService;
 
 class archiveController extends BaseController {
     
+    public function init() {
+        checkCapability('filesync', 'manager');
+    }
+    
     
     public function action_upload() {
         $storeService = $this->oc->get(StoreService::class);

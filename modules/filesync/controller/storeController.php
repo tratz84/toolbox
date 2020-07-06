@@ -11,6 +11,10 @@ use core\exception\ObjectNotFoundException;
 
 class storeController extends BaseController {
     
+    public function init() {
+        checkCapability('filesync', 'manager');
+    }
+    
     
     public function action_index() {
         
