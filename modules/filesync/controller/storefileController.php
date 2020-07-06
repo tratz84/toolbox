@@ -10,12 +10,11 @@ use core\container\ActionContainer;
 
 class storefileController extends BaseController {
     
-    public function init() {
-        checkCapability('filesync', 'manager');
-    }
     
     
     public function action_index() {
+        checkCapability('filesync', 'manager');
+        
         $storeService = $this->oc->get(StoreService::class);
         
         $this->store = $storeService->readStore(get_var('id'));
@@ -33,6 +32,8 @@ class storefileController extends BaseController {
     
     
     public function action_search() {
+        checkCapability('filesync', 'manager');
+        
         $pageNo = isset($_REQUEST['pageNo']) ? (int)$_REQUEST['pageNo'] : 0;
         $limit = $this->ctx->getPageSize();
         
@@ -48,6 +49,7 @@ class storefileController extends BaseController {
     }
     
     public function action_edit() {
+        checkCapability('filesync', 'manager');
         
         $storeService = $this->oc->get(StoreService::class);
         
@@ -67,6 +69,7 @@ class storefileController extends BaseController {
     
     
     public function action_edit_meta() {
+        checkCapability('filesync', 'manager');
         
         $storeService = $this->oc->get(StoreService::class);
         $this->form = $storeService->readFilemeta( get_var('store_file_id') );

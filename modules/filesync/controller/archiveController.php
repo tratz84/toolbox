@@ -12,7 +12,7 @@ use customer\service\CustomerService;
 class archiveController extends BaseController {
     
     public function init() {
-        checkCapability('filesync', 'manager');
+//         checkCapability('filesync', 'manager');
     }
     
     
