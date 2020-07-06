@@ -82,14 +82,14 @@ function multiuser_checkLock(key) {
 		data: {
 			key: key,
 			tab: multiuser_tabuid(),
-			username: username
+			username: appSettings.username
 		},
 		success: function(data, xhr, textStatus) {
 			if (data.locks) {
 				var users = [];
 				
 				for(var i in data.locks) {
-					if (i == username && data.locks[i] == 1) continue;
+					if (i == appSettings.username && data.locks[i] == 1) continue;
 					
 					users.push(i);
 				}
@@ -132,7 +132,7 @@ function multiuser_resetLock() {
 		data: {
 			key: '',
 			tab: multiuser_tabuid(),
-			username: username
+			username: appSettings.username
 		},
 		success: function(data, xhr, textStatus) {
 			// ?
