@@ -174,8 +174,10 @@ class viewController extends BaseController {
         // send mail
         $sm = SendMail::createMail($email);
         if ($sm->send() == false) {
+            $error = $sm->getError();
+            
             // redirect back
-            report_user_error('Sending mail failed');
+            report_user_error('Sending mail failed'.($error?": $error":""));
             redirect('/?m=webmail&c=view&id=' . $email->getEmailId());
         }
         
