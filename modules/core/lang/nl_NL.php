@@ -103,6 +103,10 @@ $lang['No results found'] = 'Geen resultaten gevonden';
 
 $lang['Field contains no value'] = 'Veld bevat geen waarde';
 
+$lang['Other user active']                              = 'Andere gebruiker actief';
+$lang['Please note, other user active in this screen:'] = 'Let op, andere gebruiker actief in dit scherm:';
+
+
 return $lang;
 
 
