@@ -23,6 +23,7 @@ use webmail\form\MailSettingsOutForm;
 use base\service\SettingsService;
 use webmail\mail\SendMail;
 use core\parser\HtmlParser;
+use base\forms\FormChangesHtml;
 
 class EmailService extends ServiceBase {
     
@@ -254,7 +255,12 @@ class EmailService extends ServiceBase {
             $email->setTextContent('');
         }
         
-        ActivityUtil::logActivity($email->getCompanyId(), $email->getPersonId(), 'webmail__email', $email->getEmailId(), 'email-deleted', 'E-mail verwijderd: '.$email->getSubject(), null, $email->getFields());
+        $form = new EmailForm();
+        $form->bind( $email );
+        
+        $fch = FormChangesHtml::formDeleted($form);
+        
+        ActivityUtil::logActivity($email->getCompanyId(), $email->getPersonId(), 'webmail__email', $email->getEmailId(), 'email-deleted', 'E-mail verwijderd: '.$email->getSubject(), $fch->getHtml(), $email->getTextContent());
         
         return $r;
     }
