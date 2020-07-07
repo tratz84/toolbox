@@ -11,18 +11,21 @@
 
 <table>
 	<tr>
-		<th>Store name</th>
+		<th><?= t('Store name') ?></th>
 		<td><?= esc_html($store->getStoreName()) ?></td>
 	</tr>
 	<tr>
-		<th>Totale store grootte</th>
+		<th><?= t('Total store size') ?></th>
 		<td>
 			<?= format_filesize($statisticsStore['size_all_files']) ?>
 		</td>
 	</tr>
 	
 	<tr>
-		<th>Grootte actieve bestanden</th>
+		<th>
+			<?= t('Size active files') ?>
+			<?= infopopup(t('Share-stores may contain multiple versions of one file'))?>
+		</th>
 		<td>
 			<?= format_filesize($statisticsStore['size_active_files']) ?>
 		</td>

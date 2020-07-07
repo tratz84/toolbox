@@ -5,7 +5,7 @@
 		<a href="<?= appUrl('/?m=filesync&c=store') ?>" class="fa fa-chevron-circle-left"></a>
 	</div>
 
-	<h1>Bestanden in <?= esc_html($store->getStoreName()) ?></h1>
+	<h1><?= t('Files in') ?> <?= esc_html($store->getStoreName()) ?></h1>
 </div>
 
 
@@ -33,33 +33,33 @@ t.addColumn({
 
 t.addColumn({
 	fieldName: 'path',
-	fieldDescription: 'pad',
+	fieldDescription: toolbox_t('Path'),
 	fieldType: 'text',
 	searchable: true
 });
 
 t.addColumn({
 	fieldName: 'filesize_text',
-	fieldDescription: 'Bestandsgrootte',
+	fieldDescription: toolbox_t('File size'),
 	fieldType: 'text'
 });
 
 t.addColumn({
 	fieldName: 'rev',
-	fieldDescription: 'Revisie',
+	fieldDescription: toolbox_t('Revision'),
 	fieldType: 'text'
 });
 
 t.addColumn({
 	fieldName: 'deleted',
-	fieldDescription: 'Verwijderd',
+	fieldDescription: toolbox_t('Deleted'),
 	fieldType: 'boolean'
 });
 
 
 t.addColumn({
 	fieldName: 'lastmodified',
-	fieldDescription: 'Laatst gewijzigd',
+	fieldDescription: toolbox_t('Last changed'),
 	fieldType: 'datetime'
 });
 

@@ -15,7 +15,7 @@ class CustomerSelectWidget extends DynamicSelectField {
         
         if ($defaultText == null) $defaultText = t('Make your choice');
         if ($endpoint == null) $endpoint = '/?m=customer&c=customer&a=select2';
-        if ($label == null) $label = 'Klant';
+        if ($label == null) $label = t('Customer');
         
         parent::__construct($name, $defaultValue, $defaultText, $endpoint, $label);
         

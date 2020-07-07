@@ -44,7 +44,7 @@ fpt.addColumn({
 
 fpt.addColumn({
 	fieldName: 'document_date',
-	fieldDescription: 'Datum',
+	fieldDescription: toolbox_t('Date'),
 	fieldType: 'date'
 });
 
@@ -52,7 +52,7 @@ fpt.addColumn({
 
 fpt.addColumn({
 	fieldName: 'company_name',
-	fieldDescription: 'Naam',
+	fieldDescription: toolbox_t('Name'),
 	fieldType: 'text',
 	searchable: true,
 	render: function(row) {
@@ -62,21 +62,21 @@ fpt.addColumn({
 
 fpt.addColumn({
 	fieldName: 'path',
-	fieldDescription: 'pad',
+	fieldDescription: toolbox_t('Path'),
 	fieldType: 'text',
 	searchable: true
 });
 
 fpt.addColumn({
 	fieldName: 'subject',
-	fieldDescription: 'Onderwerp',
+	fieldDescription: toolbox_t('Subject'),
 	fieldType: 'text',
 	searchable: true
 });
 
 fpt.addColumn({
 	fieldName: 'filesize_text',
-	fieldDescription: 'Bestandsgrootte',
+	fieldDescription: toolbox_t('File size'),
 	fieldType: 'text'
 });
 

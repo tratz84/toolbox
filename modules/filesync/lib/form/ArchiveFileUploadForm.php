@@ -29,12 +29,12 @@ class ArchiveFileUploadForm extends BaseForm {
         } else {
             $this->addWidget(new HiddenField('store_id'));
         }
-        $this->addWidget(new FileField('file', '', 'Bestand'));
-        $this->addWidget(new DatePickerField('document_date', '', 'Document datum'));
+        $this->addWidget(new FileField('file', '', t('File')));
+        $this->addWidget(new DatePickerField('document_date', '', t('Document date')));
         $this->addWidget(new CustomerSelectWidget());
         
-        $this->addWidget(new TextField('subject', '', 'Onderwerp'));
-        $this->addWidget(new TextareaField('long_description', '', 'Lange omschrijving'));
+        $this->addWidget(new TextField('subject', '', t('Subject')));
+        $this->addWidget(new TextareaField('long_description', '', t('Long description')));
         
         
         // validate upload

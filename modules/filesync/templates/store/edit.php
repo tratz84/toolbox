@@ -7,9 +7,9 @@
 	</div>
 
     <?php if ($isNew) : ?>
-    <h1>Store toevoegen</h1>
+    <h1><?= t('New store') ?></h1>
     <?php else : ?>
-    <h1>Store bewerken</h1>
+    <h1><?= t('Edit store') ?></h1>
     <?php endif; ?>
 </div>
 

@@ -6,7 +6,7 @@
 		<a href="<?= appUrl('/?m=filesync&c=store') ?>" class="fa fa-chevron-circle-left"></a>
 	</div>
 
-	<h1>Bestanden in <?= esc_html($store->getStoreName()) ?></h1>
+	<h1><?= t('Files in') ?> <?= esc_html($store->getStoreName()) ?></h1>
 </div>
 
 
@@ -35,14 +35,14 @@ t.setConnectorUrl( '/?m=filesync&c=storefile&a=search&storeId=<?= $store->getSto
 
 t.addColumn({
 	fieldName: 'document_date',
-	fieldDescription: 'Datum',
+	fieldDescription: toolbox_t('Date'),
 	fieldType: 'date'
 });
 
 
 t.addColumn({
 	fieldName: 'company_name',
-	fieldDescription: 'Naam',
+	fieldDescription: toolbox_t('Name'),
 	fieldType: 'text',
 	searchable: true,
 	render: function(row) {
@@ -52,21 +52,21 @@ t.addColumn({
 
 t.addColumn({
 	fieldName: 'path',
-	fieldDescription: 'pad',
+	fieldDescription: toolbox_t('Path'),
 	fieldType: 'text',
 	searchable: true
 });
 
 t.addColumn({
 	fieldName: 'subject',
-	fieldDescription: 'Onderwerp',
+	fieldDescription: toolbox_t('Subject'),
 	fieldType: 'text',
 	searchable: true
 });
 
 t.addColumn({
 	fieldName: 'filesize_text',
-	fieldDescription: 'Bestandsgrootte',
+	fieldDescription: toolbox_t('File size'),
 	fieldType: 'text'
 });
 

@@ -21,14 +21,14 @@ class StoreForm extends BaseForm {
         $this->addWidget(new HiddenField('store_id'));
         
         $mapTypes = array();
-        $mapTypes[''] = 'Maak uw keuze';
-        $mapTypes['archive'] = 'Archief';
-        $mapTypes['backup']  = 'Backup';
-        $mapTypes['share']   = 'Share';
+        $mapTypes[''] = t('Make your choice');
+        $mapTypes['archive'] = t('Archive');
+        $mapTypes['backup']  = t('Backup');
+        $mapTypes['share']   = t('Share');
         
-        $this->addWidget(new SelectField('store_type', '', $mapTypes, 'Soort'));
+        $this->addWidget(new SelectField('store_type', '', $mapTypes, t('Store type')));
         
-        $this->addWidget(new TextField('store_name', '', 'Naam'));
+        $this->addWidget(new TextField('store_name', '', t('Name')));
         
         $this->addValidator('store_type', new NotEmptyValidator());
         $this->addValidator('store_name', new NotEmptyValidator());

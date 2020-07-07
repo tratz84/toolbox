@@ -6,7 +6,7 @@
 		<a href="<?= appUrl('/?m=filesync&c=store&a=edit') ?>" class="fa fa-plus"></a>
 	</div>
 
-	<h1>Overzicht stores</h1>
+	<h1><?= t('Overview stores') ?></h1>
 </div>
 
 
@@ -40,7 +40,7 @@ t.addColumn({
 
 t.addColumn({
 	fieldName: 'store_name',
-	fieldDescription: 'Naam',
+	fieldDescription: toolbox_t('Name'),
 	fieldType: 'text'
 });
 
