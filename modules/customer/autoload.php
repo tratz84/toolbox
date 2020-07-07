@@ -31,9 +31,9 @@ require_once __DIR__.'/lib/functions/misc.php';
 require_once __DIR__.'/lib/functions/person.php';
 
 
-hook_register_javascript('select-person-list-edit', '/module/customer/js/select-person-edit-list.js');
-hook_register_javascript('select-company-list-edit', '/module/customer/js/select-company-edit-list.js');
-hook_register_javascript('customer-select-widget', '/module/customer/js/customer-select-widget.js');
+hook_register_javascript('select-person-list-edit',  appUrl('/?mpf=/module/customer/js/select-person-edit-list.js'));
+hook_register_javascript('select-company-list-edit', appUrl('/?mpf=/module/customer/js/select-company-edit-list.js'));
+hook_register_javascript('customer-select-widget',   appUrl('/?mpf=/module/customer/js/customer-select-widget.js'));
 
 
 hook_eventbus_subscribe('report', 'menu-list', function($reportMenuList) {
@@ -41,7 +41,7 @@ hook_eventbus_subscribe('report', 'menu-list', function($reportMenuList) {
      * report\ReportMenuList
      */
     
-    $reportMenuList->addMenuItem('Klantenoverzicht', 'customer', 'report/customerReportController', '/?m=customer&c=report/customerReport&a=xls');
+    $reportMenuList->addMenuItem(t('Customer overview'), 'customer', 'report/customerReportController', '/?m=customer&c=report/customerReport&a=xls');
     
 });
     

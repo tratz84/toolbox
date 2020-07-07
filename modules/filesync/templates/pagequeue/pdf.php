@@ -30,7 +30,7 @@
 </div>
 
 
-<script src="<?= appUrl('/module/filesync/js/image-editor.js') ?>"></script>
+<script src="<?= appUrl('/?mpf=/module/filesync/js/image-editor.js') ?>"></script>
 
 <script>
 

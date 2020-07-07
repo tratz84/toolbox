@@ -23,7 +23,7 @@ Context::getInstance()->enableModule('webmail');
 
 module_update_handler('webmail', '20200624');
 
-hook_register_javascript('webmail', '/module/webmail/js/script.js');
+hook_register_javascript('webmail', appUrl('/?mpf=/module/webmail/js/script.js'));
 
 $eb = ObjectContainer::getInstance()->get(EventBus::class);
 

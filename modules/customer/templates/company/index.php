@@ -4,7 +4,7 @@
 		<a href="<?= appUrl('/?m=customer&c=company&a=edit') ?>" class="fa fa-plus"></a>
 	</div>
 	
-    <h1>Overzicht bedrijven</h1>
+    <h1><?= t('Overview companies') ?></h1>
 </div>
 
 
@@ -34,13 +34,13 @@ t.setConnectorUrl( '/?m=customer&c=company&a=search' );
 // });
 t.addColumn({
 	fieldName: 'company_name',
-	fieldDescription: 'Bedrijfsnaam',
+	fieldDescription: toolbox_t('Company name'),
 	fieldType: 'text',
 	searchable: true
 });
 t.addColumn({
 	fieldName: 'contact_person',
-	fieldDescription: 'Contactpersoon',
+	fieldDescription: toolbox_t('Contact person'),
 	fieldType: 'text',
 	searchable: true
 });

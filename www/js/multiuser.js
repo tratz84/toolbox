@@ -73,7 +73,7 @@ function multiuser_tabuid() {
 	return tabUid;
 }
 
-var multiuser_lock_message = 'Let op, andere gebruiker actief in dit scherm: ';
+var multiuser_lock_message = toolbox_t('Please note, other user active in this screen:') + ' ';
 
 function multiuser_checkLock(key) {
 	$.ajax({
@@ -109,7 +109,7 @@ function multiuser_checkLock(key) {
 					showInlineWarning( msg );
 					
 					if (multiuser_warningPopupShown == false) {
-						showAlert('Andere gebruiker actief', msg);
+						showAlert( toolbox_t('Other user active'), msg);
 						multiuser_warningPopupShown = true;
 					}
 				} else {

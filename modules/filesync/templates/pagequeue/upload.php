@@ -21,8 +21,8 @@
 
 <div id="editor-container"></div>
 
-<script src="<?= appUrl('/module/filesync/js/exif.js') ?>"></script>
-<script src="<?= appUrl('/module/filesync/js/image-editor.js') ?>"></script>
+<script src="<?= appUrl('/?mpf=/module/filesync/js/exif.js') ?>"></script>
+<script src="<?= appUrl('/?mpf=/module/filesync/js/image-editor.js') ?>"></script>
 <script>
 
 var ie = new DocumentImageEditor('#editor-container', { image_url: <?= json_encode(appUrl('/?m=filesync&c=pagequeue&a=download&id='.$pagequeue_id)) ?> });

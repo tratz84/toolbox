@@ -51,7 +51,7 @@ class CompanyForm extends BaseForm {
         $this->addWidget( new HtmlDatetimeField('edited', '', t('Last modified'), array('hide-when-invalid' => true) ));
         $this->addWidget( new HtmlDatetimeField('created', '', t('Created on'), array('hide-when-invalid' => true) ));
         
-        $this->addWidget( new TextareaField('note', '', 'Notitie') );
+        $this->addWidget( new TextareaField('note', '', t('Note')) );
         
         $addressList = new ListFormWidget('\\customer\\forms\\AddressForm', 'addressList');
         $addressList->setSortable(true);
