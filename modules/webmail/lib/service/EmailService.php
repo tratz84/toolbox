@@ -242,15 +242,18 @@ class EmailService extends ServiceBase {
         try {
             $hp = new HtmlParser();
             $hp->loadString( $email->getTextContent() );
+            $hp->parse();
             $txt = trim( $hp->getBodyText() );
             if (strlen($txt) > 65000) {
                 $txt = substr($txt, 0, 65000);
             }
+            $email->setTextContent( $txt );
         } catch (\Exception $ex) {
             $email->setTextContent('');
         } catch (\Error $err) {
             $email->setTextContent('');
         }
+        
         ActivityUtil::logActivity($email->getCompanyId(), $email->getPersonId(), 'webmail__email', $email->getEmailId(), 'email-deleted', 'E-mail verwijderd: '.$email->getSubject(), null, $email->getFields());
         
         return $r;
