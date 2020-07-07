@@ -89,16 +89,25 @@ class ListResponse {
         return $r;
     }
     
-    
+    /**
+     * getRowCount() - total number of records in query response
+     */
     public function getRowCount() { return $this->rowCount; }
     public function setRowCount($p) { $this->rowCount = $p; }
     
+    /**
+     * getPageSize() - paging size
+     */
     public function getPageSize() { return $this->pageSize; }
     public function setPageSize($p) { $this->pageSize = $p; }
     
     public function getStart() { return $this->start; }
     public function setStart($p) { $this->start = $p; }
     
+    /**
+     * getObjectCount() - number of objects in current response
+     */
+    public function getObjectCount() { return count($this->objects); }
     public function getObjects() { return $this->objects; }
     public function setObjects($p) { $this->objects = $p; }
     
