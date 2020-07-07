@@ -10,11 +10,13 @@ use customer\service\PersonService;
 
 class UserCustomerSelectWidget extends DynamicSelectField {
     
+    protected $customerSupport = true;
+    
+    
     
     public function __construct($name='usercustomer_id', $defaultValue=null, $defaultText=null, $endpoint=null, $label=null) {
         
         if ($defaultText == null) $defaultText = t('Make your choice');
-        if ($endpoint == null) $endpoint = '/?m=customer&c=usercustomer&a=select2';
         if ($label == null) $label = t('User/Customer');
         
         parent::__construct($name, $defaultValue, $defaultText, $endpoint, $label);
@@ -22,6 +24,9 @@ class UserCustomerSelectWidget extends DynamicSelectField {
         
         hook_htmlscriptloader_enableGroup('user-customer-select-widget');
     }
+    
+    
+    public function setCustomerSupport($bln) { $this->customerSupport = $bln; }
     
     
     public function bindObject($obj) {
@@ -114,6 +119,12 @@ class UserCustomerSelectWidget extends DynamicSelectField {
     
     
     public function render() {
+        if ($this->customerSupport == false) {
+            $this->endpoint = '/?m=customer&c=usercustomer&a=select2&src=user';
+        } else {
+            $this->endpoint = '/?m=customer&c=usercustomer&a=select2';
+        }
+        
         $html = parent::render();
         
         

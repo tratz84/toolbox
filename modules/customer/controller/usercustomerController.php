@@ -5,6 +5,7 @@ use core\controller\BaseController;
 use core\db\DatabaseHandler;
 use core\db\DBObject;
 use core\forms\lists\ListResponse;
+use core\exception\InvalidStateException;
 
 class usercustomerController extends BaseController {
     
@@ -12,25 +13,49 @@ class usercustomerController extends BaseController {
     
     public function action_select2() {
         
-        $sql = "select user_id id, username name, 'user' as type
-                from base__user
-                where username LIKE ? OR concat(firstname, lastname) LIKE ?
-                union
-                select company_id id, company_name name, 'company' as type
-                from customer__company
-                where company_name LIKE ?
-                union
-                select person_id id, concat(lastname, ' ', insert_lastname, ', ', firstname) name, 'person' as type
-                from customer__person
-                where concat(lastname, ' ', insert_lastname, firstname, ' ', insert_lastname, ' ', lastname) LIKE ?
-                ";
+        $user = $company = $person = true;
+        
+        if (get_var('src')) {
+            $user = $company = $person = false;
+            
+            $toks = explode(',', get_var('src'));
+            foreach($toks as $t) {
+                if ($t == 'user') $user = true;
+                if ($t == 'company') $company = true;
+                if ($t == 'person') $person= true;
+            }
+        }
         
         $q = '%'.get_var('name').'%';
         $params = array();
-        $params[] = $q;
-        $params[] = $q;
-        $params[] = $q;
-        $params[] = $q;
+        $sqls = array();
+        if ($user) {
+            $sqls[] = "select user_id id, username name, 'user' as type
+                    from base__user
+                    where username LIKE ? OR concat(firstname, lastname) LIKE ? ";
+            $params[] = $q;
+            $params[] = $q;
+        }
+        
+        if ($company) {
+            $sqls[] = "select company_id id, company_name name, 'company' as type
+                    from customer__company
+                    where company_name LIKE ? ";
+            $params[] = $q;
+        }
+        
+        if ($person) {
+            $sqls[] = "select person_id id, concat(lastname, ' ', insert_lastname, ', ', firstname) name, 'person' as type
+                    from customer__person
+                    where concat(lastname, ' ', insert_lastname, firstname, ' ', insert_lastname, ' ', lastname) LIKE ? ";
+            $params[] = $q;
+        }
+        
+        if (count($sqls) == 0) {
+            throw new InvalidStateException('Invalid "src"-value');
+        }
+        
+        $sql = implode("\nUNION\n", $sqls);
         
         /** @var \core\db\connection\MysqlConnection $mcon */
         $mcon = DatabaseHandler::getConnection('default');
