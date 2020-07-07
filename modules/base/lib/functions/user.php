@@ -6,9 +6,9 @@
 function mapUserTypes() {
     $t = array();
     
-    $t['admin'] = 'Administrator';
-    $t['user'] = t('User');
-    $t['external_user'] = t('External user');
+    $t['admin']         = t('userType.admin');
+    $t['user']          = t('userType.user');
+    $t['external_user'] = t('userType.external_user');
     
     $t = apply_filter('mapUserTypes', $t);
     

@@ -287,7 +287,12 @@ class UserService extends ServiceBase {
         $et->setToEmail( $user->getEmail() );
         $email->addRecipient( $et );
         
-        $html = get_template( module_file('base', 'templates/auth/_reset_password_email.php'), [
+        // mail
+        $mailtpl = module_file('base', 'templates/auth/_reset_password_email-'.ctx()->getSelectedLang().'.php');
+        if ($mailtpl == false) {
+            $mailtpl = module_file('base', 'templates/auth/_reset_password_email.php');
+        }
+        $html = get_template( $mailtpl, [
             'reset_password_id' => $rp->getResetPasswordId(),
             'security_string'   => $rp->getSecurityString(),
             'ip'                => $rp->getRequestIp(),
