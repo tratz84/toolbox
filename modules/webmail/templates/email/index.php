@@ -149,7 +149,7 @@ t.addColumn({
 <?php if (ctx()->isModuleEnabled('customer')) : ?>
 t.addColumn({
 	fieldName: 'customer_name',
-	fieldDescription: toolbox_t('customer'),
+	fieldDescription: toolbox_t('Customer'),
 	fieldType: 'text',
 	render: function(row) {
 		if (row.company_name) {
