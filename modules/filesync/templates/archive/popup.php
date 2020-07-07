@@ -20,7 +20,7 @@ var fpt = new IndexTable('#filesync-popup-table');
 
 fpt.setRowClick(function(row, evt) {
 	
-	filesyncArchiveFile_Select( $(row).data('record').store_file_id );
+	<?= $js_callback_func ?>( $(row).data('record').store_file_id );
 	
 });
 

@@ -69,6 +69,12 @@ class archiveController extends BaseController {
     
     public function action_popup() {
         
+        if (get_var('callback')) {
+            $this->js_callback_func = get_var('callback');
+        } else {
+            $this->js_callback_func = 'filesyncArchiveFile_Select';
+        }
+        
         $this->setShowDecorator(false);
         return $this->render();
     }
