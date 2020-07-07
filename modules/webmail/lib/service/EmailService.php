@@ -237,6 +237,8 @@ class EmailService extends ServiceBase {
         
         $r = $email->delete();
         
+        // text_content might be too long for log
+        $email->setTextContent('');
         ActivityUtil::logActivity($email->getCompanyId(), $email->getPersonId(), 'webmail__email', $email->getEmailId(), 'email-deleted', 'E-mail verwijderd: '.$email->getSubject(), null, $email->getFields());
         
         return $r;
