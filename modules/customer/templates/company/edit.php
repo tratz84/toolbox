@@ -18,7 +18,7 @@
 
 <?php
     $tabContainer = generate_tabs('customer', 'company-edit-footer', $form);
-    $tabContainer->addTab('Bedrijfsgegevens', $form->render(), 0);
+    $tabContainer->addTab(t('Company settings'), $form->render(), 0);
     print $tabContainer->render();
 ?>
 

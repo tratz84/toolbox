@@ -74,7 +74,7 @@ $eb->subscribe('customer', 'company-edit-footer', new CallbackPeopleEventListene
     
     $html = get_component('base', 'notes/notestab', 'index', array('company_id' => $companyId));
     if ($html) {
-        $ftc->addTab('Notities', $html, 9);
+        $ftc->addTab(t('Notes'), $html, 9);
     }
     
     
@@ -96,7 +96,7 @@ $eb->subscribe('customer', 'person-edit-footer', new CallbackPeopleEventListener
 
     $html = get_component('base', 'notes/notestab', 'index', array('person_id' => $personId));
     if ($html) {
-        $ftc->addTab('Notities', $html, 9);
+        $ftc->addTab(t('Notes'), $html, 9);
     }
     
     
@@ -104,7 +104,7 @@ $eb->subscribe('customer', 'person-edit-footer', new CallbackPeopleEventListener
         $html = get_component('base', 'activityOverview', 'index', array('personId' => $personId));
         
         if ($html) {
-            $ftc->addTab('Logboek', $html, 100);
+            $ftc->addTab(t('Log'), $html, 100);
         }
     }
 }));

@@ -25,12 +25,12 @@ class EmailRecipientLineWidget extends ListEditWidget {
         $this->addWidget( new HiddenField('email_to_id', '', 'Id') );
         $this->addWidget( new HiddenField('email_id', '', 'E-mail id') );
         
-        $this->addWidget( new SelectField('to_type', 'to', array('To' => 'Aan', 'Cc' => 'Cc', 'Bcc' => 'Bcc'), 'Aan') );
+        $this->addWidget( new SelectField('to_type', 'to', array('To' => t('To'), 'Cc' => 'Cc', 'Bcc' => 'Bcc'), t('To')) );
         
-        $this->addWidget( new TextField('to_name', '', 'Naam' ));
+        $this->addWidget( new TextField('to_name', '', t('Name') ));
         $this->getWidget('to_name')->showPlaceholder();
         
-        $this->addWidget( new EmailField('to_email', '', 'E-mailadres') );
+        $this->addWidget( new EmailField('to_email', '', t('Email address')) );
         $this->getWidget('to_email')->showPlaceholder();
         
     }

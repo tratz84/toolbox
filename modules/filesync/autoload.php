@@ -76,7 +76,7 @@ $eb->subscribe('customer', 'company-edit-footer', new CallbackPeopleEventListene
     
     $html = get_component('filesync', 'archiveOverviewController', 'index', array('form' => $ftc->getSource()));
     if ($html) {
-        $ftc->addTab('Documenten', $html, 50);
+        $ftc->addTab(t('Documents'), $html, 50);
     }
 }));
 
@@ -91,7 +91,7 @@ $eb->subscribe('customer', 'person-edit-footer', new CallbackPeopleEventListener
     
     $html = get_component('filesync', 'archiveOverviewController', 'index', array('form' => $ftc->getSource()));
     if ($html) {
-        $ftc->addTab('Documenten', $html, 50);
+        $ftc->addTab(t('Documents'), $html, 50);
     }
 }));
 

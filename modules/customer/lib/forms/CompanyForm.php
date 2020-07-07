@@ -56,7 +56,7 @@ class CompanyForm extends BaseForm {
         $addressList = new ListFormWidget('\\customer\\forms\\AddressForm', 'addressList');
         $addressList->setSortable(true);
         $addressList->setLabel('Adressen');
-        $addressList->setFieldLabels(array('Straat', 'Huisnr', 'Postcode', 'Plaats'));
+        $addressList->setFieldLabels(array(t('Street'), t('Housenr'), t('Zipcode'), t('City')));
         $addressList->setFields(array('street', 'street_no', 'zipcode', 'city'));
         $addressList->setPublicFields(array('company_address_id', 'address_id', 'note', 'country_id'));
         $this->addWidget($addressList);
@@ -65,7 +65,7 @@ class CompanyForm extends BaseForm {
         $emailList = new ListFormWidget('\\customer\\forms\\EmailForm', 'emailList');
         $emailList->setSortable(true);
         $emailList->setLabel('E-mailadressen');
-        $emailList->setFieldLabels(array('E-mailadres', 'Omschrijving'));
+        $emailList->setFieldLabels(array(t('Email address'), t('Description')));
         $emailList->setFields(array('email_address', 'note'));
         $emailList->setPublicFields(array('email_id', 'company_email_id', 'primary_address'));
         $this->addWidget($emailList);
@@ -74,7 +74,7 @@ class CompanyForm extends BaseForm {
         $phoneList = new ListFormWidget('\\customer\\forms\\PhoneForm', 'phoneList');
         $phoneList->setSortable(true);
         $phoneList->setLabel('Telefoonnummers');
-        $phoneList->setFieldLabels(array('Telefoonnummer', 'Notitie'));
+        $phoneList->setFieldLabels(array(t('Phone number'), t('Note')));
         $phoneList->setFields(array('phonenr', 'note'));
         $phoneList->setPublicFields(array('phone_id', 'company_phone_id'));
         $this->addWidget($phoneList);

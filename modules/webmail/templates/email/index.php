@@ -141,7 +141,7 @@ t.setConnectorUrl( '/?m=webmail&c=email&a=search' );
 // });
 t.addColumn({
 	fieldName: 'from_name',
-	fieldDescription: 'Van',
+	fieldDescription: toolbox_t('From'),
 	fieldType: 'text',
 	searchable: false
 });
@@ -149,7 +149,7 @@ t.addColumn({
 <?php if (ctx()->isModuleEnabled('customer')) : ?>
 t.addColumn({
 	fieldName: 'customer_name',
-	fieldDescription: 'Klant',
+	fieldDescription: toolbox_t('customer'),
 	fieldType: 'text',
 	render: function(row) {
 		if (row.company_name) {
@@ -174,7 +174,7 @@ t.addColumn({
 
 t.addColumn({
 	fieldName: 'subject',
-	fieldDescription: 'Onderwerp',
+	fieldDescription: toolbox_t('Subject'),
 	fieldType: 'text',
 	searchable: false
 });
@@ -184,9 +184,9 @@ t.addColumn({
 	fieldType: 'text',
 	render: function(record) {
 		if (record.status == 'draft') {
-			return 'Concept';
+			return toolbox_t('Draft');
 		} else if (record.status == 'sent') {
-			return 'Verzonden';
+			return toolbox_t('Sent');
 		} else {
 			return record.status;
 		}
@@ -195,7 +195,7 @@ t.addColumn({
 
 t.addColumn({
 	fieldName: 'created',
-	fieldDescription: 'Aangemaakt op',
+	fieldDescription: toolbox_t('Created on'),
 	fieldType: 'datetime',
 	searchable: false
 });

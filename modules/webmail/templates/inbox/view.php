@@ -8,7 +8,7 @@
 	<table>
 	
 		<tr>
-			<th>Van</th>
+			<th><?= t('From') ?></th>
 			<td>
 				<?php if (count($from)) foreach($from as $e) : ?>
 				<div>
@@ -22,7 +22,7 @@
 
 		<?php if (count($to)) : ?>
     		<tr>
-    			<th>Aan</th>
+    			<th><?= t('To') ?></th>
     			<td>
     			<?php foreach($to as $e) : ?>
     				<div>
@@ -63,13 +63,13 @@
 		<?php endif; ?>
 		
 		<tr>
-			<th>Onderwerp</th>
+			<th><?= t('Subject') ?></th>
 			<td><?= esc_html($subject) ?></td>
 		</tr>
 		
 		<?php if (count($attachments)) : ?>
 		<tr>
-			<th>Bijlages</th>
+			<th><?= t('Attachments') ?></th>
 			<td class="attachments">
 				<?php for($attno=0; $attno < count($attachments); $attno++) : ?>
 				<a href="<?= appUrl('/?m=webmail&c=inbox&a=attachment&no='.$attno.'&id='.$id) ?>" target="_blank"><?= esc_html($attachments[$attno]->getFilename()) ?></a>

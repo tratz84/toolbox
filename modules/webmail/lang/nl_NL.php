@@ -7,6 +7,8 @@ $lang['Identities']                 = 'Identiteiten';
 $lang['Mail server (out)']          = 'Mail server (uitgaand)';
 $lang['Mail server settings (out)'] = 'Mail server instellingen (uitgaand)';
 
+$lang['Recipient - No valid recipients'] = 'Geadresseerde - Geen geldige ontvangers';
+
 $lang['New1']                       = 'Nieuw';
 $lang['To1']                        = 'Aan';
 

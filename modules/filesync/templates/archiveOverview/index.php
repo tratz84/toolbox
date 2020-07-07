@@ -4,10 +4,10 @@
 
 	<thead>
 		<tr>
-			<th>Bestandsnaam</th>
-			<th>Betreft</th>
-			<th class="th-filesize">Bestandsgrootte</th>
-			<th class="th-date">Datum</th>
+			<th><?= t('Filename') ?></th>
+			<th><?= t('Subject') ?></th>
+			<th class="th-filesize"><?= t('File size') ?></th>
+			<th class="th-date"><?= t('Date') ?></th>
 		</tr>
 	</thead>
 	
@@ -15,7 +15,7 @@
 		<?php if (count($storeFiles) == 0) : ?>
 		<tr>
 			<td colspan="4" style="text-align: center; font-style: italic;">
-				Geen resultaten gevonden
+				<?= t('No results found') ?>
 			</td>
 		</tr>
 		<?php else : ?>

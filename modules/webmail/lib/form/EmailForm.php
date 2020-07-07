@@ -39,18 +39,18 @@ class EmailForm extends BaseForm {
         
         $this->addWidget(new HtmlField('email_id', '', 'Id'));
         
-        $this->addWidget(new UploadFilesField('files', '', 'Bestanden') );
+        $this->addWidget(new UploadFilesField('files', '', t('Files')) );
         
         $this->addWidget(new HtmlField('statusAsText', '', 'Status'));
         
         if (ctx()->isModuleEnabled('customer')) {
-            $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=customer&c=customer&a=select2', 'Klant') );
+            $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=customer&c=customer&a=select2', t('Customer')) );
         }
         
         $this->addWidget(new EmailRecipientLineWidget('recipients'));
         
         
-        $this->addWidget(new TextField('subject', '', 'Onderwerp'));
+        $this->addWidget(new TextField('subject', '', t('Subject')));
         
         $this->addWidget(new TinymceField('text_content', '', ''));
         
@@ -67,7 +67,7 @@ class EmailForm extends BaseForm {
             }
             
             if ($validEmailAddresses == 0) {
-                return 'Geadresseerde - Geen geldige ontvangers';
+                return t('Recipient - No valid recipients');
             } else {
                 return null;
             }
@@ -80,7 +80,7 @@ class EmailForm extends BaseForm {
             if ($obj->getStatus() == Email::STATUS_DRAFT) {
                 $this->addIdentities();
             } else {
-                $f = new HtmlField('identity_name_email', $obj->getFromName() . ' <'.$obj->getFromEmail().'>', 'Van');
+                $f = new HtmlField('identity_name_email', $obj->getFromName() . ' <'.$obj->getFromEmail().'>', t('From'));
                 $f->setPrio(35);
                 $this->addWidget( $f );
             }
@@ -161,7 +161,7 @@ class EmailForm extends BaseForm {
         foreach($identities as $i) {
             $options[$i->getIdentityId()] = $i->getFromName() . ' <' . $i->getFromEmail() . '>';
         }
-        $sel = new SelectField('identity_id', '', $options, 'Van');
+        $sel = new SelectField('identity_id', '', $options, t('From'));
         $sel->setPrio(35);
         $this->addWidget( $sel );
         
