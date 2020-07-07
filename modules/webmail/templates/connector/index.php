@@ -6,7 +6,7 @@
 		<a href="<?= appUrl('/?m=webmail&c=connector&a=edit') ?>" class="fa fa-plus"></a>
 	</div>
 	
-	<h1>Overzicht connectors</h1>
+	<h1><?= t('Overview connectors') ?></h1>
 </div>
 
 
@@ -29,7 +29,7 @@ t.setConnectorUrl( '/?m=webmail&c=connector&a=search' );
 
 t.addColumn({
 	fieldName: 'description',
-	fieldDescription: 'Omschrijving',
+	fieldDescription: toolbox_t('Description'),
 	fieldType: 'text',
 	searchable: true
 });
@@ -42,14 +42,14 @@ t.addColumn({
 
 t.addColumn({
 	fieldName: 'username',
-	fieldDescription: 'Gebruikersnaam',
+	fieldDescription: toolbox_t('Username'),
 	fieldType: 'text',
 	searchable: true
 });
 
 t.addColumn({
 	fieldName: 'active',
-	fieldDescription: 'Actief',
+	fieldDescription: toolbox_t('Active'),
 	fieldType: 'boolean',
 	searchable: false
 });

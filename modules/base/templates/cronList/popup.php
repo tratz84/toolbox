@@ -4,7 +4,7 @@
 		<a href="javascript:void(0);" class="fa fa-times-circle popup-close-link"></a>
 	</div>
 
-	<h1>Overzicht</h1>
+	<h1><?= t('Overview') ?></h1>
 </div>
 
 
@@ -12,10 +12,10 @@
 
 	<thead>
 		<tr>
-			<th>Bericht</th>
-			<th>Foutmelding</th>
-			<th>Status</th>
-			<th>Uitgevoerd op</th>
+			<th><?= t('Message') ?></th>
+			<th><?= t('Error message') ?></th>
+			<th><?= t('Status') ?></th>
+			<th><?= t('Executed on') ?></th>
 		</tr>
 	</thead>
 	<tbody>

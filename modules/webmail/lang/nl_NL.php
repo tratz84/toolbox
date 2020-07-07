@@ -25,4 +25,10 @@ $lang['System messages']            = 'Systeem berichten';
 $lang['Use this identity for system-messages? ie. password-reset mails'] = 'Gebruik deze identiteit voor systeem-berichten? B.v. wachtwooord-reset mails';
 
 
+$lang['Overview connectors']        = 'Overzicht connectors';
+$lang['Description']                = 'Omschrijving';
+$lang['Username']                   = 'Gebruikersnaam';
+$lang['Active']                     = 'Actief';
+
+
 return $lang;

@@ -30,9 +30,9 @@ class ConnectorForm extends BaseForm {
         $this->addWidget(new InternalField('imapfolders'));
         $this->addWidget(new InternalField('selectedImapfolders'));
         
-        $this->addWidget(new CheckboxField('active', '', 'Actief'));
+        $this->addWidget(new CheckboxField('active', '', t('Active')));
         
-        $this->addWidget(new TextField('description', '', 'Omschrijving'));
+        $this->addWidget(new TextField('description', '', t('Description')));
         
         $this->addWidget(new SelectField('connector_type', '', array('imap' => 'imap', 'pop3' => 'pop3'), 'Soort'));
         

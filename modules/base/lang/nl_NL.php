@@ -91,6 +91,9 @@ $lang['Title']                  = 'Titel';
 $lang['Status']                 = 'Status';
 $lang['Run on']                 = 'Uitgevoerd op';
 $lang['Started']                = 'Gestart';
+$lang['Executed on']            = 'Uitgevoerd op';
+$lang['Error message']          = 'Foutmelding';
+$lang['Message']                = 'Bericht';
 
 $lang['Recent log activity']    = 'Recente logboek activiteiten';
 $lang['Customer']               = 'Klant';
