@@ -41,7 +41,7 @@ hook_eventbus_subscribe('report', 'menu-list', function($reportMenuList) {
      * report\ReportMenuList
      */
     
-    $reportMenuList->addMenuItem('Klantenoverzicht', 'customer', 'report/customerReportController', '/?m=customer&c=report/customerReport&a=xls');
+    $reportMenuList->addMenuItem(t('Customer overview'), 'customer', 'report/customerReportController', '/?m=customer&c=report/customerReport&a=xls');
     
 });
     

@@ -23,8 +23,8 @@ class MenuDAO extends \core\db\DAOObject {
 	    
 	    if (ctx()->isModuleEnabled('customer')) {
     	    if (ctx()->isCustomersSplit()) {
-        	    $arr[] = array('menu_code' => 'company',         'sort' => 200, 'visible' => 1, 'icon' => 'fa-user',      'label' => 'Bedrijven', 'url' => '/?m=customer&c=company');
-        	    $arr[] = array('menu_code' => 'person',          'sort' => 300, 'visible' => 1, 'icon' => 'fa-user',      'label' => 'Personen',  'url' => '/?m=customer&c=person');
+        	    $arr[] = array('menu_code' => 'company',         'sort' => 200, 'visible' => 1, 'icon' => 'fa-user',      'label' => t('Companies'), 'url' => '/?m=customer&c=company');
+        	    $arr[] = array('menu_code' => 'person',          'sort' => 300, 'visible' => 1, 'icon' => 'fa-user',      'label' => t('Persons'),  'url' => '/?m=customer&c=person');
     	    }
     	    else {
     	        $arr[] = array('menu_code' => 'customer',        'sort' => 200, 'visible' => 1, 'icon' => 'fa-user',      'label' => t('Customers'),  'url' => '/?m=customer&c=customer');
