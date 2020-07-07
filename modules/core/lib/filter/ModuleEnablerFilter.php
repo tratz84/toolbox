@@ -17,6 +17,13 @@ class ModuleEnablerFilter {
     
     
     public function doFilter($filterChain) {
+        
+        $ctx = ctx();
+        if ( $ctx->getSetting('system_language') ) {
+            $ctx->setSelectedLang( $ctx->getSetting('system_language') );
+        }
+        
+        
         $this->enableModules();
         
         $filterChain->next();

@@ -3,6 +3,9 @@
 
 $lang = array();
 
+$lang['Base settings']          = 'Basis instellingen';
+$lang['Base color']             = 'Basis kleur';
+
 $lang['Reset password']         = 'Reset wachtwoord';
 $lang['Username or e-mail']     = 'Gebruikersnaam of e-mail';
 

@@ -45,6 +45,8 @@ class settingsController extends BaseController {
             if (ctx()->isModuleEnabled('webmail')) {
                 $settingsService->updateValue('reset_password', get_var('reset_password')?1:0);
             }
+            
+            $settingsService->updateValue('system_language', get_var('system_language'));
             $settingsService->updateValue('object_locking', get_var('object_locking')?1:0);
             $settingsService->updateValue('customers_split', get_var('customers_split')?1:0);
             $settingsService->updateValue('pdf_print_date_footer', get_var('pdf_print_date_footer')?1:0);
@@ -61,6 +63,11 @@ class settingsController extends BaseController {
             $this->checkboxResetPassword = new CheckboxField('reset_password', ctx()->isResetPasswordEnabled()?'1':'0', t('Reset password'));
             $this->checkboxResetPassword->setInfoText(t('Reset password support on login-page'));
         }
+        
+        $mapLang = array();
+        $mapLang['nl_NL'] = 'Nederlands';
+        $mapLang['en_US'] = 'English';
+        $this->selectLanguage = new SelectField('system_language', @$this->settings['system_language'], $mapLang, t('System language'));
         
         $this->checkboxObjectLocking = new CheckboxField('object_locking', @$this->settings['object_locking']?'1':'0', t('Object locking'));
         $this->checkboxObjectLocking->setInfoText(t('Possibility to mark objects as "locked"'));
