@@ -22,6 +22,7 @@ use customer\model\CompanyEmailDAO;
 use webmail\form\MailSettingsOutForm;
 use base\service\SettingsService;
 use webmail\mail\SendMail;
+use core\parser\HtmlParser;
 
 class EmailService extends ServiceBase {
     
@@ -238,7 +239,18 @@ class EmailService extends ServiceBase {
         $r = $email->delete();
         
         // text_content might be too long for log
-        $email->setTextContent('');
+        try {
+            $hp = new HtmlParser();
+            $hp->loadString( $email->getTextContent() );
+            $txt = trim( $hp->getBodyText() );
+            if (strlen($txt) > 65000) {
+                $txt = substr($txt, 0, 65000);
+            }
+        } catch (\Exception $ex) {
+            $email->setTextContent('');
+        } catch (\Error $err) {
+            $email->setTextContent('');
+        }
         ActivityUtil::logActivity($email->getCompanyId(), $email->getPersonId(), 'webmail__email', $email->getEmailId(), 'email-deleted', 'E-mail verwijderd: '.$email->getSubject(), null, $email->getFields());
         
         return $r;
