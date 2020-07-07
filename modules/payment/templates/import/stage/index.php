@@ -1,6 +1,6 @@
 
-<script src="<?= appUrl('/module/payment/js/payment-import.js') ?>?v=<?= filemtime(module_file('payment', 'public/js/payment-import.js')) ?>"></script>
-<script src="<?= appUrl('/module/payment/js/payment-automatch.js') ?>?v=<?= filemtime(module_file('payment', 'public/js/payment-automatch.js')) ?>"></script>
+<script src="<?= appUrl('/?mpf=/module/payment/js/payment-import.js') ?>?v=<?= filemtime(module_file('payment', 'public/js/payment-import.js')) ?>"></script>
+<script src="<?= appUrl('/?mpf=/module/payment/js/payment-automatch.js') ?>?v=<?= filemtime(module_file('payment', 'public/js/payment-automatch.js')) ?>"></script>
 
 <div class="page-header">
 
