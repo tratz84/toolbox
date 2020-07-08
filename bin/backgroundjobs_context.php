@@ -1,8 +1,7 @@
-<?php
-use base\service\SettingsService;
-?>
 #!/usr/bin/env php
 <?php
+
+use base\service\SettingsService;
 
 /**
  * background_context.php - handles background processes & cronjobs for given context

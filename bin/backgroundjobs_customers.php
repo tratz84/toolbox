@@ -30,7 +30,8 @@ while ( true ) {
             $settings = $startedCustomers[$contextName];
             
             $status=null;
-            if (pcntl_wait( $settings['pid'], $status, WNOHANG ) === 0) {
+            $r = pcntl_waitpid( $settings['pid'], $status, WNOHANG );
+            if ($r > 0) {
                 print_info("$contextName: Seems stopped running...");
                 unset( $startedCustomers[$contextName] );
             }
