@@ -13,7 +13,7 @@ class DateValidator extends BaseValidator {
         $this->opts = $opts;
     }
     
-    public function getMessage() { return 'Ongeldige datum'; }
+    public function getMessage() { return t('Invalid date'); }
     
     public function validate($widget) {
         $v = $widget->getValue();

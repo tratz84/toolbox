@@ -99,6 +99,8 @@ $lang['Empty']         = 'Leeg';
 
 $lang['You don\'t have any widgets on your dashboard yet. Click the wheel at the top right to add widgets.'] = 'Je hebt nog geen widgets op je dashboard. Klik rechtsboven op het wieltje om widgets toe te voegen.';
 
+$lang['Invalid date']     = 'Ongeldige datum';
+
 $lang['No results found'] = 'Geen resultaten gevonden';
 
 $lang['Field contains no value'] = 'Veld bevat geen waarde';
