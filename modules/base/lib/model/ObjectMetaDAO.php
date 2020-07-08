@@ -14,9 +14,23 @@ class ObjectMetaDAO extends \core\db\DAOObject {
 	
 	public function readByKey($objectName, $objectId, $objectKey) {
 	    
-	    $sql = "select * from base__object_meta where object_name = ? and object_id = ? and object_key = ?";
+	    $sql = "select * 
+                from base__object_meta 
+                where object_name = ? 
+                    and object_key = ? ";
 	    
-	    $l = $this->queryList($sql, array($objectName, $objectId, $objectKey));
+	    $params = array();
+	    $params[] = $objectName;
+	    $params[] = $objectKey;
+	    if ($objectId === null) {
+	        $sql .= " and object_id IS NULL ";
+	    }
+	    else {
+	        $sql .= " and object_id = ? ";
+	        $params[] = $objectId;
+	    }
+	    
+	    $l = $this->queryList( $sql, $params );
 	    
 	    if (count($l)) {
 	        return $l[0];
