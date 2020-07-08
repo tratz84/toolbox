@@ -129,7 +129,7 @@ class settingsController extends BaseController {
         
         // mark as enabled
         $settingsService = $this->oc->get(SettingsService::class);
-        $settingsService->updateValue($mod.'Enabled', 1);
+        $settingsService->updateValue( $mod.'Enabled', 1, ['type' => 'mod-activation'] );
     
         report_user_message(tf('Module "%s" enabled', $mod));
         

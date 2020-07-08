@@ -67,7 +67,7 @@ class SettingsService extends ServiceBase {
         return $map;
     }
     
-    public function updateValue($settingCode, $val) {
+    public function updateValue($settingCode, $val, $opts=array()) {
         
         $sDao = new SettingDAO();
         $s = $sDao->readByKey($settingCode);
@@ -75,6 +75,10 @@ class SettingsService extends ServiceBase {
         if (!$s) {
             $s = new Setting();
             $s->setSettingCode($settingCode);
+        }
+        
+        if (isset($opts['type'])) {
+            $s->setSettingType( $opts['type'] );
         }
         
         $s->setTextValue($val);
