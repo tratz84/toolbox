@@ -4,11 +4,17 @@
 - automate/auto-generate list-pages
 - automate/auto-generate form-pages
 
-- calendar, item spanning multiple days
+- status page with enabled server features + missing features because they aren't installed on server
+	- php-imap
+	- wkhtml2pdf
+	- libreoffice
+	- ...
 
 
 == Future ==
 
 - GUI's for development databases, Service-classes & index-pages + edit-pages
+
+
 
 
