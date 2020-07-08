@@ -1,3 +1,6 @@
+<?php
+use base\service\SettingsService;
+?>
 #!/usr/bin/env php
 <?php
 
@@ -20,10 +23,20 @@ bootstrapCli($contextName);
 
 $lastCronRun = null;
 
+$settingsService = object_container_get( SettingsService::class );
+$modules_sig = $settingsService->enabledModulesSignature();
+
+
 
 $startedProcesses = array();
 while ( true ) {
     try {
+        
+        // check if enabled modules has changes. Yes? => restart script (just end, backgroundjobs_customers.php will pick it up..)
+        if ($modules_sig != $settingsService->enabledModulesSignature()) {
+            print_info("Exiting... loaded modules have been changed");
+            exit;
+        }
         
         // publish event for starting any crons
         $ac = new \core\container\ArrayContainer();

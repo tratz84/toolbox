@@ -23,6 +23,21 @@ $lastCronRun = null;
 $startedCustomers = array();
 while ( true ) {
     try {
+        
+        // check child processes PID's
+        $startedContextNames = array_keys($startedCustomers);
+        foreach($startedContextNames as $contextName) {
+            $settings = $startedCustomers[$contextName];
+            
+            $status=null;
+            if (pcntl_wait( $settings['pid'], $status, WNOHANG ) === 0) {
+                print_info("$contextName: Seems stopped running...");
+                unset( $startedCustomers[$contextName] );
+            }
+        }
+        
+        
+        // lookup current active customers
         $acs = object_container_get(\admin\service\AdminCustomerService::class);
         
         $currentCustomers = array();
@@ -63,8 +78,8 @@ while ( true ) {
             );
         }
         
+        // stop removed customers
         foreach($startedCustomers as $contextName => $settings) {
-            
             // proces running?
             if (isset($currentCustomers[$contextName])) {
                 // print "Process not ended? => skip\n";

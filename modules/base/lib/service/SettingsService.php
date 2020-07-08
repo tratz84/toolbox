@@ -68,7 +68,6 @@ class SettingsService extends ServiceBase {
     }
     
     public function updateValue($settingCode, $val, $opts=array()) {
-        
         $sDao = new SettingDAO();
         $s = $sDao->readByKey($settingCode);
         
@@ -84,6 +83,24 @@ class SettingsService extends ServiceBase {
         $s->setTextValue($val);
         
         return $s->save();
+    }
+    
+    
+    /**
+     * enabledModulesChanged() - returns unique int-signature of current enabled modules
+     * 
+     */
+    public function enabledModulesSignature() {
+        $sDao = object_container_get( SettingDAO::class );
+        
+        $objs = $sDao->readByType('mod-activation');
+        
+        $l = array();
+        foreach($objs as $obj) {
+            $l[] = $obj->getFields();
+        }
+        
+        return crc32( serialize($l) );
     }
     
     

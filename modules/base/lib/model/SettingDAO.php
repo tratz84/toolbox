@@ -27,5 +27,12 @@ class SettingDAO extends \core\db\DAOObject {
 	        return null;
 	    }
 	}
+	
+	
+	public function readByType($type) {
+	    $sql = "select * from base__setting where setting_type = ?";
+	    
+	    return $this->queryList($sql, array($type));
+	}
 }
 
