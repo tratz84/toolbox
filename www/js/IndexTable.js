@@ -673,6 +673,10 @@ function IndexTable( container, opts ) {
 			})
 		}
 		
+		// column-selection enabled? => update shown/hidden cols
+		if (this.opts.columnSelection) {
+			this.updateColumnselection();
+		}
 		
 		if (this.callback_renderRows) {
 			this.callback_renderRows();
@@ -777,7 +781,11 @@ function IndexTable( container, opts ) {
 			for(var i in this.columns) {
 				var c = this.columns[i];
 				
-				var lbl = $('<label />');
+				if (c.fieldName == '' || c.fieldDescription == '') {
+					continue;
+				}
+				
+				var lbl = $('<label class="itcs-item" />');
 				
 				var inp = $('<input type="checkbox" />');
 				inp.attr('name', 'columnSelection['+c.fieldName+']');
@@ -813,6 +821,10 @@ function IndexTable( container, opts ) {
 		var container = $('<div />');
 		for(var i in this.columns) {
 			var c = this.columns[i];
+			
+			if (c.fieldName == '' || c.fieldDescription == '') {
+				continue;
+			}
 			
 			var lbl = $('<label style="width: 300px;" />');
 			
