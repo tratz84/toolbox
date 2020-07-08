@@ -63,7 +63,7 @@ $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($e
     
     $src = $evt->getSource();
     
-    $src->addItem('Filesync', 'Pagequeue instellingen',     '/?m=filesync&c=pagequeueSettings');
+    $src->addItem('Filesync', t('Settings'),     '/?m=filesync&c=settings');
 }));
 
 

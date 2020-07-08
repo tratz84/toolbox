@@ -48,6 +48,10 @@ $l['Revision']          = 'Revisie';
 $l['Deleted']           = 'Verwijderd';
 $l['Last changed']      = 'Laatst gewijzigd';
 
+$l['Default rotation']                                   = 'Standaard rotatie';
+$l['Default rotation new images']                        = 'Standaard rotatie nieuw geuploade afbeeldingen';
+$l['Location where newly generated PDF-files are saved'] = 'Locatie waar nieuw gegenereerde PDF\'s worden opgeslagen';
+
 
 return $l;
 

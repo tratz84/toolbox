@@ -4,11 +4,14 @@
 	<?= esc_html($error) ?>
 <?php else : ?>
 
-    <?php if (in_array($file_extension, ['pdf', 'xls', 'xlsx', 'doc', 'docx'])) : ?>
-    
+    <?php if (in_array($file_extension, ['pdf'])) : ?>
     	<embed src="<?= esc_attr($file_url) ?>" width="100%" height="600" type="application/pdf">
-    	
+    <?php elseif (isset($url_pdf_preview)) : ?>
+    	<embed src="<?= esc_attr($url_pdf_preview) ?>" width="100%" height="600" type="application/pdf">
     <?php endif; ?>
+	<div style="max-width: 100%; margin: 15px auto 0; text-align: left;">
+		<a href="<?= esc_attr($file_url) ?>"><?= esc_html($filename) ?></a>
+	</div>
     
 
     <script>

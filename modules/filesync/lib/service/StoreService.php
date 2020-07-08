@@ -154,6 +154,12 @@ class StoreService extends ServiceBase {
             if ($file) {
                 unlink($file);
             }
+            
+            // possibly preview-files generated
+            if (file_exists( $file . '-preview.pdf' )) {
+                unlink( $file . '-preview.pdf' );
+            }
+            
         }
         
     }

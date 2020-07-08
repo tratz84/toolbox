@@ -1261,7 +1261,7 @@ function valid_date(value) {
 }
 
 function valid_datetime(value) {
-	if (typeof value == 'undefined') {
+	if (typeof value == 'undefined' || value === null) {
 		return false;
 	}
 	

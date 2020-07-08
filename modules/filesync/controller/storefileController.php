@@ -145,6 +145,30 @@ class storefileController extends BaseController {
     }
     
     
+    public function action_pdf_preview() {
+        
+        $storeService = $this->oc->get(StoreService::class);
+        
+        $sf = $storeService->readStoreFile( get_var('id') );
+        if ($sf == null) {
+            throw new ObjectNotFoundException('File not found');
+        }
+        
+        
+        $pdffile = filesync_storefile2pdf( $sf->getStoreFileId() );
+        
+        if (!$pdffile) {
+            die('Error creating pdf-file');
+        }
+        
+        header('Content-type: ' . mime_content_type ($pdffile));
+        header('Content-Disposition: inline; filename="'.basename($pdffile).'"');
+        
+        
+        readfile( $pdffile );
+    }
+    
+    
     
     public function action_delete() {
         $storeService = $this->oc->get(StoreService::class);

@@ -6,7 +6,7 @@
 		<a href="javascript:void(0);" class="fa fa-save submit-form"></a>
 	</div>
 
-	<h1>Pagequeue instellingen</h1>
+	<h1><?= t('Filesync settings') ?></h1>
 </div>
 
 
