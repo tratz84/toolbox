@@ -130,7 +130,7 @@ class archiveController extends BaseController {
             $this->file_url = appUrl('/?m=filesync&c=storefile&a=download&inline=1&id='.$storeFile->getStoreFileId());
             $this->download_url = appUrl('/?m=filesync&c=storefile&a=download&id='.$storeFile->getStoreFileId());
             
-            if (in_array($this->file_extension, ['doc', 'docx', 'txt', 'rtf', 'ppt', 'pptx', 'xls', 'xlsx'])) {
+            if (in_array($this->file_extension, ['doc', 'docx', 'dotx', 'txt', 'rtf', 'ppt', 'pptx', 'xls', 'xlsx', 'odt', 'ods', 'odp'])) {
                 $path = filesync_storefile2pdf( $storeFile->getStoreFileId() );
                 if ($path) {
                     $this->url_pdf_preview = appUrl('/?m=filesync&c=storefile&a=pdf_preview&inline=1&id='.$storeFile->getStoreFileId());
