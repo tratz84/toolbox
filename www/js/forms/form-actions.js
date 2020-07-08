@@ -69,6 +69,8 @@ jQuery(document).ready(function($) {
 			
 			// set focus
 			focusFirstField(popup);
+			
+			$(window).trigger('list-form-widget-add-record-show');
 		}
 		
 		show_popup(appUrl('/?m=core&c=form/formPopup'), opts);
@@ -115,6 +117,8 @@ jQuery(document).ready(function($) {
 			
 			// set focus
 			focusFirstField(popup);
+			
+			$(window).trigger('list-form-widget-add-record-show');
 		}
 		
 		show_popup(appUrl('/?m=core&c=form/formPopup'), opts);
