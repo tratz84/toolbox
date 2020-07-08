@@ -62,13 +62,13 @@ try {
     	<div class="main-content">
     	
     		<div style="max-width: 800px; margin: 50px auto;">
-    			Er is 	een fout opgetreden,
+    			<?= t('An error has occured') ?>:
     			<?php if (is_a($ex, NotForLiveException::class) == false || DEBUG) : ?>
     			 <?= $ex->getMessage() ?>
     			<?php endif; ?>
     			<br/>
     			<br/>
-    			<a href="<?= appUrl('/') ?>">Klik hier om terug te gaan naar het dashboard</a>
+    			<a href="<?= appUrl('/') ?>"><?= t('Click here to go back to the dashboard') ?></a>
     		</div>
     		
     		<?php if (DEBUG) : ?>

@@ -108,6 +108,9 @@ $lang['Field contains no value'] = 'Veld bevat geen waarde';
 $lang['Other user active']                              = 'Andere gebruiker actief';
 $lang['Please note, other user active in this screen:'] = 'Let op, andere gebruiker actief in dit scherm:';
 
+$lang['An error has occured']                           = 'Er is een fout opgetreden';
+$lang['Click here to go back to the dashboard']         = 'Klik hier om terug te gaan naar het dashboard';
+
 
 return $lang;
 
