@@ -59,7 +59,7 @@ class DynamicSelectField extends BaseWidget {
         
         $html .= '<select name="'.esc_attr($this->getName()).'" class="select2-widget" data-url="'.esc_attr($this->endpoint).'" '.$extraAttributes.'>';
         if ($this->getValue() || $this->defaultText) {
-            $html .= '<option value="'.esc_attr($val).'">'.esc_html($this->defaultText).'</option>';
+            $html .= '<option value="'.esc_attr($this->getValue()).'">'.esc_html($this->defaultText).'</option>';
         }
         $html .= '</select>';
         
