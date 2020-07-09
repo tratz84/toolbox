@@ -66,7 +66,8 @@ function IndexTable( container, opts ) {
 				}
 				
 				history.replaceState({
-					indexTable : fields
+					indexTable : fields,
+					sortField: me.sortField
 				}, 'page', url);
 			});
 		}
@@ -110,6 +111,9 @@ function IndexTable( container, opts ) {
 			if (history.state.indexTable.pageNo) {
 				this.pageNo = history.state.indexTable.pageNo;
 			}
+		}
+		if (history.state && history.state.sortField && history.state.sortField != null) {
+			this.sortField = history.state.sortField;
 		}
 	}
 
