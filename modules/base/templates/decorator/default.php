@@ -106,7 +106,7 @@ $menuItems = $ms->listMainMenu();
                 <a href="<?= appUrl('/?m=base&c=auth&a=logoff') ?>" class="fa fa-sign-out" title="Afmelden"></a>
             </div>
             <div class="administration-name">
-	            <a href="javascript:void(0);" class="nav-side-menu-toggle fa <?= function_exists('getJsState') && getJsState('small-nav-side-menu', 0) == '1' ? 'fa-bars' : 'fa-minus' ?>" onclick="navSideMenu_toggle();"></a>
+	            <a href="javascript:void(0);" class="nav-side-menu-toggle fa fa-bars" onclick="navSideMenu_toggle();"></a>
             
             	<div class="administration-name"><a href="<?= appUrl('/') ?>" title="Dashboard"><?= apply_filter('base-decorator-administration-name', esc_html($context->getCompanyName())) ?></a></div>
             </div>
