@@ -4,7 +4,8 @@
 		<meta charset="utf-8">
 		<title>Toolbox</title>
 
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+		<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" /> 
 
 		<script src="<?= BASE_HREF ?>js/jquery-3.3.1.min.js" type="text/javascript"></script>
 		<script src="<?= BASE_HREF ?>js/bootstrap.min.js" type="text/javascript"></script>

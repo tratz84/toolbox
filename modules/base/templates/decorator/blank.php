@@ -4,7 +4,8 @@
 		<meta charset="utf-8">
 		<title><?= count($pageTitle) ? implode(' - ', array_reverse($pageTitle)) . ' - ' : '' ?><?= esc_html($context->getCompanyName()) ?> - Toolbox</title>
 
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+		<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" /> 
 
 		<script>
 			var contextName = <?= json_encode($context->getContextName()) ?>;

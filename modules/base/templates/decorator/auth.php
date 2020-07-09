@@ -6,8 +6,9 @@
 
 		<base href="<?= BASE_HREF ?>" />
 
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link rel="icon" type="image/x-icon" href="favicon.ico">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+		<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" /> 
+		
 		
 		<script>
 			var appSettings = <?php
