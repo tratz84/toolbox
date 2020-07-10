@@ -81,6 +81,10 @@ class FormChangesHtml
             if ($w->getLabel() == '')
                 continue;
             
+            if ($w->getName() == 'edited' || $w->getName() == 'created') {
+                continue;
+            }
+            
             if (is_a($w, CheckboxField::class)) {
                 $val = $w->getValue() ? t('Yes') : t('No');
             } else if ($w->getValue() && (is_a($w, SelectField::class) || is_a($w, Select2Field::class))) {
@@ -433,6 +437,10 @@ class FormChangesHtml
             
             if ($w->getLabel() == '')
                 continue;
+            if ($w->getName() == 'edited' || $w->getName() == 'created') {
+                continue;
+            }
+            
             
             if (is_a($w, CheckboxField::class)) {
                 $val = $w->getValue() ? t('Yes') : t('No');
