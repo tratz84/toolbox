@@ -121,6 +121,7 @@ class UserService extends ServiceBase {
     }
     
     public function deleteUser($userId) {
+        $user = $this->readUser($userId);
         
         $ucDao = new UserCapabilityDAO();
         $ucDao->deleteByUser($userId);
@@ -131,6 +132,7 @@ class UserService extends ServiceBase {
         $uDao = new UserDAO();
         $uDao->delete($userId);
         
+        return $user;
     }
 
     
