@@ -13,6 +13,9 @@ class PersonDAO extends \core\db\DAOObject {
 		$this->setObjectName( '\\customer\\model\\Person' );
 	}
 	
+	public function read($id) {
+	    return $this->queryOne('select * from customer__person where person_id = ?', array($id));
+	}
 	
 	public function readByCompany($companyId) {
 	    $sql = "select p.*

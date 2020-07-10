@@ -21,6 +21,13 @@ class CompanyService extends ServiceBase implements ObjectHookable {
     
     
     public function readCompany($id, $opts=array()) {
+        // load only company record?
+        if (isset($opts['record-only']) && $opts['record-only']) {
+            $cDao = object_container_get(CompanyDAO::class);
+            return $cDao->read($id);
+        }
+        
+        // load full object
         $fh = FormDbHandler::getHandler( CompanyForm::class );
         
         $company = $fh->readObject( $id );

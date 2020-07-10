@@ -21,7 +21,13 @@ use core\service\FormDbHandler;
 class PersonService extends ServiceBase {
     
     
-    public function readPerson($id) {
+    public function readPerson($id, $opts=array()) {
+        // read customer__person-record only?
+        if (isset($opts['record-only']) && $opts['record-only']) {
+            $pDao = object_container_get(PersonDAO::class);
+            return $pDao->read( $id );
+        }
+        
         $fh = FormDbHandler::getHandler(PersonForm::class);
         
         return $fh->readObject( $id );

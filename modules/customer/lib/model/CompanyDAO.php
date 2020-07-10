@@ -13,6 +13,14 @@ class CompanyDAO extends \core\db\DAOObject {
 		$this->setObjectName( '\\customer\\model\\Company' );
 	}
 	
+	public function read($id) {
+	    $sql = "select c.*
+                from customer__company c
+                where c.company_id = ?";
+	    
+	    return $this->queryOne($sql, array($id));
+	}
+	
 	
 	public function readByPerson($personId) {
 	    $sql = "select c.*

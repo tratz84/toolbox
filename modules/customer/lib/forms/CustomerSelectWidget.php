@@ -10,6 +10,8 @@ use invoice\model\Offer;
 
 class CustomerSelectWidget extends DynamicSelectField {
     
+    protected $customerDeleted = false;
+    
 
     public function __construct($name='customer_id', $defaultValue=null, $defaultText=null, $endpoint=null, $label=null) {
         
@@ -29,6 +31,7 @@ class CustomerSelectWidget extends DynamicSelectField {
         
         $companyId = null;
         $personId = null;
+        $this->customerDeleted = false;
         
         if (method_exists($obj, 'getCompanyId')) {
             $companyId = $obj->getCompanyId();
@@ -51,17 +54,23 @@ class CustomerSelectWidget extends DynamicSelectField {
             $this->setValue('company-'.$companyId);
             
             $cs = ObjectContainer::getInstance()->get(CompanyService::class);
-            $name = $cs->getCompanyName($companyId);
+            $company = $cs->readCompany($companyId, ['record-only' => true]);
             
-            $this->setDefaultText( $name );
+            if ($company->getDeleted()) {
+                $this->customerDeleted = true;
+            }
+            $this->setDefaultText( $company->getCompanyName() );
         }
         else if ($personId) {
             $this->setValue('person-'.$personId);
             
             $ps = ObjectContainer::getInstance()->get(PersonService::class);
-            $fullname = $ps->getFullname($personId);
+            $person = $ps->readPerson($personId);
+            if ($person->getDeleted()) {
+                $this->customerDeleted = true;
+            }
             
-            $this->setDefaultText( $fullname );
+            $this->setDefaultText( $person->getFullname() );
         } else {
             $this->setDefaultText( t('Make your choice') );
         }
@@ -90,6 +99,10 @@ class CustomerSelectWidget extends DynamicSelectField {
     
     
     public function render() {
+        if ($this->customerDeleted) {
+            $this->addContainerClass('customer-deleted');
+        }
+        
         $html = parent::render();
         
         

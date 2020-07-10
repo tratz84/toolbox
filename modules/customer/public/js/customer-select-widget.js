@@ -1,5 +1,10 @@
 
-
+// CustomerSelectWidget contains a deleted customer? => remove customer-deleted-class when other customer is selected
+$(document).ready(function() {
+	$('div.dynamic-select-field-widget.customer-deleted select.select2-widget').on('change', function() {
+		$(this).closest('div.widget').removeClass('customer-deleted');
+	});
+});
 
 
 
