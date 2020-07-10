@@ -12,7 +12,7 @@
 	<div style="max-width: 100%; margin: 15px auto 0; text-align: left;">
 		<a href="<?= esc_attr($download_url) ?>" target="_blank"><?= esc_html($filename) ?></a>
 		
-		<?php if (isset($url_pdf_preview) && $file_extension != 'pdf') : ?>
+		<?php if (isset($url_pdf_preview)) : ?>
 		<a href="<?= esc_attr($url_pdf_preview) ?>" target="_blank"><span class="fa fa-file-pdf-o"></span></a>
 		<?php endif; ?>
 	</div>
