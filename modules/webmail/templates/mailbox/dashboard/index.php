@@ -38,7 +38,7 @@ function mailbox_showEmail(email_id) {
 function renderMails(mails) {
 	$('.mailbox-dashboard').empty();
 	if (mails.length == 0) {
-		$('.mailbox-dashboard').append('<tr><td colspan="6" style="text-align: center; font-style: italic;">' + t('All e-mails handled') + '</td></tr>');
+		$('.mailbox-dashboard').append('<tr><td colspan="6" class="no-results-found">' + t('All e-mails handled') + '</td></tr>');
 	} else {
 		for(var i in mails) {
 			var m = mails[i];
