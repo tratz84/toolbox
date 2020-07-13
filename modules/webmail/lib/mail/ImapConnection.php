@@ -170,7 +170,7 @@ class ImapConnection {
     
     public function importItems($folderName) {
         
-        if (!imap_reopen($this->imap, $this->mailbox.$folderName))
+        if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folderName)))
             return false;
         
         $messageCount = imap_check($this->imap);
@@ -381,7 +381,7 @@ class ImapConnection {
     }
     
     public function importInbox(Connector $connector) {
-        if (!imap_reopen($this->imap, $this->mailbox.'INBOX')) {
+        if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.'INBOX'))) {
             return false;
         }
         
@@ -534,7 +534,7 @@ class ImapConnection {
 
     
     public function deleteMailByUid($folder, $uid) {
-        if (!imap_reopen($this->imap, $this->mailbox.$folder)) {
+        if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folder))) {
             return false;
         }
         
@@ -543,7 +543,7 @@ class ImapConnection {
     
     
     public function moveMailByUid($uid, $sourceFolder, $targetFolder) {
-        if (!imap_reopen($this->imap, $this->mailbox.$sourceFolder)) {
+        if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$sourceFolder))) {
             return false;
         }
         
@@ -551,14 +551,14 @@ class ImapConnection {
     }
     
     public function setFlagByUid($uid, $folder, $flags) {
-        if (!imap_reopen($this->imap, $this->mailbox.$folder)) {
+        if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folder))) {
             return false;
         }
         
         return imap_setflag_full($this->imap, $uid, $flags, ST_UID);
     }
     public function clearFlagByUid($uid, $folder, $flags) {
-        if (!imap_reopen($this->imap, $this->mailbox.$folder)) {
+        if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folder))) {
             return false;
         }
         
@@ -570,7 +570,7 @@ class ImapConnection {
     }
     
     public function deleteFolder($folderName) {
-        if (!imap_reopen($this->imap, $this->mailbox.$folderName)) {
+        if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folderName))) {
             return false;
         }
         
@@ -617,7 +617,7 @@ class ImapConnection {
     public function search($folder, $criteria=array()) {
         // use current selected folder if $folder==null
         if ($folder != null) {
-            if (imap_reopen($this->imap, $this->mailbox.$folder) == false) {
+            if (imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folder)) == false) {
                 return false;
             }
         }
