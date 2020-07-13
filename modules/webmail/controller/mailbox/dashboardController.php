@@ -5,9 +5,8 @@
 use base\model\User;
 use core\controller\BaseController;
 use webmail\MailboxSearchSettings;
-use webmail\form\MailboxSearchSettingsForm;
-use webmail\solr\SolrMailQuery;
 use webmail\form\MailboxDashboardSettingsForm;
+use webmail\solr\SolrMailQuery;
 
 class dashboardController extends BaseController {
     

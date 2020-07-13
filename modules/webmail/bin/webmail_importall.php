@@ -13,13 +13,7 @@
  */
 
 
-use core\ObjectContainer;
 use core\parser\ArgumentParser;
-use webmail\mail\ImapConnection;
-use webmail\mail\SolrMailActions;
-use webmail\model\Connector;
-use webmail\service\ConnectorService;
-use webmail\solr\SolrImportMail;
 
 if (count($argv) < 2) {
     print "Usage: {$argv[0]} <contextname> [-u] [--skip-folder-import] [--skip-connector-import]\n";

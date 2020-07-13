@@ -16,9 +16,6 @@ use webmail\service\ConnectorService;
 use webmail\service\EmailService;
 use webmail\solr\SolrMail;
 use webmail\solr\SolrMailQuery;
-use Sabre\VObject\Property\ICalendar\CalAddress;
-use Sabre\VObject\Property\FlatText;
-use Sabre\VObject\Component\VAlarm;
 
 class mailController extends BaseController {
    

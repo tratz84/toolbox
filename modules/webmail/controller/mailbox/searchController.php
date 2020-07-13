@@ -1,20 +1,12 @@
 <?php
 
 use base\service\MetaService;
-use core\container\ActionContainer;
 use core\controller\BaseController;
-use core\exception\ObjectNotFoundException;
 use core\forms\lists\ListResponse;
 use webmail\MailTabSettings;
 use webmail\MailboxSearchSettings;
 use webmail\form\MailboxSearchSettingsForm;
-use webmail\mail\MailProperties;
-use webmail\model\Connector;
-use webmail\service\ConnectorService;
 use webmail\solr\SolrMailQuery;
-use core\forms\SelectField;
-use webmail\solr\SolrMail;
-use webmail\mail\SolrMailActions;
 
 class searchController extends BaseController {
 
