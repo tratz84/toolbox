@@ -280,7 +280,7 @@ class SolrImportMail {
         return null;
     }
     
-    public function purge($force=false) {
+    public function purge($force=false, $opts=array()) {
         // only purge when there are more then 100 docs
         if ($force == false && count($this->documents) < 100) {
             return false;
@@ -300,7 +300,8 @@ class SolrImportMail {
         if (is_cli()) {
             print_info("Document no: " . $this->documentCount);
         }
-        $this->commit();
+        
+        $this->commit($opts);
         
         if (is_object($json) == false) {
             throw new SolrException( 'Invalid Solr response: ' . $r );
@@ -328,7 +329,7 @@ class SolrImportMail {
             $doc = array_merge((array)$docs[0], $doc);
             
             $this->documents[] = $doc;
-            $this->purge(true);
+            $this->purge(true, ['softCommit' => true]);
             
             return true;
         }
@@ -337,8 +338,12 @@ class SolrImportMail {
     }
     
     
-    public function commit() {
-        get_url($this->solrUrl . '/update?commit=true');
+    public function commit( $opts=array() ) {
+        if (isset($opts['softCommit']) && $opts['softCommit']) {
+            get_url($this->solrUrl . '/update?softCommit=true');
+        } else {
+            get_url($this->solrUrl . '/update?commit=true');
+        }
     }
     
     public function delete($rawQuery) {
