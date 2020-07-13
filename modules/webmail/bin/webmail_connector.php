@@ -35,9 +35,9 @@ $monitors = array();
 
 $cnt=0;
 while (true) {
-    
+
+    // check if connectors are changed?
     if ($cnt == 0) {
-        
         // check database connection
         $con = DatabaseHandler::getConnection('default');
         if ($con->ping() == false) {

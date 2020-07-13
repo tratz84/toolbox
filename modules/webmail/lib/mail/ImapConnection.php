@@ -137,6 +137,9 @@ class ImapConnection {
         $folders = imap_listmailbox($this->imap, $this->mailbox, "*");
         
         foreach($folders as &$f) {
+            $f = imap_utf7_decode($f);
+        }
+        foreach($folders as &$f) {
             $f = str_replace($this->mailbox, '', $f);
         }
         
