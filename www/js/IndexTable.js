@@ -583,6 +583,39 @@ function IndexTable( container, opts ) {
 					td.attr('align', col.align);
 				}
 
+				// mouseoverText-property support columns
+				if (typeof col.mouseoverText != 'undefined') {
+					$(td).data('col', col);
+					$(td).mouseover(function() {
+						var rec = $(this).closest('tr').data('record');
+						var col = $(this).data('col');
+						
+						var txt = '';
+						if (typeof col.mouseoverText == 'function') {
+							txt = col.mouseoverText( rec );
+						}
+						else if (typeof col.mouseoverText == 'string') {
+							txt = col.mouseoverText;
+						}
+						
+						if ($(this).find('span').length == 0) {
+							var sp = $('<span />');
+							sp.text( $(this).text() );
+							$(this).empty();
+							$(this).append( sp );
+						}
+						
+						var sp = $(this).find('span');
+						showInfo(sp, txt, {
+							top: sp.offset().top + sp.height() + 10,
+							left: sp.offset().left + sp.width() + 10
+						});
+					});
+					$(td).mouseout(function(evt) {
+						hideInfo();
+					});
+				}
+				
 				if (col.render) {
 					var html = col.render(obj);
 					td.append(html);

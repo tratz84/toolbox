@@ -728,6 +728,8 @@ function showInfo(obj, html, opts) {
 	if (opts.middle) {
 		opts.middle -= $(d).outerWidth(true) / 2;
 		d.css('left', opts.middle);
+	} else 	if (opts.left) {
+		d.css('left', opts.left);
 	} else {
 		var center = offset.left + ($(obj).outerWidth(true)/2);
 		center = center - $(d).outerWidth(true) / 2;
