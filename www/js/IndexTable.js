@@ -598,6 +598,12 @@ function IndexTable( container, opts ) {
 							txt = col.mouseoverText;
 						}
 						
+						// no text? => skip
+						txt = $.trim(txt);
+						if (txt == '') {
+							return;
+						}
+						
 						if ($(this).find('span').length == 0) {
 							var sp = $('<span />');
 							sp.text( $(this).text() );
