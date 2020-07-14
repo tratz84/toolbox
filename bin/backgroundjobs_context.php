@@ -157,6 +157,9 @@ while ( true ) {
         print_info("Stacktrace: " . $ex->getTraceAsString());
         print_info("Error: " . $ex->getMessage());
         \core\db\DatabaseHandler::getInstance()->closeAll();
+        
+        // log exception to db
+        log_exception( $ex, ['admin_notification' => true] );
     }
     
     sleep(30);

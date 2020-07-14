@@ -73,3 +73,40 @@ function print_info($str) {
 }
 
 
+
+function log_exception($ex, $opts=array()) {
+    
+    try {
+        
+        if (is_a($ex, core\exception\ContextNotFoundException::class)) {
+            // don't save ContextNotFound-Exceptions
+        } else {
+            $ctx = \core\Context::getInstance();
+            
+            $el = new admin\model\ExceptionLog();
+            $el->setContextName($ctx->getContextName());
+            if ($ctx->getUser())
+                $el->setUserId($ctx->getUser()->getUserId());
+            $el->setRequestUri(substr($_SERVER['REQUEST_URI'], 0, 255));
+            $el->setMessage($ex->getMessage());
+            
+            $stacktrace = '';
+            if (is_a($ex, core\exception\DatabaseException::class)) {
+                $stacktrace .= 'Query: '.$ex->getQuery() . "\n\n";
+            }
+            $stacktrace .= $ex->getFile() . ' ('.$ex->getLine().')' . "\n";
+            $stacktrace .= $ex->getTraceAsString();
+            $el->setStacktrace($stacktrace);
+            $el->setParameters(var_export($_REQUEST, true));
+            $el->save();
+        }
+    } catch (\Exception $ex) { }
+    
+    
+    if (isset($opts['admin_notification']) && $opts['admin_notification']) {
+        debug_admin_notification('Error: ' . ctx()->getContextName() . ': ' . $ex->getMessage());
+    }
+}
+
+
+
