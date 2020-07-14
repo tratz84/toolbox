@@ -4,6 +4,15 @@
 - automate/auto-generate list-pages
 - automate/auto-generate form-pages
 
+- fail2ban
+	- admin-page
+	- fail2ban page with case-nr
+	- list of cases + whitelist
+	- exceptions
+		- CustomerNotFound
+		- runtime Exception / Error
+	- failed auths
+
 - status page with enabled server features + missing features because they aren't installed on server
 	- php-imap
 	- wkhtml2pdf
