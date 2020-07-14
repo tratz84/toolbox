@@ -71,6 +71,19 @@ class NotesService extends ServiceBase {
         
         $form->fill($note, array('note_id', 'ref_object', 'ref_id', 'company_id', 'person_id', 'important', 'shortNote', 'longNote'));
         
+        if (!$note->getSort()) {
+            $nDao = object_container_get( NoteDAO::class );
+            
+            if ($note->getRefObject()) {
+                $sort = $nDao->maxSortByRef( $note->getRefObject(), $note->getRefId() ) + 1;
+                $note->setSort( $sort );
+            }
+            else {
+                $sort = $nDao->maxSortByCustomer( $note->getCompanyId(), $note->getPersonId() ) + 1;
+                $note->setSort( $sort );
+            }
+        }
+        
         if (!$note->save()) {
             // exception would also be on it's place
             return false;
@@ -87,6 +100,22 @@ class NotesService extends ServiceBase {
         
         return $note->getNoteId();
     }
+    
+    
+    public function saveNotesOrder( $noteIds ) {
+        $ids = array();
+        
+        foreach($noteIds as $nid) {
+            if ((int)$nid) {
+                $ids[] = (int)$nid;
+            }
+        }
+        
+        $nDao = object_container_get( NoteDAO::class );
+        $nDao->updateSort( $ids );
+    }
+    
+    
     
     public function deleteNote($noteId) {
         $note = $this->oc->get(NotesService::class)->readNote($noteId);

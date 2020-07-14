@@ -104,6 +104,20 @@ class notestabController extends BaseController {
     }
     
     
+    public function action_save_sort() {
+        $notesService = object_container_get(NotesService::class);
+        
+        $ids = explode(',', get_var('ids'));
+        $ids = array_reverse( $ids );
+        
+        $notesService->saveNotesOrder( $ids );
+        
+        $this->json([
+            'success' => true
+        ]);
+    }
+    
+    
     
     public function action_delete() {
         $notesService = object_container_get(NotesService::class);

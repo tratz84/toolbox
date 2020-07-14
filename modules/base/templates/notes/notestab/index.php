@@ -12,6 +12,7 @@
 <table class="list-response-table notes-table">
 	<thead>
 		<tr>
+			<th></th>
 			<th><?= t('Note') ?></th>
 			<th style="width: 150px;"><?= t('Edited') ?></th>
 			<th style="width: 150px;"><?= t('Created') ?></th>
@@ -64,6 +65,11 @@ function renderNotes(listResponse) {
 		
 		tr.attr('data-note-id', o.note_id);
 		tr.data('note-id', o.note_id);
+
+
+		var tdSort = $('<td class="td-sort"><span class="fa fa-sort sort-handle ui-sortable-handle"></span></td>');
+
+		
 		var tdNote      = $('<td class="td-summary" />');
 		tdNote.text( o.summary );
 		
@@ -86,6 +92,7 @@ function renderNotes(listResponse) {
 			deleteNote_Click( $(this).closest('tr').data('note-id') );
 		});
 
+		tr.append( tdSort );
 		tr.append( tdNote );
 		tr.append( tdEdited );
 		tr.append( tdCreated );
@@ -170,6 +177,27 @@ $(document).ready(function() {
 	var lr = <?= json_encode($listResponse) ?>;
 
 	renderNotes( lr );
+
+
+	$('table.notes-table tbody').sortable({
+		handle: '.sort-handle',
+		update: function(evt) {
+			var noteIds = new Array();
+			$('table.notes-table tbody tr').each(function(index, node) {
+				noteIds.push( $(node).data('note-id') );
+			});
+
+			$.ajax({
+				type: 'POST',
+				url: appUrl('/?m=base&c=notes/notestab'),
+				data: {
+					a: 'save_sort',
+					ids: noteIds.join(',')
+				}
+			});
+		}
+	});
+
 });
 
 </script>

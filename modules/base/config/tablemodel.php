@@ -148,6 +148,7 @@ $tb_note->addColumn('person_id',         'int');
 $tb_note->addColumn('short_note',        'text');
 $tb_note->addColumn('long_note',         'text');
 $tb_note->addColumn('important',         'boolean');
+$tb_note->addColumn('sort',              'int');
 $tb_note->addColumn('edited',            'datetime');
 $tb_note->addColumn('created',           'datetime');
 $tbs[] = $tb_note;

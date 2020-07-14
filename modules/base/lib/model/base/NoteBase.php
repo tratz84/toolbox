@@ -38,6 +38,24 @@ class NoteBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'company_id' => 
+  array (
+    'Field' => 'company_id',
+    'Type' => 'int',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'person_id' => 
+  array (
+    'Field' => 'person_id',
+    'Type' => 'int',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
   'short_note' => 
   array (
     'Field' => 'short_note',
@@ -51,6 +69,15 @@ class NoteBase extends \core\db\DBObject {
   array (
     'Field' => 'long_note',
     'Type' => 'text',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'important' => 
+  array (
+    'Field' => 'important',
+    'Type' => 'tinyint(1)',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -74,27 +101,9 @@ class NoteBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
-  'important' => 
+  'sort' => 
   array (
-    'Field' => 'important',
-    'Type' => 'tinyint(1)',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
-  ),
-  'company_id' => 
-  array (
-    'Field' => 'company_id',
-    'Type' => 'int',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
-  ),
-  'person_id' => 
-  array (
-    'Field' => 'person_id',
+    'Field' => 'sort',
     'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
@@ -120,12 +129,24 @@ class NoteBase extends \core\db\DBObject {
 	public function getRefId() { return $this->getField('ref_id'); }
 	
 		
+	public function setCompanyId($p) { $this->setField('company_id', $p); }
+	public function getCompanyId() { return $this->getField('company_id'); }
+	
+		
+	public function setPersonId($p) { $this->setField('person_id', $p); }
+	public function getPersonId() { return $this->getField('person_id'); }
+	
+		
 	public function setShortNote($p) { $this->setField('short_note', $p); }
 	public function getShortNote() { return $this->getField('short_note'); }
 	
 		
 	public function setLongNote($p) { $this->setField('long_note', $p); }
 	public function getLongNote() { return $this->getField('long_note'); }
+	
+		
+	public function setImportant($p) { $this->setField('important', $p); }
+	public function getImportant() { return $this->getField('important'); }
 	
 		
 	public function setEdited($p) { $this->setField('edited', $p); }
@@ -136,16 +157,8 @@ class NoteBase extends \core\db\DBObject {
 	public function getCreated() { return $this->getField('created'); }
 	
 		
-	public function setImportant($p) { $this->setField('important', $p); }
-	public function getImportant() { return $this->getField('important'); }
-	
-		
-	public function setCompanyId($p) { $this->setField('company_id', $p); }
-	public function getCompanyId() { return $this->getField('company_id'); }
-	
-		
-	public function setPersonId($p) { $this->setField('person_id', $p); }
-	public function getPersonId() { return $this->getField('person_id'); }
+	public function setSort($p) { $this->setField('sort', $p); }
+	public function getSort() { return $this->getField('sort'); }
 	
 	
 }
