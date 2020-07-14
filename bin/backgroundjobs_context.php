@@ -154,6 +154,7 @@ while ( true ) {
         }
     } catch (\Exception $ex) {
         // Exception.. close all database connections to reset state
+        print_info("Stacktrace: " . $ex->getTraceAsString());
         print_info("Error: " . $ex->getMessage());
         \core\db\DatabaseHandler::getInstance()->closeAll();
     }
