@@ -583,45 +583,6 @@ function IndexTable( container, opts ) {
 					td.attr('align', col.align);
 				}
 
-				// mouseoverText-property support columns
-				if (typeof col.mouseoverText != 'undefined') {
-					$(td).data('col', col);
-					$(td).mouseover(function() {
-						var rec = $(this).closest('tr').data('record');
-						var col = $(this).data('col');
-						
-						var txt = '';
-						if (typeof col.mouseoverText == 'function') {
-							txt = col.mouseoverText( rec );
-						}
-						else if (typeof col.mouseoverText == 'string') {
-							txt = col.mouseoverText;
-						}
-						
-						// no text? => skip
-						txt = $.trim(txt);
-						if (txt == '') {
-							return;
-						}
-						
-						if ($(this).find('span').length == 0) {
-							var sp = $('<span />');
-							sp.text( $(this).text() );
-							$(this).empty();
-							$(this).append( sp );
-						}
-						
-						var sp = $(this).find('span');
-						showInfo(sp, txt, {
-							top: sp.offset().top + sp.height() + 10,
-							left: sp.offset().left + sp.width() + 10
-						});
-					});
-					$(td).mouseout(function(evt) {
-						hideInfo();
-					});
-				}
-				
 				if (col.render) {
 					var html = col.render(obj);
 					td.append(html);
@@ -684,6 +645,48 @@ function IndexTable( container, opts ) {
 					} else {
 						td.text(fieldText);
 					}
+				}
+				
+				
+				// mouseoverText-property support columns
+				if (typeof col.mouseoverText != 'undefined') {
+					$(td).data('col', col);
+					
+					if ($(td).find('span').length == 0) {
+						var sp = $('<span />');
+						sp.text( $(td).text() );
+						$(td).empty();
+						$(td).append( sp );
+					}
+
+					
+					$(td).find('span').mouseover(function() {
+						var rec = $(this).closest('tr').data('record');
+						var col = $(this).closest('td').data('col');
+						
+						var txt = '';
+						if (typeof col.mouseoverText == 'function') {
+							txt = col.mouseoverText( rec );
+						}
+						else if (typeof col.mouseoverText == 'string') {
+							txt = col.mouseoverText;
+						}
+						
+						// no text? => skip
+						txt = $.trim(txt);
+						if (txt == '') {
+							return;
+						}
+						
+						
+						showInfo(this, txt, {
+							top: $(this).offset().top + $(this).height() + 10,
+							left: $(this).offset().left + $(this).width() + 10
+						});
+					});
+					$(td).mouseout(function(evt) {
+						hideInfo();
+					});
 				}
 
 				tr.append(td);
