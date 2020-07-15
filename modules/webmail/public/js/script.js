@@ -110,7 +110,7 @@ function deleteMail(email_id) {
 				alert('Error: ' + data.message);
 			} else {
 				// remove record & content from page
-				$('tr[email_id="'+email_id+'"]').remove();
+				$('tr[email-id="'+email_id+'"]').remove();
 				$('#mail-content').empty();
 			}
 		}
