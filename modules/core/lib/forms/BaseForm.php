@@ -238,6 +238,12 @@ class BaseForm extends WidgetContainer {
             return $w1->getPrio() > $w2->getPrio();
         });
     }
+
+    public function renderLocked() {
+        $this->setObjectLocked( true );
+        
+        return $this->render();
+    }
     
     public function renderReadonly() {
         $this->sortWidgets();

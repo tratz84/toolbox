@@ -29,7 +29,7 @@
     <div class="error-container"></div>
     
     <?php if ($readonly) : ?>
-    	<?= $form->renderReadonly() ?>
+    	<?= $form->renderLocked() ?>
     <?php else : ?>
 		<?= $form->render() ?>
 	<?php endif; ?>    

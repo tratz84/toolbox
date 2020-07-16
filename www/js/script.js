@@ -82,6 +82,30 @@ $(document).ready(function() {
 
 
 function applyWidgetFields(container) {
+	
+	// form locked? => remove submit-button & disable submit-event
+	if ($(container).find('.object-locked').val() == '1') {
+		$(container).find('.submit-container').remove();
+		
+		$(container).find('form').find('input, select, textarea').attr('disabled', 'disabled');
+		$(container).find('form').find('input, select, textarea').css('color', '#000');
+		$(container).find('form').find('input, select, textarea').css('background-color', '#fff');
+		$(container).find('form').find('input, select, textarea').css('border-color', '#ccc');
+		$(container).find('form').find('input, select, textarea').css('border-width', '1px');
+		$(container).find('form').find('input, select, textarea').css('border-style', 'solid');
+
+		$(container).find('.td-sortable').css('visibility', 'hidden');
+
+		$(container).find('form').find('.row-delete').remove();
+		$(container).find('form').find('.add-entry-container.action-box').remove();
+		
+		$(container).find('form').submit(function() {
+			return false;
+		});
+	}
+
+	
+	
 	if (typeof $(document).pickadate == 'function') {
 		$(container).find('.input-pickadate').pickadate({
 			format: 'dd-mm-yyyy',
@@ -340,26 +364,6 @@ if (typeof less != 'undefined') {
  * event handling submit-form-link rechtsboven formulier-pagina's
  */
 $(document).ready(function() {
-	// form locked? => remove submit-button & disable submit-event
-	if ($('.object-locked').val() == '1') {
-		$('.submit-container').remove();
-		
-		$('form').find('input, select, textarea').attr('disabled', 'disabled');
-		$('form').find('input, select, textarea').css('color', '#000');
-		$('form').find('input, select, textarea').css('background-color', '#fff');
-		$('form').find('input, select, textarea').css('border-color', '#ccc');
-		$('form').find('input, select, textarea').css('border-width', '1px');
-		$('form').find('input, select, textarea').css('border-style', 'solid');
-		
-		$('form').find('.row-delete').remove();
-		$('form').find('.add-entry-container.action-box').remove();
-		
-		$('form').submit(function() {
-			return false;
-		});
-	}
-	
-	
 	
 	var submitForm = $('.page-header .toolbox .submit-form');
 	
