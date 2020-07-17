@@ -16,6 +16,7 @@ use core\forms\TextField;
 use core\forms\TextareaField;
 use invoice\model\Offer;
 use filesync\model\StoreFileMeta;
+use customer\forms\CustomerSelectWidget;
 
 class StoreFileMetaForm extends BaseForm {
     
@@ -29,57 +30,13 @@ class StoreFileMetaForm extends BaseForm {
         $this->addWidget(new HiddenField('store_file_id'));
         $this->addWidget(new HtmlField('filename', '', 'Bestandsnaam'));
         $this->addWidget(new DatePickerField('document_date', '', 'Document datum'));
-        $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=customer&c=customer&a=select2', 'Klant') );
+        $this->addWidget(new CustomerSelectWidget());
         $this->addWidget(new TextField('subject', '', 'Onderwerp'));
         $this->addWidget(new TextareaField('long_description', '', 'Lange omschrijving'));
         
         
     }
     
-    
-    
-    public function bind($obj) {
-        parent::bind($obj);
-        
-        $companyId = null;
-        $personId = null;
-        
-        $customerWidget = $this->getWidget('customer_id');
-        
-        if (is_a($obj, StoreFileMeta::class)) {
-            $companyId = $obj->getCompanyId();
-            $personId = $obj->getPersonId();
-        }
-        
-        
-        if (is_array($obj) && isset($obj['customer_id'])) {
-            if (strpos($obj['customer_id'], 'company-') === 0) {
-                $companyId = str_replace('company-', '', $obj['customer_id']);
-            }
-            else if (strpos($obj['customer_id'], 'person-') === 0) {
-                $personId = str_replace('person-', '', $obj['customer_id']);
-            }
-        }
-        
-        if ($companyId) {
-            $customerWidget->setValue('company-'.$companyId);
-            
-            $cs = ObjectContainer::getInstance()->get(CompanyService::class);
-            $name = $cs->getCompanyName($companyId);
-            
-            $customerWidget->setDefaultText( $name );
-        }
-        else if ($personId) {
-            $customerWidget->setValue('person-'.$personId);
-            
-            $ps = ObjectContainer::getInstance()->get(PersonService::class);
-            $fullname = $ps->getFullname($personId);
-            
-            $customerWidget->setDefaultText( $fullname );
-        }
-        
-        
-    }
     
 }
 

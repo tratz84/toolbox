@@ -44,7 +44,7 @@ class EmailForm extends BaseForm {
         $this->addWidget(new HtmlField('statusAsText', '', 'Status'));
         
         if (ctx()->isModuleEnabled('customer')) {
-            $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=customer&c=customer&a=select2', t('Customer')) );
+            $this->addWidget( new \customer\forms\CustomerSelectWidget() );
         }
         
         $this->addWidget(new EmailRecipientLineWidget('recipients'));
@@ -87,64 +87,6 @@ class EmailForm extends BaseForm {
         }
         
         parent::bind($obj);
-        
-        $companyId = null;
-        $personId = null;
-        
-        if (is_a($obj, Email::class)) {
-            $companyId = $obj->getCompanyId();
-            $personId = $obj->getPersonId();
-        }
-        
-        
-        if (is_array($obj) && isset($obj['customer_id'])) {
-            
-            if (strpos($obj['customer_id'], 'company-') === 0) {
-                $companyId = str_replace('company-', '', $obj['customer_id']);
-            }
-            else if (strpos($obj['customer_id'], 'person-') === 0) {
-                $personId = str_replace('person-', '', $obj['customer_id']);
-            }
-            
-        }
-        
-        $customerWidget = $this->getWidget('customer_id');
-        
-        if ($companyId) {
-            $customerWidget->setValue('company-'.$companyId);
-            
-            $cs = ObjectContainer::getInstance()->get(CompanyService::class);
-            $name = $cs->getCompanyName($companyId);
-            
-            $customerWidget->setDefaultText( $name );
-        }
-        else if ($personId) {
-            $customerWidget->setValue('person-'.$personId);
-            
-            $ps = ObjectContainer::getInstance()->get(PersonService::class);
-            $fullname = $ps->getFullname($personId);
-            
-            $customerWidget->setDefaultText( $fullname );
-        }
-    }
-    
-    
-    public function fill($obj, $fields=array()) {
-        parent::fill($obj, $fields);
-        
-        if (is_a($obj, Email::class)) {
-            $v = $this->getWidget('customer_id')->getValue();
-            $obj->setCompanyId(0);
-            $obj->setPersonId(0);
-            
-            if (strpos($v, 'company-') === 0) {
-                $obj->setCompanyId( str_replace('company-', '', $v) );
-            }
-            
-            if (strpos($v, 'person-') === 0) {
-                $obj->setPersonId( str_replace('person-', '', $v) );
-            }
-        }
     }
     
     

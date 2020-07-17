@@ -229,7 +229,7 @@ class StoreService extends ServiceBase {
         
 //         $changes = $form->changes($sfm);
         
-        $form->fill($sfm, array('store_file_id', 'subject', 'long_description', 'document_date'));
+        $form->fill($sfm, array('store_file_id', 'customer_id', 'subject', 'long_description', 'document_date'));
         $customer_id = $form->getWidgetValue('customer_id');
         
         $sfm->setCompanyId(null);

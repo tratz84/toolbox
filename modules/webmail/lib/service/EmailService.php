@@ -172,7 +172,7 @@ class EmailService extends ServiceBase {
             $email->setSolrMailId( $form->getWidgetValue('solr_mail_id') );
         }
         
-        $form->fill($email, array('email_id', 'identity_id', 'subject', 'text_content', 'recipients', 'company_id', 'person_id'));
+        $form->fill($email, array('email_id', 'identity_id', 'customer_id', 'subject', 'text_content', 'recipients', 'company_id', 'person_id'));
         
         if ($email->getIdentityId()) {
             $identity = $this->readIdentity($email->getIdentityId());
