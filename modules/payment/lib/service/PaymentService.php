@@ -191,7 +191,7 @@ class PaymentService extends ServiceBase {
             $paymentMethod = new PaymentMethod();
         }
         
-        $form->fill($paymentMethod, array('payment_method_id', 'code', 'description', 'default_selected', 'active', 'note'));
+        $form->fill($paymentMethod, array('payment_method_id', 'customer_id', 'code', 'description', 'default_selected', 'active', 'note'));
         
         if (!$paymentMethod->save()) {
             return false;

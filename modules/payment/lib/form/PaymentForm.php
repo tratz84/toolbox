@@ -3,21 +3,17 @@
 namespace payment\form;
 
 
-use customer\service\CompanyService;
-use customer\service\PersonService;
-use core\ObjectContainer;
 use core\forms\BaseForm;
+use core\forms\CheckboxField;
 use core\forms\DatePickerField;
-use core\forms\DynamicSelectField;
 use core\forms\HiddenField;
 use core\forms\HtmlField;
 use core\forms\SelectField;
 use core\forms\TextField;
 use core\forms\TextareaField;
 use core\forms\validator\NotEmptyValidator;
-use payment\model\Payment;
+use customer\forms\CustomerSelectWidget;
 use payment\service\PaymentService;
-use core\forms\CheckboxField;
 
 class PaymentForm extends BaseForm {
     
@@ -29,7 +25,7 @@ class PaymentForm extends BaseForm {
         
         $this->addWidget( new HiddenField('payment_id') );
         
-        $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=customer&c=customer&a=select2', 'Klant') );
+        $this->addWidget( new CustomerSelectWidget() );
         
         $this->addWidget( new DatePickerField('payment_date', '', 'Betaaldatum'));
         
@@ -87,49 +83,6 @@ class PaymentForm extends BaseForm {
         
     }
     
-    
-    public function bind($obj) {
-        parent::bind($obj);
-        
-        $companyId = null;
-        $personId = null;
-        
-        $customerWidget = $this->getWidget('customer_id');
-        
-        if (is_a($obj, Payment::class)) {
-            $companyId = $obj->getCompanyId();
-            $personId = $obj->getPersonId();
-        }
-        
-        
-        if (is_array($obj) && isset($obj['customer_id'])) {
-            
-            if (strpos($obj['customer_id'], 'company-') === 0) {
-                $companyId = str_replace('company-', '', $obj['customer_id']);
-            }
-            else if (strpos($obj['customer_id'], 'person-') === 0) {
-                $personId = str_replace('person-', '', $obj['customer_id']);
-            }
-            
-        }
-        
-        if ($companyId) {
-            $customerWidget->setValue('company-'.$companyId);
-            
-            $cs = ObjectContainer::getInstance()->get(CompanyService::class);
-            $name = $cs->getCompanyName($companyId);
-            
-            $customerWidget->setDefaultText( $name );
-        }
-        else if ($personId) {
-            $customerWidget->setValue('person-'.$personId);
-            
-            $ps = ObjectContainer::getInstance()->get(PersonService::class);
-            $fullname = $ps->getFullname($personId);
-            
-            $customerWidget->setDefaultText( $fullname );
-        }
-    }
     
     
     protected function addPaymentMethod() {
