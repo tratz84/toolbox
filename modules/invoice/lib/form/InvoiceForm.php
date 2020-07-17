@@ -91,34 +91,8 @@ class InvoiceForm extends BaseForm {
                 return null;
             });
         }
-
-
-    }
-    
-    
-    public function bind($obj) {
-        parent::bind($obj);
-
-
     }
 
-    public function fill($obj, $fields=array()) {
-        parent::fill($obj, $fields);
-
-        if (is_a($obj, Invoice::class)) {
-            $v = $this->getWidget('customer_id')->getValue();
-            $obj->setCompanyId(0);
-            $obj->setPersonId(0);
-
-            if (strpos($v, 'company-') === 0) {
-                $obj->setCompanyId( str_replace('company-', '', $v) );
-            }
-
-            if (strpos($v, 'person-') === 0) {
-                $obj->setPersonId( str_replace('person-', '', $v) );
-            }
-        }
-    }
 
     protected function addInvoiceStatus() {
 

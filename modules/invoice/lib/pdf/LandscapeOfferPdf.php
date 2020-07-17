@@ -162,6 +162,14 @@ class LandscapeOfferPdf extends BasePdf {
         $this->Cell($captionWidth, $this->lineHeight, 'Naam bedrijf', 0, 0, '', true);
         $this->SetX($this->GetX()+1);
         $customerName = $this->offer->getCustomer() ? $this->offer->getCustomer()->getName() : '';
+        if ($customerName == '') {
+            if ($this->offer->getCompanyId()) {
+                $customerName = 'company-'.$this->offer->getCompanyId();
+            }
+            if ($this->offer->getPersonId()) {
+                $customerName = 'person-'.$this->offer->getPersonId();
+            }
+        }
         $this->Cell($fieldWidth, $this->lineHeight, $customerName, 0, 0, '', true);
         
         $this->SetTextColor(0, 0, 0);

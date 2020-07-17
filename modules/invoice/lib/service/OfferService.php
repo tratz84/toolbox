@@ -52,7 +52,7 @@ class OfferService extends ServiceBase {
             $offerStatus = new OfferStatus();
         }
         
-        $form->fill($offerStatus, array('offer_status_id', 'description', 'default_selected', 'active'));
+        $form->fill($offerStatus, array('offer_status_id', 'customer_id', 'description', 'default_selected', 'active'));
         
         if (!$offerStatus->save()) {
             return false;

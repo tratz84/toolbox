@@ -303,7 +303,7 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
             return $invoice;
         }
 
-        $form->fill($invoice, array('invoice_id', 'ref_invoice_id', 'invoice_status_id', 'credit_invoice', 'invoice_date', 'deposit', 'payment_upfront', 'subject', 'comment', 'note'));
+        $form->fill($invoice, array('invoice_id', 'ref_invoice_id', 'invoice_status_id', 'customer_id', 'credit_invoice', 'invoice_date', 'deposit', 'payment_upfront', 'subject', 'comment', 'note'));
 
         if ($invoice->getInvoiceStatusId() == 0)
             $invoice->setInvoiceStatusId(null);
