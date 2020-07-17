@@ -11,5 +11,7 @@ $lang['User/Customer']   = 'Gebruiker/klant';
 $lang['Customer overview'] = 'Klanten overzicht';
 $lang['Company settings'] = 'Bedrijfsinstellingen';
 
+$lang['This company is deleted'] = 'Dit bedrijf is verwijderd';
+
 return $lang;
 
