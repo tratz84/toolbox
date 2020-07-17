@@ -63,7 +63,7 @@ $tb_cs->addColumn('tax_shift',          'boolean');
 $tb_cs->addColumn('tax_excemption',     'boolean');
 $tb_cs->addColumn('payment_term',       'int');
 $tb_cs->addIndex('company_id', ['company_id'], ['unique' => true]);
-$tb_cs->addForeignKey('invoice__company_setting_ibfk_1', 'company_id', 'customer__company', 'company_id', 'RESTRICT', 'RESTRICT');
+// $tb_cs->addForeignKey('invoice__company_setting_ibfk_1', 'company_id', 'customer__company', 'company_id', 'RESTRICT', 'RESTRICT');
 $tbs[] = $tb_cs;
 
 $tb_is = new TableModel('invoice', 'invoice_status');

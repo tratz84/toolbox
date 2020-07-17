@@ -45,14 +45,7 @@ t.addColumn({
 	fieldDescription: 'Klant',
 	fieldType: 'text',
 	render: function(record) {
-		if (is_numeric(record.company_id) && parseInt(record.company_id) != 0) {
-			record.name = record.company_name;
-		}
-		if (is_numeric(record.person_id) && parseInt(record.person_id) != 0) {
-			record.name = record.lastname + ', ' + record.insert_lastname + ' ' + record.firstname;
-		}
-
-		return record.name;
+		return format_customername( record );
 	},
 	searchable: true
 });

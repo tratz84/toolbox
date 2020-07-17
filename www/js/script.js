@@ -405,6 +405,16 @@ function navSideMenu_toggle() {
 
 function format_customername(record) {
 	
+	// company_id set, but no name? => return 'company-<ID>'
+	var company_id = 0;
+	if (typeof record.company_id != 'undefined') {
+		company_id = parseInt(record.company_id);
+		if (isNaN(company_id) == false && company_id > 0 && (typeof record.company_name == 'undefined' || record.company_name == '' || record.company_name == null)) {
+			return 'company-' + record.company_id;
+		}
+	}
+	
+	
 	if (typeof record.company_name != 'undefined' && record.company_name) {
 		return record.company_name;
 	} else {
@@ -420,6 +430,12 @@ function format_customername(record) {
 		if (typeof record.firstname != 'undefined' && record.firstname) {
 			t += ' ' + record.firstname;
 		}
+		
+		// empty name? => return 'person-<ID>'
+		if (typeof record.person_id != 'undefined' && t == '') {
+			return 'person-' + record.person_id;
+		}
+
 		
 		return t;
 	}

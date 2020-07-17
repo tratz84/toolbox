@@ -139,7 +139,7 @@ if ($invoiceSettings->getIntracommunautair()) {
         $ohc = $evt->getSource();
         $company = $ohc->getReturnValue();
         
-        if ($company->getCompanyId()) {
+        if ($company && $company->getCompanyId()) {
             $invoiceService = ObjectContainer::getInstance()->get(InvoiceService::class);
             $cs = $invoiceService->readCompanySettings($company->getCompanyId());
             if ($cs && $cs->getTaxShift()) {

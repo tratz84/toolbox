@@ -146,7 +146,7 @@ class CustomerService extends ServiceBase {
         
         if ($companyId) {
             $companyService = ObjectContainer::getInstance()->get(CompanyService::class);
-            $c = $companyService->readCompany($companyId);
+            $c = $companyService->readCompany($companyId, ['null-if-not-found' => true]);
             
             if ($c) {
                 $customer = new Customer();

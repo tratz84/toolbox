@@ -14,7 +14,7 @@ class CompanySettingBase extends \core\db\DBObject {
   'company_setting_id' => 
   array (
     'Field' => 'company_setting_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'NO',
     'Key' => 'PRI',
     'Default' => NULL,
@@ -23,7 +23,7 @@ class CompanySettingBase extends \core\db\DBObject {
   'company_id' => 
   array (
     'Field' => 'company_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => 'UNI',
     'Default' => NULL,
@@ -50,7 +50,7 @@ class CompanySettingBase extends \core\db\DBObject {
   'payment_term' => 
   array (
     'Field' => 'payment_term',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,

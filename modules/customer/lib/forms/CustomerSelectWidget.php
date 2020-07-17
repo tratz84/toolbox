@@ -56,21 +56,31 @@ class CustomerSelectWidget extends DynamicSelectField {
             $cs = ObjectContainer::getInstance()->get(CompanyService::class);
             $company = $cs->readCompany($companyId, ['record-only' => true]);
             
-            if ($company->getDeleted()) {
+            if ($company == null || $company->getDeleted()) {
                 $this->customerDeleted = true;
             }
-            $this->setDefaultText( $company->getCompanyName() );
+            if ($company) {
+                $this->setDefaultText( $company->getCompanyName() );
+            }
+            else {
+                $this->setDefaultText( 'company-'.$companyId );
+            }
         }
         else if ($personId) {
             $this->setValue('person-'.$personId);
             
             $ps = ObjectContainer::getInstance()->get(PersonService::class);
             $person = $ps->readPerson($personId);
-            if ($person->getDeleted()) {
+            if ($person == null || $person->getDeleted()) {
                 $this->customerDeleted = true;
             }
             
-            $this->setDefaultText( $person->getFullname() );
+            if ($person) {
+                $this->setDefaultText( $person->getFullname() );
+            }
+            else {
+                $this->setDefaultText( 'person-'.$personId );
+            }
         } else {
             $this->setDefaultText( t('Make your choice') );
         }

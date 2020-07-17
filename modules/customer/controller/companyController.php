@@ -128,7 +128,7 @@ class companyController extends BaseController {
             
         } else {
             $companyService = $this->oc->get(CompanyService::class);
-            $this->company = $companyService->readCompany($this->company_id);
+            $this->company = $companyService->readCompany($this->company_id, ['null-if-not-found' => true]);
         }
         
         $this->render();

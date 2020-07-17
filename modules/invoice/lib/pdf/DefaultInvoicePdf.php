@@ -100,7 +100,16 @@ class DefaultInvoicePdf extends BasePdf {
         $cs = ObjectContainer::getInstance()->get(CustomerService::class);
         $customer = $cs->readCustomerAuto($this->invoice->getCompanyId(), $this->invoice->getPersonId());
         
-        if (!$customer) return;
+        if (!$customer) {
+            if ($this->invoice->getCompanyId()) {
+                $this->Cell(190, $this->lineHeight, 'company-'.$this->invoice->getCompanyId());
+            }
+            if ($this->invoice->getPersonId()) {
+                $this->Cell(190, $this->lineHeight, 'person-'.$this->invoice->getPersonId());
+            }
+            $this->Ln();
+            return;
+        }
         
         $this->Cell(190, $this->lineHeight, $customer->getName());
         $this->Ln();
