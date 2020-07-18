@@ -1,6 +1,6 @@
 
 <fieldset class="customer-widget company-widget">
-    <?php if ($person && $person->getDeleted() == false) : ?>
+    <?php if ($person) : ?>
     	<legend class="name">
     		<span class="toolbox">
     			<?php if ($person->getDeleted() == false) : ?>
