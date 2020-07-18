@@ -25,6 +25,7 @@ class UserCustomerSelectWidget extends DynamicSelectField {
         
         
         hook_htmlscriptloader_enableGroup('user-customer-select-widget');
+        $this->addContainerClass('usercustomer-select-widget');
     }
     
     
@@ -146,6 +147,10 @@ class UserCustomerSelectWidget extends DynamicSelectField {
     
     
     public function render() {
+        if ($this->usercustomerDeleted) {
+            $this->addContainerClass('usercustomer-deleted');
+        }
+        
         if ($this->customerSupport == false) {
             $this->endpoint = '/?m=customer&c=usercustomer&a=select2&src=user';
         } else {

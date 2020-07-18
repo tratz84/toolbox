@@ -31,6 +31,9 @@ require_once __DIR__.'/lib/functions/misc.php';
 require_once __DIR__.'/lib/functions/person.php';
 
 
+hook_register_javascript('mod-customer-script',  appUrl('/?mpf=/module/customer/js/script.js'));
+hook_htmlscriptloader_enableGroup('mod-customer-script');
+
 hook_register_javascript('select-person-list-edit',  appUrl('/?mpf=/module/customer/js/select-person-edit-list.js'));
 hook_register_javascript('select-company-list-edit', appUrl('/?mpf=/module/customer/js/select-company-edit-list.js'));
 hook_register_javascript('customer-select-widget',   appUrl('/?mpf=/module/customer/js/customer-select-widget.js'));
