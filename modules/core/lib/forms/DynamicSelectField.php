@@ -47,7 +47,7 @@ class DynamicSelectField extends BaseWidget {
 
         $extraClass = $this->hasError() ? 'error' : '';
         foreach( $this->containerClasses as $cc ) {
-            $extraClass .= $cc;
+            $extraClass .= $cc . ' ';
         }
         
         $extraClass .= ' ' . slugify($this->getName()) . '-widget';

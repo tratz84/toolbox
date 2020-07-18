@@ -7,6 +7,8 @@ use base\service\UserService;
 
 class UserSelectWidget extends DynamicSelectField {
     
+    protected $userDeleted = false;
+    
     
     public function __construct($name='user_id', $defaultValue=null, $defaultText=null, $endpoint=null, $label=null) {
         
@@ -15,11 +17,16 @@ class UserSelectWidget extends DynamicSelectField {
         if ($label == null) $label = t('User');
         
         parent::__construct($name, $defaultValue, $defaultText, $endpoint, $label);
+        
+        $this->addContainerClass('user-select-widget');
+        
     }
     
     
     public function bindObject($obj) {
         parent::bindObject($obj);
+        
+        $this->userDeleted = false;
         
         $userId = null;
         
@@ -38,10 +45,23 @@ class UserSelectWidget extends DynamicSelectField {
             if ($user) {
                 $this->setDefaultText( (string)$user );
             }
+            else {
+                $this->userDeleted = true;
+                $this->setDefaultText( 'user-'.$userId );
+            }
         } else {
             $this->setDefaultText( t('Make your choice') );
         }
         
+    }
+    
+    
+    public function render() {
+        if ($this->userDeleted) {
+            $this->addContainerClass('user-deleted');
+        }
+        
+        return parent::render();
     }
     
 }

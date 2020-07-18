@@ -108,7 +108,15 @@ class ProjectService extends ServiceBase {
         $cursor = $pDao->search($opts);
 
         $r = ListResponse::fillByCursor($start, $limit, $cursor, array('project_hour_id', 'project_id', 'project_name', 'short_description', 'start_time', 'end_time', 'duration', 'total_minutes', 'declarable', 'user_id', 'username', 'company_id', 'company_name', 'person_id', 'firstname', 'insert_lastname', 'lastname', 'status_description', 'created'));
-
+        
+        $objs = $r->getObjects();
+        for($x=0; $x < count($objs); $x++) {
+            if ($objs[$x]['username'] == '') {
+                $objs[$x]['username'] = 'user-'.$objs[$x]['user_id'];
+            }
+        }
+        $r->setObjects( $objs );
+        
         return $r;
     }
 

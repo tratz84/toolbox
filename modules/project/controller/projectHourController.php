@@ -134,6 +134,7 @@ class projectHourController extends BaseController {
             
         } else {
             $ph = new ProjectHour();
+            $ph->setUserId( ctx()->getUser()->getUserId() );
         }
         
         if (is_get()) {

@@ -17,6 +17,7 @@ use core\forms\validator\DateTimeValidator;
 use core\forms\validator\NotEmptyValidator;
 use project\service\ProjectService;
 use project\model\ProjectHour;
+use base\forms\UserSelectWidget;
 
 class ProjectHourForm extends BaseForm {
     
@@ -29,7 +30,8 @@ class ProjectHourForm extends BaseForm {
         
         $this->addWidget(new HiddenField('project_hour_id'));
         
-        $this->addUsers();
+        $this->addWidget(new UserSelectWidget() );
+//         $this->addUsers();
         
 //         $this->addWidget(new CheckboxField('declarable', '', 'Declarabel'));
         $this->addWidget(new RadioField('declarable', '', ['y' => t('Yes'), 'n' => t('No')], 'Declarabel'));
@@ -142,19 +144,6 @@ class ProjectHourForm extends BaseForm {
         
     }
     
-    
-    
-    protected function addUsers() {
-        $userService = ObjectContainer::getInstance()->get(UserService::class);
-        $users = $userService->readAllUsers();
-        
-        $mapUsers = array();
-        foreach($users as $u) {
-            $mapUsers[$u->getUserId()] = $u->getUsername();
-        }
-        
-        $this->addWidget(new SelectField('user_id', '', $mapUsers, 'Gebruiker'));
-    }
     
     protected function addProjectHourType() {
         $projectService = ObjectContainer::getInstance()->get(ProjectService::class);
