@@ -110,6 +110,9 @@ class DefaultOfferPdf extends DefaultInvoicePdf {
                 $this->Cell(190, $this->lineHeight, $l);
                 $this->Ln();
             }
+            
+            // break, first address only
+            break;
         }
         
         $this->Ln();
