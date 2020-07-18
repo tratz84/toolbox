@@ -19,8 +19,8 @@ module_update_handler('base', '20200609');
 
 hook_loader(__DIR__.'/hook');
 
-hook_register_javascript('base-script',   appUrl('/?mpf=/module/base/js/script.js'));
-hook_htmlscriptloader_enableGroup('base-script');
+hook_register_javascript('mod-base-script',   appUrl('/?mpf=/module/base/js/script.js'));
+hook_htmlscriptloader_enableGroup('mod-base-script');
 
 
 
