@@ -58,7 +58,7 @@ class CustomerService extends ServiceBase {
         $opts['limit'] = $limit;
         $cursor = $cDao->search($opts);
         
-        $cursor = $cDao->search($opts);
+//         $cursor = $cDao->search($opts);
         $count = $cDao->searchCount($opts);
         
         $r = ListResponse::fillByCursor(0, $limit, $cursor, array('id', 'type', 'name', 'contact_person'));

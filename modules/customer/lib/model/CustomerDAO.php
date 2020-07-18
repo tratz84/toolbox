@@ -58,6 +58,17 @@ class CustomerDAO extends \core\db\DAOObject {
     
     protected function searchQueries($opts=array()) {
         $queryCompanies = true;
+        $queryPersons = true;
+        
+        if (isset($opts['customer_type']) && $opts['customer_type'] == 'company') {
+            $queryCompanies = true;
+            $queryPersons = false;
+        }
+        if (isset($opts['customer_type']) && $opts['customer_type'] == 'person') {
+            $queryCompanies = false;
+            $queryPersons = true;
+        }
+        
         
         $qb1 = $qb2 = null;
         
@@ -92,7 +103,6 @@ class CustomerDAO extends \core\db\DAOObject {
             }
         }
         
-        $queryPersons = true;
         if (isset($opts['contact_person']) && $opts['contact_person']) {
             $queryPersons = false;
         }
