@@ -12,6 +12,8 @@ class UserCustomerSelectWidget extends DynamicSelectField {
     
     protected $customerSupport = true;
     
+    protected  $usercustomerDeleted = false;
+    
     
     
     public function __construct($name='usercustomer_id', $defaultValue=null, $defaultText=null, $endpoint=null, $label=null) {
@@ -65,17 +67,36 @@ class UserCustomerSelectWidget extends DynamicSelectField {
             $this->setValue('company-'.$companyId);
             
             $cs = ObjectContainer::getInstance()->get(CompanyService::class);
-            $name = $cs->getCompanyName($companyId);
             
-            $this->setDefaultText( $name );
+            $company = $cs->readCompany($companyId, ['record-only' => true]);
+            
+            if ($company == null || $company->getDeleted()) {
+                $this->usercustomerDeleted = true;
+            }
+            if ($company) {
+                $this->setDefaultText( $company->getCompanyName() );
+            }
+            else {
+                $this->setDefaultText( 'company-'.$companyId );
+            }
+            
         }
         else if ($personId) {
             $this->setValue('person-'.$personId);
             
             $ps = ObjectContainer::getInstance()->get(PersonService::class);
-            $fullname = $ps->getFullname($personId);
             
-            $this->setDefaultText( $fullname );
+            $person = $ps->readPerson($personId);
+            if ($person == null || $person->getDeleted()) {
+                $this->usercustomerDeleted = true;
+            }
+            
+            if ($person) {
+                $this->setDefaultText( $person->getFullname() );
+            }
+            else {
+                $this->setDefaultText( 'person-'.$personId );
+            }
         }
         else if ($userId) {
             $this->setValue('user-'.$userId);
@@ -83,7 +104,13 @@ class UserCustomerSelectWidget extends DynamicSelectField {
             $us = ObjectContainer::getInstance()->get(UserService::class);
             $user = $us->readUser($userId);
             
-            $this->setDefaultText( (string)$user );
+            if ($user) {
+                $this->setDefaultText( (string)$user );
+            }
+            else {
+                $this->usercustomerDeleted = true;
+                $this->setDefaultText( 'user-'.$userId );
+            }
         } else {
             $this->setDefaultText( t('Make your choice') );
         }
