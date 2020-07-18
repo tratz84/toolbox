@@ -141,7 +141,7 @@ class OfferService extends ServiceBase {
             return $offer;
         }
         
-        $form->fill($offer, array('offer_id', 'offer_status_id', 'offer_date', 'deposit', 'payment_upfront', 'subject', 'comment', 'note'));
+        $form->fill($offer, array('offer_id', 'customer_id', 'offer_status_id', 'offer_date', 'deposit', 'payment_upfront', 'subject', 'comment', 'note'));
         
         if ($offer->getOfferStatusId() == 0)
             $offer->setOfferStatusId(null);
