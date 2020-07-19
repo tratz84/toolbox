@@ -13,14 +13,23 @@ function format_customername($obj) {
             $obj = $obj->getFields();
         }
     }
+    
+    $cn = '';
     if (is_array($obj)) {
         if (isset($obj['company_id']) && $obj['company_id']) {
-            return $obj['company_name'];
-        } else if (isset($obj['person_id']) && $obj['person_id']) {
+            $cn = $obj['company_name'];
             
-            return format_personname($obj);
+            if ($cn == '') {
+                $cn = 'company-'.$obj['company_id'];
+            }
+        } else if (isset($obj['person_id']) && $obj['person_id']) {
+            $cn = format_personname($obj);
+            
+            if ($cn == '') {
+                $cn = 'person-'.$obj['person_id'];
+            }
         }
     }
     
-    return null;
+    return $cn;
 }
