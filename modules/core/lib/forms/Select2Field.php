@@ -61,7 +61,13 @@ class Select2Field extends BaseWidget {
         $html .= '<select name="'.esc_attr($this->getName()).'">';
         
         foreach($this->optionItems as $key => $val) {
-            $html .= '<option value="'.esc_attr($key).'" style="'.($val['active']?'':'display:none;').'" '.($key == $this->getValue()?'selected="selected"':'').'>'.esc_html($val['description']).'</option>';
+            if ($val['active'] || $key == $this->getValue()) {
+                $active = true;
+            } else {
+                $active = false;
+            }
+            
+            $html .= '<option value="'.esc_attr($key).'" style="'.($active?'':'display:none;').'" '.($key == $this->getValue()?'selected="selected"':'').'>'.esc_html($val['description']).'</option>';
         }
         $html .= '</select>';
         $html .= '</div>';
