@@ -34,11 +34,17 @@ t.setConnectorUrl( '/?m=customer&c=customer&a=search' );
 
 
 t.addColumn({
-	fieldName: 'type',
+	fieldName: 'customer_type',
 	width: 100,
 	fieldDescription: 'Type',
-	fieldType: 'text',
-	searchable: false,
+	fieldType: 'select',
+	searchable: true,
+	filterOptions: [
+		{ 'text': 'Type', 'value': '' },
+		{ 'text': toolbox_t('Business customer'), 'value': 'company' },
+		{ 'text': toolbox_t('Private'), 'value': 'person' },
+		
+	],
 	render: function(record) {
 		if (record.type == 'person') {
 			return _('Private customer');
