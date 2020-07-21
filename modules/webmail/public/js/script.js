@@ -99,6 +99,7 @@ function setMailAction(email_id, newAction) {
 }
 
 function deleteMail(email_id) {
+	
 	$.ajax({
 		url: appUrl('/?m=webmail&c=mailbox/mail&a=delete_mail'),
 		type: 'POST',
@@ -112,6 +113,13 @@ function deleteMail(email_id) {
 				// remove record & content from page
 				$('tr[email-id="'+email_id+'"]').remove();
 				$('#mail-content').empty();
+				
+				// ajax-param set? => unset
+				var l = window.location.toString();
+				if (l.indexOf('#') != -1) {
+					l = l.substr(0, l.indexOf('#'));
+					history.replaceState( {}, '', l );
+				}
 			}
 		}
 	});
