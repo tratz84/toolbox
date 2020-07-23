@@ -21,6 +21,8 @@ function mapArchiveStores() {
 
 function filesync_lookup_libreoffice() {
     $paths = array();
+    if (defined('SOFFICE_BIN'))
+        $paths[] = SOFFICE_BIN;
     $paths[] = "/usr/bin/soffice";
     
     foreach($paths as $p) {
@@ -55,7 +57,7 @@ function filesync_convert_to_pdf($filename) {
         throw new FileException('Temp-folder not found');
     }
     
-    $cmd = $soffice . ' --headless --convert-to pdf --outdir '.escapeshellcmd($f).' '.escapeshellarg($filename);
+    $cmd = '"'.$soffice . '"' . ' --headless --convert-to pdf --outdir '.escapeshellcmd($f).' '.escapeshellarg($filename);
     `$cmd`;
     
     $pdffile = basename($filename);

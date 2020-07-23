@@ -16,6 +16,8 @@ define('STANDALONE_INSTALLATION', true);
 define('API_KEY', 'APIKEY1234567890YEKIPA');
 
 
+// define('SOFFICE_BIN', 'C:\\Program Files\\LibreOffice\\program\\soffice.exe');
+
 if (DEBUG) {
     ini_set('display_errors', 'on');
     ini_set('error_reporting', E_ALL);
