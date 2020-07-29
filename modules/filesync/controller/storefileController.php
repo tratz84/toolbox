@@ -103,10 +103,10 @@ class storefileController extends BaseController {
             if ($this->form->validate()) {
                 $storeService->saveFilemeta($this->form);
                 
-                $storeId = $this->form->getWidgetValue('store_id');
+                $sf_id = $this->form->getWidgetValue('store_file_id');
                 
                 report_user_message(t('Changes saved'));
-                redirect('/?m=filesync&c=storefile&id=' . $storeId);
+                redirect( '/?m=filesync&c=storefile&a=edit_meta&store_file_id=' . $sf_id );
             }
         }
         

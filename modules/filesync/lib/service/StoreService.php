@@ -238,21 +238,14 @@ class StoreService extends ServiceBase {
             $sfm->setStoreFileId($storeFileId);
         }
         
-        $isNew = $sfm->isNew();
         
-//         $changes = $form->changes($sfm);
+        $form->fill($sfm, array('store_file_id', 'customer_id', 'subject', 'long_description', 'document_date', 'public'));
         
-        $form->fill($sfm, array('store_file_id', 'customer_id', 'subject', 'long_description', 'document_date'));
-        $customer_id = $form->getWidgetValue('customer_id');
-        
-        $sfm->setCompanyId(null);
-        $sfm->setPersonId(null);
-        
-        if (strpos($customer_id, 'company-') === 0) {
-            $sfm->setCompanyId((int)str_replace('company-', '', $customer_id));
+        if ($sfm->getPublic()) {
+            $sfm->setPublicSecret( md5(rand().rand().rand().rand().rand().rand().rand()) );
         }
-        if (strpos($customer_id, 'person-') === 0) {
-            $sfm->setPersonId((int)str_replace('person-', '', $customer_id));
+        else {
+            $sfm->setPublicSecret('');
         }
         
         

@@ -47,6 +47,17 @@ $tb_filesync_store_file->addIndex('store_id', ['store_id']);
 $tb_filesync_store_file->addForeignKey('filesync__store_file_ibfk_1', 'store_id', 'filesync__store', 'store_id', 'CASCADE', 'RESTRICT');
 $tbs[] = $tb_filesync_store_file;
 
+
+
+$tb_sf_dl_log = new TableModel('filesync', 'store_file_download_log');
+$tb_sf_dl_log->addColumn('store_file_download_log_id', 'bigint', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_sf_dl_log->addColumn('store_file_id',              'bigint');
+$tb_sf_dl_log->addColumn('ip',                         'varchar(40)');
+$tb_sf_dl_log->addColumn('dump',                       'text');
+$tb_sf_dl_log->addColumn('created',                    'datetime');
+$tbs[] = $tb_sf_dl_log;
+
+
 $tb_filesync_store_file_meta = new TableModel('filesync', 'store_file_meta');
 $tb_filesync_store_file_meta->addColumn('store_file_meta_id', 'bigint', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
 $tb_filesync_store_file_meta->addColumn('store_file_id',      'bigint');
