@@ -134,7 +134,7 @@ class StoreFileDAO extends \core\db\DAOObject {
 	    if (!$companyId && !$personId)
 	        return array();
 	        
-	        $sql = "select sf.*, sfr.filesize, sfm.document_date, sfm.subject
+	        $sql = "select sf.*, sfr.filesize, sfm.document_date, sfm.subject, sfm.public
                 from filesync__store_file sf
                 left join filesync__store s using (store_id)
                 left join filesync__store_file_rev sfr using (store_file_id)

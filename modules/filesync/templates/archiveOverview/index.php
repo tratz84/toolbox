@@ -6,6 +6,7 @@
 		<tr>
 			<th><?= t('Filename') ?></th>
 			<th><?= t('Subject') ?></th>
+			<th><?= t('Public') ?></th>
 			<th class="th-filesize"><?= t('File size') ?></th>
 			<th class="th-date"><?= t('Date') ?></th>
 		</tr>
@@ -23,6 +24,7 @@
 			<tr class="clickable" onclick="window.open('<?= appUrl('/?m=filesync&c=storefile&a=download&inline=1&id='.$sf->getStoreFileId()) ?>', '_blank');">
 				<td><?= esc_html($sf->getPath()) ?></td>
 				<td><?= esc_html($sf->getField('subject')) ?></td>
+				<td><?= $sf->getField('public') ? t('Yes'):t('No') ?></td>
 			 	<td class="td-filesize"><?= format_filesize($sf->getField('filesize')) ?></td>
 				<td class="td-date"><?= format_date($sf->getField('document_date'), 'd-m-Y') ?></td>
 			</tr>

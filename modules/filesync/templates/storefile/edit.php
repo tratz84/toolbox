@@ -13,6 +13,7 @@
 	<?= $form->render() ?>
 </div>
 
+<div class="clear"></div>
 <br/>
 
 <table class="list-widget">
