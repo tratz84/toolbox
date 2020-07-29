@@ -56,6 +56,12 @@ t.addColumn({
 	fieldType: 'boolean'
 });
 
+t.addColumn({
+	fieldName: 'public',
+	fieldDescription: toolbox_t('Public'),
+	fieldType: 'boolean',
+	searchable: true
+});
 
 t.addColumn({
 	fieldName: 'lastmodified',

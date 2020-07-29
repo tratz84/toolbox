@@ -35,6 +35,7 @@ class StoreFileDAO extends \core\db\DAOObject {
                 . "filesync__store_file_meta.subject, "
                 . "filesync__store_file_meta.long_description, "
                 . "filesync__store_file_meta.document_date, "
+                . "ifnull(filesync__store_file_meta.public, 0) public, "
                 . "customer__company.company_name, "
                 . "customer__person.firstname, "
                 . "customer__person.insert_lastname, "
@@ -91,6 +92,11 @@ class StoreFileDAO extends \core\db\DAOObject {
         if (isset($opts['subject']) && $opts['subject']) {
             $where[] = " subject LIKE ? ";
             $params[] = '%'.$opts['subject'].'%';
+        }
+        
+        if (isset($opts['public']) && $opts['public'] !== '') {
+            $where[] = " ifnull(public, 0) LIKE ? ";
+            $params[] = $opts['public'] ? 1 : 0;
         }
         
         if (count($where)) {

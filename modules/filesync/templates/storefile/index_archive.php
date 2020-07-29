@@ -65,6 +65,13 @@ t.addColumn({
 });
 
 t.addColumn({
+	fieldName: 'public',
+	fieldDescription: toolbox_t('Public'),
+	fieldType: 'boolean',
+	searchable: true
+});
+
+t.addColumn({
 	fieldName: 'filesize_text',
 	fieldDescription: toolbox_t('File size'),
 	fieldType: 'text'
