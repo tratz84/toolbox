@@ -123,7 +123,35 @@ class StoreFileDAO extends \core\db\DAOObject {
 	public function setRevision($storeFileId, $rev) {
 	    $this->query('update filesync__store_file set rev = ? where store_file_id = ?', array($rev, $storeFileId));
 	}
-	
+
+	public function readFilesByCustomer($companyId=null, $personId=null) {
+	    if (!$companyId && !$personId)
+	        return array();
+	        
+	        $sql = "select sf.*, sfr.filesize, sfm.document_date, sfm.subject
+                from filesync__store_file sf
+                left join filesync__store s using (store_id)
+                left join filesync__store_file_rev sfr using (store_file_id)
+                join filesync__store_file_meta sfm on (sf.store_file_id = sfm.store_file_id)
+                where (s.store_type = 'archive' OR s.store_type = 'share')
+                    and sf.deleted = false
+                    and sfr.rev = sf.rev ";
+	        
+	        $params = array();
+	        
+	        if ($companyId) {
+	            $sql .= ' and sfm.company_id = ? ';
+	            $params[] = $companyId;
+	        }
+	        if ($personId) {
+	            $sql .= ' and sfm.person_id = ? ';
+	            $params[] = $personId;
+	        }
+	        
+	        $sql .= ' order by ifnull(sfm.document_date, sf.created) desc, sf.store_file_id desc';
+	        
+	        return $this->queryList($sql, $params);
+	}
 	
 	public function readArchiveFiles($companyId=null, $personId=null) {
 	    if (!$companyId && !$personId)

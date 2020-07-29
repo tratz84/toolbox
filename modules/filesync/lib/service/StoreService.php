@@ -91,6 +91,16 @@ class StoreService extends ServiceBase {
         return $sfDao->readArchiveFiles(null, $personId);
     }
     
+    public function readFilesByCompany($companyId) {
+        $sfDao = new StoreFileDAO();
+        return $sfDao->readFilesByCustomer($companyId);
+    }
+    
+    public function readFilesByPerson($personId) {
+        $sfDao = new StoreFileDAO();
+        return $sfDao->readFilesByCustomer(null, $personId);
+    }
+    
     public function readStoreFiles($storeId) {
         $sfDao = new StoreFileDAO();
         
@@ -207,7 +217,8 @@ class StoreService extends ServiceBase {
         $sfmDao = new StoreFileMetaDAO();
         $sfm = $sfmDao->readByFile($storeFileId);
         
-        $form->bind($sfm);
+        if ($sfm)
+            $form->bind($sfm);
         
         return $form;
     }
@@ -220,7 +231,9 @@ class StoreService extends ServiceBase {
         if ($storeFileId) {
             $sfmDao = new StoreFileMetaDAO();
             $sfm = $sfmDao->readByFile($storeFileId);
-        } else {
+        }
+        
+        if ($sfm == null) {
             $sfm = new StoreFileMeta();
             $sfm->setStoreFileId($storeFileId);
         }

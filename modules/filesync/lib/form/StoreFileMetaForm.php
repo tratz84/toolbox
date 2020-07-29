@@ -28,7 +28,7 @@ class StoreFileMetaForm extends BaseForm {
         
         $this->addWidget(new HiddenField('store_id'));
         $this->addWidget(new HiddenField('store_file_id'));
-        $this->addWidget(new HtmlField('filename', '', 'Bestandsnaam'));
+        $this->addWidget(new HtmlField('path', '', 'Pad'));
         $this->addWidget(new DatePickerField('document_date', '', 'Document datum'));
         $this->addWidget(new CustomerSelectWidget());
         $this->addWidget(new TextField('subject', '', 'Onderwerp'));

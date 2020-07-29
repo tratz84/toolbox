@@ -61,6 +61,25 @@ class storefileController extends BaseController {
         
         $this->store = $storeService->readStore($this->storeFile->getStoreId());
         
+        $this->form = $storeService->readFilemeta( get_var('store_file_id') );
+        
+        if ($this->form == null) {
+            throw new ObjectNotFoundException('File not found');
+        }
+        
+        if (is_post()) {
+            $this->form->bind($_REQUEST);
+            
+            if ($this->form->validate()) {
+                $storeService->saveFilemeta($this->form);
+                
+                $sf_id = (int)$this->form->getWidgetValue('store_file_id');
+                
+                report_user_message(t('Changes saved'));
+                redirect('/?m=filesync&c=storefile&a=edit&store_file_id=' . $sf_id);
+            }
+        }
+        
         $this->revisions = $this->storeFile->getRevisions();
         $this->revisions = array_reverse($this->revisions);
         

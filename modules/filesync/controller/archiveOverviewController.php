@@ -21,10 +21,10 @@ class archiveOverviewController extends BaseController {
         $personId = $this->form->getWidgetValue('person_id');
         
         if ($companyId) {
-            $this->storeFiles = $storeService->readArchiveFilesByCompany($companyId);
+            $this->storeFiles = $storeService->readFilesByCompany($companyId);
         }
         if ($personId) {
-            $this->storeFiles = $storeService->readArchiveFilesByPerson($personId);
+            $this->storeFiles = $storeService->readFilesByPerson($personId);
         }
         
         
