@@ -189,7 +189,7 @@ class MysqlTableGenerator {
                 $sql = 'ALTER TABLE `'.$this->getTableName().'` CHANGE COLUMN `'.$old.'` `'.$new.'` ' . $this->tableModel->getColumnProperty($new, 'type');
                 
                 $model_default_val = $this->tableModel->getColumnProperty($new, 'default' );
-                if ($model_default_val) {
+                if ($model_default_val !== null) {
                     $sql .= ' default \''.$model_default_val.'\'';
                 }
                 
@@ -223,7 +223,7 @@ class MysqlTableGenerator {
                 $sql = "";
                 $sql = "ALTER TABLE  `" . $this->getTableName() . "` CHANGE COLUMN ";
                 $sql .= '`' . $columnName . '` `' . $columnName . '` ' . $model_type;
-                if ($model_default_val) {
+                if ($model_default_val !== null) {
                     $sql .= ' default \''.$model_default_val.'\'';
                 }
                 $sql .= ";";
@@ -234,7 +234,7 @@ class MysqlTableGenerator {
                 $sql = "";
                 $sql .= "ALTER TABLE `" . $this->getTableName() . "` ADD COLUMN ";
                 $sql .= '`'.$columnName . '` ' . $model_type;
-                if ($model_default_val) {
+                if ($model_default_val !== null) {
                     $sql .= ' default \''.$model_default_val.'\'';
                 }
                 $sql .= ";";
@@ -242,6 +242,7 @@ class MysqlTableGenerator {
                 $sql_statements[] = $sql;
             }
         }
+        
         
         // drop columns
         foreach($this->dbColumns as $columnName => $props) {
@@ -458,6 +459,12 @@ class MysqlTableGenerator {
         
         $model_type = $this->normalizeType($model_type);
         $db_type = $this->normalizeType($db_type);
+
+        // default changed?
+//         $model_default_val = $this->tableModel->getColumnProperty($columnName, 'default' );
+//         if ((string)$this->dbColumns[$columnName]['COLUMN_DEFAULT'] !== (string)$model_default_val) {
+//             return true;
+//         }
         
         if ($db_type == $model_type) {
             return false;
