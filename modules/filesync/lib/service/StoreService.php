@@ -241,6 +241,14 @@ class StoreService extends ServiceBase {
         
         $form->fill($sfm, array('store_file_id', 'customer_id', 'subject', 'long_description', 'document_date', 'public'));
         
+        if ($sfm->getCompanyId() == 0) {
+            $sfm->setCompanyId( null );
+        }
+        if ($sfm->getPersonId() == 0) {
+            $sfm->setPersonId( null );
+        }
+        
+        
         if ($sfm->getPublic()) {
             $sfm->setPublicSecret( md5(rand().rand().rand().rand().rand().rand().rand()) );
         }
