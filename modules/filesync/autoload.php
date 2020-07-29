@@ -11,7 +11,7 @@ Context::getInstance()->enableModule('filesync');
 
 require_once __DIR__.'/lib/functions/misc.php';
 
-module_update_handler('filesync', '20200416');
+module_update_handler('filesync', '202007629');
 
 $eb = ObjectContainer::getInstance()->get(EventBus::class);
 
