@@ -55,6 +55,8 @@ $tb_filesync_store_file_meta->addColumn('person_id',          'int');
 $tb_filesync_store_file_meta->addColumn('subject',            'varchar(255)');
 $tb_filesync_store_file_meta->addColumn('long_description',   'text');
 $tb_filesync_store_file_meta->addColumn('document_date',      'date');
+$tb_filesync_store_file_meta->addColumn('public',             'bool', ['default' => 0]);
+$tb_filesync_store_file_meta->addColumn('public_secret',      'varchar(64)');
 $tb_filesync_store_file_meta->addIndex('store_file_id', ['store_file_id'], ['unique' => true]);
 $tb_filesync_store_file_meta->addIndex('company_id', ['company_id']);
 $tb_filesync_store_file_meta->addForeignKey('filesync__store_file_meta_ibfk_1', 'company_id', 'customer__company', 'company_id', 'RESTRICT', 'RESTRICT');

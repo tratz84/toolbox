@@ -116,7 +116,7 @@ class PagequeueBase extends \core\db\DBObject {
     'Type' => 'enum(\'P\',\'L\')',
     'Null' => 'YES',
     'Key' => '',
-    'Default' => 'P',
+    'Default' => NULL,
     'Extra' => '',
   ),
   'edited' => 

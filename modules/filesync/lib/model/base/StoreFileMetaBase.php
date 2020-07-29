@@ -14,7 +14,7 @@ class StoreFileMetaBase extends \core\db\DBObject {
   'store_file_meta_id' => 
   array (
     'Field' => 'store_file_meta_id',
-    'Type' => 'bigint(20)',
+    'Type' => 'bigint',
     'Null' => 'NO',
     'Key' => 'PRI',
     'Default' => NULL,
@@ -23,7 +23,7 @@ class StoreFileMetaBase extends \core\db\DBObject {
   'store_file_id' => 
   array (
     'Field' => 'store_file_id',
-    'Type' => 'bigint(20)',
+    'Type' => 'bigint',
     'Null' => 'YES',
     'Key' => 'UNI',
     'Default' => NULL,
@@ -32,7 +32,7 @@ class StoreFileMetaBase extends \core\db\DBObject {
   'company_id' => 
   array (
     'Field' => 'company_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => 'MUL',
     'Default' => NULL,
@@ -41,7 +41,7 @@ class StoreFileMetaBase extends \core\db\DBObject {
   'person_id' => 
   array (
     'Field' => 'person_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -69,6 +69,24 @@ class StoreFileMetaBase extends \core\db\DBObject {
   array (
     'Field' => 'document_date',
     'Type' => 'date',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'public' => 
+  array (
+    'Field' => 'public',
+    'Type' => 'tinyint(1)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => '0',
+    'Extra' => '',
+  ),
+  'public_secret' => 
+  array (
+    'Field' => 'public_secret',
+    'Type' => 'varchar(64)',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -107,6 +125,14 @@ class StoreFileMetaBase extends \core\db\DBObject {
 		
 	public function setDocumentDate($p) { $this->setField('document_date', $p); }
 	public function getDocumentDate() { return $this->getField('document_date'); }
+	
+		
+	public function setPublic($p) { $this->setField('public', $p); }
+	public function getPublic() { return $this->getField('public'); }
+	
+		
+	public function setPublicSecret($p) { $this->setField('public_secret', $p); }
+	public function getPublicSecret() { return $this->getField('public_secret'); }
 	
 	
 }

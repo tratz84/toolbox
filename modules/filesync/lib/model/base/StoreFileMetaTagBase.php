@@ -14,7 +14,7 @@ class StoreFileMetaTagBase extends \core\db\DBObject {
   'meta_tag_id' => 
   array (
     'Field' => 'meta_tag_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'NO',
     'Key' => 'PRI',
     'Default' => NULL,
@@ -32,7 +32,7 @@ class StoreFileMetaTagBase extends \core\db\DBObject {
   'sort' => 
   array (
     'Field' => 'sort',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -44,7 +44,7 @@ class StoreFileMetaTagBase extends \core\db\DBObject {
     'Type' => 'tinyint(1)',
     'Null' => 'YES',
     'Key' => '',
-    'Default' => '1',
+    'Default' => NULL,
     'Extra' => '',
   ),
   'edited' => 
