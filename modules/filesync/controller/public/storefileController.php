@@ -47,14 +47,8 @@ class storefileController extends BaseController {
             throw new ObjectNotFoundException('File not found');
         }
         
-        $dl = new StoreFileDownloadLog();
-        $dl->setStoreFileId( $sf->getStoreFileId() );
-        $dl->setIp( remote_addr() );
-        $dl->setDump(var_export([
-            'request' => $_REQUEST,
-            'server' => $_SERVER
-            ], true));
-        $dl->save();
+        // log download
+        $storeService->logPublicDownload( $sf->getStoreFileId() );
         
         header('Content-type: ' . mime_content_type ($file));
         header('Content-Disposition: '.(get_var('inline')?'inline':'attachment').'; filename="'.$sf->getFilename().'"');

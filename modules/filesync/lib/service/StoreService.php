@@ -2,22 +2,23 @@
 
 namespace filesync\service;
 
+use core\exception\FileException;
+use core\exception\InvalidStateException;
+use core\exception\ObjectNotFoundException;
 use core\forms\lists\ListResponse;
 use core\service\ServiceBase;
+use filesync\form\ArchiveFileUploadForm;
+use filesync\form\StoreFileMetaForm;
 use filesync\form\StoreForm;
 use filesync\model\Store;
 use filesync\model\StoreDAO;
-use filesync\model\StoreFileDAO;
-use filesync\form\StoreFileMetaForm;
-use filesync\model\StoreFileMetaDAO;
-use filesync\model\StoreFileMeta;
-use filesync\model\StoreFileRevDAO;
-use core\exception\InvalidStateException;
 use filesync\model\StoreFile;
+use filesync\model\StoreFileDAO;
+use filesync\model\StoreFileDownloadLog;
+use filesync\model\StoreFileMeta;
+use filesync\model\StoreFileMetaDAO;
 use filesync\model\StoreFileRev;
-use core\exception\FileException;
-use filesync\form\ArchiveFileUploadForm;
-use core\exception\ObjectNotFoundException;
+use filesync\model\StoreFileRevDAO;
 
 class StoreService extends ServiceBase {
     
@@ -428,6 +429,22 @@ class StoreService extends ServiceBase {
         $sfm->save();
         
         return $storeFile;
+    }
+    
+    
+    public function logPublicDownload($storeFileId) {
+        $dl = new StoreFileDownloadLog();
+        $dl->setStoreFileId( $storeFileId );
+        $dl->setIp( remote_addr() );
+        
+        $dl->setDump(var_export([
+            'request' => $_REQUEST,
+            'server' => $_SERVER
+        ], true));
+        
+        $dl->save();
+        
+        return $dl;
     }
     
 }
