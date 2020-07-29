@@ -167,6 +167,7 @@ class projectHourController extends BaseController {
                 
                 $project_id = $form->getWidgetValue('project_id');
                 
+                report_user_message(t('Changes saved'));
                 redirect('/?m=project&c=projectHour&project_id=' . $project_id);
             }
         }
