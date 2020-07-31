@@ -28,6 +28,13 @@ class TwoFaCookieDAO extends \core\db\DAOObject {
 	               , array(date('Y-m-d H:i:s'), $cookieId));
 	}
 	
+	public function cleanup() {
+	    // delete not-activated entries older then 30 minutes
+	    $this->query('delete from twofaauth__two_fa_cookie where activated = false and created <= ?', array(date('Y-m-d H:i:s', time()-(60*30))));
+	    
+	    // delete last_visit-entries older then 60 days
+	    $this->query('delete from twofaauth__two_fa_cookie where last_visit <= ?', array(date('Y-m-d H:i:s', time()-(60 * 60 *24 * 60))));
+	}
 	
 	
 	public function search($opts) {

@@ -73,11 +73,7 @@ class TwoFaService extends ServiceBase {
     public function cleanupCookies() {
         $tfCookieDao = object_container_get( TwoFaCookieDAO::class );
         
-        // delete not-activated entries older then 30 minutes
-        $tfCookieDao->query('delete from twofaauth__two_fa_cookie where activated = false and created <= ?', array(date('Y-m-d H:i:s', time()-(60*30))));
-        
-        // delete last_visit-entries older then 60 days
-        $tfCookieDao->query('delete from twofaauth__two_fa_cookie where last_visit <= ?', array(date('Y-m-d H:i:s', time()-(60 * 60 *24 * 60))));
+        $tfCookieDao->cleanup();
     }
     
     
