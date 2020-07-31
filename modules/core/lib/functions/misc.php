@@ -1104,6 +1104,34 @@ function validate_email($email)
 }
 
 
+function mask_email($email) {
+    $str = $email;
+    
+    $len = strlen($str);
+    
+    $pos_last_dot = strrpos($email, '.');
+    
+    for($x=0; $x < $len; $x++) {
+        // show first char
+        if ($x == 0) {
+            
+        }
+        // show domain extension
+        else if ($pos_last_dot !== false && $x >= $pos_last_dot-1) {
+            
+        }
+        // show char before @ when name is >=5, show '@', show char after '@'
+        else if (($x+1 < $len && $str[$x+1] == '@' && $x >= 5) || $str[$x] == '@' || ($x-1 >= 0 && $str[$x-1] == '@')) {
+            
+        } else {
+            $str[$x] = '*';
+        }
+    }
+    
+    return $str;
+}
+
+
 function timediff_minuts($start, $end) {
     $dt1 = new DateTime($start);
     $dt2 = new DateTime($end);
