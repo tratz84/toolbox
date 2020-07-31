@@ -35,7 +35,6 @@ class TwoFaEmailHandler {
 
         $error_msg = null;
         if (is_post()) {
-            
             // new password requested?
             if (get_var('btnNewCode')) {
                 $this->sendMail( $user );
@@ -106,6 +105,10 @@ class TwoFaEmailHandler {
     public function sendMail($user=null) {
         if ($user == null) {
             $user = ctx()->getUser();
+        }
+        
+        if ( validate_email( $user->getEmail() ) == false ) {
+            return false;
         }
         
         // set cookie

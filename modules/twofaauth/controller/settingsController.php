@@ -14,8 +14,9 @@ class settingsController extends BaseController {
 	    $this->form = object_container_create( TwoFactorSettingsForm::class );
 	    
 	    $arr = array();
-	    $arr['enabled'] = $faAuthSettings->getEnabled() ? '1' : '0';
-	    $arr['method']  = $faAuthSettings->getAuthMethod();
+	    $arr['enabled']              = $faAuthSettings->getEnabled() ? '1' : '0';
+	    $arr['enforce_when_no_mail'] = $faAuthSettings->getEnforceWhenNoMail();
+	    $arr['method']               = $faAuthSettings->getAuthMethod();
 	    
 	    $this->form->bind( $arr );
 	    
@@ -23,6 +24,7 @@ class settingsController extends BaseController {
 	    if (is_post()) {
 	        $settingsService = object_container_get( SettingsService::class );
 	        $settingsService->updateValue('twofaauth__enabled', get_var('enabled') ? '1' : '0');
+	        $settingsService->updateValue('twofaauth__enforce_when_no_mail', get_var('enforce_when_no_mail') ? '1' : '0');
 	        $settingsService->updateValue('twofaauth__auth_method', get_var('auth_method'));
 	        
 	        report_user_message(t('Changes saved'));

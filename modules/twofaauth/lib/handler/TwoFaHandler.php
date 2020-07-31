@@ -17,18 +17,28 @@ class TwoFaHandler {
     public function execute() {
         $faSettings = object_container_get( TwoFaAuthSettings::class );
         
+        // autologin used? => skip 2fa
+        if (isset($_SESSION['admin_autologin']) && $_SESSION['admin_autologin']) {
+            return;
+        }
+        
         // not enabled? => skip
         if ($faSettings->getEnabled() == false) {
+            return;
+        }
+
+        // not yet authenticated? => skip
+        if (ctx()->getUser() == null) {
+            return;
+        }
+        
+        // no valid e-mailadres?
+        if ($faSettings->getEnforceWhenNoMail() == false && validate_email(ctx()->getUser()->getEmail()) == false) {
             return;
         }
         
         // hmz, this might be handled differently..
         if (get_var('c') == 'js/dynamicscripts') {
-            return;
-        }
-        
-        // not yet authenticated? => skip
-        if (ctx()->getUser() == null) {
             return;
         }
         
