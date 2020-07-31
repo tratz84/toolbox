@@ -1,7 +1,6 @@
 <?php
 
 
-
 use twofaauth\handler\TwoFaHandler;
 
 

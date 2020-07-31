@@ -9,7 +9,6 @@ class settingsController extends BaseController {
 
 	public function action_index() {
 	
-
 	    $faAuthSettings = object_container_get( TwoFaAuthSettings::class );
 	    
 	    $this->form = object_container_create( TwoFactorSettingsForm::class );
@@ -31,10 +30,8 @@ class settingsController extends BaseController {
 	    }
 	    
 	    
-	    
 		$this->render();
 
 	}
-
 }
 

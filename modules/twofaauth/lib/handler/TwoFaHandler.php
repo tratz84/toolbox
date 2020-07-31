@@ -22,6 +22,7 @@ class TwoFaHandler {
             return;
         }
         
+        // hmz, this might be handled differently..
         if (get_var('c') == 'js/dynamicscripts') {
             return;
         }
@@ -31,9 +32,8 @@ class TwoFaHandler {
             return;
         }
         
-        $tfService = object_container_get(TwoFaService::class);
-        
         // check cookie
+        $tfService = object_container_get(TwoFaService::class);
         if (isset($_COOKIE['twofaauth']) && $tfService->checkCookie( $_COOKIE['twofaauth'] )) {
             return true;
         }

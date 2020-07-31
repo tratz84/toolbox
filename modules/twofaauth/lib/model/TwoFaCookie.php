@@ -4,7 +4,6 @@
 namespace twofaauth\model;
 
 
-use twofaauth\model\base\TwoFaCookieBase;
 
 class TwoFaCookie extends base\TwoFaCookieBase {
 

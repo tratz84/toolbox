@@ -27,17 +27,21 @@ class TwoFaEmailHandler {
         if (isset($_COOKIE['twofaauth'])) {
             $cookie = $tfService->readCookie( $_COOKIE['twofaauth'] );
         }
-        else {
+        
+        // cookie entry not found?
+        if ($cookie == null) {
             $this->sendMail();
         }
-        
 
         $error_msg = null;
         if (is_post()) {
+            
+            // new password requested?
             if (get_var('btnNewCode')) {
                 $this->sendMail( $user );
             }
             
+            // form submitted or next-button clicked?
             if (get_var('btnNext')) {
                 $secret_key = trim(get_var('c'));
                 
@@ -49,7 +53,7 @@ class TwoFaEmailHandler {
                     $succes = true;
                 }
                 else {
-                    // check old secret_key's last 30 minutes? user might click twice 'New code' button...
+                    // check old secret_key's last 30 minutes? user might have clicked 'New code' twice button...
                     $old_cookies = $tfService->lookupCookie( $user->getUserId(), $secret_key );
                     foreach ( $old_cookies as $oc ) {
                         if ($oc->getSecretKey() == $secret_key && $oc->getActivated() == false) {
@@ -63,6 +67,7 @@ class TwoFaEmailHandler {
                     }
                 }
                 
+                // code success?
                 if ($succes) {
                     if (get_var('remember_me')) {
                         setcookie('twofaauth', $cookie->getCookieId().':'.$cookie->getCookieValue(), time()+(60*60*24*365), appUrl('/'));
@@ -78,6 +83,7 @@ class TwoFaEmailHandler {
         }
         
         
+        // request code
         $tplEmail = new DefaultTemplate( module_file('twofaauth', 'templates/auth/email.php') );
         $tplEmail->setVar('masked_email', \mask_email($user->getEmail()));
         $tplEmail->setVar('error_msg', $error_msg);
@@ -94,6 +100,9 @@ class TwoFaEmailHandler {
         exit;
     }
     
+    /**
+     * sendMail() - creates twofaauth-cookie & sends mail with secret_key-code
+     */
     public function sendMail($user=null) {
         if ($user == null) {
             $user = ctx()->getUser();

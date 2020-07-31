@@ -1,10 +1,6 @@
 <?php
 
 
-
-
-
-
 use core\event\CallbackPeopleEventListener;
 use core\event\EventBus;
 
