@@ -21,6 +21,8 @@ class authController extends AdminBaseController {
                 $_SESSION['admin_authenticated'] = true;
                 $_SESSION['user_id'] = $user->getUserId();
                 
+                hook_eventbus_publish($user, 'admin', 'authentication-success');
+                
                 if ($user->getUserType() == 'manager') {
                     redirect('/?m=admin&c=report&a=offer');
                 } else {
