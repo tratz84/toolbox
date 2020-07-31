@@ -19,6 +19,13 @@
 	
 		<br/><br/>
 		
+		<?php if (isset($error_msg)) : ?>
+		<div class="error">
+			<?= $error_msg ?>
+		</div>
+		<br/>
+		<?php endif; ?>
+		
 		<table style="">
 			<tr>
 				<th style="padding-right: 15px;">
@@ -38,8 +45,8 @@
 			</tr>
 			<tr>
 				<td colspan="2" align="right" style="padding-top: 10px;">
+	        		<input type="submit" name="btnNext"    value="Next" style="float: right; margin-left: 5px;" />
             		<input type="submit" name="btnNewCode" value="New code" />
-	        		<input type="submit" name="btnNext"    value="Next" />
 				</td>
 			</tr>
 		</table>

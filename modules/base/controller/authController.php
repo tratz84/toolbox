@@ -172,6 +172,11 @@ class authController extends BaseController {
         }
         
         
+        // expire old cookies
+        foreach ( $_COOKIE as $key => $value ) {
+            setcookie( $key, $value, 1, appUrl('/') );
+        }
+        
         
         session_destroy();
         

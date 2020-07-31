@@ -65,6 +65,15 @@ class TwoFaCookieBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'user_id' => 
+  array (
+    'Field' => 'user_id',
+    'Type' => 'int',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -94,6 +103,10 @@ class TwoFaCookieBase extends \core\db\DBObject {
 		
 	public function setCreated($p) { $this->setField('created', $p); }
 	public function getCreated() { return $this->getField('created'); }
+	
+		
+	public function setUserId($p) { $this->setField('user_id', $p); }
+	public function getUserId() { return $this->getField('user_id'); }
 	
 	
 }

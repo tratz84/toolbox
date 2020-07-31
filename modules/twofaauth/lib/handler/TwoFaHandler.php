@@ -34,14 +34,9 @@ class TwoFaHandler {
         $tfService = object_container_get(TwoFaService::class);
         
         // check cookie
-        if (isset($_COOKIE['twofaauth'])) {
-            $cookie = $tfService->readCookie( $_COOKIE['twofaauth'] );
-            if ($cookie && $cookie->getActivated()) {
-                return true;
-            }
+        if (isset($_COOKIE['twofaauth']) && $tfService->checkCookie( $_COOKIE['twofaauth'] )) {
+            return true;
         }
-        
-        
         
         // handle 2-fa auth
         $authMethod = $faSettings->getAuthMethod();

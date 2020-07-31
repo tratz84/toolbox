@@ -5,15 +5,84 @@ namespace twofaauth\service;
 
 use core\service\ServiceBase;
 use twofaauth\model\TwoFaCookieDAO;
+use twofaauth\model\TwoFaCookie;
 
 class TwoFaService extends ServiceBase {
     
     
     
-    public function readCookie( $cookieValue) {
+    public function readCookie( $cookieValue ) {
         $tfCookieDao = object_container_get( TwoFaCookieDAO::class );
         
+        // id inside cookie-string?
+        if (strpos($cookieValue, ':') !== false) {
+            list($cookieId, $cookieVal) = explode(':', $cookieValue);
+            
+            $tfc = $tfCookieDao->read( $cookieId );
+            if ($tfc && $tfc->getCookieValue() == $cookieVal) {
+                return $tfc;
+            }
+        }
+        
+        // try to read by cookie_value
         return $tfCookieDao->readByValue( $cookieValue );
+    }
+    
+    public function activateCookie( $cookieValue ) {
+        $tfa = $this->readCookie( $cookieValue );
+        
+        if (!$tfa) {
+            return false;
+        }
+        
+        $tfa->setActivated( true );
+        $tfa->setLastVisit( date('Y-m-d H:i:s') );
+        return $tfa->save();
+    }
+    
+    public function checkCookie($cookieValue) {
+        if (trim($cookieValue) == '') {
+            return false;
+        }
+        
+        $c = $this->readCookie($cookieValue);
+        if ($c && $c->getActivated() && $c->getUserId() == ctx()->getUser()->getUserId()) {
+            $tfCookieDao = object_container_get( TwoFaCookieDAO::class );
+            
+            $tfCookieDao->updateLastVisit( $c->getCookieId() );
+            
+            return true;
+        }
+        
+        return false;
+    }
+    
+    public function lookupCookie($userId, $oldSecret) {
+        $tfCookieDao = object_container_get( TwoFaCookieDAO::class );
+        
+        $tfs = $tfCookieDao->search([
+            'user_id' => $userId,
+            'after_created_date' => date('Y-m-d H:i:s', time() - 60*30),
+            'return_list' => true
+        ]);
+        
+        return $tfs;
+    }
+    
+    
+    public function createCookie($user=null) {
+        if ($user == null) {
+            $user = ctx()->getUser();
+        }
+        
+        $tfc = new TwoFaCookie();
+        $tfc->setCookieValue(md5(uniqid().uniqid().uniqid().uniqid().uniqid().uniqid().uniqid().time()));
+        $tfc->setSecretKey( random_int(10000, 99999) );
+        $tfc->setActivated( false );
+        $tfc->setUserId( $user->getUserId() );
+        $tfc->save();
+        
+        return $tfc;
     }
     
     
