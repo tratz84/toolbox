@@ -42,6 +42,11 @@ class TwoFaHandler {
             return;
         }
         
+        // filesync-api should be moved to a public/-folder
+        if (get_var('m') == 'filesync' && get_var('c') == 'json/api') {
+            return;
+        }
+        
         // check cookie
         $tfService = object_container_get(TwoFaService::class);
         if (isset($_COOKIE['twofaauth']) && $tfService->checkCookie( $_COOKIE['twofaauth'] )) {
