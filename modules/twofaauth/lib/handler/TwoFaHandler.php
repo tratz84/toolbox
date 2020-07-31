@@ -38,7 +38,7 @@ class TwoFaHandler {
         }
         
         // hmz, this might be handled differently..
-        if (get_var('c') == 'js/dynamicscripts') {
+        if (get_var('c') == 'js/dynamicscripts' || strpos(get_var('c'), 'public/') === 0 || strpos(get_var('c'), 'api/') === 0) {
             return;
         }
         
