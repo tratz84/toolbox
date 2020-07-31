@@ -29,6 +29,7 @@ class AuthFilter {
             if ($user) {
                 $_SESSION['user_id'] = $user->getUserId();
                 $_SESSION['contextName'] = Context::getInstance()->getContextName();
+                $_SESSION['admin_autologin'] = true;
                 redirect('/');
             }
         }
