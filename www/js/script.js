@@ -1393,6 +1393,20 @@ function days_between(d1, d2) {
 	return (e - s) / msinday;
 }
 
+function months_between(d1, d2) {
+	if (typeof d1 == 'string') {
+		d1 = str2date( d1 );
+	}
+	if (typeof d2 == 'string') {
+		d2 = str2date( d2 );
+	}
+	
+	var months = (d2.getFullYear() - d1.getFullYear()) * 12;
+	
+	months = months + (d2.getMonth() - d1.getMonth());
+	
+	return months;
+}
 
 
 function next_day(date, no=1) {
