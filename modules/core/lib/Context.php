@@ -195,7 +195,7 @@ class Context
     
     public function getLogoFile() { return $this->getSetting('logoFile'); }
     
-    public function isInvoiceModuleEnabled() { return $this->getSetting('invoiceModuleEnabled', false); }
+    public function isInvoiceModuleEnabled() { return $this->isModuleEnabled('invoice'); }
     
     public function getCompanyName()      { return trim($this->getSetting('companyName')); }
     public function getCompanyStreet()    { return trim($this->getSetting('companyStreet')); }

@@ -48,14 +48,14 @@ class MenuService extends ServiceBase {
             }
             
             if ($ctx->isModuleEnabled('invoice')) {
-                if ($ctx->getSetting('invoiceModuleEnabled')) {
+//                 if ($ctx->getSetting('invoiceModuleEnabled')) {
                     $enabledMenus[] = 'offer';
                     $enabledMenus[] = 'invoice';
-                }
+//                 }
                 
-                if ($ctx->getSetting('invoiceModuleEnabled') && $ctx->isExperimental()) {
+//                 if ($ctx->getSetting('invoiceModuleEnabled') && $ctx->isExperimental()) {
                     $enabledMenus[] = 'to-bill';
-                }
+//                 }
                 
             }
             
