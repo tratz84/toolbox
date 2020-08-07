@@ -215,6 +215,11 @@ function ContainerBulkUpdate() {
 		$('#offer-table-container table thead .th-offer-status-description').after('<th class="th-offer-status-update">Bijwerken</th>');
 		
 		$('#offer-table-container table tbody tr').each(function(index, row) {
+			// skip no-results record (duh :D)
+			if ($(row).hasClass('no-results')) {
+				return;
+			}
+
 			var record = $(row).data('record');
 
 			var td = $('<td class="td-update-status"><button /></td>');
