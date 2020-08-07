@@ -127,6 +127,15 @@ function remote_addr() {
     return $_SERVER['REMOTE_ADDR'];
 }
 
+function define_true($name) {
+    if (defined($name) == false) {
+        define($name, true);
+    } else if (constant($name) !== true) {
+        throw new InvalidStateException($name.' already defined: '.var_export(constant($name), true));
+    }
+}
+
+
 
 function list_files($path, $opts=array()) {
     $path = realpath( $path );
