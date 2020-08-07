@@ -196,28 +196,29 @@ class authController extends BaseController {
         
         if (is_post()) {
             try {
-                $us = object_container_get( UserService::class );
-                
-                $lr = $us->search(0, 10, ['username' => get_var('id')]);
-                if ($lr->getRowCount() > 0) {
-                    $arrUser = $lr->getObject(0);
+                if ( trim(get_var('id')) ) {
+                    $us = object_container_get( UserService::class );
                     
-                    $us->resetPassword( $arrUser['user_id'] );
-                }
-                else {
-                    $lr = $us->search(0, 10, ['email' => get_var('id')]);
+                    $lr = $us->search(0, 10, ['username' => get_var('id')]);
                     if ($lr->getRowCount() > 0) {
-                        // first hit, what is the best method..
-                        $arrUser = $lr->getObject( 0 );
+                        $arrUser = $lr->getObject(0);
                         $us->resetPassword( $arrUser['user_id'] );
-    
-                        // or reset for all found users?...
-    //                     foreach($lr->getObjects() as $arrUser) {
-    //                         $us->resetPassword( $arrUser['user_id'] );
-    //                         break;
-    //                     }
                     }
-                    
+                    else {
+                        $lr = $us->search(0, 10, ['email' => get_var('id')]);
+                        if ($lr->getRowCount() > 0) {
+                            // first hit, what is the best method..
+                            $arrUser = $lr->getObject( 0 );
+                            $us->resetPassword( $arrUser['user_id'] );
+        
+                            // or reset for all found users?...
+        //                     foreach($lr->getObjects() as $arrUser) {
+        //                         $us->resetPassword( $arrUser['user_id'] );
+        //                         break;
+        //                     }
+                        }
+                        
+                    }
                 }
             } catch(\Exception $ex) {
                 $this->error = $ex->getMessage();
