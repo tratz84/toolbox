@@ -58,6 +58,9 @@ class FilterChain implements ObjectHookable {
 		if ($this->currentFilter < count($this->filters)) {
 			$filterNo = $this->currentFilter;
 			$this->currentFilter++;
+			
+			hook_eventbus_publish($this->filters[$filterNo], 'core', 'pre-filter-executed');
+			
 			$this->filters[$filterNo]->doFilter($this);
 		}
 	}
