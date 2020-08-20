@@ -210,7 +210,7 @@ function IndexTable( container, opts ) {
 				
 				if (me.firstLoadCompleted == false) {
 					me.firstLoadCompleted = true;
-					$(window).trigger('IndexTable-loaded-first-time', this);
+					$(window).trigger('IndexTable-loaded-first-time', me);
 				}
 			},
 			complete: function() {
