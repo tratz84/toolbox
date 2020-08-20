@@ -8,6 +8,7 @@
 	<h1><?= t('Files in') ?> <?= esc_html($store->getStoreName()) ?></h1>
 </div>
 
+<input type="hidden" id="storeType" value="<?= esc_attr($store->getStoreType()) ?>" />
 
 <div id="storefile-table-container" class="autofocus-first-field"></div>
 
