@@ -34,6 +34,13 @@ class WopiService {
         return $waDao->read( $wopiAccessId );
     }
     
+    
+    public function cleanupTokens() {
+        $waDao = object_container_get( WopiAccessDAO::class );
+        
+        $waDao->cleanup();
+    }
+    
 }
 
 
