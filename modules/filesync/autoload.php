@@ -13,7 +13,7 @@ require_once __DIR__.'/lib/functions/misc.php';
 
 hook_loader(__DIR__.'/hook/');
 
-module_update_handler('filesync', '202007629');
+module_update_handler('filesync', '20200820');
 
 $eb = ObjectContainer::getInstance()->get(EventBus::class);
 
