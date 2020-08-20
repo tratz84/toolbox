@@ -98,6 +98,16 @@ $tb_filesync_store_file_rev->addForeignKey('filesync__store_file_rev_ibfk_1', 's
 $tbs[] = $tb_filesync_store_file_rev;
 
 
+$tb_wopi_token = new TableModel('filesync', 'wopi_access');
+$tb_wopi_token->addColumn('wopi_access_id',   'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_wopi_token->addColumn('access_token',     'varchar(1024)');
+$tb_wopi_token->addColumn('access_token_ttl', 'int');
+$tb_wopi_token->addColumn('path',             'varchar(1024)');
+$tb_wopi_token->addColumn('user_id',          'int');
+$tb_wopi_token->addColumn('edited',           'datetime');
+$tb_wopi_token->addColumn('created',          'datetime');
+$tbs[] = $tb_wopi_token;
+
 
 
 return $tbs;
