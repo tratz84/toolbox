@@ -2,7 +2,7 @@
 
 namespace core\exception;
 
-class FileException extends \Exception {
+class NotImplementedException extends \Exception {
     
     protected $query = null;
     
