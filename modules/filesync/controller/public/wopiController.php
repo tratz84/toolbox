@@ -11,6 +11,7 @@
 
 use core\controller\BaseController;
 use core\exception\NotImplementedException;
+use filesync\FilesyncSettings;
 use filesync\wopi\WopiStoreFile;
 
 class wopiController extends BaseController {
@@ -24,6 +25,16 @@ class wopiController extends BaseController {
     
     
     public function action_index() {
+        // check if WOPI is activated
+        $filesyncSettings = object_container_get( FilesyncSettings::class );
+        if ( $filesyncSettings->getWopiActive() == false ) {
+            header('HTTP/1.1 500 Internal server error');
+            print "WOPI not activated";
+            return false;
+        }
+        
+        
+        // handle request
         $uri = substr( request_uri_no_params(), strlen(appUrl('/filesync/wopi/')) );
         
         $parts = explode('/', $uri);

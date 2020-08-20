@@ -9,6 +9,7 @@ use core\forms\SelectField;
 use filesync\service\StoreService;
 use core\forms\HtmlField;
 use core\forms\CheckboxField;
+use core\forms\NumberField;
 
 class PagequeueSettingsForm extends BaseForm {
     
@@ -32,6 +33,15 @@ class PagequeueSettingsForm extends BaseForm {
         }
         $this->addWidget(new SelectField('archive_store', '', $mapStores, 'Store'));
         $this->getWidget('archive_store')->setInfoText(t('Location where newly generated PDF-files are saved'));
+
+        
+        $this->addWidget(new HtmlField('lbl-wopi-settings', '', t('WOPI settings')));
+        $this->addWidget(new CheckboxField('wopi_active', '', t('Active')));
+        
+        $nf_access_token_ttl = new NumberField('wopi_access_token_ttl', '', 'Access token ttl');
+        $nf_access_token_ttl->setMin(0);
+        $nf_access_token_ttl->setInfoText('Access token time-to-live, in minutes');
+        $this->addWidget($nf_access_token_ttl);
         
         
     }

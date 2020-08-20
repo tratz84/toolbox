@@ -4,6 +4,7 @@
 namespace filesync\service;
 
 
+use filesync\FilesyncSettings;
 use filesync\model\WopiAccess;
 use filesync\model\WopiAccessDAO;
 
@@ -18,9 +19,12 @@ class WopiService {
         }
         $wa->setAccessToken( $at );
         
-        // use multiples of 60!
-        // TODO: put to 60 * 24
-        $wa->setAccessTokenTtl( 60 * 1 );
+        // set access token TTL
+        $filesyncSettings = object_container_get( FilesyncSettings::class );
+        $ttl = $filesyncSettings->getWopiAccessTokenTtl();
+        if ($ttl < 0) $ttl = 1;
+        $wa->setAccessTokenTtl( 60 * $ttl );
+        
         $wa->setUserId( $userId );
         $wa->setPath( $path );
         $wa->save();
