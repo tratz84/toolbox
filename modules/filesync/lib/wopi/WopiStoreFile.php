@@ -164,6 +164,8 @@ class WopiStoreFile extends WopiBase {
     public function handle_CheckFileInfo() {
         $r = array();
         
+        // ref @ https://docs.microsoft.com/en-us/openspecs/office_protocols/ms-wopi/a4ba20a7-b571-4ba9-9cac-3f71cac4847a
+        
         $r['BaseFileName']   = $this->storeFile->getFilename();
         $r['OwnerId']        = 0;
         $r['Size']           = $this->storeFile->getLastRevision()->getFilesize();
@@ -173,6 +175,14 @@ class WopiStoreFile extends WopiBase {
         $r['ReadOnly'] = false;
         $r['RestrictedWebViewOnly'] = false;
         $r['UserCanWrite'] = true;
+        
+        // convert to UTC
+        $dt = new \DateTime( $this->storeFile->getEdited(), new \DateTimeZone(date_default_timezone_get()) );
+        $dt->setTimezone(new \DateTimeZone('UTC') );
+        $r['LastModifiedTime'] = $dt->format('Y-m-d').'T'.$dt->format('H:i:s').'.0000000Z';
+        
+        // set current TimeZone
+        $r['TimeZone'] = 'Europe/Amsterdam';
         
         $this->json( $r );
     }
