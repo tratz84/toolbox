@@ -33,42 +33,6 @@ hook_eventbus_subscribe('base', 'user-capabilities', function($ucc) {
 });
 
 
-// $arr[] = array('menu_code' => 'filesync',        'sort' => 1600, 'visible' => 1, 'icon' => 'fa-file',      'label' => 'Filesync',       'url' => '/?m=filesync&c=store');
-$eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListener(function($evt) {
-    // permissions?
-    if (hasCapability('core', 'userType.user') == false) {
-        return;
-    }
-    if (hasCapability('filesync', 'manager') == false)
-        return;
-    
-    
-    $src = $evt->getSource();
-    
-    $menuFilesync = new Menu();
-    $menuFilesync->setIconLabelUrl('fa-file', t('File archive'), '/?m=filesync&c=store', 115);
-    $src->add($menuFilesync);
-    
-    
-    $menuPdf = new Menu();
-    $menuPdf->setIconLabelUrl('fa-file', 'PDF creator', '/?m=filesync&c=pagequeue&a=pdf', 20);
-    $menuFilesync->addChildMenu( $menuPdf );
-    
-//     $menuPq = new Menu();
-//     $menuPq->setIconLabelUrl('fa-file', 'Pagequeue', '/?m=filesync&c=pagequeue', 20);
-//     $menuFilesync->addChildMenu( $menuPq );
-}));
-
-
-$eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($evt) {
-    $ctx = Context::getInstance();
-    
-    $src = $evt->getSource();
-    
-    $src->addItem('Filesync', t('Settings'),     '/?m=filesync&c=settings');
-}));
-
-
 
 $eb->subscribe('customer', 'company-edit-footer', new CallbackPeopleEventListener(function(PeopleEvent $evt) {
     $ftc = $evt->getSource();

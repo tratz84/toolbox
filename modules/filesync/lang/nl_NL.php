@@ -5,6 +5,8 @@ $l = array();
 
 $l['modulename.filesync'] = 'Filesync';
 
+$l['File templates']   = 'Bestand templates';
+
 $l['Select file']      = 'Kies bestand';
 $l['Make your choice'] = 'Maak uw keuze';
 
