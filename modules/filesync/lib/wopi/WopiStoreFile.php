@@ -10,11 +10,15 @@ use filesync\exception\StoreFileException;
 use filesync\service\StoreService;
 use filesync\service\WopiService;
 use filesync\model\StoreFile;
+use filesync\model\Store;
 
 class WopiStoreFile extends WopiBase {
     
     protected $storeId;
     protected $storeFileId;
+    
+    /** @var Store $store */
+    protected $store = null;
     
     /** @var StoreFile $storeFile */
     protected $storeFile = null;
@@ -99,6 +103,9 @@ class WopiStoreFile extends WopiBase {
             throw new StoreFileException('Invalid store selected');
         }
         
+        // load store
+        $this->store = $storeService->readStore( $this->storeId );
+        
         // TODO: validate access_token
         $this->access_token = get_var('access_token');
         
@@ -174,7 +181,12 @@ class WopiStoreFile extends WopiBase {
         $r['SupportsUpdate'] = true;
         $r['ReadOnly'] = false;
         $r['RestrictedWebViewOnly'] = false;
-        $r['UserCanWrite'] = true;
+        
+        if ($this->store->getStoreType() == 'share') {
+            $r['UserCanWrite'] = true;
+        } else {
+            $r['UserCanWrite'] = false;
+        }
         
         // convert to UTC
         $dt = new \DateTime( $this->storeFile->getEdited(), new \DateTimeZone(date_default_timezone_get()) );
@@ -216,6 +228,13 @@ class WopiStoreFile extends WopiBase {
     
     
     public function handle_PutFile() {
+        
+        if ($this->store->getStoreType() != 'share') {
+            header('HTTP/1.1 401 Unauthorized');
+            print "Not allowed to save non-share store files";
+            return false;
+        }
+        
         $data = file_get_contents('php://input');
         
         $tmpfile = '/tmp/wopi-' . md5(uniqid().uniqid().uniqid().uniqid());
