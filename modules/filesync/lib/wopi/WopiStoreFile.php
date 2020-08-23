@@ -28,6 +28,15 @@ class WopiStoreFile extends WopiBase {
         
     }
     
+    protected function isWritable() {
+        if ($this->store->getStoreType() == 'share') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    
     public function validateToken() {
         // get access token
         $token = get_var('access_token');
@@ -182,11 +191,7 @@ class WopiStoreFile extends WopiBase {
         $r['ReadOnly'] = false;
         $r['RestrictedWebViewOnly'] = false;
         
-        if ($this->store->getStoreType() == 'share') {
-            $r['UserCanWrite'] = true;
-        } else {
-            $r['UserCanWrite'] = false;
-        }
+        $r['UserCanWrite'] = $this->isWritable();
         
         // convert to UTC
         $dt = new \DateTime( $this->storeFile->getEdited(), new \DateTimeZone(date_default_timezone_get()) );
@@ -229,7 +234,7 @@ class WopiStoreFile extends WopiBase {
     
     public function handle_PutFile() {
         
-        if ($this->store->getStoreType() != 'share') {
+        if ($this->isWritable() == false) {
             header('HTTP/1.1 401 Unauthorized');
             print "Not allowed to save non-share store files";
             return false;
