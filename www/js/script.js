@@ -279,6 +279,19 @@ function applyWidgetFields(container) {
 	});
 	
 	
+	$(container).find('input[type=text][autocomplete-url]').each(function(index, node) {
+		$(node).autocomplete({
+			delay: 500,
+			appendTo: $(node).parent(),
+			response: function() {
+				NProgress.done();
+			},
+			source: $(node).attr('autocomplete-url')
+		});
+
+	});
+	
+	
 	$('.image-selector-field').each(function(index, node) {
 		$(node).find('li').click(function() {
 			var val = $(this).data('value');
