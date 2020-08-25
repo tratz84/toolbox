@@ -61,11 +61,13 @@ class WopiSystemFile extends WopiBase {
         // check path
         $uri = substr( request_uri_no_params(), strlen(appUrl('/filesync/wopi/systemfile')) );
         
+        $fullpath = realpath( $token->getBasePath() . '/' . substr($token->getPath(), strlen('systemfile:')) );
+        
         if (endsWith($uri, '/contents')) {
             $uri = substr( $uri, 0, -strlen('/contents') );
         }
         
-        if ( realpath($this->wopiToken->getBasePath().'/'.$uri) != realpath($this->wopiToken->getBasePath().'/'.$this->wopiToken->getPath()) ) {
+        if ( realpath($this->wopiToken->getBasePath().'/'.$uri) != $fullpath ) {
             header('HTTP/1.1 401 Unauthorized');
             print "No access to requested file";
             return false;
@@ -90,7 +92,7 @@ class WopiSystemFile extends WopiBase {
         // determine action
         $action = 'CheckFileInfo';
         
-        $last_part = substr( $uri, strlen( $this->basePath . $this->wopiToken->getPath())+1 );
+        $last_part = substr( $uri, strlen( substr($this->wopiToken->getPath(), strlen('systemfile:')) ) + 1 );
         
         if ($last_part) {
             $action = $last_part;
@@ -153,7 +155,7 @@ class WopiSystemFile extends WopiBase {
         
         // ref @ https://docs.microsoft.com/en-us/openspecs/office_protocols/ms-wopi/a4ba20a7-b571-4ba9-9cac-3f71cac4847a
         
-        $path = realpath($this->wopiToken->getBasePath().'/'.$this->wopiToken->getPath());
+        $path = realpath( $this->wopiToken->getBasePath() . '/' . substr($this->wopiToken->getPath(), strlen('systemfile:')) );
         
         $r['BaseFileName']   = basename($path);
         $r['OwnerId']        = 0;
@@ -188,17 +190,16 @@ class WopiSystemFile extends WopiBase {
     }
     
     public function handle_contents_get() {
-        $file = $this->wopiToken->getBasePath().'/'.$this->wopiToken->getPath();
+        $path = realpath( $this->wopiToken->getBasePath() . '/' . substr($this->wopiToken->getPath(), strlen('systemfile:')) );
         
-        if (!$file || file_exists($file) == false) {
+        if (!$path || file_exists($path) == false) {
             throw new FileException('File not found');
         }
         
-        header('Content-type: ' . mime_content_type ($file));
-        header('Content-Disposition: '.(get_var('inline')?'inline':'attachment').'; filename="'.basename($file).'"');
+        header('Content-type: ' . mime_content_type ($path));
+        header('Content-Disposition: '.(get_var('inline')?'inline':'attachment').'; filename="'.basename($path).'"');
         
-        
-        readfile($file);
+        readfile($path);
     }
     
     
@@ -212,7 +213,9 @@ class WopiSystemFile extends WopiBase {
         
         $data = file_get_contents('php://input');
         
-        $r = file_put_contents( $this->wopiToken->getPath(), $data );
+        $path = realpath( $this->wopiToken->getBasePath() . '/' . substr($this->wopiToken->getPath(), strlen('systemfile:')) );
+        
+        $r = file_put_contents( $path, $data );
         if ($r === false || $r < 0) {
             header('HTTP/1.1 500 internal server error');
             print "Error saving file";
