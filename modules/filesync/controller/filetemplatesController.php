@@ -85,6 +85,23 @@ class filetemplatesController extends BaseController {
     }
     
     
+    public function action_info() {
+        
+        $ac = filesync_filetemplates();
+        $this->ft = null;
+        
+        foreach($ac->getItems() as $ft) {
+            if ($ft->getId() == get_var('id')) {
+                $this->ft = $ft;
+                break;
+            }
+        }
+        
+        
+        $this->setShowDecorator(false);
+        
+        return $this->render();
+    }
     
     
 }

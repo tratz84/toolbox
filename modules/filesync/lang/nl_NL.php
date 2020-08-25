@@ -10,6 +10,14 @@ $l['File templates']   = 'Bestand templates';
 $l['Link file']        = 'Koppel bestand';
 $l['Unlink file']      = 'Ontkoppel bestand';
 
+$l['Template information'] = 'Template informatie';
+$l['Template name']        = 'Template naam';
+$l['Template description'] = 'Template omschrijving';
+$l['Variable name']        = 'Variabele naam';
+$l['Example']              = 'Voorbeeld';
+
+
+
 $l['Select file']      = 'Kies bestand';
 $l['Make your choice'] = 'Maak uw keuze';
 

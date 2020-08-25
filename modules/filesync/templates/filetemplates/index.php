@@ -30,7 +30,8 @@
 				<td>
 					<?= esc_html($ft->getFile()) ?>
 				</td>
-				<td>
+				<td class="actions">
+					<a href="javascript:void(0);" onclick="showInfo(this);" class="fa fa-search"></a>
 					<input type="button" class="linkDoc" value="<?= t('Link file') ?>" />
 					<?php if ($ft->getFile()) : ?>
 					<input type="button" class="unlinkDoc" value="<?= t('Unlink file') ?>" />
@@ -89,6 +90,15 @@ function linkTemplateToFile( template_id, storeFileId ) {
 		}
 	});
 }
+
+
+function showInfo(a) {
+	var id = $(a).closest('tr').data('id');
+
+	show_popup( appUrl('/?m=filesync&c=filetemplates&a=info&id='+id) );
+}
+
+
 
 </script>
 
