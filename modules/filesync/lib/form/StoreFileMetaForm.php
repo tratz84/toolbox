@@ -22,8 +22,6 @@ class StoreFileMetaForm extends BaseForm {
     public function __construct() {
         parent::__construct();
         
-        $this->enctypeToMultipartFormdata();
-        
         $this->addKeyField('store_file_id');
         
         $this->addWidget(new InternalField('public_secret'));
@@ -42,10 +40,13 @@ class StoreFileMetaForm extends BaseForm {
     
     // add file-field for updating file
     public function addFileWidget() {
+        // set form's enctype
+        $this->enctypeToMultipartFormdata();
+        
         $this->addWidget( new FileField('file', '', t('File')) );
         $this->getWidget('file')->setPrio(1);
         
-        // TODO: check if 'file' is set and if last file is the same, if yes => handle as error
+        // check if 'file' is set and if last file is the same, if yes => handle as error
         $this->addValidator('file', function($form) {
             if (isset($_FILES['file']['size']) == false) {
                 return;
