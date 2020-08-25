@@ -11,7 +11,7 @@ use filesync\model\WopiAccessDAO;
 class WopiService {
     
     
-    public function createToken( $userId, $path ) {
+    public function createToken( $userId, $path, $opts=array() ) {
         $wa = new WopiAccess();
         $at = '';
         for($x=0; $x < 3; $x++) {
@@ -26,6 +26,9 @@ class WopiService {
         $wa->setAccessTokenTtl( 60 * $ttl );
         
         $wa->setUserId( $userId );
+        if (isset($opts['base_path']) && $opts['base_path']) {
+            $wa->setBasePath( $opts['base_path'] );
+        }
         $wa->setPath( $path );
         $wa->save();
         

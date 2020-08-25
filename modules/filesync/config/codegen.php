@@ -33,6 +33,16 @@ return array (
       'resource_name' => 'default',
       'table_name' => 'filesync__store_file_rev',
     ),
+    6 => 
+    array (
+      'resource_name' => 'default',
+      'table_name' => 'filesync__store_file_download_log',
+    ),
+    7 => 
+    array (
+      'resource_name' => 'default',
+      'table_name' => 'filesync__wopi_access',
+    ),
   ),
 );
 

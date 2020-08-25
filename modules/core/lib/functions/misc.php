@@ -108,7 +108,7 @@ function request_uri_no_params() {
         $uri = substr($uri, 0, $p);
     }
     
-    return $uri;
+    return urldecode($uri);
 }
 
 

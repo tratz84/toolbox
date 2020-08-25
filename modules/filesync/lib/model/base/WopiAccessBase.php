@@ -74,6 +74,15 @@ class WopiAccessBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'base_path' => 
+  array (
+    'Field' => 'base_path',
+    'Type' => 'varchar(1024)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -107,6 +116,10 @@ class WopiAccessBase extends \core\db\DBObject {
 		
 	public function setCreated($p) { $this->setField('created', $p); }
 	public function getCreated() { return $this->getField('created'); }
+	
+		
+	public function setBasePath($p) { $this->setField('base_path', $p); }
+	public function getBasePath() { return $this->getField('base_path'); }
 	
 	
 }

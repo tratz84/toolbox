@@ -6,36 +6,27 @@ namespace filesync\wopi;
 
 use core\exception\FileException;
 use core\exception\InvalidStateException;
-use filesync\exception\StoreFileException;
-use filesync\service\StoreService;
 use filesync\service\WopiService;
-use filesync\model\StoreFile;
-use filesync\model\Store;
 
-class WopiStoreFile extends WopiBase {
+class WopiSystemFile extends WopiBase {
     
-    protected $storeId;
-    protected $storeFileId;
+    // basePath, for not exposing full path in url
+    protected $basePath = '';
     
-    /** @var Store $store */
-    protected $store = null;
+    // mark doc as writable
+    protected $isWritable = true;
     
-    /** @var StoreFile $storeFile */
-    protected $storeFile = null;
-    
+    protected $wopiToken = null;
     
     public function __construct() {
         
     }
     
-    protected function isWritable() {
-        if ($this->store->getStoreType() == 'share') {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    public function setWritable($bln) { $this->isWritable = $bln ? true : false; }
+    public function isWritable() { return $this->isWritable; }
     
+    public function setBasePath( $p ) { $this->basePath = $p; }
+    public function getBasePath() { return $this->basePath; }
     
     public function validateToken() {
         // get access token
@@ -50,7 +41,7 @@ class WopiStoreFile extends WopiBase {
         $token = $parts[1];
         
         $wopiService = object_container_get( WopiService::class );
-        $token = $wopiService->readTokenById( $id );
+        $this->wopiToken = $token = $wopiService->readTokenById( $id );
         
         // token not found?
         if ($token == null) {
@@ -68,10 +59,13 @@ class WopiStoreFile extends WopiBase {
         }
         
         // check path
-        $uri = substr( request_uri_no_params(), strlen(appUrl('/filesync/wopi/')) );
+        $uri = substr( request_uri_no_params(), strlen(appUrl('/filesync/wopi/systemfile')) );
         
-        $parts = explode('/', $uri);
-        if (count($parts) < 3 || $token->getPath() != $parts[0] . ':/' . $parts[1] . '/' . $parts[2]) {
+        if (endsWith($uri, '/contents')) {
+            $uri = substr( $uri, 0, -strlen('/contents') );
+        }
+        
+        if ( realpath($this->wopiToken->getBasePath().'/'.$uri) != realpath($this->wopiToken->getBasePath().'/'.$this->wopiToken->getPath()) ) {
             header('HTTP/1.1 401 Unauthorized');
             print "No access to requested file";
             return false;
@@ -88,40 +82,18 @@ class WopiStoreFile extends WopiBase {
         }
         
         
-        $uri = substr( request_uri_no_params(), strlen(appUrl('/filesync/wopi/')) );
-        
-        $parts = explode('/', $uri);
-        
-        if (count($parts) < 3) {
-            throw new InvalidStateException('Invalid url');
-        }
-        
-        $this->storeId     = $parts[1];
-        $this->storeFileId = $parts[2];
-        
-        
-        // fetch storefile
-        $storeService = object_container_get( StoreService::class );
-        $this->storeFile = $storeService->readStoreFile( $this->storeFileId );
-        
-        // check if file exists
-        if ($this->storeFile == null) {
-            throw new StoreFileException('File not found');
-        }
-        else if ($this->storeFile->getStoreId() != $this->storeId) {
-            throw new StoreFileException('Invalid store selected');
-        }
-        
-        // load store
-        $this->store = $storeService->readStore( $this->storeId );
+        $uri = substr( request_uri_no_params(), strlen(appUrl('/filesync/wopi/systemfile')) );
         
         // validate access_token
         $this->access_token = get_var('access_token');
         
         // determine action
         $action = 'CheckFileInfo';
-        if (count($parts) >= 4) {
-            $action = $parts[3];
+        
+        $last_part = substr( $uri, strlen( $this->basePath . $this->wopiToken->getPath())+1 );
+        
+        if ($last_part) {
+            $action = $last_part;
         }
         
         if (($action == 'CheckFileInfo' || $action == 'contents') && isset($_SERVER['HTTP_X_WOPI_OVERRIDE'])) {
@@ -165,7 +137,6 @@ class WopiStoreFile extends WopiBase {
             }
         }
         
-        
         if (method_exists($this, 'handle_'.$action)) {
             $f = 'handle_'.$action;
             $this->$f();
@@ -182,11 +153,13 @@ class WopiStoreFile extends WopiBase {
         
         // ref @ https://docs.microsoft.com/en-us/openspecs/office_protocols/ms-wopi/a4ba20a7-b571-4ba9-9cac-3f71cac4847a
         
-        $r['BaseFileName']   = $this->storeFile->getFilename();
+        $path = realpath($this->wopiToken->getBasePath().'/'.$this->wopiToken->getPath());
+        
+        $r['BaseFileName']   = basename($path);
         $r['OwnerId']        = 0;
-        $r['Size']           = $this->storeFile->getLastRevision()->getFilesize();
+        $r['Size']           = filesize($path);
         $r['UserId']         = 0;
-        $r['Version']        = $this->storeFile->getRev();
+        $r['Version']        = 1;
         $r['SupportsUpdate'] = true;
         $r['ReadOnly'] = false;
         $r['RestrictedWebViewOnly'] = false;
@@ -194,7 +167,7 @@ class WopiStoreFile extends WopiBase {
         $r['UserCanWrite'] = $this->isWritable();
         
         // convert to UTC
-        $dt = new \DateTime( $this->storeFile->getEdited(), new \DateTimeZone(date_default_timezone_get()) );
+        $dt = new \DateTime( date('Y-m-d H:i:s', filemtime($path)), new \DateTimeZone(date_default_timezone_get()) );
         $dt->setTimezone(new \DateTimeZone('UTC') );
         $r['LastModifiedTime'] = $dt->format('Y-m-d').'T'.$dt->format('H:i:s').'.0000000Z';
         
@@ -215,17 +188,14 @@ class WopiStoreFile extends WopiBase {
     }
     
     public function handle_contents_get() {
-        $sf = $this->storeFile;
-        $rev = $this->storeFile->getLastRevision();
+        $file = $this->wopiToken->getBasePath().'/'.$this->wopiToken->getPath();
         
-        $file = get_data_file('/filesync/'.$sf->getStoreId() . '/' . $sf->getStoreFileId() . '-' . $rev->getStoreFileRevId());
-        
-        if (!$file) {
+        if (!$file || file_exists($file) == false) {
             throw new FileException('File not found');
         }
         
         header('Content-type: ' . mime_content_type ($file));
-        header('Content-Disposition: '.(get_var('inline')?'inline':'attachment').'; filename="'.$sf->getFilename().'"');
+        header('Content-Disposition: '.(get_var('inline')?'inline':'attachment').'; filename="'.basename($file).'"');
         
         
         readfile($file);
@@ -242,23 +212,12 @@ class WopiStoreFile extends WopiBase {
         
         $data = file_get_contents('php://input');
         
-        $tmpfile = '/tmp/wopi-' . md5(uniqid().uniqid().uniqid().uniqid());
-        save_data( $tmpfile, $data );
-        
-        // set fullpath
-        $tmpfile = get_data_file( $tmpfile );
-        
-        $md5sum = md5( $data );
-        $filesize = filesize( $tmpfile );
-        $lastmodified = date('Y-m-d H:i:s');
-        $encrypted = false;
-        
-        $sf = $this->storeFile;
-        
-        $storeService = object_container_get( StoreService::class );
-        $storeService->syncFile( $sf->getStoreId(), $sf->getPath(), $md5sum, $filesize, $lastmodified, $encrypted, $tmpfile );
-        
-        unlink( $tmpfile );
+        $r = file_put_contents( $this->wopiToken->getPath(), $data );
+        if ($r === false || $r < 0) {
+            header('HTTP/1.1 500 internal server error');
+            print "Error saving file";
+            return false;
+        }
         
         print 'OK';
     }

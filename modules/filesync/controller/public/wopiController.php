@@ -13,6 +13,7 @@ use core\controller\BaseController;
 use core\exception\NotImplementedException;
 use filesync\FilesyncSettings;
 use filesync\wopi\WopiStoreFile;
+use filesync\wopi\WopiSystemFile;
 
 class wopiController extends BaseController {
     
@@ -43,6 +44,10 @@ class wopiController extends BaseController {
         
         if ($type == 'storefile') {
             $wsf = new WopiStoreFile();
+            $wsf->execute();
+        } else if ($type == 'systemfile') {
+            $wsf = new WopiSystemFile();
+            $wsf->setBasePath( get_data_file( '/' ) );
             $wsf->execute();
         }
         else {
