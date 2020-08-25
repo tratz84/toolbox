@@ -265,6 +265,12 @@ class StoreService extends ServiceBase {
         }
         
         
+        // file-field attached & file uploaded? => sync
+        if ($form->getWidget('file') && isset($_FILES['file']['size']) && $_FILES['file']['size']) {
+            $sf = $this->readStoreFile( $sfm->getStoreFileId() );
+            
+            $this->syncFile($sf->getStoreId(), $sf->getPath(), md5_file($_FILES['file']['tmp_name']), filesize($_FILES['file']['tmp_name']), date('Y-m-d H:i:s'), false, $_FILES['file']['tmp_name']);
+        }
     }
     
     

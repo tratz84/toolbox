@@ -23,12 +23,11 @@
 	<tbody>
 		<?php for($x=0; $x < $filetemplates->count(); $x++) : ?>
 			<?php $ft = $filetemplates->get($x) ?>
-			<tr>
+			<tr class="filetemplate-record" data-id="<?= esc_attr($ft->getId()) ?>">
 				<td><?= esc_html($ft->getName()) ?></td>
 				<td><?= esc_html($ft->getDescription()) ?></td>
 				<td>
-					<input type="button" value="Document koppelen" />
-					
+					<input type="button" class="linkDoc" value="Document koppelen" />
 				</td>
 			</tr>
 		<?php endfor; ?>
@@ -38,7 +37,28 @@
     		</td>
     	</tr>
 	</tbody>
-
 </table>
+
+
+
+<script>
+
+$('.filetemplate-record .linkDoc').click(function() {
+	select_store_file(function(rec) {
+		console.log( rec );
+		
+		var id = $(this).closest('tr').data('id');
+		
+	}.bind(this));
+	
+});
+
+function linkTemplateToFile( template_id, storeFileId ) {
+	
+	
+}
+
+</script>
+
 
 

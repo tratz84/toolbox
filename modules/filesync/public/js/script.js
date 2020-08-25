@@ -64,3 +64,19 @@ function filesyncWidgetRender( widget, storeFileId ) {
 	
 }
 
+
+
+var func_select_store_file_callback = null;
+function select_store_file( callback ) {
+	func_select_store_file_callback = callback;
+	show_popup( appUrl('/?m=filesync&c=storefile&a=select_storefile_popup') );
+}
+
+function select_store_file_callback( record ) {
+	func_select_store_file_callback( record );
+}
+
+
+
+
+

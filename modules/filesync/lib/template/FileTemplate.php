@@ -6,6 +6,7 @@ namespace filesync\template;
 
 class FileTemplate {
     
+    protected $id = null;
     protected $name = null;
     protected $description = null;
     
@@ -15,6 +16,9 @@ class FileTemplate {
         
     }
     
+    
+    public function setId($i) { $this->id = $i; }
+    public function getId() { return $this->id; }
     
     public function setName($n) { $this->name = $n; }
     public function getName() { return $this->name; }

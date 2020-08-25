@@ -59,6 +59,11 @@ class StoreFileDAO extends \core\db\DAOObject {
             $where[] = " filesync__store_file.store_id = ? ";
             $params[] = $opts['storeId'];
         }
+
+        if (isset($opts['store_type']) && $opts['store_type']) {
+            $where[] = " filesync__store.store_type = ? ";
+            $params[] = $opts['store_type'];
+        }
         
         if (isset($opts['storeIds']) && is_array($opts['storeIds']) && count($opts['storeIds'])) {
             $storeIds = array();
@@ -75,8 +80,8 @@ class StoreFileDAO extends \core\db\DAOObject {
         
         
         if (isset($opts['path']) && $opts['path']) {
-            $where[] = 'path LIKE ? ';//COLLATE utf8mb4_general_ci';
-            $params[] = '%'.trim($opts['path']).'%';
+            $where[] = 'lower(path) LIKE ? ';//COLLATE utf8mb4_general_ci';
+            $params[] = '%'.strtolower(trim($opts['path'])).'%';
         }
         
         if (isset($opts['companyId']) && $opts['companyId']) {

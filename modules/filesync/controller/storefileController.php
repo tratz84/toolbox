@@ -9,6 +9,7 @@ use core\exception\InvalidStateException;
 use core\container\ActionContainer;
 use filesync\form\StoreFileUploadForm;
 use filesync\model\StoreFileDAO;
+use core\forms\FileField;
 
 class storefileController extends BaseController {
     
@@ -64,6 +65,10 @@ class storefileController extends BaseController {
         $this->store = $storeService->readStore($this->storeFile->getStoreId());
         
         $this->form = $storeService->readFilemeta( get_var('store_file_id') );
+        
+        // add file-field for updating file
+        $this->form->addWidget( new FileField('file', '', t('File')) );
+        $this->form->getWidget('file')->setPrio(1);
         
         if ($this->form == null) {
             throw new ObjectNotFoundException('File not found');
@@ -187,12 +192,34 @@ class storefileController extends BaseController {
             if ($this->form->validate()) {
                 $storeFile = $storeService->saveStoreFile($this->form);
                 
+                // json request?
+                if (get_var('r') == 'json') {
+                    return $this->json([
+                        'success'     => true,
+                        'storeFileId' => $storeFile->getStoreFileId(),
+                        'path'        => $storeFile->getPath(),
+                    ]);
+                }
+                
                 redirect('/?m=filesync&c=storefile&id='.$this->store->getStoreId());
             }
         }
         
-        
-        
+        // json request?
+        if (get_var('r') == 'json') {
+            $errors = array();
+            foreach($this->form->getErrors() as $field => $val) {
+                foreach($val as $msg) {
+                    $errors[$field] = $this->form->getLabelByFieldname($field) . ' - ' . $msg;
+                }
+            }
+            
+            return $this->json([
+                'success' => false,
+                'error'   => true,
+                'errors'  => $errors
+            ]);
+        }
         
         return $this->render();
     }
@@ -270,6 +297,19 @@ class storefileController extends BaseController {
         }
         
         throw new InvalidStateException('No id');
+    }
+    
+    
+    
+    public function action_select_storefile_popup() {
+        
+        $this->form = new StoreFileUploadForm(['store_as_list' => true]);
+        $this->form->showSubmitButtons();
+        
+        
+        $this->setShowDecorator(false);
+        
+        return $this->render();
     }
     
     

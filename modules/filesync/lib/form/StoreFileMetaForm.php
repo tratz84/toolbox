@@ -20,6 +20,8 @@ class StoreFileMetaForm extends BaseForm {
     public function __construct() {
         parent::__construct();
         
+        $this->enctypeToMultipartFormdata();
+        
         $this->addKeyField('store_file_id');
         
         $this->addWidget(new InternalField('public_secret'));
