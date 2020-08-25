@@ -6,9 +6,10 @@ namespace filesync\template;
 
 class FileTemplate {
     
-    protected $id = null;
-    protected $name = null;
+    protected $id          = null;
+    protected $name        = null;
     protected $description = null;
+    protected $file        = null;
     
     protected $vars = array();
     
@@ -25,6 +26,9 @@ class FileTemplate {
     
     public function setDescription($d) { $this->description = $d; }
     public function getDescription() { return $this->description; }
+    
+    public function getFile() { return $this->file; }
+    public function setFile($f) { $this->file = $f; }
     
     public function setVar($name, $opts = array()) {
         $this->vars[$name] = $opts;

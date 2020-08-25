@@ -1,10 +1,11 @@
 <?php
 
 
-use core\Context;
+use core\container\ArrayContainer;
 use core\exception\FileException;
-use filesync\service\StoreService;
 use core\exception\ObjectNotFoundException;
+use filesync\service\StoreService;
+use base\service\SettingsService;
 
 function mapArchiveStores() {
     $storeService = object_container_get(StoreService::class);
@@ -111,6 +112,31 @@ function filesync_storefile2pdf( $storeFileId ) {
 }
 
 
+
+function filesync_filetemplates() {
+    $ac = new ArrayContainer();
+    hook_eventbus_publish($ac, 'filesync', 'filetemplates');
+    
+    $storeService = object_container_get( StoreService::class );
+    
+    for($x=0; $x < $ac->count(); $x++) {
+        $ft = $ac->get($x);
+        
+        $storeFileId = ctx()->getSetting('filetemplate__'.$ft->getId());
+        
+//         var_export($storeFileId);exit;
+        if ($storeFileId) {
+            $storeFile = $storeService->readStoreFile( $storeFileId );
+            $ft->setFile( $storeFile->getPath() );
+            
+        }
+        
+        $ac->set($x, $ft);
+    }
+    
+    
+    return $ac;
+}
 
 
 

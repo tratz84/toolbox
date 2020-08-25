@@ -7,6 +7,9 @@ $l['modulename.filesync'] = 'Filesync';
 
 $l['File templates']   = 'Bestand templates';
 
+$l['Link file']        = 'Koppel bestand';
+$l['Unlink file']      = 'Ontkoppel bestand';
+
 $l['Select file']      = 'Kies bestand';
 $l['Make your choice'] = 'Maak uw keuze';
 

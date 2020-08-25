@@ -65,10 +65,7 @@ class storefileController extends BaseController {
         $this->store = $storeService->readStore($this->storeFile->getStoreId());
         
         $this->form = $storeService->readFilemeta( get_var('store_file_id') );
-        
-        // add file-field for updating file
-        $this->form->addWidget( new FileField('file', '', t('File')) );
-        $this->form->getWidget('file')->setPrio(1);
+        $this->form->addFileWidget();
         
         if ($this->form == null) {
             throw new ObjectNotFoundException('File not found');
@@ -197,6 +194,7 @@ class storefileController extends BaseController {
                     return $this->json([
                         'success'     => true,
                         'storeFileId' => $storeFile->getStoreFileId(),
+                        'store_file_id' => $storeFile->getStoreFileId(),
                         'path'        => $storeFile->getPath(),
                     ]);
                 }
