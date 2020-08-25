@@ -2,6 +2,9 @@
 
 <div class="page-header">
 	<div class="toolbox">
+		<?php if ($store->getStoreType() == 'share') : ?>
+		<a href="<?= appUrl('/?m=filesync&c=storefile&a=upload&store_id='.$store->getStoreId()) ?>" class="fa fa-upload"></a>
+		<?php endif; ?>
 		<a href="<?= appUrl('/?m=filesync&c=store') ?>" class="fa fa-chevron-circle-left"></a>
 	</div>
 

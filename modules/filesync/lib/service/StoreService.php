@@ -9,6 +9,7 @@ use core\forms\lists\ListResponse;
 use core\service\ServiceBase;
 use filesync\form\ArchiveFileUploadForm;
 use filesync\form\StoreFileMetaForm;
+use filesync\form\StoreFileUploadForm;
 use filesync\form\StoreForm;
 use filesync\model\Store;
 use filesync\model\StoreDAO;
@@ -382,6 +383,33 @@ class StoreService extends ServiceBase {
     }
     
     
+    public function autocomplete( $storeId, $term ) {
+        $sfDao = object_container_get( StoreFileDAO::class );
+        $paths = $sfDao->autocomplete( $storeId, $term );
+        
+        $r = array();
+        foreach($paths as $p) {
+            if (strpos($p, '/') === false) continue;
+            
+            $tokens = explode('/', $p);
+            for($x=0; $x < count($tokens); $x++) {
+                
+                $p2 = '';
+                
+                for ($y=0; $y <= $x && $y < count($tokens)-1; $y++) {
+                    $p2 .= $tokens[$y] . '/';
+                }
+                
+                $r[] = $p2;
+            }
+        }
+        
+        $r = array_unique($r);
+        
+        return $r;
+    }
+    
+    
     public function statisticsStore($storeId) {
         $r = array();
         
@@ -414,6 +442,60 @@ class StoreService extends ServiceBase {
         // save meta
         $sfmDao = new StoreFileMetaDAO();
         $sfm = $sfmDao->readByFile($storeFile->getStoreFileId());
+        $form->fill($sfm, array('store_file_id', 'subject', 'long_description', 'document_date'));
+        $customer_id = $form->getWidgetValue('customer_id');
+        
+        $sfm->setCompanyId(null);
+        $sfm->setPersonId(null);
+        
+        if (strpos($customer_id, 'company-') === 0) {
+            $sfm->setCompanyId((int)str_replace('company-', '', $customer_id));
+        }
+        if (strpos($customer_id, 'person-') === 0) {
+            $sfm->setPersonId((int)str_replace('person-', '', $customer_id));
+        }
+        $sfm->save();
+        
+        return $storeFile;
+    }
+    
+    
+    
+    public function saveStoreFile(StoreFileUploadForm $form) {
+        $storeId = $form->getWidgetValue('store_id');
+        $store = $this->readStore($storeId);
+        
+        if (!$store) {
+            throw new ObjectNotFoundException('Store not found');
+        }
+        
+        // save file
+        $filename     = $_FILES['file']['name'];
+        $md5          = md5_file($_FILES['file']['tmp_name'], false);
+        $filesize     = $_FILES['file']['size'];
+        $lastmodified = date('Y-m-d H:i:s');
+        
+        
+        $path = '';
+        $tokens = explode('/', str_replace('\\', '/', $form->getWidgetValue('path')));
+        foreach($tokens as $t) {
+            if (trim($t)) {
+                
+                $path = $path . trim($t) . '/';
+            }
+        }
+        
+        $storeFile = $this->syncFile( $storeId, $path . $filename, $md5, $filesize, $lastmodified, false, $_FILES['file']['tmp_name'] );
+        
+        // save meta
+        $sfmDao = new StoreFileMetaDAO();
+        $sfm = $sfmDao->readByFile($storeFile->getStoreFileId());
+        if (!$sfm) {
+            $sfm = new StoreFileMeta();
+            $sfm->setStoreFileId($storeFile->getStoreFileId());
+            $sfm->setDocumentDate(date('Y-m-d'));
+        }
+        
         $form->fill($sfm, array('store_file_id', 'subject', 'long_description', 'document_date'));
         $customer_id = $form->getWidgetValue('customer_id');
         

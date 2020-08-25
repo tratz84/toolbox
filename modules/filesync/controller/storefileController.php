@@ -7,6 +7,8 @@ use core\exception\ObjectNotFoundException;
 use filesync\service\StoreService;
 use core\exception\InvalidStateException;
 use core\container\ActionContainer;
+use filesync\form\StoreFileUploadForm;
+use filesync\model\StoreFileDAO;
 
 class storefileController extends BaseController {
     
@@ -162,6 +164,51 @@ class storefileController extends BaseController {
         
         readfile($file);
     }
+    
+    
+    
+    public function action_upload() {
+        $storeService = $this->oc->get(StoreService::class);
+        
+        $this->store = $storeService->readStore( get_var('store_id') );
+        if ($this->store == null) {
+            throw new ObjectNotFoundException('Store not found');
+        }
+        
+        
+        $this->form = object_container_create( StoreFileUploadForm::class );
+        $this->form->getWidget('store_id')->setValue( get_var('store_id') );
+        $this->form->getWidget('path')->setAutocompleteUrl( appUrl('/?m=filesync&c=storefile&a=autocomplete_path&storeId='.$this->store->getStoreId()) );
+        
+        
+        if (is_post()) {
+            $this->form->bind( $_REQUEST );
+            
+            if ($this->form->validate()) {
+                $storeFile = $storeService->saveStoreFile($this->form);
+                
+                redirect('/?m=filesync&c=storefile&id='.$this->store->getStoreId());
+            }
+        }
+        
+        
+        
+        
+        return $this->render();
+    }
+    
+    
+    public function action_autocomplete_path() {
+        $storeService = $this->oc->get(StoreService::class);
+        
+        $paths = $storeService->autocomplete( get_var('storeId'), get_var('term') );
+        
+        return $this->json( $paths );
+    }
+    
+    
+    
+    
     
     
     public function action_pdf_preview() {
