@@ -207,13 +207,16 @@ class DBObject {
         
     }
     
-    public function insert() {
+    public function insert( $opts=array() ) {
         $qb = $this->createQueryBuilder();
         
         foreach($this->dbFields as $f => $fieldSettings) {
+            if (isset($opts['with_pk']) && $opts['with_pk']) {
+            }
             // don't insert PK
-            if ($f == $this->primaryKey)
+            else if ($f == $this->primaryKey) {
                 continue;
+            }
             
             $value = $this->getField($f);
             
@@ -223,6 +226,10 @@ class DBObject {
         $res = $qb->queryInsert();
         
         $this->lastQuery = $qb->getConnection()->getLastQuery();
+
+        if (isset($opts['with_pk']) && $opts['with_pk']) {
+            return true;
+        }
         
         $insert_id = $qb->getConnection()->getInsertId();
         
