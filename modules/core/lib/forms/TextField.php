@@ -23,6 +23,8 @@ class TextField extends BaseWidget {
     public function showPlaceholder() { $this->placeholder = true; }
     public function setPlaceholder($str) { $this->options['placeholder'] = $str; }
     
+    public function setAutocompleteUrl( $url ) { $this->setAttribute('autocomplete-url', $url ); }
+    
     public function disableAutocomplete() { $this->setAttribute('autocomplete', 'off'); }
     
     public function render() {

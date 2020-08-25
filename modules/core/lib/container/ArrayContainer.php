@@ -44,6 +44,10 @@ class ArrayContainer {
         }
     }
     
+    public function set($pos, $item) {
+        $this->items[$pos] = $item;
+    }
+    
     public function insert($item, $no=0) {
         if (is_int($no) == false || $no < 0)
             return false;

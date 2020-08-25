@@ -86,6 +86,16 @@ class SettingsService extends ServiceBase {
     }
     
     
+    public function deleteSetting($settingCode) {
+        $sDao = new SettingDAO();
+        $s = $sDao->readByKey($settingCode);
+        
+        if ($s) {
+            $s->delete();
+        }
+    }
+    
+    
     /**
      * enabledModulesChanged() - returns unique int-signature of current enabled modules
      * 

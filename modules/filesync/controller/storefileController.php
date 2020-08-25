@@ -7,6 +7,9 @@ use core\exception\ObjectNotFoundException;
 use filesync\service\StoreService;
 use core\exception\InvalidStateException;
 use core\container\ActionContainer;
+use filesync\form\StoreFileUploadForm;
+use filesync\model\StoreFileDAO;
+use core\forms\FileField;
 
 class storefileController extends BaseController {
     
@@ -62,6 +65,7 @@ class storefileController extends BaseController {
         $this->store = $storeService->readStore($this->storeFile->getStoreId());
         
         $this->form = $storeService->readFilemeta( get_var('store_file_id') );
+        $this->form->addFileWidget();
         
         if ($this->form == null) {
             throw new ObjectNotFoundException('File not found');
@@ -164,6 +168,74 @@ class storefileController extends BaseController {
     }
     
     
+    
+    public function action_upload() {
+        $storeService = $this->oc->get(StoreService::class);
+        
+        $this->store = $storeService->readStore( get_var('store_id') );
+        if ($this->store == null) {
+            throw new ObjectNotFoundException('Store not found');
+        }
+        
+        
+        $this->form = object_container_create( StoreFileUploadForm::class );
+        $this->form->getWidget('store_id')->setValue( get_var('store_id') );
+        $this->form->getWidget('path')->setAutocompleteUrl( appUrl('/?m=filesync&c=storefile&a=autocomplete_path&storeId='.$this->store->getStoreId()) );
+        
+        
+        if (is_post()) {
+            $this->form->bind( $_REQUEST );
+            
+            if ($this->form->validate()) {
+                $storeFile = $storeService->saveStoreFile($this->form);
+                
+                // json request?
+                if (get_var('r') == 'json') {
+                    return $this->json([
+                        'success'     => true,
+                        'storeFileId' => $storeFile->getStoreFileId(),
+                        'store_file_id' => $storeFile->getStoreFileId(),
+                        'path'        => $storeFile->getPath(),
+                    ]);
+                }
+                
+                redirect('/?m=filesync&c=storefile&id='.$this->store->getStoreId());
+            }
+        }
+        
+        // json request?
+        if (get_var('r') == 'json') {
+            $errors = array();
+            foreach($this->form->getErrors() as $field => $val) {
+                foreach($val as $msg) {
+                    $errors[$field] = $this->form->getLabelByFieldname($field) . ' - ' . $msg;
+                }
+            }
+            
+            return $this->json([
+                'success' => false,
+                'error'   => true,
+                'errors'  => $errors
+            ]);
+        }
+        
+        return $this->render();
+    }
+    
+    
+    public function action_autocomplete_path() {
+        $storeService = $this->oc->get(StoreService::class);
+        
+        $paths = $storeService->autocomplete( get_var('storeId'), get_var('term') );
+        
+        return $this->json( $paths );
+    }
+    
+    
+    
+    
+    
+    
     public function action_pdf_preview() {
         
         $storeService = $this->oc->get(StoreService::class);
@@ -223,6 +295,19 @@ class storefileController extends BaseController {
         }
         
         throw new InvalidStateException('No id');
+    }
+    
+    
+    
+    public function action_select_storefile_popup() {
+        
+        $this->form = new StoreFileUploadForm(['store_as_list' => true]);
+        $this->form->showSubmitButtons();
+        
+        
+        $this->setShowDecorator(false);
+        
+        return $this->render();
     }
     
     

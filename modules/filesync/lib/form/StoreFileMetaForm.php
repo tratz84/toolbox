@@ -7,12 +7,14 @@ namespace filesync\form;
 use core\forms\BaseForm;
 use core\forms\CheckboxField;
 use core\forms\DatePickerField;
+use core\forms\FileField;
 use core\forms\HiddenField;
 use core\forms\HtmlField;
+use core\forms\InternalField;
 use core\forms\TextField;
 use core\forms\TextareaField;
 use customer\forms\CustomerSelectWidget;
-use core\forms\InternalField;
+use filesync\service\StoreService;
 
 class StoreFileMetaForm extends BaseForm {
     
@@ -33,6 +35,36 @@ class StoreFileMetaForm extends BaseForm {
         
         $this->addWidget(new CheckboxField('public', '', 'Public'));
         $this->getWidget('public')->setInfoText('Create download link for file?');
+    }
+    
+    
+    // add file-field for updating file
+    public function addFileWidget() {
+        // set form's enctype
+        $this->enctypeToMultipartFormdata();
+        
+        $this->addWidget( new FileField('file', '', t('File')) );
+        $this->getWidget('file')->setPrio(1);
+        
+        // check if 'file' is set and if last file is the same, if yes => handle as error
+        $this->addValidator('file', function($form) {
+            if (isset($_FILES['file']['size']) == false) {
+                return;
+            }
+            
+            $sfid = $form->getWidgetValue('store_file_id');
+            if (!$sfid) {
+                return;
+            }
+            
+            $storeService = object_container_get( StoreService::class );
+            $sf = $storeService->readStoreFile($sfid);
+            
+            if (md5_file($_FILES['file']['tmp_name']) == $sf->getField('md5sum')) {
+                return 'Uploaded file same as last revision';
+            }
+            
+        });
     }
     
     

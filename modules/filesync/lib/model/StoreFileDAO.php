@@ -59,6 +59,11 @@ class StoreFileDAO extends \core\db\DAOObject {
             $where[] = " filesync__store_file.store_id = ? ";
             $params[] = $opts['storeId'];
         }
+
+        if (isset($opts['store_type']) && $opts['store_type']) {
+            $where[] = " filesync__store.store_type = ? ";
+            $params[] = $opts['store_type'];
+        }
         
         if (isset($opts['storeIds']) && is_array($opts['storeIds']) && count($opts['storeIds'])) {
             $storeIds = array();
@@ -75,8 +80,8 @@ class StoreFileDAO extends \core\db\DAOObject {
         
         
         if (isset($opts['path']) && $opts['path']) {
-            $where[] = 'path LIKE ? ';//COLLATE utf8mb4_general_ci';
-            $params[] = '%'.trim($opts['path']).'%';
+            $where[] = 'lower(path) LIKE ? ';//COLLATE utf8mb4_general_ci';
+            $params[] = '%'.strtolower(trim($opts['path'])).'%';
         }
         
         if (isset($opts['companyId']) && $opts['companyId']) {
@@ -185,6 +190,28 @@ class StoreFileDAO extends \core\db\DAOObject {
 	    $sql .= ' order by sfm.document_date desc, sf.store_file_id desc';
 	    
 	    return $this->queryList($sql, $params);
+	}
+	
+	
+	public function autocomplete($storeId, $q) {
+	    $sql = "SELECT DISTINCT substring(path, 1, length(path) - LOCATE('/', reverse(path))+1) path
+                FROM filesync__store_file sf
+                join filesync__store s on (s.store_id = sf.store_id)
+                where s.store_type = 'share'
+                    and s.store_id = ?
+                    and sf.deleted = false
+                    and LOWER(substring(path, 1, length(path) - LOCATE('/', reverse(path))+1)) LIKE ?
+                ORDER BY path
+                LIMIT 20";
+        
+	    $res = $this->query($sql, array((int)$storeId, '%'.strtolower($q).'%'));
+	    
+	    $paths = array();
+	    while ( $r = mysqli_fetch_array($res) ) {
+	        $paths[] = $r[0];
+	    }
+	    
+	    return $paths;
 	}
 	
 	
