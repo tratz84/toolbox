@@ -4,6 +4,7 @@
 namespace filesync\service;
 
 
+use core\forms\lists\ListResponse;
 use filesync\FilesyncSettings;
 use filesync\model\WopiAccess;
 use filesync\model\WopiAccessDAO;
@@ -47,6 +48,31 @@ class WopiService {
         
         $waDao->cleanup();
     }
+    
+    public function deleteAllTokens() {
+        $waDao = object_container_get( WopiAccessDAO::class );
+        
+        $waDao->deleteAll();
+    }
+    
+    
+    public function deleteToken( $wopiAccessId ) {
+        $waDao = object_container_get( WopiAccessDAO::class );
+        $waDao->delete( $wopiAccessId );
+    }
+    
+    
+    public function searchWopiAccess($start, $limit, $opts = array()) {
+        $waDao = object_container_get( WopiAccessDAO::class );
+        
+        $cursor = $waDao->search( $opts );
+        
+        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('wopi_access_id', 'access_token', 'access_token_ttl', 'base_path', 'path', 'edited', 'created', 'username'));
+        
+        return $r;
+    }
+    
+    
     
 }
 

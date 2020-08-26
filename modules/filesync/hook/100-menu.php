@@ -4,6 +4,7 @@
 
 use base\model\Menu;
 use core\Context;
+use filesync\FilesyncSettings;
 
 hook_eventbus_subscribe('base', 'MenuService::listMainMenu', function($src) {
     // permissions?
@@ -29,10 +30,13 @@ hook_eventbus_subscribe('base', 'MenuService::listMainMenu', function($src) {
 
 
 hook_eventbus_subscribe('masterdata', 'menu', function($src) {
-    $ctx = Context::getInstance();
-    
     $src->addItem('Filesync', t('Settings'),       '/?m=filesync&c=settings');
     $src->addItem('Filesync', t('File templates'), '/?m=filesync&c=filetemplates');
+    
+    $filesyncSettings = object_container_get( FilesyncSettings::class );
+    if ( $filesyncSettings->getWopiActive() ) {
+        $src->addItem('Filesync', t('WOPI tokens'), '/?m=filesync&c=wopitokens');
+    }
     
 });
 
