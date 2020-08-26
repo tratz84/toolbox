@@ -34,7 +34,7 @@
 					<?php endif; ?>
 				</td>
 				<td class="actions">
-					<a href="javascript:void(0);" onclick="showInfo(this);" class="fa fa-search"></a>
+					<a href="javascript:void(0);" onclick="showInfo(this);" class="fa fa-question-circle"></a>
 					<input type="button" class="linkDoc" value="<?= t('Link file') ?>" />
 					<?php if ($ft->getFile()) : ?>
 					<input type="button" class="unlinkDoc" value="<?= t('Unlink file') ?>" />
