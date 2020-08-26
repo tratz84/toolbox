@@ -96,7 +96,7 @@ function meta_active_modules() {
     foreach($modules as $moduleName => $path) {
         if (ctx()->isModuleEnabled($moduleName)) {
             if (file_exists($path . '/meta.php')) {
-                $meta[$moduleName] = include $path . '/meta.php';
+                $meta[$moduleName] = load_php_file( $path . '/meta.php' );
             }
         }
     }
