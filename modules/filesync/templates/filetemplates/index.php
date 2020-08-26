@@ -29,6 +29,9 @@
 				<td><?= esc_html($ft->getDescription()) ?></td>
 				<td>
 					<?= esc_html($ft->getFile()) ?>
+					<?php if ($ft->getStoreFileId()) : ?>
+						<?= apply_filter('edit-store-file', '', ['store_file_id' => $ft->getStoreFileId()]) ?>
+					<?php endif; ?>
 				</td>
 				<td class="actions">
 					<a href="javascript:void(0);" onclick="showInfo(this);" class="fa fa-search"></a>

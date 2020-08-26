@@ -9,6 +9,8 @@ class FileTemplate {
     protected $id          = null;
     protected $name        = null;
     protected $description = null;
+    
+    protected $storeFileId = null;
     protected $file        = null;
     
     protected $vars = array();
@@ -26,6 +28,9 @@ class FileTemplate {
     
     public function setDescription($d) { $this->description = $d; }
     public function getDescription() { return $this->description; }
+    
+    public function getStoreFileId() { return $this->storeFileId; }
+    public function setStoreFileId($i) { $this->storeFileId = $i; }
     
     public function getFile() { return $this->file; }
     public function setFile($f) { $this->file = $f; }

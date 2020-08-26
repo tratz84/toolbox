@@ -127,8 +127,9 @@ function filesync_filetemplates() {
 //         var_export($storeFileId);exit;
         if ($storeFileId) {
             $storeFile = $storeService->readStoreFile( $storeFileId );
-            $ft->setFile( $storeFile->getPath() );
             
+            $ft->setStoreFileId( $storeFile->getStoreFileId() );
+            $ft->setFile( $storeFile->getPath() );
         }
         
         $ac->set($x, $ft);
