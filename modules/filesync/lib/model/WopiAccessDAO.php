@@ -57,7 +57,7 @@ class WopiAccessDAO extends \core\db\DAOObject {
 	        $qb->addWhere( QueryBuilderWhere::whereRefByVal('username', 'LIKE', '%'.$opts['username'].'%') );
 	    }
 	    
-	    
+	    $qb->setOrderBy('wopi_access_id desc');
 	    
 	    return $qb->queryCursor();
 	}
