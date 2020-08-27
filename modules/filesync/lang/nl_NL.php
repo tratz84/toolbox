@@ -16,7 +16,8 @@ $l['Template description'] = 'Template omschrijving';
 $l['Variable name']        = 'Variabele naam';
 $l['Example']              = 'Voorbeeld';
 
-
+$l['File template']        = 'Bestand template';
+$l['Variable overview']    = 'Variabele overzicht';
 
 $l['Select file']      = 'Kies bestand';
 $l['Make your choice'] = 'Maak uw keuze';

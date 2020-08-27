@@ -113,6 +113,20 @@ function filesync_storefile2pdf( $storeFileId ) {
 
 
 
+function filesync_get_filetemplate( $idName ) {
+    $ac = filesync_filetemplates();
+    
+    for($x=0; $x < $ac->count(); $x++) {
+        $ft = $ac->get( $x );
+        if ($ft->getId() == $idName) {
+            return $ft;
+        }
+    }
+    
+    return null;
+}
+
+
 function filesync_filetemplates() {
     $ac = new ArrayContainer();
     hook_eventbus_publish($ac, 'filesync', 'filetemplates');

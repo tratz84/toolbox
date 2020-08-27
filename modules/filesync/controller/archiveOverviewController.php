@@ -28,6 +28,7 @@ class archiveOverviewController extends BaseController {
         }
         
         
+        
         if (!$companyId && !$personId) {
             return;
         }
