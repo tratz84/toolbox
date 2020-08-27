@@ -112,6 +112,15 @@ class WopiStoreFile extends WopiBase {
             throw new StoreFileException('Invalid store selected');
         }
         
+        // check if system file exists
+        $file = $this->storeFile->getSystemPath();
+        if ($file == null) {
+            header('HTTP/1.1 500 Internal server error');
+            print "System file not found";
+            return false;
+        }
+        
+        
         // load store
         $this->store = $storeService->readStore( $this->storeId );
         
