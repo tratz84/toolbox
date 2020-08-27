@@ -38,7 +38,7 @@
 		</tr>
 		<?php else : ?>
 			<?php foreach($storeFiles as $sf) : ?>
-			<tr class="clickable" onclick="window.open('<?= appUrl('/?m=filesync&c=storefile&a=download&inline=1&id='.$sf->getStoreFileId()) ?>', '_blank');">
+			<tr class="clickable" onclick="window.open('<?= apply_filter('edit-store-file-url', appUrl('/?m=filesync&c=storefile&a=download&inline=1&id='.$sf->getStoreFileId()), ['store_file_id' => $sf->getStoreFileId()]) ?>', '_blank');">
 				<td><?= esc_html($sf->getPath()) ?></td>
 				<td><?= esc_html($sf->getField('subject')) ?></td>
 				<td><?= $sf->getField('public') ? t('Yes'):t('No') ?></td>
