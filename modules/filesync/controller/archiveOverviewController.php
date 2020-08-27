@@ -30,7 +30,11 @@ class archiveOverviewController extends BaseController {
         
         $this->filetemplates = array();
         if (isset($this->template_ids) && is_array($this->template_ids)) foreach( $this->template_ids as $tid) {
-            $this->filetemplates[] = filesync_get_filetemplate( $tid );
+            $ft = filesync_get_filetemplate( $tid );
+            
+            if ($ft->getStoreFileId()) {
+                $this->filetemplates[] = $ft;
+            }
         }
         
         

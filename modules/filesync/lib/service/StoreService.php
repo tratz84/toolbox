@@ -20,6 +20,7 @@ use filesync\model\StoreFileMeta;
 use filesync\model\StoreFileMetaDAO;
 use filesync\model\StoreFileRev;
 use filesync\model\StoreFileRevDAO;
+use filesync\exception\FilesyncException;
 
 class StoreService extends ServiceBase {
     
@@ -344,7 +345,9 @@ class StoreService extends ServiceBase {
         $sfrDao = new StoreFileRevDAO();
         $lastRev = $sfrDao->readLastRevision($storeFile->getStoreFileId());
         if ($lastRev != null && $lastRev->getMd5sum() == $md5sum && $lastRev->getFilesize() == $filesize) {
-            throw new InvalidStateException('File already synced and @ top');
+            $fe = new FilesyncException('File already synced and @ top');
+            $fe->setStoreFileId( $storeFile->getStoreFileId() );
+            throw $fe;
         }
         
         $nextRev = 1;
