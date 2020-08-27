@@ -22,6 +22,7 @@ class archiveOverviewController extends BaseController {
         } else {
             $companyId = get_var('companyId');
             $personId = get_var('personId');
+            $this->template_ids = get_var('template_ids');
         }
         
         if ($companyId) {
