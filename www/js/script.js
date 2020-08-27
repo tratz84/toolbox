@@ -291,6 +291,8 @@ function applyWidgetFields(container) {
 
 	});
 	
+	$(container).find('.js-menu-container > ul').menu();
+	
 	
 	$('.image-selector-field').each(function(index, node) {
 		$(node).find('li').click(function() {
