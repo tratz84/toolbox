@@ -24,7 +24,10 @@ class WopiService {
         $filesyncSettings = object_container_get( FilesyncSettings::class );
         $ttl = $filesyncSettings->getWopiAccessTokenTtl();
         if ($ttl < 0) $ttl = 1;
-        $wa->setAccessTokenTtl( 60 * $ttl );
+        
+        // The access_token_ttl property tells a WOPI client when an access token expires, represented as the number of milliseconds since January 1, 1970 UTC (the date epoch in JavaScript)
+        // doc @ https://wopi.readthedocs.io/projects/wopirest/en/latest/concepts.html#term-access-token-ttl
+        $wa->setAccessTokenTtl( (time() + (60 * $ttl))*1000 );
         
         $wa->setUserId( $userId );
         if (isset($opts['base_path']) && $opts['base_path']) {
