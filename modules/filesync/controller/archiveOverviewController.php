@@ -16,9 +16,13 @@ class archiveOverviewController extends BaseController {
         
         $storeService = $this->oc->get(StoreService::class);
         
-        
-        $companyId = $this->form->getWidgetValue('company_id');
-        $personId = $this->form->getWidgetValue('person_id');
+        if (isset($this->form)) {
+            $companyId = $this->form->getWidgetValue('company_id');
+            $personId = $this->form->getWidgetValue('person_id');
+        } else {
+            $companyId = get_var('companyId');
+            $personId = get_var('personId');
+        }
         
         if ($companyId) {
             $this->storeFiles = $storeService->readFilesByCompany($companyId);
