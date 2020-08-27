@@ -216,9 +216,8 @@ class WopiStoreFile extends WopiBase {
     
     public function handle_contents_get() {
         $sf = $this->storeFile;
-        $rev = $this->storeFile->getLastRevision();
         
-        $file = get_data_file('/filesync/'.$sf->getStoreId() . '/' . $sf->getStoreFileId() . '-' . $rev->getStoreFileRevId());
+        $file = $this->storeFile->getSystemPath();
         
         if (!$file) {
             throw new FileException('File not found');

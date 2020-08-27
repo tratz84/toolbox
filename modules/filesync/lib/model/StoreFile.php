@@ -38,6 +38,19 @@ class StoreFile extends base\StoreFileBase {
         return basename($this->getPath());
     }
     
+    public function getSystemPath() {
+        if ($this->getStoreId() && $this->getStoreFileId() && $this->getLastRevision() && $this->getLastRevision()->getStoreFileRevId()) {
+            $file = get_data_file('/filesync/'.$this->getStoreId() . '/' . $this->getStoreFileId() . '-' . $this->getLastRevision()->getStoreFileRevId());
+            
+            if ($file) {
+                return $file;
+            }
+        }
+        
+        
+        return null;
+    }
+    
     
     public function asArray() {
         $arr = array();
