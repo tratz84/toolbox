@@ -31,9 +31,9 @@ class WopiAccessDAO extends \core\db\DAOObject {
 	public function cleanup() {
 	    $sql = "delete
                 from filesync__wopi_access
-                where date_add(created, interval filesync__wopi_access.access_token_ttl second) < now() ";
+                where filesync__wopi_access.access_token_ttl <= ? ";
 	    
-	    $this->query( $sql );
+	    $this->query( $sql, array(time()*1000) );
 	}
 	
 	

@@ -51,8 +51,8 @@ class WopiSystemFile extends WopiBase {
         }
         
         
-        // + 300 to give it some slack
-        if (date2unix($token->getCreated()) + $token->getAccessTokenTtl() + 300 < time()) {
+        // + 60-sec to give it some slack
+        if ($token->getAccessTokenTtl() < (time()*1000) + 60000) {
             header('HTTP/1.1 401 Unauthorized');
             print "Token expired";
             return false;
