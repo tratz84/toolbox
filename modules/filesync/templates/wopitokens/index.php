@@ -39,9 +39,9 @@ t.addColumn({
 	searchable: true
 });
 t.addColumn({
-	fieldName: 'access_token_ttl',
+	fieldName: 'access_token_ttl_datetime',
 	fieldDescription: 'TTL',
-	fieldType: 'text',
+	fieldType: 'datetime',
 	searchable: false
 });
 

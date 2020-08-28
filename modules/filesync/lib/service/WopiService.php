@@ -72,6 +72,15 @@ class WopiService {
         
         $r = ListResponse::fillByCursor($start, $limit, $cursor, array('wopi_access_id', 'access_token', 'access_token_ttl', 'base_path', 'path', 'edited', 'created', 'username'));
         
+        $objs = $r->getObjects();
+        foreach($objs as &$o) {
+            $dt = new \DateTime();
+            $dt->setTimezone( new \DateTimeZone(date_default_timezone_get()) );
+            $dt->setTimestamp( $o['access_token_ttl'] / 1000 );
+            $o['access_token_ttl_datetime'] = $dt->format('Y-m-d H:i:s');
+        }
+        $r->setObjects( $objs );
+        
         return $r;
     }
     
