@@ -17,7 +17,6 @@ class ImapConnector extends BaseMailConnector {
     protected $username;
     protected $password;
     
-    protected $connector = null;
     
     protected $connectionOptions = array();
     
@@ -135,7 +134,7 @@ class ImapConnector extends BaseMailConnector {
             return strcmp($f1, $f2);
         });
             
-            return $folders;
+        return $folders;
     }
     
     public function ping() {
