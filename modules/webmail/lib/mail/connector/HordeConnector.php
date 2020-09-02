@@ -1,17 +1,10 @@
 <?php
 
 
-
-<?php
-
-
 namespace webmail\mail\connector;
 
-use core\ObjectContainer;
-use webmail\mail\MailProperties;
+use Horde_Imap_Client_Socket;
 use webmail\model\Connector;
-use webmail\service\ConnectorService;
-use webmail\solr\SolrMail;
 
 
 class HordeConnector extends BaseMailConnector {
@@ -40,22 +33,23 @@ class HordeConnector extends BaseMailConnector {
     
     
     public function connect() {
-        
         if ($this->connector->getPort() == 993) {
-            $this->connectionOptions[] = 'ssl';
+            $secure = 'ssl';
         } else {
-            $secure = 'tls'
+            $secure = 'tls';
         }
         
         
         try {
-            $this->client = new Horde_Imap_Client_Socket(array(
-                'username' => $this->connector->getUsername(),
-                'password' => $this->connector->getPassword(),
-                'hostspec' => $this->connector->getHostname(),
-                'port' => $this->connector->getPort(),
-                'secure' => $secure,
-            ));
+            
+            $opts = array();
+            $opts['username'] = $this->connector->getUsername();
+            $opts['password'] = $this->connector->getPassword();
+            $opts['hostspec'] = $this->connector->getHostname();
+            $opts['port']     = $this->connector->getPort();
+            $opts['secure']   = $secure;
+            
+            $this->client = new Horde_Imap_Client_Socket( $opts );
         } catch (\Exception $ex) {
             $this->errors = [
                 $ex->getMessage()
@@ -84,7 +78,7 @@ class HordeConnector extends BaseMailConnector {
     }
     
     public function listFolders() {
-        $list = $client->listMailboxes('*');
+        $list = $this->client->listMailboxes('*');
         
         $folders = array_keys($list);
         

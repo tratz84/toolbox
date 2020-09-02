@@ -153,52 +153,52 @@ class ImapConnector extends BaseMailConnector {
         if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folderName)))
             return false;
             
-            $messageCount = imap_check($this->imap);
+        $messageCount = imap_check($this->imap);
+        
+        $items = array();
+        
+        // Fetch an overview for all messages in INBOX
+        $overviewList = $this->buildOverviewList( $messageCount );
+        
+        // fetch messages
+        $x=0;
+        foreach($overviewList as $range) {
+            $results = imap_fetch_overview($this->imap, $range, $this->imapFetchOverviewOptions);
             
-            $items = array();
-            
-            // Fetch an overview for all messages in INBOX
-            $overviewList = $this->buildOverviewList( $messageCount );
-            
-            // fetch messages
-            $x=0;
-            foreach($overviewList as $range) {
-                $results = imap_fetch_overview($this->imap, $range, $this->imapFetchOverviewOptions);
-                
-                if (is_cli()) {
-                    print_info("Importing msg: " . $folderName . " (" . $x . "/" . $this->imapFetchListCount . ')');
-                }
-                
-                for($y=0; $y < count($results); $y++) {
-                    $emlfile = $this->determineEmailPath( $results[$y] );
-                    
-                    // INBOX has special business rules. Skip update if e-mail is not yet imported by bin/webmail_connector.php
-                    if ($folderName == 'INBOX' && file_exists($emlfile) == false) {
-                        continue;
-                    }
-                    
-                    $mp = $this->buildMessageProperties($emlfile, $folderName, $results[$y]);
-                    
-                    // check if mail (properties) are changed
-                    $changed = $this->serverPropertiesChanged($emlfile, $mp);
-                    
-                    if ($changed) {
-                        $mp->save();
-                        
-                        // TODO: if Folder = Sent, check 'In-Reply-To'-header & lookup replied e-mail. If status == 'open', set to REPLIED
-                        $this->saveMessage($folderName, $results[$y]);
-                    }
-                    
-                    // callback (probably Solr-import)
-                    call_user_func($this->callback_itemImported, $folderName, $results[$y], $emlfile, $changed);
-                }
-                
-                imap_gc($this->imap, IMAP_GC_ELT | IMAP_GC_ENV | IMAP_GC_TEXTS);
-                
-                $x += count($results);
+            if (is_cli()) {
+                print_info("Importing msg: " . $folderName . " (" . $x . "/" . $this->imapFetchListCount . ')');
             }
             
-            return $items;
+            for($y=0; $y < count($results); $y++) {
+                $emlfile = $this->determineEmailPath( $results[$y] );
+                
+                // INBOX has special business rules. Skip update if e-mail is not yet imported by bin/webmail_connector.php
+                if ($folderName == 'INBOX' && file_exists($emlfile) == false) {
+                    continue;
+                }
+                
+                $mp = $this->buildMessageProperties($emlfile, $folderName, $results[$y]);
+                
+                // check if mail (properties) are changed
+                $changed = $this->serverPropertiesChanged($emlfile, $mp);
+                
+                if ($changed) {
+                    $mp->save();
+                    
+                    // TODO: if Folder = Sent, check 'In-Reply-To'-header & lookup replied e-mail. If status == 'open', set to REPLIED
+                    $this->saveMessage($folderName, $results[$y]);
+                }
+                
+                // callback (probably Solr-import)
+                call_user_func($this->callback_itemImported, $folderName, $results[$y], $emlfile, $changed);
+            }
+            
+            imap_gc($this->imap, IMAP_GC_ELT | IMAP_GC_ENV | IMAP_GC_TEXTS);
+            
+            $x += count($results);
+        }
+        
+        return $items;
     }
     
     protected function determineEmailPath($overview) {
@@ -379,56 +379,56 @@ class ImapConnector extends BaseMailConnector {
             for($y=0; $y < count($results); $y++) {
                 if ($results[$y]->deleted)
                     continue;
+                
+                // save file locally
+                $file = $this->determineEmailPath( $results[$y] );
+                
+                if (file_exists($file) == false) {
+                    $emlfile = $this->saveMessage('INBOX', $results[$y]);
                     
-                    // save file locally
-                    $file = $this->determineEmailPath( $results[$y] );
-                    
-                    if (file_exists($file) == false) {
-                        $emlfile = $this->saveMessage('INBOX', $results[$y]);
+                    // new?
+                    if ($emlfile) {
+                        // apply filters
+                        print_info("Applying filters");
+                        $result = $this->applyFilters($connector, $file, $results[$y]->uid);
                         
-                        // new?
-                        if ($emlfile) {
-                            // apply filters
-                            print_info("Applying filters");
-                            $result = $this->applyFilters($connector, $file, $results[$y]->uid);
+                        // update propertiesName
+                        $mp = new MailProperties($emlfile);
+                        $mp->load();
+                        
+                        // message moved to another folder?
+                        if (isset($result['move_to_folder'])) {
+                            // set new folder name
+                            $mp->setFolder( $result['move_to_folder'] );
+                            $folderName = $result['move_to_folder'];
                             
-                            // update propertiesName
-                            $mp = new MailProperties($emlfile);
-                            $mp->load();
-                            
-                            // message moved to another folder?
-                            if (isset($result['move_to_folder'])) {
-                                // set new folder name
-                                $mp->setFolder( $result['move_to_folder'] );
-                                $folderName = $result['move_to_folder'];
-                                
-                                // call imap_expunge
-                                $blnExpunge = true;
-                            }
-                            // set default folder
-                            else {
-                                $folderName = 'INBOX';
-                            }
-                            
-                            // mark as spam
-                            if (isset($result['is_spam']) && $result['is_spam']) {
-                                $mp->setJunk( true );
-                            }
-                            
-                            // set_action?
-                            if (isset($result['set_action']) && $result['set_action']) {
-                                $mp->setAction( $result['set_action'] );
-                            }
-                            
-                            $mp->save();
-                            
-                            
-                            // call callback
-                            if ($this->callback_itemImported != null) {
-                                call_user_func($this->callback_itemImported, $folderName, $results[$y], $file, true);
-                            }
+                            // call imap_expunge
+                            $blnExpunge = true;
+                        }
+                        // set default folder
+                        else {
+                            $folderName = 'INBOX';
+                        }
+                        
+                        // mark as spam
+                        if (isset($result['is_spam']) && $result['is_spam']) {
+                            $mp->setJunk( true );
+                        }
+                        
+                        // set_action?
+                        if (isset($result['set_action']) && $result['set_action']) {
+                            $mp->setAction( $result['set_action'] );
+                        }
+                        
+                        $mp->save();
+                        
+                        
+                        // call callback
+                        if ($this->callback_itemImported != null) {
+                            call_user_func($this->callback_itemImported, $folderName, $results[$y], $file, true);
                         }
                     }
+                }
             }
         }
         
@@ -453,60 +453,60 @@ class ImapConnector extends BaseMailConnector {
             // skip inactive filters
             if ($f->getActive() == false)
                 continue;
+            
+            $conditions = $f->getConditions();
+            
+            $conditionCount = 0;
+            foreach($conditions as $c) {
+                if ( $c->match($p, $file) ) {
+                    if ($c->getFilterType() == 'is_spam') {
+                        $isSpam = true;
+                    }
+                    
+                    $conditionCount++;
+                }
+            }
+            
+            if (($f->getMatchMethod() == 'match_all' && $conditionCount == count($conditions)) || ($f->getMatchMethod() == 'match_one' && $conditionCount > 0)) {
+                $actions = $f->getActions();
                 
-                $conditions = $f->getConditions();
+                if (count($actions) == 0)
+                    return null;
                 
-                $conditionCount = 0;
-                foreach($conditions as $c) {
-                    if ( $c->match($p, $file) ) {
-                        if ($c->getFilterType() == 'is_spam') {
-                            $isSpam = true;
-                        }
-                        
-                        $conditionCount++;
+                $return_value = array();
+                $return_value['is_spam'] = $isSpam;
+                
+                $moveFolderActionValue = null;
+                foreach($actions as $action) {
+                    if ($action->getFilterAction() == 'move_to_folder') {
+                        $moveFolderActionValue = $action->getFilterActionValue();               // this is an webmail__connector_imapfolder.connector_imapfolder_id
+                    }
+                    if ($action->getFilterAction() == 'set_action') {
+                        $return_value['set_action'] = $action->getFilterActionValue();
                     }
                 }
                 
-                if (($f->getMatchMethod() == 'match_all' && $conditionCount == count($conditions)) || ($f->getMatchMethod() == 'match_one' && $conditionCount > 0)) {
-                    $actions = $f->getActions();
+                if ($moveFolderActionValue) {
+                    $connectorService = ObjectContainer::getInstance()->get(ConnectorService::class);
+                    $f = $connectorService->readImapFolder( $moveFolderActionValue );
                     
-                    if (count($actions) == 0)
-                        return null;
-                        
-                        $return_value = array();
-                        $return_value['is_spam'] = $isSpam;
-                        
-                        $moveFolderActionValue = null;
-                        foreach($actions as $action) {
-                            if ($action->getFilterAction() == 'move_to_folder') {
-                                $moveFolderActionValue = $action->getFilterActionValue();               // this is an webmail__connector_imapfolder.connector_imapfolder_id
-                            }
-                            if ($action->getFilterAction() == 'set_action') {
-                                $return_value['set_action'] = $action->getFilterActionValue();
-                            }
+                    // found? => move
+                    if ($f) {
+                        if ($isSpam) {
+                            imap_setflag_full($this->imap, $messageUid, 'Junk', ST_UID);
+                            imap_setflag_full($this->imap, $messageUid, '$Junk', ST_UID);
                         }
                         
-                        if ($moveFolderActionValue) {
-                            $connectorService = ObjectContainer::getInstance()->get(ConnectorService::class);
-                            $f = $connectorService->readImapFolder( $moveFolderActionValue );
+                        if (imap_mail_move($this->imap, $messageUid, $f->getFolderName(), CP_UID)) {
                             
-                            // found? => move
-                            if ($f) {
-                                if ($isSpam) {
-                                    imap_setflag_full($this->imap, $messageUid, 'Junk', ST_UID);
-                                    imap_setflag_full($this->imap, $messageUid, '$Junk', ST_UID);
-                                }
-                                
-                                if (imap_mail_move($this->imap, $messageUid, $f->getFolderName(), CP_UID)) {
-                                    
-                                }
-                                
-                                $return_value['move_to_folder'] = $f->getFolderName();
-                            }
                         }
                         
-                        return $return_value;
+                        $return_value['move_to_folder'] = $f->getFolderName();
+                    }
                 }
+                
+                return $return_value;
+            }
         }
         
         return array();
@@ -575,23 +575,23 @@ class ImapConnector extends BaseMailConnector {
         usort($folders, function($o1, $o2) use ($c) {
             if ($o1->getConnectorImapfolderId() == $c->getSentConnectorImapfolderId())
                 return 1;
-                if ($o2->getConnectorImapfolderId() == $c->getSentConnectorImapfolderId())
-                    return -1;
-                    
-                    return strcmp($o1->getFolderName(), $o2->getFolderName());
-        });
-            
-            
-            foreach($folders as $if) {
-                if (!$if->getActive()) {
-                    continue;
-                }
+            if ($o2->getConnectorImapfolderId() == $c->getSentConnectorImapfolderId())
+                return -1;
                 
-                if (is_cli())
-                    print_info("Importing: " . $if->getFolderName());
-                    
-                    $this->importItems( $if->getFolderName() );
+            return strcmp($o1->getFolderName(), $o2->getFolderName());
+        });
+        
+        
+        foreach($folders as $if) {
+            if (!$if->getActive()) {
+                continue;
             }
+            
+            if (is_cli())
+                print_info("Importing: " . $if->getFolderName());
+            
+            $this->importItems( $if->getFolderName() );
+        }
     }
     
     public function search($folder, $criteria=array()) {
@@ -609,17 +609,17 @@ class ImapConnector extends BaseMailConnector {
             
             if ($str != '')
                 $str = $str . ' ';
-                
-                
-                if (in_array($key, ['BCC', 'BEFORE', 'BODY', 'CC', 'FROM', 'KEYWORD', 'ON', 'SINCE', 'SUBJECT', 'TEXT', 'TO', 'UNKEYWORD'])) {
-                    $str .= $key . ' "' . addslashes($crit['value']) . '"';
-                }
-                else if (in_array($key, ['ALL', 'ANSWERED', 'DELETED', 'FLAGGED', 'NEW', 'OLD', 'RECENT', 'SEEN', 'UNANSWERED', 'UNDELETED', 'UNFLAGGED', 'UNSEEN'])) {
-                    $str .= $key;
-                }
-                else {
-                    throw new \core\exception\InvalidArgumentException('Invalid search keyword: ' . $key);
-                }
+            
+            
+            if (in_array($key, ['BCC', 'BEFORE', 'BODY', 'CC', 'FROM', 'KEYWORD', 'ON', 'SINCE', 'SUBJECT', 'TEXT', 'TO', 'UNKEYWORD'])) {
+                $str .= $key . ' "' . addslashes($crit['value']) . '"';
+            }
+            else if (in_array($key, ['ALL', 'ANSWERED', 'DELETED', 'FLAGGED', 'NEW', 'OLD', 'RECENT', 'SEEN', 'UNANSWERED', 'UNDELETED', 'UNFLAGGED', 'UNSEEN'])) {
+                $str .= $key;
+            }
+            else {
+                throw new \core\exception\InvalidArgumentException('Invalid search keyword: ' . $key);
+            }
         }
         
         return imap_search($this->imap, $str, SE_UID, 'UTF-8');

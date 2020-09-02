@@ -3,6 +3,7 @@
 
 namespace webmail\mail\connector;
 
+use core\exception\InvalidStateException;
 use webmail\model\Connector;
 
 
@@ -19,6 +20,25 @@ class BaseMailConnector {
     
     public function setConnector($c) { $this->connector = $c; }
     public function getConnector() { return $this->connector; }
+    
+    
+    public static function createMailConnector(Connector $connector) {
+        if ($connector->getConnectorType() == 'imap') {
+            $ic = new ImapConnector($connector);
+            return $ic;
+        }
+        else if ($connector->getConnectorType() == 'horde') {
+            $hc = new HordeConnector( $connector );
+            return $hc;
+        }
+        else if ($connector->getConnectorType() == 'pop3') {
+            $pc = new Pop3Connector($connector);
+            return $pc;
+        }
+        else {
+            throw new InvalidStateException('Invalid connectorType');
+        }
+    }
     
     
     public function stop() {
