@@ -9,6 +9,7 @@ use webmail\service\ConnectorService;
 use webmail\solr\SolrImportMail;
 use webmail\solr\SolrMail;
 use core\exception\InvalidStateException;
+use webmail\mail\connector\ImapConnector;
 
 function mapAllConnectors() {
     
@@ -75,7 +76,7 @@ function webmail_import_connectors($updateOnly) {
         $start_time_run = time();
         
         if ($c->getConnectorType() == 'imap') {
-            $ic = ImapConnection::createByConnector($c);
+            $ic = new ImapConnector($c);
             if (!$ic->connect()) {
                 print_info("Unable to connect to " . $c->getDescription());
                 continue;

@@ -8,9 +8,9 @@ spl_autoload_register(function($name) {
     
     $path = str_replace(['_', '\\'], '/', $name).'.php';
     
-    $path = realpath( __DIR__.'/horde/lib/'.$path );
+    $path = realpath( __DIR__.'/lib/'.$path );
     
-    if ($path && is_file($path) && strpos($path, realpath( __DIR__.'/horde/lib/')) === 0) {
+    if ($path && is_file($path) && strpos($path, realpath( __DIR__.'/lib/')) === 0) {
         require_once $path;
     }
     

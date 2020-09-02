@@ -1,15 +1,16 @@
 <?php
 
-namespace webmail\mail;
 
+namespace webmail\mail\connector;
 
 use core\ObjectContainer;
+use webmail\mail\MailProperties;
 use webmail\model\Connector;
 use webmail\service\ConnectorService;
 use webmail\solr\SolrMail;
-use core\exception\NotForLiveException;
 
-class HordeMonitor {
+
+class ImapConnector extends BaseMailConnector {
     
     protected $hostname;
     protected $port;
@@ -27,34 +28,26 @@ class HordeMonitor {
     
     protected $callback_itemImported = null;
     
+    protected $serverPropertyChecksums = null;
     
+    protected $imapFetchListCount = -1;
+    protected $imapFetchOverviewOptions = 0;
     
     // just import messages 'SINCE'
     protected $sinceUpdate = null;
     
     
-    public function __construct($hostname=null, $port=null, $username=null, $password=null) {
+    public function __construct(Connector $connector) {
+        parent::__construct($connector);
         
-        $this->setHostname($hostname);
-        $this->setPort($port);
-        $this->setUsername($username);
-        $this->setPassword($password);
+        $this->setHostname($connector->getHostname());
+        $this->setPort($connector->getPort());
+        $this->setUsername($connector->getUsername());
+        $this->setPassword($connector->getPassword());
         
+        $this->connectionOptions[] = 'imap';
+        $this->connectionOptions[] = 'novalidate-cert';
     }
-    
-    public static function createByConnector(Connector $c) {
-        $ic = new self();
-        
-        $ic->setHostname($c->getHostname());
-        $ic->setPort($c->getPort());
-        $ic->setUsername($c->getUsername());
-        $ic->setPassword($c->getPassword());
-        
-        $ic->setConnector($c);
-        
-        return $ic;
-    }
-    
     
     public function setHostname($p) { $this->hostname = $p; }
     public function getHostname( ) { return $this->hostname; }
@@ -68,9 +61,6 @@ class HordeMonitor {
     public function setPassword($p) { $this->password = $p; }
     public function getPassword( ) { return $this->password; }
     
-    public function setConnector($c) { $this->connector = $c; }
-    public function getConnector() { return $this->connector; }
-    
     public function getErrors() { return $this->errors; }
     
     public function setSinceUpdate($t) { $this->sinceUpdate = $t; }
@@ -82,16 +72,70 @@ class HordeMonitor {
     
     
     public function connect() {
+        if ($this->getPort() == 993) {
+            $this->connectionOptions[] = 'ssl';
+        }
+        
+        
+        imap_timeout( IMAP_OPENTIMEOUT , 10 );
+        imap_timeout( IMAP_READTIMEOUT , 10 );
+        imap_timeout( IMAP_WRITETIMEOUT , 10 );
+        imap_timeout( IMAP_CLOSETIMEOUT , 5 );
+        
+        $strOpts = implode('/', $this->connectionOptions);
+        $strOpts = '/' . $strOpts;
+        
+        $this->mailbox = '{'.$this->getHostname().':'.$this->getPort().$strOpts.'}';
+        
+        $this->imap = @\imap_open($this->mailbox, $this->getUsername(), $this->getPassword());
+        
+        if ($this->imap === false) {
+            $this->errors = imap_errors();
+            
+            return false;
+        }
+        
+        return true;
     }
     
     public function isConnected() {
+        if ($this->imap !== false && $this->imap !== null) {
+            return true;
+        } else {
+            return false;
+        }
     }
     
     public function disconnect() {
+        if ($this->imap === null) return;
+        
+        imap_close( $this->imap );
+        $this->imap = null;
     }
     
     
     public function listFolders() {
+        $folders = imap_listmailbox($this->imap, $this->mailbox, "*");
+        
+        foreach($folders as &$f) {
+            $f = imap_utf7_decode($f);
+        }
+        foreach($folders as &$f) {
+            $f = str_replace($this->mailbox, '', $f);
+        }
+        
+        usort($folders, function($f1, $f2) {
+            if ($f1 == 'INBOX') {
+                return -1;
+            }
+            if ($f2 == 'INBOX') {
+                return 1;
+            }
+            
+            return strcmp($f1, $f2);
+        });
+            
+            return $folders;
     }
     
     public function ping() {
@@ -107,9 +151,69 @@ class HordeMonitor {
     
     public function importItems($folderName) {
         
+        if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folderName)))
+            return false;
+            
+            $messageCount = imap_check($this->imap);
+            
+            $items = array();
+            
+            // Fetch an overview for all messages in INBOX
+            $overviewList = $this->buildOverviewList( $messageCount );
+            
+            // fetch messages
+            $x=0;
+            foreach($overviewList as $range) {
+                $results = imap_fetch_overview($this->imap, $range, $this->imapFetchOverviewOptions);
+                
+                if (is_cli()) {
+                    print_info("Importing msg: " . $folderName . " (" . $x . "/" . $this->imapFetchListCount . ')');
+                }
+                
+                for($y=0; $y < count($results); $y++) {
+                    $emlfile = $this->determineEmailPath( $results[$y] );
+                    
+                    // INBOX has special business rules. Skip update if e-mail is not yet imported by bin/webmail_connector.php
+                    if ($folderName == 'INBOX' && file_exists($emlfile) == false) {
+                        continue;
+                    }
+                    
+                    $mp = $this->buildMessageProperties($emlfile, $folderName, $results[$y]);
+                    
+                    // check if mail (properties) are changed
+                    $changed = $this->serverPropertiesChanged($emlfile, $mp);
+                    
+                    if ($changed) {
+                        $mp->save();
+                        
+                        // TODO: if Folder = Sent, check 'In-Reply-To'-header & lookup replied e-mail. If status == 'open', set to REPLIED
+                        $this->saveMessage($folderName, $results[$y]);
+                    }
+                    
+                    // callback (probably Solr-import)
+                    call_user_func($this->callback_itemImported, $folderName, $results[$y], $emlfile, $changed);
+                }
+                
+                imap_gc($this->imap, IMAP_GC_ELT | IMAP_GC_ENV | IMAP_GC_TEXTS);
+                
+                $x += count($results);
+            }
+            
+            return $items;
     }
     
     protected function determineEmailPath($overview) {
+        $dt = new \DateTime();
+        $dt->setTimestamp($overview->udate);
+        $dt->setTimezone(new \DateTimeZone('+0000'));
+        
+        $uid = @md5($overview->size . $overview->message_id . $overview->from . $overview->subject . $overview->udate);
+        
+        $p = ctx()->getDataDir() . '/webmail/inbox/' . $dt->format('Y') . '/' . $dt->format('m') . '/' . $dt->format('d');
+        
+        $file = $p . '/' . $uid . '.eml';
+        
+        return $file;
     }
     
     
@@ -540,8 +644,56 @@ class HordeMonitor {
     }
     
     
+    public function stop() {
+        $this->disconnect();
+        $this->setCallbackItemImported(null);
+    }
+
+    
+    /**
+     * poll() - checks if there's new mail
+     *
+     * @return boolean true/false, true if there's new mail
+     */
+    public function poll() {
+        // no connection? => try to connect
+        if ($this->isConnected() == false) {
+            if (!$this->connect()) {
+                return false;
+            }
+        }
+        
+        // fetch mailbox status
+        $oldCheck = $this->check;
+        $this->check = $this->check();
+        
+        $checkMailbox = false;
+        
+        // first run & check-succeeded? => return true
+        if ($oldCheck == null && is_object($this->check)) {
+            $checkMailbox = true;
+        }
+        // ..nd-run? => compare with previous response
+        if (is_object($oldCheck) && is_object($this->check) && $oldCheck->Nmsgs != $this->check->Nmsgs) {
+            $checkMailbox = true;
+        }
+        
+        if ($checkMailbox)
+            return true;
+        
+        // check-failed? => disconnect
+        if (!$this->check) {
+            $this->disconnect();
+        }
+        
+        return false;
+    }
+    
+    
+    
+    public function import() {
+        $items = $this->importInbox( $this->connector );
+    }
     
 }
-
-
 
