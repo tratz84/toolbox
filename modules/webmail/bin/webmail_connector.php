@@ -9,11 +9,10 @@
 
 use core\ObjectContainer;
 use core\db\DatabaseHandler;
-use webmail\mail\ImapMonitor;
-use webmail\service\ConnectorService;
-use webmail\service\EmailService;
-use webmail\solr\SolrImportMail;
 use webmail\model\Connector;
+use webmail\service\ConnectorService;
+use webmail\solr\SolrImportMail;
+use webmail\mail\connector\ImapConnector;
 
 if (count($argv) != 2) {
     print "Usage: {$argv[0]} <contextname>\n";
@@ -96,9 +95,9 @@ while (true) {
                 $c->setField('last_filter_change', $lastFilterChange);
                 
                 // connect
-                if ($c->getConnectorType() == 'imap') {
+                if ($c->getConnectorType() == 'imap' || $c->getConnectorType() == 'horde') {
                     print_info("Starting monitor for: " . $c->getDescription());
-                    $im = new ImapMonitor($c);
+                    $im = ImapConnector::createMailConnector( $c );
                     $im->setCallbackItemImported(function($folderName, $overview, $file, $changed) use ($c) {
                         // decode subject
                         $subject = imap_utf8( $overview->subject );
