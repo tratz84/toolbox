@@ -2,14 +2,12 @@
 
 
 
-use webmail\mail\ImapConnection;
 use webmail\mail\SolrMailActions;
 use webmail\model\Connector;
 use webmail\service\ConnectorService;
 use webmail\solr\SolrImportMail;
 use webmail\solr\SolrMail;
 use core\exception\InvalidStateException;
-use webmail\mail\connector\ImapConnector;
 use webmail\mail\connector\BaseMailConnector;
 
 function mapAllConnectors() {

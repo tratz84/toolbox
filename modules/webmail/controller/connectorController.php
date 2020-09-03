@@ -8,6 +8,7 @@ use webmail\model\Connector;
 use webmail\service\ConnectorService;
 use webmail\mail\ImapConnection;
 use core\exception\ObjectNotFoundException;
+use webmail\mail\connector\BaseMailConnector;
 
 class connectorController extends BaseController {
     
@@ -91,27 +92,40 @@ class connectorController extends BaseController {
     public function action_fetch_folders() {
         $connectorService = $this->oc->get(ConnectorService::class);
         
-        $password = get_var('password', '');
-        
-        if (!$password && get_var('connector_id')) {
+        $pw_db = '';
+        if (get_var('connector_id')) {
             $connector = $connectorService->readConnector((int)get_var('connector_id'));
-            $password = $connector->getPassword();
+            $pw_db = $connector->getPassword();
+        } else {
+            $connector = new Connector();
         }
+        
+        $connectorForm = $this->oc->create(ConnectorForm::class, $connector);
+        $connectorForm->bind($_REQUEST);
+        $connectorForm->fill( $connector, array_keys($_REQUEST) );
+        
+        if (get_var('password')) {
+            $connector->setPassword( get_var('password') );
+        } else {
+            $connector->setPassword( $pw_db );
+        }
+        
         
         $result = array();
         
         try {
-            $imap = new ImapConnection(get_var('hostname'), get_var('port'), get_var('username'), $password);
-            if ($imap->connect()) {
-                $result['folders'] = $imap->listFolders();
-                $imap->disconnect();
+            $mailcon = BaseMailConnector::createMailConnector($connector);
+            
+            if ($mailcon->connect()) {
+                $result['folders'] = $mailcon->listFolders();
+                $mailcon->disconnect();
                 
                 $result['status'] = 'ok';
             } else {
                 $result['status'] = 'error';
                 $result['message'] = 'Mislukt verbinding te maken';
-                if (count($imap->getErrors())) {
-                    $result['message'] = $result['message']. ': ' . implode(', ', $imap->getErrors());
+                if (count($mailcon->getErrors())) {
+                    $result['message'] = $result['message']. ': ' . implode(', ', $mailcon->getErrors());
                 }
             }
         } catch (\Exception $ex) {

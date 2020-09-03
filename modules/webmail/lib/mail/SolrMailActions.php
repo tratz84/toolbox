@@ -3,8 +3,6 @@
 namespace webmail\mail;
 
 use core\exception\ObjectNotFoundException;
-use function object_container_get;
-use function webmail\mail\ImapConnection\imapAppend as imap_last_error;
 use webmail\model\Connector;
 use webmail\service\ConnectorService;
 use webmail\service\EmailService;
