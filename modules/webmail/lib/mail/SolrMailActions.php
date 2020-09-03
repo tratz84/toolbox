@@ -227,12 +227,12 @@ class SolrMailActions {
         }
         
         // moved? => update properties-file
-        if ($props->getUid() && $this->mailConnection->moveMailByUid($props->getUid(), $props->getFolder(), $if->getFolderName())) {
+        if ($props->getUid() && $this->mailConnector->moveMailByUid($props->getUid(), $props->getFolder(), $if->getFolderName())) {
             $this->mailConnector->expunge();
             
             // moving mail is actually a copy- + delete-action. After a move
             // the UID of the message in mailbox must be updated
-            $foundUids = $this->mailConnection->lookupUid($if->getFolderName(), $solrMail);
+            $foundUids = $this->mailConnector->lookupUid($if->getFolderName(), $solrMail);
             $newUid = is_array($foundUids) && count($foundUids) == 1 ? $foundUids[0] : null;
             $solrMail->getProperties()->setUid( $newUid );
         }
@@ -317,8 +317,8 @@ class SolrMailActions {
         $this->createMailConnector($connector);
         
         // connect to imap server
-        if (!$this->mailConnection->isConnected()) {
-            if ($this->mailConnection->connect() == false) {
+        if (!$this->mailConnector->isConnected()) {
+            if ($this->mailConnector->connect() == false) {
                 return false;
             }
         }
@@ -336,7 +336,7 @@ class SolrMailActions {
 //         $emlMessage = str_replace("\n", "\r\n", $emlMessage);
 //         print $emlMessage;exit; 
         
-        $r = $this->mailConnection->appendMessage($if_send->getFolderName(), $emlMessage);
+        $r = $this->mailConnector->appendMessage($if_send->getFolderName(), $emlMessage);
         
         $this->lastError = \imap_last_error();
         
