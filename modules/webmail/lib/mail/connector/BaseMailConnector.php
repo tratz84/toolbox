@@ -44,19 +44,27 @@ abstract class BaseMailConnector {
     public abstract function disconnect();
     
     
-    public function stop() {
-    }
+    // check if there's new mail
+    public function poll() { }
     
-    public function poll() {
-    }
+    // import mail
+    public function import() { }
     
-    public function import() {
-    }
+    // expunge deleted
+    public function expunge() { }
     
-    public function expunge() {
-    }
+    // empty folder
+    public function emptyFolder($folderName) { }
     
-    public function emptyFolder($folderName) {
-    }
+    
+    public function markMail($uid, $folder, $flag) { }
+    public function markJunk($uid, $folder) { }
+    
+    public function moveMailByUid($uid, $srcFolder, $dstFolder) { }
+    public function deleteMailByUid($uid, $folder) { }
+    public function lookupUid($folder, $solrMail) { }
+    
+    public function appendMessage($folder, $emlMessage) { }
+    
 }
 

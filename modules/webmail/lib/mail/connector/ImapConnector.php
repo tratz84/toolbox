@@ -530,13 +530,26 @@ class ImapConnector extends BaseMailConnector {
         return imap_mail_move($this->imap, $uid, $targetFolder, CP_UID);
     }
     
-    public function setFlagByUid($uid, $folder, $flags) {
+    public function markMail($uid, $folder, $flags) {
         if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folder))) {
             return false;
         }
         
         return imap_setflag_full($this->imap, $uid, $flags, ST_UID);
     }
+    
+    public function markJunk($uid, $folder) {
+        if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folder))) {
+            return false;
+        }
+        
+        imap_setflag_full($this->imap, $uid, 'Junk', ST_UID);
+        imap_setflag_full($this->imap, $uid, '$Junk', ST_UID);
+        
+        imap_clearflag_full($this->imap, $uid, 'NonJunk', ST_UID);
+        imap_clearflag_full($this->imap, $uid, '$NonJunk', ST_UID);
+    }
+    
     public function clearFlagByUid($uid, $folder, $flags) {
         if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folder))) {
             return false;
@@ -545,7 +558,7 @@ class ImapConnector extends BaseMailConnector {
         return imap_clearflag_full($this->imap, $uid, $flags, ST_UID);
     }
     
-    public function imapAppend($mailbox, $message, $options=null, $internal_date=null) {
+    public function appendMessage($mailbox, $message, $options=null, $internal_date=null) {
         return imap_append($this->imap, $this->mailbox.$mailbox, $message, "\\Seen");
     }
     
@@ -640,12 +653,6 @@ class ImapConnector extends BaseMailConnector {
         
         
         return $uids;
-    }
-    
-    
-    public function stop() {
-        $this->disconnect();
-        $this->setCallbackItemImported(null);
     }
 
     

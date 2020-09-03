@@ -79,7 +79,9 @@ while (true) {
                 // connector changed? => stop
                 if ($connectorChanged) {
                     print_info("Stopping monitor for: " . $c->getDescription() . " (changed)");
-                    $monitors[$connectorId]->stop();
+                    $monitors[$connectorId]->disconnect();
+                    if (method_exists($monitors[$connectorId], 'setCallbackItemImported'))
+                        $monitors[$connectorId]->setCallbackItemImported( null );
                     unset( $monitors[$connectorId] );
                 }
             }
@@ -124,7 +126,9 @@ while (true) {
         foreach($monitors as $connectorId => $monitor) {
             if (in_array($connectorId, $connectorIds) == false) {
                 print_info("Removing monitor for: " . $monitor->getConnector()->getDescription());
-                $monitors[$connectorId]->stop();
+                $monitors[$connectorId]->disconnect();
+                if (method_exists($monitors[$connectorId], 'setCallbackItemImported'))
+                    $monitors[$connectorId]->setCallbackItemImported( null );
                 unset( $monitors[$connectorId] );
             }
         }

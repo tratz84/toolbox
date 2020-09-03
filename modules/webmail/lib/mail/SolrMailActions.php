@@ -181,11 +181,11 @@ class SolrMailActions {
         
         
         // mark mail as answered
-        $ic = ImapConnection::createByConnector($connector);
-        if ($ic->connect()) {
-            $ic->setFlagByUid($mailProperties->getUid(), $mailProperties->getFolder(), $flag);
+        $mailConnector = BaseMailConnector::createMailConnector($connector);
+        if ($mailConnector->connect()) {
+            $mailConnector->markMail($mailProperties->getUid(), $mailProperties->getFolder(), $flag);
 //             $ic->expunge();
-            $ic->disconnect();
+            $mailConnector->disconnect();
         }
     }
     
@@ -210,32 +210,29 @@ class SolrMailActions {
         if ($props->getFolder() == $if->getFolderName())
             return false;
         
-        $this->createImapConnection($connector);
+        $this->createMailConnector($connector);
         
         // try to connect
-        if (!$this->imapConnection->isConnected()) {
-            if ($this->imapConnection->connect() == false) {
+        if (!$this->mailConnector->isConnected()) {
+            if ($this->mailConnector->connect() == false) {
                 return false;
             }
         }
         
         // spam?
         if (isset($opts['spam']) && $opts['spam']) {
-            $this->imapConnection->setFlagByUid($props->getUid(),   $props->getFolder(), 'Junk');
-            $this->imapConnection->setFlagByUid($props->getUid(),   $props->getFolder(), '$Junk');
-            $this->imapConnection->clearFlagByUid($props->getUid(), $props->getFolder(), 'NonJunk');
-            $this->imapConnection->clearFlagByUid($props->getUid(), $props->getFolder(), '$NonJunk');
+            $this->mailConnector->markJunk($props->getUid(),   $props->getFolder());
         
             $solrMail->getProperties()->setJunk(true);
         }
         
         // moved? => update properties-file
-        if ($props->getUid() && $this->imapConnection->moveMailByUid($props->getUid(), $props->getFolder(), $if->getFolderName())) {
-            $this->imapConnection->expunge();
+        if ($props->getUid() && $this->mailConnection->moveMailByUid($props->getUid(), $props->getFolder(), $if->getFolderName())) {
+            $this->mailConnector->expunge();
             
             // moving mail is actually a copy- + delete-action. After a move
             // the UID of the message in mailbox must be updated
-            $foundUids = $this->imapConnection->lookupUid($if->getFolderName(), $solrMail);
+            $foundUids = $this->mailConnection->lookupUid($if->getFolderName(), $solrMail);
             $newUid = is_array($foundUids) && count($foundUids) == 1 ? $foundUids[0] : null;
             $solrMail->getProperties()->setUid( $newUid );
         }
@@ -317,11 +314,11 @@ class SolrMailActions {
             throw new ObjectNotFoundException('Email not found');
         }
         
-        $this->createImapConnection($connector);
+        $this->createMailConnector($connector);
         
         // connect to imap server
-        if (!$this->imapConnection->isConnected()) {
-            if ($this->imapConnection->connect() == false) {
+        if (!$this->mailConnection->isConnected()) {
+            if ($this->mailConnection->connect() == false) {
                 return false;
             }
         }
@@ -339,7 +336,7 @@ class SolrMailActions {
 //         $emlMessage = str_replace("\n", "\r\n", $emlMessage);
 //         print $emlMessage;exit; 
         
-        $r = $this->imapConnection->imapAppend($if_send->getFolderName(), $emlMessage);
+        $r = $this->mailConnection->appendMessage($if_send->getFolderName(), $emlMessage);
         
         $this->lastError = \imap_last_error();
         
@@ -384,10 +381,10 @@ class SolrMailActions {
         
         $connector = $connectorService->readConnector($mail->getConnectorId());
         if ($connector && $connector->getConnectorType() == 'imap') {
-            $this->createImapConnection($connector);
+            $this->createMailConnector($connector);
             
             // try to connect
-            if ($this->imapConnection->isConnected() || $this->imapConnection->connect()) {
+            if ($this->mailConnector->isConnected() || $this->mailConnector->connect()) {
                 
                 // get trash-folder if available
                 $trash_ifid = $connector->getTrashConnectorImapfolderId();
@@ -399,16 +396,16 @@ class SolrMailActions {
                 
                 // trash-folder exists? => move message to trash
                 if ($trash_if) {
-                    $this->imapConnection->moveMailByUid($mp->getUid(), $mail->getMailboxName(), $trash_if->getFolderName());
+                    $this->mailConnector->moveMailByUid($mp->getUid(), $mail->getMailboxName(), $trash_if->getFolderName());
                 }
                 // no trash-folder? => delete
                 else {
-                    $this->imapConnection->deleteMailByUid($mail->getMailboxName(), $mp->getUid());
+                    $this->mailConnector->deleteMailByUid($mail->getMailboxName(), $mp->getUid());
                 }
                 
-                $this->imapConnection->expunge();
+                $this->mailConnector->expunge();
                 
-                $this->imapConnection->disconnect();
+                $this->mailConnector->disconnect();
             }
         }
         
