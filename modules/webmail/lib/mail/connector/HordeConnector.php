@@ -77,6 +77,25 @@ class HordeConnector extends BaseMailConnector {
         $this->client = null;
     }
     
+    
+    public function setSinceUpdate($t) { $this->sinceUpdate = $t; }
+    
+    public function setCallbackItemImported($callback) {
+        $this->callback_itemImported = $callback;
+    }
+    
+    
+    public function ping() {
+        if ($this->client === null) return false;
+        
+        return true;
+    }
+    
+    public function check() {
+        return $this->client->check();
+    }
+    
+    
     public function listFolders() {
         $list = $this->client->listMailboxes('*');
         
