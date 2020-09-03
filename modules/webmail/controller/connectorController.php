@@ -6,7 +6,6 @@ use core\controller\BaseController;
 use webmail\form\ConnectorForm;
 use webmail\model\Connector;
 use webmail\service\ConnectorService;
-use webmail\mail\ImapConnection;
 use core\exception\ObjectNotFoundException;
 use webmail\mail\connector\BaseMailConnector;
 

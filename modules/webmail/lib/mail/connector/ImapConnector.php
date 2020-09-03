@@ -549,7 +549,7 @@ class ImapConnector extends BaseMailConnector {
         return imap_append($this->imap, $this->mailbox.$mailbox, $message, "\\Seen");
     }
     
-    public function deleteFolder($folderName) {
+    public function emptyFolder($folderName) {
         if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folderName))) {
             return false;
         }

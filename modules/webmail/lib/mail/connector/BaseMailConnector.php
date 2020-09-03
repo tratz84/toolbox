@@ -7,7 +7,7 @@ use core\exception\InvalidStateException;
 use webmail\model\Connector;
 
 
-class BaseMailConnector {
+abstract class BaseMailConnector {
     
     protected $connector;
     protected $blnRunning = true;
@@ -40,18 +40,23 @@ class BaseMailConnector {
         }
     }
     
+    public abstract function connect();
+    public abstract function disconnect();
+    
     
     public function stop() {
-        
     }
     
     public function poll() {
-        
     }
     
     public function import() {
-        
     }
     
+    public function expunge() {
+    }
+    
+    public function emptyFolder($folderName) {
+    }
 }
 

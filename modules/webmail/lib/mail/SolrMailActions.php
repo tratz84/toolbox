@@ -11,10 +11,11 @@ use webmail\solr\SolrMail;
 use webmail\solr\SolrMailQuery;
 use core\exception\InvalidStateException;
 use webmail\model\Email;
+use webmail\mail\connector\BaseMailConnector;
 
 class SolrMailActions {
     
-    protected $imapConnection = null;
+    protected $mailConnector = null;
     
     protected $lastError = null;
     
@@ -23,24 +24,23 @@ class SolrMailActions {
     }
     
     
-    public function setImapConnection($ic) { $this->imapConnection = $ic; }
-    public function createImapConnection($connector) {
-        if ($this->imapConnection != null) {
-            if ($this->imapConnection->getConnector()->getConnectorId() != $connector->getConnectorId()) {
-                throw new InvalidStateException('debug this! returning wrong ImapConnection');
+    public function createMailConnector($connector) {
+        if ($this->mailConnector != null) {
+            if ($this->mailConnector->getConnector()->getConnectorId() != $connector->getConnectorId()) {
+                throw new InvalidStateException('debug this! returning wrong MailConnector');
             }
             
-            return $this->imapConnection;
+            return $this->mailConnector;
         }
         
         
-        $this->imapConnection = ImapConnection::createByConnector($connector);
+        $this->mailConnector = BaseMailConnector::createMailConnector($connector);
     }
     
     public function closeConnection() {
-        if ($this->imapConnection) {
-            $this->imapConnection->disconnect();
-            $this->imapConnection=null;
+        if ($this->mailConnector) {
+            $this->mailConnector->disconnect();
+            $this->mailConnector = null;
         }
     }
     

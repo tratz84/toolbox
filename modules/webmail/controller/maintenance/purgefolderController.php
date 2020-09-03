@@ -4,10 +4,10 @@
 
 use core\controller\BaseController;
 use webmail\form\PurgeFolderForm;
-use webmail\mail\ImapConnection;
 use webmail\mail\SolrMailActions;
 use webmail\service\ConnectorService;
 use webmail\solr\SolrMailQuery;
+use webmail\mail\connector\BaseMailConnector;
 
 class purgefolderController extends BaseController {
     
@@ -87,25 +87,18 @@ class purgefolderController extends BaseController {
             
             
             // purge imap-folder
-            if ($connector->getConnectorType() == 'imap') {
-                $ic = ImapConnection::createByConnector($connector);
-                if (!$ic->connect()) {
-                    return $this->json([
-                        'error' => true,
-                        'message' => 'Unable to connect to server'
-                    ]);
-                }
-                
-                $ic->deleteFolder($imapFolderName);
-                $ic->expunge();
-                
-                $ic->disconnect();
-            } else {
+            $mailConnector = BaseMailConnector::createMailConnector($connector);
+            if (!$mailConnector->connect()) {
                 return $this->json([
                     'error' => true,
-                    'message' => 'Purge not supported for connection type'
+                    'message' => 'Unable to connect to server'
                 ]);
             }
+            
+            $mailConnector->emptyFolder($imapFolderName);
+            $mailConnector->expunge();
+            
+            $mailConnector->disconnect();
         }
         catch (\Exception|\Error $ex) {
             return $this->json([
