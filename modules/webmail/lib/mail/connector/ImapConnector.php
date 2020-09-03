@@ -20,6 +20,8 @@ class ImapConnector extends BaseMailConnector {
     
     protected $connectionOptions = array();
     
+    protected $check = null;
+    
     protected $mailbox = null;
     protected $imap = null;
     
