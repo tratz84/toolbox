@@ -5,6 +5,7 @@ namespace webmail\mail\connector;
 
 use core\exception\InvalidStateException;
 use webmail\model\Connector;
+use webmail\solr\SolrMail;
 
 
 abstract class BaseMailConnector {
@@ -62,7 +63,7 @@ abstract class BaseMailConnector {
     
     public function moveMailByUid($uid, $srcFolder, $dstFolder) { }
     public function deleteMailByUid($uid, $folder) { }
-    public function lookupUid($folder, $solrMail) { }
+    public function lookupUid($folder, SolrMail $solrMail) { }
     
     public function appendMessage($folder, $emlMessage) { }
     
