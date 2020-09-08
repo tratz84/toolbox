@@ -2,10 +2,13 @@
 
 
 jQuery(document).ready(function($) {
+	handleFormActions(document.body);
+});
+function handleFormActions(actionsContainer) {
+	var $ = jQuery;
 	
-	
-	$('.form-generator').submit(function() {
-		$('.list-form-widget, .list-edit-form-widget').each(function(index, node) {
+	$(actionsContainer).find('.form-generator').submit(function() {
+		$(actionsContainer).find('.list-form-widget, .list-edit-form-widget').each(function(index, node) {
 			handleCounters( node );
 		});
 	});
@@ -13,7 +16,7 @@ jQuery(document).ready(function($) {
 	/**
 	 * handle clicks on list-form-widget-table rows
 	 */
-	$('.form-generator .list-form-widget .sublist tbody tr').click(function(evt) {
+	$(actionsContainer).find('.form-generator .list-form-widget .sublist tbody tr').click(function(evt) {
 		// skip click-handling for action-cell
 		if ($(evt.target).hasClass('actions') || $(evt.target).closest('td.actions').length > 0) {
 			return;
@@ -25,15 +28,15 @@ jQuery(document).ready(function($) {
 		$(this).find('.row-edit').click();
 	});
 	
-	$('.form-generator .list-form-widget .sublist .actions .row-edit').click(function() {
+	$(actionsContainer).find('.form-generator .list-form-widget .sublist .actions .row-edit').click(function() {
 		row_edit( $(this).closest('tr') );
 	});
 	
-	$('.form-generator .list-form-widget .sublist .actions .row-delete').click(function() {
+	$(actionsContainer).find('.form-generator .list-form-widget .sublist .actions .row-delete').click(function() {
 		row_delete( $(this).closest('tr') );
 	});
 	
-	$('.form-generator .list-form-widget .add-record').click(function() {
+	$(actionsContainer).find('.form-generator .list-form-widget .add-record').click(function() {
 		if ($(this).closest('.form-generator').hasClass('form-readonly'))
 			return;
 		
@@ -303,7 +306,7 @@ jQuery(document).ready(function($) {
 	/**
 	 * list-edit-form-widget event handling
 	 */
-	$('.widget.list-edit-form-widget').each(function(index, node) {
+	$(actionsContainer).find('.widget.list-edit-form-widget').each(function(index, node) {
 		var lefw = new ListEditFormWidget( node );
 		node.lefw = lefw;
 	});
@@ -317,7 +320,7 @@ jQuery(document).ready(function($) {
 
 	
 	$(window).trigger('form-actions-set');
-});
+}
 
 
 

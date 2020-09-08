@@ -7,6 +7,11 @@ $(window).on('form-actions-set', function() {
 		return;
 	}
 	
+	// already set? this might called multiple times when popups are stacked
+	if ($('.customer-form-select-company-list-edit .select-company').length > 0) {
+		return;
+	}
+
 	var lefw = $('.customer-form-select-company-list-edit').get(0).lefw;
 	
 	$('.customer-form-select-company-list-edit .add-record').hide();

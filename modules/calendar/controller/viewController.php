@@ -17,6 +17,12 @@ class viewController extends BaseController {
     
     
     public function action_index() {
+        hook_htmlscriptloader_enableGroup('iban');
+        hook_htmlscriptloader_enableGroup('customer-select-widget');
+        hook_htmlscriptloader_enableGroup('select-person-list-edit');
+        hook_htmlscriptloader_enableGroup('select-company-list-edit');
+        
+        
         $calendarService = $this->oc->get(CalendarService::class);
         
         $this->today = new DateTime('now', new DateTimeZone(date_default_timezone_get()));

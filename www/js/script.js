@@ -787,18 +787,28 @@ function show_popup(url, opts) {
 		data: opts.data,
 		success: function(data, xhr, textStatus) {
 			
-			var bg = $('<div class="popup-element popup-background" />');
-			
-			bg.click(function() {
-				close_popup();
-			});
+			if ($('.popup-background').length == 0) {
+				var bg = $('<div class="popup-element popup-background" />');
+				bg.click(function() {
+					close_popup();
+				});
+				$(document.body).append(bg);
+			}
 			
 			$(document.body).addClass('popup-container-visible');
 			
+			var popupNo = 1;
+			$('.popup-container').each(function(index, node) {
+				if (parseInt($(node).data('popup-no')) >= popupNo) {
+					popupNo = parseInt($(node).data('popup-no'))+1;
+				}
+			});
+			
 			var popup = $('<div class="popup-element popup-container" />');
+			popup.addClass('popup-container-'+popupNo);
+			popup.data('popup-no', popupNo);
 			popup.html( data );
 			
-			$(document.body).append(bg);
 			$(document.body).append(popup);
 			
 			$(popup).find('.popup-close-link').click(function() { close_popup(); });
@@ -806,6 +816,7 @@ function show_popup(url, opts) {
 			autoformat_fields( popup );
 			
 			applyWidgetFields( popup );
+			handleFormActions( popup );
 			
 			$(window).trigger('popup-container-created', popup);
 			
@@ -832,10 +843,18 @@ function close_popup() {
 		return;
 	}
 	
-	$('.popup-element').remove();
-	$(document.body).removeClass('popup-container-visible');
+	// remove only last opened
+	var popupContainers = $('.popup-container');
+	var lastPopupContainer = popupContainers.get( popupContainers.length - 1 );
+	$(lastPopupContainer).remove();
 	
-	$(window).trigger('close-popup');
+	
+	if ($('.popup-container').length == 0) {
+		$('.popup-element').remove();
+		$(document.body).removeClass('popup-container-visible');
+		
+		$(window).trigger('close-popup');
+	}
 }
 
 
