@@ -4,6 +4,8 @@
 - automate/auto-generate list-pages
 - automate/auto-generate form-pages
 
+- popup stacking
+
 - fail2ban
 	- admin-page
 	- fail2ban page with case-nr
