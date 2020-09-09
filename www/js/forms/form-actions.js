@@ -7,6 +7,14 @@ jQuery(document).ready(function($) {
 function handleFormActions(actionsContainer) {
 	var $ = jQuery;
 	
+	// prevent double handling. Shouldn't happen..
+	if ($(actionsContainer).data('handleFormActions-called')) {
+		console.error('second time handleFormActions called');
+		return;
+	}
+	$(actionsContainer).data('handleFormActions-called', true);
+	
+	
 	$(actionsContainer).find('.form-generator').submit(function() {
 		$(actionsContainer).find('.list-form-widget, .list-edit-form-widget').each(function(index, node) {
 			handleCounters( node );
@@ -312,10 +320,7 @@ function handleFormActions(actionsContainer) {
 	});
 	
 	$(window).on('popup-container-created', function(evt, el) {
-		$(el).find('.widget.list-edit-form-widget').each(function(index, node) {
-			var lefw = new ListEditFormWidget( node );
-			node.lefw = lefw;
-		});
+		handleFormActions( el );
 	});
 
 	

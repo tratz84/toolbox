@@ -816,7 +816,6 @@ function show_popup(url, opts) {
 			autoformat_fields( popup );
 			
 			applyWidgetFields( popup );
-			handleFormActions( popup );
 			
 			$(window).trigger('popup-container-created', popup);
 			
