@@ -21,8 +21,12 @@ class CustomerSelectWidget extends DynamicSelectField {
         
         parent::__construct($name, $defaultValue, $defaultText, $endpoint, $label);
         
-        
+        // these are necessary in the popup when clicked on the '+'-anchor
         hook_htmlscriptloader_enableGroup('iban');
+        hook_htmlscriptloader_enableGroup('select-company-list-edit');
+        hook_htmlscriptloader_enableGroup('select-person-list-edit');
+        
+        // 
         hook_htmlscriptloader_enableGroup('customer-select-widget');
     }
     
