@@ -21,7 +21,7 @@
 
 	<thead>
 		<tr>
-			<th>Id</th>
+<!-- 			<th>Id</th> -->
 			<th>Bestandsgrootte</th>
 			<th>md5sum</th>
 			<th>Revisie</th>
@@ -33,7 +33,7 @@
 	<tbody>
 		<?php foreach($revisions as $r) : ?>
 		<tr>
-			<td><?= $r->getStoreFileRevId() ?></td>
+<!-- 			<td><?= $r->getStoreFileRevId() ?></td> -->
 			<td><?= $r->getFilesize() ?></td>
 			<td><?= $r->getMd5sum() ?></td>
 			<td><?= $r->getRev() ?></td>

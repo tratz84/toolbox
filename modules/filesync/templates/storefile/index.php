@@ -27,13 +27,13 @@ t.setRowClick(function(row, evt) {
 t.setConnectorUrl( '/?m=filesync&c=storefile&a=search&storeId=<?= $store->getStoreId() ?>' );
 
 
-t.addColumn({
-	fieldName: 'store_file_id',
-	width: 40,
-	fieldDescription: 'Id',
-	fieldType: 'text',
-	searchable: false
-});
+// t.addColumn({
+// 	fieldName: 'store_file_id',
+// 	width: 40,
+// 	fieldDescription: 'Id',
+// 	fieldType: 'text',
+// 	searchable: false
+// });
 
 t.addColumn({
 	fieldName: 'path',
