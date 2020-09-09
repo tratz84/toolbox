@@ -35,4 +35,37 @@
 }
 
 
+.popup-element.popup-tab {
+	position: fixed;
+	width: 80vw;
+	height: 26px;
+	left: 10vw;
+	top: calc(10% - 26px);
+	overflow-y: auto;
+	z-index: 90004;
+	
+	.popup-tab-item {
+		&::before {
+			content: "\f105";
+			padding: 1px 5px 0 5px;
+			display: block;
+			float: left;
+			font-family: FontAwesome;
+			font-weight: bold;
+			color: #00f;
+		}
+		float: left;
+		line-height: 26px;
+		background-color: #e3e3e3;
+		padding-right: 5px;
+	}
+	
+	@media (max-width: @pxMobileBreak) {
+		width: 94vw;
+		left: 3vw;
+	}
+
+}
+
+
 
