@@ -774,14 +774,19 @@ function showInfo(obj, html, opts) {
 }
 
 
-
+var show_popup_ajx = null;
 function show_popup(url, opts) {
+	// previous call active?
+	if (show_popup_ajx != null) {
+		return;
+	}
+	
 	opts = opts || {};
 	console.log(opts);
 	
 	hideInfo();
 	
-	$.ajax({
+	show_popup_ajx = $.ajax({
 		type: 'POST',
 		url: url,
 		data: opts.data,
@@ -826,6 +831,9 @@ function show_popup(url, opts) {
 		},
 		error: function(err) {
 			alert('Error: ' + err);
+		},
+		complete: function() {
+			show_popup_ajx = null;
 		}
 	});
 }
