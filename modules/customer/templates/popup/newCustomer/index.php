@@ -14,8 +14,12 @@
 
 $ftc = generate_tabs('customer', 'popup-newCustomer', null);
 
-$ftc->addTab(t('New company'), '<div class="popup-error-list-container"></div>'.$companyForm->render(), 10, ['name' => 'company']);
-$ftc->addTab(t('New person'), '<div class="popup-error-list-container"></div>'.$personForm->render(), 20, ['name' => 'person']);
+if ($showCompany) {
+    $ftc->addTab(t('New company'), '<div class="popup-error-list-container"></div>'.$companyForm->render(), 10, ['name' => 'company']);
+}
+if ($showPerson) {
+    $ftc->addTab(t('New person'), '<div class="popup-error-list-container"></div>'.$personForm->render(), 20, ['name' => 'person']);
+}
 
 $ftc->render();
 

@@ -21,6 +21,12 @@ class newCustomerController extends BaseController {
         $this->personForm->disableSubmit();
         $this->personForm->hideSubmitButtons();
         
+        $this->showCompany = true;
+        $this->showPerson = true;
+        
+        if (get_var('personOnly')) {
+            $this->showCompany = false;
+        }
         
         $this->setShowDecorator(false);
         return $this->render();
@@ -95,7 +101,7 @@ class newCustomerController extends BaseController {
         
         return $this->json([
             'success'       => true,
-            'company_id'    => $personId,
+            'person_id'     => $personId,
             'customer_id'   => 'person-'.$personId,
             'person_name'   => format_personname( $arr ),
             'customer_name' => format_personname( $arr )

@@ -22,9 +22,44 @@ $(window).on('form-actions-set', function() {
 	$('.customer-form-select-person-list-edit .add-record').hide();
 	
 	$('.customer-form-select-person-list-edit .add-entry-container.action-box').append('<span><a class="select-person" href="javascript:void(0);">'+_('Select person')+'</a></span>');
+	$('.customer-form-select-person-list-edit .add-entry-container.action-box').append('<span><a class="add-person" href="javascript:void(0);">'+_('Add person')+'</a></span>');
 	
 	$('.customer-form-select-person-list-edit .select-person').click(function() {
 		show_popup( appUrl('/?m=customer&c=person&a=popup') );
+	});
+
+	$('.customer-form-select-person-list-edit .add-person').click(function() {
+		show_popup( appUrl('/?m=customer&c=popup/newCustomer&personOnly=1'), {
+			renderCallback: function(popup) {
+				$(popup).find('.submit-form').click(function() {
+					$.ajax({
+						type: 'POST',
+						url: appUrl('/?m=customer&c=popup/newCustomer&a=save_person'),
+						data: $('.popup-container .form-person-form').serialize(),
+						success: function(data, xhr, textStatus) {
+							if (data.error) {
+								console.log(data);
+								setPopupFormErrors($(popup).find('.form-person-form'), data.errors);
+							}
+							
+							if (data.success) {
+								var lefw = $('.customer-form-select-person-list-edit').get(0).lefw;
+						
+								lefw.addRecord(function(row) {
+									$(row).find('.hidden-field-widget-person-id input').val( data.person_id );
+									$(row).find('.widget-full-name input').val( data.person_name );
+									$(row).find('.widget-full-name .value').text( data.person_name );
+								});
+
+								
+								close_popup();
+							}
+							
+						}
+					});
+				});
+			}
+		});
 	});
 	
 	$(lefw).on('list-edit-add-record', function() {
