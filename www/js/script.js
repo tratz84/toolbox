@@ -1470,7 +1470,9 @@ function months_between(d1, d2) {
 }
 
 
-function next_day(date, no=1) {
+function next_day(date, no) {
+	if (typeof no == 'undefined') no = 1;
+	
 	if (typeof date == 'string') {
 		date = str2date( date );
 	}
