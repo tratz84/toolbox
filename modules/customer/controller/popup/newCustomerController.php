@@ -26,6 +26,9 @@ class newCustomerController extends BaseController {
         
         if (get_var('personOnly')) {
             $this->showCompany = false;
+            
+            // create customer? probably popup in company-form, hide company selection..
+            $this->personForm->removeWidget('companyList');
         }
         
         $this->setShowDecorator(false);
