@@ -31,6 +31,18 @@ function is_windows() {
     return false;
 }
 
+/**
+ * Internet Explorer-browser? (not Edge)
+ * @return boolean
+ */
+function browser_ie() {
+    if (isset($_SERVER['HTTP_USER_AGENT']) && strpos(@$_SERVER['HTTP_USER_AGENT'], 'Trident') !== false) {
+        return true;
+    }
+    
+    return false;
+}
+
 function is_debug() {
     if (defined('DEBUG') && DEBUG) {
         return true;
