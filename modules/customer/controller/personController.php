@@ -82,8 +82,11 @@ class personController extends FormController {
     
     
     public function action_popup() {
-        
         $this->setShowDecorator(false);
+        
+        $this->personForm = new PersonForm();
+        $this->personForm->disableSubmit();
+        $this->personForm->removeWidget('companyList');
         
         return $this->render();
     }

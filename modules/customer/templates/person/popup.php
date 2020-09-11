@@ -2,8 +2,8 @@
 <div class="page-header">
 
 	<div class="toolbox">
-		<a href="<?= appUrl('/?m=customer&c=person&a=edit') ?>" onclick="$('#person-table-container [name=lastname]').focus();" class="fa fa-plus" target="_blank"></a>
 		<a href="javascript:void(0);" class="fa fa-times-circle popup-close-link"></a>
+		<a href="javascript:void(0);" class="fa fa-save submit-form"></a>
 	</div>
 	
 	
@@ -12,8 +12,18 @@
 </div>
 
 
-<div id="person-table-container"></div>
+<?php 
 
+$ftc = generate_tabs('customer', 'popup-selectPersion', null);
+
+$ftc->addTab(t('Select person'), '<div class="popup-error-list-container"></div> <div id="person-table-container"></div>', 10, ['name' => 'select-person']);
+
+$ftc->addTab(t('New person'), '<div class="popup-error-list-container"></div>'.$personForm->render(), 20, ['name' => 'add-person']);
+
+$ftc->render();
+
+
+?>
 
 
 
