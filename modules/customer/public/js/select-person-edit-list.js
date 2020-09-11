@@ -31,7 +31,7 @@ $(window).on('form-actions-set', function() {
 				$(popup).find('.toolbox .submit-form').hide();
 				
 				$(popup).find('a[data-toggle="tab"]').on('shown.bs.tab', function() {
-					var personSelected = $(this).closest('.popup-container').find('a[data-tab-name=select-person]').attr('aria-selected');
+					var personSelected = $(this).closest('.popup-container').find('a[data-tab-name=popup-select-person]').attr('aria-selected');
 					
 					if (personSelected == 'true') {
 						$(this).closest('.popup-container').find('.toolbox .submit-form').hide();
