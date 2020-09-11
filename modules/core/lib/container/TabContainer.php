@@ -62,7 +62,7 @@ class TabContainer {
             
             $tab_name = isset($tab['name']) ? $tab['name'] : $slug;
             
-            $html .= '<a class="nav-item nav-link '.($x==0?'active':'').'" id="nav-'.$slug.'-tab" data-tab-name="'.esc_attr($tab_name).'" data-toggle="tab" role="tab" aria-controls="'.$slug.'" href="#nav-'.$slug.'" aria-selected="'.($x==0?'true':'false').'">'.esc_html($tab['title']).'</a>' . PHP_EOL;
+            $html .= '<a class="nav-item nav-link '.($x==0?'active':'').'" id="nav-'.$tab_name.'-tab" data-tab-name="'.esc_attr($tab_name).'" data-toggle="tab" role="tab" aria-controls="'.$tab_name.'" href="#nav-'.$tab_name.'" aria-selected="'.($x==0?'true':'false').'">'.esc_html($tab['title']).'</a>' . PHP_EOL;
         }
         $html .= '</div>' . PHP_EOL;
         $html .= '</nav>' . PHP_EOL;
@@ -74,7 +74,7 @@ class TabContainer {
             $slug = slugify($tab['title']);
             $tab_name = isset($tab['name']) ? $tab['name'] : $slug;
             
-            $html .= '<div class="tab-pane '.($x==0?'show active':'').' tab-name-'.$tab_name.'" id="nav-'.$slug.'" role="tabpanel" aria-labelledby="'.$slug.'-tab">' . PHP_EOL;
+            $html .= '<div class="tab-pane '.($x==0?'show active':'').' tab-name-'.$tab_name.'" id="nav-'.$tab_name.'" role="tabpanel" aria-labelledby="'.$tab_name.'-tab">' . PHP_EOL;
             $html .= $tab['content'] . PHP_EOL;
             $html .= '</div>' . PHP_EOL;
         }

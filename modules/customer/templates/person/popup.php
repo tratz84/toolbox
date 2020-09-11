@@ -16,9 +16,9 @@
 
 $ftc = generate_tabs('customer', 'popup-selectPersion', null);
 
-$ftc->addTab(t('Select person'), '<div class="popup-error-list-container"></div> <div id="person-table-container"></div>', 10, ['name' => 'select-person']);
+$ftc->addTab(t('Select person'), '<div class="popup-error-list-container"></div> <div id="person-table-container"></div>', 10, ['name' => 'popup-select-person']);
 
-$ftc->addTab(t('New person'), '<div class="popup-error-list-container"></div>'.$personForm->render(), 20, ['name' => 'add-person']);
+$ftc->addTab(t('New person'), '<div class="popup-error-list-container"></div>'.$personForm->render(), 20, ['name' => 'popup-add-person']);
 
 $ftc->render();
 

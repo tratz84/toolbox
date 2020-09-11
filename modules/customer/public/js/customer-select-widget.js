@@ -42,7 +42,7 @@ function newCustomerPopup_handleCompanySubmit() {
 		data: $('.popup-container .form-company-form').serialize(),
 		success: function(data, xhr, textStatus) {
 			if (data.error) {
-				setPopupFormErrors('.popup-container .form-company-form', data.errors);
+				setPopupFormErrors('.popup-container .tab-name-company', data.errors);
 			}
 			
 			if (data.success) {
@@ -63,7 +63,7 @@ function newCustomerPopup_handlePersonSubmit() {
 		success: function(data, xhr, textStatus) {
 			if (data.error) {
 				console.log(data);
-				setPopupFormErrors('.popup-container .form-person-form', data.errors);
+				setPopupFormErrors('.popup-container .tab-name-person', data.errors);
 			}
 			
 			if (data.success) {

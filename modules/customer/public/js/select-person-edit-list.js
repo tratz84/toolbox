@@ -49,7 +49,7 @@ $(window).on('form-actions-set', function() {
 						success: function(data, xhr, textStatus) {
 							if (data.error) {
 								console.log(data);
-								setPopupFormErrors($(popup).find('.tab-name-person'), data.errors);
+								setPopupFormErrors($(popup).find('.tab-name-popup-add-person'), data.errors);
 							}
 							
 							if (data.success) {
