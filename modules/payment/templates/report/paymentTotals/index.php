@@ -15,7 +15,8 @@
     	</tr>
     </thead>
 	<tbody>
-		<?php foreach($totalsByCustomer as $tc) : ?>
+		<?php foreach($customerIds as $cid) : ?>
+			<?php $tc = $totalsByCustomer[$cid] ?>
     		<tr class="clickable" onclick="record_Click(this);" data-company-id="<?= $tc['company_id'] ?>" data-person-id="<?= $tc['person_id'] ?>">
     			<td>
     				<?= esc_html(format_customername($tc)) ?>

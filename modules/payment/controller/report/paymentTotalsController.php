@@ -72,6 +72,16 @@ class paymentTotalsController extends BaseReportController {
         }
         
         
+        $customerIds = array_keys( $this->totalsByCustomer );
+        usort($customerIds, function($o1, $o2) {
+            $n1 = format_customername( $this->totalsByCustomer[$o1] );
+            $n2 = format_customername( $this->totalsByCustomer[$o2] );
+            
+            return strcasecmp($n1, $n2);
+        });
+        $this->customerIds = $customerIds;
+        
+        
         return $this->renderToString();
     }
     
