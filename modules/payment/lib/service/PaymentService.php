@@ -341,6 +341,12 @@ class PaymentService extends ServiceBase {
         
         
     }
+
+    public function readPaymentTotals($opts) {
+        $iDao = new PaymentDAO();
+        
+        return $iDao->readTotals( $opts );
+    }
     
     
     public function summaryByCustomer($companyId, $personId) {

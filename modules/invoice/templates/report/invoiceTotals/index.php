@@ -22,11 +22,7 @@
     		<?php $totalInvoices += $r['number_invoices'] ?>
     		<tr class="clickable" onclick="record_Click(this);" data-company-id="<?= $r['company_id'] ?>" data-person-id="<?= $r['person_id'] ?>">
     			<td>
-    				<?php if ($r['company_name']) : ?>
-    					<?= esc_html($r['company_name']) ?>
-    				<?php else : ?>
-    					<?= esc_html(format_personname($r)) ?>
-    				<?php endif; ?>
+    				<?= esc_html(format_customername($r)) ?>
     			</td>
     			<td class="right">
     				<?= format_price($r['total_billed'], true, ['thousands' => '.']) ?>

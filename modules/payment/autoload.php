@@ -103,5 +103,14 @@ hook_eventbus_subscribe('customer', 'person-edit-footer', function($ftc) {
         $ftc->addTab('Betalingen', $html);
     }
 });
+
+
+hook_eventbus_subscribe('report', 'menu-list', function($reportMenuList) {
+    /**
+     * report\ReportMenuList
+     */
     
+    $reportMenuList->addMenuItem('Betalingen - totalen',   'payment', 'report/paymentTotals');
+});
+
 

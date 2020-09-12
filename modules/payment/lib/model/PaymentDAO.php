@@ -90,5 +90,43 @@ class PaymentDAO extends \core\db\DAOObject {
 	    return $rows[0];
 	}
 	
+	
+	
+	public function readTotals($opts) {
+	    $sql = "select c.company_id, c.company_name, p.person_id, p.firstname, p.insert_lastname, p.lastname, sum(amount) total_amount, count(*) number_payments
+                from payment__payment
+                left join customer__company c using (company_id)
+                left join customer__person p using (person_id) ";
+	    
+	    $where = array();
+	    $params = array();
+	    
+	    // hmz..
+	    if (isset($opts['start']) && valid_date($opts['start'])) {
+	        $where[] = ' payment_date >= ? ';
+	        $params[] = format_date($opts['start'], 'Y-m-d');
+	    }
+	    if (isset($opts['end']) && valid_date($opts['end'])) {
+	        $where[] = ' payment_date <= ? ';
+	        $params[] = format_date($opts['end'], 'Y-m-d');
+	    }
+	    
+	    $where[] = 'cancelled = false';
+	    
+	    if (count($where)) {
+	        $sql .= ' where ('.implode(') AND (', $where) . ') ';
+	    }
+	    
+	    $sql .= "group by payment__payment.company_id, payment__payment.person_id";
+	    
+	    $res = $this->query($sql, $params);
+	    $rows = array();
+	    while ($r = $res->fetch_assoc()) {
+	        $rows[] = $r;
+	    }
+	    
+	    return $rows;
+	}
+	
 }
 

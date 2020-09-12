@@ -132,7 +132,16 @@ class InvoiceDAO extends \core\db\DAOObject {
 
 
 	public function readTotals($opts) {
-	    $sql = "select c.company_id, c.company_name, p.person_id, p.firstname, p.insert_lastname, p.lastname, sum(total_calculated_price) total_billed, count(*) number_invoices
+	    $sql = "select i.company_id
+                        , c.company_name
+                        , i.person_id
+                        , p.firstname
+                        , p.insert_lastname
+                        , p.lastname
+                        , sum(total_calculated_price) total_billed
+                        , sum(ifnull(total_calculated_price, 0)) sum_total_calculated_price
+                        , sum(ifnull(total_calculated_price_incl_vat, 0)) sum_total_calculated_price_incl_vat
+                        , count(*) number_invoices
                 from invoice__invoice i
                 left join customer__company c using (company_id)
                 left join customer__person p using (person_id) ";
@@ -158,7 +167,7 @@ class InvoiceDAO extends \core\db\DAOObject {
 	        $sql .= ' where ('.implode(') AND (', $where) . ') ';
 	    }
 
-	    $sql .= "group by i.company_id, p.person_id
+	    $sql .= "group by i.company_id, i.person_id
                 order by sum(total_calculated_price) desc";
 
 	    $res = $this->query($sql, $params);
@@ -207,7 +216,7 @@ class InvoiceDAO extends \core\db\DAOObject {
 	        $list[] = array(
 	            'month' => $row[0],
 	            'sum_excl_vat' => $row[1],
-	            'sum_incl_vat' => $row[1],
+	            'sum_incl_vat' => $row[2],
 	        );
 	    }
 	    
