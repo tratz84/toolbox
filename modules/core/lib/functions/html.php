@@ -68,6 +68,40 @@ function output_user_messages() {
         unset($_SESSION['user_message']);
 }
 
+
+function report_user_warning($msg) {
+    if (isset($_SESSION['user_warnings']) == false) {
+        $_SESSION['user_warnings'] = array();
+    }
+    
+    // prevent duplicate messages
+    if (in_array($msg, $_SESSION['user_warnings'])) {
+        return;
+    }
+    
+    if (is_array($msg)) foreach($msg as $m) {
+        $_SESSION['user_warnings'][] = $m;
+    } else {
+        $_SESSION['user_warnings'][] = $msg;
+    }
+}
+
+function output_user_warnings() {
+    if (isset($_SESSION['user_warnings']) && is_array($_SESSION['user_warnings']) && count($_SESSION['user_warnings'])) {
+        
+        foreach($_SESSION['user_warnings'] as $e) {
+            print '<div class="alert alert-warning">';
+            print '<div>'.esc_html($e).'</div>';
+            print '</div>';
+        }
+        
+    }
+    
+    if (isset($_SESSION['user_warnings']))
+        unset($_SESSION['user_warnings']);
+}
+
+
 function report_user_error($msg) {
     if (isset($_SESSION['user_errors']) == false) {
         $_SESSION['user_errors'] = array();

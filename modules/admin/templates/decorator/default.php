@@ -71,6 +71,8 @@
 	<div class="main-content">
 		<?php output_user_messages() ?>
 		
+		<?php output_user_warnings() ?>
+		
 		<?php output_user_errors() ?>
 		
 		<?php print $content ?>
