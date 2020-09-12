@@ -4,6 +4,7 @@
 namespace payment\model;
 
 
+use core\db\DatabaseHandler;
 use core\db\query\QueryBuilderWhere;
 
 class PaymentDAO extends \core\db\DAOObject {
@@ -65,5 +66,29 @@ class PaymentDAO extends \core\db\DAOObject {
 	    return $this->queryCursor($sql, $params);
 	}
 
+	
+	public function sumByCustomer($companyId, $personId) {
+	    $params = array();
+	    $sql = "select sum(ifnull(amount, 0)) sum_amount
+                from payment__payment
+                where cancelled = false";
+	    if ($companyId) {
+	        $sql .= ' and company_id = ? ';
+	        $params[] = $companyId;
+	    }
+	    else if ($personId) {
+	        $sql .= ' and person_id = ? ';
+	        $params[] = $personId;
+	    }
+	    else {
+	        return null;
+	    }
+	    
+	    $con = DatabaseHandler::getConnection($this->resourceName);
+	    $rows = $con->queryList($sql, $params);
+	    
+	    return $rows[0];
+	}
+	
 }
 

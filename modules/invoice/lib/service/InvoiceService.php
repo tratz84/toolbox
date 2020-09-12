@@ -689,6 +689,14 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
         
         return $list;
     }
+    
+    
+    public function summaryByCustomer($companyId, $personId) {
+        $iDao = new InvoiceDAO();
+        $invoiceSum = $iDao->sumByCustomer($companyId, $personId);
+        
+        return $invoiceSum;
+    }
 
 
 }

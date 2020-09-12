@@ -343,6 +343,13 @@ class PaymentService extends ServiceBase {
     }
     
     
+    public function summaryByCustomer($companyId, $personId) {
+        $pDao = new PaymentDAO();
+        $paymentSum = $pDao->sumByCustomer($companyId, $personId);
+        
+        return $paymentSum;
+    }
+    
     
 }
 

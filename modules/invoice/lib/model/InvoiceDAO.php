@@ -4,6 +4,7 @@
 namespace invoice\model;
 
 use core\Context;
+use core\db\DatabaseHandler;
 
 
 class InvoiceDAO extends \core\db\DAOObject {
@@ -212,6 +213,29 @@ class InvoiceDAO extends \core\db\DAOObject {
 	    
 	    return $list;
 	    
+	}
+	
+	
+	public function sumByCustomer($companyId, $personId) {
+	    $params = array();
+	    $sql = "select sum(ifnull(total_calculated_price,0)) sum_total_calculated_price, sum(ifnull(total_calculated_price_incl_vat,0)) sum_total_calculated_price_incl_vat
+                from invoice__invoice";
+	    if ($companyId) {
+	        $sql .= ' where company_id = ? ';
+	        $params[] = $companyId;
+	    }
+	    else if ($personId) {
+	        $sql .= ' where person_id = ? ';
+	        $params[] = $personId;
+	    }
+	    else {
+	        return null;
+	    }
+	    
+	    $con = DatabaseHandler::getConnection($this->resourceName);
+	    $rows = $con->queryList($sql, $params);
+	    
+	    return $rows[0];
 	}
 
 }

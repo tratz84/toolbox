@@ -1,5 +1,26 @@
 
+<table>
+<?php if (isset($invoiceSummary)) : ?>
+    <tr>
+    	<td>Totaal gefactureerd excl. btw</td>
+    	<td align=right style="padding-left: 20px;"><?= format_price($invoiceSummary['sum_total_calculated_price']) ?></td>
+    </tr>
+    <tr>
+    	<td>Totaal gefactureerd incl. btw</td>
+    	<td align=right><?= format_price($invoiceSummary['sum_total_calculated_price_incl_vat']) ?></td>
+    </tr>
+<?php endif; ?>
+    <tr>
+    	<td>Totaal betaald</td>
+    	<td align=right>
+    		<?= format_price($paymentSummary['sum_amount']) ?>
+    	</td>
+    	<td style="padding-left: 20px;">Openstaand bedrag</td>
+    	<td align=right style="<?= $diff_cents > 0 ? 'color: #f00' : 'color: #0f0;' ?>"><?= format_price(myround($diff_cents/100,2)) ?></td>
+    </tr>
+</table>
 
+<hr/>
 
 <div id="payment-overview-table-container"></div>
 
