@@ -142,6 +142,8 @@ class InvoiceDAO extends \core\db\DAOObject {
                         , sum(ifnull(total_calculated_price, 0)) sum_total_calculated_price
                         , sum(ifnull(total_calculated_price_incl_vat, 0)) sum_total_calculated_price_incl_vat
                         , count(*) number_invoices
+                        , c.deleted company_deleted
+                        , p.deleted person_deleted
                 from invoice__invoice i
                 left join customer__company c using (company_id)
                 left join customer__person p using (person_id) ";

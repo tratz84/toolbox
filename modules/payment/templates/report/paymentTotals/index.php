@@ -17,9 +17,10 @@
 	<tbody>
 		<?php foreach($customerIds as $cid) : ?>
 			<?php $tc = $totalsByCustomer[$cid] ?>
+			<?php $customername = format_customername($tc); ?>
     		<tr class="clickable" onclick="record_Click(this);" data-company-id="<?= $tc['company_id'] ?>" data-person-id="<?= $tc['person_id'] ?>">
-    			<td>
-    				<?= esc_html(format_customername($tc)) ?>
+    			<td style="<?= $tc['company_deleted'] || $tc['person_deleted'] || strpos($customername, 'person-') === 0 || strpos($customername, 'company-') === 0 ? 'color: #f00 ' : '' ?>">
+    				<?= esc_html($customername) ?>
     			</td>
     			<td class="right">
     				<?= format_price(@$tc['sum_total_calculated_price'], true, ['thousands' => '.']) ?>

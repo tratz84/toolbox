@@ -93,7 +93,16 @@ class PaymentDAO extends \core\db\DAOObject {
 	
 	
 	public function readTotals($opts) {
-	    $sql = "select c.company_id, c.company_name, p.person_id, p.firstname, p.insert_lastname, p.lastname, sum(amount) total_amount, count(*) number_payments
+	    $sql = "select c.company_id
+                    , c.company_name
+                    , p.person_id
+                    , p.firstname
+                    , p.insert_lastname
+                    , p.lastname
+                    , sum(amount) total_amount
+                    , count(*) number_payments
+                    , c.deleted company_deleted
+                    , p.deleted person_deleted
                 from payment__payment
                 left join customer__company c using (company_id)
                 left join customer__person p using (person_id) ";

@@ -54,8 +54,8 @@ function report_user_message($msg) {
 }
 
 function output_user_messages() {
+    // show messages
     if (isset($_SESSION['user_message']) && is_array($_SESSION['user_message']) && count($_SESSION['user_message'])) {
-        
         foreach($_SESSION['user_message'] as $e) {
             print '<div class="global-message alert alert-success">';
             print '<div>'.esc_html($e).'</div>';
@@ -64,8 +64,39 @@ function output_user_messages() {
         
     }
     
-    if (isset($_SESSION['user_message']))
+    if (isset($_SESSION['user_message'])) {
         unset($_SESSION['user_message']);
+    }
+    
+    // show warnings
+    if (isset($_SESSION['user_warnings']) && is_array($_SESSION['user_warnings']) && count($_SESSION['user_warnings'])) {
+        
+        foreach($_SESSION['user_warnings'] as $e) {
+            print '<div class="alert alert-warning">';
+            print '<div>'.esc_html($e).'</div>';
+            print '</div>';
+        }
+        
+    }
+    
+    if (isset($_SESSION['user_warnings'])) {
+        unset($_SESSION['user_warnings']);
+    }
+    
+    // show errors
+    if (isset($_SESSION['user_errors']) && is_array($_SESSION['user_errors']) && count($_SESSION['user_errors'])) {
+        
+        foreach($_SESSION['user_errors'] as $e) {
+            print '<div class="alert alert-danger">';
+            print '<div>'.esc_html($e).'</div>';
+            print '</div>';
+        }
+        
+    }
+    
+    if (isset($_SESSION['user_errors'])) {
+        unset($_SESSION['user_errors']);
+    }
 }
 
 
@@ -86,20 +117,6 @@ function report_user_warning($msg) {
     }
 }
 
-function output_user_warnings() {
-    if (isset($_SESSION['user_warnings']) && is_array($_SESSION['user_warnings']) && count($_SESSION['user_warnings'])) {
-        
-        foreach($_SESSION['user_warnings'] as $e) {
-            print '<div class="alert alert-warning">';
-            print '<div>'.esc_html($e).'</div>';
-            print '</div>';
-        }
-        
-    }
-    
-    if (isset($_SESSION['user_warnings']))
-        unset($_SESSION['user_warnings']);
-}
 
 
 function report_user_error($msg) {
@@ -117,21 +134,6 @@ function report_user_error($msg) {
     } else {
         $_SESSION['user_errors'][] = $msg;
     }
-}
-
-function output_user_errors() {
-    if (isset($_SESSION['user_errors']) && is_array($_SESSION['user_errors']) && count($_SESSION['user_errors'])) {
-        
-        foreach($_SESSION['user_errors'] as $e) {
-            print '<div class="alert alert-danger">';
-            print '<div>'.esc_html($e).'</div>';
-            print '</div>';
-        }
-        
-    }
-    
-    if (isset($_SESSION['user_errors']))
-        unset($_SESSION['user_errors']);
 }
 
 
