@@ -20,9 +20,10 @@
 		<?php foreach($totals as $r) : ?>
     		<?php $totalBilled += $r['total_billed'] ?>
     		<?php $totalInvoices += $r['number_invoices'] ?>
+    		<?php $customername = format_customername($r) ?>
     		<tr class="clickable" onclick="record_Click(this);" data-company-id="<?= $r['company_id'] ?>" data-person-id="<?= $r['person_id'] ?>">
-    			<td>
-    				<?= esc_html(format_customername($r)) ?>
+    			<td style="<?= $r['company_deleted'] || $r['person_deleted'] || strpos($customername, 'person-') === 0 || strpos($customername, 'company-') === 0 ? 'color: #f00 ' : '' ?>">
+    				<?= esc_html($customername) ?>
     			</td>
     			<td class="right">
     				<?= format_price($r['total_billed'], true, ['thousands' => '.']) ?>
