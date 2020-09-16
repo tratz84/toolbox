@@ -9,7 +9,7 @@
 
 
 
-<script src="<?= BASE_HREF ?>js/calendar/calendarController.js"></script>
+<script src="<?= appUrl('/?mpf=/module/calendar/js/calendarController.js') ?>"></script>
 
 <input type="hidden" id="calendarId" value="<?= $calendar->getCalendarId() ?>" />
 
