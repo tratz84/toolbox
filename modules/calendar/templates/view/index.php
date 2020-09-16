@@ -9,7 +9,7 @@
 
 
 
-<script src="<?= appUrl('/?mpf=/module/calendar/js/calendarController.js') ?>"></script>
+<script src="<?= appUrl('/?mpf=/module/calendar/js/calendarController.js?v='.filemtime(module_file('calendar', 'public/js/calendar.js'))) ?>"></script>
 
 <input type="hidden" id="calendarId" value="<?= $calendar->getCalendarId() ?>" />
 
