@@ -13,23 +13,6 @@
 			<li>
 				<a href="<?= appUrl('/?m=codegen&c=settings') ?>">Settings</a>
 			</li>
-			<li>
-				<a href="<?= appUrl('/?m=codegen&c=generateModule') ?>">Generate module</a>
-			</li>
-			<li>
-				<a href="<?= appUrl('/?m=codegen&c=base/controllerGenerator') ?>">Generate controller</a>
-			</li>
-			<?php /*
-			<li>
-				<a href="<?= appUrl('/?m=codegen&c=datamodel/module') ?>">Datamodel</a>
-			</li>
-			*/ ?>
-			<li>
-				<a href="<?= appUrl('/?m=codegen&c=menugeneratorController') ?>">Menu Generator</a>
-			</li>
-			<li>
-				<a href="<?= appUrl('/?m=codegen&c=config/usercapability') ?>">User capabilities</a>
-			</li>
 		</ul>
 	</div>
 
@@ -72,6 +55,30 @@
 		<ul>
 			<li>
 				<a href="<?= appUrl('/?m=codegen&c=generator/indexTable') ?>">IndexTable generator</a>
+			</li>
+		</ul>
+	</div>
+	
+	
+	<div class="col-xs-12 col-sm-4 col-lg-3 setting-menu-tag-container">
+		<h2>Code</h2>
+		<ul>
+			<li>
+				<a href="<?= appUrl('/?m=codegen&c=generateModule') ?>">Generate module</a>
+			</li>
+			<li>
+				<a href="<?= appUrl('/?m=codegen&c=base/controllerGenerator') ?>">Generate controller</a>
+			</li>
+			<?php /*
+			<li>
+				<a href="<?= appUrl('/?m=codegen&c=datamodel/module') ?>">Datamodel</a>
+			</li>
+			*/ ?>
+			<li>
+				<a href="<?= appUrl('/?m=codegen&c=menugeneratorController') ?>">Menu Generator</a>
+			</li>
+			<li>
+				<a href="<?= appUrl('/?m=codegen&c=config/usercapability') ?>">User capabilities</a>
 			</li>
 		</ul>
 	</div>
