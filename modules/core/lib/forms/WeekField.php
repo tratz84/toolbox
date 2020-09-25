@@ -51,11 +51,32 @@ class WeekField extends BaseWidget {
     public function render() {
         // build week array
         
-        $map_weeks = array();
         
+        // get selected val
+        $val = $this->getValue();
+        if ($this->getValue() && preg_match('/^\\d{4}-\\d{1,2}$/', $this->getValue())) {
+            $val = $this->getValue();
+        } else {
+            $val = $this->thisWeek;
+        }
+        
+        // entered startWeek after $val> => set $startWeek to $val
+        if ($val) {
+            $intThisWeek = (int)str_replace('-', '', $val);
+            $intStartWeek = (int)str_replace('-', '', $this->startWeek);
+            if ($intThisWeek > $intStartWeek) {
+                list ($sy, $sw) = explode('-', $val);
+                // maybe -10 for scrolling/spacing?
+                $this->setStartYearWeek($sy, $sw);
+            }
+        }
+        
+
+        $map_weeks = array();
         $curYear = $this->startYear;
         $curWeek = $this->startWeek;
         $weeks_in_year = weeks_in_year( $curYear );
+        
         
         for($x=0; $x < 500 && ($curYear < $this->endYear) || ($curYear == $this->endYear && $curWeek <= $this->endWeek) ; $x++) {
             
@@ -72,12 +93,6 @@ class WeekField extends BaseWidget {
             }
         }
         
-        $val = $this->getValue();
-        if ($this->getValue() && preg_match('/^\\d{4}-\\d{1,2}$/', $this->getValue())) {
-            $val = $this->getValue();
-        } else {
-            $val = $this->thisWeek;
-        }
         
         if ( isset($map_weeks[$val]) == false ) {
             list($y, $w) = explode('-', $val);
