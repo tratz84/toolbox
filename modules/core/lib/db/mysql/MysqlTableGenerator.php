@@ -17,10 +17,20 @@ class MysqlTableGenerator {
     protected $dbIndexes = array();
     protected $dbForeignKeys = array();
     
+    protected $dropColumns = false;
+    
+    
     public function __construct(TableModel $model) {
         $this->tableModel = $model;
         
         $this->resourceName = $model->getResourceName();
+        
+        // auto-drop columns?
+        if (is_debug()) {
+            $this->dropColumns = true;
+        } else {
+            $this->dropColumns = apply_filter('tableModelAutoDropColumns', false);
+        }
         
     }
     
@@ -245,9 +255,11 @@ class MysqlTableGenerator {
         
         
         // drop columns
-        foreach($this->dbColumns as $columnName => $props) {
-            if ($this->tableModel->hasColumn($columnName) == false) {
-                $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` DROP COLUMN `" . $columnName . "`;";
+        if ($this->dropColumns) {
+            foreach($this->dbColumns as $columnName => $props) {
+                if ($this->tableModel->hasColumn($columnName) == false) {
+                    $sql_statements[] = "ALTER TABLE `" . $this->getTableName() . "` DROP COLUMN `" . $columnName . "`;";
+                }
             }
         }
         
