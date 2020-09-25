@@ -306,7 +306,14 @@ class pagequeueController extends BaseController {
         // Content-Disposition
         header('Content-Disposition: inline; filename="'.$page->getBasenameFile().'"');
         
-        readfile($p);
+        // load/show jpeg through php-lib to remove exif-meta rotation data (IF it's set..)
+        if (in_array(file_extension($p), ['jpg', 'jpeg'])) {
+            $img = imagecreatefromjpeg( $p );
+            imagejpeg($img);
+        }
+        else {
+            readfile($p);
+        }
     }
     
     
