@@ -49,6 +49,31 @@ class PagequeueService extends ServiceBase {
                 throw new FileException('Error saving file');
             }
             
+            // jpeg? => check exifdata
+            if (in_array(file_extension($path), array('jpg', 'jpeg'))) {
+                if ($fh = fopen($fullpath, 'r')) {
+                    $exif_data = exif_read_data($fh);
+                    fclose($fh);
+                    
+                    // Orientation set? => auto-rotate
+                    if (isset($exif_data['Orientation'])) {
+                        if ($exif_data['Orientation'] == 1) {
+                            // default
+                        }
+                        else if ($exif_data['Orientation'] == 3) {
+                            $pag->setDegreesRotated( 180 );
+                        }
+                        else if ($exif_data['Orientation'] == 6) {
+                            $pag->setDegreesRotated( 90 );
+                        }
+                        else if ($exif_data['Orientation'] == 8) {
+                            $pag->setDegreesRotated( 270 );
+                        }
+                    }
+                }
+            }
+            
+            
             $pag->setFilename( $path );
             $pag->save();
         }
