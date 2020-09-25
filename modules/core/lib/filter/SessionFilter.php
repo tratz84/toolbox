@@ -23,7 +23,7 @@ class SessionFilter {
             $uri = '/'.     substr($_SERVER['REQUEST_URI'], strlen(BASE_HREF));
             
             $matches = array();
-            if (preg_match('/^\\/([a-zA-Z0-9_-]+)?\\/.*/', $uri, $matches) == false) {
+            if (preg_match('/^\\/([a-zA-Z0-9_-]+)?\\/.*/', $uri, $matches) == false || count($matches) != 2) {
                 throw new ContextNotFoundException('context not found');
             }
             $contextName = $matches[1];

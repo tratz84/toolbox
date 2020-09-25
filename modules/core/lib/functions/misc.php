@@ -103,7 +103,7 @@ function app_request_uri() {
             return $uri;
         
         $matches = array();
-        if (preg_match('/^\\/([a-zA-Z0-9_-]+)?\\/.*/', $uri, $matches) == false) {
+        if (preg_match('/^\\/([a-zA-Z0-9_-]+)?\\/.*/', $uri, $matches) == false || count($matches) != 2) {
             throw new \core\exception\ContextNotFoundException('context not found');
         }
         
