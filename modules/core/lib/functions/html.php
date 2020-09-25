@@ -428,7 +428,7 @@ function parse_shortcode($str) {
     
     $cur = '';
     for($x=0; $x < strlen($str); $x++) {
-        $c = $str{$x};
+        $c = $str[$x];
         
         $cur .= $c;
         
