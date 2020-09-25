@@ -73,7 +73,7 @@ class inboxController extends BaseController {
         $this->bcc     = $p->getAddresses('bcc');
         $this->subject = $p->getHeader('subject');
         
-        $this->attachments = $p->getAttachments(false);
+        $this->attachments = $p->getAttachments();
         $this->id = get_var('id');
         
         $this->setShowDecorator(false);
@@ -91,7 +91,7 @@ class inboxController extends BaseController {
         $p->setPath($f);
         
         $no = (int)get_var('no');
-        $this->attachments = $p->getAttachments(false);
+        $this->attachments = $p->getAttachments();
         
         if ($no < 0 || $no >= count($this->attachments)) {
             die('Attachment not found');

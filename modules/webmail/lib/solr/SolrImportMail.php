@@ -158,7 +158,7 @@ class SolrImportMail {
     }
     
     protected function attachmentCount(\PhpMimeMailParser\Parser $p) {
-        $att = $p->getAttachments(true);
+        $att = $p->getAttachments();
         
         $attachmentCount = 0;
         

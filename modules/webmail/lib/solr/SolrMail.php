@@ -315,9 +315,13 @@ class SolrMail {
         
         
         $this->attachments = array();
-        $this->parserAttachments = $this->parsedMail->getAttachments(false);
+        $this->parserAttachments = $this->parsedMail->getAttachments();
         $pos=0;
         foreach($this->parserAttachments as $att) {
+            // inline? => skip
+            if ($att->getContentID()) {
+                continue;
+            }
             $this->attachments[] = array(
                 'pos'      => $pos,
                 'filename' => $att->getFilename()
