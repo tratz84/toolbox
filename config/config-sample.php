@@ -29,7 +29,7 @@ define('BASE_HREF', '/');
 
 
 // note, not to be used directly, use Context::getInstance()->getDataDir();
-define('DATA_DIR', '/projects/peopleweb-php/data');
+define('DATA_DIR', '/projects/toolbox/data');
 define('WEBMAIL_SOLR', 'http://localhost:8984/solr/webmail');
 
 
@@ -37,7 +37,10 @@ define('WEBMAIL_SOLR', 'http://localhost:8984/solr/webmail');
 define('DEFAULT_DATABASE_HOST',     'localhost');
 define('DEFAULT_DATABASE_USERNAME', 'root');
 define('DEFAULT_DATABASE_PASSWORD', 'uiz123');
-define('DEFAULT_DATABASE_NAME',     'insights_github');
+define('DEFAULT_DATABASE_NAME',     'toolbox_master');
+
+//ctx()->addModuleDir('/projects/extra-modules');
+
 
 // master-data database
 $dh = \core\db\DatabaseHandler::getInstance();
