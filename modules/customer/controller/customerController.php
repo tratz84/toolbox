@@ -5,11 +5,14 @@ use customer\service\CustomerService;
 use core\controller\BaseController;
 use customer\service\CompanyService;
 use customer\service\PersonService;
+use customer\forms\lists\CustomerIndexTable;
 
 class customerController extends BaseController {
     
     
     public function action_index() {
+        
+        $this->cit = new CustomerIndexTable();
         
         $this->render();
     }
