@@ -12,7 +12,7 @@ class customerController extends BaseController {
     
     public function action_index() {
         
-        $this->cit = new CustomerIndexTable();
+        $this->cit = object_container_create( CustomerIndexTable::class );
         
         $this->render();
     }

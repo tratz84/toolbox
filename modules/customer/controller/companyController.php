@@ -15,6 +15,7 @@ use core\event\ActionValidationEvent;
 use core\event\EventBus;
 use core\exception\InvalidStateException;
 use core\exception\ObjectNotFoundException;
+use customer\forms\lists\CompanyIndexTable;
 
 class companyController extends BaseController {
 
@@ -26,6 +27,8 @@ class companyController extends BaseController {
     }
     
     public function action_index() {
+        
+        $this->cit = object_container_create( CompanyIndexTable::class );
         
         $this->render();
     }
