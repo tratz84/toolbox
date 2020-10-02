@@ -1,0 +1,25 @@
+
+
+
+=== CRUD ===
+
+- controller
+	- index
+	- search
+	- edit
+	- delete
+	- update_sort
+
+- dao
+	- read
+	- delete
+	- search
+
+- service
+	- read
+	- save
+	- delete
+	- search
+
+
+
