@@ -45,8 +45,11 @@ class CalendarItemForm extends BaseForm {
         $this->addWidget(new CheckboxField('cancelled', '', 'Geannuleerd'));
         
         $this->addWidget(new DatePickerField('start_date', '', 'Startdatum'));
+        $this->getWidget('start_date')->setShowWeeks(true);
         $this->addWidget(new TimePickerField('start_time', '', 'Starttijd'));
+        
         $this->addWidget(new DatePickerField('end_date',   '', 'Einddatum'));
+        $this->getWidget('end_date')->setShowWeeks(true);
         $this->addWidget(new TimePickerField('end_time',   '', 'Eindtijd'));
         
         $this->addWidget(new ReminderInputField('recurrence_type', '', 'Herhaling'));
