@@ -36,8 +36,15 @@ class generateModuleController extends BaseController {
         mkdir($module_dir . '/' . $module_code . '/controller');
         mkdir($module_dir . '/' . $module_code . '/lib');
         mkdir($module_dir . '/' . $module_code . '/templates');
+        mkdir($module_dir . '/' . $module_code . '/hook');
         
-        file_put_contents($module_dir . '/' . $module_code . '/autoload.php', "<?php\n\n");
+        file_put_contents($module_dir . '/' . $module_code . '/autoload.php'
+            , get_template(module_file('codegen', 'templates/_classes/codegen-autoload.php')
+                , [
+                    'module_code' => $module_code,
+                    'module_name' => $module_name
+                ]
+        ));
         
         file_put_contents($module_dir . '/' . $module_code . '/meta.php', "<?php\n\nreturn new core\\module\\ModuleMeta(".var_export($module_code, true).", ".var_export($module_name, true).", ".var_export($module_desc, true).");\n");
         
