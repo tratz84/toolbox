@@ -6,7 +6,7 @@
     		<?php if ($readonly) : ?>
 	    		<a href="javascript:void(0);" class="fa fa-times-circle popup-close-link"></a>
     		<?php else : ?>
-        		<a href="javascript:void(0);" class="fa fa-chevron-circle-left popup-close-link"></a>
+        		<a href="javascript:void(0);" class="fa fa-times-circle popup-close-link"></a>
         		<?php if ($isNew == false) : ?>
         		<a href="javascript:void(0);" class="fa fa-trash delete-calendar-item"></a>
         		<?php endif;?>
