@@ -132,18 +132,18 @@ class InvoiceDAO extends \core\db\DAOObject {
 
 
 	public function readTotals($opts) {
-	    $sql = "select i.company_id
-                        , c.company_name
-                        , i.person_id
-                        , p.firstname
-                        , p.insert_lastname
-                        , p.lastname
+	    $sql = "select min(i.company_id) company_id
+                        , min(c.company_name) company_name
+                        , min(i.person_id) person_id
+                        , min(p.firstname) firstname
+                        , min(p.insert_lastname) insert_lastname
+                        , min(p.lastname) lastname
                         , sum(total_calculated_price) total_billed
                         , sum(ifnull(total_calculated_price, 0)) sum_total_calculated_price
                         , sum(ifnull(total_calculated_price_incl_vat, 0)) sum_total_calculated_price_incl_vat
                         , count(*) number_invoices
-                        , c.deleted company_deleted
-                        , p.deleted person_deleted
+                        , min(c.deleted) company_deleted
+                        , min(p.deleted) person_deleted
                 from invoice__invoice i
                 left join customer__company c using (company_id)
                 left join customer__person p using (person_id) ";
@@ -169,9 +169,9 @@ class InvoiceDAO extends \core\db\DAOObject {
 	        $sql .= ' where ('.implode(') AND (', $where) . ') ';
 	    }
 
-	    $sql .= "group by i.company_id, i.person_id
+	    $sql .= "group by ifnull(concat('company-', i.company_id), concat('person-', i.person_id))
                 order by sum(total_calculated_price) desc";
-
+	    
 	    $res = $this->query($sql, $params);
 	    $rows = array();
 	    while ($r = $res->fetch_assoc()) {
