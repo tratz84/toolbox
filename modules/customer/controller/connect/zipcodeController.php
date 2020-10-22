@@ -42,7 +42,7 @@ class zipcodeController extends BaseController {
         $r = @json_decode($resp);
         
         if ($r == false || is_object($r) == false || isset($r->response) == false || $r->response->numFound == 0 || count($r->response->docs) == 0) {
-            var_export($resp);exit;
+//            var_export($resp);exit;
             return $this->json(array(
                 'success' => false,
                 'error' => 'Zipcode not found'
