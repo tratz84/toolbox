@@ -529,7 +529,8 @@ class ImapConnector extends BaseMailConnector {
             return false;
         }
         
-        return imap_mail_move($this->imap, $uid, $targetFolder, CP_UID);
+        $f = imap_utf7_encode( $targetFolder );
+        return imap_mail_move($this->imap, $uid, $f, CP_UID);
     }
     
     public function markMail($uid, $folder, $flags) {
