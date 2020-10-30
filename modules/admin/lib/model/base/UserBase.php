@@ -8,7 +8,7 @@ class UserBase extends \core\db\DBObject {
 
 	public function __construct($id=null) {
 		$this->setResource( 'admin' );
-		$this->setTableName( 'insights__user' );
+		$this->setTableName( 'toolbox__user' );
 		$this->setPrimaryKey( 'user_id' );
 		$this->setDatabaseFields( array (
   'user_id' => 

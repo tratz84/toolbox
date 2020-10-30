@@ -12,7 +12,7 @@ class CustomerDAO extends \core\db\DAOObject {
 	}
 	
 	public function readAll() {
-	    return $this->queryList("select * from insights__customer order by contextName");
+	    return $this->queryList("select * from toolbox__customer order by contextName");
 	}
 	
 	public function readCustomers($ids) {
@@ -26,12 +26,12 @@ class CustomerDAO extends \core\db\DAOObject {
 	    if (count($intIds) == 0)
 	        return array();
 	    
-        return $this->queryList("select * from insights__customer where customer_id IN (".implode(', ', $intIds).") order by contextName");
+        return $this->queryList("select * from toolbox__customer where customer_id IN (".implode(', ', $intIds).") order by contextName");
 	}
 	
 
 	public function readByName($n) {
-	    $l = $this->queryList("select * from insights__customer where contextName = ?", array($n));
+	    $l = $this->queryList("select * from toolbox__customer where contextName = ?", array($n));
 	    
 	    if (count($l))
 	        return $l[0];

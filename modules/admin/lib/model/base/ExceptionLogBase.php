@@ -8,7 +8,7 @@ class ExceptionLogBase extends \core\db\DBObject {
 
 	public function __construct($id=null) {
 		$this->setResource( 'admin' );
-		$this->setTableName( 'insights__exception_log' );
+		$this->setTableName( 'toolbox__exception_log' );
 		$this->setPrimaryKey( 'exception_log_id' );
 		$this->setDatabaseFields( array (
   'exception_log_id' => 

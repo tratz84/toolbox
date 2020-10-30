@@ -12,15 +12,15 @@ class UserDAO extends \core\db\DAOObject {
 	}
 	
 	public function read($id) {
-	    return $this->queryOne("select * from insights__user where user_id = ?", array($id));
+	    return $this->queryOne("select * from toolbox__user where user_id = ?", array($id));
 	}
 	
 	public function readAll() {
-	    return $this->queryList("select * from insights__user ");
+	    return $this->queryList("select * from toolbox__user ");
 	}
 
 	public function readByUsername($username) {
-	    $l = $this->queryList("select * from insights__user where username = ?", array($username));
+	    $l = $this->queryList("select * from toolbox__user where username = ?", array($username));
 	    
 	    if (count($l)) {
 	        return $l[0];
@@ -31,12 +31,12 @@ class UserDAO extends \core\db\DAOObject {
 	
 	
 	public function delete($id) {
-	    return $this->query("delete from insights__user where user_id = ?", array($id));
+	    return $this->query("delete from toolbox__user where user_id = ?", array($id));
 	}
 	
 	public function search($opts) {
 	    
-	    $sql = "select * from insights__user  ";
+	    $sql = "select * from toolbox__user  ";
 	    
 	    $where = array();
 	    $params = array();
@@ -63,7 +63,7 @@ class UserDAO extends \core\db\DAOObject {
 	}
 	
 	public function updatePassword($userId, $pass) {
-	    return $this->query("update insights__user set password=? where user_id = ?", array($pass, $userId));
+	    return $this->query("update toolbox__user set password=? where user_id = ?", array($pass, $userId));
 	}
 	
 }

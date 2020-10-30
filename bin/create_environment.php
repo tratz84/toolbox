@@ -26,7 +26,7 @@ if ($dbcount == 0) {
 }
 
 // insert customer
-DatabaseHandler::getConnection('admin')->query('insert into insights__customer set contextName=?, databaseName=?, active=1, experimental=0', array($contextName, 'toolbox_'.$contextName));
+DatabaseHandler::getConnection('admin')->query('insert into toolbox__customer set contextName=?, databaseName=?, active=1, experimental=0', array($contextName, 'toolbox_'.$contextName));
 
 
 // bootstrap

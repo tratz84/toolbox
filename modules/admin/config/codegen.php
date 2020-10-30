@@ -6,27 +6,27 @@ return array (
     0 => 
     array (
       'resource_name' => 'admin',
-      'table_name' => 'insights__autologin',
+      'table_name' => 'toolbox__autologin',
     ),
     1 => 
     array (
       'resource_name' => 'admin',
-      'table_name' => 'insights__customer',
+      'table_name' => 'toolbox__customer',
     ),
     2 => 
     array (
       'resource_name' => 'admin',
-      'table_name' => 'insights__exception_log',
+      'table_name' => 'toolbox__exception_log',
     ),
     3 => 
     array (
       'resource_name' => 'admin',
-      'table_name' => 'insights__user',
+      'table_name' => 'toolbox__user',
     ),
     4 => 
     array (
       'resource_name' => 'admin',
-      'table_name' => 'insights__user_customer',
+      'table_name' => 'toolbox__user_customer',
     ),
   ),
 );

@@ -1,7 +1,7 @@
-DROP TABLE IF EXISTS `insights__autologin`;
+DROP TABLE IF EXISTS `toolbox__autologin`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `insights__autologin` (
+CREATE TABLE `toolbox__autologin` (
   `autologin_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `contextName` varchar(64) NOT NULL,
   `securityString` varchar(128) NOT NULL,
@@ -15,13 +15,13 @@ CREATE TABLE `insights__autologin` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `insights__customer`
+-- Table structure for table `toolbox__customer`
 --
 
-DROP TABLE IF EXISTS `insights__customer`;
+DROP TABLE IF EXISTS `toolbox__customer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `insights__customer` (
+CREATE TABLE `toolbox__customer` (
   `customer_id` int(11) NOT NULL AUTO_INCREMENT,
   `contextName` varchar(64) DEFAULT NULL,
   `databaseName` varchar(64) DEFAULT NULL,
@@ -36,13 +36,13 @@ CREATE TABLE `insights__customer` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `insights__exception_log`
+-- Table structure for table `toolbox__exception_log`
 --
 
-DROP TABLE IF EXISTS `insights__exception_log`;
+DROP TABLE IF EXISTS `toolbox__exception_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `insights__exception_log` (
+CREATE TABLE `toolbox__exception_log` (
   `exception_log_id` int(11) NOT NULL AUTO_INCREMENT,
   `contextName` varchar(64) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
@@ -56,13 +56,13 @@ CREATE TABLE `insights__exception_log` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `insights__user`
+-- Table structure for table `toolbox__user`
 --
 
-DROP TABLE IF EXISTS `insights__user`;
+DROP TABLE IF EXISTS `toolbox__user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `insights__user` (
+CREATE TABLE `toolbox__user` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(32) DEFAULT NULL,
   `password` varchar(128) DEFAULT NULL,
@@ -75,13 +75,13 @@ CREATE TABLE `insights__user` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `insights__user_customer`
+-- Table structure for table `toolbox__user_customer`
 --
 
-DROP TABLE IF EXISTS `insights__user_customer`;
+DROP TABLE IF EXISTS `toolbox__user_customer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `insights__user_customer` (
+CREATE TABLE `toolbox__user_customer` (
   `user_customer_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
   `customer_id` int(11) DEFAULT NULL,

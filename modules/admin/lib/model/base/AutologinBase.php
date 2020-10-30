@@ -8,7 +8,7 @@ class AutologinBase extends \core\db\DBObject {
 
 	public function __construct($id=null) {
 		$this->setResource( 'admin' );
-		$this->setTableName( 'insights__autologin' );
+		$this->setTableName( 'toolbox__autologin' );
 		$this->setPrimaryKey( 'autologin_id' );
 		$this->setDatabaseFields( array (
   'autologin_id' => 

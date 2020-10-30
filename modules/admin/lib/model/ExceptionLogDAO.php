@@ -13,14 +13,14 @@ class ExceptionLogDAO extends \core\db\DAOObject {
 
 	
 	public function read($id) {
-	    return $this->queryOne("select * from insights__exception_log where exception_log_id = ?", array($id));
+	    return $this->queryOne("select * from toolbox__exception_log where exception_log_id = ?", array($id));
 	}
 	
 	
 	
 	public function search($opts=array()) {
 	    
-	    $sql = "select * from insights__exception_log ";
+	    $sql = "select * from toolbox__exception_log ";
 	    
 	    $where = array();
 	    $params = array();

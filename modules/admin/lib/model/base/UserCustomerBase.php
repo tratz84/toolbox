@@ -8,7 +8,7 @@ class UserCustomerBase extends \core\db\DBObject {
 
 	public function __construct($id=null) {
 		$this->setResource( 'admin' );
-		$this->setTableName( 'insights__user_customer' );
+		$this->setTableName( 'toolbox__user_customer' );
 		$this->setPrimaryKey( 'user_customer_id' );
 		$this->setDatabaseFields( array (
   'user_customer_id' => 
