@@ -125,8 +125,15 @@ class Context
             throw new InvalidStateException('Context not set');
         
         $path = DATA_DIR . '/' . $this->getContextName();
-        if (is_dir($path) == false)
+        if (is_dir($path) == false) {
+            // configuration valid?
+            if (is_dir(DATA_DIR) == false) {
+                throw new InvalidStateException('DATA_DIR doesn\'t exist');
+            }
+            
+            // add data-dir for current context
             mkdir($path);
+        }
         
         $path = realpath($path);
         
