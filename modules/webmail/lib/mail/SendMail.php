@@ -164,7 +164,13 @@ class SendMail {
                 }
             }
         } else {
-            $transport = new \Swift_SmtpTransport($settings['mail_hostname'], $settings['mail_port']);
+            // TLS security for transport?
+            $transport_security = null;
+            if (isset($settings['mail_tls']) && $settings['mail_tls']) {
+                $transport_security = 'tls';
+            }
+            
+            $transport = new \Swift_SmtpTransport($settings['mail_hostname'], $settings['mail_port'], $transport_security);
             if ($settings['mail_username'] && $settings['mail_password']) {
                 $transport->setUsername($settings['mail_username']);
                 $transport->setPassword($settings['mail_password']);

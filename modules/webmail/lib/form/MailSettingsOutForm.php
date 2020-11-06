@@ -7,6 +7,7 @@ use core\forms\SelectField;
 use core\forms\TextField;
 use core\forms\validator\NumberValidator;
 use core\forms\HiddenField;
+use core\forms\CheckboxField;
 
 class MailSettingsOutForm extends BaseForm {
     
@@ -19,6 +20,7 @@ class MailSettingsOutForm extends BaseForm {
         
         $this->addWidget(new TextField('mail_hostname', '', t('Hostname')));
         $this->addWidget(new TextField('mail_port', '25', t('Port')));
+        $this->addWidget(new CheckboxField('mail_tls', '0', t('TLS')));
         
         $this->addWidget(new TextField('mail_username', '', t('Username')));
         $this->addWidget(new TextField('mail_password', '', t('Password')));
