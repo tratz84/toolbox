@@ -185,6 +185,7 @@ class SendMail {
                 $r = $mailer->send( $message );
             } catch (\Exception $ex) {
                 $this->error = $ex->getMessage();
+                ctx()->setLastError( $ex->getMessage() );
                 return false;
             }
             
