@@ -40,7 +40,7 @@ class settingsMailOutController extends BaseController {
                     if ($emailService->sendMailTest( get_var('send_test') )) {
                         report_user_message('Mail sent successfully');
                     } else {
-                        report_user_error('Error sending mail');
+                        report_user_error('Error sending mail ('.ctx()->getLastError().')');
                     }
                     redirect('/?m=webmail&c=settingsMailOut');
                 }

@@ -31,6 +31,8 @@ class Context
     
     protected $settings = null;
     
+    protected $lastError = null;
+    
     public function __construct() {
         
     }
@@ -216,6 +218,9 @@ class Context
     
     public function getPrefixNumbers()    { return trim($this->getSetting('prefixNumbers')); }
     
+    
+    public function getLastError() { return $this->lastError; }
+    public function setLastError($e) { $this->lastError = $e; }
     
 
     public static function &getInstance() {
