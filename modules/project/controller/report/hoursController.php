@@ -38,7 +38,7 @@ class hoursController extends BaseReportController {
 
         $sheet = $spreadsheet->setActiveSheetIndex(0);//->setCellValue('A1', 'Hello')
 
-        $this->xlsHeader($sheet, array('Gebruiker', 'Klant', 'Project', 'Omschrijving', 'Start', 'Eind', 'Duur', 'Declarabel', 'Status', 'Aangemaakt op'));
+        $this->xlsHeader($sheet, array('Gebruiker', 'Klant', 'Project', 'Omschrijving', 'Lange omschrijving', 'Start', 'Eind', 'Duur', 'Declarabel', 'Status', 'Aangemaakt op'));
 
         $objs = $this->lrHours->getObjects();
         for($rowno=0; $rowno < count($objs); $rowno++) {
@@ -53,12 +53,13 @@ class hoursController extends BaseReportController {
 
             $this->xlsCol($sheet, $rowno+2, 3, $c['project_name']);
             $this->xlsCol($sheet, $rowno+2, 4, $c['short_description']);
-            $this->xlsCol($sheet, $rowno+2, 5, $c['start_time'], 'datetime');
-            $this->xlsCol($sheet, $rowno+2, 6, $c['end_time'], 'datetime');
-            $this->xlsCol($sheet, $rowno+2, 7, myround($c['total_minutes']/60,2));
-            $this->xlsCol($sheet, $rowno+2, 8, $c['declarable'] ? true : false);
-            $this->xlsCol($sheet, $rowno+2, 9, $c['status_description']);
-            $this->xlsCol($sheet, $rowno+2, 10, $c['created'], 'datetime');
+            $this->xlsCol($sheet, $rowno+2, 5, $c['long_description']);
+            $this->xlsCol($sheet, $rowno+2, 6, $c['start_time'], 'datetime');
+            $this->xlsCol($sheet, $rowno+2, 7, $c['end_time'], 'datetime');
+            $this->xlsCol($sheet, $rowno+2, 8, myround($c['total_minutes']/60,2));
+            $this->xlsCol($sheet, $rowno+2, 9, $c['declarable'] ? true : false);
+            $this->xlsCol($sheet, $rowno+2, 10, $c['status_description']);
+            $this->xlsCol($sheet, $rowno+2, 11, $c['created'], 'datetime');
         }
 
         $this->outputExcel($spreadsheet, 'project-hours.xlsx');
