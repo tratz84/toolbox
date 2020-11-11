@@ -5,6 +5,7 @@ namespace invoice;
 
 
 use invoice\pdf\DefaultInvoicePdf;
+use invoice\pdf\DefaultInvoice2Pdf;
 use invoice\pdf\LandscapeOfferPdf;
 use invoice\pdf\DefaultOfferPdf;
 use core\Context;
@@ -51,7 +52,8 @@ class InvoiceSettings {
     public function getInvoicePdfTemplates() {
         $t = array();
         
-        $t[ DefaultInvoicePdf::class ] = 'Standaard opmaak';
+        $t[ DefaultInvoicePdf::class ]  = 'Standaard opmaak';
+        $t[ DefaultInvoice2Pdf::class ] = 'Standaard opmaak (2)';
         
         return $t;
     }
