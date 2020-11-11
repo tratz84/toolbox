@@ -190,7 +190,7 @@ class DefaultInvoice2Pdf extends BasePdf {
         $this->SetFont('Arial', 'B', '12');
         $this->Cell(95, $lh, 'Omschrijving', $border, 0, 'L');
         $this->Cell(15, $lh, 'Aantal', $border, 0, 'R');
-        $this->Cell(30, $lh, 'Prijs', $border, 0, 'R');
+        $this->Cell(30, $lh, 'Bedrag', $border, 0, 'R');
         $this->Cell(20, $lh, 'Btw', $border, 0, 'R');
         $this->Cell(30, $lh, 'Totaal', $border, 0, 'R');
         $this->Ln();
