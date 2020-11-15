@@ -581,7 +581,7 @@ class MysqlTableGenerator {
         }
         
         
-        $sql .= PHP_EOL.') ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci'.PHP_EOL;
+        $sql .= PHP_EOL.') ENGINE='.$this->tableModel->getEngine().' CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci'.PHP_EOL;
         
         return array( $sql );
     }

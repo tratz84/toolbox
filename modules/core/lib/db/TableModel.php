@@ -28,6 +28,7 @@ class TableModel {
         $this->data['indexes'] = array();
         $this->data['foreignKeys'] = array();
         $this->data['renamedColumns'] = array();
+        $this->data['engine'] = 'InnoDB';
     }
     
     
@@ -45,6 +46,10 @@ class TableModel {
     
     public function setTableName($n) { $this->data['tableName'] = $n; }
     public function getTableName() { return $this->data['tableName']; }
+    
+    public function setEngine($n) { $this->data['engine'] = $n; }
+    public function getEngine() { return $this->data['engine']; }
+    
     
     public function getColumns() {
         return array_keys( $this->data['columns'] );
