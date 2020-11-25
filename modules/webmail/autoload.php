@@ -169,5 +169,10 @@ hook_eventbus_subscribe('core', 'background-jobs', function(\core\container\Arra
     }
 });
 
+// serverInfoController, report webmail-state
+hook_eventbus_subscribe('base', 'ServerInfoContainer', function($serverInfoContainer) {
+    $ok = function_exists('imap_open');
+    $serverInfoContainer->addInfo( 'php-imap', $ok ? 'Ok' : 'Error', $ok ? '' : 'imap extension not loaded' );
+});
 
 
