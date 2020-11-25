@@ -20,6 +20,9 @@ class serverInfoController extends BaseController {
             $this->sic->addInfo('wkhtmltopdf', 'Not available', 'Unable to create PDF-files from HTML');
         }
         
+        $this->sic->addInfo('PHP_FD_SETSIZE '.infopopup('max open files + connections'), PHP_FD_SETSIZE );
+        
+        
         
         hook_eventbus_publish( $this->sic, 'base', 'ServerInfoContainer' );
         
