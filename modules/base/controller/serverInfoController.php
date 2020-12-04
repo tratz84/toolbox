@@ -30,15 +30,15 @@ class serverInfoController extends BaseController {
         
         // check php-curl
         $curl = extension_loaded('curl');
-        $this->sic->addInfo('php-curl', $curl?'Ok':'Not loaded');
+        $this->sic->addInfo('php-curl', $curl?'Ok':'Not loaded', 'extension not loaded');
         
         // check php-gd
         $gd = extension_loaded('gd');
-        $this->sic->addInfo('php-gd', $gd?'Ok':'Not loaded');
+        $this->sic->addInfo('php-gd', $gd?'Ok':'Not loaded', $gd?'':'extension not loaded');
         
         // check php-imagick
         $imagick = extension_loaded('imagick');
-        $this->sic->addInfo('php-imagic', $imagick?'Ok':'Not loaded');
+        $this->sic->addInfo('php-imagick', $imagick?'Ok':'Not loaded', $imagick?'':'extension not loaded');
         
         hook_eventbus_publish( $this->sic, 'base', 'ServerInfoContainer' );
         
