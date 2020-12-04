@@ -308,10 +308,7 @@ class invoiceController extends BaseController {
         $invoiceService = $this->oc->get(InvoiceService::class);
         $invoice = $invoiceService->readInvoice((int)$_REQUEST['id']);
         
-        $invoicePdf = $this->oc->create(DefaultInvoicePdf::class);
-        
-        $invoicePdf->setInvoice($invoice);
-        $invoicePdf->render();
+        $invoicePdf = $invoiceService->createPdf( $invoice->getInvoiceId() );
         
         $rawPdfData = $invoicePdf->Output('S');
         
