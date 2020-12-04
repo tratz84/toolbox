@@ -30,7 +30,7 @@ class serverInfoController extends BaseController {
         
         // check php-curl
         $curl = extension_loaded('curl');
-        $this->sic->addInfo('php-curl', $curl?'Ok':'Not loaded', 'extension not loaded');
+        $this->sic->addInfo('php-curl', $curl?'Ok':'Not loaded', $curl?'':'extension not loaded');
         
         // check php-gd
         $gd = extension_loaded('gd');
