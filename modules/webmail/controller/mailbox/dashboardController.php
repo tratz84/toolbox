@@ -32,15 +32,22 @@ class dashboardController extends BaseController {
         
         $this->mails = array();
         
+        $error = null;
         try {
             $this->listResponse = $smq->searchListResponse();
             
             $this->mails = $this->listResponse->getObjects();
         } catch(\Exception $ex) {
-            $this->error = $ex->getMessage();
+            $error = $this->error = $ex->getMessage();
         }
         
         if ($opts['render']) {
+            if ($error) {
+                return $this->json([
+                    'success' => false,
+                    'message' => $error
+                ]);
+            }
             $this->json([
                 'success' => true,
                 'mails' => $this->mails

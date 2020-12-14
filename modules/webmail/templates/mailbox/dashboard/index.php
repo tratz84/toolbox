@@ -98,6 +98,10 @@ function renderMails(mails) {
 var mailbox_mails = <?= json_encode($mails) ?>;
 renderMails( mailbox_mails );
 
+<?php if (isset($error) && $error) : ?>
+$('.mailbox-dashboard .no-results-found').text( <?= json_encode($error) ?> );
+<?php endif; ?>
+
 // refresh every minute
 if (typeof webmail_dashboard_refreshInterval != 'undefined') clearInterval(webmail_dashboard_refreshInterval);
 webmail_dashboard_refreshInterval = setInterval(function() {
@@ -108,6 +112,9 @@ webmail_dashboard_refreshInterval = setInterval(function() {
 			console.log( data );
 			if (data.success) {
 				renderMails( data.mails );
+			}
+			else {
+				$('.mailbox-dashboard .no-results-found').text( data.message );
 			}
 		}
 	});
