@@ -448,7 +448,11 @@ function format_customername(record) {
 		
 		// empty name? => return 'person-<ID>'
 		if (typeof record.person_id != 'undefined' && t == '') {
-			return 'person-' + record.person_id;
+			if (record.person_id == '0') {
+				return '';
+			} else {
+				return 'person-' + record.person_id;
+			}
 		}
 
 		
