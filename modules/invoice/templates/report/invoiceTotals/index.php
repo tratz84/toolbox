@@ -8,6 +8,7 @@
 <table class="list-widget">
 	<thead>
     	<tr>
+    		<th style="width: 50px;">#</th>
     		<th>Klant</th>
     		<th class="right">Totaalbedrag</th>
     		<th class="right">Aantal <?= strtolower(strOrder(2)) ?></th>
@@ -17,11 +18,13 @@
 	<tbody>
 		<?php $totalBilled = 0; ?>
 		<?php $totalInvoices = 0; ?>
+		<?php $counter=1; ?>
 		<?php foreach($totals as $r) : ?>
     		<?php $totalBilled += $r['total_billed'] ?>
     		<?php $totalInvoices += $r['number_invoices'] ?>
     		<?php $customername = format_customername($r) ?>
     		<tr class="clickable" onclick="record_Click(this);" data-company-id="<?= $r['company_id'] ?>" data-person-id="<?= $r['person_id'] ?>">
+    			<td><?= $counter ?></td>
     			<td style="<?= $r['company_deleted'] || $r['person_deleted'] || strpos($customername, 'person-') === 0 || strpos($customername, 'company-') === 0 ? 'color: #f00 ' : '' ?>">
     				<?= esc_html($customername) ?>
     			</td>
@@ -35,10 +38,12 @@
     				<?= format_price($r['total_billed'] / $r['number_invoices'], true, ['thousands' => '.']) ?>
     			</td>
     		</tr>
+    		<?php $counter++; ?>
 		<?php endforeach; ?>
 	</tbody>
 	<tfoot style="font-weight: bold;">
 		<tr>
+			<td></td>
 			<td></td>
 			<td class="right"><?= format_price($totalBilled, true, ['thousands' => '.']) ?></td>
 			<td class="right"><?= $totalInvoices ?></td>
