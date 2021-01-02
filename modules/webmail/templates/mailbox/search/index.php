@@ -389,9 +389,7 @@ function viewMail(email_id) {
 		},
 		success: function(data, xhr, textStatus) {
 			$('#mail-content').html( data );
-
-			$('#mail-content').redraw();
-			
+			$('#mail-content').trigger('resize');
 		}
 	});
 }
