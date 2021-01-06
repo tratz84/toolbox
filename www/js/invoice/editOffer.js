@@ -27,6 +27,9 @@ $(document).ready(function() {
 		fix_textLines();
 	});
 
+	$('.invoice-form-list-offer-line-widget').get(0).lefw.setCallbackDeleteRecord(function(row) {
+		offer_calc_totals();
+	});
 
 	// customer-change, change popup upper right
 	$('[name=customer_id]').change(function() {
