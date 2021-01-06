@@ -15,6 +15,10 @@
 			    'multiuser_check_interval' => MULTIUSER_CHECK_INTERVAL,
 			    'standalone_installation' => false
 			]) ?>;
+			
+			// dynamicscriptsController is not loaded in admin-mod
+			var t = function(str) { return str; };
+			var toolbox_t = function(str) { return str; };
 		</script>
 
 		<script src="/js/jquery-3.3.1.min.js" type="text/javascript"></script>
