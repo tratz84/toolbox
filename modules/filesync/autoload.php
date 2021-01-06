@@ -113,4 +113,13 @@ add_filter('form-generator-form-widgets', function($formWidgets) {
 });
 
 
+hook_eventbus_subscribe('base', 'ServerInfoContainer', function(\base\util\ServerInfoContainer $sic) {
+    if (filesync_lookup_libreoffice()) {
+        $sic->addInfo('OpenOffice', 'Ok');
+    }
+    else {
+        $sic->addInfo('OpenOffice', 'Not found', 'soffice executable not found');
+    }
+});
+
 
