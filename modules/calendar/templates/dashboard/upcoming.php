@@ -20,7 +20,7 @@
 		</tr>
 	<?php else : ?>
 		<?php foreach($items as $i) : ?>
-		<tr class="clickable" onclick="<?= esc_attr("show_popup(appUrl('/?m=calendar&c=view&a=edit'), { data: { calendar_item_id: ".$i->getId() . ", readonly: true }})") ?>">
+		<tr class="clickable <?= $i->getCancelled() ? 'item cancelled' : '' ?>" onclick="<?= esc_attr("show_popup(appUrl('/?m=calendar&c=view&a=edit'), { data: { calendar_item_id: ".$i->getId() . ", readonly: true }})") ?>">
 			<td>
 				<?php if ($i->getCustomerName()) : ?>
 				<span style="font-weight: 600;"><?= esc_html($i->getCustomerName()) ?></span>:
