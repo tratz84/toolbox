@@ -41,6 +41,7 @@ $menuItems = $ms->listMainMenu();
 		<script src="<?= BASE_HREF ?>js/bootstrap.min.js"></script>
 
 		<script src="<?= BASE_HREF ?>lib/moment/moment-with-locales.min.js"></script>
+		<script> moment.locale(<?= json_encode(ctx()->getSelectedLang()) ?>); </script>
 		<script src="<?= BASE_HREF ?>lib/eonasdan-bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
 		
 <!-- 		<script src="/lib/pickadate-3.5.6/picker.js"></script> -->

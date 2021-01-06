@@ -11,6 +11,7 @@
 		<script src="<?= BASE_HREF ?>js/bootstrap.min.js" type="text/javascript"></script>
 
 		<script src="<?= BASE_HREF ?>lib/moment/moment-with-locales.min.js"></script>
+		<script> moment.locale(<?= json_encode(ctx()->getSelectedLang()) ?>); </script>
 		<script src="<?= BASE_HREF ?>lib/eonasdan-bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
 		
 	<script src="<?= BASE_HREF ?>lib/jquery-ui/jquery-ui.min.js"></script>
