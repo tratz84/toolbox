@@ -46,7 +46,8 @@ $lang['date']                   = 'datum';
 $lang['Bill']                   = 'Rekening';
 $lang['Invoice']                = 'Factuur';
 
-$lang['Notes for bills to pay and services/work to invoice'] = 'Notities voor te-betalen en te-factureren';
+$lang['Billable-overview'] = 'Billable-overzicht';
+$lang['Page with notes for bills to pay and services/work to invoice'] = 'Pagina met notities voor te-betalen en te-factureren';
 
 
 return $lang;

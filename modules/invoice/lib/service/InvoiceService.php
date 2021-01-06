@@ -407,40 +407,43 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
 
         $iDao = new InvoiceDAO();
 
+        $invoiceSettings = object_container_get( InvoiceSettings::class );
         // check if invoice-date is not after next invoice & not before previous invoice
-        if ($invoiceId) {
-            // fetch next & prev invoice
-            $invoice = $iDao->read($invoiceId);
-            if (!$invoice) {
-                throw new \core\exception\ObjectNotFoundException('Invoice not found');
-            }
-
-            $prevInvoiceNumber = $invoice->getInvoiceNumber() - 1;
-            $nextInvoiceNumber = $invoice->getInvoiceNumber() + 1;
-
-            $prevInvoice = $iDao->readByInvoiceNumber($prevInvoiceNumber);
-            if ($prevInvoice) {
-                $ymd = (int)format_date($prevInvoice->getInvoiceDate(), 'Ymd');
-                if ($ymd > $ymdInvoiceDate) {
-                    return false;
+        if ( $invoiceSettings->getInvoiceDateCheck() ) {
+            if ($invoiceId) {
+                // fetch next & prev invoice
+                $invoice = $iDao->read($invoiceId);
+                if (!$invoice) {
+                    throw new \core\exception\ObjectNotFoundException('Invoice not found');
+                }
+    
+                $prevInvoiceNumber = $invoice->getInvoiceNumber() - 1;
+                $nextInvoiceNumber = $invoice->getInvoiceNumber() + 1;
+    
+                $prevInvoice = $iDao->readByInvoiceNumber($prevInvoiceNumber);
+                if ($prevInvoice) {
+                    $ymd = (int)format_date($prevInvoice->getInvoiceDate(), 'Ymd');
+                    if ($ymd > $ymdInvoiceDate) {
+                        return false;
+                    }
+                }
+    
+                $nextInvoice = $iDao->readByInvoiceNumber($nextInvoiceNumber);
+                if ($nextInvoice) {
+                    $ymd = (int)format_date($nextInvoice->getInvoiceDate(), 'Ymd');
+                    if ($ymd < $ymdInvoiceDate) {
+                        return false;
+                    }
                 }
             }
-
-            $nextInvoice = $iDao->readByInvoiceNumber($nextInvoiceNumber);
-            if ($nextInvoice) {
-                $ymd = (int)format_date($nextInvoice->getInvoiceDate(), 'Ymd');
-                if ($ymd < $ymdInvoiceDate) {
+            // new invoice? => check if invoice-date is not before last invoice
+            else {
+                $lid = $iDao->getLastInvoiceDate();
+                $d2 = (int)format_date($lid, 'Ymd');
+    
+                if ($ymdInvoiceDate < $d2) {
                     return false;
                 }
-            }
-        }
-        // new invoice? => check if invoice-date is not before last invoice
-        else {
-            $lid = $iDao->getLastInvoiceDate();
-            $d2 = (int)format_date($lid, 'Ymd');
-
-            if ($ymdInvoiceDate < $d2) {
-                return false;
             }
         }
 

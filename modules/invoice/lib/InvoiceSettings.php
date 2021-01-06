@@ -39,6 +39,10 @@ class InvoiceSettings {
         return $ctx->getSetting('invoice__prices_inc_vat', false);
     }
     
+    public function getInvoiceDateCheck() {
+        return ctx()->getSetting('invoice__invoice_date_check', true);
+    }
+    
     
     public function getOfferPdfTemplates() {
         $t = array();

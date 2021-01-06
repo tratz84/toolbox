@@ -82,12 +82,25 @@ use invoice\pdf\DefaultInvoicePdf;
         	<label class="checkbox-ui-placeholder" for="invoice__prices_inc_vat"></label>
         </div>
         
-        <br/><br/>
-
         <div class="widget checkbox-field-widget">
         	<label>
-        		Billable
-        		<?= infopopup(t('Notes for bills to pay and services/work to invoice')) ?>
+        		Factuurdatum oplopend forceren
+        		
+        		<?= infopopup('Controleren bij opslaan dat factuurdatum altijd oplopend is?') ?>
+    		</label>
+        	
+        	<input type="checkbox" class="checkbox-ui" id="invoice__invoice_date_check" name="invoice__invoice_date_check" <?= $invoiceSettings->getInvoiceDateCheck() ? 'checked="checked"' : '' ?> />
+        	<label class="checkbox-ui-placeholder" for="invoice__invoice_date_check"></label>
+        </div>
+        
+        
+        <br/><br/>
+
+		<hr/>
+        <div class="widget checkbox-field-widget">
+        	<label>
+        		<?= t('Billable-overview') ?>
+        		<?= infopopup(t('Page with notes for bills to pay and services/work to invoice')) ?>
     		</label>
         	
         	<input type="checkbox" class="checkbox-ui" 
@@ -109,8 +122,9 @@ use invoice\pdf\DefaultInvoicePdf;
             </div>
         </div>
         
+        <div class="clear"></div>
+		<hr/>        
 		
-		<br/><br/><br/>
 
         <div class="upload-field-widget">
             <br/>
