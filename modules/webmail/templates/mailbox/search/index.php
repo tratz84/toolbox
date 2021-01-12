@@ -388,8 +388,9 @@ function viewMail(email_id) {
 			id: email_id
 		},
 		success: function(data, xhr, textStatus) {
-			$('#mail-content').html( data );
-			$('#mail-content').trigger('resize');
+			setTimeout(function() {
+				$('#mail-content').html( data );
+			}, 100);
 		}
 	});
 }
