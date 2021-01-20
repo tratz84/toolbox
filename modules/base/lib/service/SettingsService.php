@@ -82,7 +82,15 @@ class SettingsService extends ServiceBase {
         
         $s->setTextValue($val);
         
-        return $s->save();
+        $r = $s->save();
+        
+        
+        // flush settings
+        if ($r) {
+            ctx()->flushSettingCache();
+        }
+        
+        return $r;
     }
     
     
