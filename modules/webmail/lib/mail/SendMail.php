@@ -144,6 +144,7 @@ class SendMail {
     
     
     public function send() {
+        /** @var EmailService $emailService */
         $emailService = object_container_get(EmailService::class);
         $settings = $emailService->getMailServerSettings();
         
@@ -203,7 +204,13 @@ class SendMail {
                 $solrMailActions->saveSendMail( $this );
             }
             
-            
+            // mail successfully sent?
+            if ($r) {
+                if ($this->getEmailId()) {
+                    $emailService->markMailAsSent( $this->getEmailId() );
+                }
+                
+            }
             
             return $r;
         }

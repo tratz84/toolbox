@@ -181,9 +181,6 @@ class viewController extends BaseController {
             redirect('/?m=webmail&c=view&id=' . $email->getEmailId());
         }
         
-        // mark mail as sent
-        $emailService->markMailAsSent( $email->getEmailId() );
-        
         // mark mail as sent on imap-server/solr
         if ($email->getSolrMailId()) {
             try {
