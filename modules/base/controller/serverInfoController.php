@@ -40,6 +40,10 @@ class serverInfoController extends BaseController {
         $imagick = extension_loaded('imagick');
         $this->sic->addInfo('php-imagick', $imagick?'Ok':'Not loaded', $imagick?'':'extension not loaded');
         
+        // check php-imagick
+        $ext_zip = extension_loaded('zip');
+        $this->sic->addInfo('php-zip', $ext_zip?'Ok':'Not loaded', $ext_zip?'':'extension not loaded');
+        
         hook_eventbus_publish( $this->sic, 'base', 'ServerInfoContainer' );
         
         return $this->render();
