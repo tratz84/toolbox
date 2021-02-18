@@ -88,6 +88,11 @@ class StoreFileDAO extends \core\db\DAOObject {
             $where[] = " filesync__store_file_meta.company_id = ? ";
             $params[] = $opts['companyId'];
         }
+
+        if (isset($opts['personId']) && $opts['personId']) {
+            $where[] = " filesync__store_file_meta.person_id = ? ";
+            $params[] = $opts['personId'];
+        }
         
         if (isset($opts['company_name']) && $opts['company_name']) {
             $where[] = " company_name LIKE ? ";

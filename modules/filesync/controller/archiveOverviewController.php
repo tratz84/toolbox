@@ -4,6 +4,7 @@
 
 use core\controller\BaseController;
 use filesync\service\StoreService;
+use filesync\form\ArchiveCustomerIndexTable;
 
 class archiveOverviewController extends BaseController {
     
@@ -25,11 +26,13 @@ class archiveOverviewController extends BaseController {
             $this->template_ids = get_var('template_ids');
         }
         
+        $this->archiveCustomerIndexTable = new ArchiveCustomerIndexTable();
+        $this->archiveCustomerIndexTable->setContainerId('#archive-customer-index-table');
         if ($companyId) {
-            $this->storeFiles = $storeService->readFilesByCompany($companyId);
+            $this->archiveCustomerIndexTable->setCompanyId( $companyId );
         }
         if ($personId) {
-            $this->storeFiles = $storeService->readFilesByPerson($personId);
+            $this->archiveCustomerIndexTable->setPersonId( $personId );
         }
         
         
@@ -50,5 +53,23 @@ class archiveOverviewController extends BaseController {
         $this->setShowDecorator(false);
         $this->render();
     }
+    
+    
+    
+    public function action_search() {
+        $pageNo = isset($_REQUEST['pageNo']) ? (int)$_REQUEST['pageNo'] : 0;
+        $limit = $this->ctx->getPageSize();
+        
+        $storeService = object_container_get( StoreService::class );
+        
+        $r = $storeService->searchFile($pageNo*$limit, $limit, $_REQUEST);
+        
+        $arr = array();
+        $arr['listResponse'] = $r;
+        
+        
+        $this->json($arr);
+    }
+    
     
 }
