@@ -16,6 +16,8 @@ class ArchiveCustomerIndexTable extends IndexTable {
         parent::__construct();
         
         
+        $this->setItVariable('it_aci');
+        
         $this->setColumn('path',              ['fieldDescription' => t('Filename'), 'fieldType' => 'text', 'searchable' => true]);
         $this->setColumn('subject',           ['fieldDescription' => t('Subject'),  'fieldType' => 'text', 'searchable' => true]);
         $this->setColumn('public',            ['fieldDescription' => t('Public'),   'fieldType' => 'boolean']);
