@@ -18,9 +18,23 @@ class IndexTable {
     protected $renderLoad = true;
     
     public function __construct() {
+        $this->autoSetItVariable();
         
         $this->codegen();
+    }
+    
+    protected function autoSetItVariable() {
+        $n = get_class($this);
         
+        // ucfirst to include part of namespace
+        $n = ucfirst($n);
+        
+        // remove all non-uppercases + 'IndexTable'-string
+        $n = preg_replace('/([^A-Z]|IndexTable)/', '', $n);
+        
+        $n = strtolower($n);
+        
+        $this->setItVariable('it_'.$n);
     }
     
     
