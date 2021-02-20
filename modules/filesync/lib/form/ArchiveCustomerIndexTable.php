@@ -21,6 +21,10 @@ class ArchiveCustomerIndexTable extends IndexTable {
         $this->setColumn('filesize_text',     ['fieldDescription' => t('File size')]);
         $this->setColumn('document_date',     ['fieldDescription' => t('Date'),      'fieldType' => 'date']);
         
+        
+        $this->setRowClick("function(row) {
+            window.open( appUrl('/?m=filesync&c=storefile&a=download&inline=1&id=' + $(row).data('record').store_file_id), '_blank' );
+        }");
     }
     
     
