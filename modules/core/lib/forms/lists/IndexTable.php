@@ -25,6 +25,24 @@ class IndexTable {
         $this->codegen();
     }
     
+    /**
+     * extra class=""-name in <table>-tag
+     */
+    public function setTableClass($cl) { $this->setOpt('tableClass', $cl); }
+    
+    /**
+     * extra variables used loading IndexTable
+     * used for standard filtering
+     */ 
+    public function setDefaultSearchOpt($key, $val) {
+        if (isset($this->opts['defaultSearchOpts']) == false) {
+            $this->opts['defaultSearchOpts'] = array();
+        }
+        
+        $this->opts['defaultSearchOpts'][$key] = $val;
+    }
+    
+    
     protected function autoSetItVariable() {
         $n = get_class($this);
         
@@ -67,6 +85,7 @@ class IndexTable {
         
         $this->columns[ $columnName ] = $props;
     }
+    public function removeColumn( $columnName ) { unset( $this->columns[ $columnName ] ); }
     public function getColumn( $columnName ) {
         if (isset($this->columns[ $columnName ])) {
             return $this->columns[ $columnName ];

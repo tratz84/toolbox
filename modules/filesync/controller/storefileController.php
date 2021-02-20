@@ -2,14 +2,13 @@
 
 
 
-use core\controller\BaseController;
-use core\exception\ObjectNotFoundException;
-use filesync\service\StoreService;
-use core\exception\InvalidStateException;
 use core\container\ActionContainer;
+use core\controller\BaseController;
+use core\exception\InvalidStateException;
+use core\exception\ObjectNotFoundException;
+use filesync\form\ArchiveCustomerIndexTable;
 use filesync\form\StoreFileUploadForm;
-use filesync\model\StoreFileDAO;
-use core\forms\FileField;
+use filesync\service\StoreService;
 
 class storefileController extends BaseController {
     
@@ -27,6 +26,10 @@ class storefileController extends BaseController {
         }
         
         if ($this->store->getStoreType() == 'archive') {
+            $this->archiveCustomerIndexTable = new ArchiveCustomerIndexTable();
+            $this->archiveCustomerIndexTable->setContainerId('#storefile-table-container');
+            $this->archiveCustomerIndexTable->setDefaultSearchOpt('storeId', $this->store->getStoreId());
+            
             $this->setActionTemplate( 'index_archive' );
         }
         

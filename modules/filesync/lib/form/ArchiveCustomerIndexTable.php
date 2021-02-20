@@ -5,7 +5,6 @@ namespace filesync\form;
 
 
 use core\forms\lists\IndexTable;
-use core\exception\InvalidStateException;
 
 class ArchiveCustomerIndexTable extends IndexTable {
     
@@ -17,13 +16,33 @@ class ArchiveCustomerIndexTable extends IndexTable {
         
         // LibreOfficeOnline links
         $this->setOpt('lool_links', true);
+        $this->setTableClass('filesync-customer-index-table');
         
+        $this->setColumn('document_date',     ['fieldDescription' => t('Date'),      'fieldType' => 'date']);
+        $this->setColumn('customer_name',     ['fieldDescription' => t('Customer name'), 'fieldType' => 'text', 'searchable' => true]);
         $this->setColumn('path',              ['fieldDescription' => t('Filename'), 'fieldType' => 'text', 'searchable' => true]);
         $this->setColumn('subject',           ['fieldDescription' => t('Subject'),  'fieldType' => 'text', 'searchable' => true]);
-        $this->setColumn('public',            ['fieldDescription' => t('Public'),   'fieldType' => 'boolean']);
+        $this->setColumn('public',            ['fieldDescription' => t('Public'),   'fieldType' => 'boolean', 'searchable' => true]);
         $this->setColumn('filesize_text',     ['fieldDescription' => t('File size')]);
-        $this->setColumn('document_date',     ['fieldDescription' => t('Date'),      'fieldType' => 'date']);
-        $this->setColumn('actions',           ['fieldDescription' => '']);
+        $this->setColumn('actions',           ['fieldDescription' => '', 'render' => "
+            function( record ) {
+               var store_file_id = record['store_file_id'];
+
+               var anchEdit = $('<a class=\"fa fa-pencil\" />');
+               anchEdit.attr('href', appUrl('/?m=filesync&c=storefile&a=edit_meta&store_file_id=' + store_file_id));
+               
+               var anchDel  = $('<a class=\"fa fa-trash\" />');
+               anchDel.attr('href', appUrl('/?m=filesync&c=storefile&a=delete&store_file_id=' + store_file_id));
+               anchDel.click( handle_deleteConfirmation_event );
+               anchDel.data('description', record.fullname);
+
+               
+               var container = $('<div />');
+               container.append(anchEdit);
+               container.append(anchDel);
+               
+               return container;
+       }"]);
         
         
         $this->setRowClick("function(row) {
@@ -32,22 +51,16 @@ class ArchiveCustomerIndexTable extends IndexTable {
     }
     
     
-    public function setCompanyId( $id ) { $this->companyId = $id; }
-    public function setPersonId( $id ) { $this->personId = $id; }
+    public function setCompanyId( $id ) { $this->setDefaultSearchOpt('companyId', $id); }
+    public function setPersonId( $id ) { $this->setDefaultSearchOpt('personId', $id); }
     
     
     public function render() {
         if ($this->companyId == null && $this->personId == null) {
-            throw new InvalidStateException('No customer id set');
+//             throw new InvalidStateException('No customer id set');
         }
         
         $connectorUrl = '/?m=filesync&c=archiveOverview&a=search';
-        if ($this->companyId) {
-            $connectorUrl .= '&companyId='.$this->companyId;
-        }
-        if ($this->personId) {
-            $connectorUrl .= '&personId='.$this->personId;
-        }
         $this->setConnectorUrl( $connectorUrl );
         
         

@@ -37,6 +37,7 @@ class StoreFileDAO extends \core\db\DAOObject {
                 . "filesync__store_file_meta.document_date, "
                 . "ifnull(filesync__store_file_meta.public, 0) public, "
                 . "customer__company.company_name, "
+                . "customer__person.person_id, "
                 . "customer__person.firstname, "
                 . "customer__person.insert_lastname, "
                 . "customer__person.lastname, "
@@ -97,6 +98,12 @@ class StoreFileDAO extends \core\db\DAOObject {
         if (isset($opts['company_name']) && $opts['company_name']) {
             $where[] = " company_name LIKE ? ";
             $params[] = '%'.$opts['company_name'].'%';
+        }
+        
+        if (isset($opts['customer_name']) && $opts['customer_name']) {
+            $where[] = " company_name LIKE ? OR concat(ifnull(customer__person.firstname, ''), ' ', ifnull(customer__person.insert_lastname, ''), ' ', ifnull(customer__person.lastname, ''), ' ', ifnull(customer__person.insert_lastname, ''), ' ', ifnull(customer__person.firstname, '')) LIKE ? ";
+            $params[] = '%'.$opts['customer_name'].'%';
+            $params[] = '%'.$opts['customer_name'].'%';
         }
         
         if (isset($opts['subject']) && $opts['subject']) {
