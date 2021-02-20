@@ -11,6 +11,8 @@ class IndexTable {
     protected $connectorUrl;
     protected $rowClick = null;
     
+    protected $opts = array();
+    
     protected $columns = array();
     protected $columnPrio = 10;
     
@@ -47,6 +49,10 @@ class IndexTable {
     public function setConnectorUrl( $connectorUrl ) { $this->connectorUrl = $connectorUrl; }
     public function getConnectorUrl( ) { return $this->connectorUrl; }
     
+    public function setOpt($key, $val) { $this->opts[$key] = $val; }
+    public function getOpt($k, $defaultValue = null) { return isset($this->opts[$k]) ? $this->opts[$k] : $defaultValue; }
+    public function getOpts() { return $this->opts; }
+    
     public function setRowClick( $js ) { $this->rowClick = $js; }
     public function getRowClick( ) { return $this->rowClick; }
     
@@ -81,7 +87,7 @@ class IndexTable {
     public function render() {
         $js = '';
         
-        $js .= 'var '.$this->getItVariable().' = new IndexTable('.json_encode($this->getContainerId()).');' . PHP_EOL;
+        $js .= 'var '.$this->getItVariable().' = new IndexTable('.json_encode($this->getContainerId()).', '.json_encode($this->opts).');' . PHP_EOL;
         $js .= PHP_EOL;
         $js .= $this->getItVariable() . '.setConnectorUrl( '.json_encode($this->getConnectorUrl()).' );' . PHP_EOL;
         $js .= PHP_EOL;

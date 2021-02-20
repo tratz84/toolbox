@@ -15,11 +15,15 @@ class ArchiveCustomerIndexTable extends IndexTable {
     public function __construct() {
         parent::__construct();
         
+        // LibreOfficeOnline links
+        $this->setOpt('lool_links', true);
+        
         $this->setColumn('path',              ['fieldDescription' => t('Filename'), 'fieldType' => 'text', 'searchable' => true]);
         $this->setColumn('subject',           ['fieldDescription' => t('Subject'),  'fieldType' => 'text', 'searchable' => true]);
         $this->setColumn('public',            ['fieldDescription' => t('Public'),   'fieldType' => 'boolean']);
         $this->setColumn('filesize_text',     ['fieldDescription' => t('File size')]);
         $this->setColumn('document_date',     ['fieldDescription' => t('Date'),      'fieldType' => 'date']);
+        $this->setColumn('actions',           ['fieldDescription' => '']);
         
         
         $this->setRowClick("function(row) {
