@@ -29,7 +29,7 @@ class archiveOverviewController extends BaseController {
         $this->archiveCustomerIndexTable = new ArchiveCustomerIndexTable();
         $this->archiveCustomerIndexTable->setContainerId('#archive-customer-index-table');
         $this->archiveCustomerIndexTable->removeColumn('customer_name');
-        $this->archiveCustomerIndexTable->removeColumn('actions');
+//         $this->archiveCustomerIndexTable->removeColumn('actions');
         
         if ($companyId) {
             $this->archiveCustomerIndexTable->setCompanyId($companyId);
