@@ -38,11 +38,11 @@ class CustomerSelectWidget extends DynamicSelectField {
         $personId = null;
         $this->customerDeleted = false;
         
-        if (method_exists($obj, 'getCompanyId')) {
+        if (is_object($obj) && method_exists($obj, 'getCompanyId')) {
             $companyId = $obj->getCompanyId();
         }
         
-        if (method_exists($obj, 'getPersonId')) {
+        if (is_object($obj) && method_exists($obj, 'getPersonId')) {
             $personId = $obj->getPersonId();
         }
         
