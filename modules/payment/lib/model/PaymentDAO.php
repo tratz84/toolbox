@@ -29,7 +29,7 @@ class PaymentDAO extends \core\db\DAOObject {
 	public function search($opts=array()) {
 	    $qb = $this->createQueryBuilder();
 	    
-	    $qb->setTable('payment__payment_line');
+	    $qb->setTable('payment__payment');
 	    
 	    // payment__payment-fields
 	    $qb->selectField('payment_id',  'payment__payment');
@@ -42,12 +42,12 @@ class PaymentDAO extends \core\db\DAOObject {
 	    $qb->selectField('cancelled',   'payment__payment');
 	    $qb->selectField('created',     'payment__payment');
 	    
-	    $qb->leftJoin('payment__payment',        'payment_id');
-	    $qb->leftJoin('payment__payment_method', 'payment_method_id');
+// 	    $qb->leftJoin('payment__payment',        'payment_id');
+// 	    $qb->leftJoin('payment__payment_method', 'payment_method_id');
 	    $qb->leftJoin('customer__company',       'company_id',       'payment__payment');
 	    $qb->leftJoin('customer__person',        'person_id',        'payment__payment');
 	    
-	    $qb->setGroupBy('payment__payment.payment_id');
+// 	    $qb->setGroupBy('payment__payment.payment_id');
 	    
 	    $qb->setOrderBy('payment__payment.payment_id desc');
 	    
@@ -93,16 +93,16 @@ class PaymentDAO extends \core\db\DAOObject {
 	
 	
 	public function readTotals($opts) {
-	    $sql = "select c.company_id
-                    , c.company_name
-                    , p.person_id
-                    , p.firstname
-                    , p.insert_lastname
-                    , p.lastname
-                    , sum(amount) total_amount
-                    , count(*) number_payments
-                    , c.deleted company_deleted
-                    , p.deleted person_deleted
+	    $sql = "select payment__payment.company_id
+                    , payment__payment.person_id
+                    , min(c.company_name)    company_name
+                    , min(p.firstname)       firstname
+                    , min(p.insert_lastname) insert_lastname
+                    , min(p.lastname)        lastname
+                    , sum(amount)            total_amount
+                    , count(*)               number_payments
+                    , min(c.deleted)         company_deleted
+                    , min(p.deleted)         person_deleted
                 from payment__payment
                 left join customer__company c using (company_id)
                 left join customer__person p using (person_id) ";
