@@ -62,7 +62,7 @@ class StackPlate {
         return $dom->saveHTML();
     }
     
-    protected function renderTemplate($dom=null, $templatefile) {
+    protected function renderTemplate($dom, $templatefile) {
         $html = $this->parseTemplate($templatefile);
         
         $subdom = new \DOMDocument('1.0', 'UTF-8');

@@ -63,7 +63,7 @@ class MailSearch {
     
     
     
-    public function search($start=0, $limit, $opts) {
+    public function search($start, $limit, $opts) {
         
         $this->start = $start;
         $this->pageSize = $limit;
