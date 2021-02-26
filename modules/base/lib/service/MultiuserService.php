@@ -22,7 +22,7 @@ class MultiuserService extends ServiceBase {
         }
     }
     
-    public function setLock($username, $tabuid=null, $lockKey) {
+    public function setLock($username, $tabuid, $lockKey) {
         $mDao = new MultiuserLockDAO();
         
         $ml = $mDao->readByTab($username, $tabuid);
