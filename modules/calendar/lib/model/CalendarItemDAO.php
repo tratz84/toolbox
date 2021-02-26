@@ -37,7 +37,7 @@ class CalendarItemDAO extends \core\db\DAOObject {
 	    return $this->readByOpts(['calendar_id' => $calendarId], $start, $end);
 	}
 	
-	public function readByOpts($opts=array(), $start, $end) {
+	public function readByOpts($opts, $start, $end) {
 	    
 	    $sql = "select cal__calendar_item.*, customer__company.company_name, customer__person.firstname, customer__person.insert_lastname, customer__person.lastname ";
 	    $sql .= " from cal__calendar_item ";

@@ -235,7 +235,7 @@ class BaseForm extends WidgetContainer {
     
     public function sortWidgets() {
         usort($this->widgets, function($w1, $w2) {
-            return $w1->getPrio() > $w2->getPrio();
+            return $w1->getPrio() - $w2->getPrio();
         });
     }
 

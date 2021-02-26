@@ -49,7 +49,7 @@ class TabContainer {
             if ($t1['prio'] == $t2['prio'])
                 return strcmp($t1['title'], $t2['title']);
             
-            return $t1['prio'] > $t2['prio'];
+            return ($t1['prio'] - $t2['prio'])*100;
         });
         
         $html = '';

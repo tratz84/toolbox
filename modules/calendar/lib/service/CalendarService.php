@@ -125,7 +125,7 @@ class CalendarService extends ServiceBase {
     }
     
     
-    public function readEventInstancesExplodedByCustomer($companyId, $personId, $start=null, $end) {
+    public function readEventInstancesExplodedByCustomer($companyId, $personId, $start=null, $end=null) {
         // validate
         if (!$companyId && !$personId) {
             throw new InvalidArgumentException('No company/person id set');
