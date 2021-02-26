@@ -39,16 +39,18 @@ class UserCustomerSelectWidget extends DynamicSelectField {
         $personId = null;
         $userId = null;
         
-        if (method_exists($obj, 'getCompanyId')) {
-            $companyId = $obj->getCompanyId();
-        }
-        
-        if (method_exists($obj, 'getPersonId')) {
-            $personId = $obj->getPersonId();
-        }
-        
-        if (method_exists($obj, 'getUserId')) {
-            $userId = $obj->getUserId();
+        if (is_object($obj)) {
+            if (method_exists($obj, 'getCompanyId')) {
+                $companyId = $obj->getCompanyId();
+            }
+            
+            if (method_exists($obj, 'getPersonId')) {
+                $personId = $obj->getPersonId();
+            }
+            
+            if (method_exists($obj, 'getUserId')) {
+                $userId = $obj->getUserId();
+            }
         }
         
         $widget_name = $this->getName();

@@ -30,7 +30,7 @@ class UserSelectWidget extends DynamicSelectField {
         
         $userId = null;
         
-        if (method_exists($obj, 'getUserId')) {
+        if (is_object($obj) && method_exists($obj, 'getUserId')) {
             $userId = $obj->getUserId();
         }
         
