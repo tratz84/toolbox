@@ -25,9 +25,9 @@ class objectlockController extends BaseController {
         $lo = new LookupObject(get_var('objectName'), get_var('id'));
         if ($lo->lookup()) {
             $obj = $lo->getObject();
-            if (method_exists($obj, 'getCompanyId'))
+            if (is_object($obj) && method_exists($obj, 'getCompanyId'))
                 $companyId = $obj->getCompanyId();
-            if (method_exists($obj, 'getPersonId'))
+                if (is_object($obj) && method_exists($obj, 'getPersonId'))
                 $personId = $obj->getPersonId();
         }
         
@@ -54,9 +54,9 @@ class objectlockController extends BaseController {
         $lo = new LookupObject(get_var('objectName'), get_var('id'));
         if ($lo->lookup()) {
             $obj = $lo->getObject();
-            if (method_exists($obj, 'getCompanyId'))
+            if (is_object($obj) && method_exists($obj, 'getCompanyId'))
                 $companyId = $obj->getCompanyId();
-            if (method_exists($obj, 'getPersonId'))
+            if (is_object($obj) && method_exists($obj, 'getPersonId'))
                 $personId = $obj->getPersonId();
         }
         

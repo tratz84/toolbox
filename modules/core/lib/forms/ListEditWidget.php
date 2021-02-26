@@ -87,7 +87,7 @@ abstract class ListEditWidget extends ListWidget {
         }
         
         $func = 'get'.dbCamelCase($fieldName);
-        if (method_exists($obj, $func)) {
+        if (is_object($obj) && method_exists($obj, $func)) {
             $v = $obj->$func();
         } else if (is_a($obj, DBObject::class)) {
             $v = $obj->getField($fieldName);

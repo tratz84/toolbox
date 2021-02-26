@@ -38,7 +38,7 @@ class ListWidget extends WidgetContainer {
         
         $objects = array();
         
-        if (method_exists($obj, $get_func)) {
+        if (is_object($obj) && method_exists($obj, $get_func)) {
             
             $objects = $obj->$get_func();
         } else if (isset($obj->{$this->methodObjectList})) {
