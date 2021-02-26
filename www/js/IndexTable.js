@@ -185,6 +185,12 @@ function IndexTable( container, opts ) {
 			searchOpts['sortField'] = this.sortField;
 		}
 		
+		if (this.opts.defaultSearchOpts) {
+			for(var sok in this.opts.defaultSearchOpts) {
+				searchOpts[ sok ] = this.opts.defaultSearchOpts[ sok ];
+			}
+		}
+		
 		console.log( searchOpts );
 		
 		if (this.callback_pre_load) {
@@ -271,6 +277,9 @@ function IndexTable( container, opts ) {
 
 		if (this.table == null) {
 			this.table = $('<table class="list-response-table" />');
+			if (this.opts.tableClass) {
+				$(this.table).addClass( this.opts.tableClass );
+			}
 			$(this.table).data('IndexTable', this);
 
 			$(this.container).append(this.table);
@@ -543,6 +552,11 @@ function IndexTable( container, opts ) {
 					
 					if (($(evt.target).is('td') && $(evt.target).data('click-disabled'))
 							|| $(evt.target).closest('td').data('click-disabled')) {
+						return;
+					}
+					
+					// Anchor clicked, or cell with anchor? => skip
+					if ( evt.target.nodeName == 'A' || $(evt.target).find('A').length) {
 						return;
 					}
 
