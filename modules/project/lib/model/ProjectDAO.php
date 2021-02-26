@@ -37,8 +37,7 @@ class ProjectDAO extends \core\db\DAOObject {
 	    
 	    $qb->setTable('project__project');
 	    $qb->selectFields('project__project.*', 'customer__company.company_id', 'customer__company.company_name', 'customer__person.person_id', 'customer__person.firstname', 'customer__person.insert_lastname', 'customer__person.lastname');
-	    $qb->selectFunction('sum(ifnull(duration*60, TIMESTAMPDIFF(minute, start_time, end_time))) total_minutes');
-	    $qb->leftJoin('project__project_hour', 'project_id');
+	    $qb->selectFunction('(select sum(ifnull(duration*60, TIMESTAMPDIFF(minute, start_time, end_time))) from project__project_hour pph where pph.project_id=project__project.project_id)  total_minutes');
 	    $qb->leftJoin('customer__company', 'company_id');
 	    $qb->leftJoin('customer__person', 'person_id');
 	    
@@ -76,9 +75,7 @@ class ProjectDAO extends \core\db\DAOObject {
 		    $qb->addWhere(QueryBuilderWhere::whereRefByVal('project_name', 'LIKE', '%' . $opts['project_name'] . '%'));
 		}
 	    
-		$qb->setGroupBy('project__project.project_id');
-		
-		$qb->setOrderBy('max(project__project_hour.project_hour_id) desc ');
+		$qb->setRawOrderBy('(select max(ph2.project_hour_id) from project__project_hour ph2 where ph2.project_id=project__project.project_id) desc ');
 		
 		return $qb->queryCursor( Project::class );
 	}

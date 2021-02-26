@@ -193,6 +193,11 @@ abstract class QueryBuilder {
         return $this;
     }
     
+
+    public function setRawOrderBy($o) {
+        $this->orderBy = $o;
+        return $this;
+    }
     
     public function setOrderBy($o, $filterField=true) {
         // accept limited characters
