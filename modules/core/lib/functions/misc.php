@@ -875,6 +875,13 @@ function next_day($date, $no=1) {
     
     return date('Y-m-d', $t);
 }
+function previous_day($date, $no=1) {
+    if ($no == 0)
+        return $date;
+        
+    return next_day($date, $no * -1);
+}
+
 
 function next_week($date, $no) {
     return next_day($date, $no * 7);
