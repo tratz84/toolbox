@@ -44,6 +44,10 @@ class serverInfoController extends BaseController {
         $ext_zip = extension_loaded('zip');
         $this->sic->addInfo('php-zip', $ext_zip?'Ok':'Not loaded', $ext_zip?'':'extension not loaded');
         
+        // check php-soap
+        $ext_soap = extension_loaded('soap');
+        $this->sic->addInfo('php-soap', $ext_soap?'Ok':'Not loaded', $ext_soap?'':'extension not loaded');
+        
         hook_eventbus_publish( $this->sic, 'base', 'ServerInfoContainer' );
         
         return $this->render();
