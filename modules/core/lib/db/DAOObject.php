@@ -30,6 +30,11 @@ class DAOObject
         return $con->query($query, $params);
     }
     
+    public function getAffectedRows() {
+        $con = DatabaseHandler::getConnection($this->resourceName);
+        return $con->getAffectedRows();
+    }
+    
     
     public function queryList($query, $params = array()) {
         $con = DatabaseHandler::getConnection($this->resourceName);
