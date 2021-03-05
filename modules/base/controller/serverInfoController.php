@@ -17,6 +17,7 @@ class serverInfoController extends BaseController {
         $this->sic->addInfo('Operating system', php_uname());
         $this->sic->addInfo('Memory limit', ini_get('memory_limit'));
         $this->sic->addInfo('Max execution time (Time limit)', ini_get('max_execution_time'));
+        $this->sic->addInfo('ROOT-dir', ROOT);
         
         // wkhtmltopdf is used for archiving in webmail-mod
         if (toolbox_html2pdf_available()) {
