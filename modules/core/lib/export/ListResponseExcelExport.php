@@ -133,7 +133,9 @@ class ListResponseExcelExport {
     
     public function outputExcel(Spreadsheet $spreadsheet, $filename) {
         
-        if (is_web()) {
+        if (ctx()->getVar('list-response-excel-disable-headers')) {
+            
+        } else if (is_web()) {
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment;filename="'.$filename.'"');
             header('Cache-Control: max-age=0');
