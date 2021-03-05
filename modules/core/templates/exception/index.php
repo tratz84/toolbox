@@ -5,6 +5,7 @@ use core\exception\NotForLiveException;
 use core\exception\ContextNotFoundException;
 
 try {
+    header("HTTP/1.0 500 Internal Server Error");
     
     if (is_a($ex, ContextNotFoundException::class)) {
         // don't save ContextNotFound-Exceptions
