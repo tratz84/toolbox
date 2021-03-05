@@ -197,6 +197,14 @@ function IndexTable( container, opts ) {
 			this.callback_pre_load(searchOpts);
 		}
 		
+		// show loading indicator?
+		if (this.opts.loadingIndicator) {
+			$(this.table).find('tbody').remove();
+			
+			var tbodyLoading = $('<tbody class="loading-indicator"><tr><td colspan="'+this.columns.length+'" align="center"><img src="./images/ajax-loader-big.gif" /> Loading...</td></tr></tbody>');
+			$(this.table).append( tbodyLoading );
+		}
+		
 		this.ajaxLoadRequest = $.ajax({
 			type : 'POST',
 			url : this.connectorUrl,
