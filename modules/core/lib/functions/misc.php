@@ -888,6 +888,29 @@ function next_week($date, $no) {
 }
 
 
+function previous_week_no($year, $weekNo) {
+    $weekNo--;
+    
+    if ($weekNo <= 0) {
+        $year--;
+        $weekNo = weeks_in_year($year);
+    }
+    
+    return sprintf('%d-%02d', $year, $weekNo);
+}
+
+
+function next_week_no($year, $weekNo) {
+    $weekNo++;
+    
+    if ($weekNo > weeks_in_year( $year )) {
+        $weekNo = 1;
+        $year++;
+    }
+    
+    return sprintf('%d-%02d', $year, $weekNo);
+}
+
 function date_add_hours( $date, $hours, $format='Y-m-d H:i:s' ) {
     $dt = new DateTime( $date, new DateTimeZone(date_default_timezone_get()) );
     if ($hours > 0) {
