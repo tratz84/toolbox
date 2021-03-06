@@ -227,8 +227,10 @@ function IndexTable( container, opts ) {
 					$(window).trigger('IndexTable-loaded-first-time', me);
 				}
 			},
+			error: function() {
+				showAlert('Error', 'An error occured loading the data..');
+			},
 			complete: function() {
-				//showAlert('Error', 'An error occured..');
 				me.loading = false;
 			}
 		});
