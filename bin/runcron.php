@@ -16,7 +16,12 @@ include dirname(__FILE__).'/../config/config.php';
 
 // standalone?
 if (is_standalone_installation()) {
-    get_url(BASE_URL . BASE_HREF . '?m=base&c=public/cron&a=run');
+    bootstrapCli( 'default' );
+    
+    print "Cron mode: Standalone\n";
+    $cronService = object_container_get(\base\service\CronService::class);
+    
+    $cronService->runCron();
 }
 // multi-installation? => loop all through customers
 else {
