@@ -72,6 +72,11 @@ spl_autoload_register(function($name) {
             $classPathWithoutModuleName = substr($classPath, strlen($moduleName)+1);
             $moduleClassName = $moduleName;
             $path = realpath( $modulePath . '/lib/' . $classPathWithoutModuleName . '.php' );
+            
+            // path found?
+            if ($path) {
+                break;
+            }
         }
     }
     
