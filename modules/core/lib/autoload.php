@@ -69,9 +69,9 @@ spl_autoload_register(function($name) {
 //         if (in_array($moduleName, ['admin']) == false && ctx()->isModuleEnabled($moduleName) == false) continue;
         
         if (strpos($classPath, $moduleName.'/') === 0) {
-            $classPath = substr($classPath, strlen($moduleName)+1);
+            $classPathWithoutModuleName = substr($classPath, strlen($moduleName)+1);
             $moduleClassName = $moduleName;
-            $path = realpath( $modulePath . '/lib/' . $classPath . '.php' );
+            $path = realpath( $modulePath . '/lib/' . $classPathWithoutModuleName . '.php' );
         }
     }
     
