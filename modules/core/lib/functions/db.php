@@ -6,6 +6,13 @@
 use core\db\DatabaseHandler;
 use core\exception\DatabaseException;
 
+
+function queryValue($resourceName, $sql, $params=array()) {
+    $conn = DatabaseHandler::getInstance()->getConnection( $resourceName );
+    
+    return $conn->queryValue( $sql, $params );
+}
+
 function query($resourceName, $sql, $params=array()) {
     $conn = DatabaseHandler::getInstance()->getConnection( $resourceName );
     
