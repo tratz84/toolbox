@@ -19,6 +19,9 @@ class IndexTable {
     // call 'it.load();' ?
     protected $renderLoad = true;
     
+    protected $enableColumnSelection = false;
+    
+    
     public function __construct() {
         $this->autoSetItVariable();
         
@@ -61,7 +64,11 @@ class IndexTable {
     public function setItVariable( $n ) { $this->itVariable = $n; }
     public function getItVariable( ) { return $this->itVariable; }
     
-    public function setContainerId( $containerId ) { $this->containerId = $containerId; }
+    public function setContainerId( $containerId ) {
+        if (strpos($containerId, '#') !== 0)
+            $containerId = '#' . $containerId;
+        $this->containerId = $containerId;
+    }
     public function getContainerId( ) { return $this->containerId; }
     
     public function setConnectorUrl( $connectorUrl ) { $this->connectorUrl = $connectorUrl; }
@@ -98,6 +105,10 @@ class IndexTable {
         $this->columns[ $columnName ][ $propName ] = $val;
     }
     
+    public function enableColumnSelection() { $this->enableColumnSelection = true; }
+    public function disableColumnSelection() { $this->enableColumnSelection = false; }
+    
+    
     protected function codegen() {
         
     }
@@ -108,7 +119,17 @@ class IndexTable {
             $this->containerId = '#default-table';
         }
         
-        $html = '<div id="'.substr($this->getContainerId(), 1).'"></div>';
+        $html = '';
+        if ($this->enableColumnSelection) {
+            $idColSelect = substr($this->getContainerId(), 1)."-column-selection";
+            
+            $html .= "<div id=\"".$idColSelect."\"></div>";
+            $html .= '<hr/>';
+            $this->setOpt('columnSelection', '#'.$idColSelect);
+        }
+        
+        $html .= '<div id="'.substr($this->getContainerId(), 1).'"></div>';
+        
         $html .= "\n\n";
         $html .= "<script type=\"text/javascript\">\n";
         $html .= $this->render();
@@ -129,14 +150,29 @@ class IndexTable {
         }
         $js .= PHP_EOL;
         
+        if ($this->enableColumnSelection) {
+            $js .= $this->getItVariable() . ".createColumnSelection({forcePopup: true});" . PHP_EOL;
+        }
+        $js .= PHP_EOL;
+        
         $colKeys = array_keys( $this->columns );
         usort($colKeys, function($k1, $k2) {
             return $this->columns[$k1]['prio'] - $this->columns[$k2]['prio'];
         });
         
+        $columnState = null;
+        if (isset($this->opts['tableName'])) {
+            $columnState = getJsState('indextable-enabled-columns-'.$this->opts['tableName']);
+        }
+        
         foreach($this->columns as $colName => $props) {
             if (isset($props['fieldName']) == false) {
                 $props['fieldName'] = $colName;
+            }
+            
+            // hidden columns
+            if ($columnState && isset($columnState[$props['fieldName']]) && is_false($columnState[$props['fieldName']])) {
+                $props['hidden'] = true;
             }
             
             $js .= $this->getItVariable() . '.addColumn({' . PHP_EOL . '  ';

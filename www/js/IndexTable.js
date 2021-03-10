@@ -872,6 +872,7 @@ function IndexTable( container, opts ) {
 				
 				inp.change(function() {
 					me.updateColumnselection();
+					this.saveColumnState();
 				});
 			}
 		} else {
@@ -920,6 +921,7 @@ function IndexTable( container, opts ) {
 			html: container,
 			callback_ok: function() {
 				this.updateColumnselection();
+				this.saveColumnState();
 			}.bind(this)
 		});
 		
@@ -930,6 +932,23 @@ function IndexTable( container, opts ) {
 		}
 	};
 	
+	/**
+	 * save shown/hidden column state
+	 */
+	this.saveColumnState = function() {
+		if (!this.opts.tableName) {
+			console.error('IndexTable.saveColumnState failed, this.opts.tableName not set');
+			return;
+		}
+
+		var state = {};
+		$('.index-table-column-selector').each(function(index, node) {
+			var c = $(node).data('column');
+			state[ c.fieldName ] = $(node).prop('checked');
+		});
+		
+		saveJsState('indextable-enabled-columns-'+this.opts.tableName, state);
+	};
 	
 	
 	this.updateColumnselection = function() {
@@ -937,13 +956,24 @@ function IndexTable( container, opts ) {
 			var c = $(node).data('column');
 			
 			if ($(this).prop('checked')) {
-				$('.th-'+slugify(c.fieldName)).show();
-				$('.td-'+slugify(c.fieldName)).show();
+				c.hidden = false;
 			} else {
+				c.hidden = true;
+			}
+		});
+		
+		for(var i in this.columns) {
+			var c = this.columns[i];
+			if (c.hidden) {
 				$('.th-'+slugify(c.fieldName)).hide();
 				$('.td-'+slugify(c.fieldName)).hide();
 			}
-		});
+			else {
+				$('.th-'+slugify(c.fieldName)).show();
+				$('.td-'+slugify(c.fieldName)).show();
+			}
+		}
+
 	};
 
 

@@ -66,6 +66,32 @@ function is_admin_context() {
 }
 
 
+
+function is_true($v) {
+    if ($v) {
+        return true;
+    }
+    if ($v == 'true') {
+        return true;
+    }
+    
+    return false;
+}
+
+function is_false($v) {
+    if (!$v) {
+        return true;
+    }
+    if ($v == 'false') {
+        return true;
+    }
+    
+    return false;
+}
+
+
+
+
 function appUrl($u) {
     
     if (defined('ADMIN_CONTEXT')) {
