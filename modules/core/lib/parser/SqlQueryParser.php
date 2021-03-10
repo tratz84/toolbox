@@ -91,8 +91,12 @@ class SqlQueryParser {
             }
         }
         
+        $whereInserted = false;
+        
         // not existing?
         if ($whereno == -1) {
+            $whereInserted = true;
+            
             $where_commandno = $this->lookupCommandNo('where');
             
             // loop through commands and find right position to add 'where'
@@ -101,7 +105,7 @@ class SqlQueryParser {
             for($x=0; $x < count($sq); $x++) {
                 // right location to add 'where' ?
                 $no = $this->lookupCommandNo( $sq[$x]['cmd'] );
-                if ($no > $where_commandno) {
+                if ($no > $where_commandno && $whereSet == false) {
                     $newsq[] = array(
                         'cmd' => 'where',
                         'parts' => array()
@@ -149,6 +153,7 @@ class SqlQueryParser {
             
         }
         
+        
         // put parentheses around original where-clause
         if (isset($this->splitQueries[$queryNo][$whereno]['parentheses_set']) == false) {
             $this->splitQueries[$queryNo][$whereno]['parentheses_set'] = true;
@@ -164,7 +169,7 @@ class SqlQueryParser {
                 );
                 $pright = array(
                     'type' => 'string',
-                    'string' => ') AND ',
+                    'string' => ') ',
                     'subs' => array()
                 );
                 
@@ -176,18 +181,43 @@ class SqlQueryParser {
             $this->splitQueries[$queryNo][$whereno]['parts'] = $parts;
         }
         
+        // WHERE not added (already a clause?) => prepend with 'AND'
+        if ($whereInserted == false) {
+            $str = ' AND ' . $str;
+        }
+        
         $this->splitQueries[$queryNo][$whereno]['parts'][] = array(
             'type' => 'string',
-            'string' => $str,
+            'string' => $str . "\n",
             'subs' => array()
         );
+        
+    }
+    
+    
+    public function setOrderBy( $str ) {
+        for($qn=0; $qn < count($this->splitQueries); $qn++) {
+            $nsq = array();
+            for($x=0; $x < count($this->splitQueries[$qn]); $x++) {
+                if ($this->splitQueries[$qn][$x]['cmd'] == 'order by') continue;
+                
+                $nsq[] = $this->splitQueries[$qn][$x];
+            }
+            $nsq[] = array(
+                'cmd' => 'order by',
+                'parts' => array(
+                    ['string' => 'order by '.$str],
+                )
+            );
+            
+            $this->splitQueries[$qn] = $nsq;
+        }
+        
     }
     
     
     public function removeLimit() {
-        
         for($qn=0; $qn < count($this->splitQueries); $qn++) {
-            
             $nsq = array();
             for($x=0; $x < count($this->splitQueries[$qn]); $x++) {
                 if ($this->splitQueries[$qn][$x]['cmd'] == 'limit') continue;
@@ -197,7 +227,6 @@ class SqlQueryParser {
             
             $this->splitQueries[$qn] = $nsq;
         }
-        
     }
     
     
@@ -206,7 +235,7 @@ class SqlQueryParser {
      */
     protected function lookupCommandNo($cmdname) {
         for($x=0; $x < count($this->queryCommands); $x++) {
-            if ($this->queryCommands[$x]['cmd'] == $cmdname) {
+            if ($this->queryCommands[$x]['cmd'] == strtolower($cmdname)) {
                 return $x;
             }
         }
@@ -450,7 +479,7 @@ class SqlQueryParser {
                         if ($x+($z*2) >= $partnos)
                             break;
                         
-                        if ($this->parts[$x+($z*2)]['string'] == strtolower($cmdstring[$z])) {
+                        if (strtolower($this->parts[$x+($z*2)]['string']) == strtolower($cmdstring[$z])) {
                             $matchCount++;
                         }
                     }
@@ -495,9 +524,9 @@ class SqlQueryParser {
                 $this->splitQueries[$splitquery_no][$lastcmd]['parts'][] = $this->parts[$x];
             }
         }
-        
-        
     }
+    
+    
     
     
     
