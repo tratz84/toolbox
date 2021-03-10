@@ -7,7 +7,7 @@ class IndexTable {
     
     protected $itVariable = 'it';
     
-    protected $containerId;
+    protected $containerId = null;
     protected $connectorUrl;
     protected $rowClick = null;
     
@@ -102,6 +102,20 @@ class IndexTable {
         
     }
     
+    public function renderHtml() {
+        
+        if ($this->containerId == null) {
+            $this->containerId = '#default-table';
+        }
+        
+        $html = '<div id="'.substr($this->getContainerId(), 1).'"></div>';
+        $html .= "\n\n";
+        $html .= "<script type=\"text/javascript\">\n";
+        $html .= $this->render();
+        $html .= "</script>\n";
+        
+        return $html;
+    }
     
     public function render() {
         $js = '';
