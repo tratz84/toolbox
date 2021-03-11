@@ -51,7 +51,7 @@ class MonthField extends BaseWidget {
         $next = $start;
         $ymdNext = (int)format_date($next, 'Ymd');
         $ymdEnd = (int)format_date($end, 'Ymd');
-        for($x=0; $x < 500 && $ymdNext < $ymdEnd; $x++) {
+        for($x=0; $x < 500 && $ymdNext <= $ymdEnd; $x++) {
             $ym = format_date($next, 'Y-m');
             
             $map_months[ $ym ] = [
