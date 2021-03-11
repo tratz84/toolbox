@@ -889,7 +889,7 @@ function IndexTable( container, opts ) {
 	
 	
 	this.selectColumnsPopup = function() {
-		var container = $('<div />');
+		var container = $('<div class="index-table-column-selection" />');
 		for(var i in this.columns) {
 			var c = this.columns[i];
 			
