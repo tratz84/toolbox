@@ -9,6 +9,8 @@ class SqlQueryParser {
     
     protected $splitQueries = array();
     
+    protected $params = array();
+    
     protected $queryCommands = array(
         array('cmd' =>'select'),
         array('cmd' =>'from'),
@@ -52,6 +54,11 @@ class SqlQueryParser {
             for($y=0; $y < count($sq); $y++) {
                 $sql .= $this->partsToString( $sq[$y]['parts'] );
             }
+        }
+        
+        // set params
+        foreach( $this->params as $key => $val ) {
+            $sql = str_replace('{{'.$key.'}}', $val, $sql);
         }
         
         return $sql;
@@ -192,6 +199,16 @@ class SqlQueryParser {
             'subs' => array()
         );
         
+    }
+    
+    
+    public function setParam( $paramName, $paramValue, $escape=true) {
+        if ($escape) {
+            $this->params[$paramName] = "'".addslashes($paramValue)."'";
+        }
+        else {
+            $this->params[$paramName] = $paramValue;
+        }
     }
     
     
