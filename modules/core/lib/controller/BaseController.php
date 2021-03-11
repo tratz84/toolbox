@@ -47,7 +47,7 @@ class BaseController {
             $found = null;
             foreach($dirs as $d) {
                 $d = realpath($d);
-                if (strpos($filename_controller, $d) === 0) {
+                if (strpos($filename_controller, $d.DIRECTORY_SEPARATOR) === 0) {
                     $found = $d;
                     break;
                 }
