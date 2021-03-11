@@ -53,6 +53,8 @@ $lang['Module "%s" disabled']   = 'Module "%s" gedeactiveerd';
 $lang['Subject']                = 'Onderwerp';
 $lang['Time']                   = 'Tijdstip';
 
+$lang['Select columns']         = 'Kies kolommen';
+
 $lang['Fieldname']              = 'Veldnaam';
 $lang['Old value']              = 'Oude waarde';
 $lang['New value']              = 'Nieuwe waarde';
