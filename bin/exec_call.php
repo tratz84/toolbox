@@ -68,8 +68,9 @@ if (strpos($call, '::') !== false) {
         $r = $m->invokeArgs( null, $funcParams );
     }
     else {
-        $obj = $ref->newInstance();
-        $r = $m->invokeArgs( $obj, $funcParams );
+        $obj = object_container_get( $className );
+        
+        $r = call_user_func_array(array($obj, $call), $funcParams);
     }
     
     // output result
