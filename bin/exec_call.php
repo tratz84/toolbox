@@ -6,9 +6,6 @@
  * 
  */
 
-use admin\service\AdminCustomerService;
-use core\ObjectContainer;
-
 include dirname(__FILE__).'/../config/config.php';
 
 if (is_debug() == false) {
