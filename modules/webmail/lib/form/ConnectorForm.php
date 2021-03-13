@@ -35,8 +35,11 @@ class ConnectorForm extends BaseForm {
         $this->addWidget(new TextField('description', '', t('Description')));
         
         $this->addWidget(new SelectField('connector_type', '', array(
-            'imap'  => 'imap (native)')));
-//             'horde' => 'imap (horde)',
+                'imap'  => 'imap (native)',
+                'horde' => 'imap (horde)',
+                )
+            )
+        );
 //             'pop3'  => 'pop3'), 'Soort'));
         
         
