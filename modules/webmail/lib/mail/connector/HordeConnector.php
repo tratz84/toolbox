@@ -182,9 +182,24 @@ class HordeConnector extends BaseMailConnector {
             $eml = $this->determineEmailPath( $cdf );
 
         }
+    }
+    
+    protected function fetchRawMail($folderName, $id) {
+        // create query
+        $fq2 = new \Horde_Imap_Client_Fetch_Query();
+        $fq2->headerText();
+        $fq2->bodyText();
         
+        // fetch
+        $list2 = $this->client->fetch( $folderName, $fq2, array(
+            'ids' => new \Horde_Imap_Client_Ids( array($id) )
+        ));
         
+        // 1st item
+        $cdf2 = $list2->first();
         
+        // 
+        return $cdf2->getHeaderText() . $cdf2->getBodyText();
     }
     
     
