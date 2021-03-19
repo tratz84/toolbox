@@ -6,8 +6,9 @@ namespace core\forms;
 
 
 use core\db\DBObject;
+use core\db\LockableObject;
 
-class BaseForm extends WidgetContainer {
+class BaseForm extends WidgetContainer implements LockableObject {
     
     protected $submitButtons = array();
     protected $showSubmitButtons = true;
@@ -333,6 +334,33 @@ class BaseForm extends WidgetContainer {
         
         return $html;
     }
+    public function getLockKey() {
+        // start lock name
+        $lockKey = get_class( $this );
+        if (strpos($lockKey, '\\') !== false)
+            $lockKey = substr($lockKey, strrpos($lockKey, '\\')+1);
+        $lockKey =  str_replace('Form', '', $lockKey);
+        
+        $vals = array();
+        foreach( $this->getKeyFields() as $kf ) {
+            $v = $this->getWidgetValue( $kf );
+            if ($v) {
+                $vals[] = $v;
+            }
+        }
+        
+        if (count($vals)) {
+            $lockKey .= '-' . implode('-', $vals);
+            if (strlen($lockKey) > 64) {
+                $lockKey = substr($lockKey, 0, 64);
+            }
+            
+            return $lockKey;
+        }
+        
+        return null;
+    }
+
     
 }
 

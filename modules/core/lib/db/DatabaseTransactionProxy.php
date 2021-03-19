@@ -25,29 +25,10 @@ class DatabaseTransactionProxy {
         $con = \core\db\DatabaseHandler::getInstance()->getConnection('default');
         
         // Form? => auto set lock for object
-        if (count($arguments) && is_a($arguments[0], BaseForm::class)) {
-            // start lock name
-            $lockKey = get_class($arguments[0]);
-            if (strpos($lockKey, '\\') !== false)
-                $lockKey = substr($lockKey, strrpos($lockKey, '\\')+1);
-            $lockKey =  str_replace('Form', '', $lockKey);
+        if (count($arguments) && is_a($arguments[0], \core\db\LockableObject::class)) {
+            $lockKey = $arguments[0]->getLockKey();
             
-            $vals = array();
-            foreach( $arguments[0]->getKeyFields() as $kf ) {
-                $v = $arguments[0]->getWidgetValue( $kf );
-                if ($v) {
-                    $vals[] = $v;
-                }
-            }
-            
-            if (count($vals)) {
-                $lockKey .= '-' . implode('-', $vals);
-                if (strlen($lockKey) > 64) {
-                    $lockKey = substr($lockKey, 0, 64);
-                }
-                
-                $v = $con->queryValue("select is_free_lock(?)", array($lockKey));
-                
+            if ($lockKey) {
                 $con->getLock( $lockKey );
             }
         }
