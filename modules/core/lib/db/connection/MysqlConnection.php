@@ -79,6 +79,7 @@ class MysqlConnection extends DBConnection {
         
         if (!$r) {
             // begin_transaction failed, throw an exception?
+            throw new DatabaseException('BEGIN TRANSACTION failed');
         }
         
         return $r;
