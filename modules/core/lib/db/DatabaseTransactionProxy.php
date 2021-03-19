@@ -52,6 +52,7 @@ class DatabaseTransactionProxy {
             }
         }
         
+        // start transaction
         $con->beginTransaction();
         
         try {
@@ -66,9 +67,8 @@ class DatabaseTransactionProxy {
             throw $ex;
         }
         
-        if ($con->getTransactionCount() == 0) {
-            $con->releaseLocks();
-        }
+        // release locks, if set
+        $con->releaseLocks();
         
         return $r;
     }

@@ -68,8 +68,6 @@ class MysqlConnection extends DBConnection {
         $this->mysqli->close();
     }
     
-    public function getTransactionCount() { return $this->transactionCount; }
-    
     public function beginTransaction() {
         
         $this->transactionCount++;
@@ -133,6 +131,10 @@ class MysqlConnection extends DBConnection {
     }
     
     public function releaseLocks() {
+        if ($this->transactionCount > 0) {
+            return;
+        }
+        
         foreach($this->dbLocks as $l) {
             $this->query('select release_lock(?)', array($l));
         }
