@@ -34,9 +34,6 @@ class PersonService extends ServiceBase {
     }
     
     public function save(\customer\forms\PersonForm $personForm) {
-        
-//         sleep( 10 );
-        
         $fh = FormDbHandler::getHandler( PersonForm::class );
         
         $obj = $fh->saveForm( $personForm );
