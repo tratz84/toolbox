@@ -6,6 +6,7 @@ namespace core\db;
 
 use core\exception\MethodNotFoundException;
 use core\container\ObjectHookProxy;
+use core\forms\BaseForm;
 
 class DatabaseTransactionProxy {
     
@@ -22,6 +23,17 @@ class DatabaseTransactionProxy {
         }
         
         $con = \core\db\DatabaseHandler::getInstance()->getConnection('default');
+        
+        // Form? => auto set lock for object
+        if (count($arguments) && is_a($arguments[0], \core\db\LockableObject::class)) {
+            $lockKey = $arguments[0]->getLockKey();
+            
+            if ($lockKey) {
+                $con->getLock( $lockKey );
+            }
+        }
+        
+        // start transaction
         $con->beginTransaction();
         
         try {
@@ -36,6 +48,8 @@ class DatabaseTransactionProxy {
             throw $ex;
         }
         
+        // release locks, if set
+        $con->releaseLocks();
         
         return $r;
     }

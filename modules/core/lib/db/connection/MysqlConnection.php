@@ -24,6 +24,8 @@ class MysqlConnection extends DBConnection {
     
     protected $affected_rows;
     
+    protected $dbLocks = array();
+    
     public function __construct() {
         
     }
@@ -59,6 +61,7 @@ class MysqlConnection extends DBConnection {
         $this->mysqli->query('SET NAMES utf8mb4');
         $this->mysqli->query('SET SQL_MODE=\'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION\'');
         
+        
         return true;
     }
     public function disconnect() {
@@ -76,6 +79,7 @@ class MysqlConnection extends DBConnection {
         
         if (!$r) {
             // begin_transaction failed, throw an exception?
+            throw new DatabaseException('BEGIN TRANSACTION failed');
         }
         
         return $r;
@@ -94,7 +98,9 @@ class MysqlConnection extends DBConnection {
         
         
         if ($this->transactionCount == 0) {
-            return $this->mysqli->commit();
+            $r = $this->mysqli->commit();
+            
+            return $r;
         } else {
             return true;
         }
@@ -113,6 +119,28 @@ class MysqlConnection extends DBConnection {
         } else {
             return true;
         }
+    }
+    
+    /**
+     * 
+     * @param string $name
+     * @param int $timeout - in seconds
+     */
+    public function getLock( $name, $timeout = -1 ) {
+        $this->query('select get_lock( ?, '.intval($timeout).')', array($name));
+        $this->dbLocks[] = $name;
+    }
+    
+    public function releaseLocks() {
+        if ($this->transactionCount > 0) {
+            return;
+        }
+        
+        foreach($this->dbLocks as $l) {
+            $this->query('select release_lock(?)', array($l));
+        }
+        
+        $this->dbLocks = array();
     }
     
     
