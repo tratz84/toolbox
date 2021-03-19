@@ -24,6 +24,8 @@ class MysqlConnection extends DBConnection {
     
     protected $affected_rows;
     
+    protected $dbLocks = array();
+    
     public function __construct() {
         
     }
@@ -49,7 +51,8 @@ class MysqlConnection extends DBConnection {
     public function getAffectedRows() { return $this->affected_rows; }
     
     public function connect() {
-        $this->mysqli = new \mysqli($this->host, $this->username, $this->password, $this->databaseName);
+        $this->mysqli = mysqli_init();
+        $this->mysqli->real_connect($this->host, $this->username, $this->password, $this->databaseName);
         
         if ($this->mysqli->connect_errno) {
             $this->error = 'Unable to connect to database';
@@ -58,6 +61,9 @@ class MysqlConnection extends DBConnection {
         
         $this->mysqli->query('SET NAMES utf8mb4');
         $this->mysqli->query('SET SQL_MODE=\'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION\'');
+        $this->mysqli->query('SET query_cache_size = 0');
+        $this->mysqli->query('SET query_cache_type = 0');
+        
         
         return true;
     }
@@ -94,7 +100,9 @@ class MysqlConnection extends DBConnection {
         
         
         if ($this->transactionCount == 0) {
-            return $this->mysqli->commit();
+            $r = $this->mysqli->commit();
+            
+            return $r;
         } else {
             return true;
         }
@@ -113,6 +121,24 @@ class MysqlConnection extends DBConnection {
         } else {
             return true;
         }
+    }
+    
+    /**
+     * 
+     * @param string $name
+     * @param int $timeout - in seconds
+     */
+    public function getLock( $name, $timeout = -1 ) {
+        $this->query('select get_lock( ?, '.intval($timeout).')', array($name));
+        $this->dbLocks[] = $name;
+    }
+    
+    public function releaseLocks() {
+        foreach($this->dbLocks as $l) {
+            $this->query('select release_lock(?)', array($l));
+        }
+        
+        $this->dbLocks = array();
     }
     
     
