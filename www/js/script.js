@@ -651,7 +651,9 @@ function showAlert(title, body, callback_ok) {
 	html += '  </div>';		// <!-- /.modal-dialog -->
 	html += '</div>';		// <!-- /.modal -->
 
+	// remove old dialog = backdrop
 	$('.confirmation-dialog').remove();
+	$('.modal-backdrop').remove();
 	
 	var d = $(html);
 	$(document.body).prepend(d);
