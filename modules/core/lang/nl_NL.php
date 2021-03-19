@@ -112,6 +112,8 @@ $lang['An error has occured']                           = 'Er is een fout opgetr
 $lang['Click here to go back to the dashboard']         = 'Klik hier om terug te gaan naar het dashboard';
 
 
+$lang['Error: changed not saved, page reloaded: '] = 'Error: wijzigingen niet opgeslagen, pagina herladen: ';
+
 return $lang;
 
 

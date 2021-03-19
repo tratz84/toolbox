@@ -100,7 +100,7 @@ function appUrl($u) {
         $contextName = Context::getInstance()->getContextName();
     }
     
-    if (strpos($u, '/'.$contextName.'/') === 0) {
+    if (strpos($u, BASE_HREF . $contextName . '/') === 0) {
         return $u;
     }
     

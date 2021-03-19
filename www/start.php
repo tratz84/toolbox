@@ -3,6 +3,7 @@
 use core\exception\DatabaseException;
 use core\exception\SecurityException;
 use core\exception\ContextNotFoundException;
+use core\exception\ObjectModifiedException;
 
 require_once '../config/config.php';
 
@@ -20,6 +21,10 @@ try {
     $fc->addFilter( new \core\filter\DispatchFilter() );
     
     $fc->execute();
+} catch (ObjectModifiedException $ex) {
+    report_user_error(t('Error: changed not saved, page reloaded: ') . $ex->getMessage());
+    
+    redirect( $_SERVER['REQUEST_URI'] );
 } catch (SecurityException $ex) {
     // TODO: block IP? this exception only happens on hacking-like attempts
     
