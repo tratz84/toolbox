@@ -27,7 +27,13 @@ class ReportMenuList {
     }
     
     
-    public function getMenuItems() { return $this->menuItems; }
+    public function getMenuItems() {
+        usort($this->menuItems, function($rmi1, $rmi2) {
+            return strcmp($rmi1->getName(), $rmi2->getName());
+        });
+        
+        return $this->menuItems;
+    }
     
 }
 
