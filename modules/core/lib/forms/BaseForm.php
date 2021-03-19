@@ -35,6 +35,9 @@ class BaseForm extends WidgetContainer implements LockableObject {
         
         $this->submitButtons['default-button'] = new SubmitField('default-button', t('Save'));
         
+        
+        $this->addWidget( new HiddenField('object_version') );
+        
     }
     
     public static function createAndBind(DBObject $obj) {

@@ -9,6 +9,7 @@ use core\exception\DatabaseException;
 use core\forms\lists\ListResponse;
 use core\exception\ObjectNotFoundException;
 use base\model\ObjectMetaDAO;
+use core\exception\ObjectModifiedException;
 
 
 class FormDbHandler {
@@ -154,6 +155,13 @@ class FormDbHandler {
         
         if ($pk_id) {
             $dbObj = $this->readObject( $pk_id );
+        }
+
+        // check if object is changed while editing
+        $widgetObjectVersion = $form->getWidget('object_version');
+        if ($widgetObjectVersion && $form->getWidgetValue('object_version') != $dbObj->getObjectVersion()) {
+            // TODO: something better then an exception..
+            throw new ObjectModifiedException( 'Object changed by other session' );
         }
         
         

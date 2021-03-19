@@ -14,6 +14,8 @@ class DBObject {
     protected $dbFields = array();
     protected $fields = array();
     
+    protected $objectVersion = null;
+    
     protected $lastError = null;
     protected $lastQuery = null;
     
@@ -32,6 +34,21 @@ class DBObject {
     public function setPrimaryKey($n) { $this->primaryKey = $n; }
     public function getPrimaryKey() { return $this->primaryKey; }
     public function getPrimaryKeyValue() { return $this->getField( $this->primaryKey ); }
+    
+    /**
+     * setObjectVersion() - unique string that identifies current object version. If not 
+     *                      set, it will default to field 'edited'. This is used to prevent
+     *                      crossing form posts when two users edit same object.    
+     */
+    public function setObjectVersion($v) { $this->objectVersion = $v; }
+    public function getObjectVersion() {
+        if ($this->objectVersion) {
+            return $this->objectVersion;
+        }
+        else {
+            return $this->getField('edited', null);
+        }
+    }
     
     protected function setDatabaseFields($arr) { $this->dbFields = $arr; }
     
