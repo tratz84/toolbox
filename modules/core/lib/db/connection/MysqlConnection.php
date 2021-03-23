@@ -127,8 +127,13 @@ class MysqlConnection extends DBConnection {
      * @param int $timeout - in seconds
      */
     public function getLock( $name, $timeout = -1 ) {
-        $this->query('select get_lock( ?, '.intval($timeout).')', array($name));
-        $this->dbLocks[] = $name;
+        $l = $this->queryValue('select get_lock( ?, '.intval($timeout).')', array($name));
+        
+        if ($l) {
+            $this->dbLocks[] = $name;
+        }
+        
+        return $l;
     }
     
     public function releaseLocks() {
