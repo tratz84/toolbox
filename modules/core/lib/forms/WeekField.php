@@ -57,23 +57,30 @@ class WeekField extends BaseWidget {
         return $val;
     }
     
+    public function getValue() {
+        $v = parent::getValue();
+        
+        // handle formatting
+        if ($v && preg_match('/^\\d{4}-\\d{1,2}$/', $this->getValue())) {
+            $v = $this->formatWeek( $v );
+        }
+        // invalid value
+        else {
+            return null;
+        }
+        
+        return $v;
+    }
+    
     
     public function render() {
         // build week array
         
         
         // get selected val
-        $val = null;
-        if ($this->getValue() && preg_match('/^\\d{4}-\\d{1,2}$/', $this->getValue())) {
-            $val = $this->formatWeek( $this->getValue() );
-        }
+        $val = $this->getValue();
         
-        if (preg_match('/^\\d{4}-\\d{1,2}$/', $val)) {
-            if (strlen($val) == strlen('0000-0')) {
-                $val = $this->formatWeek( $val );
-            }
-        }
-        else {
+        if (!$val) {
             $val = $this->thisWeek;
         }
         
@@ -91,8 +98,7 @@ class WeekField extends BaseWidget {
 
         $map_weeks = array();
         $curYear = $this->startYear;
-        $curWeek = $this->startWeek;
-        $weeks_in_year = weeks_in_year( $curYear );
+        $curWeek = (int)$this->startWeek;
         
         for($x=0; $x < 500 && ($curYear < $this->endYear) || ($curYear == $this->endYear && $curWeek <= $this->endWeek) ; $x++) {
             $map_weeks[$curYear . '-' . $curWeek ] = [
@@ -100,15 +106,13 @@ class WeekField extends BaseWidget {
             ];
             
             // determine next week
-            $curWeek++;
-            if ($curWeek > $weeks_in_year) {
-                $curWeek = 1;
-                $weeks_in_year = weeks_in_year( $curYear + 1 );
-                $curYear++;
-            }
+            $nextYW = next_week_no($curYear, $curWeek);
+            list ($curYear, $curWeek) = explode('-', $nextYW);
+            $curWeek = (int)$curWeek;
         }
         
-        if ( isset($map_weeks[$val]) == false ) {
+        
+        if ( $val && isset($map_weeks[$val]) == false ) {
             list($y, $w) = explode('-', $val);
             $w = intval($w);
             $map_weeks[ $y.'-'.$w ] = ['description' => t('Week') . ' ' . $w . ' - ' . $y];
