@@ -49,10 +49,28 @@ class WeekField extends BaseWidget {
     
     
     protected function formatWeek($val) {
+        // invalid value?
+        if (preg_match('/^\\d{4}-\\d{1,2}$/', $val) == false) {
+            return null;
+        }
+        
+        // format value
         if (preg_match('/^\\d{4}-\\d{1}$/', $val)) {
             list($y, $w) = explode('-', $val);
             return $y . '-0' . $w;
         }
+        
+        // validate value
+        list($y, $w) = explode('-', $val);
+        $y = (int)$y;
+        $w = (int)$w;
+        if ($y < 1000 || $y > 3000) {
+            return null;
+        }
+        if ($w < 1 || $w > weeks_in_year($y)) {
+            return null;
+        }
+        
         
         return $val;
     }
@@ -60,31 +78,18 @@ class WeekField extends BaseWidget {
     public function getValue() {
         $v = parent::getValue();
         
-        // handle formatting
-        if ($v && preg_match('/^\\d{4}-\\d{1,2}$/', $this->getValue())) {
-            $v = $this->formatWeek( $v );
-        }
-        // invalid value
-        else {
-            return null;
-        }
-        
-        return $v;
+        // format
+        return $this->formatWeek( $v );
     }
     
     
     public function render() {
-        // build week array
-        
         
         // get selected val
         $val = $this->getValue();
         
-        if (!$val) {
-            $val = $this->thisWeek;
-        }
         
-        // entered startWeek after $val> => set $startWeek to $val
+        // $val before startYearWeek? => set startYearWeek back
         if ($val) {
             $intThisWeek = (int)str_replace('-', '', $val);
             $intStartWeek = (int)sprintf('%d%02d', $this->startYear, $this->startWeek);
@@ -93,25 +98,36 @@ class WeekField extends BaseWidget {
                 // maybe -10 for scrolling/spacing?
                 $this->setStartYearWeek($sy, $sw);
             }
+            
+            // $val after endYearWeek? => set endYearWeek 
+            $intEndWeek = (int)sprintf('%d%02d', $this->endYear, $this->endWeek);
+            if ($intThisWeek > $intEndWeek) {
+                list ($sy, $sw) = explode('-', $val);
+                $this->setEndYearWeek($sy, $sw);
+            }
         }
         
 
-        $map_weeks = array();
-        $curYear = $this->startYear;
-        $curWeek = (int)$this->startWeek;
+        // create option map
+        $endYW = (int)sprintf('%04d%02d', $this->endYear, $this->endWeek);
+        $curYW = (int)sprintf('%04d%02d', $this->startYear, $this->startWeek);
         
-        for($x=0; $x < 500 && ($curYear < $this->endYear) || ($curYear == $this->endYear && $curWeek <= $this->endWeek) ; $x++) {
-            $map_weeks[$curYear . '-' . $curWeek ] = [
+        $map_weeks = array();
+        for($x=0; $x < 500 && $curYW <= $endYW ; $x++) {
+            $curYear = (int)substr($curYW, 0, 4);
+            $curWeek = (int)substr($curYW, 4, 2);
+            
+            $key = sprintf('%d-%02d', $curYear, $curWeek);
+            $map_weeks[ $key ] = [
                 'description' => t('Week') . ' ' . $curWeek . ' - ' . $curYear
             ];
             
             // determine next week
-            $nextYW = next_week_no($curYear, $curWeek);
-            list ($curYear, $curWeek) = explode('-', $nextYW);
-            $curWeek = (int)$curWeek;
+            $curYW = next_week_no($curYear, $curWeek);
+            $curYW = (int)str_replace('-', '', $curYW);
         }
         
-        
+        // shouldn't happen
         if ( $val && isset($map_weeks[$val]) == false ) {
             list($y, $w) = explode('-', $val);
             $w = intval($w);
@@ -119,8 +135,8 @@ class WeekField extends BaseWidget {
         }
         
         
+        // render widget
         $html = '';
-        
         $html .= '<div class="widget week-field-widget widget-'.slugify($this->getName()).'">';
         $html .= '<label>'.esc_html($this->getLabel()).infopopup($this->getInfoText()).'</label>';
         
@@ -128,7 +144,9 @@ class WeekField extends BaseWidget {
         
         $html .= '<select name="'.esc_attr($this->getName()).'">';
         foreach($map_weeks as $key => $props) {
-            $html .= '<option value="'.esc_attr($key).'" '.($this->formatWeek($key) == $val?'selected="selected"':'').' 
+            $key = $this->formatWeek($key);
+            
+            $html .= '<option value="'.esc_attr($key).'" '.($key == $val?'selected="selected"':'').' 
                         class="' . ($key == $this->thisWeek?'current-week':'') . '">'
                 . esc_html($props['description'])
                 . '</option>';
