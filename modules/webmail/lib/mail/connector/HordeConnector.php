@@ -9,6 +9,7 @@ use webmail\mail\MailProperties;
 use webmail\model\Connector;
 use webmail\service\ConnectorService;
 use webmail\solr\SolrMail;
+use core\exception\NotImplementedException;
 
 
 class HordeConnector extends BaseMailConnector {
@@ -195,7 +196,7 @@ class HordeConnector extends BaseMailConnector {
             $cdf = $list->offsetGet( $id );
             
             // ref @ https://dev.horde.org/api/master/lib/Imap_Client/classes/Horde_Imap_Client_Data_Envelope.html
-            $env = $cdf->getEnvelope();
+//             $env = $cdf->getEnvelope();
             
             $emlfile = $this->determineEmailPath( $cdf );
             
@@ -487,63 +488,63 @@ class HordeConnector extends BaseMailConnector {
             // skip inactive filters
             if ($f->getActive() == false)
                 continue;
+            
+            $conditions = $f->getConditions();
+            
+            $conditionCount = 0;
+            foreach($conditions as $c) {
+                if ( $c->match($p, $file) ) {
+                    if ($c->getFilterType() == 'is_spam') {
+                        $isSpam = true;
+                    }
+                    
+                    $conditionCount++;
+                }
+            }
+            
+            if (($f->getMatchMethod() == 'match_all' && $conditionCount == count($conditions)) || ($f->getMatchMethod() == 'match_one' && $conditionCount > 0)) {
+                $actions = $f->getActions();
                 
-                $conditions = $f->getConditions();
+                if (count($actions) == 0)
+                    return null;
+                    
+                $return_value = array();
+                $return_value['is_spam'] = $isSpam;
                 
-                $conditionCount = 0;
-                foreach($conditions as $c) {
-                    if ( $c->match($p, $file) ) {
-                        if ($c->getFilterType() == 'is_spam') {
-                            $isSpam = true;
-                        }
-                        
-                        $conditionCount++;
+                $moveFolderActionValue = null;
+                foreach($actions as $action) {
+                    if ($action->getFilterAction() == 'move_to_folder') {
+                        $moveFolderActionValue = $action->getFilterActionValue();               // this is an webmail__connector_imapfolder.connector_imapfolder_id
+                    }
+                    if ($action->getFilterAction() == 'set_action') {
+                        $return_value['set_action'] = $action->getFilterActionValue();
                     }
                 }
                 
-                if (($f->getMatchMethod() == 'match_all' && $conditionCount == count($conditions)) || ($f->getMatchMethod() == 'match_one' && $conditionCount > 0)) {
-                    $actions = $f->getActions();
+                if ($moveFolderActionValue) {
+                    $connectorService = ObjectContainer::getInstance()->get(ConnectorService::class);
+                    $f = $connectorService->readImapFolder( $moveFolderActionValue );
                     
-                    if (count($actions) == 0)
-                        return null;
-                        
-                        $return_value = array();
-                        $return_value['is_spam'] = $isSpam;
-                        
-                        $moveFolderActionValue = null;
-                        foreach($actions as $action) {
-                            if ($action->getFilterAction() == 'move_to_folder') {
-                                $moveFolderActionValue = $action->getFilterActionValue();               // this is an webmail__connector_imapfolder.connector_imapfolder_id
-                            }
-                            if ($action->getFilterAction() == 'set_action') {
-                                $return_value['set_action'] = $action->getFilterActionValue();
-                            }
-                        }
-                        
-                        if ($moveFolderActionValue) {
-                            $connectorService = ObjectContainer::getInstance()->get(ConnectorService::class);
-                            $f = $connectorService->readImapFolder( $moveFolderActionValue );
+                    // found? => move
+                    if ($f) {
+                        if ($isSpam) {
+                            $flags = $cdf->getFlags();
+                            if (in_array("\\junk", $flags) == false)
+                                $flags[] = "\\junk";
+                            if (in_array("\\\$junk", $flags) == false)      // '\$junk'
+                                $flags[] = "\\\$junk";
                             
-                            // found? => move
-                            if ($f) {
-                                if ($isSpam) {
-                                    $flags = $cdf->getFlags();
-                                    if (in_array("\\junk", $flags) == false)
-                                        $flags[] = "\\junk";
-                                    if (in_array("\\\$junk", $flags) == false)      // '\$junk'
-                                        $flags[] = "\\\$junk";
-                                    
-                                    $cdf->setFlags( $flags );
-                                }
-                                
-                                $this->moveMailByUid( $cdf->getUid(), 'INBOX', $f->getFolderName() );
-                                
-                                $return_value['move_to_folder'] = $f->getFolderName();
-                            }
+                            $cdf->setFlags( $flags );
                         }
                         
-                        return $return_value;
+                        $this->moveMailByUid( $cdf->getUid(), 'INBOX', $f->getFolderName() );
+                        
+                        $return_value['move_to_folder'] = $f->getFolderName();
+                    }
                 }
+                
+                return $return_value;
+            }
         }
         
         return array();
@@ -578,42 +579,30 @@ class HordeConnector extends BaseMailConnector {
     }
     
     public function markJunk($uid, $folder) {
-        if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folder))) {
-            return false;
-        }
-        
-        imap_setflag_full($this->imap, $uid, 'Junk', ST_UID);
-        imap_setflag_full($this->imap, $uid, '$Junk', ST_UID);
-        
-        imap_clearflag_full($this->imap, $uid, 'NonJunk', ST_UID);
-        imap_clearflag_full($this->imap, $uid, '$NonJunk', ST_UID);
+        $this->client->store( $folder, array('add' => array('$junk', 'junk'), 'ids' => new \Horde_Imap_Client_Ids($uid)));
+        $this->client->store( $folder, array('remove' => array('$nonjunk', 'nonjunk'), 'ids' => new \Horde_Imap_Client_Ids($uid)));
     }
     
     public function clearFlagByUid($uid, $folder, $flags) {
-        if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folder))) {
-            return false;
-        }
-        
-        return imap_clearflag_full($this->imap, $uid, $flags, ST_UID);
+        $this->client->store( $folder, array('remove' => $flags, 'ids' => new \Horde_Imap_Client_Ids($uid)));
     }
     
     public function appendMessage($mailbox, $message, $options=null, $internal_date=null) {
-        return imap_append($this->imap, $this->mailbox.$mailbox, $message, "\\Seen");
+        $this->client->append( $mailbox, $message, ['\\seen'], $internal_date);
     }
     
     public function emptyFolder($folderName) {
-        if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folderName))) {
-            return false;
-        }
+        $searchQuery = new \Horde_Imap_Client_Search_Query();
         
-        $c = imap_check($this->imap);
+        $results = $this->client->search( $folderName, $searchQuery );
         
-        return imap_delete($this->imap, '1:'.$c->Nmsgs);
+        $this->client->store( $folderName, array('add' => array(\Horde_Imap_Client::FLAG_DELETED), 'ids' => new \Horde_Imap_Client_Ids($results['match'])));
     }
     
     
-    public function expunge( $mailbox ) {
-        return $this->client->expunge( $mailbox );
+    public function expunge( ) {
+        throw new NotImplementedException('not yet implemented');
+//         return $this->client->expunge( $mailbox );
     }
     
     
