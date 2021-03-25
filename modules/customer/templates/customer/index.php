@@ -10,14 +10,6 @@
 
 
 
-<div id="person-table-container"></div>
+<?= $cit->renderHtml() ?>
 
 
-
-
-<script>
-
-<?= $cit->render() ?>
-
-
-</script>
