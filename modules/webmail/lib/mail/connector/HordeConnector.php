@@ -88,6 +88,12 @@ class HordeConnector extends BaseMailConnector {
     public function ping() {
         if ($this->client === null) return false;
         
+        try {
+            $this->client->noop();
+        } catch (\Horde_Imap_Client_Exception $ex) {
+            return false;
+        }
+        
         return true;
     }
     
@@ -114,6 +120,88 @@ class HordeConnector extends BaseMailConnector {
         
         return $folders;
     }
+    
+    
+    protected function determineEmailPath( \Horde_Imap_Client_Data_Fetch $cdf ) {
+        // ref @ https://dev.horde.org/api/master/lib/Imap_Client/classes/Horde_Imap_Client_Data_Envelope.html
+        $env = $cdf->getEnvelope();
+        
+        $overview = new \stdClass();
+        $overview->size       = $cdf->getSize();
+        $overview->udate      = $cdf->getImapDate()->format('U');
+        $overview->subject    = $env->subject;
+        $overview->from       = $env->from->writeAddress();
+        $overview->message_id = $env->message_id;
+        
+        
+        $dt = new \DateTime();
+        $dt->setTimestamp($overview->udate);
+        $dt->setTimezone(new \DateTimeZone('+0000'));
+        
+        $uid = @md5($overview->size . $overview->message_id . $overview->from . $overview->subject . $overview->udate);
+        
+        $p = ctx()->getDataDir() . '/webmail/inbox/' . $dt->format('Y') . '/' . $dt->format('m') . '/' . $dt->format('d');
+        
+        $file = $p . '/' . $uid . '.eml';
+        
+        return $file;
+    }
+    
+    
+    public function importItems($folderName) {
+        
+       
+        $searchQuery = new \Horde_Imap_Client_Search_Query();
+//         $searchQuery->dateSearch(new \DateTime('2021-03-01 00:00:00'), \Horde_Imap_Client_Search_Query::DATE_SINCE);
+        
+        $results = $this->client->search( $folderName, $searchQuery );
+//         var_export($results); return;
+        
+        $fetchQuery = new \Horde_Imap_Client_Fetch_Query();
+        $fetchQuery->imapDate();
+//         $fetchQuery->size();
+//         $fetchQuery->uid();
+        $fetchQuery->envelope();
+        $fetchQuery->size();
+        
+        
+        $list = $this->client->fetch( $folderName, $fetchQuery, array(
+            'ids' => new \Horde_Imap_Client_Ids( $results['match'] )
+        ));
+        
+        
+        $ids = $list->ids();
+        foreach($ids as $id) {
+            // ref @ https://dev.horde.org/api/master/lib/Imap_Client/classes/Horde_Imap_Client_Data_Fetch.html
+            $cdf = $list->offsetGet( $id );
+            
+            // ref @ https://dev.horde.org/api/master/lib/Imap_Client/classes/Horde_Imap_Client_Data_Envelope.html
+            $env = $cdf->getEnvelope();
+            
+            
+            $eml = $this->determineEmailPath( $cdf );
+
+        }
+    }
+    
+    protected function fetchRawMail($folderName, $id) {
+        // create query
+        $fq2 = new \Horde_Imap_Client_Fetch_Query();
+        $fq2->headerText();
+        $fq2->bodyText();
+        
+        // fetch
+        $list2 = $this->client->fetch( $folderName, $fq2, array(
+            'ids' => new \Horde_Imap_Client_Ids( array($id) )
+        ));
+        
+        // 1st item
+        $cdf2 = $list2->first();
+        
+        // 
+        return $cdf2->getHeaderText() . $cdf2->getBodyText();
+    }
+    
     
     
     
