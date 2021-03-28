@@ -105,7 +105,13 @@ function appUrl($u) {
     }
     
     if (is_standalone_installation()) {
-        $url = BASE_HREF . substr($u, 1);
+        if (defined_value('REWRITE_DISABLED') && strpos($u, '/module/') === 0) {
+            $url = BASE_HREF . '?mpf=' . substr($u, strlen(BASE_HREF)-1);
+        }
+        else {
+            $url = BASE_HREF . substr($u, 1);
+        }
+        
     } else {
         $url = BASE_HREF . $contextName . $u;
     }
@@ -170,6 +176,18 @@ function define_true($name) {
         define($name, true);
     } else if (constant($name) !== true) {
         throw new InvalidStateException($name.' already defined: '.var_export(constant($name), true));
+    }
+}
+
+/**
+ * defined_value() - returns value, or $defaultValue, false by default
+ */
+function defined_value($name, $defaultValue = false) {
+    if (defined($name)) {
+        return constant( $name );
+    }
+    else {
+        return $defaultValue;
     }
 }
 
