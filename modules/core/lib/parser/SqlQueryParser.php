@@ -58,7 +58,13 @@ class SqlQueryParser {
         
         // set params
         foreach( $this->params as $key => $val ) {
-            $sql = str_replace('{{'.$key.'}}', $val, $sql);
+            $v = $val['value'];
+            
+            if ($val['escape']) {
+                $v = "'" . addslashes($v) . "'";
+            }
+            
+            $sql = str_replace('{{'.$key.'}}', $v, $sql);
         }
         
         return $sql;
@@ -202,13 +208,20 @@ class SqlQueryParser {
     }
     
     
-    public function setParam( $paramName, $paramValue, $escape=true) {
-        if ($escape) {
-            $this->params[$paramName] = "'".addslashes($paramValue)."'";
+    public function getParam( $paramName, $defaultValue=null ) {
+        if (isset($this->params[$paramName])) {
+            return $this->params[$paramName]['value'];
         }
         else {
-            $this->params[$paramName] = $paramValue;
+            return $defaultValue;
         }
+    }
+    
+    public function setParam( $paramName, $paramValue, $escape=true) {
+        $this->params[$paramName] = array(
+            'value' => $paramValue
+            , 'escape' => $escape
+        );
     }
     
     
