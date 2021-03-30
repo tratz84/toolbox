@@ -472,6 +472,8 @@ function uploadFilesFieldDelete_Click(obj) {
 function weekField_prev_option(obj) {
 	var s = $(obj).parent().find('select');
 	
+	if (s.prop('disabled')) return;
+	
 	var selectedOption = s.val();
 	s.find('option').removeAttr('selected');
 	
@@ -487,6 +489,8 @@ function weekField_prev_option(obj) {
 function weekField_next_option(obj) {
 	var s = $(obj).parent().find('select');
 	
+	if (s.prop('disabled')) return;
+
 	var selectedOption = s.val();
 	s.find('option').removeAttr('selected');
 	
@@ -505,6 +509,8 @@ function weekField_next_option(obj) {
 function monthField_prev_option(obj) {
 	var s = $(obj).parent().find('select');
 	
+	if (s.prop('disabled')) return;
+	
 	var selectedOption = s.val();
 	s.find('option').removeAttr('selected');
 	
@@ -519,6 +525,8 @@ function monthField_prev_option(obj) {
 }
 function monthField_next_option(obj) {
 	var s = $(obj).parent().find('select');
+	
+	if (s.prop('disabled')) return;
 	
 	var selectedOption = s.val();
 	s.find('option').removeAttr('selected');
