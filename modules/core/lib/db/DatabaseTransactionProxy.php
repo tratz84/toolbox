@@ -7,6 +7,7 @@ namespace core\db;
 use core\exception\MethodNotFoundException;
 use core\container\ObjectHookProxy;
 use core\forms\BaseForm;
+use core\exception\DatabaseException;
 
 class DatabaseTransactionProxy {
     
@@ -29,7 +30,10 @@ class DatabaseTransactionProxy {
             $lockKey = $arguments[0]->getLockKey();
             
             if ($lockKey) {
-                $con->getLock( $lockKey );
+                if (!$con->getLock( $lockKey )) {
+                    // failed to get lock..
+                    throw new DatabaseException('Unable to get lock: ' . $lockKey);
+                }
             }
         }
         

@@ -16,6 +16,7 @@ use codegen\form\widgetoptions\TimePickerOptionsForm;
 use core\forms\CheckboxField;
 use core\forms\ColorPickerField;
 use core\forms\DatePickerField;
+use core\forms\DateTimePickerField;
 use core\forms\HiddenField;
 use core\forms\HtmlField;
 use core\forms\MonthField;
@@ -170,6 +171,12 @@ class GeneratorHelper {
             'class' => DatePickerField::class,
             'editor' => DatePickerOptionsForm::class,
             'label' => 'DatePicker'
+        );
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => DateTimePickerField::class,
+            'editor' => DatePickerOptionsForm::class,
+            'label' => 'DateTimePicker'
         );
         $formWidgets[] = array(
             'type' => 'widget',
