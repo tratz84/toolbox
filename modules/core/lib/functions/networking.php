@@ -45,6 +45,9 @@ function post_url($url, $data, $opts=array()) {
     
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    if (isset($opts['customrequest']) && $opts['customrequest']) {
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $opts['customrequest']);
+    }
     
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
