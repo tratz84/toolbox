@@ -29,12 +29,44 @@ class EmailDAO extends \core\db\DAOObject {
     	    $qb->selectField('firstname',       'customer__person');
     	    $qb->selectField('insert_lastname', 'customer__person');
     	    $qb->selectField('lastname',        'customer__person');
+    	    
+    	    
+    	    if (isset($opts['customer_name']) && $opts['customer_name']) {
+    	        $nameFields = array();
+    	        $nameFields[] = 'customer__person.firstname';
+    	        $nameFields[] = 'customer__person.insert_lastname';
+    	        $nameFields[] = 'customer__person.lastname';
+    	        $nameFields[] = 'customer__person.insert_lastname';
+    	        $nameFields[] = 'customer__person.firstname';
+    	        $nameFields[] = 'customer__company.company_name';
+    	        
+    	        $str = '';
+    	        foreach($nameFields as $f) {
+    	            if ($str != '') {
+    	                $str = $str . ', ';
+    	            }
+    	            $str .= " IFNULL({$f}, ''), ' ' ";
+    	        }
+	            
+    	        $qb->addWhere( QueryBuilderWhere::whereRefByVal("concat( $str )", 'LIKE', '%'.$opts['customer_name'].'%') );
+    	    }
 	    }
 	    
 	    if (array_key_exists('incoming', $opts)) {
 	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('webmail__email.incoming', '=', ($opts['incoming'] ? 1 : 0)));
 	    }
 	    
+	    if (isset($opts['from_name']) && $opts['from_name']) {
+	        $qb->addWhere( QueryBuilderWhere::whereRefByVal('webmail__email.from_name', 'LIKE', '%'.$opts['from_name'].'%') );
+	    }
+	    
+	    if (isset($opts['subject']) && $opts['subject']) {
+	        $qb->addWhere( QueryBuilderWhere::whereRefByVal('webmail__email.subject', 'LIKE', '%'.$opts['subject'].'%') );
+	    }
+	    
+	    if (isset($opts['status']) && $opts['status']) {
+	        $qb->addWhere( QueryBuilderWhere::whereRefByVal('webmail__email.status', '=', $opts['status']) );
+	    }
 	    
 	    if (isset($opts['orderby']) && $opts['orderby']) {
 	        $qb->setOrderBy( $opts['orderby'] );
