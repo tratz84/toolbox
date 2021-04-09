@@ -62,6 +62,15 @@ class EmailService extends ServiceBase {
         
         $i = $iDao->readSystemMessages();
         
+        // nothing found? => return first active
+        if ($i == null) {
+            $identities = $iDao->readActive();
+            if (count($identities) > 0) {
+                $i = $identities[0];
+            }
+        }
+        
+        // none active? => fallback
         if ($i === null) {
             $i = new Identity();
             $i->setFromName('Toolbox - Admin');

@@ -25,6 +25,7 @@ function filesync_lookup_libreoffice() {
     if (defined('SOFFICE_BIN'))
         $paths[] = SOFFICE_BIN;
     $paths[] = "/usr/bin/soffice";
+    $paths[] = "C:/Program Files/LibreOffice/program/soffice.exe";
     
     foreach($paths as $p) {
         if (file_exists($p)) {

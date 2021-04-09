@@ -143,7 +143,7 @@ t.addColumn({
 	fieldName: 'from_name',
 	fieldDescription: toolbox_t('From'),
 	fieldType: 'text',
-	searchable: false
+	searchable: true
 });
 
 <?php if (ctx()->isModuleEnabled('customer')) : ?>
@@ -168,7 +168,7 @@ t.addColumn({
 			return t;
 		}
 	},
-	searchable: false
+	searchable: true
 });
 <?php endif; ?>
 
@@ -176,12 +176,12 @@ t.addColumn({
 	fieldName: 'subject',
 	fieldDescription: toolbox_t('Subject'),
 	fieldType: 'text',
-	searchable: false
+	searchable: true
 });
 t.addColumn({
 	fieldName: 'status',
 	fieldDescription: 'Status',
-	fieldType: 'text',
+	fieldType: 'select',
 	render: function(record) {
 		if (record.status == 'draft') {
 			return toolbox_t('Draft');
@@ -190,7 +190,13 @@ t.addColumn({
 		} else {
 			return record.status;
 		}
-	}
+	},
+	searchable: true,
+	filterOptions: [
+		  { value: '',      text: toolbox_t('Status') }
+		, { value: 'draft', text: toolbox_t('Draft') }
+		, { value: 'sent',  text: toolbox_t('Sent') }
+	]
 });
 
 t.addColumn({
