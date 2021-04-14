@@ -178,6 +178,7 @@ class StoreService extends ServiceBase {
     }
     
     public function deleteStoreFileRev($storeFileRevId) {
+        /** @var StoreFile $storeFile */
         $storeFile = $this->readStoreFileByRev($storeFileRevId);
         
         $revisions = $storeFile->getRevisions();
@@ -202,6 +203,19 @@ class StoreService extends ServiceBase {
             
             $file = get_data_file('filesync/'.$storeFile->getStoreId().'/'.$storeFile->getStoreFileId().'-'.$rev->getStoreFileRevId());
             unlink( $file );
+            
+            // current revision deleted? => determine new top
+            if ( $storeFile->getRev() == $rev->getRev() ) {
+                $topRev = null;
+                foreach( $revisions as $r ) {
+                    if (($topRev == null && $r != $rev->getRev()) || ($r > $topRev && $r != $rev->getRev()))
+                        $topRev = $rev->getRev();
+                }
+                if ($topRev) {
+                    $storeFile->setRev( $topRev );
+                }
+            }
+            
         }
         
     }
