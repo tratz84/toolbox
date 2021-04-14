@@ -208,11 +208,12 @@ class StoreService extends ServiceBase {
             if ( $storeFile->getRev() == $rev->getRev() ) {
                 $topRev = null;
                 foreach( $revisions as $r ) {
-                    if (($topRev == null && $r != $rev->getRev()) || ($r > $topRev && $r != $rev->getRev()))
-                        $topRev = $rev->getRev();
+                    if ($r->getRev() != $rev->getRev() && ($topRev == null || $topRev < $r->getRev()))
+                        $topRev = $r->getRev();
                 }
                 if ($topRev) {
                     $storeFile->setRev( $topRev );
+                    $storeFile->save();
                 }
             }
             
