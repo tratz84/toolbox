@@ -25,6 +25,12 @@ class CalendarService extends ServiceBase {
         
         return $cDao->readAll();
     }
+    
+    public function readActiveCalendars() {
+        $cDao = new CalendarDAO();
+        
+        return $cDao->readActive();
+    }
 
     public function readFirstCalendar() {
         $cDao = new CalendarDAO();

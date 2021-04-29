@@ -6,8 +6,11 @@ use calendar\form\CalendarItemForm;
 use calendar\model\CalendarItem;
 use calendar\service\CalendarService;
 use core\controller\BaseController;
+use core\forms\SelectField;
 
 class viewController extends BaseController {
+    
+    protected $calendar = null;
     
     public function init() {
         checkCapability('calendar', 'edit-calendar');
@@ -27,7 +30,25 @@ class viewController extends BaseController {
         
         $this->today = new DateTime('now', new DateTimeZone(date_default_timezone_get()));
         
-        $this->calendar = $calendarService->readFirstCalendar();
+        // calendarId set? => read cal
+        if (get_var('cid')) {
+            $this->calendar = $calendarService->readCalendar( get_var('cid') );
+        }
+        
+        // fallback to first calendar
+        if ($this->calendar == null) {
+            $this->calendar = $calendarService->readFirstCalendar();
+        }
+        
+        
+        $mapCalendars = array();
+        foreach( $calendarService->readActiveCalendars() as $c ) {
+            $mapCalendars[ $c->getCalendarId() ] = $c->getName();
+        }
+        if (count($mapCalendars) > 1) {
+            $this->selectCalendar = new SelectField('cid', $this->calendar->getCalendarId(), $mapCalendars);
+        }
+        
         
         if ($this->calendar) {
             $this->addTitle($this->calendar->getName());

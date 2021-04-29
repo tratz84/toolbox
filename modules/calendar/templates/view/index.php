@@ -6,6 +6,11 @@
 
 <?php else : ?>
 
+<?php if (isset($selectCalendar)) : ?>
+<div style="position: absolute; right: 10px; margin-top: 16px;">
+	<?= $selectCalendar->render() ?>
+</div>
+<?php endif; ?>
 
 
 
@@ -35,6 +40,10 @@ $(document).ready(function() {
 	controller.setCalendarId( <?= (int)$calendar->getCalendarId() ?> );
 	
 	controller.loadData();
+
+	$('[name=cid]').change(function() {
+		window.location = appUrl('/?m=calendar&c=view&cid=' + $(this).val());
+	});
 });
 
 function calendarReminder_Change(obj) {
