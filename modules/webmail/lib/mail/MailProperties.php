@@ -12,6 +12,9 @@ class MailProperties {
 
     protected $sfile = null;
     protected $tbfile = null;
+    protected $emlFile = null;
+    
+    protected $parsedEml = null;
     
     protected $serverProperties = array();              // imap-properties
     protected $serverPropertiesChanged = false;
@@ -20,6 +23,8 @@ class MailProperties {
     protected $toolboxPropertiesChanged = false;
 
     public function __construct($emlFile=null) {
+        $this->emlFile = $emlFile;
+        
         if (!$emlFile) {
             // null?
         }
@@ -34,6 +39,42 @@ class MailProperties {
             }
         }
     }
+    
+    
+    public function getParsedEml() {
+        if ($this->parsedEml == null) {
+            $this->parsedEml = new \PhpMimeMailParser\Parser();
+            $this->parsedEml->setPath( $this->emlFile );
+        }
+        
+        return $this->parsedEml;
+    }
+    
+    
+    public function getCreated() {
+        $p = $this->getParsedEml();
+        
+        // date in mailheader
+        if ($p->getHeader('date')) {
+            $dt = new \DateTime(null, new \DateTimeZone('+0000'));
+            $dt->setTimestamp(strtotime($p->getHeader('date')));
+            return $dt->format('Y-m-d').'T'.$dt->format('H:i:s').'Z';
+        }
+        // server date
+        else if ($this->getProperty('udate')) {
+            $dt = new \DateTime( );
+            $dt->setTimestamp( $this->getProperty('udate') );
+            return $dt->format('Y-m-d').'T'.$dt->format('H:i:s').'Z';
+        }
+        else if ($this->getProperty('created')) {
+            $dt = new \DateTime( $this->getProperty('created') );
+            return $dt->format('Y-m-d').'T'.$dt->format('H:i:s').'Z';
+        }
+        
+        return null;
+    }
+    
+    
     
     public function toolboxPropertyFileExists() { return file_exists($this->tbfile) ? true : false; }
     
