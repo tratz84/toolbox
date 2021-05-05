@@ -33,7 +33,7 @@
     	<?php endforeach; ?>
         <?php if (count($offers->getObjects())==0) : ?>
         <tr>
-        	<td colspan="4" class="no-records">Geen offertes aangemaakt</td>
+        	<td colspan="4" class="no-results-found">Geen offertes aangemaakt</td>
         </tr>
         <?php endif; ?>
     </tbody>
