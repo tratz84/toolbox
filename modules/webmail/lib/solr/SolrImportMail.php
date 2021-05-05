@@ -60,9 +60,25 @@ class SolrImportMail {
         $r['contextName'] = $this->contextName;
         $r['file'] = str_replace($datadir, '', $emlFile);
         
-        $dt = new \DateTime(null, new \DateTimeZone('+0000'));
-        $dt->setTimestamp(strtotime($p->getHeader('date')));
-        $r['date'] = $dt->format('Y-m-d').'T'.$dt->format('H:i:s').'Z';
+        // date in mailheader
+        if ($p->getHeader('date')) {
+            $dt = new \DateTime(null, new \DateTimeZone('+0000'));
+            $dt->setTimestamp(strtotime($p->getHeader('date')));
+            $r['date'] = $dt->format('Y-m-d').'T'.$dt->format('H:i:s').'Z';
+        }
+        // server date
+        else if ($mp->getProperty('udate')) {
+            $dt = new \DateTime( );
+            $dt->setTimestamp( $mp->getProperty('udate') );
+            $r['date'] = $dt->format('Y-m-d').'T'.$dt->format('H:i:s').'Z';
+        }
+        else if ($mp->getProperty('created')) {
+            $dt = new \DateTime( $mp->getProperty('created') );
+            $r['date'] = $dt->format('Y-m-d').'T'.$dt->format('H:i:s').'Z';
+        }
+        else {
+            $r['date'] = 0;
+        }
         
         // use cleanup_string(), else solr might not accept document. In that case, the whole document-batch is rejected!
         $r['emlMessageId'] = cleanup_string( $p->getHeader('Message-ID') );
