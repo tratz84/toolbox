@@ -238,6 +238,8 @@ class ImapConnector extends BaseMailConnector {
         $mp->setServerProperty('seen',        @$overview->seen);
         $mp->setServerProperty('draft',       @$overview->draft);
         
+        $mp->setToolboxProperty('created',    date(\DateTime::ISO8601));
+        
         if ($mp->toolboxPropertyFileExists() == false && $mp->getProperty('action') == '') {
             if (@$overview->answered && ($mp->getAction() == '' || $mp->getAction() == 'open')) {
                 // maybe also do this for ACTION_URGENT ?
