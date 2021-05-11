@@ -49,6 +49,10 @@ class serverInfoController extends BaseController {
         $ext_soap = extension_loaded('soap');
         $this->sic->addInfo('php-soap', $ext_soap?'Ok':'Not loaded', $ext_soap?'':'extension not loaded');
         
+        // check php-xml (Xls writer uses this)
+        $ext_xml = extension_loaded('xml');
+        $this->sic->addInfo('php-xml', $ext_xml?'Ok':'Not loaded', $ext_xml?'':'extension not loaded');
+        
         hook_eventbus_publish( $this->sic, 'base', 'ServerInfoContainer' );
         
         return $this->render();
