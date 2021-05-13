@@ -19,6 +19,14 @@ class serverInfoController extends BaseController {
         $this->sic->addInfo('Max execution time (Time limit)', ini_get('max_execution_time'));
         $this->sic->addInfo('ROOT-dir', ROOT);
         
+        if (function_exists('posix_getpwuid')) {
+            $posixUserinfo = posix_getpwuid( posix_getuid() );
+            $this->sic->addInfo('Current user', $posixUserinfo['name'] );
+        }
+        else {
+            // TODO: WINNT support
+        }
+        
         // wkhtmltopdf is used for archiving in webmail-mod
         if (toolbox_html2pdf_available()) {
             $this->sic->addInfo('wkhtmltopdf', 'Ok');
