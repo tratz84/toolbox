@@ -29,6 +29,9 @@ use core\forms\TimePickerField;
 use core\forms\WeekField;
 use core\forms\WidgetContainer;
 use customer\forms\CustomerSelectWidget;
+use core\forms\HtmlDateField;
+use core\forms\HtmlDatetimeField;
+use codegen\form\widgetoptions\HtmlDateOptionsForm;
 
 class GeneratorHelper {
     
@@ -230,6 +233,19 @@ class GeneratorHelper {
             'class' => HtmlField::class,
 //             'editor' => HtmlOptionsForm::class,
             'label' => 'Html-field'
+        );
+
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => HtmlDateField::class,
+            'editor' => HtmlDateOptionsForm::class,
+            'label' => 'HtmlDate-field'
+        );
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => HtmlDatetimeField::class,
+            'editor' => HtmlDateOptionsForm::class,
+            'label' => 'HtmlDatetime-field'
         );
         
         $formWidgets[] = array(

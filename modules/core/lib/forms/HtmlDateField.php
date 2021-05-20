@@ -2,6 +2,8 @@
 
 namespace core\forms;
 
+use core\Context;
+
 class HtmlDateField extends BaseWidget {
     
     protected $opts = array();
@@ -13,6 +15,10 @@ class HtmlDateField extends BaseWidget {
         $this->setValue($value);
         
         $this->opts = $opts;
+    }
+    
+    public function setOption($key, $val) {
+        $this->opts[$key] = $val;
     }
     
     

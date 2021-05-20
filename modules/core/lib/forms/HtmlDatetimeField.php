@@ -17,6 +17,10 @@ class HtmlDatetimeField extends BaseWidget {
         $this->opts = $opts;
     }
     
+    public function setOption($key, $val) {
+        $this->opts[$key] = $val;
+    }
+    
     
     public function renderAsText() {
         $t = '';
