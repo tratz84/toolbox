@@ -72,7 +72,11 @@ function print_info($str) {
     print '[' . ctx()->getContextName() . '][' . date('Y-m-d H:i:s') . '] ' . $str . "\n";
 }
 
-
+function print_cli_info($str) {
+    if (is_cli()) {
+        return print_info($str);
+    }
+}
 
 function log_exception($ex, $opts=array()) {
     
