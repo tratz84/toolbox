@@ -43,6 +43,8 @@ else {
 
 $call = $params[0];
 $funcParams = array_splice( $params, 1 );
+$strParams = count($funcParams) > 0 ? "'".implode("', '", $funcParams)."'" : "";
+
 
 if (strpos($call, '::') !== false) {
     list($className, $call) = explode('::', $call);
@@ -63,7 +65,7 @@ if (strpos($call, '::') !== false) {
     $m = $ref->getMethod( $call );
     
     // call method
-    print "Calling {$className}::{$call}('".implode("', '", $funcParams)."') ...\n";
+    print "Calling {$className}::{$call}({$strParams}) ...\n";
     if ($m->isStatic()) {
         $r = $m->invokeArgs( null, $funcParams );
     }
@@ -82,8 +84,7 @@ else {
         exit;
     }
     
-    
-    print "Calling $call('".implode("', '", $funcParams)."')\n";
+    print "Calling $call({$strParams})\n";
     $r = call_user_func_array($call, $funcParams);
     
     // output result
