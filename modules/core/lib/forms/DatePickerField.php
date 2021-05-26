@@ -8,17 +8,30 @@ class DatePickerField extends BaseWidget {
     
     protected $showWeeks = false;
     
+    protected $options = array();
     
-    public function __construct($name, $value=null, $label=null) {
+    
+    public function __construct($name, $value=null, $label=null, $opts=array()) {
         
         $this->setName($name);
         $this->setLabel($label);
         $this->setValue($value);
         
+        $this->options = $opts;
     }
     
     public function showPlaceholder() { $this->placeholder = true; }
     public function setShowWeeks($bln) { $this->showWeeks = $bln; }
+    
+    public function setOption($key, $val) { $this->options[$key] = $val; }
+    public function getOption($key, $defaultValue=null) {
+        if (isset($this->options[$key])) {
+            return $this->options[$key];
+        }
+        else {
+            return $defaultValue;
+        }
+    }
     
     public function getValue() {
         $v = parent::getValue();
