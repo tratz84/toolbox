@@ -218,10 +218,7 @@ class offerController extends BaseController {
         $offerService = $this->oc->get(OfferService::class);
         $offer = $offerService->readOffer((int)$_REQUEST['id']);
         
-        $offerPdf = $this->oc->create(LandscapeOfferPdf::class);
-        
-        $offerPdf->setOffer($offer);
-        $offerPdf->render();
+        $offerPdf = $offerService->createPdf((int)$_REQUEST['id']);
         
         $rawPdfData = $offerPdf->Output('S');
         
