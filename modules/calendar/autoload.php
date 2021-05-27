@@ -18,8 +18,8 @@ module_update_handler('calendar', '20200414');
 
 hook_loader(__DIR__.'/hook/');
 
-hook_register_javascript('calendar', appUrl('/?mpf=/module/calendar/js/calendarController.js?v='.filemtime(module_file('calendar', 'public/js/calendar.js'))));
-hook_register_javascript('calendar', appUrl('/?mpf=/module/calendar/js/calendar.js'));
+hook_register_javascript('calendar', '/?mpf=/module/calendar/js/calendarController.js&v='.filemtime(module_file('calendar', 'public/js/calendar.js')));
+hook_register_javascript('calendar', '/?mpf=/module/calendar/js/calendar.js');
 
 $eb = ObjectContainer::getInstance()->get(EventBus::class);
 
