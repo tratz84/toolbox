@@ -192,7 +192,7 @@ $lang['Long description']  = 'Lange omschrijving';
 $lang['Dump changes']      = 'Dump wijzigingen';
 
 // settings
-$lang['Masterdata']             = 'Stamgegevens';
+$lang['Master data']            = 'Stamgegevens';
 $lang['User Management']        = 'Gebruikersbeheer';
 $lang['Company settings']       = 'Bedrijfsgegevens';
 $lang['Application settings']   = 'Programma instellingen';
