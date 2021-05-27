@@ -100,6 +100,16 @@ function appUrl($u) {
         $contextName = Context::getInstance()->getContextName();
     }
     
+    // /module/-path? => rewrite to /?mpf=/module/.../
+    if (strpos($u, '/module/') === 0) {
+        $urlParts = explode('/', $u);
+        
+        // module_path found? (module exists..)
+        if (module_exists( $urlParts[2] )) {
+            $u = '/?mpf='.$u;
+        }
+    }
+    
     if (strpos($u, BASE_HREF . $contextName . '/') === 0) {
         return $u;
     }
