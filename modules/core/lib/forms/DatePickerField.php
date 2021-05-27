@@ -61,8 +61,6 @@ class DatePickerField extends BaseWidget {
     
     public function render() {
         
-        $html = '';
-        
         $this->setAttribute('type', 'text');
         
         $this->addContainerClass('datepicker-field-widget');
@@ -71,10 +69,10 @@ class DatePickerField extends BaseWidget {
             $this->addContainerClass('error');
         }
         
-        if ($this->placeholder) {
-            $this->setAttribute('placeholder', $this->getLabel());
-        } else if (isset($this->options['placeholder']) && $this->options['placeholder']) {
+        if (isset($this->options['placeholder']) && $this->options['placeholder']) {
             $this->setAttribute('placeholder', $this->options['placeholder']);
+        } else if ($this->placeholder) {
+            $this->setAttribute('placeholder', $this->getLabel());
         }
         
         if (isset($this->options['readonly'])&&$this->options['readonly']) {
