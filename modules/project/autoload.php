@@ -18,9 +18,9 @@ $oc = ObjectContainer::getInstance();
 // access to project?
 $jsStr = '';
 if (hasCapability('core', 'userType.user')) {
-    $jsStr = '?phicon=1';
+    $jsStr = '&phicon=1';
 }
-hook_register_javascript('project', BASE_HREF.'module/project/js/script.js'.$jsStr);
+hook_register_javascript('project', appUrl('/?mpf=/module/project/js/script.js'.$jsStr));
 hook_htmlscriptloader_enableGroup('project');
 
 

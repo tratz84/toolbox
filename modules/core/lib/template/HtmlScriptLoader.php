@@ -68,6 +68,10 @@ class HtmlScriptLoader {
         if (strpos($url, 'https://') === 0 || strpos($url, 'https://') === 0) {
             return $url;
         } else {
+            if (strpos($url, appUrl('/')) === 0) {
+                return $url;
+            }
+            
             if (strpos($url, '/') === 0)
                 $url = substr($url, 1);
             
