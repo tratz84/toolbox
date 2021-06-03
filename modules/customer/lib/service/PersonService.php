@@ -44,6 +44,7 @@ class PersonService extends ServiceBase {
     
     public function search($start, $limit, $opts = array()) {
         $fh = FormDbHandler::getHandler( PersonForm::class );
+        $fh->getMapper()->addPublicField('deleted');
         
         return $fh->search($start, $limit, $opts);
     }
@@ -69,9 +70,10 @@ class PersonService extends ServiceBase {
 //         $pDao->delete( $personId );
 
         // delete meta
-        $omDao = new ObjectMetaDAO();
-        $omDao->deleteByObject(Person::class, $personId);
-        $omDao->deleteByObject('person', $personId);            // deprecated ?
+        // person not actually deleted.. just marked as deleted. Skip removing meta-data
+//         $omDao = new ObjectMetaDAO();
+//         $omDao->deleteByObject(Person::class, $personId);
+//         $omDao->deleteByObject('person', $personId);            // deprecated ?
         
         // delete person
         $personDao = $this->oc->get(PersonDAO::class);

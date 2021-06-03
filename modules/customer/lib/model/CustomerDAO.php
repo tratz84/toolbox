@@ -119,7 +119,7 @@ class CustomerDAO extends \core\db\DAOObject {
             $qb2->selectField('edited',       'customer__person');
             $qb2->selectField('created',      'customer__person');
             $qb2->selectField("''",           '', 'contact_person');
-            $qb2->selectFunction("concat(lastname, ', ', insert_lastname, ' ', firstname) as name");
+            $qb2->selectFunction("concat(ifnull(lastname, ''), ', ', ifnull(insert_lastname, ''), ' ', ifnull(firstname, '')) as name");
             
             $qb2->setTable('customer__person');
             
@@ -128,7 +128,7 @@ class CustomerDAO extends \core\db\DAOObject {
             
             if (isset($opts['name']) && trim($opts['name'])) {
                 $qb2->addWhere(QueryBuilderWhere::whereRefByVal(
-                    ' concat(lastname, \', \', insert_lastname, \' \', firstname, \' \', insert_lastname, \' \', lastname)'
+                    " concat(ifnull(lastname, ''), ', ', ifnull(insert_lastname, ''), ' ', ifnull(firstname, '), ' ', ifnull(insert_lastname, '), ' ', lastname)"
                     , 'LIKE'
                     , '%'.str_replace(' ', '%', $opts['name']).'%'));
             }
@@ -137,9 +137,9 @@ class CustomerDAO extends \core\db\DAOObject {
                 $qb2->addWhere(QueryBuilderWhere::whereRefByVal('iban', '=', $opts['iban']));
             }
             
-            if (isset($opts['contact_person'])) {
+            if (isset($opts['contact_person']) && $opts['contact_person']) {
                 $qb2->addWhere(QueryBuilderWhere::whereRefByVal(
-                    ' concat(lastname, \', \', insert_lastname, \' \', firstname, \' \', insert_lastname, \' \', lastname)'
+                    " concat(ifnull(lastname, ''), ', ', ifnull(insert_lastname, ''), ' ', ifnull(firstname, '), ' ', ifnull(insert_lastname, '), ' ', lastname)"
                     , 'LIKE'
                     , '%'.str_replace(' ', '%', $opts['contact_person']).'%'));
             }

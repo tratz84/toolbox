@@ -40,7 +40,7 @@ class CompanyForm extends BaseForm {
         
 //         $this->addCompanyTypes();
         
-        $this->addWidget( new TextField('company_name', '', t('Companyname')) );
+        $this->addWidget( new TextField('company_name', '', t('Company name')) );
         $this->addWidget( new TextField('contact_person', '', t('Contact person')) );
         $this->addWidget( new TextField('coc_number', '', t('Coc number')) );
         $this->addWidget( new TextField('vat_number', '', t('VAT number')) );

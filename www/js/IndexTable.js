@@ -872,7 +872,7 @@ function IndexTable( container, opts ) {
 				
 				inp.change(function() {
 					me.updateColumnselection();
-					this.saveColumnState();
+					me.saveColumnState();
 				});
 			}
 		} else {

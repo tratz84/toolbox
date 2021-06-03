@@ -33,8 +33,12 @@ class PersonDAO extends \core\db\DAOObject {
 	    $qb->setTable('customer__person')
 	       ->selectFields('*');
 	    
-	    
-	    $qb->addWhere(QueryBuilderWhere::whereRefByVal('deleted', '=', false));
+        if (isset($opts['return_deleted']) && $opts['return_deleted']) {
+            // don't filter deleted
+        }
+        else {
+	       $qb->addWhere(QueryBuilderWhere::whereRefByVal('deleted', '=', false));
+        }
 	    
 	    if (isset($opts['customername']) && trim($opts['customername']) != '') {
 	        $qb->addWhere(QueryBuilderWhere::whereRefByVal("concat(firstname, ' ', insert_lastname, ' ', lastname)", 'LIKE', '%'.$opts['customername'].'%'));
