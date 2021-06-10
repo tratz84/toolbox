@@ -390,7 +390,7 @@ function viewMail(email_id) {
 		success: function(data, xhr, textStatus) {
 			setTimeout(function() {
 				$('#mail-content').html( data );
-			}, 100);
+			}, 10);
 		}
 	});
 }
