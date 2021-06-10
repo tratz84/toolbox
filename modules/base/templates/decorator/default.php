@@ -13,7 +13,7 @@ $menuItems = $ms->listMainMenu();
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 		<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" />
 		
-		<link crossorigin="use-credentials" rel="manifest" href="<?= appUrl('/?m=base&c=manifest&a=webapp') ?>" />
+		<link crossorigin="use-credentials" rel="manifest" href="<?= appUrl('/?m=base&c=webapp/manifest') ?>" />
 
 		<script src="<?= BASE_HREF ?>lib/mobile-detect.min.js"></script>
 		<script>
