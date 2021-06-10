@@ -13,21 +13,6 @@ $menuItems = $ms->listMainMenu();
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 		<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" />
 		
-		<link crossorigin="use-credentials" rel="manifest" href="<?= appUrl('/?m=base&c=webapp/manifest') ?>" />
-		<script>
-			if ('serviceWorker' in navigator) {
-			  window.addEventListener('load', function() {
-			    navigator.serviceWorker.register( <?= json_encode(appUrl('/?mpf=/module/base/webapp/serviceworker.js')) ?> ).then(function(registration) {
-1			      // Registration was successful
-			      console.log('ServiceWorker registration successful with scope: ', registration.scope);
-			    }, function(err) {
-			      // registration failed :(
-			      console.log('ServiceWorker registration failed: ', err);
-			    });
-			  });
-			}
-		</script>
-
 		<script src="<?= BASE_HREF ?>lib/mobile-detect.min.js"></script>
 		<script>
 			var contextName = <?= json_encode($context->getContextName()) ?>;
@@ -107,6 +92,8 @@ $menuItems = $ms->listMainMenu();
 		<?php print_htmlScriptLoader_top() ?>
 		
 		<?php print_htmlScriptLoader_inlineCss() ?>
+		
+		<?php hook_eventbus_publish(null, 'base', 'decorator-render-head', null) ?>
 		
 	</head>
 <body class="<?= isset($body_class) ? $body_class : '' ?> <?= function_exists('getJsState') && getJsState('small-nav-side-menu', 0) == '1' ? 'small-nav-side-menu' : '' ?>">
