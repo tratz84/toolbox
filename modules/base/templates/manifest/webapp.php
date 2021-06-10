@@ -1,7 +1,7 @@
 {
   "name": <?= json_encode("Toolbox - " . ctx()->getCompanyName()) ?>,
   "short_name": "Toolbox",
-  "start_url": "<?= BASE_URL . appUrl('/') ?>",
+  "start_url": "<?= appUrl('/') ?>",
   "display": "standalone",
   "background_color": "#fff",
   "description": "Toolbox",
