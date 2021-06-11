@@ -56,6 +56,9 @@ class EmailDAO extends \core\db\DAOObject {
 	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('webmail__email.incoming', '=', ($opts['incoming'] ? 1 : 0)));
 	    }
 	    
+	    // don't show deleted mails
+	    $qb->addWhere( QueryBuilderWhere::whereRefByRef('webmail__email.deleted', 'IS', 'NULL') );
+	    
 	    if (isset($opts['from_name']) && $opts['from_name']) {
 	        $qb->addWhere( QueryBuilderWhere::whereRefByVal('webmail__email.from_name', 'LIKE', '%'.$opts['from_name'].'%') );
 	    }
