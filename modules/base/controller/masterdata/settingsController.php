@@ -47,6 +47,7 @@ class settingsController extends BaseController {
             }
             
             $settingsService->updateValue('system_language', get_var('system_language'));
+            $settingsService->updateValue('progressive_web_app_features', get_var('progressive_web_app_features')?1:0);
             $settingsService->updateValue('object_locking', get_var('object_locking')?1:0);
             $settingsService->updateValue('customers_split', get_var('customers_split')?1:0);
             $settingsService->updateValue('pdf_print_date_footer', get_var('pdf_print_date_footer')?1:0);
@@ -68,6 +69,9 @@ class settingsController extends BaseController {
         $mapLang['nl_NL'] = 'Nederlands';
         $mapLang['en_US'] = 'English';
         $this->selectLanguage = new SelectField('system_language', @$this->settings['system_language'], $mapLang, t('System language'));
+        
+        $this->checkboxPwa = new CheckboxField('progressive_web_app_features', @$this->settings['progressive_web_app_features']?'1':'0', t('Progressive web app'));
+        $this->checkboxPwa->setInfoText(t('Enable "Progressive Web App" features? (install app)'));
         
         $this->checkboxObjectLocking = new CheckboxField('object_locking', @$this->settings['object_locking']?'1':'0', t('Object locking'));
         $this->checkboxObjectLocking->setInfoText(t('Possibility to mark objects as "locked"'));

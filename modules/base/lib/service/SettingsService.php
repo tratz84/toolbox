@@ -63,6 +63,9 @@ class SettingsService extends ServiceBase {
         if (isset($map['master_base_color']) == false) {
             $map['master_base_color'] = '#ff0000';
         }
+
+        if (isset($map['progressive_web_app_features']) == false)
+            $map['progressive_web_app_features'] = 1;
         
         return $map;
     }

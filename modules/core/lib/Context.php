@@ -184,6 +184,10 @@ class Context
     public function isPersonsEnabled() { return true; }   // $this->getSetting('personsEnabled') ? true : false; }
     public function isCompaniesEnabled() { return true; } // $this->getSetting('companiesEnabled') ? true : false; }
     
+    public function isProgressiveWebAppEnabled() {
+        return $this->getSetting('progressive_web_app_features', 1);
+    }
+    
     public function isResetPasswordEnabled() {
         // this is a requirement for password resets
         if ($this->isModuleEnabled('webmail') == false) {

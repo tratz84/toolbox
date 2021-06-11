@@ -41,6 +41,8 @@
 
 	<div style="padding: 5px 5px 15px 5px; margin-bottom: 15px;">
 		<?= $selectLanguage->render() ?>
+
+		<?= $checkboxPwa->render() ?>
 	
 		<?php if (isset($checkboxResetPassword)) : ?>
 			<?= $checkboxResetPassword->render() ?>

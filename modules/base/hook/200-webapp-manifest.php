@@ -4,7 +4,11 @@
 
 
 hook_eventbus_subscribe('base', 'decorator-render-head', function($evt) {
-
+    // disabled? => skip
+    if (ctx()->isProgressiveWebAppEnabled() == false) {
+        return;
+    }
+    
     $urlManifest = appUrl('/?m=base&c=webapp/manifest');
     $urlServiceWorker = json_encode(appUrl('/?mpf=/module/base/webapp/serviceworker.js'));
     
