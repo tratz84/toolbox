@@ -120,9 +120,21 @@ class StoreFileDAO extends \core\db\DAOObject {
             $sql .= " WHERE (".implode(" ) AND (", $where) . ") ";
         }
         
-        
-        $sql .= "order by filesync__store_file_meta.document_date desc, filesync__store_file.store_file_id desc";
-        
+        if (isset($opts['sortField']) && $opts['sortField']) {
+            if ($opts['sortField'] == 'customer_name') {
+                $sql .= " ORDER BY company_name, concat(ifnull(customer__person.lastname, ''), ' ', ifnull(customer__person.insert_lastname, ''), ' ', ifnull(customer__person.firstname, ''))"; 
+            }
+            else {
+                $sql .= " ORDER BY " . preg_replace('/[^a-zA-Z_]/', '', $opts['sortField']);
+            }
+            
+            if (isset($opts['sortFieldDirection']) && $opts['sortFieldDirection'] == 'DESC') {
+                $sql .= " DESC ";
+            }
+        }
+        else {
+            $sql .= "order by filesync__store_file_meta.document_date desc, filesync__store_file.store_file_id desc";
+        }
         
         return $this->queryCursor($sql, $params);
 	}
