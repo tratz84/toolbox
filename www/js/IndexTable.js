@@ -24,6 +24,7 @@ function IndexTable( container, opts ) {
 	this.loading = false;
 	this.firstLoadCompleted = false;
 	this.sortField = null;
+	this.sortFieldDirection = null;
 	
 	this.callback_rowClick = null;
 	this.callback_rowDblclick = null;
@@ -184,6 +185,9 @@ function IndexTable( container, opts ) {
 		if (this.sortField) {
 			searchOpts['sortField'] = this.sortField;
 		}
+		if (this.sortFieldDirection) {
+			searchOpts['sortFieldDirection'] = this.sortFieldDirection;
+		}
 		
 		if (this.opts.defaultSearchOpts) {
 			for(var sok in this.opts.defaultSearchOpts) {
@@ -280,6 +284,7 @@ function IndexTable( container, opts ) {
 		this.callback_selectColumnsPopup = callback;
 	};
 
+	this.getSortField = function() { return this.sortField; };
 	this.setSortField = function(field) { this.sortField = field; };
 
 
@@ -456,6 +461,8 @@ function IndexTable( container, opts ) {
 			
 			
 			if (col.sortField) {
+				$(td).addClass('header-field-sort');
+			
 				if ($(td).find('span.field-description').length) {
 					$(td).find('span.field-description').wrap('<a href="javascript:void(0);" class="field-sort"></a>');
 				}
@@ -465,6 +472,8 @@ function IndexTable( container, opts ) {
 					var it = $(this).closest('table').data('IndexTable');
 					var col = $(this).closest('th').data('col');
 					
+					var oldSortField = it.getSortField();
+					
 					if (typeof col.sortField == 'string') {
 						it.setSortField( col.sortField );
 					} else {
@@ -473,6 +482,14 @@ function IndexTable( container, opts ) {
 						} else {
 							it.setSortField( col.sortField[0] );
 						}
+					}
+					
+					// inverse sortfield direction
+					if (it.getSortField() == oldSortField) {
+						it.sortFieldDirection = it.sortFieldDirection == 'DESC' ? 'ASC' : 'DESC';
+					}
+					else {
+						it.sortFieldDirection = null;
 					}
 					
 					it.pageNo = 1;

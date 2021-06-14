@@ -18,12 +18,12 @@ class ArchiveCustomerIndexTable extends IndexTable {
         $this->setOpt('lool_links', true);
         $this->setTableClass('filesync-customer-index-table');
         
-        $this->setColumn('document_date',     ['fieldDescription' => t('Date'),      'fieldType' => 'date']);
-        $this->setColumn('customer_name',     ['fieldDescription' => t('Customer name'), 'fieldType' => 'text', 'searchable' => true]);
-        $this->setColumn('path',              ['fieldDescription' => t('Filename'), 'fieldType' => 'text', 'searchable' => true]);
-        $this->setColumn('subject',           ['fieldDescription' => t('Subject'),  'fieldType' => 'text', 'searchable' => true]);
+        $this->setColumn('document_date',     ['fieldDescription' => t('Date'),      'fieldType' => 'date', 'sortField' => 'document_date']);
+        $this->setColumn('customer_name',     ['fieldDescription' => t('Customer name'), 'fieldType' => 'text', 'sortField' => 'customer_name', 'searchable' => true]);
+        $this->setColumn('path',              ['fieldDescription' => t('Filename'), 'fieldType' => 'text', 'sortField' => 'path', 'searchable' => true]);
+        $this->setColumn('subject',           ['fieldDescription' => t('Subject'),  'fieldType' => 'text', 'sortField' => 'subject', 'searchable' => true]);
         $this->setColumn('public',            ['fieldDescription' => t('Public'),   'fieldType' => 'boolean', 'searchable' => true]);
-        $this->setColumn('filesize_text',     ['fieldDescription' => t('File size')]);
+        $this->setColumn('filesize_text',     ['fieldDescription' => t('File size'), 'sortField' => 'filesize']);
         $this->setColumn('actions',           ['fieldDescription' => '', 'render' => "
             function( record ) {
                var store_file_id = record['store_file_id'];

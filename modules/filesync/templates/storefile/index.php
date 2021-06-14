@@ -39,18 +39,21 @@ t.addColumn({
 	fieldName: 'path',
 	fieldDescription: toolbox_t('Path'),
 	fieldType: 'text',
+	sortField: 'path',
 	searchable: true
 });
 
 t.addColumn({
 	fieldName: 'filesize_text',
 	fieldDescription: toolbox_t('File size'),
+	sortField: 'filesize',
 	fieldType: 'text'
 });
 
 t.addColumn({
 	fieldName: 'rev',
 	fieldDescription: toolbox_t('Revision'),
+	sortField: 'rev',
 	fieldType: 'text'
 });
 
@@ -70,6 +73,7 @@ t.addColumn({
 t.addColumn({
 	fieldName: 'lastmodified',
 	fieldDescription: toolbox_t('Last changed'),
+	sortField: 'lastmodified',
 	fieldType: 'datetime'
 });
 
