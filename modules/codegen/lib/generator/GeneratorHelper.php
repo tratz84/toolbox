@@ -32,6 +32,7 @@ use customer\forms\CustomerSelectWidget;
 use core\forms\HtmlDateField;
 use core\forms\HtmlDatetimeField;
 use codegen\form\widgetoptions\HtmlDateOptionsForm;
+use core\forms\FileField;
 
 class GeneratorHelper {
     
@@ -252,6 +253,11 @@ class GeneratorHelper {
             'type' => 'widget',
             'class' => UserSelectWidget::class,
             'label' => 'User select'
+        );
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => FileField::class,
+            'label' => 'File upload'
         );
         
         
