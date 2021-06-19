@@ -64,6 +64,14 @@ class customerController extends BaseController {
     }
     
     
+    public function action_new() {
+        
+        return $this->render();
+    }
+    
+    
+    
+    
     public function action_emailaddresses() {
         
         $companyId = null;
