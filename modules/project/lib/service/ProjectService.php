@@ -161,6 +161,8 @@ class ProjectService extends ServiceBase {
         if (!$hour->save()) {
             return false;
         }
+        
+        return $hour;
     }
 
 
