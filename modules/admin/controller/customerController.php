@@ -31,6 +31,13 @@ class customerController extends AdminBaseController {
 
         $this->json = json_decode($data);
         
+        if ($this->json === null) {
+            $this->error = 'Request failed, customer/database doesn\'t exist?';
+        }
+        else if (isset($this->message)) {
+            $this->error = $this->message;
+        }
+        
         
         $this->setShowDecorator(false);
         

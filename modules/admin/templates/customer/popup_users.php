@@ -1,10 +1,17 @@
 
 
-
-<?php if (isset($json->message)) : ?>
-
-	Bericht: <?= esc_html($json->message) ?>
-
+<?php if (isset($error)) : ?>
+	
+	<div class="page-header">
+		<div class="toolbox">
+			<a href="javascript:void(0);" class="fa fa-times-circle popup-close-link"></a>
+		</div>
+		
+		<h1>Error (<?= esc_html($contextName) ?>)</h1>
+	</div>
+	
+	Message: <?= esc_html( $error ) ?>
+	
 <?php else : ?>
 
 	<div class="page-header">
