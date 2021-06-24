@@ -37,6 +37,17 @@
 
 	<?php print $form->render() ?>
 
+	<?php
+        $tabContainer = generate_tabs('invoice', 'invoice-edit-footer', $form);
+        if ($form->getWidgetValue('invoice_id'))
+            $tabContainer->AddTab(t('Log'), get_component('base', 'activityOverview', 'index', array('ref_object' => 'invoice__invoice', 'ref_id' => $form->getWidgetValue('invoice_id'))));
+        
+        if ($tabContainer->hasTabs()) {
+            print '<hr/>';
+            print $tabContainer->render();
+        }
+    ?>
+	
 <?php endif; ?>
 
 
