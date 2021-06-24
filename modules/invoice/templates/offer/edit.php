@@ -52,7 +52,7 @@
 	<?php
         $tabContainer = generate_tabs('invoice', 'offer-edit-tabs', $form);
         if ($form->getWidgetValue('offer_id'))
-            $tabContainer->AddTab(t('Log'), get_component('base', 'activityOverview', 'index', array('ref_object' => 'invoice__offer', 'ref_id' => $form->getWidgetValue('offer_id'))));
+            $tabContainer->AddTab(t('Log'), get_component('base', 'activityOverview', 'index', array('stretchtobottom' => false, 'ref_object' => 'invoice__offer', 'ref_id' => $form->getWidgetValue('offer_id'))));
         
         if ($tabContainer->hasTabs()) {
             print '<hr/>';

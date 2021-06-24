@@ -1,6 +1,6 @@
 
 
-<div id="activity-table-container" class="stretch-to-bottom"></div>
+<div id="activity-table-container" class="<?= $stretchtobottom ? 'stretch-to-bottom' : '' ?>"></div>
 
 <script>
 

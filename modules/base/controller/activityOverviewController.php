@@ -20,6 +20,10 @@ class activityOverviewController extends BaseController {
         if (isset($this->ref_id) == false)
             $this->ref_id = '';
         
+        // by default autoresize
+        if (isset($this->stretchtobottom) == false)
+            $this->stretchtobottom = true;
+        
         
         $this->setShowDecorator(false);
         $this->render();
