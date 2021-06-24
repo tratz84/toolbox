@@ -38,7 +38,8 @@ class TabContainer {
     }
     
     public function getTabs() { return $this->tabs; }
-    
+    public function getTabCount() { return count($this->tabs); }
+    public function hasTabs() { return count($this->tabs) > 0 ? true : false; }
     
     public function render() {
         if (count($this->tabs) == 0) {
