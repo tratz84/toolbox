@@ -4,3 +4,6 @@
 ==>> TODO: controllers/archiveOverview, make use of IndexTable & make fields searchable
 
 => top revision of file deleted => client keeps syncing
+
+=> bug, delete file & create folder with name of file => sync error
+
