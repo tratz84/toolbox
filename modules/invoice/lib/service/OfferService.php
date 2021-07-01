@@ -3,20 +3,22 @@
 namespace invoice\service;
 
 use base\forms\FormChangesHtml;
-use customer\service\CustomerService;
 use base\service\MetaService;
 use base\util\ActivityUtil;
 use core\ObjectContainer;
 use core\exception\ObjectNotFoundException;
 use core\forms\lists\ListResponse;
 use core\service\ServiceBase;
+use customer\service\CustomerService;
 use invoice\InvoiceSettings;
 use invoice\form\InvoiceForm;
 use invoice\form\OfferForm;
 use invoice\model\Invoice;
 use invoice\model\InvoiceLine;
+use invoice\model\InvoiceStatusDAO;
 use invoice\model\Offer;
 use invoice\model\OfferDAO;
+use invoice\model\OfferLine;
 use invoice\model\OfferLineDAO;
 use invoice\model\OfferStatus;
 use invoice\model\OfferStatusDAO;
@@ -115,6 +117,19 @@ class OfferService extends ServiceBase {
         
         return $offer;
     }
+    
+    
+    public function readDefaultInvoiceStatus() {
+        $isDao = new InvoiceStatusDAO();
+        
+        $is = $isDao->readByDefaultStatus();
+        if ($is)
+            return $is;
+        
+        $is = $isDao->readFirst();
+        return $is;
+    }
+    
     
     
     public function saveOffer($form) {
@@ -263,6 +278,12 @@ class OfferService extends ServiceBase {
         $i->setSubject($offer->getSubject());
         $i->setComment($offer->getComment());
         $i->setInvoiceDate(date('Y-m-d'));
+        
+        $defaultInvoiceStatus = $this->readDefaultInvoiceStatus();
+        if ($defaultInvoiceStatus) {
+            $i->setInvoiceStatusId( $defaultInvoiceStatus->getInvoiceStatusId() );
+        }
+        
         
         $ols = $offer->getOfferLines();
         $invoiceLines = array();
