@@ -15,9 +15,9 @@ try {
     $fc->addFilter( new \core\filter\ModulePublicFilter() );
     $fc->addFilter( new \core\filter\SessionFilter() );
     $fc->addFilter( new \core\filter\DatabaseFilter() );
+    $fc->addFilter( new \core\filter\AuthFilter() );
     $fc->addFilter( new \core\filter\ModuleEnablerFilter() );
     $fc->addFilter( new \core\filter\RouteFilter() );
-    $fc->addFilter( new \core\filter\AuthFilter() );
     $fc->addFilter( new \core\filter\DispatchFilter() );
     
     $fc->execute();
