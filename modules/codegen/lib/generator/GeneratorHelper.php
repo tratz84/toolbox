@@ -146,6 +146,15 @@ class GeneratorHelper {
             'editor' => \codegen\form\widgetoptions\NumberOptionsForm::class,
             'label' => 'Number field'
         );
+        
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => \core\forms\PasswordField::class,
+//             'editor' => \codegen\form\widgetoptions\NumberOptionsForm::class,
+            'label' => 'Password field'
+        );
+        
+        
         $formWidgets[] = array(
             'type' => 'widget',
             'class' => \core\forms\EuroField::class,
