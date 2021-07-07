@@ -18,15 +18,16 @@ if (count($argv) != 3) {
 $contextName = $argv[1];
 $adminPassword = $argv[2];
 
+$dbPrefix = apply_filter('create_environment-db_prefix', 'toolbox_');
 
 // check if database exists
-$dbcount = DatabaseHandler::getConnection('admin')->queryValue("select count(*) from information_schema.schemata where schema_name=?", array('toolbox_'.$contextName));
+$dbcount = DatabaseHandler::getConnection('admin')->queryValue("select count(*) from information_schema.schemata where schema_name=?", array($dbPrefix.$contextName));
 if ($dbcount == 0) {
     die("Error: Database not yet created\n");
 }
 
 // insert customer
-DatabaseHandler::getConnection('admin')->query('insert into toolbox__customer set contextName=?, databaseName=?, active=1, experimental=0', array($contextName, 'toolbox_'.$contextName));
+DatabaseHandler::getConnection('admin')->query('insert into toolbox__customer set contextName=?, databaseName=?, active=1, experimental=0', array($contextName, $dbPrefix.$contextName));
 
 
 // bootstrap
