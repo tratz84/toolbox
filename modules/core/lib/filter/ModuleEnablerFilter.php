@@ -78,6 +78,10 @@ class ModuleEnablerFilter {
                 $moduleEnabled = true;
             }
             
+            if (apply_filter('moduleEnabled-'.$meta->getTag(), false)) {
+                $moduleEnabled = true;
+            }
+            
             // mandatory modules
             if (in_array($moduleName, ['base'])) {
                 $moduleEnabled = true;
