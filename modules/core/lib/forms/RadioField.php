@@ -53,13 +53,18 @@ class RadioField extends BaseWidget {
         
         $html .= '<div class="widget radio-field-widget '.$extraClass.'">';
         $html .= '<label class="radio-field-label">'.esc_html($this->getLabel()).'</label>';
+        
+        $html .= '<span class="radio-options-container">';
         foreach($this->optionItems as $key => $val) {
             $idslug = slugify($this->getName().'-'.$key);
             
+            $html .= '<span class="radio-option-container">';
             $html .= '<input type="radio" class="radio-ui" id="'.esc_attr($idslug).'" name="'.$this->getName().'" value="'.esc_attr($key).'" '.($key == $this->getValue()?'checked="checked"':'').' /> ';
             $html .= '<label for="'.esc_attr($idslug).'" class="radio-ui-placeholder"></label> ';
             $html .= '<label class="widget-text" for="'.esc_attr($idslug).'" >'.esc_html($val).'</label> ';
+            $html .= '</span>';
         }
+        $html .= '</span>';
         $html .= '</div>';
         
         return $html;
