@@ -17,6 +17,7 @@ use core\forms\CheckboxField;
 use core\forms\ColorPickerField;
 use core\forms\DatePickerField;
 use core\forms\DateTimePickerField;
+use core\forms\EmailField;
 use core\forms\HiddenField;
 use core\forms\HtmlField;
 use core\forms\MonthField;
@@ -165,6 +166,11 @@ class GeneratorHelper {
             'type' => 'widget',
             'class' => TextField::class,
             'label' => 'Textfield'
+        );
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => EmailField::class,
+            'label' => 'Emailfield'
         );
         
         $formWidgets[] = array(
