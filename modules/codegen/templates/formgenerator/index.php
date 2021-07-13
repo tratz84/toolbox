@@ -16,7 +16,7 @@
 <hr/>
 
 <div class="row">
-    <div class="col-xs-3">
+    <div class="col-3">
     	<div>
     		<a href="javascript:void(0);" onclick="btnAddWidget_Click();">Add widget</a>
     	</div>
@@ -25,7 +25,7 @@
     	<div id="widget-info"></div>
     </div>
     
-    <div class="col-xs-9">
+    <div class="col-9">
 		<div id="form-preview" class="form-preview"></div>
 	</div>
 </div>
