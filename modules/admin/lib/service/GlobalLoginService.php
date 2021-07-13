@@ -42,6 +42,16 @@ class GlobalLoginService extends ServiceBase {
             return null;
         }
     }
+
+    public function deleteAutologinBySecurityString($autologinId, $securityString) {
+        $t = $this->readAutologin($autologinId, $securityString);
+        
+        if ($t) {
+            return $t->delete();
+        }
+        
+        return false;
+    }
     
     
     public function contextExists($contextName) {
