@@ -39,5 +39,9 @@ class CustomerDAO extends \core\db\DAOObject {
 	       return null;
 	}
 	
+	public function updateDescription( $customerId, $description ) {
+	    $this->query('update toolbox__customer set description = ? where customer_id = ?', array( $description, $customerId ));
+	}
+	
 }
 
