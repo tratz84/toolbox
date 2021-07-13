@@ -11,8 +11,8 @@
 
 <nav>
 	<div class="nav nav-tabs" id="nav-tab" role="tablist">
-		<a class="nav-item nav-link active" id="existing-file-tab"  data-toggle="tab" role="tab" aria-controls="existing-customer" href="#nav-existing-file" aria-selected="true"><?= t('Existing file') ?></a>
-		<a class="nav-item nav-link" id="new-file-tab"       data-toggle="tab" role="tab" aria-controls="new-company"       href="#nav-new-file"       aria-selected="false"><?= t('New file') ?></a>
+		<a class="nav-item nav-link active" id="existing-file-tab"  data-bs-toggle="tab" role="tab" aria-controls="existing-customer" href="#nav-existing-file" aria-selected="true"><?= t('Existing file') ?></a>
+		<a class="nav-item nav-link" id="new-file-tab"       data-bs-toggle="tab" role="tab" aria-controls="new-company"       href="#nav-new-file"       aria-selected="false"><?= t('New file') ?></a>
 	</div>
 </nav>
 
