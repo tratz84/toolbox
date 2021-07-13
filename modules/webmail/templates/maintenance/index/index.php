@@ -15,7 +15,7 @@
 <div class="functions-menu-page">
 
 
-	<div class="col-xs-12 col-sm-4 col-lg-3 setting-menu-tag-container">
+	<div class="col-12 col-sm-4 col-lg-3 setting-menu-tag-container">
 		<h2><?= t('Misc') ?></h2>
 		<ul class="">
 			<li>

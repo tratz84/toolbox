@@ -6,7 +6,7 @@
 
 <div class="functions-menu-page">
 
-	<div class="col-xs-12 col-sm-4 col-lg-3 setting-menu-tag-container">
+	<div class="col-12 col-sm-4 col-lg-3 setting-menu-tag-container">
 		<h2>Base</h2>
 		
 		<ul>
@@ -16,7 +16,7 @@
 		</ul>
 	</div>
 
-	<div class="col-xs-12 col-sm-4 col-lg-3 setting-menu-tag-container">
+	<div class="col-12 col-sm-4 col-lg-3 setting-menu-tag-container">
 		<h2>DB</h2>
 		
 		<ul>
@@ -30,7 +30,7 @@
 		</ul>
 	</div>
 	
-	<div class="col-xs-12 col-sm-4 col-lg-3 setting-menu-tag-container">
+	<div class="col-12 col-sm-4 col-lg-3 setting-menu-tag-container">
 		<h2>Forms</h2>
 		
 		<ul>
@@ -49,7 +49,7 @@
 		</ul>
 	</div>
 
-	<div class="col-xs-12 col-sm-4 col-lg-3 setting-menu-tag-container">
+	<div class="col-12 col-sm-4 col-lg-3 setting-menu-tag-container">
 		<h2>Pages</h2>
 		
 		<ul>
@@ -60,7 +60,7 @@
 	</div>
 	
 	
-	<div class="col-xs-12 col-sm-4 col-lg-3 setting-menu-tag-container">
+	<div class="col-12 col-sm-4 col-lg-3 setting-menu-tag-container">
 		<h2>Code</h2>
 		<ul>
 			<li>

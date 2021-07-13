@@ -15,14 +15,14 @@
 <hr/>
 
 <div class="row" style="margin: 0;">
-    <div class="col-xs-3">
+    <div class="col-3">
     	<div>
     		<a href="javascript:void(0);" onclick="btnAddMenu_Click();">Add menu</a>
     	</div>
     	<div id="tree"></div>
     </div>
     
-    <div class="col-xs-9">
+    <div class="col-9">
     	<div id="menu-info"></div>
 		<div id="form-preview" class="form-preview"></div>
 	</div>

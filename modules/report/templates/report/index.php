@@ -41,7 +41,7 @@
 <?php endif; ?>
 
 <?php if ($showIndex) : ?>
-<div class="col-xs-12 col-lg-6 setting-menu-tag-container no-padding">
+<div class="col-12 col-lg-6 setting-menu-tag-container no-padding">
 	<ul>
     	<?php foreach($rml->getMenuItems() as $mi) : ?>
 		<li>

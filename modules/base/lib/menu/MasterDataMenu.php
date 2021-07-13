@@ -67,7 +67,7 @@ class MasterDataMenu {
         foreach($sections as $s) {
             $items = $this->menu[$s];
             
-            $html .= '<div class="col-xs-12 col-sm-4 col-lg-3 setting-menu-tag-container">';
+            $html .= '<div class="col-12 col-sm-4 col-lg-3 setting-menu-tag-container">';
             $html .= '<h2>'.esc_html($s).'</h2>';
             $html .= '<ul class="">';
             foreach($items as $i) {

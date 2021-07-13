@@ -7,7 +7,7 @@
 </div>
 
 
-<div class="col-xs-12 col-sm-4 col-lg-3 setting-menu-tag-container" style="padding-left: 0;">
+<div class="col-12 col-sm-4 col-lg-3 setting-menu-tag-container" style="padding-left: 0;">
 	<ul class="">
 		<li><a href="<?= appUrl('/?m=customer&c=company&a=edit') ?>"><?= t('Add company') ?></a></li>
 		<li><a href="<?= appUrl('/?m=customer&c=person&a=edit') ?>"><?= t('Add person') ?></a></li>
