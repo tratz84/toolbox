@@ -594,13 +594,13 @@ function showConfirmation(title, body, callback_ok) {
 	html += '    <div class="modal-content">';
 	html += '      <div class="modal-header">';
 	html += '        <h4 class="modal-title"></h4>';
-	html += '        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+	html += '        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
 	html += '      </div>';
 	html += '      <div class="modal-body">';
 //	html += '        <p>One fine body&hellip;</p>';
 	html += '      </div>';
 	html += '      <div class="modal-footer">';
-	html += '        <button type="button" class="btn btn-default" data-dismiss="modal">'+toolbox_t('Cancel')+'</button>';
+	html += '        <button type="button" class="btn btn-default" data-bs-dismiss="modal">'+toolbox_t('Cancel')+'</button>';
 	html += '        <button type="button" class="btn btn-primary">Ok</button>';
 	html += '      </div>';
 	html += '    </div>';	// <!-- /.modal-content -->
@@ -623,11 +623,13 @@ function showConfirmation(title, body, callback_ok) {
 		
 		$('.confirmation-dialog').modal('hide');
 	});
-	
-	$('.confirmation-dialog').modal({
+
+	var myModal = new bootstrap.Modal( $('.confirmation-dialog').get(0), {
 		show: true,
 		keyboard: true
 	});
+
+	myModal.show();
 
 	$('.confirmation-dialog').on('shown.bs.modal', function() {
 		$('.confirmation-dialog').find('input[type="text"], input[type="password"]').first().focus();
@@ -641,7 +643,7 @@ function showAlert(title, body, callback_ok) {
 	html += '    <div class="modal-content">';
 	html += '      <div class="modal-header">';
 	html += '        <h4 class="modal-title"></h4>';
-	html += '        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+	html += '        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
 	html += '      </div>';
 	html += '      <div class="modal-body">';
 	html += '      </div>';
@@ -668,11 +670,12 @@ function showAlert(title, body, callback_ok) {
 		$('.confirmation-dialog').modal('hide');
 	});
 	
-	$('.confirmation-dialog').modal({
+	var myModal = new bootstrap.Modal( $('.confirmation-dialog').get(0), {
 		show: true,
 		keyboard: true
 	});
 
+	myModal.show();
 }
 
 
@@ -1077,12 +1080,15 @@ function fullscreenPopup(title, body) {
 	
 	$('.confirmation-dialog .modal-title').html(title);
 	$('.confirmation-dialog .modal-body').append(body);
-	
-	$('.confirmation-dialog').modal({
+
+	var myModal = new bootstrap.Modal( $('.confirmation-dialog').get(0), {
 		show: true,
-		keyboard: false,
+		keyboard: true,
 		backdrop: false
 	});
+
+	myModal.show();
+	
 }
 
 
