@@ -87,7 +87,8 @@ $menuItems = $ms->listMainMenu();
 		<script src="<?= BASE_HREF ?>js/savestate.js?t=<?= filemtime(WWW_ROOT.'/js/savestate.js') ?>"></script>
 		<script src="<?= BASE_HREF ?>js/TabContainer.js?t=<?= filemtime(WWW_ROOT.'/js/TabContainer.js') ?>"></script>
 		
-		<link href="<?= BASE_HREF ?>lib/font-awesome-4/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+		<link href="<?= BASE_HREF ?>lib/fontawesome-free-5.15.3-web/css/v4-shims.min.css" rel="stylesheet" type="text/css" />
+		<link href="<?= BASE_HREF ?>lib/fontawesome-free-5.15.3-web/css/all.min.css" rel="stylesheet" type="text/css" />
 		
 		<?php print_htmlScriptLoader_top() ?>
 		
