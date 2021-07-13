@@ -20,7 +20,8 @@
 		<?php endif; ?>
 		
 		
-		<link href="/lib/font-awesome-4/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+		<link href="<?= BASE_HREF ?>lib/fontawesome-free-5.15.3-web/css/v4-shims.min.css" rel="stylesheet" type="text/css" />
+		<link href="<?= BASE_HREF ?>lib/fontawesome-free-5.15.3-web/css/all.min.css" rel="stylesheet" type="text/css" />
 	</head>
 <body class="auth">
 

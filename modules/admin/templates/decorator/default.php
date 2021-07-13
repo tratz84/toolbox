@@ -44,7 +44,8 @@
 		<script src="/js/script.js?t=<?= filemtime(WWW_ROOT.'/js/script.js') ?>" type="text/javascript"></script>
 		<script src="/js/admin/script.js?t=<?= filemtime(WWW_ROOT.'/js/admin/script.js') ?>" type="text/javascript"></script>
 		
-		<link href="/lib/font-awesome-4/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+		<link href="<?= BASE_HREF ?>lib/fontawesome-free-5.15.3-web/css/v4-shims.min.css" rel="stylesheet" type="text/css" />
+		<link href="<?= BASE_HREF ?>lib/fontawesome-free-5.15.3-web/css/all.min.css" rel="stylesheet" type="text/css" />
 	</head>
 <body class="<?= isset($body_class) ? $body_class : '' ?>">
     <header>
