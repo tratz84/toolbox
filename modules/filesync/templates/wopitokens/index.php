@@ -36,7 +36,16 @@ t.addColumn({
 	fieldName: 'access_token',
 	fieldDescription: 'Token',
 	fieldType: 'text',
-	searchable: true
+	searchable: true,
+	render: function(record) {
+		var t = record.access_token;
+
+		var s = $('<span />');
+		s.text( t.substr(0, 40) + '....' );
+		s.attr( 'title', t );
+		
+		return s;
+	}
 });
 t.addColumn({
 	fieldName: 'access_token_ttl_datetime',
