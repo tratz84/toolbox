@@ -25,7 +25,14 @@ class monthlyController extends BaseController {
             
             $userService = object_container_get(UserService::class);
             $selected_user = $userService->readUser( $this->selected_user_id );
-            $this->addTitle( t('Month overview') . ' ' . $selected_user->getUsername() );
+            
+            $strTitle = t('Month overview');
+            if ($selected_user)
+                $strTitle .= ' ' . $selected_user->getUsername();
+            else
+                $strTitle .= ' ' . $this->selected_user_id;
+            
+            $this->addTitle( $strTitle );
         }
         
         
@@ -35,8 +42,6 @@ class monthlyController extends BaseController {
     protected function handleProjectUsers() {
         $projectService = object_container_get(ProjectService::class);
         $map = $projectService->mapProjectUsers();
-        
-        $this->selectUser = new SelectField('user_id', '', $map, t('User shown'));
         
         // determine user_id to show
         $user = \core\Context::getInstance()->getUser();
@@ -48,6 +53,8 @@ class monthlyController extends BaseController {
             $keys = array_keys($map);
             $this->selected_user_id = $keys[0];
         }
+        
+        $this->selectUser = new SelectField('user_id', $this->selected_user_id, $map, t('User shown'));
     }
     
     
