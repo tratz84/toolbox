@@ -19,35 +19,23 @@ class MenuDAO extends \core\db\DAOObject {
 	public function readVisible() {
 	    
 	    $arr = array();
-	    $arr[] = array('menu_code' => 'dashboard',       'sort' => 100, 'visible' => 1, 'icon' => 'fa-dashboard', 'label' => 'Dashboard', 'url' => '/');
+	    $arr[] = array('menu_code' => 'dashboard',       'sort' => 10, 'visible' => 1, 'icon' => 'fa-dashboard', 'label' => 'Dashboard', 'url' => '/');
 	    
-// 	    $arr[] = array('menu_code' => 'webmail',         'sort' => 700, 'visible' => 1);
 	    $arr[] = array('menu_code' => 'todo',            'sort' => 800, 'visible' => 1);
 	    
-// 	    $arr[] = array('menu_code' => 'project',         'sort' => 1000, 'visible' => 1, 'icon' => 'fa-tasks', 'label' => 'Projecten', 'url' => '/?m=project&c=project');
-	    
-	    $arr[] = array('menu_code' => 'rental',          'sort' => 1100, 'visible' => 1, 'icon' => 'fa-tags',      'label' => 'Plattegrond',    'url' => '/?m=rental&c=rental&a=index');
-	    $arr[] = array('menu_code' => 'rentallist',      'sort' => 1200, 'visible' => 1, 'icon' => 'fa-tags',      'label' => 'Alle units',     'url' => '/?m=rental&c=rental&a=list');
-	    $arr[] = array('menu_code' => 'rentalcontracts', 'sort' => 1300, 'visible' => 1, 'icon' => 'fa-tags',      'label' => 'Huurcontracten', 'url' => '/?m=rental&c=contract/view');
-// 	    $arr[] = array('menu_code' => 'rentalfg',        'sort' => 1400, 'visible' => 1);
-        
-	    
-// 	    if (hasCapability('webmail', 'send-mail'))
-// 	        $arr[] = array('menu_code' => 'webmail',      'sort' => 1500, 'visible' => 1, 'icon' => 'fa-send',    'label' => 'E-mail',   'url' => '/?m=webmail&c=email');
-	        
 	    if (hasCapability('report', 'show-reports'))
 	        $arr[] = array('menu_code' => 'report',          'sort' => 1700, 'visible' => 1, 'icon' => 'fa-signal',    'label' => 'Rapportage',     'url' => '/?m=report&c=report');
 	    $arr[] = array('menu_code' => 'support',         'sort' => 1800, 'visible' => 1, 'icon' => 'fa-support', 'label' => 'Support', 'url' => '/?m=support&c=ticketList');
 	    
 	    if (hasCapability('base', 'edit-masterdata'))
-	       $arr[] = array('menu_code' => 'masterdata',      'sort' => 1900, 'visible' => 1, 'icon' => 'fa-wrench',    'label' => t('Master data'),   'url' => '/?m=base&c=masterdata/index');
+	       $arr[] = array('menu_code' => 'masterdata',      'sort' => 99999, 'visible' => 1, 'icon' => 'fa-wrench',    'label' => t('Master data'),   'url' => '/?m=base&c=masterdata/index');
 	    
 	    $weight = 10;
 	    $menus = array();
 	    foreach($arr as $a) {
 	        $m = new Menu();
 	        $m->setFields($a);
-	        $m->setWeight($weight);
+	        $m->setWeight( $a['sort'] );
 	        
 	        if (hasCapability('core', 'userType.user') || $m->getMenuCode() == 'dashboard') {
     	        $menus[] = $m;

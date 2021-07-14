@@ -15,12 +15,12 @@ hook_eventbus_subscribe('base', 'MenuService::listMainMenu', function($src) {
         return;
         
     $menuFilesync = new Menu();
-    $menuFilesync->setIconLabelUrl('fa-file', t('File archive'), '/?m=filesync&c=store', 115);
+    $menuFilesync->setIconLabelUrl('fa-file', t('File archive'), '/?m=filesync&c=store', 1900);
     $src->add($menuFilesync);
     
     
     $menuPdf = new Menu();
-    $menuPdf->setIconLabelUrl('fa-file', 'PDF creator', '/?m=filesync&c=pagequeue&a=pdf', 20);
+    $menuPdf->setIconLabelUrl('fa-file', 'PDF creator', '/?m=filesync&c=pagequeue&a=pdf', 1901);
     $menuFilesync->addChildMenu( $menuPdf );
     
     //     $menuPq = new Menu();
