@@ -7,6 +7,9 @@ use core\db\DatabaseHandler;
 
 ctx()->enableModule('customer');
 
+// load hooks
+hook_loader(__DIR__.'/hook/');
+
 
 // init customer__country-table on activation
 hook_eventbus_subscribe('customer', 'module-update-executed', function($null) {
