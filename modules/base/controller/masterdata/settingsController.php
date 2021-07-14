@@ -28,11 +28,11 @@ class settingsController extends BaseController {
             // sort by prio
             $p = ($m1->getPrio() - $m2->getPrio());
             if ($p != 0) {
-                return ceil( $p );
+                return $p;
             }
             
             // sort by name
-            return strcmp($m1->getName(), $m2->getName()) * -1;
+            return strcmp($m1->getName(), $m2->getName());
         });
         
         if (is_post()) {
