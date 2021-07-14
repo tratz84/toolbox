@@ -86,7 +86,7 @@ function TabContainerItem(tabContainer, title, content) {
 		
 		var firstItem = $(this.tabContainer.container).find('.nav.nav-tabs a').length == 0 ? true : false;
 		this.menuItem = $('<li class="nav-item"></li>');
-		this.menuItem.append('<a class="nav-item nav-link" id="nav-'+t+'-tab" href="#nav-'+t+'" role="tab" data-toggle="tab" aria-controls="nav-'+t+'-tab" aria-selected="false"></a>');
+		this.menuItem.append('<a class="nav-item nav-link" id="nav-'+t+'-tab" href="#nav-'+t+'" role="tab" data-bs-toggle="tab" aria-controls="nav-'+t+'-tab" aria-selected="false"></a>');
 		this.menuItem.find('a').text( this.title );
 		if ( firstItem ) {
 			this.menuItem.find('a').addClass('active');
