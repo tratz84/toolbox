@@ -95,6 +95,14 @@ class BaseWidget {
                 
                 $fieldCount++;
             }
+            // handle array's
+            else if (strpos($this->getName(), '[') !== false) {
+                $v = get_array_value( $this->getName(), $arr );
+                
+                if ($v)
+                    $this->setValue( $v );
+                
+            }
         }
         
         return $fieldCount;

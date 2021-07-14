@@ -736,6 +736,35 @@ function check_array($var, $field=null, $minCount=0) {
     return true;
 }
 
+/**
+ * get_array_value() - returns value by name, ie 'arr[0][value]'
+ */
+function get_array_value( $name, $array, $defaultValue=null ) {
+    $v = $array;
+    
+    $counter=0;
+    $tokens = explode( '[', $name );
+    foreach($tokens as $t) {
+        $t = rtrim($t, ']');
+        
+        if (isset($v[$t])) {
+            $counter++;
+            $v = $v[$t];
+        }
+        else {
+            break;
+        }
+    }
+    
+    if ($counter == count($tokens)) {
+        return $v;
+    }
+    else {
+        return $defaultValue;
+    }
+}
+
+
 
 function lookupModuleFile($pathInModule) {
     $ctx = Context::getInstance();
