@@ -279,6 +279,31 @@ class WidgetContainer extends BaseWidget {
     }
     
     
+    /**
+     * setArrayPrefix() - sets prefix
+     *
+     * @param $prefix - string of function
+     */
+    public function setArrayPrefix( $prefix, $index=0 ) {
+        $widgets = $this->getWidgetsRecursive();
+        for($x=0; $x < count($widgets); $x++) {
+            // skip empty named
+            if ($widgets[$x]->getName() == '')
+                continue;
+            // save original name
+            if (!$widgets[$x]->getField('originalWidgetName', false))
+                $widgets[$x]->setField('originalWidgetName', $widgets[$x]->getName());
+            
+            
+            // build name
+            $n = $widgets[$x]->getField('originalWidgetName');
+            if ($prefix)
+                $n = $prefix . '[' . $index . ']'. '['.$n.']';
+            
+            $widgets[$x]->setName( $n );
+        }
+    }
+                    
     public function setNamePrefix( $prefix ) {
         $widgets = $this->getWidgetsRecursive();
         for($x=0; $x < count($widgets); $x++) {
@@ -292,7 +317,9 @@ class WidgetContainer extends BaseWidget {
                     
             // build name
             $n = $widgets[$x]->getField('originalWidgetName');
-            $n = $prefix . $n;
+            
+            if ($prefix)
+                $n = $prefix . $n;
             
             $widgets[$x]->setName( $n );
         }
