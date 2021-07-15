@@ -91,6 +91,11 @@ class WidgetContainer extends BaseWidget {
         return null;
     }
     
+    public function clearWidgets() {
+        $this->widgets = array();
+        $this->widgetNames = array();
+    }
+    
     public function removeWidget($name) {
         $widgets = array();
         

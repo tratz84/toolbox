@@ -202,6 +202,10 @@ class BaseForm extends WidgetContainer implements LockableObject {
     
     public function clearErrors() {
         $this->errors = array();
+        
+        foreach( $this->getWidgetsRecursive() as $w ) {
+            $w->hasError( false );
+        }
     }
     
     
