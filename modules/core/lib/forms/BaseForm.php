@@ -200,6 +200,10 @@ class BaseForm extends WidgetContainer implements LockableObject {
         return $r;
     }
     
+    public function clearErrors() {
+        $this->errors = array();
+    }
+    
     
     public function validate() {
         
