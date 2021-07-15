@@ -124,7 +124,7 @@ $menuItems = $ms->listMainMenu();
 		
 		<div class="menu-mobile-spacer"></div>
 		
-	    <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
+	    <i class="fa fa-bars fa-2x toggle-btn" data-bs-toggle="collapse" data-bs-target="#menu-content"></i>
 	
 		<div class="menu-list">
 			
