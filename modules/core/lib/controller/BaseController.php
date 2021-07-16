@@ -230,11 +230,23 @@ class BaseController {
     
     
     public function json($arr) {
-        
         header('Content-type: application/json; charset=utf-8');
         
         print json_encode( $arr );
         
+    }
+    
+    public function renderJson($arr) {
+        
+        $this->setShowDecorator( false );
+        
+        // render template
+        ob_start();
+        $this->render();
+        $arr['html'] = ob_get_clean();
+        
+        
+        return $this->json( $arr );
     }
     
 }
