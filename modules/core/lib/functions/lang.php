@@ -24,6 +24,8 @@ function t_loadlang() {
                 }
             }
         }
+        
+        $lang = apply_filter('lang', $lang);
     }
     
     return $lang;
