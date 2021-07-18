@@ -7,7 +7,7 @@
 	</div>
 
     <?php if ($isNew) : ?>
-    <h1>Bedrijf toevoegen: <span id="h1-company-name"></span></h1>
+    <h1><?= t('Add company') ?>: <span id="h1-company-name"></span></h1>
     <?php else : ?>
     <h1><span id="h1-company-name"><?= esc_html($form->getWidgetValue('company_name')) ?></span></h1>
     <?php endif; ?>
