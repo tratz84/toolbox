@@ -38,7 +38,7 @@ $menuItems = $ms->listMainMenu();
 		<script src="<?= appUrl('/?m=base&c=js/dynamicscripts&a=lang&v='.crc32(serialize(t_loadlang())) ) ?>"></script>
 		<script src="<?= BASE_HREF ?>js/jquery-3.3.1.min.js"></script>
 		<script src="<?= BASE_HREF ?>js/jquery-migrate-3.0.0.min.js"></script>
-		<script src="<?= BASE_HREF ?>js/bootstrap.min.js"></script>
+		<script src="<?= BASE_HREF ?>js/bootstrap.min.js?v=<?= filemtime(WWW_ROOT.'/js/bootstrap.min.js') ?>"></script>
 
 		<script src="<?= BASE_HREF ?>lib/moment/moment-with-locales.min.js"></script>
 		<script> moment.locale(<?= json_encode(ctx()->getSelectedLang()) ?>); </script>
