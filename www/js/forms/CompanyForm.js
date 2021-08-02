@@ -36,6 +36,11 @@ $(document).ready(function() {
 function cf_validateIban() {
 	var inp = $('.form-generator.form-company-form [name=iban]');
 	
+	// iban-widget might be removed..
+	if (inp.length == 0) {
+		return;
+	}
+	
 	var val = inp.val();
 	console.log(val);
 	val = val.replace(/\s+/, '');
