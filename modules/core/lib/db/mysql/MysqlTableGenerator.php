@@ -543,7 +543,7 @@ class MysqlTableGenerator {
 
             if (isset($indexes[$key]['unique']) && $indexes[$key]['unique']) {
                 // UNIQUE constraint
-                $sql .= "\tCONSTRAINT `{$key}` UNIQUE(".implode(', ', $cols) . ")";
+                $sql .= "\tCONSTRAINT `{$key}` UNIQUE(`".implode('`, `', $cols) . "`)";
             } else {
                 // standard INDEX
                 $indexProps = '';
@@ -551,7 +551,7 @@ class MysqlTableGenerator {
                     $indexProps = 'FULLTEXT ';
                 }
 
-                $sql .= "\t{$indexProps}KEY `{$key}` (".implode(', ', $cols) . ")";
+                $sql .= "\t{$indexProps}KEY `{$key}` (`".implode('`, `', $cols) . "`)";
             }
             
 //             $sql .= ($x < count($constraint_keys)-1 ? ",\n":"");
