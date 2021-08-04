@@ -173,10 +173,12 @@ class Context
         }
         
         if (isset($this->settings[$val])) {
-            return $this->settings[$val];
+            $r = $this->settings[$val];
         } else {
-            return $defaultVal;
+            $r = $defaultVal;
         }
+        
+        return apply_filter('Context-getSetting-'.$val, $r);
     }
     
     public function getPageSize() { return $this->getSetting('PAGE_SIZE'); }
