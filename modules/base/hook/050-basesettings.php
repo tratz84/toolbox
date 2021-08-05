@@ -3,6 +3,7 @@
 
 // register tinymce script. Loaded only when needed, because loading sometimes hanged because of it.. :/
 use base\service\SettingsService;
+use core\filter\ModuleEnablerFilter;
 
 hook_register_css('tinymce', '/lib/tinymce/skins/lightgray/skin.min.css', ['position' => 'bottom']);
 hook_register_javascript('tinymce', '/lib/tinymce/tinymce.min.js',        ['position' => 'bottom']);
@@ -17,13 +18,16 @@ hook_register_javascript('iban', '/js/iban.js', ['position' => 'top']);
 
 
 
-// overwrite CSS colors
-$settingsService = object_container_get( SettingsService::class );
-$settings = $settingsService->settingsAsMap();
-$master_base_color = valid_rgbhex($settings['master_base_color']) ? $settings['master_base_color'] : '#f00';
-$rgbMasterColor = hex2rgb($master_base_color);
-
-$coreCssText = <<<CSS
+hook_eventbus_subscribe('core', 'filter-executed', function( $filter ) {
+    
+    // add css after all modules are enabled
+    if (is_a($filter, ModuleEnablerFilter::class)) {
+        // overwrite CSS colors
+        $master_base_color = ctx()->getSetting('master_base_color');
+        $master_base_color = valid_rgbhex($master_base_color) ? $master_base_color : '#f00';
+        $rgbMasterColor = hex2rgb($master_base_color);
+        
+        $coreCssText = <<<CSS
 header .notifications-bar {
     background-color: rgba({$rgbMasterColor[0]}, {$rgbMasterColor[1]}, {$rgbMasterColor[2]}, 1);
 }
@@ -37,7 +41,8 @@ header .notifications-bar {
 }
 
 CSS;
-hook_add_inline_css($coreCssText);
-
+        hook_add_inline_css($coreCssText);
+    }
+});
 
 
