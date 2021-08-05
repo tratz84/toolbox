@@ -155,6 +155,10 @@ function app_request_uri() {
 }
 
 function request_uri_no_params() {
+    if (is_cli()) {
+        throw new InvalidStateException('request_uri_no_params() called in cli-env');
+    }
+    
     $uri = $_SERVER['REQUEST_URI'];
     $p = strrpos($uri, '?');
     
