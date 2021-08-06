@@ -8,10 +8,10 @@
 
 include dirname(__FILE__).'/../config/config.php';
 
-if (is_debug() == false) {
-    print "Exiting.. debug only at the moment\n";
-    exit;
-}
+// if (is_debug() == false) {
+//     print "Exiting.. debug only at the moment\n";
+//     exit;
+// }
 
 
 \core\Context::getInstance()->enableModule('admin');
