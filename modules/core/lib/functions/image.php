@@ -2,6 +2,8 @@
 
 
 
+use core\exception\InvalidArgumentException;
+
 function gd_load_image($path) {
     
     $ext = file_extension($path);
@@ -54,6 +56,29 @@ function gd_image_supported($filename) {
         return false;
     }
 }
+
+
+function gd_image_resize( $img, $newWidth, $newHeight=null) {
+    if (intval($newWidth) <= 0 && intval($newHeight) <= 0) {
+        throw new InvalidArgumentException('Invalid width & height given');
+    }
+    
+    $originalWidth = imagesx( $img );
+    $originalHeight = imagesy( $img );
+    
+    if (intval($newWidth) <= 0) {
+        $newWidth = $originalWidth * $newHeight / $originalHeight; 
+    }
+    if (intval($newHeight) <= 0) {
+        $newHeight = $originalHeight * $newWidth / $originalWidth;
+    }
+    
+    $newimg = imagecreatetruecolor( $newWidth, $newHeight );
+    imagecopyresized( $newimg, $img, 0, 0, 0, 0, $newWidth, $newHeight, $originalWidth, $originalHeight );
+    
+    return $newimg;
+}
+
 
 
 
