@@ -42,7 +42,7 @@ $tb_mtemplateto->addColumn('to_type',        "enum('To','Cc','Bcc')");
 $tb_mtemplateto->addColumn('to_name',        'varchar(255)');
 $tb_mtemplateto->addColumn('to_email',       'varchar(255)');
 $tb_mtemplateto->addColumn('sort',           'int');
-$tbs[] =$tb_mtemplateto;
+$tbs[] = $tb_mtemplateto;
 
 
 
@@ -112,6 +112,16 @@ $tb_email->addForeignKey('webmail__email_ibfk_1', 'user_id', 'base__user', 'user
 $tbs[] = $tb_email;
 
 
+$tb_et = new TableModel('webmail', 'email_tag');
+$tb_et->addColumn('email_tag_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_et->addColumn('tag_name',     'varchar(255)');
+$tb_et->addColumn('sort',         'int');
+$tb_et->addColumn('visible',      'boolean');
+$tb_et->addColumn('edited',       'datetime');
+$tb_et->addColumn('created',      'datetime');
+$tbs[] = $tb_et;
+
+
 $tb_eet = new TableModel('webmail', 'email_email_tag');
 $tb_eet->addColumn('email_email_tag_id',                'bigint', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
 $tb_eet->addColumn('email_id', 'int');
@@ -121,7 +131,6 @@ $tb_eet->addIndex('webmail__email_email_tag_ibfk_2', array('email_tag_id'));
 $tb_eet->addForeignKey('webmail__email_email_tag_ibfk_1', 'email_id', 'webmail__email', 'email_id', 'cascade', 'restrict');
 $tb_eet->addForeignKey('webmail__email_email_tag_ibfk_2', 'email_tag_id', 'webmail__email_tag', 'email_tag_id', 'cascade', 'restrict');
 $tbs[] = $tb_eet;
-
 
 
 $tb_ef = new TableModel('webmail', 'email_file');
@@ -141,15 +150,6 @@ $tb_es->addColumn('edited',           'datetime');
 $tb_es->addColumn('created',          'datetime');
 $tbs[] = $tb_es;
 
-
-$tb_et = new TableModel('webmail', 'email_tag');
-$tb_et->addColumn('email_tag_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
-$tb_et->addColumn('tag_name',     'varchar(255)');
-$tb_et->addColumn('sort',         'int');
-$tb_et->addColumn('visible',      'boolean');
-$tb_et->addColumn('edited',       'datetime');
-$tb_et->addColumn('created',      'datetime');
-$tbs[] = $tb_et;
 
 
 $tb_eto = new TableModel('webmail', 'email_to');
