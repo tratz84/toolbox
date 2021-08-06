@@ -44,3 +44,7 @@ module_update_handler('base', 'init', ['init' => true]);
 
 DatabaseHandler::getConnection('default')->query( "insert into base__user set username='admin', password=?, edited=now(), created=now(), user_type='admin'", array($adminPassword) );
 
+
+hook_eventbus_publish(null, 'core', 'create_environment');
+
+
