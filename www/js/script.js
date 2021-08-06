@@ -587,6 +587,35 @@ function endsWith(haystack, str) {
 
 
 
+function showPageLoading() {
+	hidePageLoading();
+	
+	var bg = $('<div class="page-loading popup-element popup-background" style="z-index: 99992" />');
+	$(document.body).prepend( bg );
+	
+	var nf = $('<div class="page-loading notification" />');
+	nf.css({
+		'z-index':            '99993'
+		, 'background-color': '#fff'
+		, 'color':            '#000'
+		, 'padding':          '20px'
+		, 'position':         'fixed'
+		, 'width':            '80%'
+		, 'left':             '10%'
+		, 'border-radius':    '5px'
+		, 'top':              'calc(50% - 6em)'
+		, 'box-shadow':       '0px 0px 50px #000 '
+	})
+	nf.html('<img src="'+appSettings.base_href+'images/ajax-loader-big.gif" /> &nbsp;&nbsp; Loading...')
+	$(document.body).prepend( nf );
+}
+function hidePageLoading() {
+	$('.page-loading').remove();
+}
+
+
+
+
 function showConfirmation(title, body, callback_ok) {
 	
 	var html = '<div class="confirmation-dialog modal fade" tabindex="-1" role="dialog">';
