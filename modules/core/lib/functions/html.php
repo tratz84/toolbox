@@ -185,6 +185,8 @@ function include_component($module, $controller, $action, $vars=array()) {
     
     $controllerInstance->setActionTemplate($action);
     
+    hook_eventbus_publish($controllerInstance, 'core', 'controller-created');
+    
     if (method_exists($controllerInstance, 'handle_action')) {
         // publish event
         hook_eventbus_publish($controllerInstance, $module, 'include-component');
