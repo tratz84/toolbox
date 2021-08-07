@@ -82,8 +82,13 @@ class BaseController {
     
     public function addJavascript($url) { $this->javascriptFiles[] = $url; }
     
+    public function getTemplateFile() { return $this->templateFile; }
     public function setTemplateFile($f) { $this->templateFile = $f; }
+    
+    public function getDecoratorFile() { return $this->decoratorFile; }
     public function setDecoratorFile($f) { $this->decoratorFile = $f; }
+    
+    public function showDecorator() { return $this->showDecorator; }
     public function setShowDecorator($bln) { $this->showDecorator = $bln; }
     
     public function setActionTemplate($p) { $this->actionTemplate = $p; }
