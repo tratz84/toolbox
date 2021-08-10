@@ -1344,6 +1344,26 @@ function endsiWith($haystack, $val) {
     return endsWith($haystack, $val);
 }
 
+
+function filterPrefixes( $str, $prefixes=array() ) {
+    do {
+        $matchFound = false;
+        foreach($prefixes as $spf) {
+            if (strpos($str, $spf) === 0) {
+                $str = substr($str, strlen($spf));
+                $str = trim($str);
+                
+                $matchFound = true;
+                break;
+            }
+        }
+    } while ($matchFound == true);
+    
+    return $str;
+}
+
+
+
 if (function_exists('mb_trim') == false) {
     function mb_trim($str) {
         return preg_replace("/(^\s+)|(\s+$)/u", "", $str);
