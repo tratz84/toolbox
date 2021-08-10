@@ -546,6 +546,33 @@ function serialize2object( container ) {
 	return obj;
 }
 
+
+
+function copyToClipboard( obj ) {
+	
+	var inp = $('<input type="text" />');
+	inp.val( obj.text() );
+	$(document.body).append( inp );
+
+	inp.get(0).select();
+	inp.get(0).setSelectionRange(0, 99999); /* For mobile devices */
+
+	var r = document.execCommand("copy");
+	
+	inp.remove();
+	
+	if (r) {
+		show_user_message( toolbox_t('Text copied to clipboard') );
+	}
+	else {
+		show_user_warning( toolbox_t('Failed to copy text to clipboard') );
+	}
+
+}
+
+
+
+
 function handle_deleteConfirmation() {
 	$('a.delete').click( handle_deleteConfirmation_event );
 }

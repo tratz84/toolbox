@@ -114,6 +114,10 @@ $lang['Click here to go back to the dashboard']         = 'Klik hier om terug te
 
 $lang['Error: changed not saved, page reloaded: '] = 'Error: wijzigingen niet opgeslagen, pagina herladen: ';
 
+$lang['Text copied to clipboard'] = 'Tekst naar klembord gekopieerd';
+$lang['Failed to copy text to clipboard'] = 'Mislukt tekst naar klembord te kopieeren';
+
+
 return $lang;
 
 

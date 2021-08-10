@@ -35,6 +35,7 @@ use core\forms\TimePickerField;
 use core\forms\WeekField;
 use core\forms\WidgetContainer;
 use customer\forms\CustomerSelectWidget;
+use core\forms\CopyToClipboardField;
 
 class GeneratorHelper {
     
@@ -259,6 +260,12 @@ class GeneratorHelper {
             'label' => 'Html-field'
         );
 
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => CopyToClipboardField::class,
+            'label' => 'Copy-to-Clipboard-field'
+        );
+        
         $formWidgets[] = array(
             'type' => 'widget',
             'class' => HtmlDateField::class,
