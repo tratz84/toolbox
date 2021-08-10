@@ -22,9 +22,11 @@ class FieldSetContainer extends WidgetContainer {
         
         $html .= '<legend>'.$this->getLabel().'</legend>';
         
+        $html .= '<div class="fieldset-content">';
         foreach($this->widgets as $w) {
             $html .= $w->render();
         }
+        $html .= '</div>';
         
         $html .= '</fieldset>';
         
