@@ -7,6 +7,7 @@ use codegen\form\widgetoptions\CheckboxOptionsForm;
 use codegen\form\widgetoptions\ContainerOptionsForm;
 use codegen\form\widgetoptions\DatePickerOptionsForm;
 use codegen\form\widgetoptions\HiddenOptionsForm;
+use codegen\form\widgetoptions\HtmlDateOptionsForm;
 use codegen\form\widgetoptions\ListEditWidgetsOptionsForm;
 use codegen\form\widgetoptions\ListFormWidgetsOptionsForm;
 use codegen\form\widgetoptions\RadioOptionsForm;
@@ -18,7 +19,11 @@ use core\forms\ColorPickerField;
 use core\forms\DatePickerField;
 use core\forms\DateTimePickerField;
 use core\forms\EmailField;
+use core\forms\FieldSetContainer;
+use core\forms\FileField;
 use core\forms\HiddenField;
+use core\forms\HtmlDateField;
+use core\forms\HtmlDatetimeField;
 use core\forms\HtmlField;
 use core\forms\MonthField;
 use core\forms\RadioField;
@@ -30,10 +35,6 @@ use core\forms\TimePickerField;
 use core\forms\WeekField;
 use core\forms\WidgetContainer;
 use customer\forms\CustomerSelectWidget;
-use core\forms\HtmlDateField;
-use core\forms\HtmlDatetimeField;
-use codegen\form\widgetoptions\HtmlDateOptionsForm;
-use core\forms\FileField;
 
 class GeneratorHelper {
     
@@ -134,6 +135,13 @@ class GeneratorHelper {
             'label' => 'container'
         );
 
+        $formWidgets[] = array(
+            'type' => 'container',
+            'class' => FieldSetContainer::class,
+            'editor' => ContainerOptionsForm::class,
+            'label' => 'FieldSet Container'
+        );
+        
         $formWidgets[] = array(
             'type' => 'widget',
             'class' => HiddenField::class,

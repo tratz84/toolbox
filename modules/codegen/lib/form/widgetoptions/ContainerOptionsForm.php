@@ -12,7 +12,7 @@ class ContainerOptionsForm extends DefaultWidgetOptionsForm {
         
         $this->getWidget('name')->setValue('container');
         
-        $this->removeWidget('label');
+//         $this->removeWidget('label');
         $this->removeWidget('defaultValue');
         
     }
