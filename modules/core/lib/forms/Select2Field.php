@@ -56,24 +56,47 @@ class Select2Field extends BaseWidget {
         
         $extraClass = $this->hasError() ? 'error' : '';
         
-        $html .= '<div class="widget select-field-widget '.$extraClass.'">';
-        $html .= '<label>'.esc_html($this->getLabel()).'</label>';
-        $html .= '<select name="'.esc_attr($this->getName()).'">';
+        $html .= '<div class="widget select-field-widget '.$extraClass.'">' . PHP_EOL;
+        $html .= '<label>'.esc_html($this->getLabel()).'</label>' . PHP_EOL;
+        $html .= '<select name="'.esc_attr($this->getName()).'">' . PHP_EOL;
         
-        foreach($this->optionItems as $key => $val) {
-            if ($val['active'] || $key == $this->getValue()) {
-                $active = true;
-            } else {
-                $active = false;
-            }
-            
-            $html .= '<option value="'.esc_attr($key).'" style="'.($active?'':'display:none;').'" '.($key == $this->getValue()?'selected="selected"':'').'>'.esc_html($val['description']).'</option>';
-        }
-        $html .= '</select>';
-        $html .= '</div>';
+        $html .= $this->renderOptions( $this->optionItems );
+        
+        $html .= '</select>' . PHP_EOL;
+        $html .= '</div>' . PHP_EOL;
         
         return $html;
     }
+    
+    
+    
+    protected function renderOptions( $optionItems ) {
+        $html = '';
+        
+        foreach($optionItems as $key => $val) {
+            
+            if (isset($val['optgroup']) && $val['optgroup']) {
+                $html .= '<optgroup label="'.esc_attr($val['description']).'">'.PHP_EOL;
+                if (isset($val['items'])) {
+                    $html .= $this->renderOptions( $val['items'] );
+                }
+                $html .= '</optgroup>'.PHP_EOL;
+            }
+            else {
+                if ((isset($val['active']) == false || $val['active']) || $key == $this->getValue()) {
+                    $active = true;
+                } else {
+                    $active = false;
+                }
+                
+                $html .= '<option value="'.esc_attr($key).'" style="'.($active?'':'display:none;').'" '.($key == $this->getValue()?'selected="selected"':'').'>'.esc_html($val['description']).'</option>' . PHP_EOL;
+            }
+        }
+        
+        return $html;
+    }
+    
+    
     
     
 }
