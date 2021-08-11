@@ -230,6 +230,55 @@ class UserService extends ServiceBase {
         
     }
     
+    /**
+     * 
+     * @param int $userId
+     * @param array $capabilities - [ ['module_name' => ..., 'capability_code' => ....], ... ]
+     */
+    public function setUserCapabilities( $userId, $capabilities=array() ) {
+        
+        $user = $this->readUser( $userId );
+        
+        $caps = $user->getCapabilities();
+        
+        // delete old
+        foreach( $caps as $c ) {
+            $found = false;
+            
+            foreach($capabilities as $newCap) {
+                if ($c->getModuleName() == $newCap['module_name'] && $c->getCapabilityCode() == $newCap['capability_code']) {
+                    $found = true;
+                    break;
+                }
+            }
+            
+            if ($found == false)
+                $c->delete();
+        }
+        
+        
+        // add new
+        foreach($capabilities as $newCap) {
+            $found = false;
+            
+            foreach( $caps as $c ) {
+                if ($c->getModuleName() == $newCap['module_name'] && $c->getCapabilityCode() == $newCap['capability_code']) {
+                    $found = true;
+                    break;
+                }
+            }
+            
+            if ($found == false) {
+                $uc = new UserCapability();
+                $uc->setUserId( $userId );
+                $uc->setModuleName( $newCap['module_name'] );
+                $uc->setCapabilityCode( $newCap['capability_code'] );
+                $uc->save();
+            }
+        }
+        
+    }
+    
     
     
     public function readResetPassword($resetPasswordId, $securityString=null) {

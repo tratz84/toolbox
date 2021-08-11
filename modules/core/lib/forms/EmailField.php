@@ -19,13 +19,18 @@ class EmailField extends BaseWidget {
     public function render() {
         $html = '';
         
+        $attrs = '';
+        foreach($this->attributes as $key => $val) {
+            $attrs .= ' '.$key.'="'.esc_attr($val).'"';
+        }
+        
         $extraClass = $this->hasError() ? 'error' : '';
         
         $strPlaceholder = $this->placeholder ? 'placeholder="'.esc_attr($this->getLabel()).'"':'';
         
         $html .= '<div class="widget email-field-widget '.$extraClass.'">';
         $html .= '<label>'.esc_html($this->getLabel()).'</label>';
-        $html .= '<input type="email" name="'.esc_attr($this->getName()).'" value="'.esc_attr($this->getValue()).'" '.$strPlaceholder.' />';
+        $html .= '<input'.$attrs.' type="email" name="'.esc_attr($this->getName()).'" value="'.esc_attr($this->getValue()).'" '.$strPlaceholder.' />';
         $html .= '</div>';
         
         return $html;

@@ -63,7 +63,7 @@ $tb_connector->addColumn('active',                        'boolean');
 $tb_connector->addColumn('edited',                        'datetime');
 $tb_connector->addColumn('created',                       'datetime');
 $tb_connector->addIndex('email__connector_ibfk_1', array('user_id'));
-$tb_connector->addForeignKey('email__connector_ibfk_1', 'user_id', 'base__user', 'user_id', 'set null', 'restrict');
+// $tb_connector->addForeignKey('email__connector_ibfk_1', 'user_id', 'base__user', 'user_id', 'set null', 'restrict');
 $tbs[] = $tb_connector;
 
 
@@ -108,7 +108,7 @@ $tb_email->addIndex('webmail__email_ibfk_1', array('user_id'));
 $tb_email->addIndex('id_search_id', array('search_id'));
 $tb_email->addIndex('connector_imapfolder_id', array('connector_imapfolder_id'));
 $tb_email->addIndex('text_content', array('text_content'), ['fulltext' => true]);
-$tb_email->addForeignKey('webmail__email_ibfk_1', 'user_id', 'base__user', 'user_id', 'set null', 'restrict');
+// $tb_email->addForeignKey('webmail__email_ibfk_1', 'user_id', 'base__user', 'user_id', 'set null', 'restrict');
 $tbs[] = $tb_email;
 
 
