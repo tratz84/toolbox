@@ -3,6 +3,8 @@
 
 namespace base\model;
 
+use core\event\CapabilityEvent;
+
 
 class User extends base\UserBase {
 
@@ -28,6 +30,24 @@ class User extends base\UserBase {
     }
     public function getCapabilities() { return $this->capabilities; }
     public function hasCapability($moduleName, $capabilityCode) {
+        // module disabled? => always return false
+        if (ctx()->isModuleEnabled($moduleName) == false)
+            return false;
+        
+        
+        if ($this->getUserType() == 'admin')
+            return true;
+        
+        if ($moduleName == 'core' && $capabilityCode == 'userType.user' && $this->getUserType() == 'user')
+            return true;
+                    
+        // publish capability event
+        $cc = new CapabilityEvent($moduleName, $capabilityCode);
+        hook_eventbus_publish($cc, 'core', 'has-capability');
+        if ($cc->hasResult()) {
+            return $cc->getResult();
+        }
+        
         return isset($this->capabilityMap[$moduleName.'.'.$capabilityCode]) ? true : false;
     }
     
