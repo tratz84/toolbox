@@ -10,6 +10,7 @@ class FieldSetContainer extends WidgetContainer {
     public function __construct($name='widget-container', $label=null) {
         parent::__construct( $name );
         
+        $this->setName( $name );
         $this->setLabel( $label );
     }
     
