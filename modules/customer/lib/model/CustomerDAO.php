@@ -49,6 +49,7 @@ class CustomerDAO extends \core\db\DAOObject {
         if (isset($opts['limit'])) {
             $start = isset($opts['start']) ? intval($opts['start']) : 0;
             $limit = intval($opts['limit']);
+            $limit = apply_filter('CustomerDAO::search-limit', $limit);
             
             $sql .= " LIMIT {$start}, {$limit}";
         }
