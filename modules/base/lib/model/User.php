@@ -43,6 +43,7 @@ class User extends base\UserBase {
                     
         // publish capability event
         $cc = new CapabilityEvent($moduleName, $capabilityCode);
+        $cc->setUser( $this );
         hook_eventbus_publish($cc, 'core', 'has-capability');
         if ($cc->hasResult()) {
             return $cc->getResult();
