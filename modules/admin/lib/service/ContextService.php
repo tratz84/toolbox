@@ -20,5 +20,12 @@ class ContextService extends ServiceBase {
         return $cDao->readByName($contextName);
     }
     
+    public function updateContextDescription( $contextName, $description ) {
+        
+        $cDao = new CustomerDAO();
+        
+        $cDao->updateDescriptionByName( $contextName, $description );
+        
+    }
     
 }

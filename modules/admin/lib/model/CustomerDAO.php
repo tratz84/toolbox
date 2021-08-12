@@ -43,5 +43,8 @@ class CustomerDAO extends \core\db\DAOObject {
 	    $this->query('update toolbox__customer set description = ? where customer_id = ?', array( $description, $customerId ));
 	}
 	
+	public function updateDescriptionByName( $contextName, $description ) {
+	    $this->query('update toolbox__customer set description = ? where contextName = ?', array( $description, $contextName ));
+	}
 }
 
