@@ -5,6 +5,7 @@ namespace base\model;
 
 
 use base\menu\MasterDataMenu;
+use base\menu\MenuActiveResult;
 
 class Menu extends base\MenuBase {
 
@@ -57,34 +58,38 @@ class Menu extends base\MenuBase {
     
     
     public function isActive() {
+        $r = false;
         
         $url = '/' . substr($_SERVER['REQUEST_URI'], strlen(appUrl('/')));
         $controller = \core\Context::getInstance()->getController();
         
         if ($this->getUrl() == '/') {
             if ($controller == 'dashboard') {
-                return true;
+                $r = true;
             }
         } else if (strpos($url, $this->getUrl()) === 0) {
-            return true;
+            $r = true;
         }
         // hmz.. hacky, moet beter
         else if ($this->getUrl() == '/?m=rental&c=contract/view' && strpos($url, '/?m=rental&c=contract/wizard') === 0) {
-            return true;
+            $r = true;
         } else if ($this->getUrl() == '/?m=base&c=masterdata/index') {
             $mdm = MasterDataMenu::generate();
             
             foreach($mdm->getMenu() as $section => $items) {
                 foreach($items as $i) {
                     if (strpos($url, $i['url']) === 0) {
-                        return true;
+                        $r = true;
                     }
                 }
             }
         }
         
+        $mar = new MenuActiveResult($this, $r);
         
-        return false;
+        hook_eventbus_publish($mar, 'base', 'Menu::isActive');
+        
+        return $mar->getResult();
     }
     
 }
