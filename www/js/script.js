@@ -373,8 +373,17 @@ if (typeof less != 'undefined') {
 	});
 }
 
-
-
+// pageLoaded handles debug-environment's less'
+function pageLoaded(func) {
+	if (typeof less != 'undefined') {
+		less.pageLoadFinished.then(function() {
+			func();
+		});
+	}
+	else {
+		$(document).ready( func );
+	}
+}
 
 /**
  * event handling submit-form-link rechtsboven formulier-pagina's
