@@ -14,6 +14,7 @@ class BaseWidget {
     
     protected $name;
     protected $label;
+    protected $escapeLabel = true;
     protected $value;
     protected $blnError;
     protected $arrRenderFunctions = array();
@@ -29,6 +30,9 @@ class BaseWidget {
     
     public function getLabel() { return $this->label; }
     public function setLabel($n) { $this->label = $n; }
+    
+    public function getEscapeLabel() { return $this->escapeLabel; }
+    public function setEscapeLabel($bln) { $this->escapeLabel = $bln ? true : false; }
     
     public function getValue() { return $this->value; }
     public function setValue($n) { $this->value = $n; }
@@ -132,9 +136,13 @@ class BaseWidget {
         
         $for_name = isset($this->attributes['name']) ? $this->attributes['name'] : '';
         
+        $htmlLabel = $this->getLabel();
+        if ( $this->getEscapeLabel() )
+            $htmlLabel = esc_html( $htmlLabel );
+        
         $html = '';
         $html .= '<div class="'.implode(' ', $this->containerClasses).'">';
-        $html .= '<label for="'.esc_attr($for_name).'">'.esc_html($this->getLabel()).infopopup($this->getInfoText()).'</label>';
+        $html .= '<label for="'.esc_attr($for_name).'">'.$htmlLabel.infopopup($this->getInfoText()).'</label>';
         $html .= $this->renderTag();
         $html .= '</div>';
         
