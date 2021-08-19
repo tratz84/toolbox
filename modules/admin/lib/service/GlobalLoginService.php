@@ -37,6 +37,9 @@ class GlobalLoginService extends ServiceBase {
         $l=$aDao->readBySecurityString($autologinId, $securityString);
         
         if (count($l)) {
+            // set last_used, for stats & cleaning purposes
+            $aDao->updateLastUsed( $l[0]->getAutologinId() );
+            
             return $l[0];
         } else {
             return null;

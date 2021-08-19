@@ -25,6 +25,14 @@ class AutologinDAO extends \core\db\DAOObject {
 	    
 	    return $this->query($sql, array($contextName, $username));
 	}
+	
+	
+	public function updateLastUsed( $autologinId ) {
+	    $this->query('update toolbox__autologin 
+                        set lastUsed = ? 
+                        where autologin_id = ?'
+	               , array(date('Y-m-d H:i:s'), $autologinId));
+	}
 
 }
 
