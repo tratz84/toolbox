@@ -29,13 +29,13 @@ t.setRowClick(function(row, evt) {
 t.setConnectorUrl( '/?m=calendar&c=calendar&a=search' );
 
 
-t.addColumn({
-	fieldName: 'calendar_id',
-	width: 40,
-	fieldDescription: 'Id',
-	fieldType: 'text',
-	searchable: false
-});
+// t.addColumn({
+// 	fieldName: 'calendar_id',
+// 	width: 40,
+// 	fieldDescription: 'Id',
+// 	fieldType: 'text',
+// 	searchable: false
+// });
 t.addColumn({
 	fieldName: 'name',
 	fieldDescription: 'Kalendernaam',
