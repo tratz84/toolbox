@@ -39,13 +39,13 @@ t.setSortUpdate(function(evt) {
 	});
 });
 
-t.addColumn({
-	fieldName: 'filter_id',
-	width: 40,
-	fieldDescription: 'Id',
-	fieldType: 'text',
-	searchable: false
-});
+// t.addColumn({
+// 	fieldName: 'filter_id',
+// 	width: 40,
+// 	fieldDescription: 'Id',
+// 	fieldType: 'text',
+// 	searchable: false
+// });
 
 t.addColumn({
 	fieldName: 'name',
