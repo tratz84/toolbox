@@ -970,7 +970,7 @@ function previous_day($date, $no=1) {
 }
 
 
-function next_week($date, $no) {
+function next_week($date, $no=1) {
     return next_day($date, $no * 7);
 }
 
