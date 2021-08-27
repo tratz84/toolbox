@@ -180,19 +180,19 @@ class VEvent extends VEventInstance {
         $ymditemStart = (int)format_date($this->getStartDate(), 'Ymd');
         $ymditemEnd = (int)format_date($this->getEndDate(), 'Ymd');
         
-        $dt = new \DateTime($this->getStartDate());
+        $dt = format_date($this->getStartDate(), 'Y-m-d');
         
         // set date to start of week
-        if ($dt->format('N') > 1) {
-            $dt->modify('-'.($dt->format('N')-1) . ' day');
+        if (format_date($dt, 'N') > 1) {
+            $dt = previous_day( $dt, 1 );
         }
         
         // move $dt to start of period
-        while ((int)$dt->format('Ymd') < $ymdstart) {
-            $dt->modify('+' . $this->interval . ' week');
+        while ((int)format_date($dt, 'Ymd') < $ymdstart) {
+            $dt = next_day( $dt );
         }
 
-        while ((int)$dt->format('Ymd') <= $ymdend && (!$ymditemEnd || (int)$dt->format('Ymd') <= $ymditemEnd)) {
+        while ((int)format_date($dt, 'Ymd') <= $ymdend && (!$ymditemEnd || (int)format_date($dt, 'Ymd') <= $ymditemEnd)) {
             $days = explode(',', $this->byDay);
             foreach ($days as $d) {
                 if (isset($this->daysToNum[$d]) == false) continue;
@@ -200,23 +200,22 @@ class VEvent extends VEventInstance {
                 // move to right day
                 $dayno = $this->daysToNum[$d];
                 
-                $dt2 = clone $dt;
-                if ($dt2->format('N') != $dayno) {
-                    $dt2->modify('+' . ($dayno-1) . ' day');
+                $dt2 = $dt;
+                if (format_date($dt2, 'N') != $dayno) {
+                    $dt2 = next_day($dt2);
                 }
                 
                 // peildatum voor startdatum?
-                if ((int)$dt2->format('Ymd') < $ymditemStart)
+                if ((int)format_date($dt2, 'Ymd') < $ymditemStart)
                     continue;
                 
                 // peildatum na einddatum
-                if ($ymditemEnd && (int)$dt2->format('Ymd') > $ymditemEnd)
+                if ($ymditemEnd && (int)format_date($dt2, 'Ymd') > $ymditemEnd)
                     continue;
-                
                 
                 $i = new VEventInstance();
                 $i->setId($this->getId());
-                $i->setStartDate($dt2->format('Y-m-d'));
+                $i->setStartDate(format_date($dt2, 'Y-m-d'));
                 $i->setStartTime($this->getStartTime());
                 $i->setEndTime($this->getEndTime());
                 $i->setAllDay($this->getAllDay());
@@ -227,12 +226,12 @@ class VEvent extends VEventInstance {
                 $i->setRecurrent(true);
                 
                 // skip EX-dates
-                if (in_array($dt->format('Y-m-d'), $exDates) == false) {
+                if (in_array(format_date($dt, 'Y-m-d'), $exDates) == false) {
                     $instances[] = $i;
                 }
             }
             
-            $dt->modify('+' . $this->interval . ' week');
+            $dt = next_week( $dt );
         }
         
         return $instances;
