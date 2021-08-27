@@ -122,6 +122,8 @@ class viewController extends BaseController {
         // existing item with recurrence-rule, but editing 'Exemplaar' => set start_date to selected_date
         if ($calendarItem->isNew() == false && get_var('edit_derived_item') == true) {
             $this->form->getWidget('start_date')->setValue(format_date($_REQUEST['startDate'], 'Y-m-d'));
+            $this->form->getWidget('end_date')->setValue( null );
+            
             $this->form->getWidget('recurrence_type')->resetValues();
         }
         

@@ -201,7 +201,7 @@ class VEvent extends VEventInstance {
                 $dayno = $this->daysToNum[$d];
                 
                 $dt2 = $dt;
-                if (format_date($dt2, 'N') != $dayno) {
+                while (format_date($dt2, 'N') != $dayno) {
                     $dt2 = next_day($dt2);
                 }
                 
@@ -226,7 +226,7 @@ class VEvent extends VEventInstance {
                 $i->setRecurrent(true);
                 
                 // skip EX-dates
-                if (in_array(format_date($dt, 'Y-m-d'), $exDates) == false) {
+                if (in_array(format_date($dt2, 'Y-m-d'), $exDates) == false) {
                     $instances[] = $i;
                 }
             }
