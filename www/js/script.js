@@ -74,7 +74,9 @@ $(document).ready(function() {
 
 	
 	setTimeout(function() {
-		$('.alert.alert-success').not('.called-from-js').slideUp();
+		$('.alert.alert-success').not('.called-from-js').slideUp(function() {
+			$(window).trigger('resize');
+		});
 	}, 3500);
 	
 });
