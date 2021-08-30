@@ -1534,5 +1534,23 @@ function cleanup_string($string) {
 }
 
 
+function excel_date2daycount( $date ) {
+    if (valid_date($date) == false)
+        return null;
+    
+    $d = format_date($date, 'Y-m-d');
+    
+    return days_between('1900-12-30', $d, false )+1;
+}
+
+function excel_daycount2date( $dayCount ) {
+    // 25569-days = difference start unix timestamp
+    $t = ($dayCount - 25569) * 86400;
+    
+    return date('Y-m-d', $t);
+}
+
+
+
 
 
