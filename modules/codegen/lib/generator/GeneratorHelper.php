@@ -14,8 +14,10 @@ use codegen\form\widgetoptions\RadioOptionsForm;
 use codegen\form\widgetoptions\SelectOptionsForm;
 use codegen\form\widgetoptions\TextareaOptionsForm;
 use codegen\form\widgetoptions\TimePickerOptionsForm;
+use core\forms\AudioField;
 use core\forms\CheckboxField;
 use core\forms\ColorPickerField;
+use core\forms\CopyToClipboardField;
 use core\forms\DatePickerField;
 use core\forms\DateTimePickerField;
 use core\forms\EmailField;
@@ -35,7 +37,6 @@ use core\forms\TimePickerField;
 use core\forms\WeekField;
 use core\forms\WidgetContainer;
 use customer\forms\CustomerSelectWidget;
-use core\forms\CopyToClipboardField;
 
 class GeneratorHelper {
     
@@ -283,6 +284,11 @@ class GeneratorHelper {
             'type' => 'widget',
             'class' => UserSelectWidget::class,
             'label' => 'User select'
+        );
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => AudioField::class,
+            'label' => 'Audio upload'
         );
         $formWidgets[] = array(
             'type' => 'widget',
