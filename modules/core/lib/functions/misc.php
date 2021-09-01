@@ -1419,28 +1419,28 @@ function months_between($start, $end) {
 function toolbox_mime_content_type($filename) {
     $mime_types = array(
         
-        'txt' => 'text/plain',
-        'htm' => 'text/html',
+        'txt'  => 'text/plain',
+        'htm'  => 'text/html',
         'html' => 'text/html',
-        'php' => 'text/html',
-        'css' => 'text/css',
-        'js' => 'application/javascript',
+        'php'  => 'text/html',
+        'css'  => 'text/css',
+        'js'   => 'application/javascript',
         'json' => 'application/json',
-        'xml' => 'application/xml',
-        'swf' => 'application/x-shockwave-flash',
-        'flv' => 'video/x-flv',
+        'xml'  => 'application/xml',
+        'swf'  => 'application/x-shockwave-flash',
+        'flv'  => 'video/x-flv',
         
         // images
-        'png' => 'image/png',
-        'jpe' => 'image/jpeg',
+        'png'  => 'image/png',
+        'jpe'  => 'image/jpeg',
         'jpeg' => 'image/jpeg',
-        'jpg' => 'image/jpeg',
-        'gif' => 'image/gif',
-        'bmp' => 'image/bmp',
-        'ico' => 'image/vnd.microsoft.icon',
+        'jpg'  => 'image/jpeg',
+        'gif'  => 'image/gif',
+        'bmp'  => 'image/bmp',
+        'ico'  => 'image/vnd.microsoft.icon',
         'tiff' => 'image/tiff',
-        'tif' => 'image/tiff',
-        'svg' => 'image/svg+xml',
+        'tif'  => 'image/tiff',
+        'svg'  => 'image/svg+xml',
         'svgz' => 'image/svg+xml',
         
         // archives
@@ -1451,16 +1451,18 @@ function toolbox_mime_content_type($filename) {
         'cab' => 'application/vnd.ms-cab-compressed',
         
         // audio/video
+        'wav' => 'audio/wav',
+        'ogg '=> 'audio/ogg',
         'mp3' => 'audio/mpeg',
-        'qt' => 'video/quicktime',
+        'qt'  => 'video/quicktime',
         'mov' => 'video/quicktime',
         
         // adobe
         'pdf' => 'application/pdf',
         'psd' => 'image/vnd.adobe.photoshop',
-        'ai' => 'application/postscript',
+        'ai'  => 'application/postscript',
         'eps' => 'application/postscript',
-        'ps' => 'application/postscript',
+        'ps'  => 'application/postscript',
         
         // ms office
         'doc' => 'application/msword',
