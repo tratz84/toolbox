@@ -320,9 +320,9 @@ class SolrMail {
         $pos=0;
         foreach($tmpAttachments as $att) {
             // inline? => skip
-            if ($att->getContentID()) {
-                continue;
-            }
+//             if ($att->getContentID()) {
+//                 continue;
+//             }
             $this->attachments[] = array(
                 'pos'      => $pos,
                 'filename' => $att->getFilename()
