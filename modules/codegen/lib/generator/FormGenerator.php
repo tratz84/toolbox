@@ -42,7 +42,7 @@ class FormGenerator {
         $ns = $this->getNamespace();
         $classname = $this->getClassName();
         
-        $path = module_file($module, '/lib/form/'.($ns?str_replace('\\','/',$ns).'/':'').$classname.'.php');
+        $path = module_file($moduleName, '/lib/form/'.($ns?str_replace('\\','/',$ns).'/':'').$classname.'.php');
         
         if ($path) {
             unlink($path);
