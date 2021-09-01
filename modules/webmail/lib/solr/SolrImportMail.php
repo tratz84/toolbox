@@ -161,10 +161,11 @@ class SolrImportMail {
         foreach($att as $at) {
             $attHeaders = $at->getHeaders();
             
-            if (isset($attHeaders['content-id'])) {
-                // content-id set? => attachment used in e-mail. Don't count as attachment
-            }
-            else if (isset($attHeaders['content-disposition']) && stripos($attHeaders['content-disposition'], 'attachment') !== false) {
+//             if (isset($attHeaders['content-id'])) {
+//                 // content-id set? => attachment used in e-mail. Don't count as attachment
+//             }
+//             else 
+            if (isset($attHeaders['content-disposition']) && stripos($attHeaders['content-disposition'], 'attachment') !== false) {
                 $attachmentCount++;
             }
             else if ($at->getContentDisposition() == 'attachment') {
