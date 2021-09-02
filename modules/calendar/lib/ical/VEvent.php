@@ -206,11 +206,11 @@ class VEvent extends VEventInstance {
                 }
                 
                 // peildatum voor startdatum?
-                if ((int)format_date($dt2, 'Ymd') < $ymditemStart)
+                if ((int)format_date($dt2, 'Ymd') < $ymdstart)
                     continue;
                 
                 // peildatum na einddatum
-                if ($ymditemEnd && (int)format_date($dt2, 'Ymd') > $ymditemEnd)
+                if ($ymditemEnd && (int)format_date($dt2, 'Ymd') > $ymdend)
                     continue;
                 
                 $i = new VEventInstance();
