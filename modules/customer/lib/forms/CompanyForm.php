@@ -41,7 +41,11 @@ class CompanyForm extends BaseForm {
 //         $this->addCompanyTypes();
         
         $this->addWidget( new TextField('company_name', '', t('Company name')) );
+        $this->getWidget('company_name')->setAttribute('autocomplete', 'off');
+        
         $this->addWidget( new TextField('contact_person', '', t('Contact person')) );
+        $this->getWidget('contact_person')->setAttribute('autocomplete', 'off');
+        
         $this->addWidget( new TextField('coc_number', '', t('Coc number')) );
         $this->addWidget( new TextField('vat_number', '', t('VAT number')) );
         $this->addWidget( new TextField('iban', '', 'IBAN') );
