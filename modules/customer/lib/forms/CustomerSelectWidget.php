@@ -6,7 +6,6 @@ use customer\service\CompanyService;
 use customer\service\PersonService;
 use core\ObjectContainer;
 use core\forms\DynamicSelectField;
-use invoice\model\Offer;
 
 class CustomerSelectWidget extends DynamicSelectField {
     
