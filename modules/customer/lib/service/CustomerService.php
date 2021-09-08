@@ -10,6 +10,7 @@ use core\ObjectContainer;
 use core\forms\lists\ListResponse;
 use core\service\ServiceBase;
 use customer\model\EmailDAO;
+use customer\model\CompanyDAO;
 
 class CustomerService extends ServiceBase {
     
@@ -186,6 +187,33 @@ class CustomerService extends ServiceBase {
         }
         
         return null;
+    }
+    
+    
+    public function readAllCustomers( ){
+        $sql = "select *
+                from (
+                    select concat('company-', company_id) customer_id, company_name name
+                    from customer__company cc
+                    union
+                    select concat('person-', person_id) customer_id, concat( firstname, ' ', insert_lastname, ' ', lastname) name
+                    from customer__person cp
+                ) customer
+                order by customer.name asc";
+        
+        $cDao = new CompanyDAO();
+        $cursor = $cDao->queryCursor( $sql );
+        
+        $customers = array();
+        while ($c = $cursor->next()) {
+            $rec = array();
+            $rec['customer_id'] = $c->getField('customer_id');
+            $rec['name']        = $c->getField('name');
+            
+            $customers[] = $rec;
+        }
+        
+        return $customers;
     }
     
 }
