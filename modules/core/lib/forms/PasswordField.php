@@ -4,6 +4,7 @@ namespace core\forms;
 
 class PasswordField extends BaseWidget {
     
+    protected $renderEmptyValue = true;
     
     public function __construct($name, $value=null, $label=null) {
         
@@ -14,6 +15,12 @@ class PasswordField extends BaseWidget {
     }
     
     public function setPlaceholder($str) { $this->options['placeholder'] = $str; }
+    
+    
+    public function setRenderEmptyValue($bln) { $this->renderEmptyValue = $bln; }
+    public function getRenderEmptyValue() { return $this->renderEmptyValue; }
+    
+    
     
     public function render() {
         
@@ -36,7 +43,10 @@ class PasswordField extends BaseWidget {
         
         $this->setAttribute('autocomplete', 'new-password');
         
-        $this->setAttribute('value', '');//$this->getValue());
+        if ($this->getRenderEmptyValue())
+            $this->setAttribute('value', '');
+        else
+            $this->setAttribute('value', $this->getValue());
         
         return parent::render();
     }
