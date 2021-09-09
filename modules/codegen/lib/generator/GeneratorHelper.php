@@ -37,6 +37,7 @@ use core\forms\TimePickerField;
 use core\forms\WeekField;
 use core\forms\WidgetContainer;
 use customer\forms\CustomerSelectWidget;
+use customer\forms\CustomerSimpleSelectWidget;
 
 class GeneratorHelper {
     
@@ -240,6 +241,12 @@ class GeneratorHelper {
             'class' => RadioField::class,
             'editor' => RadioOptionsForm::class,
             'label' => 'Radio'
+        );
+        
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => CustomerSimpleSelectWidget::class,
+            'label' => 'Customer simple select'
         );
         
         $formWidgets[] = array(
