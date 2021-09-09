@@ -193,10 +193,10 @@ class CustomerService extends ServiceBase {
     public function readAllCustomers( ){
         $sql = "select *
                 from (
-                    select concat('company-', company_id) customer_id, company_name name
+                    select concat('company-', company_id) customer_id, company_name name, deleted
                     from customer__company cc
                     union
-                    select concat('person-', person_id) customer_id, concat( firstname, ' ', insert_lastname, ' ', lastname) name
+                    select concat('person-', person_id) customer_id, concat( firstname, ' ', insert_lastname, ' ', lastname) name, deleted
                     from customer__person cp
                 ) customer
                 order by customer.name asc";
@@ -209,6 +209,7 @@ class CustomerService extends ServiceBase {
             $rec = array();
             $rec['customer_id'] = $c->getField('customer_id');
             $rec['name']        = $c->getField('name');
+            $rec['deleted']     = $c->getField('deleted') ? true : false;
             
             $customers[] = $rec;
         }
