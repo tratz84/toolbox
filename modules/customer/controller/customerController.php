@@ -129,6 +129,25 @@ class customerController extends BaseController {
     }
     
     
+    public function action_all_customers() {
+        $customerService = object_container_get( CustomerService::class );
+        
+        $customers = $customerService->readAllCustomers();
+        
+        $result = array();
+        $result['success'] = true;
+        $result['customers'] = array();
+        foreach($customers as $c) {
+            $result['customers'][] = array(
+                'customer_id' => $c['customer_id']
+                , 'name' => $c['name']
+            );
+        }
+        
+        $this->json($result);
+    }
+    
+    
 }
 
 

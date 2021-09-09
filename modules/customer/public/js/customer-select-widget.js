@@ -8,12 +8,12 @@ $(document).ready(function() {
 
 
 
-function newCustomerPopup_Click() {
+function newCustomerPopup_Click( objAnchor ) {
 	
 	show_popup( appUrl('/?m=customer&c=popup/newCustomer'), {
 		renderCallback: function(popup) {
 			$(popup).find('.submit-form').click(function() {
-				newCustomerPopup_handleSubmit();
+				newCustomerPopup_handleSubmit( objAnchor );
 			});
 //			applyWidgetFields( popup );
 		}
@@ -21,21 +21,21 @@ function newCustomerPopup_Click() {
 }
 
 
-function newCustomerPopup_handleSubmit() {
+function newCustomerPopup_handleSubmit( objAnchor ) {
 	
 	var activeTab = $('.popup-container .nav-tabs a.nav-item.active');
 	
 	if (activeTab.data('tab-name') == 'company') {
-		newCustomerPopup_handleCompanySubmit();
+		newCustomerPopup_handleCompanySubmit( objAnchor );
 	}
 	
 	if (activeTab.data('tab-name') == 'person') {
-		newCustomerPopup_handlePersonSubmit();
+		newCustomerPopup_handlePersonSubmit( objAnchor );
 	}
 	
 }
 
-function newCustomerPopup_handleCompanySubmit() {
+function newCustomerPopup_handleCompanySubmit( objAnchor ) {
 	$.ajax({
 		type: 'POST',
 		url: appUrl('/?m=customer&c=popup/newCustomer&a=save_company'),
@@ -46,16 +46,22 @@ function newCustomerPopup_handleCompanySubmit() {
 			}
 			
 			if (data.success) {
-				set_select2_val('select[name=customer_id]', data.customer_id, data.customer_name);
+				var select = $(objAnchor).closest('div.widget').find('select[name=customer_id]');
 				
-				close_popup();
+				if (select.hasClass('select2-widget')) {
+					set_select2_val('select[name=customer_id]', data.customer_id, data.customer_name);
+					close_popup();
+				}
+				else {
+					newCustomerPopup_reloadOptions( select, data );
+				}
 			}
 			
 		}
 	});
 }
 
-function newCustomerPopup_handlePersonSubmit() {
+function newCustomerPopup_handlePersonSubmit( objAnchor ) {
 	$.ajax({
 		type: 'POST',
 		url: appUrl('/?m=customer&c=popup/newCustomer&a=save_person'),
@@ -67,12 +73,59 @@ function newCustomerPopup_handlePersonSubmit() {
 			}
 			
 			if (data.success) {
-				set_select2_val('select[name=customer_id]', data.customer_id, data.customer_name);
+				var select = $(objAnchor).closest('div.widget').find('select[name=customer_id]');
 				
-				close_popup();
+				if (select.hasClass('select2-widget')) {
+					set_select2_val('select[name=customer_id]', data.customer_id, data.customer_name);
+					close_popup();
+				}
+				else {
+					newCustomerPopup_reloadOptions( select, data );
+				}
 			}
 			
 		}
 	});
 }
+
+
+function newCustomerPopup_reloadOptions( objSelect, dataNewCustomer ) {
+	showPageLoading();
+	
+	$.ajax({
+		type: 'POST',
+		url: appUrl('/?m=customer&c=customer&a=all_customers'),
+		data: {
+			
+		},
+		success: function(data, xhr, textStatus) {
+			$(objSelect).find('option').each(function(index, node) {
+				if ($(node).val() != '') $(node).remove();
+			});
+			
+			for( x in data.customers ) {
+				var opt = $('<option />');
+				
+				opt.val( data.customers[x]['customer_id'] );
+				opt.text( data.customers[x]['name'] );
+				
+				if (dataNewCustomer.customer_id == data.customers[x]['customer_id']) {
+					opt.attr('selected', 'selected');
+				}
+				
+				$(objSelect).append( opt );
+			}
+			
+			close_popup();
+			hidePageLoading();
+
+		},
+		error: function() {
+			alert('Er is een fout opgetreden, vernieuw de pagina en probeer het opnieuw');
+		}
+	});
+	
+}
+
+
 

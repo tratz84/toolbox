@@ -120,7 +120,7 @@ class CustomerSelectWidget extends DynamicSelectField {
         $html = parent::render();
         
         
-        $i = ' <a href="javascript:void(0);" onclick="newCustomerPopup_Click();" class="fa fa-plus"></a>';
+        $i = ' <a href="javascript:void(0);" onclick="newCustomerPopup_Click( this );" class="fa fa-plus"></a>';
         
         $html = str_replace('</select>', '</select>'.$i, $html);
         
