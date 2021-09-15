@@ -10,6 +10,7 @@ use core\forms\lists\ListResponse;
 use core\exception\ObjectNotFoundException;
 use base\model\ObjectMetaDAO;
 use core\exception\ObjectModifiedException;
+use core\exception\InvalidStateException;
 
 
 class FormDbHandler {
@@ -181,6 +182,9 @@ class FormDbHandler {
         }
         
         $pk_id = $dbObj->getField($pk);
+        if ($form->getWidget( $pk ) == null) {
+            throw new InvalidStateException('pk not set, '.$pk);
+        }
         $form->getWidget( $pk )->setValue( $pk_id );
         
         
