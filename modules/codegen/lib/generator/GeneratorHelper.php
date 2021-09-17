@@ -37,6 +37,8 @@ use core\forms\TimePickerField;
 use core\forms\WeekField;
 use core\forms\WidgetContainer;
 use customer\forms\CustomerSelectWidget;
+use customer\forms\CustomerSimpleSelectWidget;
+use customer\forms\CompanySelectWidget;
 
 class GeneratorHelper {
     
@@ -244,8 +246,20 @@ class GeneratorHelper {
         
         $formWidgets[] = array(
             'type' => 'widget',
+            'class' => CustomerSimpleSelectWidget::class,
+            'label' => 'Customer simple select'
+        );
+        
+        $formWidgets[] = array(
+            'type' => 'widget',
             'class' => CustomerSelectWidget::class,
             'label' => 'Customer select'
+        );
+        
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => CompanySelectWidget::class,
+            'label' => 'Company select'
         );
         
         $formWidgets[] = array(

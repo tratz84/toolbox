@@ -27,6 +27,17 @@ class PersonDAO extends \core\db\DAOObject {
 	}
 	
 	
+	public function readByEmail( $email ) {
+	    $sql = "select cp.*
+                from customer__person cp
+                join customer__person_email cpe on (cp.person_id = cpe.person_id)
+                join customer__email ce on (cpe.email_id = ce.email_id)
+                where ce.email_address = ?";
+	    
+	    return $this->queryList( $sql, array($email) );
+	}
+	
+	
 	public function search($opts=array()) {
 	    
 	    $qb = $this->createQueryBuilder();

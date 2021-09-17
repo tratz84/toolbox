@@ -20,6 +20,16 @@ class ListResponseExcelExport {
         $this->fields = $fields;
     }
     
+    public function addField( $name, $label=null, $type='text' ) {
+        if ($label === null) $label = $name;
+        
+        $this->fields[] = array(
+            'name'    => $name
+            , 'label' => $label
+            , 'type'  => $type
+        );
+    }
+    
     
     public function export(ListResponse $response, $filename="file.xlsx") {
         $sheet = $this->createSheet($response);

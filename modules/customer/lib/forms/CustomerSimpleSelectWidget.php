@@ -2,30 +2,43 @@
 
 namespace customer\forms;
 
-use customer\service\CompanyService;
-use customer\service\PersonService;
 use core\ObjectContainer;
-use core\forms\DynamicSelectField;
+use core\forms\Select2Field;
+use customer\service\CompanyService;
+use customer\service\CustomerService;
+use customer\service\PersonService;
 
-class CustomerSelectWidget extends DynamicSelectField {
+class CustomerSimpleSelectWidget extends Select2Field {
     
     protected $customerDeleted = false;
     
-
-    public function __construct($name='customer_id', $defaultValue=null, $defaultText=null, $endpoint=null, $label=null) {
+    
+    public function __construct($name, $value=null, $optionItems=array(), $label=null, $opts=array()) {
         
-        if ($defaultText == null) $defaultText = t('Make your choice');
-        if ($endpoint == null) $endpoint = '/?m=customer&c=customer&a=select2';
         if ($label == null) $label = t('Customer');
         
-        parent::__construct($name, $defaultValue, $defaultText, $endpoint, $label);
+        // no options given? => load default
+        if (!$optionItems || count($optionItems) == 0) {
+            $customerService = object_container_get( CustomerService::class );
+            $customers = $customerService->readAllCustomers();
+            $optionItems[''] = array(
+                'description' => t('Make your choice')
+                , 'active' => true
+            );
+            
+            foreach($customers as $cust) {
+                $optionItems[ $cust['customer_id'] ] = array(
+                    'description' => $cust['name']
+                    , 'active' => $cust['deleted'] ? false : true
+                );
+            }
+        }
         
-        // these are necessary in the popup when clicked on the '+'-anchor
+        
+        
+        parent::__construct($name, $value, $optionItems, $label, $opts);
+        
         hook_htmlscriptloader_enableGroup('iban');
-        hook_htmlscriptloader_enableGroup('select-company-list-edit');
-        hook_htmlscriptloader_enableGroup('select-person-list-edit');
-        
-        // 
         hook_htmlscriptloader_enableGroup('customer-select-widget');
     }
     
@@ -56,37 +69,9 @@ class CustomerSelectWidget extends DynamicSelectField {
         
         if ($companyId) {
             $this->setValue('company-'.$companyId);
-            
-            $cs = ObjectContainer::getInstance()->get(CompanyService::class);
-            $company = $cs->readCompany($companyId, ['record-only' => true]);
-            
-            if ($company == null || $company->getDeleted()) {
-                $this->customerDeleted = true;
-            }
-            if ($company) {
-                $this->setDefaultText( $company->getCompanyName() );
-            }
-            else {
-                $this->setDefaultText( 'company-'.$companyId );
-            }
         }
         else if ($personId) {
             $this->setValue('person-'.$personId);
-            
-            $ps = ObjectContainer::getInstance()->get(PersonService::class);
-            $person = $ps->readPerson($personId);
-            if ($person == null || $person->getDeleted()) {
-                $this->customerDeleted = true;
-            }
-            
-            if ($person) {
-                $this->setDefaultText( $person->getFullname() );
-            }
-            else {
-                $this->setDefaultText( 'person-'.$personId );
-            }
-        } else {
-            $this->setDefaultText( t('Make your choice') );
         }
     }
     
@@ -113,12 +98,7 @@ class CustomerSelectWidget extends DynamicSelectField {
     
     
     public function render() {
-        if ($this->customerDeleted) {
-            $this->addContainerClass('customer-deleted');
-        }
-        
         $html = parent::render();
-        
         
         $i = ' <a href="javascript:void(0);" onclick="newCustomerPopup_Click( this );" class="fa fa-plus"></a>';
         

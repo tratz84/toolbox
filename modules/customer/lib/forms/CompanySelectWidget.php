@@ -3,11 +3,10 @@
 namespace customer\forms;
 
 use customer\service\CompanyService;
-use customer\service\PersonService;
 use core\ObjectContainer;
 use core\forms\DynamicSelectField;
 
-class CustomerSelectWidget extends DynamicSelectField {
+class CompanySelectWidget extends DynamicSelectField {
     
     protected $customerDeleted = false;
     
@@ -15,7 +14,7 @@ class CustomerSelectWidget extends DynamicSelectField {
     public function __construct($name='customer_id', $defaultValue=null, $defaultText=null, $endpoint=null, $label=null) {
         
         if ($defaultText == null) $defaultText = t('Make your choice');
-        if ($endpoint == null) $endpoint = '/?m=customer&c=customer&a=select2';
+        if ($endpoint == null) $endpoint = '/?m=customer&c=customer&a=select2&customer_type=company';
         if ($label == null) $label = t('Customer');
         
         parent::__construct($name, $defaultValue, $defaultText, $endpoint, $label);
@@ -23,7 +22,7 @@ class CustomerSelectWidget extends DynamicSelectField {
         // these are necessary in the popup when clicked on the '+'-anchor
         hook_htmlscriptloader_enableGroup('iban');
         hook_htmlscriptloader_enableGroup('select-company-list-edit');
-        hook_htmlscriptloader_enableGroup('select-person-list-edit');
+//         hook_htmlscriptloader_enableGroup('select-person-list-edit');
         
         // 
         hook_htmlscriptloader_enableGroup('customer-select-widget');
@@ -34,23 +33,16 @@ class CustomerSelectWidget extends DynamicSelectField {
         parent::bindObject($obj);
         
         $companyId = null;
-        $personId = null;
         $this->customerDeleted = false;
         
         if (is_object($obj) && method_exists($obj, 'getCompanyId')) {
             $companyId = $obj->getCompanyId();
         }
         
-        if (is_object($obj) && method_exists($obj, 'getPersonId')) {
-            $personId = $obj->getPersonId();
-        }
         
         if (is_array($obj) && isset($obj['customer_id'])) {
             if (strpos($obj['customer_id'], 'company-') === 0) {
                 $companyId = str_replace('company-', '', $obj['customer_id']);
-            }
-            else if (strpos($obj['customer_id'], 'person-') === 0) {
-                $personId = str_replace('person-', '', $obj['customer_id']);
             }
         }
         
@@ -69,22 +61,6 @@ class CustomerSelectWidget extends DynamicSelectField {
             else {
                 $this->setDefaultText( 'company-'.$companyId );
             }
-        }
-        else if ($personId) {
-            $this->setValue('person-'.$personId);
-            
-            $ps = ObjectContainer::getInstance()->get(PersonService::class);
-            $person = $ps->readPerson($personId);
-            if ($person == null || $person->getDeleted()) {
-                $this->customerDeleted = true;
-            }
-            
-            if ($person) {
-                $this->setDefaultText( $person->getFullname() );
-            }
-            else {
-                $this->setDefaultText( 'person-'.$personId );
-            }
         } else {
             $this->setDefaultText( t('Make your choice') );
         }
@@ -102,12 +78,6 @@ class CustomerSelectWidget extends DynamicSelectField {
             }
         }
         
-        if (method_exists($obj, 'setPersonId')) {
-            $obj->setPersonId(0);
-            if (strpos($v, 'person-') === 0) {
-                $obj->setPersonId( str_replace('person-', '', $v) );
-            }
-        }
     }
     
     

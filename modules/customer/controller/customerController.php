@@ -129,6 +129,31 @@ class customerController extends BaseController {
     }
     
     
+    public function action_all_customers() {
+        $customerService = object_container_get( CustomerService::class );
+        
+        $customers = $customerService->readAllCustomers();
+        
+        $result = array();
+        $result['success'] = true;
+        $result['customers'] = array();
+        foreach($customers as $c) {
+            // this is probably called because there is a new customer added with a popup
+            // so skip deleted customers
+            if ($c['deleted'])
+                continue;
+            
+            $result['customers'][] = array(
+                'customer_id' => $c['customer_id']
+                , 'name' => $c['name']
+                , 'deleted' => $c['deleted']
+            );
+        }
+        
+        $this->json($result);
+    }
+    
+    
 }
 
 
