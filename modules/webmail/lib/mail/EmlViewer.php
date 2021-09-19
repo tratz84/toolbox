@@ -137,7 +137,8 @@ class EmlViewer {
         
         // strip html
         $dom = new \DOMDocument();
-        @$dom->loadHTML( '<?xml version="1.0 encoding="utf-8"?>'.$this->contentHtml );
+        /*@$dom->loadHTML( '<?xml version="1.0 encoding="utf-8"?>'.$this->contentHtml );*/
+        @$dom->loadHTML( mb_convert_encoding($this->contentHtml, 'HTML-ENTITIES', 'UTF-8') );
         
         
         $allowedElements = array(
