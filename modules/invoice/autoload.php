@@ -131,7 +131,7 @@ if ($invoiceSettings->getIntracommunautair()) {
     hook_create_object(CompanyForm::class, function(CompanyForm $form) {
         $w = new \core\forms\CheckboxField('tax_shift', '', 'Intracommunautair');
         $w->setInfoText('Diensten/producten worden intracommunautaire geleverd? (buitenlandsbedrijf)');
-        $w->setPrio(76);
+        $w->setPrio(86);
         $form->addWidget($w);
     });
     

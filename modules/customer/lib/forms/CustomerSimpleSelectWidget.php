@@ -3,12 +3,12 @@
 namespace customer\forms;
 
 use core\ObjectContainer;
-use core\forms\SelectField;
+use core\forms\Select2Field;
 use customer\service\CompanyService;
 use customer\service\CustomerService;
 use customer\service\PersonService;
 
-class CustomerSimpleSelectWidget extends SelectField {
+class CustomerSimpleSelectWidget extends Select2Field {
     
     protected $customerDeleted = false;
     
@@ -21,10 +21,16 @@ class CustomerSimpleSelectWidget extends SelectField {
         if (!$optionItems || count($optionItems) == 0) {
             $customerService = object_container_get( CustomerService::class );
             $customers = $customerService->readAllCustomers();
-            $optionItems[''] = t('Make your choice');
+            $optionItems[''] = array(
+                'description' => t('Make your choice')
+                , 'active' => true
+            );
             
             foreach($customers as $cust) {
-                $optionItems[ $cust['customer_id'] ] = $cust['name'];
+                $optionItems[ $cust['customer_id'] ] = array(
+                    'description' => $cust['name']
+                    , 'active' => $cust['deleted'] ? false : true
+                );
             }
         }
         

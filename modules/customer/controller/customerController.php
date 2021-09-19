@@ -138,9 +138,15 @@ class customerController extends BaseController {
         $result['success'] = true;
         $result['customers'] = array();
         foreach($customers as $c) {
+            // this is probably called because there is a new customer added with a popup
+            // so skip deleted customers
+            if ($c['deleted'])
+                continue;
+            
             $result['customers'][] = array(
                 'customer_id' => $c['customer_id']
                 , 'name' => $c['name']
+                , 'deleted' => $c['deleted']
             );
         }
         
