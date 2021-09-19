@@ -5,6 +5,7 @@ namespace webmail\mail;
 
 
 use core\exception\FileException;
+use core\exception\InvalidStateException;
 
 class EmlViewer {
     
@@ -19,6 +20,8 @@ class EmlViewer {
     
     protected $attachments;
     protected $parserAttachments;
+    
+    protected $parsed = false;
     
     
     public function __construct( $filename = null ) {
@@ -96,6 +99,8 @@ class EmlViewer {
         
         $this->contentHtml = $parsedMail->getMessageBody('html');
         $this->contentText = $parsedMail->getMessageBody('text');
+        
+        $this->parsed = true;
     }
     
     
@@ -119,6 +124,9 @@ class EmlViewer {
     }
     
     public function getContentSafe() {
+        if ($this->parsed == false) {
+            throw new InvalidStateException('EmlViewer::parse() not called');
+        }
         
         // no contentHtml? => return contentText
         if (!$this->contentHtml || trim($this->contentHtml) == '') {
