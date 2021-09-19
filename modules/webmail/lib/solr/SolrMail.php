@@ -214,6 +214,27 @@ class SolrMail {
                     // remove all '<protocol>://' (trying to be future proof? :)
                     $val->value = preg_replace('/(\\S*):\\/\\/\\S*/', ';', $val->value);
                 }
+                else if ($el->nodeName == 'img' && $attributeName == 'src') {
+                    $imgSrc = $val->nodeValue;
+                    // inline image? => insert
+                    $imgSet = false;
+                    if (strpos($imgSrc, 'cid:') === 0) {
+                        foreach( $this->parserAttachments as $pa ) {
+                            if ($pa->getContentId() == substr($imgSrc, 4)) {
+                                if (in_array( file_extension( $pa->getFilename() ), array('gif', 'png', 'jpg', 'jpeg') ) ) {
+                                    $val->nodeValue = 'data:'.toolbox_mime_content_type( $pa->getFilename() ).';base64, '. base64_encode($pa->getContent());
+                                    $imgSet = true;
+                                }
+                                break;
+                            }
+                            
+                        }
+                    }
+                    
+                    if ($imgSet == false) {
+                        $el->removeAttribute($attributeName);
+                    }
+                }
                 // remove all not-allowed attrs
                 else if (in_array($attributeName, $allowedAttributes) == false) {
                     $el->removeAttribute($attributeName);
