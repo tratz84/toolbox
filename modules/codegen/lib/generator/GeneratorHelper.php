@@ -20,6 +20,7 @@ use core\forms\ColorPickerField;
 use core\forms\CopyToClipboardField;
 use core\forms\DatePickerField;
 use core\forms\DateTimePickerField;
+use core\forms\DivContenteditableField;
 use core\forms\EmailField;
 use core\forms\FieldSetContainer;
 use core\forms\FileField;
@@ -36,9 +37,9 @@ use core\forms\TextareaField;
 use core\forms\TimePickerField;
 use core\forms\WeekField;
 use core\forms\WidgetContainer;
+use customer\forms\CompanySelectWidget;
 use customer\forms\CustomerSelectWidget;
 use customer\forms\CustomerSimpleSelectWidget;
-use customer\forms\CompanySelectWidget;
 
 class GeneratorHelper {
     
@@ -190,6 +191,12 @@ class GeneratorHelper {
             'class' => TextareaField::class,
             'editor' => TextAreaOptionsForm::class,
             'label' => 'Textarea-field'
+        );
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => DivContenteditableField::class,
+            'editor' => TextAreaOptionsForm::class,
+            'label' => 'Div Contenteditable-field'
         );
         $formWidgets[] = array(
             'type' => 'widget',
