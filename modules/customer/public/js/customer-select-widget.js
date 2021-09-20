@@ -79,7 +79,7 @@ function newCustomerPopup_handlePersonSubmit( objAnchor ) {
 			}
 			
 			if (data.success) {
-				var select = $(objAnchor).closest('div.widget').find('select[name=customer_id], select[name=company_id], select[name=person_id]');
+				var select = $(objAnchor).closest('div.widget').find('select[name=customer_id]');
 				
 				if (select.hasClass('select2-widget')) {
 					set_select2_val( select, data.customer_id, data.customer_name );
