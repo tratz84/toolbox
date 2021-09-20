@@ -278,8 +278,8 @@ class GeneratorHelper {
         $formWidgets[] = array(
             'type' => 'widget',
             'class' => HtmlField::class,
-//             'editor' => HtmlOptionsForm::class,
-            'label' => 'Html-field'
+            'label' => 'Html-field',
+            'editor' => \codegen\form\widgetoptions\TextOptionsForm::class
         );
 
         $formWidgets[] = array(

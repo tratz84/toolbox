@@ -43,6 +43,10 @@ class BaseWidget {
     public function setPrio($p) { $this->prio = $p; }
     public function getPrio() { return $this->prio; }
     
+    public function setOption($key, $val) {
+        $this->opts[$key] = $val;
+    }
+    
     public function addContainerClass($className) {
         if (in_array($className, $this->containerClasses) == false) {
             $this->containerClasses[] = $className;

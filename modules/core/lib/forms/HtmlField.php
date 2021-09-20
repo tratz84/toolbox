@@ -20,6 +20,9 @@ class HtmlField extends BaseWidget {
     public function render() {
         $html = '';
         
+        if (trim($this->getValue()) == '' && isset($this->opts['hide-when-empty']) && $this->opts['hide-when-empty'])
+            return '';
+        
         $html .= '<div class="widget html-field-widget widget-'.slugify($this->getName()).'">';
         $html .= '<input type="hidden" name="'.esc_attr($this->getName()).'" value="'.esc_attr($this->getValue()).'" />';
         $html .= '<label>'.esc_html($this->getLabel()).infopopup($this->getInfoText()).'</label>';
