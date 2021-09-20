@@ -95,6 +95,7 @@ function applyWidgetFields(container) {
 		$(container).find('form').find('input, select, textarea').css('border-color', '#ccc');
 		$(container).find('form').find('input, select, textarea').css('border-width', '1px');
 		$(container).find('form').find('input, select, textarea').css('border-style', 'solid');
+		$(container).find('form').find('div[contenteditable]').attr('contenteditable', 'false');
 
 		$(container).find('.td-sortable').css('visibility', 'hidden');
 
