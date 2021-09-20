@@ -40,9 +40,11 @@ class CompanySelectWidget extends DynamicSelectField {
         }
         
         
-        if (is_array($obj) && isset($obj['customer_id'])) {
-            if (strpos($obj['customer_id'], 'company-') === 0) {
-                $companyId = str_replace('company-', '', $obj['customer_id']);
+        if (is_array($obj) && isset($obj[$this->getName()])) {
+            $val = $obj[$this->getName()];
+            
+            if (strpos($val, 'company-') === 0) {
+                $companyId = str_replace('company-', '', $val);
             }
         }
         
@@ -90,7 +92,7 @@ class CompanySelectWidget extends DynamicSelectField {
         $html = parent::render();
         
         
-        $i = ' <a href="javascript:void(0);" onclick="newCustomerPopup_Click( this );" class="fa fa-plus"></a>';
+        $i = ' <a href="javascript:void(0);" onclick="newCustomerPopup_Click( this, {customer_type: \'company\'} );" class="fa fa-plus"></a>';
         
         $html = str_replace('</select>', '</select>'.$i, $html);
         

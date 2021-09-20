@@ -52,10 +52,10 @@ function newCustomerPopup_handleCompanySubmit( objAnchor ) {
 			}
 			
 			if (data.success) {
-				var select = $(objAnchor).closest('div.widget').find('select[name=customer_id]');
+				var select = $(objAnchor).closest('div.widget').find('select');
 				
 				if (select.hasClass('select2-widget')) {
-					set_select2_val('select[name=customer_id]', data.customer_id, data.customer_name);
+					set_select2_val(select, data.customer_id, data.customer_name);
 					close_popup();
 				}
 				else {
@@ -79,7 +79,7 @@ function newCustomerPopup_handlePersonSubmit( objAnchor ) {
 			}
 			
 			if (data.success) {
-				var select = $(objAnchor).closest('div.widget').find('select[name=customer_id]');
+				var select = $(objAnchor).closest('div.widget').find('select');
 				
 				if (select.hasClass('select2-widget')) {
 					set_select2_val( select, data.customer_id, data.customer_name );
