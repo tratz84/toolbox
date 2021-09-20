@@ -51,6 +51,7 @@ class Menu extends base\MenuBase {
     
     
     public function addChildMenu($menu) { $this->childMenus[] = $menu; }
+    public function setChildMenus( $menus ) { $this->childMenus = $menus; }
     public function hasChildMenus() { return count($this->childMenus) > 0 ? true : false; }
     public function getChildMenus() {
         return $this->childMenus;
