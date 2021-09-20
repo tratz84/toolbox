@@ -69,6 +69,11 @@ class CustomerSelectWidget extends DynamicSelectField {
             }
         }
         
+        // gets kinda messy ;) when widget name is 'person_id' => ignore companyId & visa versa 
+        if ($this->name == 'company_id') $personId = null;
+        if ($this->name = 'person_id') $companyId = null;
+        
+        
         if ($companyId) {
             $this->setValue('company-'.$companyId);
             
