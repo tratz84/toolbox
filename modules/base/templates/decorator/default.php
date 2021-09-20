@@ -86,6 +86,7 @@ $menuItems = $ms->listMainMenu();
 		<script src="<?= BASE_HREF ?>js/multiuser.js?t=<?= filemtime(WWW_ROOT.'/js/multiuser.js') ?>"></script>
 		<script src="<?= BASE_HREF ?>js/savestate.js?t=<?= filemtime(WWW_ROOT.'/js/savestate.js') ?>"></script>
 		<script src="<?= BASE_HREF ?>js/TabContainer.js?t=<?= filemtime(WWW_ROOT.'/js/TabContainer.js') ?>"></script>
+		<script src="<?= BASE_HREF ?>js/img-rotate.js?t=<?= filemtime(WWW_ROOT.'/js/img-rotate.js') ?>"></script>
 		
 		<link href="<?= BASE_HREF ?>lib/fontawesome-free-5.15.3-web/css/v4-shims.min.css" rel="stylesheet" type="text/css" />
 		<link href="<?= BASE_HREF ?>lib/fontawesome-free-5.15.3-web/css/all.min.css" rel="stylesheet" type="text/css" />

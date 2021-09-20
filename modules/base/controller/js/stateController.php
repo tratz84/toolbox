@@ -3,6 +3,7 @@
 
 use base\model\User;
 use core\controller\BaseController;
+use core\container\ArrayContainer;
 
 class stateController extends BaseController {
     
@@ -31,6 +32,19 @@ class stateController extends BaseController {
         
         return $this->json( $r );
     }
+    
+    
+    public function action_save_img_rotate() {
+        
+        $ac = new ArrayContainer();
+        $ac->setAttribute('ref', get_var('ref'));
+        $ac->setAttribute('rotation', get_var('rotation'));
+        
+        
+        hook_eventbus_publish( $ac, 'base', 'js/state::save_img_rotate' );
+    }
+    
+    
     
 }
 
