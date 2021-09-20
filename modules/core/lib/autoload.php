@@ -12,6 +12,7 @@ require_once dirname( __FILE__ ) . '/functions/lock.php';
 require_once dirname( __FILE__ ) . '/functions/bootstrap.php';
 require_once dirname( __FILE__ ) . '/functions/module.php';
 require_once dirname( __FILE__ ) . '/functions/misc.php';
+require_once dirname( __FILE__ ) . '/functions/file.php';
 require_once dirname( __FILE__ ) . '/functions/networking.php';
 require_once dirname( __FILE__ ) . '/functions/html.php';
 require_once dirname( __FILE__ ) . '/functions/currency.php';
