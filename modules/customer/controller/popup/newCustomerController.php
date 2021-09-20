@@ -24,7 +24,7 @@ class newCustomerController extends BaseController {
         $this->showCompany = true;
         $this->showPerson = true;
         
-        if (get_var('personOnly')) {
+        if (get_var('personOnly') || get_var('customer_type') == 'person') {
             $this->showCompany = false;
             
             // create customer? probably popup in company-form, hide company selection..

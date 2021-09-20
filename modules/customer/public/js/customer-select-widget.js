@@ -8,9 +8,15 @@ $(document).ready(function() {
 
 
 
-function newCustomerPopup_Click( objAnchor ) {
+function newCustomerPopup_Click( objAnchor, opts ) {
+	opts = opts ? opts : {};
 	
-	show_popup( appUrl('/?m=customer&c=popup/newCustomer'), {
+	var popup_url = appUrl('/?m=customer&c=popup/newCustomer');
+	if (opts.customer_type) {
+		popup_url = popup_url + '&customer_type=' + opts.customer_type;
+	}
+	
+	show_popup( popup_url, {
 		renderCallback: function(popup) {
 			$(popup).find('.submit-form').click(function() {
 				newCustomerPopup_handleSubmit( objAnchor );
@@ -73,10 +79,10 @@ function newCustomerPopup_handlePersonSubmit( objAnchor ) {
 			}
 			
 			if (data.success) {
-				var select = $(objAnchor).closest('div.widget').find('select[name=customer_id]');
+				var select = $(objAnchor).closest('div.widget').find('select[name=customer_id], select[name=company_id], select[name=person_id]');
 				
 				if (select.hasClass('select2-widget')) {
-					set_select2_val('select[name=customer_id]', data.customer_id, data.customer_name);
+					set_select2_val( select, data.customer_id, data.customer_name );
 					close_popup();
 				}
 				else {

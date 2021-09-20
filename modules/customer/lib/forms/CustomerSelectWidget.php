@@ -6,11 +6,13 @@ use customer\service\CompanyService;
 use customer\service\PersonService;
 use core\ObjectContainer;
 use core\forms\DynamicSelectField;
+use core\exception\InvalidStateException;
 
 class CustomerSelectWidget extends DynamicSelectField {
     
     protected $customerDeleted = false;
     
+    protected $customerType = null;
 
     public function __construct($name='customer_id', $defaultValue=null, $defaultText=null, $endpoint=null, $label=null) {
         
@@ -27,6 +29,17 @@ class CustomerSelectWidget extends DynamicSelectField {
         
         // 
         hook_htmlscriptloader_enableGroup('customer-select-widget');
+    }
+    
+    
+    public function setCustomerType( $ct ) {
+        if ($ct != 'company' && $ct != 'person') {
+            throw new InvalidStateException('Invalid customerType');
+        }
+        
+        $this->customerType = $ct;
+        
+        $this->setEndpoint('/?m=customer&c=customer&a=select2&customer_type='.$this->customerType);
     }
     
     
@@ -119,8 +132,12 @@ class CustomerSelectWidget extends DynamicSelectField {
         
         $html = parent::render();
         
+        $opts = array();
+        if ($this->customerType) {
+            $opts['customer_type'] = $this->customerType;
+        }
         
-        $i = ' <a href="javascript:void(0);" onclick="newCustomerPopup_Click( this );" class="fa fa-plus"></a>';
+        $i = ' <a href="javascript:void(0);" onclick="newCustomerPopup_Click( this, '.esc_json_attr($opts).' );" class="fa fa-plus"></a>';
         
         $html = str_replace('</select>', '</select>'.$i, $html);
         
