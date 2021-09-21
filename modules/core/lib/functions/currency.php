@@ -107,6 +107,15 @@ function strtodouble($str)
 }
 
 
+function price2cents( $price ) {
+    $p = myround( strtodouble($price), 2 );
+    $p = intval($p * 100);
+    
+    return $p;
+}
+
+
+
 /**
  * compare_currency() - compares 2 prices in cents
  * @return
