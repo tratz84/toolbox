@@ -7,6 +7,7 @@ namespace core\forms;
 
 use core\db\DBObject;
 use core\db\LockableObject;
+use core\exception\InvalidStateException;
 
 class BaseForm extends WidgetContainer implements LockableObject {
     
@@ -224,6 +225,10 @@ class BaseForm extends WidgetContainer implements LockableObject {
     public function validateWidget($fieldName) {
         $validators = $this->validators[$fieldName];
         $widget = $this->getWidget($fieldName);
+        
+        if (!$widget) {
+            throw new InvalidStateException( 'BaseForm::validateWidget('.$fieldName.'), field not found' );
+        }
         
         foreach($validators as $v) {
             
