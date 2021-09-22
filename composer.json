@@ -14,6 +14,7 @@
 		"phpunit/phpunit": "^7.5",
 		"sabre/vobject": "^4.3",
 		"setasign/fpdi": "^2.3",
-		"minishlink/web-push": "^6.0"
+		"minishlink/web-push": "^6.0",
+		"digitick/sepa-xml": "^2.1"
 	}
 }
