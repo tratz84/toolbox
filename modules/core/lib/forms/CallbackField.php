@@ -6,6 +6,8 @@ class CallbackField extends BaseWidget {
     
     protected $callback = null;
     
+    protected $showLabel = true;
+    
     public function __construct($name, $callback=null, $label=null) {
         
         $this->setName($name);
@@ -14,6 +16,13 @@ class CallbackField extends BaseWidget {
         
         $this->callback = $callback;
     }
+    
+    public function setCallback($clb) { $this->callback = $clb; }
+    
+    public function setShowLabel($bln) { $this->showLabel = $bln; }
+    public function enableLabel() { $this->showLabel = true; }
+    public function disableLabel() { $this->showLabel = false; }
+    
     
     
     public function render() {
@@ -26,7 +35,11 @@ class CallbackField extends BaseWidget {
         $callback = $this->callback;
         
         $html .= '<div class="widget callback-field-widget '.$extraClass.'">';
-        $html .= '<label>'.esc_html($this->getLabel()).'</label>';
+        
+        if ($this->showLabel) {
+            $html .= '<label>'.esc_html($this->getLabel()).'</label>';
+        }
+        
         $html .= $callback();
         $html .= '</div>';
         
