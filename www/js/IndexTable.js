@@ -625,7 +625,7 @@ function IndexTable( container, opts ) {
 				}
 
 				if (col.render) {
-					var html = col.render(obj);
+					var html = col.render(obj, this);
 					td.append(html);
 				} else {
 					var fieldText = obj[col.fieldName];
