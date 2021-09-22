@@ -165,7 +165,16 @@ class IndexTable {
             $columnState = getJsState('indextable-enabled-columns-'.$this->opts['tableName']);
         }
         
-        foreach($this->columns as $colName => $props) {
+        // sort by prio
+        $columnKeys = array_keys( $this->columns );
+        $columns = $this->columns;
+        usort( $columnKeys, function($k1, $k2) use ($columns) {
+            return $columns[$k1]['prio'] - $columns[$k2]['prio'];
+        });
+        
+        foreach($columnKeys as $colName) {
+            $props = $this->columns[$colName];
+            
             if (isset($props['fieldName']) == false) {
                 $props['fieldName'] = $colName;
             }
