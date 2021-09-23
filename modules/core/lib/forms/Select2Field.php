@@ -19,6 +19,11 @@ class Select2Field extends BaseWidget {
         
     }
     
+    
+    public function setOptionItems( $optionItems ) { $this->optionItems = $optionItems; }
+    public function getOptionItems() { return $this->optionItems; }
+    
+    
     public function renderAsText() {
         $val = $this->getValue();
         
@@ -89,7 +94,18 @@ class Select2Field extends BaseWidget {
                     $active = false;
                 }
                 
-                $html .= '<option value="'.esc_attr($key).'" style="'.($active?'':'display:none;').'" '.($key == $this->getValue()?'selected="selected"':'').'>'.esc_html($val['description']).'</option>' . PHP_EOL;
+                $html .= '<option value="'.esc_attr($key).'" style="'.($active?'':'display:none;').'" '.($key == $this->getValue()?'selected="selected"':'');
+                
+                // atributes set?
+                if (isset($val['attributes']) && is_array($val['attributes'])) {
+                    foreach( $val['attributes'] as $k => $v) {
+                        $html .= ' ' . $k . '="' . esc_attr($v) . '" ';
+                    }
+                }
+                
+                $html .= '>';
+                $html .= esc_html($val['description']);
+                $html .= '</option>' . PHP_EOL;
             }
         }
         
