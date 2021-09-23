@@ -97,5 +97,19 @@ class PersonService extends ServiceBase {
         }
     }
     
+    
+    public function readByEmail( $email ) {
+        if (validate_email($email) == false) {
+            // exception worthy? :/
+            return array();
+        }
+        
+        $pDao = new PersonDAO();
+        $persons = $pDao->readByEmail( $email );
+        
+        return $persons;
+    }
+    
+    
 }
 
