@@ -40,11 +40,16 @@ class EuroField extends BaseWidget {
     public function render() {
         $t = format_price($this->getValue());
         
+        $attrs = '';
+        foreach($this->attributes as $k => $v) {
+            $attrs .= ' '.$k.'="'.esc_attr($v).'" ';
+        }
+        
         $html = '';
         
         $html .= '<div class="widget euro-field-widget widget-'.slugify($this->getName()).'">';
         $html .= '<label>'.esc_html($this->getLabel()).infopopup($this->getInfoText()).' </label>';
-        $html .= '<input type="text" name="'.esc_attr($this->getName()).'" value="'.esc_attr($t).'" onchange="this.value=format_price(this.value, true)" />';
+        $html .= '<input '.$attrs.' type="text" name="'.esc_attr($this->getName()).'" value="'.esc_attr($t).'" onchange="this.value=format_price(this.value, true)" />';
         $html .= '</div>';
         
         return $html;

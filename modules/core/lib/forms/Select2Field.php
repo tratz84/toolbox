@@ -61,9 +61,14 @@ class Select2Field extends BaseWidget {
         
         $extraClass = $this->hasError() ? 'error' : '';
         
+        $attrs = '';
+        foreach($this->attributes as $k => $v) {
+            $attrs .= ' '.$k.'="'.esc_attr($v).'" ';
+        }
+        
         $html .= '<div class="widget select-field-widget '.$extraClass.'">' . PHP_EOL;
         $html .= '<label>'.esc_html($this->getLabel()).'</label>' . PHP_EOL;
-        $html .= '<select name="'.esc_attr($this->getName()).'">' . PHP_EOL;
+        $html .= '<select name="'.esc_attr($this->getName()).'" '.$attrs.'>' . PHP_EOL;
         
         $html .= $this->renderOptions( $this->optionItems );
         
