@@ -18,6 +18,9 @@ class serverInfoController extends BaseController {
         $this->sic->addInfo('https', isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] ? t('Yes') : t('No'));
         $this->sic->addInfo('Memory limit', ini_get('memory_limit'));
         $this->sic->addInfo('Max execution time (Time limit)', ini_get('max_execution_time'));
+        $this->sic->addInfo('Max post size', ini_get('post_max_size'));
+        $this->sic->addInfo('Max upload filesize', ini_get('upload_max_filesize'));
+        $this->sic->addInfo('Max input vars', ini_get('max_input_vars'));
         $this->sic->addInfo('ROOT-dir', ROOT);
         
         if (function_exists('posix_getpwuid')) {
