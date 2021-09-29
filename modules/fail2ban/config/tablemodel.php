@@ -8,15 +8,16 @@ use core\db\TableModel;
 $tbs = array();
 
 
-$tb_l = new TableModel('fail2ban', 'list');
-$tb_l->addColumn('whitelist_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
-$tb_l->addColumn('ip',           'varchar(64)');
-$tb_l->addColumn('note',         'text');
-$tb_l->addColumn('type',         "enum('allow','block')");
-$tb_l->addColumn('sort',         'int');
-$tb_l->addColumn('active',       'bool');
-$tb_l->addColumn('edited',       'datetime');
-$tb_l->addColumn('created',      'datetime');
+$tb_l = new TableModel('fail2ban', 'ip_setting');
+$tb_l->addColumn('ip_setting_id',    'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_l->addColumn('ip',               'varchar(64)');
+$tb_l->addColumn('description',      'varchar(128)');
+$tb_l->addColumn('note',             'text');
+$tb_l->addColumn('type',             "enum('allow','block')");
+$tb_l->addColumn('sort',             'int');
+$tb_l->addColumn('active',           'bool');
+$tb_l->addColumn('edited',           'datetime');
+$tb_l->addColumn('created',          'datetime');
 $tbs[] = $tb_l;
 
 

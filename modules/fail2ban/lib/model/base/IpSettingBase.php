@@ -4,16 +4,16 @@
 namespace fail2ban\model\base;
 
 
-class ListBase extends \core\db\DBObject {
+class IpSettingBase extends \core\db\DBObject {
 
 	public function __construct($id=null) {
 		$this->setResource( 'default' );
-		$this->setTableName( 'fail2ban__list' );
-		$this->setPrimaryKey( 'whitelist_id' );
+		$this->setTableName( 'fail2ban__ip_setting' );
+		$this->setPrimaryKey( 'ip_setting_id' );
 		$this->setDatabaseFields( array (
-  'whitelist_id' => 
+  'ip_setting_id' => 
   array (
-    'Field' => 'whitelist_id',
+    'Field' => 'ip_setting_id',
     'Type' => 'int',
     'Null' => 'NO',
     'Key' => 'PRI',
@@ -83,6 +83,15 @@ class ListBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'description' => 
+  array (
+    'Field' => 'description',
+    'Type' => 'varchar(128)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -90,8 +99,8 @@ class ListBase extends \core\db\DBObject {
 	}
 	
 		
-	public function setWhitelistId($p) { $this->setField('whitelist_id', $p); }
-	public function getWhitelistId() { return $this->getField('whitelist_id'); }
+	public function setIpSettingId($p) { $this->setField('ip_setting_id', $p); }
+	public function getIpSettingId() { return $this->getField('ip_setting_id'); }
 	
 		
 	public function setIp($p) { $this->setField('ip', $p); }
@@ -120,6 +129,10 @@ class ListBase extends \core\db\DBObject {
 		
 	public function setCreated($p) { $this->setField('created', $p); }
 	public function getCreated() { return $this->getField('created'); }
+	
+		
+	public function setDescription($p) { $this->setField('description', $p); }
+	public function getDescription() { return $this->getField('description'); }
 	
 	
 }
