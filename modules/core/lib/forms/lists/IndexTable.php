@@ -74,8 +74,13 @@ class IndexTable {
     public function setConnectorUrl( $connectorUrl ) { $this->connectorUrl = $connectorUrl; }
     public function getConnectorUrl( ) { return $this->connectorUrl; }
     
+    public function setOption($key, $val) { $this->setOpt($key, $val); }
     public function setOpt($key, $val) { $this->opts[$key] = $val; }
+    
+    public function getOption($k, $defaultValue=null) { return $this->getOpt($k, $defaultValue); }
     public function getOpt($k, $defaultValue = null) { return isset($this->opts[$k]) ? $this->opts[$k] : $defaultValue; }
+    
+    public function getOptions() { return $this->getOpts(); }
     public function getOpts() { return $this->opts; }
     
     public function setRowClick( $js ) { $this->rowClick = $js; }
