@@ -27,6 +27,19 @@ class ReportMenuList {
     }
     
     
+    public function removeByControllerName( $controllerName ) {
+        $this->menuItems = array_filter( $this->menuItems, function($mi) use ($controllerName) {
+            if ($mi->getControllerName() == $controllerName) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
+        
+    }
+    
+    public function setMenuItems( $menuItems ) { $this->menuItems = $menuItems; }
     public function getMenuItems() {
         usort($this->menuItems, function($rmi1, $rmi2) {
             return strcmp($rmi1->getName(), $rmi2->getName());
