@@ -12,6 +12,7 @@ $l['Zero or negative to disable'] = 'Nul of negatief om uit te schakelen';
 $l['Max. time span in minutes']   = 'Maximum tijdsduur in minuten';
 $l['Time span']                   = 'Tijdsduur';
 $l['Max. attempts']               = 'Max. pogingen';
+$l['In minutes']                  = 'In minuten';
 
 
 return $l;
