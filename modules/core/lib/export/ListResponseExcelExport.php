@@ -9,6 +9,8 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use core\forms\lists\ListResponse;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use core\db\DBObject;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 class ListResponseExcelExport {
     
@@ -53,7 +55,12 @@ class ListResponseExcelExport {
             for($colno=0; $colno < count($this->fields); $colno++) {
                 $f = $this->fields[$colno];
                 
-                $val = $objs[$x][ $f['name'] ];
+                if (is_a( $objs[$x], DBObject::class )) {
+                    $val = $objs[$x]->getField( $f['name'] );
+                }
+                else {
+                    $val = $objs[$x][ $f['name'] ];
+                }
                 
                 $this->xlsCol($sheet, $x+2, $colno+1, $val, isset($f['type'])?$f['type']:'text');
             }
@@ -110,6 +117,13 @@ class ListResponseExcelExport {
                 break;
             case 'formula' :
                 $sheet->setCellValueExplicit($this->colCode($rowno, $colno), $val, DataType::TYPE_FORMULA);
+                
+                break;
+            case 'euro' :
+            case 'currency' :
+                $colpos = $this->colCode($rowno, $colno);
+                $sheet->getStyle($colpos)->getNumberFormat()->setFormatCode( '"€" #,##0.00_-' );
+                $sheet->setCellValue( $colpos, $val );
                 
                 break;
             default :
