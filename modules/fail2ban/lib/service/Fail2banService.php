@@ -30,6 +30,11 @@ class Fail2banService extends ServiceBase {
         return $is;
     }
     
+    public function deleteIpSetting($id) {
+        $lDao = new IpSettingDAO();
+        $is = $lDao->delete( $id );
+    }
+    
     
     public function saveIpSetting( $form ) {
         

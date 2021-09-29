@@ -21,8 +21,8 @@ $tb_l->addColumn('created',          'datetime');
 $tbs[] = $tb_l;
 
 
-$tb_check =new TableModel('fail2ban', 'check');
-$tb_check->addColumn('abuse_check_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_check =new TableModel('fail2ban', 'ban_check');
+$tb_check->addColumn('ban_check_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
 $tb_check->addColumn('ip',              'varchar(64)');
 $tb_check->addColumn('message',         'varchar(64)');
 $tb_check->addColumn('created',         'datetime');

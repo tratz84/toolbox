@@ -40,6 +40,30 @@ class IpSettingIndexTable extends IndexTable {
             , 'fieldType' => 'boolean'
         ]);
         
+        $this->setColumn('actions', [
+            'fieldName' => '',
+            'fieldDescription' => '',
+            'fieldType' => 'actions',
+            'render' => "function( record ) {
+        		var id = record['ip_setting_id'];
+    
+        		var anchEdit = $('<a class=\"fa fa-pencil\" />');
+        		anchEdit.attr('href', appUrl('/?m=fail2ban&c=ipsettings&a=edit&id=' + id));
+
+        		var anchDel  = $('<a class=\"fa fa-trash\" />');
+        		anchDel.attr('href', appUrl('/?m=fail2ban&c=ipsettings&a=delete&id=' + id));
+        		anchDel.click( handle_deleteConfirmation_event );
+        		anchDel.data( 'description', record.ip );
+
+
+        		var container = $('<div />');
+        		container.append(anchEdit);
+        		container.append(anchDel);
+
+        		return container;
+        	}"
+        ]);
+        
         $this->setRowClick("function(row, evt) {
             var rec = $(row).data('record');
             

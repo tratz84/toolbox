@@ -19,6 +19,15 @@ class IpSettingDAO extends \core\db\DAOObject {
 	    
 	    return $this->queryOne( $sql, array($id) );
 	}
+
+	public function delete($id) {
+	    $sql = "delete
+                from fail2ban__ip_setting
+                where ip_setting_id = ?";
+	    
+	    return $this->query( $sql, array($id) );
+	}
+	
 	
 	public function readAll() {
 	    $sql = "select *

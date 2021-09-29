@@ -86,9 +86,11 @@ class ipsettingsController extends BaseController {
 	}
 
 	public function action_delete() {
-	
-
-
+       
+	    $f2bService = object_container_get( Fail2banService::class );
+	    $f2bService->deleteIpSetting( get_var('id') );
+        
+        redirect( '/?m=fail2ban&c=ipsettings' );
 	}
 
 
