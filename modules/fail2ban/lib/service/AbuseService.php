@@ -4,8 +4,24 @@
 namespace fail2ban\service;
 
 
+use core\forms\lists\ListResponse;
+use core\service\ServiceBase;
+use fail2ban\model\BanCheck;
+use fail2ban\model\BanCheckDAO;
+
 class AbuseService extends ServiceBase {
     
+    
+    
+    public function searchBanCheck($start, $limit, $opts=array()) {
+        $bcDao = new BanCheckDAO();
+        
+        $cursor = $bcDao->search( $opts );
+        
+        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('ban_check_id', 'ip', 'message', 'created'));
+        
+        return $r;
+    }
     
     
     
@@ -25,7 +41,7 @@ class AbuseService extends ServiceBase {
     
     public function checkAbuse( $ip ) {
         if (is_debug()) {
-            return false;
+//             return false;
         }
         
         $acDao = new BanCheckDAO();
@@ -36,10 +52,12 @@ class AbuseService extends ServiceBase {
         
         
         if (strpos($ip, ':') === false) {
-            $iplong = ip2long( $ip );
+            $ipParts = explode('.', $ip);
             
-            // check by netmask 255.255.255.0
-            $count = $acDao->abuseCountNetmaskIpv4( $iplong, '0xffffff00', date('Y-m-d H:i:s', strtotime('-60 minutes')) );
+            $ipSearch = $ipParts[0] . '.' . $ipParts[1] . '.' . $ipParts[2] . '.%';
+            
+            // check by 1.1.1.*
+            $count = $acDao->abuseCountLike( $ipSearch, date('Y-m-d H:i:s', strtotime('-60 minutes')) );
             
             if ($count > 60 ) {
                 return 'Too many attempts from your network';
@@ -48,6 +66,16 @@ class AbuseService extends ServiceBase {
         
         return false;
     }
+    
+    
+    public function cleanUp( $filter ) {
+        $acDao = new BanCheckDAO();
+        
+        $filter = str_replace( '*', '%', trim($filter) );
+        
+        $acDao->deleteByFilter( $filter );
+    }
+    
     
 }
 

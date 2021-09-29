@@ -9,8 +9,17 @@ class BanCheckBase extends \core\db\DBObject {
 	public function __construct($id=null) {
 		$this->setResource( 'default' );
 		$this->setTableName( 'fail2ban__ban_check' );
-		$this->setPrimaryKey( '' );
+		$this->setPrimaryKey( 'ban_check_id' );
 		$this->setDatabaseFields( array (
+  'ban_check_id' => 
+  array (
+    'Field' => 'ban_check_id',
+    'Type' => 'int',
+    'Null' => 'NO',
+    'Key' => 'PRI',
+    'Default' => NULL,
+    'Extra' => 'auto_increment',
+  ),
   'ip' => 
   array (
     'Field' => 'ip',
@@ -38,20 +47,15 @@ class BanCheckBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
-  'ban_check_id' => 
-  array (
-    'Field' => 'ban_check_id',
-    'Type' => 'int',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
-  ),
 ) );
 		
 		if ($id != null)
 			$this->setField($this->primaryKey, $id);
 	}
+	
+		
+	public function setBanCheckId($p) { $this->setField('ban_check_id', $p); }
+	public function getBanCheckId() { return $this->getField('ban_check_id'); }
 	
 		
 	public function setIp($p) { $this->setField('ip', $p); }
@@ -64,10 +68,6 @@ class BanCheckBase extends \core\db\DBObject {
 		
 	public function setCreated($p) { $this->setField('created', $p); }
 	public function getCreated() { return $this->getField('created'); }
-	
-		
-	public function setBanCheckId($p) { $this->setField('ban_check_id', $p); }
-	public function getBanCheckId() { return $this->getField('ban_check_id'); }
 	
 	
 }
