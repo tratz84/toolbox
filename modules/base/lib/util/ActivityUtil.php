@@ -18,8 +18,9 @@ class ActivityUtil {
         $a->setLongDescription($longDescription);
         $a->setNote($note);
         $a->setChanges($changes);
+        $a->save();
         
-        return $a->save();
+        return $a;
         
     }
     
@@ -41,8 +42,9 @@ class ActivityUtil {
         $a->setLongDescription($longDescription);
         $a->setNote($note);
         $a->setChanges($changes);
+        $a->save();
         
-        return $a->save();
+        return $a;
     }
 
     public static function logActivityCompany($companyId, $refObject, $refId, $code, $shortDescription=null, $longDescription=null, $changes=null) {
