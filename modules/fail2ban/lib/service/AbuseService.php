@@ -8,6 +8,7 @@ use core\forms\lists\ListResponse;
 use core\service\ServiceBase;
 use fail2ban\model\BanCheck;
 use fail2ban\model\BanCheckDAO;
+use fail2ban\model\IpSettingDAO;
 
 class AbuseService extends ServiceBase {
     
@@ -24,9 +25,31 @@ class AbuseService extends ServiceBase {
     }
     
     
+    public function findMatch( $ip ) {
+        $isDao = new IpSettingDAO();
+        
+        $isl = $isDao->readActive();
+        
+        foreach( $isl as $is ) {
+            if ($is->match( $ip )) {
+                return $is;
+            }
+        }
+        
+        return null;
+    }
+    
     
     
     public function markAbuse( $ip, $message ) {
+        
+        // white-listed? => skip
+        $is = $this->findMatch( $ip );
+        if ($is && $is->getType() == 'allow') {
+            return;
+        }
+        
+        
         if ($message && strlen($message) > 64) {
             $message = substr($message, 0, 64);
         }
@@ -44,24 +67,45 @@ class AbuseService extends ServiceBase {
 //             return false;
         }
         
-        $acDao = new BanCheckDAO();
-        $count = $acDao->abuseCount($ip, date('Y-m-d H:i:s', strtotime('-5 minutes')));
-        if ($count > 10) {
-            return 'Maximum failed attempts reached';
+        
+        // check white/black list
+        $is = $this->findMatch( $ip );
+        if ($is) {
+            if ($is->getType() == 'allow') {
+                return false;
+            }
+            if ($is->getType() == 'block') {
+                return 'IP blocked';
+            }
         }
         
         
-        if (strpos($ip, ':') === false) {
-            $ipParts = explode('.', $ip);
-            
-            $ipSearch = $ipParts[0] . '.' . $ipParts[1] . '.' . $ipParts[2] . '.%';
-            
-            // check by 1.1.1.*
-            $count = $acDao->abuseCountLike( $ipSearch, date('Y-m-d H:i:s', strtotime('-60 minutes')) );
-            
-            if ($count > 60 ) {
-                return 'Too many attempts from your network';
+        $maxAttemptsIp = fail2ban_max_attempts_ip();
+        if ($maxAttemptsIp > 0) {
+            $acDao = new BanCheckDAO();
+            $count = $acDao->abuseCount($ip, date('Y-m-d H:i:s', strtotime('-'.fail2ban_max_attempts_ip_timespan().' minutes')));
+            if ($count > 10) {
+                return 'Maximum failed attempts reached';
             }
+        }
+        
+        
+        $maxAttemptsNetwork = fail2ban_max_attempts_network();
+        if (strpos($ip, ':') === false) {
+            // ipv4
+            if ($maxAttemptsNetwork > 0) {
+                $ipParts = explode('.', $ip);
+                
+                $ipSearch = $ipParts[0] . '.' . $ipParts[1] . '.' . $ipParts[2] . '.%';
+                
+                // check by 1.1.1.*
+                $count = $acDao->abuseCountLike( $ipSearch, date('Y-m-d H:i:s', strtotime('-'.fail2ban_max_attempts_network_timespan().' minutes')) );
+                
+                if ($count >= $maxAttemptsNetwork ) {
+                    return 'Too many attempts from your network';
+                }
+            }
+            // TODO: ipv6
         }
         
         return false;

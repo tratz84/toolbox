@@ -11,6 +11,14 @@ class IpSetting extends base\IpSettingBase {
         
         $this->setActive( true );
     }
+    
+    public function match( $ip ) {
+        if (trim($this->getIp()) == '') {
+            return false;
+        }
+        
+        return fnmatch( $this->getIp(), $ip, FNM_CASEFOLD|FNM_NOESCAPE);
+    }
 
 }
 

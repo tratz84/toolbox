@@ -37,6 +37,15 @@ class IpSettingDAO extends \core\db\DAOObject {
 	    return $this->queryList( $sql );
 	}
 	
+	public function readActive() {
+	    $sql = "select *
+                from fail2ban__ip_setting
+                where active = 1
+                order by sort";
+	    
+	    return $this->queryList( $sql );
+	}
+	
 	
 	public function nextSort() {
 	    $c = $this->queryValue('select max(sort) from fail2ban__ip_setting');
