@@ -645,7 +645,7 @@ function showPageLoading() {
 		, 'top':              'calc(50% - 6em)'
 		, 'box-shadow':       '0px 0px 50px #000 '
 	})
-	nf.html('<img src="'+appSettings.base_href+'images/ajax-loader-big.gif" /> &nbsp;&nbsp; Loading...')
+	nf.html('<img src="'+appSettings.base_href+'images/ajax-loader-big.gif" /> &nbsp;&nbsp; <span class="loading-text">Loading...</a>')
 	$(document.body).prepend( nf );
 }
 function hidePageLoading() {
