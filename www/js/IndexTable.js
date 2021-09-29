@@ -791,7 +791,50 @@ function IndexTable( container, opts ) {
 			return;
 		}
 		
-		if (pageCount > 10) {
+		
+		if (pageCount > 1000) {
+			var inputPager = $('<input type="number" min="1" name="pager" style="width: 75px;" />');
+			inputPager.data('page-no', pageNo);
+			inputPager.data('page-count', pageCount);
+			inputPager.attr('max', 'pageCount');
+			inputPager.val( pageNo );
+			inputPager.on('change', function() {
+				var pageNo = parseInt( $(this).data('page-no') );
+				var pageCount = parseInt( $(this).data('page-count') );
+				
+				var newNo = parseInt( $(this).val() );
+				if (isNaN(newNo)) newNo = pageNo;
+				if (newNo > pageCount) newNo = pageCount
+				if (newNo < 1) newNo = 1;
+				
+				$(this).val(newNo);
+				me.setPage( newNo );
+			});
+			
+			
+			pager.append('<a class="pager-back" href="javascript:void(0);">&lt;</a> ');
+			pager.append( inputPager );
+			pager.append( ' / ' + pageCount );
+			pager.append(' <a class="pager-next" href="javascript:void(0);">&gt;</a>');
+			
+			if (pageNo == 1)
+				pager.find('.pager-back').css('visibility', 'hidden');
+			if (pageNo >= pageCount)
+				pager.find('.pager-next').css('visibility', 'hidden');
+			
+			pager.find('.pager-back').click(function() {
+				var p = me.pageNo - 1;
+				if (p > 0)
+					me.setPage(p);
+			});
+			
+			
+			pager.find('.pager-next').click(function() {
+				var p = me.pageNo + 1;
+				me.setPage(p);
+			});
+		}
+		else if (pageCount > 10) {
 			var selectPager = $('<select name="pager" />');
 			
 			for (var x = 1; x <= pageCount; x++) {
@@ -830,8 +873,6 @@ function IndexTable( container, opts ) {
 				var p = me.pageNo + 1;
 				me.setPage(p);
 			});
-			
-			
 		} else {
 			for (var x = 1; x <= pageCount; x++) {
 				var anch = $('<a href="javascript:void(0);" />');
