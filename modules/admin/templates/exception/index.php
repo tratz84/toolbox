@@ -8,6 +8,13 @@
 
 
 <div class="page-header">
+	
+	<div class="toolbox">
+		<?php if (is_standalone_installation()) : ?>
+		<a href="<?= appUrl('/?m=base&c=masterdata/index') ?>" class="fa fa-chevron-circle-left"></a>
+		<?php endif; ?>
+	</div>
+	
     <h1>Overzicht Exceptions</h1>
 </div>
 
