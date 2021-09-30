@@ -22,11 +22,20 @@ foreach($modules as $moduleName => $path) {
 // generate css
 $css = '';
 foreach($lessFiles as $lf) {
-    if (is_windows()) {
-        $cmd = 'node_modules\.bin\lessc -x '.$lf;
-    } else {
-        $cmd = './node_modules/.bin/lessc -x '.$lf;
+    $cmd = null;
+    if (file_exists(__DIR__.'/../node_modules/lessc/node_modules/.bin/lessc')) {
+        $cmd = realpath( __DIR__.'/../node_modules/lessc/node_modules/.bin/lessc' );
     }
+    else if (file_exists(__DIR__.'/../node_modules/.bin/lessc')) {
+        $cmd = realpath( __DIR__.'/../node_modules/.bin/lessc' );
+    }
+    
+    if ($cmd == null) {
+        print "Error: lessc not found\n";
+        exit;   
+    }
+    
+    $cmd = $cmd . ' -x ' . $lf;
 
     print "Executing command: {$cmd}\n";
     $css .= `$cmd`;
