@@ -126,7 +126,7 @@ class MysqlConnection extends DBConnection {
      * @param string $name
      * @param int $timeout - in seconds
      */
-    public function getLock( $name, $timeout = -1 ) {
+    public function getLock( $name, $timeout = 3600 ) {
         $l = $this->queryValue('select get_lock( ?, '.intval($timeout).')', array($name));
         
         if ($l) {
