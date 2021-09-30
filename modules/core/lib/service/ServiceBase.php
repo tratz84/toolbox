@@ -27,7 +27,7 @@ class ServiceBase implements DatabaseTransactionObject, ObjectHookable {
      * @param string $name - name of lock
      * @param int $timeout - timeout in seconds
      */
-    public function getLock($name, $timeout=-1) {
+    public function getLock($name, $timeout=3600) {
         $con = \core\db\DatabaseHandler::getInstance()->getConnection('default');
         
         $lockStatus = $con->queryValue('select is_free_lock(?)', array($name));

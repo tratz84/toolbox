@@ -21,7 +21,7 @@ abstract class DBConnection {
     public abstract function commitTransaction();
     public abstract function rollbackTransaction();
     
-    public abstract function getLock($name, $timeout=-1);
+    public abstract function getLock($name, $timeout=3600);
     public abstract function releaseLocks();
     
     
