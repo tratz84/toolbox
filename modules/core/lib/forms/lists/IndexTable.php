@@ -129,7 +129,7 @@ class IndexTable {
             $idColSelect = substr($this->getContainerId(), 1)."-column-selection";
             
             $html .= "<div id=\"".$idColSelect."\"></div>";
-            $html .= '<hr/>';
+            $html .= '<hr class="hr-column-selection" />';
             $this->setOpt('columnSelection', '#'.$idColSelect);
         }
         

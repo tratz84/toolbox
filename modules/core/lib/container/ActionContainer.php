@@ -75,7 +75,7 @@ class ActionContainer {
             $html .= '<span class="'.slugify($items[$x]['name']).'">' . $items[$x]['html'] . '</span> ';
         }
         $html .= '</div>';
-        $html .= '<hr/>';
+        $html .= '<hr class="hr-action-container" />';
         
         return $html;
     }
