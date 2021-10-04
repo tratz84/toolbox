@@ -107,7 +107,7 @@ class ObjectContainer {
         $ctx = Context::getInstance();
         
         if ( $ctx->isModuleEnabled($module) == false ) {
-            throw new InvalidStateException('Requested module not enabled');
+            throw new InvalidStateException('Requested module not enabled ('.$module.')');
         }
         
         if (endsWith($controller, 'Controller')) {
