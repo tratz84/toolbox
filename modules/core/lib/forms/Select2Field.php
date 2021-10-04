@@ -61,6 +61,8 @@ class Select2Field extends BaseWidget {
         
         $extraClass = $this->hasError() ? 'error' : '';
         
+        $extraClass .= 'widget-'.slugify($this->getName());
+        
         $attrs = '';
         foreach($this->attributes as $k => $v) {
             $attrs .= ' '.$k.'="'.esc_attr($v).'" ';
