@@ -39,4 +39,6 @@
 		<td>Factuur-, offerte- of order-nr, offerte / factuur</td>
 	</tr>
 
+	<?php hook_eventbus_publish( $form, 'webmail', 'template-edit-parameters' ) ?>
+
 </table>
