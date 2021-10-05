@@ -21,11 +21,6 @@ class WebmailOutboxIndexTable extends IndexTable {
         $this->setColumn('subject',              ['fieldDescription' => t('Subject'), 'fieldType' => 'text', 'searchable' => true]);
         $this->setColumn('created',           ['fieldDescription' => t('Created'),  'fieldType' => 'datetime']);
         
-        
-        $this->setRowClick("function(row) {
-            window.open( appUrl('/?m=webmail&c=view&id=&id=' + $(row).data('record').email_id), '_blank' );
-        }");
-        
         $connectorUrl = '/?m=webmail&c=email&a=search';
         $this->setConnectorUrl( $connectorUrl );
     }

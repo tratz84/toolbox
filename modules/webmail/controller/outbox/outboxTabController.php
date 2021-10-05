@@ -12,6 +12,9 @@ class outboxTabController extends BaseController {
         
         $this->wo_it = new WebmailOutboxIndexTable();
         $this->wo_it->setRenderLoad( false );
+        $this->wo_it->setOption('autoloadNext', true);
+        $this->wo_it->setOption('fixedHeader', true);
+        
         
         if (isset($this->companyId) && (int)$this->companyId) {
             $this->wo_it->setCompanyId( (int)$this->companyId );
