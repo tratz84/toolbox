@@ -14,7 +14,7 @@ class AddressForm extends BaseForm {
     public function __construct() {
         parent::__construct();
         
-        $this->addJavascript('address-form', appUrl('?mpf=/module/customer/js/address-form.js'));
+        $this->addJavascript('address-form', appUrl('/?mpf=/module/customer/js/address-form.js'));
         
         $customerService = ObjectContainer::getInstance()->get(CustomerService::class);
         $countries = $customerService->getCountries();
