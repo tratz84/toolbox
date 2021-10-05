@@ -23,7 +23,7 @@ class TinymceField extends BaseWidget {
         
         // TODO: $this->getValue() contains safe html?
         
-        $html .= '<div class="widget tinymce-field-widget widget-'.slugify($this->getLabel()).'">';
+        $html .= '<div class="widget tinymce-field-widget widget-'.slugify($this->getName()).'">';
         $html .= '<label class="widget-label">'.esc_html($this->getLabel()).'</label>';
         $html .= '<div>'.$this->getValue().'</div>';
         $html .= '</div>';
@@ -36,7 +36,7 @@ class TinymceField extends BaseWidget {
         
         $extraClass = $this->hasError() ? 'error' : '';
         
-        $html .= '<div class="widget tinymce-field-widget widget-'.slugify($this->getLabel()).' '.$extraClass.'">';
+        $html .= '<div class="widget tinymce-field-widget widget-'.slugify($this->getName()).' '.$extraClass.'">';
         $html .= '<label>' . esc_html($this->getLabel()) . infopopup($this->getInfoText()) . '</label>';
         $html .= '<div><textarea class="input-tinymce" name="'.esc_attr($this->getName()).'">'.esc_html($this->getValue()).'</textarea></div>';
         $html .= '</div>';
