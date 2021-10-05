@@ -267,7 +267,9 @@ class BaseForm extends WidgetContainer implements LockableObject {
     public function renderReadonly() {
         $this->sortWidgets();
         
-        $html = '<div class="form-generator form-readonly">';
+        $className = get_class($this);
+        
+        $html = '<div class="form-generator form-readonly form-readonly-'.slugify($className).'">';
         
         $className = get_class($this);
         if (strrpos($className, '\\') !== false)
