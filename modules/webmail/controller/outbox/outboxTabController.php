@@ -1,0 +1,32 @@
+<?php
+
+
+
+use core\controller\BaseController;
+use webmail\form\WebmailOutboxIndexTable;
+
+class outboxTabController extends BaseController {
+    
+    public function action_index() {
+        
+        
+        $this->wo_it = new WebmailOutboxIndexTable();
+        $this->wo_it->setRenderLoad( false );
+        
+        if (isset($this->companyId) && (int)$this->companyId) {
+            $this->wo_it->setCompanyId( (int)$this->companyId );
+        }
+        else if (isset($this->personId) && (int)$this->personId) {
+            $this->wo_it->setPersonId( (int)$this->personId );
+        }
+        else {
+            return;
+        }
+        
+        return $this->render();
+    }
+    
+    
+}
+
+

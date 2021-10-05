@@ -50,6 +50,22 @@ class EmailDAO extends \core\db\DAOObject {
 	            
     	        $qb->addWhere( QueryBuilderWhere::whereRefByVal("concat( $str )", 'LIKE', '%'.$opts['customer_name'].'%') );
     	    }
+    	    
+    	    if (isset($opts['company_id']) && $opts['company_id']) {
+    	        $qb->addWhere( QueryBuilderWhere::whereRefByVal( 'customer__company.company_id', '=', $opts['company_id']) );
+    	    }
+    	    else if (isset($opts['companyId']) && $opts['companyId']) {
+    	        $qb->addWhere( QueryBuilderWhere::whereRefByVal( 'customer__company.company_id', '=', $opts['companyId']) );
+    	    }
+    	    
+    	    if (isset($opts['person_id']) && $opts['person_id']) {
+    	        $qb->addWhere( QueryBuilderWhere::whereRefByVal( 'customer__person.person_id', '=', $opts['person_id']) );
+    	    }
+    	    else if (isset($opts['personId']) && $opts['personId']) {
+    	        $qb->addWhere( QueryBuilderWhere::whereRefByVal( 'customer__person.person_id', '=', $opts['personId']) );
+    	    }
+    	    
+    	    
 	    }
 	    
 	    if (array_key_exists('incoming', $opts)) {
