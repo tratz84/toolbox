@@ -7,6 +7,9 @@ class EuroField extends BaseWidget {
     
     protected $opts = array();
     
+    protected $emptyOnZero = false;
+    
+    
     public function __construct($name, $value=null, $label=null, $opts=array()) {
         
         $this->setName($name);
@@ -15,6 +18,8 @@ class EuroField extends BaseWidget {
         
         $this->opts = $opts;
     }
+    
+    public function setEmptyOnZero( $bln ) { $this->emptyOnZero = $bln ? true : false; }
     
     
     public function getValue() {
@@ -38,7 +43,12 @@ class EuroField extends BaseWidget {
     
     
     public function render() {
-        $t = format_price($this->getValue());
+        if ($this->emptyOnZero && price2cents($this->getValue()) == 0) {
+            $t = '';
+        }
+        else {
+            $t = format_price($this->getValue());
+        }
         
         $attrs = '';
         foreach($this->attributes as $k => $v) {
