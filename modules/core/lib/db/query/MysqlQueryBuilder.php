@@ -88,6 +88,9 @@ class MysqlQueryBuilder extends QueryBuilder {
         foreach($this->rightJoin as $j) {
             $sql .= 'RIGHT JOIN `'.$j['table'].'` ON (`'.$j['table'].'`.`'.$j['fieldJoinTable'].'` = `' . $j['parentTable'].'`.`'.$j['fieldParentTable'].'`)' . PHP_EOL;
         }
+        foreach($this->rawJoin as $j) {
+            $sql .= $j . PHP_EOL;
+        }
         
 //         $this->whereContainer
         $sql .= $this->buildWhere($this->whereContainer);

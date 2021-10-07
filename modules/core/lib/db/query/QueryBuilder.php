@@ -18,6 +18,8 @@ abstract class QueryBuilder {
     protected $leftJoin = array();
     protected $rightJoin = array();
     protected $join = array();
+    protected $rawJoin = array();
+    
     
     protected $objectName = null;
     
@@ -186,6 +188,9 @@ abstract class QueryBuilder {
         return $this;
     }
     
+    public function rawJoin($str) {
+        $this->rawJoin[] = $str;
+    }
     
     public function addWhere($qbw) {
         $this->whereContainer->addWhere( $qbw );
