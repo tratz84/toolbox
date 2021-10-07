@@ -35,7 +35,8 @@ class NumberField extends BaseWidget {
         
         $extraClass = $this->hasError() ? 'error' : '';
         
-        $attributes = array();
+        $attributes = $this->attributes;
+        
         $attributes['type'] = 'number';
         $attributes['name'] = $this->getName();
         $attributes['value'] = $this->getValue();
