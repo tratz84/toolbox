@@ -43,6 +43,16 @@ function tf($str) {
     return vsprintf($str, $params);
 }
 
+function has_t($str) {
+    static $lang = null;
+    
+    if ($lang === null) {
+        $lang = t_loadlang();
+    }
+    
+    return array_key_exists($str, $lang) ? true : false;
+}
+
 function t($str) {
     static $lang = null;
     
