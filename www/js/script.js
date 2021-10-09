@@ -311,6 +311,41 @@ function applyWidgetFields(container) {
 		
 	});
 	
+	
+	$(container).find('.select2-editable-field-widget .select2-editable-toggle').on('click', function() {
+		console.log('gooo');
+		var c = $(this).closest('div.widget');
+		
+		var select = $(c).find('select');
+		var inp = $(c).find('input[type=text]');
+		
+		if (select.is(':visible')) {
+			select.hide();
+			inp.show();
+			inp.focus();
+			
+			select.attr('name', $(c).data('name')+'__disabled');
+			inp.attr('name', $(c).data('name'));
+			var t = select.find('option:selected').text().trim();
+			inp.val( t );
+			
+			$(this).removeClass('fa-pencil');
+			$(this).addClass('fa-times');
+		}
+		else {
+			select.show();
+			inp.hide();
+			
+			select.attr('name', $(c).data('name'));
+			inp.attr('name', $(c).data('name')+'__disabled');
+			
+			$(this).addClass('fa-pencil');
+			$(this).removeClass('fa-times');
+		}
+		
+	});
+	
+	
 	// event for hooking modules
 	$(window).trigger( 'applyWidgetFields' );
 

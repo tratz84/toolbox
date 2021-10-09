@@ -40,6 +40,7 @@ use core\forms\WidgetContainer;
 use customer\forms\CompanySelectWidget;
 use customer\forms\CustomerSelectWidget;
 use customer\forms\CustomerSimpleSelectWidget;
+use core\forms\Select2EditableField;
 
 class GeneratorHelper {
     
@@ -243,6 +244,12 @@ class GeneratorHelper {
             'class' => Select2Field::class,
             'editor' => SelectOptionsForm::class,
             'label' => 'Select2'
+        );
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => Select2EditableField::class,
+            'editor' => SelectOptionsForm::class,
+            'label' => 'Select2Editable'
         );
         $formWidgets[] = array(
             'type' => 'widget',
