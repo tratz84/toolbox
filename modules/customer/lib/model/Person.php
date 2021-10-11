@@ -33,6 +33,33 @@ class Person extends base\PersonBase {
     public function getCompanyList() { return $this->companyList; }
     public function setCompanyList($l) { $this->companyList = $l; }
     
+    public function getEmailAddressNo($pos=0) {
+        $els = $this->getEmailList();
+        
+        if ($pos >= 0 && $pos < count($els)) {
+            return $els[$pos]->getEmailAddress();
+        }
+        else {
+            return null;
+        }
+    }
+    
+    public function setEmailAddressNo( $pos=0, $email ) {
+        $els = $this->getEmailList();
+        
+        if ($pos == 0 && count($els) == 0) {
+            $els[] = new Email();
+        }
+        
+//         while ( count($els) < $pos+1 ) {
+//             $el = new Email();
+//             $els[] = $el;
+//         }
+        
+        $els[$pos]->setEmailAddress( trim($email) );
+    }
+    
+    
     
     public function getFullname() {
         
