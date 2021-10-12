@@ -1370,6 +1370,16 @@ if (function_exists('mb_trim') == false) {
     }
 }
 
+function trim_array( $arr) {
+    foreach( $arr as $key => $v ) {
+        if (is_string( $v ))
+            $arr[$key] = trim( $v );
+    }
+    
+    return $arr;
+}
+
+
 function guidv4()
 {
     if (function_exists('com_create_guid') === true)
