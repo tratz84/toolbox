@@ -46,6 +46,10 @@ class CheckboxField extends BaseWidget {
         if ($this->getValue()) {
            $this->setAttribute('checked', 'checked');
         }
+        // unset. This widget is re-used in ListEditWidget's
+        else {
+            $this->unsetAttribute( 'checked' );
+        }
         
         return parent::render();
     }
