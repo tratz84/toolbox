@@ -321,6 +321,8 @@ class FormDbHandler {
     public function search($start, $limit, $opts) {
         $dao = object_container_get( $this->mapper->getDaoClass() );
         
+        $opts = trim_array( $opts );
+        
         $cursor = $dao->search($opts);
         
         $r = ListResponse::fillByCursor( $start, $limit, $cursor, $this->mapper->getPublicFields() );
