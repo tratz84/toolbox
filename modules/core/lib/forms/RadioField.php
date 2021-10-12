@@ -62,12 +62,34 @@ class RadioField extends BaseWidget {
         
         $html .= '<span class="radio-options-container">';
         foreach($this->optionItems as $key => $val) {
+            
+            $strOptionAttributes = '';
+            
+            if (is_array($val)) {
+                if (isset($val['description_html'])) {
+                    $optionText = $val['description_html'];
+                }
+                else {
+                    $optionText = esc_html( $val['description'] );
+                }
+                
+                
+                if (isset($val['attributes']) && is_array($val['attributes'])) {
+                    foreach( $val['attributes'] as $k => $v) {
+                        $strOptionAttributes .= ' ' . $k . '="' . esc_attr($v) . '" ';
+                    }
+                }
+                
+            } else {
+                $optionText = esc_html( $val );
+            }
+            
             $idslug = slugify($this->getName().'-'.$key);
             
             $html .= '<span class="radio-option-container">';
-            $html .= '<input type="radio" class="radio-ui" id="'.esc_attr($idslug).'" name="'.$this->getName().'" '.$attrs.' value="'.esc_attr($key).'" '.($key == $this->getValue()?'checked="checked"':'').' /> ';
+            $html .= '<input type="radio" class="radio-ui" id="'.esc_attr($idslug).'" name="'.$this->getName().'" '.$strOptionAttributes.$attrs.' value="'.esc_attr($key).'" '.($key == $this->getValue()?'checked="checked"':'').' /> ';
             $html .= '<label for="'.esc_attr($idslug).'" class="radio-ui-placeholder"></label> ';
-            $html .= '<label class="widget-text" for="'.esc_attr($idslug).'" >'.esc_html($val).'</label> ';
+            $html .= '<label class="widget-text" for="'.esc_attr($idslug).'" >'.$optionText.'</label> ';
             $html .= '</span>';
         }
         $html .= '</span>';
