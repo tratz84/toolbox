@@ -30,7 +30,9 @@ class SubmitField extends BaseWidget {
     public function showPlaceholder() { $this->placeholder = true; }
     
     public function render() {
-        $this->setAttribute('type', 'submit');
+        if ($this->getAttribute('type') == false)
+            $this->setAttribute('type', 'submit');
+        
         $this->setAttribute('name', $this->getName());
         
         if (isset($this->options['readonly'])&&$this->options['readonly']) {
