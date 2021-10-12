@@ -38,7 +38,7 @@ class DateField extends BaseWidget {
             $this->setAttribute('placeholder', $this->options['placeholder']);
         }
         
-        if (isset($this->options['readonly'])&&$this->options['readonly']) {
+        if (isset($this->options['readonly']) && $this->options['readonly']) {
             $this->setAttribute('readonly', 'readonly');
         }
         
