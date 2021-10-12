@@ -60,6 +60,7 @@ class BaseForm extends WidgetContainer implements LockableObject {
     public function getSubmitText() { return $this->submitButtons['default-button']->getValue( ); }
     
     public function addButton($name, $label) { $this->submitButtons[$name] = new SubmitField($name, $label); }
+    public function removeButton($name) { unset( $this->submitButtons[$name] ); }
     
     
     public function addJavascript($name, $script) {
