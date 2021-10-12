@@ -272,7 +272,9 @@ class WidgetContainer extends BaseWidget {
     public function render() {
         $this->sortWidgets();
         
-        $html = '<div class="widget widget-container widget-container-'.slugify($this->getName()).'">';
+        $strContainerClasses = trim( implode(' ', $this->containerClasses) );
+        
+        $html = '<div class="widget widget-container '.$strContainerClasses.' widget-container-'.slugify($this->getName()).'">';
         
         foreach($this->widgets as $w) {
             $html .= $w->render();
