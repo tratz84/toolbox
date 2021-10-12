@@ -34,7 +34,7 @@ class BaseForm extends WidgetContainer implements LockableObject {
         
         $this->setHtmlAttribute('data-form-class', get_class($this));
         
-        $this->submitButtons['default-button'] = new SubmitField('default-button', t('Save'));
+        $this->addButton('default-button', t('Save'));
         
         
         $this->addWidget( new HiddenField('object_version') );
@@ -59,7 +59,12 @@ class BaseForm extends WidgetContainer implements LockableObject {
     public function setSubmitText($t) { $this->submitButtons['default-button']->setValue( $t ); }
     public function getSubmitText() { return $this->submitButtons['default-button']->getValue( ); }
     
-    public function addButton($name, $label) { $this->submitButtons[$name] = new SubmitField($name, $label); }
+    public function addButton($name, $label) {
+        $b = new SubmitField($name, $label);
+        $b->setPrio( (count($this->submitButtons)+1) * 10 );
+        
+        $this->submitButtons[$name] = $b;
+    }
     public function removeButton($name) { unset( $this->submitButtons[$name] ); }
     
     
@@ -326,7 +331,13 @@ class BaseForm extends WidgetContainer implements LockableObject {
         
         if ($this->showSubmitButtons) {
             $html .= '<div class="submit-container">';
-            foreach($this->submitButtons as $key => $submitField) {
+            
+            $submitButtons = array_values( $this->submitButtons );
+            usort($submitButtons, function($b1, $b2) {
+                return $b1->getPrio() - $b2->getPrio();
+            });
+            
+            foreach($submitButtons as $submitField) {
                 $html .= $submitField->render() . ' ';
             }
             $html .= '</div>' . PHP_EOL;
