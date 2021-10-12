@@ -18,6 +18,7 @@ use core\forms\AudioField;
 use core\forms\CheckboxField;
 use core\forms\ColorPickerField;
 use core\forms\CopyToClipboardField;
+use core\forms\DateField;
 use core\forms\DatePickerField;
 use core\forms\DateTimePickerField;
 use core\forms\DivContenteditableField;
@@ -30,6 +31,7 @@ use core\forms\HtmlDatetimeField;
 use core\forms\HtmlField;
 use core\forms\MonthField;
 use core\forms\RadioField;
+use core\forms\Select2EditableField;
 use core\forms\Select2Field;
 use core\forms\SelectField;
 use core\forms\TextField;
@@ -40,7 +42,6 @@ use core\forms\WidgetContainer;
 use customer\forms\CompanySelectWidget;
 use customer\forms\CustomerSelectWidget;
 use customer\forms\CustomerSimpleSelectWidget;
-use core\forms\Select2EditableField;
 
 class GeneratorHelper {
     
@@ -211,6 +212,14 @@ class GeneratorHelper {
             'editor' => DatePickerOptionsForm::class,
             'label' => 'DatePicker'
         );
+        
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => DateField::class,
+//             'editor' => DatePickerOptionsForm::class,
+            'label' => 'DateField'
+        );
+        
         $formWidgets[] = array(
             'type' => 'widget',
             'class' => DateTimePickerField::class,
