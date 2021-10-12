@@ -165,15 +165,22 @@ class FormGenerator {
                 if (isset($w->data->relationType) == false || $w->data->relationType == '')
                     continue;
                 
-                $mapperFunc = '\\'.$w->data->class.'::codegenDbMapper';
-                $fdm = $mapperFunc();
+                $rf = new \ReflectionClass( $w->data->class );
                 
-                $widgetDao = $fdm->getDaoClass();
-                
-                if ($w->data->relationType == 'MTO1') {
-                    $mapping_code .= '$fdm->addMTO1( \\'.$widgetDao.'::class, '.var_export($w->data->name, true).');' . PHP_EOL;
-                } else if ($w->data->relationType == 'MTON') {
-                    $mapping_code .= '$fdm->addMTON( \\'.$widgetDao.'::class, \\'.$w->data->class.'::class, '.var_export($w->data->name, true).');' . PHP_EOL;
+                if ( $rf->hasMethod('codegenDbMapper') ) {
+                    $mapperFunc = '\\'.$w->data->class.'::codegenDbMapper';
+                    $fdm = $mapperFunc();
+                    
+                    $widgetDao = $fdm->getDaoClass();
+                    
+                    if ($w->data->relationType == 'MTO1') {
+                        $mapping_code .= '$fdm->addMTO1( \\'.$widgetDao.'::class, '.var_export($w->data->name, true).');' . PHP_EOL;
+                    } else if ($w->data->relationType == 'MTON') {
+                        $mapping_code .= '$fdm->addMTON( \\'.$widgetDao.'::class, \\'.$w->data->class.'::class, '.var_export($w->data->name, true).');' . PHP_EOL;
+                    }
+                }
+                else {
+                    report_user_warning( 'DAO Object ot set for ' . $w->data->class );
                 }
                 
             }
