@@ -11,6 +11,7 @@ use core\forms\Select2Field;
 use core\forms\SelectField;
 use core\forms\WidgetContainer;
 use core\forms\CheckboxField;
+use core\forms\HtmlField;
 
 class FormChangesHtml
 {
@@ -76,6 +77,8 @@ class FormChangesHtml
         $htmlBase['html'] .= '<tbody>';
         foreach ($widgetsNewForm as $w) {
             if (is_a($w, ListWidget::class))
+                continue;
+            if (is_a($w, HtmlField::class))
                 continue;
             
             if ($w->getLabel() == '')
