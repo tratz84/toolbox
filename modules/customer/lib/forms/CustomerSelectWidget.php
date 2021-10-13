@@ -50,12 +50,16 @@ class CustomerSelectWidget extends DynamicSelectField {
         $personId = null;
         $this->customerDeleted = false;
         
+        $fieldFound = false;
+        
         if (is_object($obj) && method_exists($obj, 'getCompanyId')) {
             $companyId = $obj->getCompanyId();
+            $fieldFound = true;
         }
         
         if (is_object($obj) && method_exists($obj, 'getPersonId')) {
             $personId = $obj->getPersonId();
+            $fieldFound = true;
         }
         
         if (is_array($obj) && isset($obj[ $this->getName() ])) {
@@ -63,10 +67,17 @@ class CustomerSelectWidget extends DynamicSelectField {
             
             if (strpos($val, 'company-') === 0) {
                 $companyId = str_replace('company-', '', $val);
+                $fieldFound = true;
             }
             else if (strpos($val, 'person-') === 0) {
                 $personId = str_replace('person-', '', $val);
+                $fieldFound = true;
             }
+        }
+        
+        // no person_id or company_id in $obj? => skip
+        if ($fieldFound == false) {
+            return;
         }
         
         // gets kinda messy ;) when widget name is 'person_id' => ignore companyId & visa versa 
