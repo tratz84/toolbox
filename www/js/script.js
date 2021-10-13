@@ -1965,6 +1965,22 @@ function set_select2_val(selector, val, text) {
 	$( selector ).val( val ).trigger('change');
 }
 
+function set_select2_url( selector, url ) {
+	$(selector).select2({
+		ajax: {
+			url: appUrl(url),
+			type: 'POST',
+			data: function(params) {
+				var d = {};
+
+				d.name = params.term;
+				
+				return d;
+			}
+		}
+	});
+}
+
 
 
 function clickableRow_Click( objRow ) {
