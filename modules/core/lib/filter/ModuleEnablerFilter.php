@@ -105,6 +105,10 @@ class ModuleEnablerFilter {
                         throw new InvalidStateException('Sub module not found: '.var_export($tag, true));
                     }
                     
+                    if ($tag == $meta->getTag()) {
+                        throw new InvalidStateException( 'Module set itself as dependency' );
+                    }
+                    
                     
                     $loadedModules[ $tag ] = true;
                     $depmod = $moduleMetas[ $tag ];
