@@ -8,6 +8,16 @@ pageLoaded(function() {
 		ir.init();
 	});
 	
+	// TabContainer fix
+	$(window).on('tabcontainer-item-click', function( e, anch ) {
+		var id = $(anch).attr('id');
+		id = 'div.tab-pane#'+id.substr(0, id.length-4);
+		
+		$(id).find('img-rotate').each(function(index, node) {
+			if ($(node).data('img-rotate'))
+				$(node).data('img-rotate').drawImage();
+		});
+	});
 });
 
 
