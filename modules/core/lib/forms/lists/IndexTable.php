@@ -4,6 +4,8 @@
 namespace core\forms\lists;
 
 use core\export\ListResponseExcelExport;
+use core\export\CursorExcelExport;
+use core\export\CursorCsvExport;
 
 class IndexTable {
     
@@ -237,6 +239,33 @@ class IndexTable {
         return $lre;
     }
     
+    public function createCursorExcelExport( ) {
+        $lre = new CursorExcelExport();
+        
+        // set header
+        foreach( $this->columns as $name => $c ) {
+            $label = isset($c['fieldDescription']) && $c['fieldDescription'] ? $c['fieldDescription'] : $name;
+            $type = isset($c['fieldType']) && $c['fieldType'] ? $c['fieldType'] : 'text';
+            
+            $lre->addField($name, $label, $type);
+        }
+        
+        return $lre;
+    }
+ 
+    public function createCursorCsvExport( ) {
+        $lre = new CursorCsvExport();
+        
+        // set header
+        foreach( $this->columns as $name => $c ) {
+            $label = isset($c['fieldDescription']) && $c['fieldDescription'] ? $c['fieldDescription'] : $name;
+            $type = isset($c['fieldType']) && $c['fieldType'] ? $c['fieldType'] : 'text';
+            
+            $lre->addField($name, $label, $type);
+        }
+        
+        return $lre;
+    }
     
 }
 
