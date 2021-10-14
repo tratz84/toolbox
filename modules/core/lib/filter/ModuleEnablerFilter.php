@@ -92,9 +92,6 @@ class ModuleEnablerFilter {
             
             // module enabled? => include autoload.php
             if ($moduleEnabled) {
-                $modulesToLoad[] = array('meta' => $meta, 'autoload' => $meta->getProperty('path').'/autoload.php');
-                
-                $loadedModules[ $meta->getTag() ] = true;
                 
                 // loop through dependencies
                 foreach( $meta->getDependencies() as $tag ) {
@@ -113,6 +110,10 @@ class ModuleEnablerFilter {
                     $depmod = $moduleMetas[ $tag ];
                     $modulesToLoad[] = array('meta' => $depmod, 'autoload' => $depmod->getProperty('path').'/autoload.php');
                 }
+                
+                // mark module to load
+                $modulesToLoad[] = array('meta' => $meta, 'autoload' => $meta->getProperty('path').'/autoload.php');
+                $loadedModules[ $meta->getTag() ] = true;
             }
         }
 
