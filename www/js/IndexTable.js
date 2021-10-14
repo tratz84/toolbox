@@ -138,6 +138,44 @@ function IndexTable( container, opts ) {
 		this.columns.sort(function(o1, o2) { return o1.pos - o2.pos });
 	};
 	
+	
+	this.buildSearchOpts = function() {
+		var searchOpts = { };
+
+		// searchopts
+		searchOpts = serialize2object(this.opts.searchContainer ? this.opts.searchContainer : this.container);
+
+		searchOpts['pageNo'] = this.pageNo - 1;
+		
+		if (this.sortField) {
+			searchOpts['sortField'] = this.sortField;
+		}
+		if (this.sortFieldDirection) {
+			searchOpts['sortFieldDirection'] = this.sortFieldDirection;
+		}
+		
+		if (this.opts.defaultSearchOpts) {
+			for(var sok in this.opts.defaultSearchOpts) {
+				searchOpts[ sok ] = this.opts.defaultSearchOpts[ sok ];
+			}
+		}
+		
+		console.log( searchOpts );
+		
+		if (this.callback_pre_load) {
+			this.callback_pre_load(searchOpts);
+		}
+		
+		return searchOpts;
+	};
+	
+	this.formpost  = function( url ) {
+		var searchOpts = this.buildSearchOpts();
+		
+		formpost( url, searchOpts );
+	};
+	
+	
 	/**
 	 * load() - (re)load table
 	 * 			opts.force = force reload
@@ -175,31 +213,9 @@ function IndexTable( container, opts ) {
 		
 		var me = this;
 
-		var searchOpts = { };
 
-		// searchopts
-		searchOpts = serialize2object(this.opts.searchContainer ? this.opts.searchContainer : this.container);
-
-		searchOpts['pageNo'] = this.pageNo - 1;
+		searchOpts = this.buildSearchOpts();
 		
-		if (this.sortField) {
-			searchOpts['sortField'] = this.sortField;
-		}
-		if (this.sortFieldDirection) {
-			searchOpts['sortFieldDirection'] = this.sortFieldDirection;
-		}
-		
-		if (this.opts.defaultSearchOpts) {
-			for(var sok in this.opts.defaultSearchOpts) {
-				searchOpts[ sok ] = this.opts.defaultSearchOpts[ sok ];
-			}
-		}
-		
-		console.log( searchOpts );
-		
-		if (this.callback_pre_load) {
-			this.callback_pre_load(searchOpts);
-		}
 		
 		// show loading indicator?
 		if (this.opts.loadingIndicator) {
