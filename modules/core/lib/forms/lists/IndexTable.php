@@ -3,6 +3,8 @@
 
 namespace core\forms\lists;
 
+use core\export\ListResponseExcelExport;
+
 class IndexTable {
     
     protected $itVariable = 'it';
@@ -217,6 +219,24 @@ class IndexTable {
         
         return $js;
     }
+    
+    /**
+     * @return ListResponseExcelExport
+     */
+    public function createListResponseExcelExport( ) {
+        $lre = new ListResponseExcelExport();
+        
+        // set header
+        foreach( $this->columns as $name => $c ) {
+            $label = isset($c['fieldDescription']) && $c['fieldDescription'] ? $c['fieldDescription'] : $name;
+            $type = isset($c['fieldType']) && $c['fieldType'] ? $c['fieldType'] : 'text';
+            
+            $lre->addField($name, $label, $type);
+        }
+        
+        return $lre;
+    }
+    
     
 }
 

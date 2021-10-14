@@ -16,6 +16,8 @@ class ListResponseExcelExport {
     
     protected $fields;
     
+    protected $callbackColumnValue = null;
+    
     
     public function __construct($fields=array()) {
         
@@ -30,6 +32,11 @@ class ListResponseExcelExport {
             , 'label' => $label
             , 'type'  => $type
         );
+    }
+    
+    
+    public function setCallbackColumnValue( $callback ) {
+        $this->callbackColumnValue = $callback;
     }
     
     
@@ -48,6 +55,7 @@ class ListResponseExcelExport {
         $headers = $this->getHeaders();
         $this->xlsHeader($sheet, $headers);
         
+        $callbackColumnValue = $this->callbackColumnValue;
         
         // set content
         $objs = $response->getObjects();
@@ -60,6 +68,11 @@ class ListResponseExcelExport {
                 }
                 else {
                     $val = $objs[$x][ $f['name'] ];
+                }
+                
+                // callback set?
+                if ($callbackColumnValue) {
+                    $val = $callbackColumnValue( $f['name'], $val );
                 }
                 
                 $this->xlsCol($sheet, $x+2, $colno+1, $val, isset($f['type'])?$f['type']:'text');
