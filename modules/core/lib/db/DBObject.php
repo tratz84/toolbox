@@ -89,6 +89,15 @@ class DBObject {
             return false;
     }
     
+    public function getterOrField( $fieldName ) {
+        $func = 'get'.dbCamelCase( $fieldName );
+        if (method_exists($this, $func))
+            return $this->$func();
+        else
+            return $this->getField($fieldName);
+    }
+    
+    
     public function setFields($arr) {
         foreach($arr as $key => $val) {
             $this->setField($key, $val);
