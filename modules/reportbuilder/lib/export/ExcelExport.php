@@ -32,7 +32,7 @@ class ExcelExport {
     public function export() {
         // determine filename
         $f = $this->getFilename();
-        if (strpos($f, '.xls') === false) {
+        if (endsiWith($f, '.xls') == false && endsiWith($f, '.xlsx') == false) {
             $f = $f . '.xlsx';
         }
         
