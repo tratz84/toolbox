@@ -44,7 +44,12 @@ class Person extends base\PersonBase {
         }
     }
     
-    public function setEmailAddressNo( $pos=0, $email ) {
+    /**
+     * 
+     * @param int $pos - starts at 0
+     * @param string $email
+     */
+    public function setEmailAddressNo( $pos, $email ) {
         $els = $this->getEmailList();
         
         if ($pos == 0 && count($els) == 0) {
