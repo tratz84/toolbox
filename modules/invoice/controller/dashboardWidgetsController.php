@@ -49,6 +49,12 @@ class dashboardWidgetsController extends BaseController {
         $metaService = $this->oc->get(MetaService::class);
         
         $this->widgetSettings = @unserialize( $metaService->getMetaValue('user', $userId, 'dashboard_lastInvoices-widget') );
+        if (!$this->widgetSettings) {
+            $this->widgetSettings = array();
+            $this->widgetSettings['show_invoice_amount'] = false;
+            $this->widgetSettings['show_open_days'] = false;
+        }
+        
         if (is_array($this->widgetSettings) && isset($this->widgetSettings['invoiceStatusIds']))
             $opts['invoiceStatusIds'] = $this->widgetSettings['invoiceStatusIds'];
         
@@ -65,9 +71,10 @@ class dashboardWidgetsController extends BaseController {
         $userId = $this->ctx->getUser()->getUserId();
         $metaService = $this->oc->get(MetaService::class);
         $widgetSettings = @unserialize( $metaService->getMetaValue('user', $userId, 'dashboard_lastInvoices-widget') );
-
+        
         $this->form = new RecentInvoiceWidgetForm();
-        $this->form->bind($widgetSettings);
+        if ($widgetSettings)
+            $this->form->bind($widgetSettings);
         
         if (get_var('save')) {
             $this->form->bind($_REQUEST);
