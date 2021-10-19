@@ -81,4 +81,27 @@ function gd_image_resize( $img, $newWidth, $newHeight=null) {
 
 
 
+function imagick_image_resize( $im, $newWidth, $newHeight=null ) {
+    if (intval($newWidth) <= 0 && intval($newHeight) <= 0) {
+        throw new InvalidArgumentException('Invalid width & height given');
+    }
+    
+    $originalWidth = $im->getImageWidth();
+    $originalHeight = $im->getImageHeight();
+    
+    if (intval($newWidth) <= 0) {
+        $newWidth = $originalWidth * $newHeight / $originalHeight;
+    }
+    if (intval($newHeight) <= 0) {
+        $newHeight = $originalHeight * $newWidth / $originalWidth;
+    }
+    
+    
+    $im->resizeImage( $newWidth, $newHeight,imagick::FILTER_CUBIC, 1);
+    
+    return $im;
+}
+
+
+
 
