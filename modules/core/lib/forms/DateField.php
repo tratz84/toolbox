@@ -25,6 +25,19 @@ class DateField extends BaseWidget {
     
     public function disableAutocomplete() { $this->setAttribute('autocomplete', 'off'); }
     
+    
+    public function getValue() {
+        $v = parent::getValue();
+        
+        if (valid_date($v)) {
+            return format_date($v, 'Y-m-d');
+        }
+        else {
+            return null;
+        }
+    }
+    
+    
     public function render() {
         $this->setAttribute('type', 'date');
         
