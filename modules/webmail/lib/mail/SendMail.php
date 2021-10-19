@@ -157,12 +157,15 @@ class SendMail {
                     $transport->setPassword(SMTP_PASSWORD);
                 }
             } else {
-                // unix? =>K use sendmail
-                if (file_exists('/usr/sbin/sendmail')) {
-                    $transport = new \Swift_SendmailTransport();
-                } else {
-                    throw new ResourceException('No mail transport configured');
-                }
+                // unix? => use sendmail
+                $transport = new \Swift_SendmailTransport();
+                
+                // skip check, just try.. some environments block this, but still work
+//                 if (file_exists('/usr/sbin/sendmail')) {
+//                     $transport = new \Swift_SendmailTransport();
+//                 } else {
+//                     throw new ResourceException('/usr/sbin/sendmail not found');
+//                 }
             }
         } else {
             // TLS security for transport?
