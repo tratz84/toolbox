@@ -181,6 +181,15 @@ class BaseForm extends WidgetContainer implements LockableObject {
     public function getErrors() { return $this->errors; }
     public function hasErrors() { return count($this->errors) > 0 ? true : false; }
     
+    public function getFieldErrorMessage( $fieldName, $defaultValue = null ) {
+        if ( isset($this->errors[$fieldName]) ) {
+            return $this->errors[$fieldName];
+        }
+        else {
+            return $defaultValue;
+        }
+    }
+    
     public function getErrorList() {
         $l = array();
         
