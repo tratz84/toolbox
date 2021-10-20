@@ -8,6 +8,32 @@ class DashboardWidgets {
     public $userWidgets = array();
     
     
+    public function getWidgets() { return $this->widgets; }
+    public function getUserWidgets() { return $this->userWidgets; }
+    
+    public function removeWidget( $widgetCode, $callRemoveUserWidget =true ) {
+        
+        $this->widgets = array_filter($this->widgets, function($w) use ($widgetCode) {
+            if ( $w['code'] == $widgetCode )
+                return false;
+            else
+                return true;
+        });
+        
+        if ($callRemoveUserWidget)
+            $this->removeUserWidget( $widgetCode, false );
+    }
+    
+    public function removeUserWidget( $widgetCode, $callRemoveWidget=true ) {
+        if (isset($this->userWidgets[$widgetCode]))
+            unset( $this->userWidgets[$widgetCode] );
+        
+        if ($callRemoveWidget)
+            $this->removeWidget( $widgetCode, false );
+    }
+    
+    
+    
     public function addWidget($code, $name, $description, $ajaxUrl) {
         $this->widgets[] = array(
             'code' => $code,
