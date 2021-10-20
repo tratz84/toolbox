@@ -65,6 +65,7 @@ $lang['payment_type.deposit'] = 'Borg';
 $lang['articleType.normal'] = 'Normaal';
 $lang['articleType.deposit'] = 'Borg';
 
+$lang['Column selection'] = 'Kolom selectie';
 
 $lang['contract-status.active']  = 'Actief';
 $lang['contract-status.stopped'] = 'Gestopt';

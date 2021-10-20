@@ -991,7 +991,7 @@ function IndexTable( container, opts ) {
 		}
 
 		var dialog = showDialog({
-			title: 'Column selection',
+			title: t('Column selection'),
 			html: container,
 			callback_ok: function() {
 				this.updateColumnselection();
