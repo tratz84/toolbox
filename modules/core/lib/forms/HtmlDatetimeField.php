@@ -47,6 +47,7 @@ class HtmlDatetimeField extends BaseWidget {
         $html = '';
         
         $html .= '<div class="widget html-field-widget widget-'.slugify($this->getName()).'">';
+        $html .= '<input type="hidden" name="'.$this->getName() . '" value="'.esc_attr($this->getValue()).'" />';
         $html .= '<label>'.esc_html($this->getLabel()).'</label>';
         $html .= '<span>'.esc_html($t).'</span>';
         $html .= '</div>';
