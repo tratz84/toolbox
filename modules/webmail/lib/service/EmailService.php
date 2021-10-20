@@ -229,7 +229,7 @@ class EmailService extends ServiceBase {
         
         $cursor = $eDao->search($opts);
         
-        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('email_id', 'user_id', 'incoming', 'from_name', 'from_email', 'subject', 'deleted', 'created', 'status', 'company_name', 'firstname', 'insert_lastname', 'lastname'));
+        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('email_id', 'user_id', 'incoming', 'from_name', 'from_email', 'subject', 'deleted', 'created', 'status', 'statusAsText', 'company_name', 'firstname', 'insert_lastname', 'lastname'));
         
         return $r;
     }

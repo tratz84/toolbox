@@ -18,6 +18,8 @@ class WebmailOutboxIndexTable extends IndexTable {
         
         $this->setColumn('from_name',     ['fieldDescription' => t('From'),      'fieldType' => 'text']);
 //         $this->setColumn('customer_name',     ['fieldDescription' => t('Customer name'), 'fieldType' => 'text', 'sortField' => 'customer_name', 'searchable' => true]);
+        $this->setColumn('statusAsText',         ['fieldDescription' => t('Status'), 'fieldType' => 'text']);
+        
         $this->setColumn('subject',              ['fieldDescription' => t('Subject'), 'fieldType' => 'text', 'searchable' => true]);
         $this->setColumn('created',           ['fieldDescription' => t('Created'),  'fieldType' => 'datetime']);
         
