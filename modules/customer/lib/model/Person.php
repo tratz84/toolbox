@@ -67,10 +67,20 @@ class Person extends base\PersonBase {
     
     
     public function getFullname() {
-        
         return format_personname($this);
     }
     
+    public function getFullnameSpoken() {
+        $n = trim( $this->getFirstname() );
+        if ( trim($this->getInsertLastname()) != '' ) {
+            $n .= ' ' . $this->getInsertLastname();
+        }
+        if ( trim($this->getLastname()) != '' ) {
+            $n .= ' ' . $this->getLastname();
+        }
+        
+        return $n;
+    }
     
 }
 
