@@ -102,6 +102,9 @@ function applyWidgetFields(container) {
 		$(container).find('form').find('.row-delete').remove();
 		$(container).find('form').find('.add-entry-container.action-box').remove();
 		
+		$(container).find('form div.widget.select2-editable-field-widget a').remove();
+		$(container).find('form div.widget.select-field-widget a').remove();
+		
 		$(container).find('form').submit(function() {
 			return false;
 		});
