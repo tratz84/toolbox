@@ -97,7 +97,7 @@ function imagick_image_resize( $im, $newWidth, $newHeight=null ) {
     }
     
     
-    $im->resizeImage( $newWidth, $newHeight,imagick::FILTER_CUBIC, 1);
+    $im->resizeImage( $newWidth, $newHeight,imagick::FILTER_HAMMING, 1);
     
     return $im;
 }
