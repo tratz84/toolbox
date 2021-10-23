@@ -26,6 +26,9 @@ class AuthFilter {
             $userService = ObjectContainer::getInstance()->get(UserService::class);
             
             $user = $userService->readByAutologinToken($_GET['admin_autologin']);
+            
+            $user = apply_filter('core-Authfilter-admin_autologin', $user);
+            
             if ($user) {
                 $_SESSION['user_id'] = $user->getUserId();
                 $_SESSION['contextName'] = Context::getInstance()->getContextName();
