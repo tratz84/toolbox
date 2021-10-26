@@ -57,7 +57,7 @@ class customerController extends AdminBaseController {
         $opts = array();
         $opts['headers'] = array('API-KEY: ' . API_KEY);
         
-        $response = post_url( BASE_URL . '/' . $_REQUEST['contextName'] . '/?m=base&c=api/user&a=autologin', array('username' => $_POST['username'], 'log-activity' => $logActivity), $opts );
+        $response = post_url( BASE_URL . '/' . $_REQUEST['contextName'] . '/?m=base&c=api/user&a=autologin&prefix=tbadmin', array('username' => $_POST['username'], 'log-activity' => $logActivity), $opts );
         
         $json = json_decode($response);
         if ($json == false || isset($json->token) == false) {

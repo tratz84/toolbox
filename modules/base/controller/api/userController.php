@@ -34,7 +34,7 @@ class userController extends BaseController {
         }
         
         
-        $token = $userService->generateAutologinToken($user->getUserId());
+        $token = $userService->generateAutologinToken( $user->getUserId(), get_var('prefix') );
         
         $this->json(array('token' => $token));
     }

@@ -180,12 +180,17 @@ class UserService extends ServiceBase {
     }
     
     
-    public function generateAutologinToken($user_id) {
+    public function generateAutologinToken($user_id, $prefix=null) {
         
         $token = md5(uniqid().uniqid().uniqid().uniqid().uniqid().uniqid().uniqid().uniqid());
         // set timestamp, token may only be used for 10 seconds..
         $token .= '$' . date('YmdHis');
         
+        if ($prefix) {
+            if (strlen($prefix) > 8)
+                $prefix = substr($prefix, 0, 8);
+            $token = $prefix . $token;
+        }
         
         $uDao = new UserDAO();
         $uDao->setAutologinToken($user_id, $token);
