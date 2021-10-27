@@ -57,6 +57,10 @@ class ActionContainer {
         return $this->items;
     }
     
+    public function clearItems() {
+        $this->items = array();
+    }
+    
     
     public function render() {
         if (!$this->hasItems()) {
