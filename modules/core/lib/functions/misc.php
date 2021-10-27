@@ -1232,6 +1232,9 @@ function validate_email($email)
                 $isValid = false;
             }
         }
+        else if ( strpos($domain, '.') === false ) {
+            $isValid = false;
+        }
         // if ($isValid && !(checkdnsrr($domain,"MX") || checkdnsrr($domain,"A")))
         // {
         // // domain not found in DNS
