@@ -12,7 +12,9 @@
 
 <?= $form->render() ?>
 
-<input type="button" value="Save + test" onclick="saveTest_Click();" />
+<div class="clear">
+	<input type="button" value="Save + test" onclick="saveTest_Click();" />
+</div>
 
 <script>
 
