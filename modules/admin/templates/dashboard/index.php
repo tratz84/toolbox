@@ -10,6 +10,7 @@
 		<tr>
 			<th>Context name</th>
 			<th>Database</th>
+			<th>Description</th>
 			<th>Note</th>
 			<th>Actief</th>
 		</tr>
@@ -20,6 +21,7 @@
     	<tr class="clickable" data-context-name="<?= esc_attr($c->getContextName()) ?>">
     		<td><?= esc_html($c->getContextName()) ?></td>
     		<td><?= esc_html($c->getDatabaseName()) ?></td>
+    		<td><?= esc_html($c->getDescription()) ?></td>
     		<td><?= esc_html($c->getNote()) ?></td>
     		<td><?= $c->getActive() ? 'Ja' : 'Nee' ?></td>
     	</tr>
