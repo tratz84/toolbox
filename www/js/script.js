@@ -1,6 +1,32 @@
 
 
 
+// report javascript bugs
+window.onerror = function(message, source, lineno, colno, error) {
+	var msg = message + '\n' + source + ':' + lineno + ':' + colno + '\n' + error;
+	
+	// <video />-playback error. Ignore this
+	if (message == 'ResizeObserver loop limit exceeded') {
+		return false;
+	} 
+	
+	// report..
+	$.ajax({
+		type: 'POST',
+		url: appUrl('/'),
+		data: {
+			m: 'base',
+			c: 'debug',
+			a: 'report_bug',
+			url: window.location.toString(),
+			message: msg
+		}
+	});
+};
+
+
+
+
 $(document).ready(function() {
 	
 	
