@@ -869,7 +869,12 @@ function date2unix($input)
 function format_date($str, $format='d-m-Y', $defaultVal='') {
 
     if (strpos($str, 'Y-m') !== false || strpos($str, 'm-Y') !== false || $str == 'Ymd') {
-        throw new NotForLiveException('Lul, je draait de $str & $format weer eens om...');
+        if (is_debug()) {
+            throw new NotForLiveException('Lul, je draait de $str & $format weer eens om...');
+        }
+        else {
+            throw new InvalidArgumentException('$str and $format flipped');
+        }
     }
     
     if (valid_date($str) || valid_datetime($str)) {
