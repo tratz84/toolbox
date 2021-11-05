@@ -45,7 +45,7 @@ class ProjectDAO extends \core\db\DAOObject {
 	        
 	        $qbwc = new QueryBuilderWhereContainer('OR');
 	        $qbwc->addWhere(QueryBuilderWhere::whereRefByVal('company_name', 'LIKE', '%' . $opts['name'] . '%'));
-	        $qbwc->addWhere(QueryBuilderWhere::whereRefByVal("concat(customer__person.firstname, ' ', customer__person.insert_lastname, ' ', customer__person.lastname)", 'LIKE', '%' . $opts['name'] . '%'));
+	        $qbwc->addWhere(QueryBuilderWhere::whereRefByVal("concat_ws('', customer__person.firstname, ' ', customer__person.insert_lastname, ' ', customer__person.lastname)", 'LIKE', '%' . $opts['name'] . '%'));
 	        
 	        $qb->addWhere($qbwc);
 	    }
@@ -56,8 +56,8 @@ class ProjectDAO extends \core\db\DAOObject {
 	        $q = '%'.preg_replace('/\\s+/', '%', $q).'%';
 	        
 	        $qbwc = new QueryBuilderWhereContainer('OR');
-	        $qbwc->addWhere(QueryBuilderWhere::whereRefByVal("concat(company_name, ' ', project__project.project_name)", 'LIKE', $q));
-	        $qbwc->addWhere(QueryBuilderWhere::whereRefByVal("concat(customer__person.firstname, ' ', customer__person.insert_lastname, ' ', customer__person.lastname, ' ', project__project.project_name)", 'LIKE', $q));
+	        $qbwc->addWhere(QueryBuilderWhere::whereRefByVal("concat_ws('', company_name, ' ', project__project.project_name)", 'LIKE', $q));
+	        $qbwc->addWhere(QueryBuilderWhere::whereRefByVal("concat_ws('', customer__person.firstname, ' ', customer__person.insert_lastname, ' ', customer__person.lastname, ' ', project__project.project_name)", 'LIKE', $q));
 	        
 	        $qb->addWhere($qbwc);
 	    }

@@ -32,7 +32,7 @@ class usercustomerController extends BaseController {
         if ($user) {
             $sqls[] = "select user_id id, username name, 'user' as type
                     from base__user
-                    where username LIKE ? OR concat(firstname, lastname) LIKE ? ";
+                    where username LIKE ? OR concat_ws(' ', firstname, lastname) LIKE ? ";
             $params[] = $q;
             $params[] = $q;
         }
@@ -45,9 +45,9 @@ class usercustomerController extends BaseController {
         }
         
         if ($person) {
-            $sqls[] = "select person_id id, concat(lastname, ' ', insert_lastname, ', ', firstname) name, 'person' as type
+            $sqls[] = "select person_id id, concat_ws('', lastname, ' ', insert_lastname, ', ', firstname) name, 'person' as type
                     from customer__person
-                    where concat(lastname, ' ', insert_lastname, firstname, ' ', insert_lastname, ' ', lastname) LIKE ? ";
+                    where concat_ws(' ', lastname, insert_lastname, firstname, insert_lastname, lastname) LIKE ? ";
             $params[] = $q;
         }
         

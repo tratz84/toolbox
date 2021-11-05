@@ -53,7 +53,7 @@ class PersonDAO extends \core\db\DAOObject {
         }
 	    
 	    if (isset($opts['customername']) && trim($opts['customername']) != '') {
-	        $qb->addWhere(QueryBuilderWhere::whereRefByVal("concat(firstname, ' ', insert_lastname, ' ', lastname)", 'LIKE', '%'.$opts['customername'].'%'));
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal("concat_ws(' ', firstname, insert_lastname, lastname)", 'LIKE', '%'.$opts['customername'].'%'));
 	    }
 	    
 	    if (isset($opts['firstname']) && trim($opts['firstname']) != '') {

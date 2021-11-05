@@ -38,7 +38,7 @@ class ActivityDAO extends \core\db\DAOObject {
     	    if (isset($opts['customer_name']) && trim($opts['customer_name'])) {
     	        $qbwc = new QueryBuilderWhereContainer('OR');
     	        $qbwc->addWhere(QueryBuilderWhere::whereRefByVal('customer__company.company_name', 'LIKE', '%'.$opts['customer_name'].'%'));
-    	        $qbwc->addWhere(QueryBuilderWhere::whereRefByVal("concat(customer__person.firstname, ' ', customer__person.insert_lastname, ' ', customer__person.lastname)", 'LIKE', '%'.$opts['customer_name'].'%'));
+    	        $qbwc->addWhere(QueryBuilderWhere::whereRefByVal("concat_ws(' ', customer__person.firstname, customer__person.insert_lastname, customer__person.lastname)", 'LIKE', '%'.$opts['customer_name'].'%'));
     	        
     	        $qb->addWhere($qbwc);
     	    }

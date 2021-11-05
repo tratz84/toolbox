@@ -32,7 +32,7 @@ class UserDAO extends \core\db\DAOObject {
 	    
 	    if (isset($opts['name']) && trim($opts['name']) != '') {
 	        $q1 = QueryBuilderWhere::whereRefByVal('username', 'LIKE', '%'.$opts['name'].'%');
-	        $q2 = QueryBuilderWhere::whereRefByVal("concat(firstname, ' ', lastname, ' ', firstname)"
+	        $q2 = QueryBuilderWhere::whereRefByVal("concat_ws(' ', firstname, lastname, firstname)"
 	            , 'LIKE', '%'.$opts['name'].'%');
 	        
 	        $qbwc = new QueryBuilderWhereContainer();

@@ -30,7 +30,7 @@ class ToBillDAO extends \core\db\DAOObject {
 	    $params = array();
 	    
 	    if (isset($opts['customer_name']) && trim($opts['customer_name'])) {
-	        $where[] = " concat(p.lastname, ', ', p.insert_lastname, ' ', p.firstname) LIKE ? OR c.company_name LIKE ? ";
+	        $where[] = " concat_ws('', p.lastname, ', ', p.insert_lastname, ' ', p.firstname) LIKE ? OR c.company_name LIKE ? ";
 	        $params[] = '%'.$opts['customer_name'].'%';
 	        $params[] = '%'.$opts['customer_name'].'%';
 	    }
