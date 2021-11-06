@@ -15,6 +15,10 @@ class CustomerDAO extends \core\db\DAOObject {
 	    return $this->queryList("select * from toolbox__customer order by contextName");
 	}
 	
+	public function readActive() {
+	    return $this->queryList("select * from toolbox__customer where active =  true order by contextName");
+	}
+	
 	public function readCustomers($ids) {
 	    $intIds = array();
 	    foreach($ids as $i) {

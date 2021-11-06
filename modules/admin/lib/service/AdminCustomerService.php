@@ -9,7 +9,7 @@ use core\Context;
 class AdminCustomerService extends ServiceBase {
     
     
-    public function readCustomers() {
+    public function readCustomers( $opts=array() ) {
         
         $ctx = $this->oc->get(Context::class);
         $user = $ctx->getUser();
@@ -17,7 +17,10 @@ class AdminCustomerService extends ServiceBase {
         $customerDao = new CustomerDAO();
         
         if (is_cli() || $user->getUserType() == 'admin') {
-            return $customerDao->readAll();
+            if (isset($opts['active-only']) && $opts['active-only'])
+                return $customerDao->readActive();
+            else
+                return $customerDao->readAll();
         } else {
             $customerDao = new CustomerDAO();
             
