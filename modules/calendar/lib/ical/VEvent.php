@@ -331,7 +331,7 @@ class VEvent extends VEventInstance {
         
         $ymditemEnd = (int)format_date($this->getEndDate(), 'Ymd');
         
-        $dt = new \DateTime($this->getStartDate());
+        $dt = new \DateTime( format_date($this->getStartDate(), 'Y-m-01') );
         
         
         while ((int)$dt->format('Ymd') <= $ymdend && (!$ymditemEnd || (int)$dt->format('Ymd') <= $ymditemEnd)) {
@@ -392,7 +392,14 @@ class VEvent extends VEventInstance {
                 $instances[] = $i;
             }
             
-            $dt->modify('+' . $this->interval . ' year');
+            // set to first of month. Yearly 
+            if ($this->byMonth) {
+                $dt->setDate( $dt->format('Y')+1, $this->byMonth, 1 );
+            }
+            else {
+                $dt->setDate( $dt->format('Y')+1, $dt->format('m'), 1 );
+                
+            }
         }
         
         return $instances;
