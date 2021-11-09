@@ -19,6 +19,10 @@ $tb_activity->addColumn('long_description',  'text');
 $tb_activity->addColumn('note',              'text');
 $tb_activity->addColumn('changes',           'text');
 $tb_activity->addColumn('created',           'datetime');
+$tb_activity->addIndex('index_ref',     ['ref_object', 'ref_id']);
+$tb_activity->addIndex('index_user',    ['user_id']);
+$tb_activity->addIndex('index_company', ['company_id']);
+$tb_activity->addIndex('index_person',  ['person_id']);
 $tbs[] = $tb_activity;
 
 $tb_cron = new TableModel('base', 'cron');
