@@ -180,6 +180,7 @@ class GeneratorHelper {
         $formWidgets[] = array(
             'type' => 'widget',
             'class' => TextField::class,
+            'editor' => \codegen\form\widgetoptions\TextFieldOptionsForm::class,
             'label' => 'Textfield'
         );
         $formWidgets[] = array(
