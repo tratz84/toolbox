@@ -7,6 +7,7 @@ use core\template\HtmlScriptLoader;
 
 class TinymceField extends BaseWidget {
     
+    protected $fullpage = true;
     
     public function __construct($name, $value=null, $label=null) {
         $this->setName($name);
@@ -16,6 +17,11 @@ class TinymceField extends BaseWidget {
         $hsl = ObjectContainer::getInstance()->get(HtmlScriptLoader::class);
         $hsl->enableGroup('tinymce');
     }
+    
+    /**
+     * setFullpage() - add <html>, <head> & <body>-tags ?
+     */
+    public function setFullpage($bln) { $this->fullpage = $bln ? true : false; }
     
     
     public function renderAsText() {
@@ -36,7 +42,7 @@ class TinymceField extends BaseWidget {
         
         $extraClass = $this->hasError() ? 'error' : '';
         
-        $html .= '<div class="widget tinymce-field-widget widget-'.slugify($this->getName()).' '.$extraClass.'">';
+        $html .= '<div class="widget tinymce-field-widget widget-'.slugify($this->getName()).' '.$extraClass.'" data-fullpage="'.($this->fullpage?1:0).'">';
         $html .= '<label>' . esc_html($this->getLabel()) . infopopup($this->getInfoText()) . '</label>';
         $html .= '<div><textarea class="input-tinymce" name="'.esc_attr($this->getName()).'">'.esc_html($this->getValue()).'</textarea></div>';
         $html .= '</div>';

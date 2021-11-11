@@ -272,9 +272,16 @@ function applyWidgetFields(container) {
 	});
 	
 	if (typeof $(document).tinymce == 'function') {
-		$('.input-tinymce').tinymce({
-			plugins: 'paste,code,link,media,paste,table,textcolor,wordcount,contextmenu,colorpicker',
-			paste_data_images: true
+		$('.input-tinymce').each(function(index, node) {
+			var strPlugins = 'paste,code,link,media,paste,table,textcolor,wordcount,contextmenu,colorpicker';
+			
+			if ( $(node).closest('.widget').data('fullpage') )
+				strPlugins += ',fullpage';
+			
+			$(node).tinymce({
+				plugins: strPlugins,
+				paste_data_images: true
+			});
 		});
 	}
 	
