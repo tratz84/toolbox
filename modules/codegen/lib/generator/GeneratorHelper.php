@@ -42,6 +42,7 @@ use core\forms\WidgetContainer;
 use customer\forms\CompanySelectWidget;
 use customer\forms\CustomerSelectWidget;
 use customer\forms\CustomerSimpleSelectWidget;
+use core\forms\TinymceField;
 
 class GeneratorHelper {
     
@@ -195,6 +196,14 @@ class GeneratorHelper {
             'editor' => TextAreaOptionsForm::class,
             'label' => 'Textarea-field'
         );
+        
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => TinymceField::class,
+            'editor' => TextAreaOptionsForm::class,
+            'label' => 'Tinymce-field'
+        );
+        
         $formWidgets[] = array(
             'type' => 'widget',
             'class' => DivContenteditableField::class,
