@@ -169,7 +169,6 @@ class VEvent extends VEventInstance {
     }
     
     protected function generateEventInstancesWeekly($startDate, $endDate) {
-        
         $ymdstart = (int)format_date($startDate, 'Ymd');
         $ymdend = (int)format_date($endDate, 'Ymd');
         
@@ -209,9 +208,12 @@ class VEvent extends VEventInstance {
                 if ((int)format_date($dt2, 'Ymd') < $ymdstart)
                     continue;
                 
+                if ($ymditemEnd && (int)format_date($dt2, 'Ymd') > $ymditemEnd)
+                    break;
+                
                 // peildatum na einddatum
                 if ($ymditemEnd && (int)format_date($dt2, 'Ymd') > $ymdend)
-                    continue;
+                    break;
                 
                 $i = new VEventInstance();
                 $i->setId($this->getId());
