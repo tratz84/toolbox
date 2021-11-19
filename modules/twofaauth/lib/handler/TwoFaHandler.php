@@ -50,6 +50,9 @@ class TwoFaHandler {
         // check cookie
         $tfService = object_container_get(TwoFaService::class);
         if (isset($_COOKIE['twofaauth']) && $tfService->checkCookie( $_COOKIE['twofaauth'] )) {
+            // extend cookie time
+            setcookie('twofaauth', $_COOKIE['twofaauth'], time()+(60*60*24*365), appUrl('/'));
+            
             return true;
         }
         
