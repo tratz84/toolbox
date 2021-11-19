@@ -314,8 +314,18 @@ class BaseForm extends WidgetContainer implements LockableObject {
             $html .= '<div class="error-close-container"><a href="javascript:void(0);" onclick="$(this).closest(\'div.errors.error-list\').remove();" class="fa fa-remove"></a></div>';
             $html .= '<ul>';
             foreach($this->errors as $fieldName => $errorList) {
+                $errorMessages = array();
+                
                 foreach($errorList as $e) {
-                    $html .= '<li>'.$this->getLabelByFieldname($fieldName) . ' - ' . esc_html($e).'</li>';
+                    // skip duplicate messages
+                    $errorMessage = $this->getLabelByFieldname($fieldName) . ' - ' . esc_html($e);
+                    if (isset($errorMessages[$errorMessage])) {
+                        continue;
+                    }
+                    $errorMessages[$errorMessage] = true;
+                    
+                    $html .= '<li>'.$errorMessage.'</li>';
+                    
                 }
             }
             $html .= '</ul>';
