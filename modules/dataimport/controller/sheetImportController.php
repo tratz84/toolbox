@@ -82,6 +82,7 @@ class sheetImportController extends BaseController {
                         'name'    => $w->getName() . '.' . $w2->getName() 
                         , 'label' => $w->getLabel() . ' - ' . $w2->getLabel()
                         , 'prio'  => ($w->getPrio()+$subprio)
+                        , 'list'  => true
                     );
                     
                     $subprio += 0.01;
@@ -96,6 +97,7 @@ class sheetImportController extends BaseController {
                     'name'    => $w->getName()
                     , 'label' => $w->getLabel()
                     , 'prio'  => $w->getPrio()
+                    , 'list'  => false
                 );
             }
         }
