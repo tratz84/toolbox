@@ -46,6 +46,13 @@ class sheetImportController extends BaseController {
         
         $this->dif = $dif = $difc->getForm( get_var('uid') );
         
+        // get file
+        $f = get_data_file_safe('dataimport', get_var('f'));
+        if (!$f)
+            throw new FileException( 'File not found' );
+        
+        
+        
         
         return $this->render();
     }
