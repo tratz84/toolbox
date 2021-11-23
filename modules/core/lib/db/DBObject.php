@@ -60,6 +60,19 @@ class DBObject {
         }
     }
     
+    public function getColumnMaxLength( $columnName ) {
+        $t = $this->getColumnType($columnName);
+        
+        $r = array();
+        if ($t && preg_match('/^varchar\\((\\d+)\\)$/', $t, $r)) {
+            return $r[1];
+        }
+        
+        return null;
+    }
+    
+    
+    
     public function getLastError() { return $this->lastError; }
     public function getLastQuery() { return $this->lastQuery; }
     
