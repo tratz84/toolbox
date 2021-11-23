@@ -21,6 +21,7 @@ class DynamicSelectField extends BaseWidget {
     
     public function setEndpoint( $url ) { $this->endpoint = $url; }
     
+    public function getDefaultText() { return $this->defaultText; }
     public function setDefaultText($t) { $this->defaultText = $t; }
     
     public function renderAsText() {

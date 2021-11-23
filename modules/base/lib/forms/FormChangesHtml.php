@@ -88,13 +88,7 @@ class FormChangesHtml
                 continue;
             }
             
-            if (is_a($w, CheckboxField::class)) {
-                $val = $w->getValue() ? t('Yes') : t('No');
-            } else if ($w->getValue() && (is_a($w, SelectField::class) || is_a($w, Select2Field::class))) {
-                $val = $w->getValueLabel();
-            } else {
-                $val = $w->getValue();
-            }
+            $val = $this->getWidgetText( $w );
 
             $w_old = $this->oldForm->getWidget($w->getName());
             
@@ -103,26 +97,10 @@ class FormChangesHtml
                 continue;
             }
             
-            if (is_a($w_old, CheckboxField::class)) {
-                $oldVal = $w_old->getValue() ? t('Yes') : t('No');
-            } else if ($w_old->getValue() && (is_a($w_old, SelectField::class) || is_a($w_old, Select2Field::class))) {
-                $oldVal = $w_old->getValueLabel();
-            } else {
-                $oldVal = $w_old->getValue();
-            }
+            $oldVal = $this->getWidgetText( $w_old );
 
             
-            if (is_a($w, DatePickerField::class)) {
-                $val    = format_date($val, 'Y-m-d');
-                $oldVal = format_date($oldVal, 'Y-m-d');
-            }
-            
             if ((string)$oldVal != (string)$val) {
-                if (is_a($w, DatePickerField::class)) {
-                    $oldVal = format_date($oldVal, 'd-m-Y');
-                    $val = format_date($val, 'd-m-Y');
-                }
-                
                 $this->changeCount++;
                 $htmlBase['html'] .= '<tr><td>' . esc_html($w->getLabel()) . '</td><td>' . esc_html($oldVal) . '</td><td>' . esc_html($val) . '</td></tr>' . "\n";
                 $htmlBase['changes']++;
@@ -214,23 +192,14 @@ class FormChangesHtml
                 
                 $w2->setValue('');
                 $w2->bindObject($objsNew[$x]);
-                if (is_a($w2, CheckboxField::class)) {
-                    $vNew = $w2->getValue() ? t('Yes') : t('No');
-                } else if ($w2->getValue() && (is_a($w2, SelectField::class) || is_a($w2, Select2Field::class))) {
-                    $vNew = $w2->getValueLabel();
-                } else {
-                    $vNew = $w2->getValue();
-                }
+                
+                $vNew = $this->getWidgetText( $w2 );
+                
                 
                 $w2->setValue('');
                 $w2->bindObject($objsOld[$x]);
-                if (is_a($w2, CheckboxField::class)) {
-                    $vOld = $w2->getValue() ? t('Yes') : t('No');
-                } else if ($w2->getValue() && (is_a($w2, SelectField::class) || is_a($w2, Select2Field::class))) {
-                    $vOld = $w2->getValueLabel();
-                } else {
-                    $vOld = $w2->getValue();
-                }
+                
+                $vOld =$this->getWidgetText( $w2 );
                 
                 
                 if ($vNew == $vOld) {
@@ -261,7 +230,7 @@ class FormChangesHtml
                     if (is_a($w2, HiddenField::class)) continue;
                     
                     $w2->bindObject($objsNew[$x]);
-                    $vNew = $w2->getValue();
+                    $vNew = $this->getWidgetText( $w2 );
                     
                     $htmlTr.= '<td>'.esc_html($vNew).'</td>';
                 }
@@ -282,7 +251,7 @@ class FormChangesHtml
                     if (is_a($w2, HiddenField::class)) continue;
                     
                     $w2->bindObject($objsOld[$x]);
-                    $vOld = $w2->getValue();
+                    $vOld = $this->getWidgetText( $w2 );
                     
                     $htmlTr.= '<td>'.esc_html($vOld).'</td>';
                 }
@@ -301,6 +270,29 @@ class FormChangesHtml
         
         return $htmlList;
     }
+    
+    
+    public function getWidgetText( $w ) {
+        $v = null;
+        
+        if (is_a($w, CheckboxField::class)) {
+            $v = $w->getValue() ? t('Yes') : t('No');
+        } else if ($w->getValue() && (is_a($w, SelectField::class) || is_a($w, Select2Field::class))) {
+            $v = $w->getValueLabel();
+        } else if ($w->getValue() && is_a($w, \core\forms\DynamicSelectField::class) && $w->getDefaultText()) {
+            $v = $w->getDefaultText();
+        } else {
+            $v = $w->getValue();
+        }
+        
+        if (is_a($w, DatePickerField::class))
+            $v = format_date($v, 'd-m-Y');
+        
+        
+        return $v;
+    }
+    
+    
     
     protected function parseListEditWidget($widgetNewForm) {
         $htmlList = array('html' => '', 'changes' => 0);
@@ -338,11 +330,11 @@ class FormChangesHtml
                 
                 $w2->setValue('');
                 $w2->bindObject($objsNew[$x]);
-                $vNew = $w2->getValue();
+                $vNew = $this->getWidgetText( $w2 );
                 
                 $w2->setValue('');
                 $w2->bindObject($objsOld[$x]);
-                $vOld = $w2->getValue();
+                $vOld = $this->getWidgetText( $w2 );
                 
                 if ($vNew == $vOld) {
                     $htmlTr .= '<td>'.esc_html($vNew).'</td>';
@@ -372,7 +364,7 @@ class FormChangesHtml
                     if (is_a($w2, HiddenField::class)) continue;
                     
                     $w2->bindObject($objsNew[$x]);
-                    $vNew = $w2->getValue();
+                    $vNew = $this->getWidgetText( $w2 );
                     
                     $htmlTr.= '<td>'.esc_html($vNew).'</td>';
                 }
@@ -393,7 +385,7 @@ class FormChangesHtml
                     if (is_a($w2, HiddenField::class)) continue;
                     
                     $w2->bindObject($objsOld[$x]);
-                    $vOld = $w2->getValue();
+                    $vOld = $this->getWidgetText( $w2 );
                     
                     $htmlTr.= '<td>'.esc_html($vOld).'</td>';
                 }
@@ -445,15 +437,8 @@ class FormChangesHtml
             }
             
             
-            if (is_a($w, CheckboxField::class)) {
-                $val = $w->getValue() ? t('Yes') : t('No');
-            } else if ($w->getValue() && (is_a($w, SelectField::class) || is_a($w, Select2Field::class)))
-                $val = $w->getValueLabel();
-            else
-                $val = $w->getValue();
             
-            if (is_a($w, DatePickerField::class))
-                $val = format_date($val, 'd-m-Y');
+            $val = $this->getWidgetText( $w );
 
             $html .= '<tr><td>' . esc_html($w->getLabel()) . '</td><td>' . esc_html($val) . '</td></tr>' . "\n";
         }
