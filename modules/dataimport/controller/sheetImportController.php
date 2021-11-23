@@ -5,6 +5,9 @@ use core\controller\BaseController;
 use dataimport\container\DataImportFormContainer;
 use dataimport\form\UploadSheetForm;
 use core\exception\FileException;
+use core\forms\ListFormWidget;
+use core\forms\ListEditWidget;
+use core\forms\HiddenField;
 
 class sheetImportController extends BaseController {
     
@@ -51,12 +54,58 @@ class sheetImportController extends BaseController {
         if (!$f)
             throw new FileException( 'File not found' );
         
-        
-        
+        $m = $this->mapOptions();
+        var_export($m);exit;
         
         return $this->render();
     }
     
+    
+    public function mapOptions() {
+        $map = array();
+        $form = object_container_create( $this->dif['formClass'] );
+        
+        $widgets = $form->getWidgetsRecursive( ['include_lists' => true] );
+        foreach($widgets as $w) {
+            if (is_a($w, HiddenField::class) || in_array($w->getName(), ['edited', 'created']))
+                continue;
+            
+            if (is_a($w, ListFormWidget::class)) {
+                $subform = object_container_create($w->getFormClass());
+                
+                $subprio = 0.01;
+                foreach( $subform->getWidgetsRecursive() as $w2 ) {
+                    if (is_a($w2, HiddenField::class))
+                        continue;
+                    
+                    $map[ ] = array(
+                        'name'    => $w->getName() . '.' . $w2->getName() 
+                        , 'label' => $w->getLabel() . ' - ' . $w2->getLabel()
+                        , 'prio'  => ($w->getPrio()+$subprio)
+                    );
+                    
+                    $subprio += 0.01;
+                }
+                
+            }
+            else if (is_a($w, ListEditWidget::class)) {
+                
+            }
+            else {
+                $map[ $w->getName() ] = array(
+                    'name'    => $w->getName()
+                    , 'label' => $w->getLabel()
+                    , 'prio'  => $w->getPrio()
+                );
+            }
+        }
+        
+        usort($map, function($o1, $o2) {
+            return $o1['prio'] - $o2['prio'];
+        });
+        
+        return $map;
+    }
     
     
 }
