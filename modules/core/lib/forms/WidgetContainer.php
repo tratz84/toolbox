@@ -49,12 +49,23 @@ class WidgetContainer extends BaseWidget {
     }
     public function getWidgets() { return $this->widgets; }
     
-    public function getWidgetsRecursive() {
+    /**
+     * 
+     * @param array $opts - 'include_lists' - true/false, include ListFormWidget / ListEditWidget ?
+     * 
+     * @return array
+     */
+    public function getWidgetsRecursive( $opts=array() ) {
         $allWidgets = array();
         
         $widgets = $this->getWidgets();
         foreach($widgets as $w) {
-            if (is_a($w, WidgetContainer::class)) {
+            // list?
+            if (isset($opts['include_lists']) && $opts['include_lists'] 
+                && (is_a($w, \core\forms\ListFormWidget::class) || is_a($w, \core\forms\ListEditWidget::class)) ) {
+                $w = array($w);
+            }
+            else if (is_a($w, WidgetContainer::class)) {
                 $w = $w->getWidgetsRecursive();
             } else {
                 $w = array($w);
