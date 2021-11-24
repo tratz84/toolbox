@@ -44,6 +44,10 @@ class CompanyDAO extends \core\db\DAOObject {
 	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('company_name', 'LIKE', '%'.$opts['company_name'].'%'));
 	    }
 
+	    if (isset($opts['eq_company_name']) && trim($opts['eq_company_name']) != '') {
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('company_name', '=', $opts['eq_company_name']));
+	    }
+	    
 	    if (isset($opts['contact_person']) && trim($opts['contact_person']) != '') {
 	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('contact_person', 'LIKE', '%'.$opts['contact_person'].'%'));
 	    }
