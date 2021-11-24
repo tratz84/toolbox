@@ -86,6 +86,14 @@ class XlsDataImporter {
             return 'No data';
         }
         
+        // determine maximum columns
+        $maxCol = count($arr[0]);
+        for($x=0; $x < count($arr[0]); $x++) {
+            if (trim($arr[0][$x]) != '')
+                $maxCol = $x+1;
+        }
+        
+        
         
         $html = '';
         
@@ -97,7 +105,7 @@ class XlsDataImporter {
         $html .= '<tr>';
         $html .= '<td><input type="checkbox" name="import_row_all" '.($this->getPostValue('import_row_all')?'checked=checked':'').' /></td>';
         $mapOptions = $this->mapOptions();
-        for($colNo=0; $colNo < count($arr[0]); $colNo++) {
+        for($colNo=0; $colNo < count($arr[0]) && $colNo < $maxCol; $colNo++) {
             $fieldName = 'col_'.$colNo;
             $fieldValue = $this->getPostValue( $fieldName );
             
@@ -134,7 +142,9 @@ class XlsDataImporter {
             
             $html .= '<tr>' . PHP_EOL;
             $html .= '<td><input type="checkbox" class="import-row" name="'.$fieldName.'" '.($this->getPostValue($fieldName)?'checked=checked':'').' /></td>';
-            foreach($row as $col) {
+            for($colNo=0; $colNo < count($row) && $colNo < $maxCol; $colNo++) {
+                $col = $row[$colNo];
+                
                 $html .= "\t".'<td>' . esc_html($col) . '</td>' . PHP_EOL;
             }
             
