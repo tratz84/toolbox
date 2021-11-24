@@ -259,7 +259,7 @@ class XlsDataImporter {
         // bind to array
         $arr = array();
         for($colNo=0; $colNo < count($r); $colNo++) {
-            $field = $this->post['col_'.$colNo];
+            $field = isset($this->post['col_'.$colNo]) ? $this->post['col_'.$colNo] : null;
             if (!$field) continue;
             
             $mapping = $mapOptions[$field];
