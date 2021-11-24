@@ -279,8 +279,8 @@ class FormChangesHtml
             $v = $w->getValue() ? t('Yes') : t('No');
         } else if ($w->getValue() && (is_a($w, SelectField::class) || is_a($w, Select2Field::class))) {
             $v = $w->getValueLabel();
-        } else if ($w->getValue() && is_a($w, \core\forms\DynamicSelectField::class) && $w->getDefaultText()) {
-            $v = $w->getDefaultText();
+//         } else if ($w->getValue() && is_a($w, \core\forms\DynamicSelectField::class) && $w->getDefaultText()) {
+//             $v = $w->getDefaultText();
         } else {
             $v = $w->getValue();
         }
