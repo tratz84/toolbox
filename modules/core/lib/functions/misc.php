@@ -90,6 +90,18 @@ function is_false($v) {
 }
 
 
+function get_class_shortname( $obj ) {
+    $n = get_class($obj);
+    
+    $p = strrpos($n, '\\');
+    if ($p !== false) {
+        $n = substr($n, $p+1);
+    }
+    
+    return $n;
+}
+
+
 
 
 function appUrl($u) {
