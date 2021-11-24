@@ -66,6 +66,16 @@ class XlsDataImporter {
     }
     
     
+    public function countRowsWithErrors() {
+        $c = 0;
+        
+        foreach($this->validationErrors as $e) {
+            if ($e)
+                $c++;
+        }
+        return $c;
+    }
+    
     
     
     public function render() {
@@ -79,7 +89,7 @@ class XlsDataImporter {
         
         $html = '';
         
-        $html .= '<table>' . PHP_EOL;
+        $html .= '<table class="list-response-table">' . PHP_EOL;
         
         
         // header
@@ -130,6 +140,9 @@ class XlsDataImporter {
             
             if (isset($this->validationErrors[$rowNo])) {
                 $html .= "\t" . '<td>' . esc_html($this->validationErrors[$rowNo]) . '</td>' . PHP_EOL;
+            }
+            else {
+                $html .= "\t" . '<td></td>' . PHP_EOL;
             }
             
             $html .= '</tr>' . PHP_EOL;

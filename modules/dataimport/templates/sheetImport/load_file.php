@@ -14,6 +14,12 @@
 
 	<br/>
 	
+	<?php if ( $di->countRowsWithErrors() > 0 ) : ?>
+	<div class="errors">
+		<?= $di->countRowsWithErrors() ?> record(s) with errors
+	</div>
+	<?php endif; ?>
+	
 	<input type="submit" name="validate" value="<?= t('Validate') ?>" />
 	
 	<?php if ($allowImport) : ?>
