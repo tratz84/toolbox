@@ -9,6 +9,9 @@ class Select2Field extends BaseWidget {
     protected $optionItems = array();
     protected $opts = array();
     
+    protected $sortOptionItems = false;
+    
+    
     public function __construct($name, $value=null, $optionItems=array(), $label=null, $opts=array()) {
         
         $this->setName($name);
@@ -19,6 +22,7 @@ class Select2Field extends BaseWidget {
         
     }
     
+    public function setSortOptionItems( $bln ) { $this->sortOptionItems = $bln ? true : false; }
     
     public function setOptionItems( $optionItems ) { $this->optionItems = $optionItems; }
     public function getOptionItems() { return $this->optionItems; }
@@ -85,7 +89,15 @@ class Select2Field extends BaseWidget {
     protected function renderOptions( $optionItems ) {
         $html = '';
         
-        foreach($optionItems as $key => $val) {
+        $keys = array_keys( $optionItems );
+        if ($this->sortOptionItems) {
+            usort($keys, function($k1, $k2) use ($optionItems) {
+                return strcmp( $optionItems[$k1]['description'], $optionItems[$k2]['description'] );
+            });
+        }
+        
+        foreach($keys as $key) {
+            $val = $optionItems[$key];
             
             if (isset($val['optgroup']) && $val['optgroup']) {
                 $html .= '<optgroup label="'.esc_attr($val['description']).'">'.PHP_EOL;
