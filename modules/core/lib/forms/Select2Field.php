@@ -92,6 +92,12 @@ class Select2Field extends BaseWidget {
         $keys = array_keys( $optionItems );
         if ($this->sortOptionItems) {
             usort($keys, function($k1, $k2) use ($optionItems) {
+                // empty value @ top
+                if ($k1 == '')
+                    return -1;
+                if ($k2 == '')
+                    return 1;
+                
                 return strcmp( $optionItems[$k1]['description'], $optionItems[$k2]['description'] );
             });
         }
