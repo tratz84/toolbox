@@ -2,12 +2,10 @@
 
 
 use core\controller\BaseController;
+use core\exception\FileException;
 use dataimport\container\DataImportFormContainer;
 use dataimport\form\UploadSheetForm;
-use core\exception\FileException;
-use core\forms\ListFormWidget;
-use core\forms\ListEditWidget;
-use core\forms\HiddenField;
+use dataimport\import\XlsDataImporter;
 
 class sheetImportController extends BaseController {
     
@@ -45,70 +43,48 @@ class sheetImportController extends BaseController {
     
     
     public function action_load_file() {
+        $this->allowImport = false;
+        
         $difc = object_container_create( DataImportFormContainer::class );
         
-        $this->dif = $dif = $difc->getForm( get_var('uid') );
+        $this->dif = $difc->getForm( get_var('uid') );
         
         // get file
         $f = get_data_file_safe('dataimport', get_var('f'));
         if (!$f)
             throw new FileException( 'File not found' );
         
-        $m = $this->mapOptions();
-        var_export($m);exit;
+        $di = new XlsDataImporter( $this->dif, $f );
+        if (is_post()) {
+            $di->setPost( $_POST );
+            
+            if (get_var('validate')) {
+                if ( $di->validate() == 0 ) {
+                    $this->allowImport = true;
+                }
+            }
+            
+            if (get_var('import') && $di->validate() == 0) {
+                $count = $di->import();
+                
+                redirect('/?m=dataimport&c=sheetImport&a=done&cnt='.$count);
+            }
+        }
+        
+        $this->di = $di;
         
         return $this->render();
     }
     
     
-    public function mapOptions() {
-        $map = array();
-        $form = object_container_create( $this->dif['formClass'] );
+    public function action_done() {
         
-        $widgets = $form->getWidgetsRecursive( ['include_lists' => true] );
-        foreach($widgets as $w) {
-            if (is_a($w, HiddenField::class) || in_array($w->getName(), ['edited', 'created']))
-                continue;
-            
-            if (is_a($w, ListFormWidget::class)) {
-                $subform = object_container_create($w->getFormClass());
-                
-                $subprio = 0.01;
-                foreach( $subform->getWidgetsRecursive() as $w2 ) {
-                    if (is_a($w2, HiddenField::class))
-                        continue;
-                    
-                    $map[ ] = array(
-                        'name'    => $w->getName() . '.' . $w2->getName() 
-                        , 'label' => $w->getLabel() . ' - ' . $w2->getLabel()
-                        , 'prio'  => ($w->getPrio()+$subprio)
-                        , 'list'  => true
-                    );
-                    
-                    $subprio += 0.01;
-                }
-                
-            }
-            else if (is_a($w, ListEditWidget::class)) {
-                
-            }
-            else {
-                $map[ $w->getName() ] = array(
-                    'name'    => $w->getName()
-                    , 'label' => $w->getLabel()
-                    , 'prio'  => $w->getPrio()
-                    , 'list'  => false
-                );
-            }
-        }
+        $this->cnt = (int)get_var('cnt');
         
-        usort($map, function($o1, $o2) {
-            return $o1['prio'] - $o2['prio'];
-        });
-        
-        return $map;
+        return $this->render();
     }
     
+
     
 }
 
