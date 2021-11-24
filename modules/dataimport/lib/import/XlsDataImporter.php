@@ -140,7 +140,9 @@ class XlsDataImporter {
             
             $fieldName = 'import_col_'.$rowNo;
             
-            $html .= '<tr>' . PHP_EOL;
+            $hasErrors = isset($this->validationErrors[$rowNo]) && $this->validationErrors[$rowNo] ? true : false;
+            
+            $html .= '<tr class="'.($hasErrors?'row-error':'').'">' . PHP_EOL;
             $html .= '<td><input type="checkbox" class="import-row" name="'.$fieldName.'" '.($this->getPostValue($fieldName)?'checked=checked':'').' /></td>';
             for($colNo=0; $colNo < count($row) && $colNo < $maxCol; $colNo++) {
                 $col = $row[$colNo];
