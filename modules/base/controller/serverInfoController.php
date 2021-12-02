@@ -4,6 +4,7 @@
 
 use base\util\ServerInfoContainer;
 use core\controller\BaseController;
+use core\db\DatabaseHandler;
 
 class serverInfoController extends BaseController {
     
@@ -22,6 +23,12 @@ class serverInfoController extends BaseController {
         $this->sic->addInfo('Max upload filesize', ini_get('upload_max_filesize'));
         $this->sic->addInfo('Max input vars', ini_get('max_input_vars'));
         $this->sic->addInfo('ROOT-dir', ROOT);
+        
+        $defaultCon = DatabaseHandler::getConnection('default');
+        if (is_a($defaultCon, \core\db\connection\MysqlConnection::class)) {
+            $mysqlVersion = DatabaseHandler::getConnection('default')->queryValue('select version()');
+            $this->sic->addInfo('MySQL version', $mysqlVersion);
+        }
         
         if (function_exists('posix_getpwuid')) {
             $posixUserinfo = posix_getpwuid( posix_getuid() );
