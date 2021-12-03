@@ -77,7 +77,7 @@ class serverInfoController extends BaseController {
             $this->sic->addInfo('php-xdebug', $ext_xdebug?'Ok':'Not loaded', $ext_xdebug?'':'extension not loaded');
         }
         else {
-            $this->sic->addInfo('php-xdebug', $ext_xdebug==false?'Ok':'Loaded(!!)', $ext_xdebug==false?'':'extension loaded, slows down system(!)');
+            $this->sic->addInfo('php-xdebug', $ext_xdebug==false?'Ok (Not loaded)':'Loaded(!!)', $ext_xdebug==false?'':'extension loaded, slows down system(!)');
         }
         
         
