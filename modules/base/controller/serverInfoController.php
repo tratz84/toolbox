@@ -72,6 +72,15 @@ class serverInfoController extends BaseController {
         $ext_xml = extension_loaded('xml');
         $this->sic->addInfo('php-xml', $ext_xml?'Ok':'Not loaded', $ext_xml?'':'extension not loaded');
         
+        $ext_xdebug = extension_loaded('xdebug');
+        if (is_debug()) {
+            $this->sic->addInfo('php-xdebug', $ext_xdebug?'Ok':'Not loaded', $ext_xdebug?'':'extension not loaded');
+        }
+        else {
+            $this->sic->addInfo('php-xdebug', $ext_xdebug==false?'Ok':'Loaded(!!)', $ext_xdebug==false?'':'extension loaded, slows down system(!)');
+        }
+        
+        
         hook_eventbus_publish( $this->sic, 'base', 'ServerInfoContainer' );
         
         return $this->render();
