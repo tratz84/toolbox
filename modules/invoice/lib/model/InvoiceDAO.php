@@ -142,8 +142,8 @@ class InvoiceDAO extends \core\db\DAOObject {
                         , sum(ifnull(total_calculated_price, 0)) sum_total_calculated_price
                         , sum(ifnull(total_calculated_price_incl_vat, 0)) sum_total_calculated_price_incl_vat
                         , count(*) number_invoices
-                        , min(c.deleted) company_deleted
-                        , min(p.deleted) person_deleted
+                        , any_value(c.deleted) company_deleted
+                        , any_value(p.deleted) person_deleted
                 from invoice__invoice i
                 left join customer__company c using (company_id)
                 left join customer__person p using (person_id) ";
@@ -169,7 +169,7 @@ class InvoiceDAO extends \core\db\DAOObject {
 	        $sql .= ' where ('.implode(') AND (', $where) . ') ';
 	    }
 
-	    $sql .= "group by ifnull(concat('company-', i.company_id), concat('person-', i.person_id))
+	    $sql .= "group by concat_ws('cp_', i.company_id, '-', i.person_id)
                 order by sum(total_calculated_price) desc";
 	    
 	    $res = $this->query($sql, $params);
