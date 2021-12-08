@@ -4,6 +4,7 @@
 
 use base\util\ServerInfoContainer;
 use core\controller\BaseController;
+use core\db\DatabaseHandler;
 
 class serverInfoController extends BaseController {
     
@@ -22,6 +23,12 @@ class serverInfoController extends BaseController {
         $this->sic->addInfo('Max upload filesize', ini_get('upload_max_filesize'));
         $this->sic->addInfo('Max input vars', ini_get('max_input_vars'));
         $this->sic->addInfo('ROOT-dir', ROOT);
+        
+        $defaultCon = DatabaseHandler::getConnection('default');
+        if (is_a($defaultCon, \core\db\connection\MysqlConnection::class)) {
+            $mysqlVersion = DatabaseHandler::getConnection('default')->queryValue('select version()');
+            $this->sic->addInfo('MySQL version', $mysqlVersion);
+        }
         
         if (function_exists('posix_getpwuid')) {
             $posixUserinfo = posix_getpwuid( posix_getuid() );
@@ -64,6 +71,15 @@ class serverInfoController extends BaseController {
         // check php-xml (Xls writer uses this)
         $ext_xml = extension_loaded('xml');
         $this->sic->addInfo('php-xml', $ext_xml?'Ok':'Not loaded', $ext_xml?'':'extension not loaded');
+        
+        $ext_xdebug = extension_loaded('xdebug');
+        if (is_debug()) {
+            $this->sic->addInfo('php-xdebug', $ext_xdebug?'Ok':'Not loaded', $ext_xdebug?'':'extension not loaded');
+        }
+        else {
+            $this->sic->addInfo('php-xdebug', $ext_xdebug==false?'Ok (Not loaded)':'Loaded(!!)', $ext_xdebug==false?'':'extension loaded, slows down system(!)');
+        }
+        
         
         hook_eventbus_publish( $this->sic, 'base', 'ServerInfoContainer' );
         
