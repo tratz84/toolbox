@@ -169,7 +169,7 @@ class InvoiceDAO extends \core\db\DAOObject {
 	        $sql .= ' where ('.implode(') AND (', $where) . ') ';
 	    }
 
-	    $sql .= "group by concat_ws('cp_', i.company_id, '-', i.person_id)
+	    $sql .= "group by i.company_id, i.person_id
                 order by sum(total_calculated_price) desc";
 	    
 	    $res = $this->query($sql, $params);
