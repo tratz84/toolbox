@@ -2,6 +2,8 @@
 
 namespace core\forms;
 
+use core\db\DBObject;
+
 class TextField extends BaseWidget {
     
     protected $placeholder = false;
@@ -15,6 +17,27 @@ class TextField extends BaseWidget {
         
         $this->options = $opts;
     }
+    
+    
+    
+    public function bindObject($obj) {
+        $r = parent::bindObject( $obj );
+        
+        // set maxlength
+        if (isset($this->options['maxlength']) == false) {
+            if (is_a($obj, DBObject::class)) {
+                $l = $obj->getColumnMaxLength( $this->getName() );
+                
+                if ($l && $l > 0) {
+                    $this->options['maxlength'] = $l;
+                }
+            }
+        }
+        
+        return $r;
+    }
+    
+    
     
     public function setValue($value) {
         parent::setValue( trim($value) );
