@@ -114,6 +114,32 @@ function price2cents( $price ) {
     return $p;
 }
 
+function price2cents_eq( $p1, $p2 ) {
+    $r = compare_number( strtodouble($p1), strtodouble($p2) );
+    
+    return $r === 0 ? true : false;
+}
+function price2cents_gt( $p1, $p2 ) {
+    $r = compare_number( strtodouble($p1), strtodouble($p2) );
+    
+    return $r === 1 ? true : false;
+}
+function price2cents_ge( $p1, $p2 ) {
+    $r = compare_number( strtodouble($p1), strtodouble($p2) );
+    
+    return $r === 0 || $r === 1 ? true : false;
+}
+function price2cents_lt( $p1, $p2 ) {
+    $r = compare_number( strtodouble($p1), strtodouble($p2) );
+    
+    return $r === -1 ? true : false;
+}
+function price2cents_le( $p1, $p2 ) {
+    $r = compare_number( strtodouble($p1), strtodouble($p2) );
+    
+    return $r === 0 || $r === -1 ? true : false;
+}
+
 
 
 /**
