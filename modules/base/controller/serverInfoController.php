@@ -32,7 +32,7 @@ class serverInfoController extends BaseController {
         
         if (function_exists('posix_getpwuid')) {
             $posixUserinfo = posix_getpwuid( posix_getuid() );
-            $this->sic->addInfo('Current user', $posixUserinfo['name'] );
+            $this->sic->addInfo('System user', $posixUserinfo['name'] );
         }
         else {
             // TODO: WINNT support
