@@ -54,7 +54,7 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
     
     $menuCal = new Menu();
     $menuCal->setIconLabelUrl('fa-calendar', t('Calendar'), '/?m=calendar&c=view');
-    $menuCal->setWeight(40);
+    $menuCal->setWeight(39);
     if ($calitemActionsEnabled) {
         $menuCal->setMenuAsFirstChild( true );
     }
