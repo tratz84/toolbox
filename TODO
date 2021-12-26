@@ -5,6 +5,10 @@ Bootstrap 4 => 5
 
 
 == TODO ==
+
+- user groups with permissions
+- logging lists, fix sorting issues (set pk on list, show new position)
+
 - automate/auto-generate Service-classes
 - automate/auto-generate list-pages
 - automate/auto-generate form-pages
