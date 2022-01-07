@@ -11,6 +11,7 @@ $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($e
     $src = $evt->getSource();
     
     $src->addItem('2 Factor authentication', t('Settings'),  '/?m=twofaauth&c=settings');
+    $src->addItem('2 Factor authentication', t('Cookies'),   '/?m=twofaauth&c=cookies');
 }));
 
 
