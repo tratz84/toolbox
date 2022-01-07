@@ -23,7 +23,15 @@ class cookiesController extends BaseController {
         
         $tfService = object_container_get( TwoFaService::class );
         
-        $r = $tfService->searchCookies($pageNo*$limit, $limit, $_REQUEST);
+        $opts = $_REQUEST;
+        
+        // default sorting
+        if (isset($opts['sortField']) == false) {
+            $opts['sortField'] = 'last_visit';
+            $opts['sortFieldDirection'] = 'desc';
+        }
+        
+        $r = $tfService->searchCookies($pageNo*$limit, $limit, $opts);
         
         $arr = array();
         $arr['listResponse'] = $r;

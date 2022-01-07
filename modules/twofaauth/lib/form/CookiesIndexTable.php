@@ -29,10 +29,12 @@ class CookiesIndexTable extends IndexTable {
         $this->setColumn('last_visit', [
             'fieldType' => 'datetime'
             , 'fieldDescription' => t('Last visit')
+            , 'sortField' => 'last_visit'
         ]);
         $this->setColumn('created', [
             'fieldType' => 'datetime'
             , 'fieldDescription' => t('Created')
+            , 'sortField' => 'created'
         ]);
         
         $this->setColumn('actions', [

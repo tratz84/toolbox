@@ -72,6 +72,10 @@ class TwoFaCookieDAO extends \core\db\DAOObject {
 	       $qb->setLimit( 50 );
 	    }
 	    
+	    if (isset($opts['sortField'])) {
+	        $qb->setOrderBy( $opts['sortField'] . (isset($opts['sortFieldDirection']) ? ' ' .$opts['sortFieldDirection']:'') );
+	    }
+	    
 	    if (isset($opts['return_list']) && $opts['return_list']) {
     	    return $qb->queryList();
 	    }
