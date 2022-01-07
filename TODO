@@ -8,7 +8,7 @@ Bootstrap 4 => 5
 
 - user groups with permissions
 - logging lists, fix sorting issues (set pk on list, show new position)
-- 2fa, listing auths
+* - 2fa, listing auths
 
 - automate/auto-generate Service-classes
 - automate/auto-generate list-pages
