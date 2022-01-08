@@ -6,6 +6,7 @@ namespace twofaauth\service;
 use core\service\ServiceBase;
 use twofaauth\model\TwoFaCookieDAO;
 use twofaauth\model\TwoFaCookie;
+use core\forms\lists\ListResponse;
 
 class TwoFaService extends ServiceBase {
     
@@ -90,6 +91,36 @@ class TwoFaService extends ServiceBase {
         $tfc->save();
         
         return $tfc;
+    }
+    
+    
+    public function searchCookies($start, $limit, $opts=array()) {
+        $dao = new TwoFaCookieDAO();
+        
+        $cursor = $dao->search( $opts );
+        
+        $lr = ListResponse::fillByCursor($start, $limit, $cursor, array(
+            'cookie_id',
+            'cookie_value',
+            'secret_key',
+            'user_id',
+            'username',
+            'activated',
+            'last_visit',
+            'created'
+        ));
+        
+        return $lr;
+    }
+    
+    public function deleteCookie( $cookieId ) {
+        $dao = new TwoFaCookieDAO();
+        
+        if ( $dao->delete( (int) $cookieId ) == false ) {
+            // ObjectNotFoundException ?
+        }
+        
+        return true;
     }
     
     

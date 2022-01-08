@@ -101,6 +101,7 @@ class MysqlQueryBuilder extends QueryBuilder {
         
         if ($this->orderBy) {
             // TODO: filter orderBy to prevent injections
+            // TODO: check if orderBy-field is a selected field?
             $sql .= 'ORDER BY '.$this->orderBy . PHP_EOL;
         }
         
