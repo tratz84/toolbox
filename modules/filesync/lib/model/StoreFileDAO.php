@@ -141,7 +141,7 @@ class StoreFileDAO extends \core\db\DAOObject {
                 $store = $sDao->read( $opts['storeId'] );
                 
                 if ($store && $store->getStoreType() == 'share') {
-                    $strOrderBy = "order by lasmodified desc";
+                    $strOrderBy = "order by lastmodified desc";
                 }
             }
             
