@@ -139,7 +139,7 @@ class StoreFileDAO extends \core\db\DAOObject {
             if (isset($opts['storeId']) && $opts['storeId']) {
                 $store = $this->read( $opts['storeId'] );
                 if ($store && $store->getStoreType() == 'share') {
-                    $strOrderBy = "order by filesync__store_file.edited desc";
+                    $strOrderBy = "order by lasmodified desc";
                 }
             }
             
