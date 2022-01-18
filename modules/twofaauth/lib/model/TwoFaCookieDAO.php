@@ -21,6 +21,13 @@ class TwoFaCookieDAO extends \core\db\DAOObject {
 	    return $this->queryOne('select * from twofaauth__two_fa_cookie where cookie_value = ?', array($val));
 	}
 	
+	public function delete( $id ) {
+	    $this->query('delete from twofaauth__two_fa_cookie where cookie_id = ?', array($id));
+	    
+	    return $this->getAffectedRows() > 0;
+	}
+	
+	
 	public function updateLastVisit($cookieId) {
 	    return $this->query('update twofaauth__two_fa_cookie 
                                 set last_visit = ? 
@@ -41,6 +48,16 @@ class TwoFaCookieDAO extends \core\db\DAOObject {
 	    
 	    $qb = $this->createQueryBuilder();
 	    $qb->setTable('twofaauth__two_fa_cookie');
+	    $qb->leftJoin('base__user', 'user_id');
+	    
+	    $qb->selectField('cookie_id',    'twofaauth__two_fa_cookie');
+	    $qb->selectField('cookie_value', 'twofaauth__two_fa_cookie');
+	    $qb->selectField('secret_key',   'twofaauth__two_fa_cookie');
+	    $qb->selectField('user_id',      'twofaauth__two_fa_cookie');
+	    $qb->selectField('activated',    'twofaauth__two_fa_cookie');
+	    $qb->selectField('last_visit',   'twofaauth__two_fa_cookie');
+	    $qb->selectField('created',      'twofaauth__two_fa_cookie');
+	    $qb->selectField('username',     'base__user');
 	    
 	    
 	    if (isset($opts['user_id']) && $opts['user_id']) {
@@ -55,6 +72,9 @@ class TwoFaCookieDAO extends \core\db\DAOObject {
 	       $qb->setLimit( 50 );
 	    }
 	    
+	    if (isset($opts['sortField'])) {
+	        $qb->setOrderBy( $opts['sortField'] . (isset($opts['sortFieldDirection']) ? ' ' .$opts['sortFieldDirection']:'') );
+	    }
 	    
 	    if (isset($opts['return_list']) && $opts['return_list']) {
     	    return $qb->queryList();

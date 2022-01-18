@@ -133,7 +133,24 @@ class StoreFileDAO extends \core\db\DAOObject {
             }
         }
         else {
-            $sql .= "order by filesync__store_file_meta.document_date desc, filesync__store_file.store_file_id desc";
+            
+            $strOrderBy = null;
+            
+            if (isset($opts['storeId']) && $opts['storeId']) {
+                $sDao = new StoreDAO();
+                $store = $sDao->read( $opts['storeId'] );
+                
+                if ($store && $store->getStoreType() == 'share') {
+                    $strOrderBy = "order by lastmodified desc";
+                }
+            }
+            
+            if ($strOrderBy == null) {
+                $strOrderBy = "order by filesync__store_file_meta.document_date desc, filesync__store_file.store_file_id desc";
+            }
+            
+                
+            $sql .= $strOrderBy;
         }
         
         return $this->queryCursor($sql, $params);

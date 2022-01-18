@@ -34,7 +34,11 @@ class sheetImportController extends BaseController {
                     throw new FileException( 'Unable to copy sheet' );
                 }
                 
-                redirect( '/?m=dataimport&c=sheetImport&a=load_file&uid=f5795d83908f1cd4bd832fa14cfc30c4&f='.urlencode($file) );
+                redirect( '/?m=dataimport&c=sheetImport&a=load_file&uid='.get_var('uid').'&f='.urlencode($file) );
+            }
+            
+            if (isset($_FILES['file']) && $_FILES['file']['error'] != 0) {
+                report_user_error( 'Error uploading file: ' . files_error_to_text($_FILES['file']['error']) );
             }
         }
         
@@ -43,6 +47,8 @@ class sheetImportController extends BaseController {
     
     
     public function action_load_file() {
+        ini_set('memory_limit', '2G');
+        
         $this->allowImport = false;
         
         $difc = object_container_create( DataImportFormContainer::class );
