@@ -55,6 +55,7 @@ class ConnectorForm extends BaseForm {
         $this->addWidget(new SelectField('sent_connector_imapfolder_id', '', $mapFolders, 'Sent'));
         $this->addWidget(new SelectField('junk_connector_imapfolder_id', '', $mapFolders, 'Junk'));
         $this->addWidget(new SelectField('trash_connector_imapfolder_id', '', $mapFolders, 'Trash'));
+        $this->addWidget(new SelectField('reply_move_imapfolder_id',      '', $mapFolders, 'Move on reply'));
         
         $this->addImapFolders();
         

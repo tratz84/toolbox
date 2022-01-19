@@ -14,7 +14,7 @@ class ConnectorBase extends \core\db\DBObject {
   'connector_id' => 
   array (
     'Field' => 'connector_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'NO',
     'Key' => 'PRI',
     'Default' => NULL,
@@ -23,18 +23,9 @@ class ConnectorBase extends \core\db\DBObject {
   'user_id' => 
   array (
     'Field' => 'user_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => 'MUL',
-    'Default' => NULL,
-    'Extra' => '',
-  ),
-  'description' => 
-  array (
-    'Field' => 'description',
-    'Type' => 'varchar(255)',
-    'Null' => 'YES',
-    'Key' => '',
     'Default' => NULL,
     'Extra' => '',
   ),
@@ -59,16 +50,7 @@ class ConnectorBase extends \core\db\DBObject {
   'port' => 
   array (
     'Field' => 'port',
-    'Type' => 'int(11)',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
-  ),
-  'username' => 
-  array (
-    'Field' => 'username',
-    'Type' => 'varchar(255)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -95,7 +77,7 @@ class ConnectorBase extends \core\db\DBObject {
   'sent_connector_imapfolder_id' => 
   array (
     'Field' => 'sent_connector_imapfolder_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -104,7 +86,7 @@ class ConnectorBase extends \core\db\DBObject {
   'junk_connector_imapfolder_id' => 
   array (
     'Field' => 'junk_connector_imapfolder_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -113,7 +95,7 @@ class ConnectorBase extends \core\db\DBObject {
   'trash_connector_imapfolder_id' => 
   array (
     'Field' => 'trash_connector_imapfolder_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -146,6 +128,33 @@ class ConnectorBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'description' => 
+  array (
+    'Field' => 'description',
+    'Type' => 'varchar(255)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'username' => 
+  array (
+    'Field' => 'username',
+    'Type' => 'varchar(255)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'reply_move_imapfolder_id' => 
+  array (
+    'Field' => 'reply_move_imapfolder_id',
+    'Type' => 'int',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -161,10 +170,6 @@ class ConnectorBase extends \core\db\DBObject {
 	public function getUserId() { return $this->getField('user_id'); }
 	
 		
-	public function setDescription($p) { $this->setField('description', $p); }
-	public function getDescription() { return $this->getField('description'); }
-	
-		
 	public function setConnectorType($p) { $this->setField('connector_type', $p); }
 	public function getConnectorType() { return $this->getField('connector_type'); }
 	
@@ -175,10 +180,6 @@ class ConnectorBase extends \core\db\DBObject {
 		
 	public function setPort($p) { $this->setField('port', $p); }
 	public function getPort() { return $this->getField('port'); }
-	
-		
-	public function setUsername($p) { $this->setField('username', $p); }
-	public function getUsername() { return $this->getField('username'); }
 	
 		
 	public function setPassword($p) { $this->setField('password', $p); }
@@ -211,6 +212,18 @@ class ConnectorBase extends \core\db\DBObject {
 		
 	public function setCreated($p) { $this->setField('created', $p); }
 	public function getCreated() { return $this->getField('created'); }
+	
+		
+	public function setDescription($p) { $this->setField('description', $p); }
+	public function getDescription() { return $this->getField('description'); }
+	
+		
+	public function setUsername($p) { $this->setField('username', $p); }
+	public function getUsername() { return $this->getField('username'); }
+	
+		
+	public function setReplyMoveImapfolderId($p) { $this->setField('reply_move_imapfolder_id', $p); }
+	public function getReplyMoveImapfolderId() { return $this->getField('reply_move_imapfolder_id'); }
 	
 	
 }

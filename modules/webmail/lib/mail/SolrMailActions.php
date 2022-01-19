@@ -148,8 +148,9 @@ class SolrMailActions {
         $this->updateSolrFields($solrMail->getId(),[ 'isSeen' => true ]);
     }
     
-    public function markAsAnswered(SolrMail $solrMail) {
-        $this->markMail($solrMail, '\\Answered');
+    
+    public function markAsAnswered(SolrMail $solrMail, $opts=array()) {
+        $this->markMail($solrMail, '\\Answered', $opts);
         
         // update property
         $mailProperties = $solrMail->getProperties();
@@ -165,7 +166,7 @@ class SolrMailActions {
     }
     
     
-    public function markMail(SolrMail $solrMail, $flag) {
+    public function markMail(SolrMail $solrMail, $flag, $opts=array()) {
         // if Connector exists, connection is imap & message is in Junk-folder? => move to inbox
         $mailProperties = $solrMail->getProperties();
         $connector = null;
@@ -184,6 +185,14 @@ class SolrMailActions {
         $mailConnector = BaseMailConnector::createMailConnector($connector);
         if ($mailConnector->connect()) {
             $mailConnector->markMail($mailProperties->getUid(), $mailProperties->getFolder(), $flag);
+            
+            if (isset($opts['handle_reply']) && $opts['handle_reply'] && $connector->getReplyMoveImapfolderId()) {
+                $targetIf = $connectorService->readImapFolder( $connector->getReplyMoveImapfolderId() );
+                if ($targetIf && $targetIf->getFolderName() != $mailProperties->getFolder()) {
+                    $mailConnector->moveMailByUid($mailProperties->getUid(), $mailProperties->getFolder(), $targetIf->getFolderName());
+                }
+            }
+            
 //             $ic->expunge();
             $mailConnector->disconnect();
         }

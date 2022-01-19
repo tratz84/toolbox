@@ -23,7 +23,7 @@ Context::getInstance()->enableModule('webmail');
 // core\db\mysql\MysqlTableGenerator::updateModule('webmail', true);
 // die('done');
 
-module_update_handler('webmail', '20210811');
+module_update_handler('webmail', '20220119');
 
 hook_loader(__DIR__.'/hook/');
 

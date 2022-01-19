@@ -17,6 +17,7 @@ use webmail\form\FilterForm;
 use webmail\model\Filter;
 use core\exception\DatabaseException;
 use base\service\SettingsService;
+use webmail\model\ConnectorImapfolder;
 
 class ConnectorService extends ServiceBase {
     
@@ -100,7 +101,7 @@ class ConnectorService extends ServiceBase {
         $changes = $form->changes($connector);
         
         
-        $form->fill($connector, array('connector_id', 'description', 'connector_type', 'hostname', 'port', 'username', 'sent_connector_imapfolder_id', 'junk_connector_imapfolder_id', 'trash_connector_imapfolder_id', 'active'));
+        $form->fill($connector, array('connector_id', 'description', 'connector_type', 'hostname', 'port', 'username', 'sent_connector_imapfolder_id', 'junk_connector_imapfolder_id', 'trash_connector_imapfolder_id', 'reply_move_imapfolder_id', 'active'));
         
         if ($form->getWidgetValue('password')) {
             $connector->setPassword($form->getWidgetValue('password'));
@@ -185,6 +186,9 @@ class ConnectorService extends ServiceBase {
     }
     
     
+    /**
+     * @return ConnectorImapfolder
+     */
     public function readImapFolder($connectorImapFolderId) {
         $cifDao = new ConnectorImapfolderDAO();
         

@@ -189,7 +189,7 @@ class viewController extends BaseController {
                 
                 if ($solrMail) {
                     $sma = new SolrMailActions();
-                    $sma->markAsAnswered($solrMail);
+                    $sma->markAsAnswered($solrMail, ['handle_reply' => true]);
                 }
             } catch (\Exception|\Error $ex) {
                 // mja

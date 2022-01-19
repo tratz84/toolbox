@@ -59,6 +59,7 @@ $tb_connector->addColumn('nextrun_fullimport',            'boolean');
 $tb_connector->addColumn('sent_connector_imapfolder_id',  'int');
 $tb_connector->addColumn('junk_connector_imapfolder_id',  'int');
 $tb_connector->addColumn('trash_connector_imapfolder_id', 'int');
+$tb_connector->addColumn('reply_move_imapfolder_id',      'int');
 $tb_connector->addColumn('active',                        'boolean');
 $tb_connector->addColumn('edited',                        'datetime');
 $tb_connector->addColumn('created',                       'datetime');
