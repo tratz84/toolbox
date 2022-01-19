@@ -20,6 +20,11 @@ class ProjectHour extends base\ProjectHourBase {
         
         return parent::setDeclarable($p);
     }
+    
+    public function setDuration($d) {
+        return parent::setDuration( strtodouble($d) );
+    }
+    
 
 }
 
