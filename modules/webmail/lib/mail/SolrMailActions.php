@@ -191,11 +191,15 @@ class SolrMailActions {
         if ($mailConnector->connect()) {
             $mailConnector->markMail($mailProperties->getUid(), $mailProperties->getFolder(), $flag);
             
+            // Move-on-reply set?
             if (isset($opts['handle_reply']) && $opts['handle_reply'] && $connector->getReplyMoveImapfolderId()) {
+                // fetch folder
                 $targetIf = $connectorService->readImapFolder( $connector->getReplyMoveImapfolderId() );
                 if ($targetIf && $targetIf->getFolderName() != $mailProperties->getFolder()) {
+                    // move
                     $mailConnector->moveMailByUid($mailProperties->getUid(), $mailProperties->getFolder(), $targetIf->getFolderName());
                     
+                    // mark field to be updated
                     $solrMail->setChangedField( 'mailboxName', $targetIf->getFolderName() );
                 }
             }
