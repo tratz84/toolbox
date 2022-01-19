@@ -14,6 +14,7 @@ use core\forms\TextField;
 use core\forms\WidgetContainer;
 use core\forms\validator\NotEmptyValidator;
 use webmail\model\Connector;
+use core\forms\TabWidgetContainer;
 
 class ConnectorForm extends BaseForm {
     
@@ -30,32 +31,38 @@ class ConnectorForm extends BaseForm {
         $this->addWidget(new InternalField('imapfolders'));
         $this->addWidget(new InternalField('selectedImapfolders'));
         
-        $this->addWidget(new CheckboxField('active', '', t('Active')));
+        $twc = new TabWidgetContainer( 'connector-tabs' );
+        $twc->addTab( 'base', t('Base settings') );
+        $this->addWidget( $twc );
         
-        $this->addWidget(new TextField('description', '', t('Description')));
+        $twc->addTabWidget( 'base', new CheckboxField('active', '', t('Active')));
         
-        $this->addWidget(new SelectField('connector_type', '', array(
+        $twc->addTabWidget( 'base', new TextField('description', '', t('Description')));
+        
+        $twc->addTabWidget( 'base', new SelectField('connector_type', '', array(
             'imap'  => 'imap (native)')));
 //             'horde' => 'imap (horde)',
 //             'pop3'  => 'pop3'), 'Soort'));
         
         
-        $this->addWidget(new TextField('hostname', '', 'Hostname'));
+        $twc->addTabWidget( 'base', new TextField('hostname', '', 'Hostname'));
         
-        $this->addWidget(new NumberField('port', '', 'Port'));
+        $twc->addTabWidget( 'base', new NumberField('port', '', 'Port'));
         
-        $this->addWidget(new TextField('username', '', 'Username'));
-        $this->addWidget(new TextField('password', '', 'Password'));
+        $twc->addTabWidget( 'base', new TextField('username', '', 'Username'));
+        $twc->addTabWidget( 'base', new TextField('password', '', 'Password'));
         
         $mapFolders = array();
         $mapFolders[] = 'Maak uw keuze';
         foreach($connector->getImapfolders() as $if) {
             $mapFolders[$if->getConnectorImapfolderId()] = $if->getFolderName();
         }
-        $this->addWidget(new SelectField('sent_connector_imapfolder_id', '', $mapFolders, 'Sent'));
-        $this->addWidget(new SelectField('junk_connector_imapfolder_id', '', $mapFolders, 'Junk'));
-        $this->addWidget(new SelectField('trash_connector_imapfolder_id', '', $mapFolders, 'Trash'));
-        $this->addWidget(new SelectField('reply_move_imapfolder_id',      '', $mapFolders, 'Move on reply'));
+        $twc->addTabWidget( 'base', new SelectField('sent_connector_imapfolder_id', '', $mapFolders, 'Sent'));
+        $twc->addTabWidget( 'base', new SelectField('junk_connector_imapfolder_id', '', $mapFolders, 'Junk'));
+        $twc->addTabWidget( 'base', new SelectField('trash_connector_imapfolder_id', '', $mapFolders, 'Trash'));
+        
+        $twc->addTab('advanced', t('Advanced settings'), 20);
+        $twc->addTabWidget( 'advanced', new SelectField('reply_move_imapfolder_id',      '', $mapFolders, 'Move on reply'));
         
         $this->addImapFolders();
         
@@ -97,9 +104,11 @@ class ConnectorForm extends BaseForm {
     
     
     public function addImapFolders() {
+        $t = $this->getWidget( 'connector-tabs' );
+        
         $wc = new WidgetContainer();
         $wc->setName('imap-folders');
-        $this->addWidget($wc);
+        $t->addWidget($wc);
         
         foreach($this->connector->getImapfolders() as $if) {
             $wc->addWidget(new HiddenField('imapfolder-'.slugify($if->getFoldername()), $if->getFoldername(), $if->getFoldername()));
