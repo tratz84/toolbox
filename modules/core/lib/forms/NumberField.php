@@ -29,6 +29,8 @@ class NumberField extends BaseWidget {
     public function setMin($m) { $this->min = $m; }
     public function setMax($m) { $this->max = $m; }
     
+    public function setStep($s) { $this->setAttribute('step', $s); }
+    
     
     public function render() {
         $html = '';
