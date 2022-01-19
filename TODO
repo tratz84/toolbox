@@ -9,6 +9,8 @@ Bootstrap 4 => 5
 - user groups with permissions
 - logging lists, fix sorting issues (set pk on list, show new position)
 * - 2fa, listing auths
+- dropdown, table select ipv text
+- query builder, ordering fields selectField() & selectFunction()
 - api-module
 
 - automate/auto-generate Service-classes
