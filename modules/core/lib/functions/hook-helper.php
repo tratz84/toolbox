@@ -128,7 +128,12 @@ function object_container_get($className) {
 
 // TODO: parameter support, class can contain constructor..
 function object_container_create($className) {
-    return ObjectContainer::getInstance()->create($className);
+    $oc = ObjectContainer::getInstance();
+    
+    $params = func_get_args();
+    $params = array_splice($params, 1);
+    
+    return $oc->create($className, ...$params);
 }
 
 
