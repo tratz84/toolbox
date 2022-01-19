@@ -41,7 +41,7 @@ class TabContainer {
     public function getTabCount() { return count($this->tabs); }
     public function hasTabs() { return count($this->tabs) > 0 ? true : false; }
     
-    public function render() {
+    public function render($opts=array()) {
         if (count($this->tabs) == 0) {
             return;
         }
@@ -81,6 +81,10 @@ class TabContainer {
         }
         
         $html .= '</div>' . PHP_EOL;
+        
+        if (isset_value($opts['return'])) {
+            return $html;
+        }
         
         print $html;
     }
