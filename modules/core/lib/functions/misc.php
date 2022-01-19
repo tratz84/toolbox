@@ -217,6 +217,15 @@ function defined_value($name, $defaultValue = false) {
     }
 }
 
+function isset_value( &$p, $defaultValue = false ) {
+    if (isset($p)) {
+        return $p;
+    }
+    else {
+        return $defaultValue;
+    }
+}
+
 
 
 function list_files($path, $opts=array()) {
