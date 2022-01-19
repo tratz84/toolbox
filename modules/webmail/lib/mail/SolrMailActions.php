@@ -159,7 +159,12 @@ class SolrMailActions {
         // mark as replied
         if ($solrMail->getAction() == 'open') {
             $mailProperties->setAction('replied');
-            $this->updateSolrFields($solrMail->getId(), ['action' => 'replied']);
+            
+            // update solr fields
+            $solrMail->setChangedField('action', 'replied');
+            $solrFields = $solrMail->getChangedFields();
+            
+            $this->updateSolrFields($solrMail->getId(), $solrFields);
         }
         
         $mailProperties->save();
@@ -190,6 +195,8 @@ class SolrMailActions {
                 $targetIf = $connectorService->readImapFolder( $connector->getReplyMoveImapfolderId() );
                 if ($targetIf && $targetIf->getFolderName() != $mailProperties->getFolder()) {
                     $mailConnector->moveMailByUid($mailProperties->getUid(), $mailProperties->getFolder(), $targetIf->getFolderName());
+                    
+                    $solrMail->setChangedField( 'mailboxName', $targetIf->getFolderName() );
                 }
             }
             

@@ -41,6 +41,8 @@ class SolrMail {
     
     protected $properties = null;
     
+    protected $changedFields = array();
+    
     
     public function __construct($jsonMail) {
         $this->jsonMail = $jsonMail;
@@ -120,6 +122,14 @@ class SolrMail {
     public function getSubject() {
         return isset($this->jsonMail->subject) ? $this->jsonMail->subject : '';
     }
+    
+    
+    public function setChangedField( $fieldName, $val ) {
+        $this->changedFields[$fieldName] = $val;
+    }
+    public function getChangedFields() { return $this->changedFields; }
+    
+    
     
     /**
      * 
