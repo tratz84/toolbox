@@ -6,7 +6,6 @@ namespace core\forms;
 
 
 use core\container\TabContainer;
-use core\exception\InvalidArgumentException;
 use core\exception\InvalidStateException;
 
 class TabWidgetContainer extends WidgetContainer {
@@ -28,7 +27,7 @@ class TabWidgetContainer extends WidgetContainer {
             'title' => $title,
             'prio'  => $prio,
             'opts'  => $opts,
-            'widgets' => array()
+            'widgetNames' => array()
         );
     }
     
@@ -42,26 +41,25 @@ class TabWidgetContainer extends WidgetContainer {
     }
     
     public function addTabWidget( $tabName, $widget ) {
+        $this->tabs[ $tabName ]['widgetNames'][] = $widget->getName();
         parent::addWidget( $widget );
-        
-        $this->tabs[ $tabName ]['widgets'][] = $widget;
     }
     
     
     public function render() {
         
         foreach($this->tabs as $name => $opts) {
-            $html = '';
+            $widgetNames = $this->tabs[$name]['widgetNames'];
             
-            foreach($this->tabs[$name]['widgets'] as $w) {
-                $html .= $w->render() . PHP_EOL;
+            $html = '';
+            foreach($widgetNames as $wn) {
+                $html .= $this->getWidget( $wn )->render();
             }
             
             $this->tabContainer->addTab( $opts['title'], $html, $opts['prio'], $opts);
         }
         
-        
-        return $this->tabContainer->render( ['return' => 1]);
+        return $this->tabContainer->render( ['return' => 1] );
     }
     
 }
