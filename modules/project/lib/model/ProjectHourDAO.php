@@ -44,7 +44,7 @@ class ProjectHourDAO extends \core\db\DAOObject {
 	    $qb->selectFields('project__project.project_name', 'project__project_hour_type.description type_description', 'project__project_hour_status.description status_description');
 	    $qb->selectFields('base__user.username');
 	    $qb->selectFields('customer__company.company_id');
-	    $qb->selectFunction("ifnull(duration*60, TIMESTAMPDIFF(minute, start_time, end_time)) total_minutes");
+	    $qb->selectFunction("if (registration_type='from_to', TIMESTAMPDIFF(minute, start_time, end_time), duration*60) as total_minutes");
 	    
 	    $qb->setTable('project__project_hour');
 	    $qb->leftJoin('project__project',             'project_id');
@@ -139,7 +139,7 @@ class ProjectHourDAO extends \core\db\DAOObject {
 	public function userSummaryForMonth($userId, $year, $month) {
 	    $qb = $this->createQueryBuilder();
 	    $qb->setTable('project__project_hour');
-	    $qb->selectFunction("ifnull(duration*60, TIMESTAMPDIFF(minute, start_time, end_time)) total_minutes");
+	    $qb->selectFunction("if (registration_type='from_to', TIMESTAMPDIFF(minute, start_time, end_time), duration*60) as total_minutes");
 	    $qb->selectFunction("day(start_time) day");
 	    
 	    $qb->addWhere(QueryBuilderWhere::whereRefByVal('year(start_time)', '=', $year));
