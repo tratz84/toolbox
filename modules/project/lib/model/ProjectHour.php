@@ -22,7 +22,12 @@ class ProjectHour extends base\ProjectHourBase {
     }
     
     public function setDuration($d) {
-        return parent::setDuration( strtodouble($d) );
+        if ($d === null) {
+            return parent::setDuration( null );
+        }
+        else {
+            return parent::setDuration( strtodouble($d) );
+        }
     }
     
 
