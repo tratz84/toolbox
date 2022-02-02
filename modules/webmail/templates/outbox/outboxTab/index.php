@@ -100,4 +100,10 @@ $(window).on('tabcontainer-item-click', function(e, f) {
 	outboxtab_first_open = false;
 });
 
+
+function uploadFilesField_Click(obj) {
+	window.open(appUrl('/?m=webmail&c=view&a=file&id=' + $(obj).data('id')), '_blank');
+}
+
+
 </script>
