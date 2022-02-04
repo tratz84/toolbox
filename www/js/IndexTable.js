@@ -42,6 +42,8 @@ function IndexTable( container, opts ) {
 	
 	this.callback_renderRows = null;
 	
+	this.inputPagerUsed = false;
+	
 	
 	/**
 	 * called before this.load()-ajax call is made
@@ -245,6 +247,11 @@ function IndexTable( container, opts ) {
 				if (me.firstLoadCompleted == false) {
 					me.firstLoadCompleted = true;
 					$(window).trigger('IndexTable-loaded-first-time', me);
+				}
+				
+				if (me.inputPagerUsed) {
+					me.inputPagerUsed = false;
+					$(me.container).find('input[name=pager]').focus();
 				}
 			},
 			error: function() {
@@ -812,7 +819,7 @@ function IndexTable( container, opts ) {
 			var inputPager = $('<input type="number" min="1" name="pager" style="width: 75px;" />');
 			inputPager.data('page-no', pageNo);
 			inputPager.data('page-count', pageCount);
-			inputPager.attr('max', 'pageCount');
+			inputPager.attr('max', pageCount);
 			inputPager.val( pageNo );
 			inputPager.on('change', function() {
 				var pageNo = parseInt( $(this).data('page-no') );
@@ -824,6 +831,7 @@ function IndexTable( container, opts ) {
 				if (newNo < 1) newNo = 1;
 				
 				$(this).val(newNo);
+				me.inputPagerUsed = true;
 				me.setPage( newNo );
 			});
 			
