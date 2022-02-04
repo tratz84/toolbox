@@ -1,5 +1,9 @@
 
 
+- widget outbox
+-- settings what to show => Draft + Sent ? of just Draft..
+
+
 - mark mail as HAM
 
 - assign to user (or usergroup?)
