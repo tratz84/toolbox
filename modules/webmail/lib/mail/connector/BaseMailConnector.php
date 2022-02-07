@@ -6,6 +6,7 @@ namespace webmail\mail\connector;
 use core\exception\InvalidStateException;
 use webmail\mail\MailProperties;
 use webmail\model\Connector;
+use webmail\service\ConnectorService;
 use webmail\solr\SolrMail;
 
 
@@ -100,6 +101,80 @@ abstract class BaseMailConnector {
         return save_data('webmail/message-checksums', serialize($this->serverPropertyChecksums));
     }
     
+    
+    
+    
+    protected function applyFilters($connector, $file, $messageUid) {
+        $isSpam = false;
+        
+        $p = new \PhpMimeMailParser\Parser();
+        $p->setPath($file);
+        
+        $filters = $connector->getFilters();
+        
+        foreach($filters as $f) {
+            // skip inactive filters
+            if ($f->getActive() == false)
+                continue;
+            
+            $conditions = $f->getConditions();
+            
+            $conditionCount = 0;
+            foreach($conditions as $c) {
+                if ( $c->match($p, $file) ) {
+                    if ($c->getFilterType() == 'is_spam') {
+                        $isSpam = true;
+                    }
+                    
+                    $conditionCount++;
+                }
+            }
+            
+            if (($f->getMatchMethod() == 'match_all' && $conditionCount == count($conditions)) || ($f->getMatchMethod() == 'match_one' && $conditionCount > 0)) {
+                $actions = $f->getActions();
+                
+                if (count($actions) == 0)
+                    return null;
+                
+                $return_value = array();
+                $return_value['is_spam'] = $isSpam;
+                
+                $moveFolderActionValue = null;
+                foreach($actions as $action) {
+                    if ($action->getFilterAction() == 'move_to_folder') {
+                        $moveFolderActionValue = $action->getFilterActionValue();               // this is an webmail__connector_imapfolder.connector_imapfolder_id
+                    }
+                    if ($action->getFilterAction() == 'set_action') {
+                        $return_value['set_action'] = $action->getFilterActionValue();
+                    }
+                }
+                
+                if ($moveFolderActionValue) {
+                    /** @var ConnectorService $connectorService */
+                    $connectorService = object_container_getget(ConnectorService::class);
+                    $f = $connectorService->readImapFolder( $moveFolderActionValue );
+                    
+                    // found? => move
+                    if ($f) {
+                        if ($isSpam) {
+                            $this->markJunk($messageUid, 'INBOX');
+                        }
+                        
+                        
+                        if ( $this->moveMailByUid($messageUid, 'INBOX', $f->getFolderName()) ) {
+                            
+                        }
+                        
+                        $return_value['move_to_folder'] = $f->getFolderName();
+                    }
+                }
+                
+                return $return_value;
+            }
+        }
+        
+        return array();
+    }
     
 }
 

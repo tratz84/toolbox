@@ -348,7 +348,7 @@ class ImapConnector extends BaseMailConnector {
         return $list;
     }
     
-    public function importInbox(Connector $connector) {
+    public function importInbox() {
         if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.'INBOX'))) {
             return false;
         }
@@ -378,7 +378,7 @@ class ImapConnector extends BaseMailConnector {
                     if ($emlfile) {
                         // apply filters
                         print_info("Applying filters");
-                        $result = $this->applyFilters($connector, $file, $results[$y]->uid);
+                        $result = $this->applyFilters($this->connector, $file, $results[$y]->uid);
                         
                         // update propertiesName
                         $mp = new MailProperties($emlfile);
@@ -425,77 +425,6 @@ class ImapConnector extends BaseMailConnector {
         imap_gc($this->imap, IMAP_GC_ELT | IMAP_GC_ENV | IMAP_GC_TEXTS);
         
         return $items;
-    }
-    
-    protected function applyFilters($connector, $file, $messageUid) {
-        $isSpam = false;
-        
-        $p = new \PhpMimeMailParser\Parser();
-        $p->setPath($file);
-        
-        $filters = $connector->getFilters();
-        
-        foreach($filters as $f) {
-            // skip inactive filters
-            if ($f->getActive() == false)
-                continue;
-            
-            $conditions = $f->getConditions();
-            
-            $conditionCount = 0;
-            foreach($conditions as $c) {
-                if ( $c->match($p, $file) ) {
-                    if ($c->getFilterType() == 'is_spam') {
-                        $isSpam = true;
-                    }
-                    
-                    $conditionCount++;
-                }
-            }
-            
-            if (($f->getMatchMethod() == 'match_all' && $conditionCount == count($conditions)) || ($f->getMatchMethod() == 'match_one' && $conditionCount > 0)) {
-                $actions = $f->getActions();
-                
-                if (count($actions) == 0)
-                    return null;
-                
-                $return_value = array();
-                $return_value['is_spam'] = $isSpam;
-                
-                $moveFolderActionValue = null;
-                foreach($actions as $action) {
-                    if ($action->getFilterAction() == 'move_to_folder') {
-                        $moveFolderActionValue = $action->getFilterActionValue();               // this is an webmail__connector_imapfolder.connector_imapfolder_id
-                    }
-                    if ($action->getFilterAction() == 'set_action') {
-                        $return_value['set_action'] = $action->getFilterActionValue();
-                    }
-                }
-                
-                if ($moveFolderActionValue) {
-                    $connectorService = ObjectContainer::getInstance()->get(ConnectorService::class);
-                    $f = $connectorService->readImapFolder( $moveFolderActionValue );
-                    
-                    // found? => move
-                    if ($f) {
-                        if ($isSpam) {
-                            imap_setflag_full($this->imap, $messageUid, 'Junk', ST_UID);
-                            imap_setflag_full($this->imap, $messageUid, '$Junk', ST_UID);
-                        }
-                        
-                        if (imap_mail_move($this->imap, $messageUid, $f->getFolderName(), CP_UID)) {
-                            
-                        }
-                        
-                        $return_value['move_to_folder'] = $f->getFolderName();
-                    }
-                }
-                
-                return $return_value;
-            }
-        }
-        
-        return array();
     }
     
     

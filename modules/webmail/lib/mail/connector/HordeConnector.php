@@ -19,6 +19,8 @@ class HordeConnector extends BaseMailConnector {
     
     protected $errors = null;
     
+    protected $check = null;
+    
     protected $callback_itemImported = null;
     
     protected $serverPropertyChecksums = null;
@@ -136,7 +138,7 @@ class HordeConnector extends BaseMailConnector {
     }
     
     
-    protected function buildOverviewList( $folderName, $messageCount ) {
+    protected function buildOverviewList( $folderName ) {
         $list = array();
         
         if ($this->sinceUpdate) {
@@ -326,7 +328,7 @@ class HordeConnector extends BaseMailConnector {
         $items = array();
         
         // Fetch an overview for all messages in INBOX
-        $overviewList = $this->buildOverviewList( $folderName, $messageCount );
+        $overviewList = $this->buildOverviewList( $folderName );
         
         // fetch messages
         $x=0;
@@ -383,6 +385,91 @@ class HordeConnector extends BaseMailConnector {
         return $items;
     }
     
+    
+    
+    public function importInbox() {
+        $items = array();
+        
+        
+        $blnExpunge = false;
+        
+        // Fetch an overview for all messages in INBOX
+        $q = new \Horde_Imap_Client_Fetch_Query();
+        $q->flags();
+        $q->envelope();
+        $q->size();
+        $q->uid();
+        $q->imapDate();
+        
+        $opts = array();
+        
+        $results = $this->client->fetch( 'INBOX', $q, $opts );
+        $ids = $results->ids();
+        
+        
+        for($y=0; $y < count($ids); $y++) {
+            $fetch = $results->get( $ids[$y] );
+            
+            if (in_array('\\Deleted', $fetch->getFlags()))
+                continue;
+            
+            // save file locally
+            $file = $this->determineEmailPath( $fetch );
+            
+            if (file_exists($file) == false) {
+                $emlfile = $this->saveMessage('INBOX', $fetch);
+                
+                // new?
+                if ($emlfile) {
+                    // apply filters
+                    print_info("Applying filters");
+                    $result = $this->applyFilters($this->connector, $file, $fetch->getUid());
+                    
+                    // update propertiesName
+                    $mp = new MailProperties($emlfile);
+                    $mp->load();
+                    
+                    // message moved to another folder?
+                    if (isset($result['move_to_folder'])) {
+                        // set new folder name
+                        $mp->setFolder( $result['move_to_folder'] );
+                        $folderName = $result['move_to_folder'];
+                        
+                        // call imap_expunge
+                        $blnExpunge = true;
+                    }
+                    // set default folder
+                    else {
+                        $folderName = 'INBOX';
+                    }
+                    
+                    // mark as spam
+                    if (isset($result['is_spam']) && $result['is_spam']) {
+                        $mp->setJunk( true );
+                    }
+                    
+                    // set_action?
+                    if (isset($result['set_action']) && $result['set_action']) {
+                        $mp->setAction( $result['set_action'] );
+                    }
+                    
+                    $mp->save();
+                    
+                    
+                    // call callback
+                    $this->handleCallbackItemImported($folderName, $fetch, $emlfile, true);
+                }
+            }
+        }
+        
+        if ($blnExpunge) {
+//             imap_expunge($this->imap);
+        }
+        
+        return $items;
+    }
+    
+    
     public function doImport(Connector $c) {
         
         $folders = $c->getImapfolders();
@@ -414,6 +501,90 @@ class HordeConnector extends BaseMailConnector {
         }
     }
     
+    
+    
+    public function markJunk($uid, $folderName) {
+        $options = [
+            'uids' => new \Horde_Imap_Client_Ids( $uid ),
+            'add' => ['Junk', '$Junk'],
+            'remove' => ['NonJunk', '$NonJunk']
+        ];
+        
+        $this->client->store( $folderName, $options );
+    }
+    
+    public function moveMailByUid($uid, $srcFolder, $dstFolder) {
+        $opts = array();
+        $opts['ids']  = new \Horde_Imap_Client_Ids( $uid );
+        $opts['move'] = true;
+        
+        $r = $this->client->copy( $srcFolder, $dstFolder, $opts );
+        
+        // copy() returns array( 'old_uid' => 'new_uid' )
+        if (isset($r[$uid]) && $r[$uid]) {
+            return $r[$uid];
+        }
+        else {
+            return false;
+        }
+    }
+    
+    
+    /**
+     * poll() - checks if there's new mail
+     *
+     * @return boolean true/false, true if there's new mail
+     */
+    public function poll() {
+        // no connection? => try to connect
+        if ($this->isConnected() == false) {
+            if (!$this->connect()) {
+                return false;
+            }
+        }
+        
+        // fetch mailbox status
+        $oldCheck = $this->check;
+        try {
+            $this->check = $this->client->status( 'INBOX' );
+        } catch (\Exception $ex) {
+            try {
+                // disconnect after error
+                $this->disconnect();
+            } catch (\Exception $ex) { }
+            
+            print_cli_info( 'HordeConnector::poll, error: '.$ex->getMessage() ); 
+            return false;
+        }
+        
+        
+        $checkMailbox = false;
+        
+        // first run & check-succeeded? => return true
+        if ($oldCheck == null && isset($this->check['messages']) && $this->check['messages']) {
+            $checkMailbox = true;
+        }
+        // ..nd-run? => compare with previous response
+        if (is_array($oldCheck) && is_array($this->check) && $oldCheck['messages'] != $this->check['messages']) {
+            $checkMailbox = true;
+        }
+        
+        if ($checkMailbox)
+            return true;
+            
+        // check-failed? => disconnect
+        if (!$this->check) {
+            $this->disconnect();
+        }
+        
+        return false;
+    }
+    
+    
+    
+    public function import() {
+        $items = $this->importInbox( $this->connector );
+    }
     
 }
 
