@@ -1,4 +1,11 @@
 <?php
+/**
+ * HordeConnector() - imap connector through horde-classes
+ * 
+ * Examples @ https://github.com/wrobel/horde/blob/master/framework/Imap_Client/test/Horde/Imap/Client/test_client.php
+ * 
+ * 
+ */
 
 
 namespace webmail\mail\connector;
