@@ -8,6 +8,14 @@ class Email extends base\EmailBase {
     
     const STATUS_DRAFT = 'draft';
     const STATUS_SENT  = 'sent';
+    const STATUS_RECEIVED = 'received';
+    
+    const ATTRIBUTE_SEEN      = 0x01;
+    const ATTRIBUTE_REPLIED   = 0x02;
+    const ATTRIBUTE_FORWARDED = 0x04;
+    const ATTRIBUTE_SPAM      = 0x10;
+    const ATTRIBUTE_DELETED   = 0x20;
+    
 
     protected $files = array();
     protected $recipients = array();
@@ -32,5 +40,16 @@ class Email extends base\EmailBase {
     public function getStatusAsText() {
         return t('webmail.status.' . $this->getStatus());
     }
+    
+    
+    public function setField($key, $val) {
+        // don't auto-fill created-field
+        if ($key == 'created' && isset($this->fields['created']) && $this->fields['created']) {
+            return;
+        }
+        
+        return parent::setField($key, $val);
+    }
+    
 }
 

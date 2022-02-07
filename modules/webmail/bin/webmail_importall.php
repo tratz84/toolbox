@@ -46,7 +46,6 @@ if ($argumentParser->hasOption('skip-folder-import') == false) {
     print_info("DONE Folder import");
 }
 
-
 if ($argumentParser->hasOption('skip-connector-import') == false) {
     print_info("START Connector import");
     webmail_import_connectors($updateOnly);

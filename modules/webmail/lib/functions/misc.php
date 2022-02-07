@@ -9,6 +9,21 @@ use webmail\solr\SolrImportMail;
 use webmail\solr\SolrMail;
 use core\exception\InvalidStateException;
 use webmail\mail\connector\BaseMailConnector;
+use webmail\storage\MailImportFactory;
+
+
+
+
+function webmail_storage_engine() {
+    if (defined('WEBMAIL_SOLR')) {
+        return 'solr';
+    }
+    else {
+        return 'db';
+    }
+}
+
+
 
 function mapAllConnectors() {
     
@@ -45,12 +60,10 @@ function mapMailActions() {
  * @param boolean $updateOnly
  */
 function webmail_import_folder($updateOnly) {
-    if (defined('WEBMAIL_SOLR') == false)
-        throw new InvalidStateException('Solr not configured');
+    $mi = MailImportFactory::getImportMail();
+    $mi->setUpdateMode( $updateOnly );
     
-    $solrImportMail = new SolrImportMail(WEBMAIL_SOLR);
-    $solrImportMail->setUpdateMode( $updateOnly );
-    $solrImportMail->importFolder( ctx()->getDataDir().'/webmail/inbox' );
+    $mi->importFolder( ctx()->getDataDir().'/webmail/inbox' );
 }
 
 /**
@@ -59,9 +72,6 @@ function webmail_import_folder($updateOnly) {
  * @param boolean $updateOnly
  */
 function webmail_import_connectors($updateOnly) {
-    if (defined('WEBMAIL_SOLR') == false)
-        throw new InvalidStateException('Solr not configured');
-    
     // loop through active Connectors to sync/fetch mail
     /** @var ConnectorService $connectorService */
     $connectorService = object_container_get( ConnectorService::class );
@@ -92,18 +102,21 @@ function webmail_import_connectors($updateOnly) {
             
             $sentImapFolder =  $connectorService->readImapFolder( $c->getSentConnectorImapfolderId() );
             
-            $solrImportMail = new SolrImportMail(WEBMAIL_SOLR);
-            $ic->setCallbackItemImported(function($folderName, $overview, $file, $changed) use ($solrImportMail, $sentImapFolder) {
+            $mailImport = MailImportFactory::getImportMail();
+            $mailImport->setUpdateMode( $updateOnly );
+            
+            $ic->setCallbackItemImported(function($folderName, $overview, $file, $changed) use ($mailImport, $sentImapFolder) {
                 // this callback is only called on new mail and changed (IMAP-properties like isRead & folderName can change)
                 //                 print "Queueing file: $file\n";
                 if ($changed) {
-                    $solrImportMail->queueEml( $file );
-                    $solrImportMail->purge( );
+                    $mailImport->queueEml( $file );
+                    $mailImport->purge( );
                     
                     // new mail in Sent-folder? => mark In-Reply-To-mail as REPLIED if status is OPEN
                     if ($sentImapFolder && $sentImapFolder->getFolderName() == $folderName) {
+                        // TODO: fix this...
                         $sma = new SolrMailActions();
-                        $sma->autoMarkMessageAsReplied( $solrImportMail->getLastInReplyTo() );
+                        $sma->autoMarkMessageAsReplied( $mailImport->getLastInReplyTo() );
                     }
                 }
             });
@@ -112,7 +125,7 @@ function webmail_import_connectors($updateOnly) {
             $ic->disconnect();
             $ic->saveServerPropertyChecksums();
             
-            $solrImportMail->purge( true );
+            $mailImport->purge( true );
         }
         else if ($c->getConnectorType() == 'pop3') {
             

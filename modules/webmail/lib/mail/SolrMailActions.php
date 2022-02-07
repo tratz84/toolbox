@@ -76,7 +76,8 @@ class SolrMailActions {
             $solrMail->saveProperties();
             
             // update solr
-            $su = new SolrImportMail( WEBMAIL_SOLR );
+            $su = new SolrImportMail( );
+            $su->setSolrUrl( WEBMAIL_SOLR );
             $su->updateDoc($solrMail->getId(), [ 'mailboxName' => 'Junk' ]);
             return ['folder' => 'Junk'];
         }
@@ -269,7 +270,8 @@ class SolrMailActions {
     
     public function updateSolrFolder($emailId, $folderName) {
         // update solr
-        $su = new SolrImportMail( WEBMAIL_SOLR );
+        $su = new SolrImportMail( );
+        $su->setSolrUrl( WEBMAIL_SOLR );
         $su->updateDoc($emailId,
             [
                 'mailboxName' => $folderName
@@ -282,7 +284,8 @@ class SolrMailActions {
 
     protected function updateSolrFields($emailId, $fields) {
         // update solr
-        $su = new SolrImportMail( WEBMAIL_SOLR );
+        $su = new SolrImportMail( );
+        $su->setSolrUrl( WEBMAIL_SOLR );
         $su->updateDoc($emailId, $fields);
     }
     
@@ -441,6 +444,7 @@ class SolrMailActions {
     public function deleteSolrMail($id) {
         // delete solr index
         $sim = new SolrImportMail();
+        $sim->setSolrUrl( WEBMAIL_SOLR );
         $sim->delete('id:'.solr_escapePhrase($id));
         
         // delete eml file

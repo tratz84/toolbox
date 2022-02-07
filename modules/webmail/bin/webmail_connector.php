@@ -105,7 +105,8 @@ while (true) {
                         
                         // update solr
                         if (defined_value('WEBMAIL_SOLR')) {
-                            $solrImportMail = new SolrImportMail( WEBMAIL_SOLR );
+                            $solrImportMail = new SolrImportMail( );
+                            $solrImportMail->setSolrUrl( WEBMAIL_SOLR );
                             $solrImportMail->queueEml( $file );
                             $solrImportMail->purge( true );
                         }

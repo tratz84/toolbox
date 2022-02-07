@@ -196,7 +196,7 @@ class EmailBase extends \core\db\DBObject {
     'Field' => 'solr_mail_id',
     'Type' => 'varchar(255)',
     'Null' => 'YES',
-    'Key' => '',
+    'Key' => 'MUL',
     'Default' => NULL,
     'Extra' => '',
   ),
@@ -204,6 +204,15 @@ class EmailBase extends \core\db\DBObject {
   array (
     'Field' => 'confidential',
     'Type' => 'tinyint(1)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'server_properties_checksum' => 
+  array (
+    'Field' => 'server_properties_checksum',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -302,6 +311,10 @@ class EmailBase extends \core\db\DBObject {
 		
 	public function setConfidential($p) { $this->setField('confidential', $p); }
 	public function getConfidential() { return $this->getField('confidential'); }
+	
+		
+	public function setServerPropertiesChecksum($p) { $this->setField('server_properties_checksum', $p); }
+	public function getServerPropertiesChecksum() { return $this->getField('server_properties_checksum'); }
 	
 	
 }

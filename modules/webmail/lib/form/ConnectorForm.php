@@ -40,8 +40,9 @@ class ConnectorForm extends BaseForm {
         $twc->addTabWidget( 'base', new TextField('description', '', t('Description')));
         
         $twc->addTabWidget( 'base', new SelectField('connector_type', '', array(
-            'imap'  => 'imap (native)')));
-//             'horde' => 'imap (horde)',
+            'imap'  => 'imap (native)',
+            'horde' => 'imap (horde)'
+        )));
 //             'pop3'  => 'pop3'), 'Soort'));
         
         
