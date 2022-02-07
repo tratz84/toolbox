@@ -62,7 +62,9 @@ class HordeConnector extends BaseMailConnector {
             $opts['port']     = $this->connector->getPort();
             $opts['secure']   = $secure;
             
-            $opts['debug'] = '/home/timvw/tmp/horde-log';
+            if (is_debug()) {
+                $opts['debug'] = ctx()->getDataDir() . '/horde-imap.log';
+            }
             
             $this->client = new Horde_Imap_Client_Socket( $opts );
         } catch (\Exception $ex) {
