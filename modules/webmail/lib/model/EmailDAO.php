@@ -72,6 +72,13 @@ class EmailDAO extends \core\db\DAOObject {
 	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('webmail__email.incoming', '=', ($opts['incoming'] ? 1 : 0)));
 	    }
 	    
+	    if (array_key_exists('connector_id_null', $opts)) {
+	        if ($opts['connector_id_null'])
+	           $qb->addWhere(QueryBuilderWhere::whereRefByRef('webmail__email.connector_id', 'IS', 'NULL'));
+           else
+               $qb->addWhere(QueryBuilderWhere::whereRefByRef('webmail__email.connector_id', 'IS NOT', 'NULL'));
+	    }
+	    
 	    // don't show deleted mails
 	    $qb->addWhere( QueryBuilderWhere::whereRefByRef('webmail__email.deleted', 'IS', 'NULL') );
 	    

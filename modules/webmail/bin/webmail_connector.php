@@ -9,10 +9,10 @@
 
 use core\ObjectContainer;
 use core\db\DatabaseHandler;
+use webmail\mail\connector\ImapConnector;
 use webmail\model\Connector;
 use webmail\service\ConnectorService;
-use webmail\solr\SolrImportMail;
-use webmail\mail\connector\ImapConnector;
+use webmail\storage\MailImportFactory;
 
 if (count($argv) != 2) {
     print "Usage: {$argv[0]} <contextname>\n";
@@ -100,16 +100,12 @@ while (true) {
                     $im = ImapConnector::createMailConnector( $c );
                     $im->setCallbackItemImported(function($folderName, $overview, $file, $changed) use ($c) {
                         // decode subject
-                        $subject = imap_utf8( $overview->subject );
-                        print_info("Importing mail, " . $c->getConnectorId() . ': ' . $subject . " (".$overview->date.")");
+                        print_info("Importing mail, " . $c->getConnectorId() . ': ' . $overview['subject'] . " (".$overview['date'].")");
                         
-                        // update solr
-                        if (defined_value('WEBMAIL_SOLR')) {
-                            $solrImportMail = new SolrImportMail( );
-                            $solrImportMail->setSolrUrl( WEBMAIL_SOLR );
-                            $solrImportMail->queueEml( $file );
-                            $solrImportMail->purge( true );
-                        }
+                        // import mail
+                        $importHandler = MailImportFactory::getImportMail();
+                        $importHandler->queueEml( $file );
+                        $importHandler->purge( true );
                     });
                     
                     $monitors[$connectorId] = $im;

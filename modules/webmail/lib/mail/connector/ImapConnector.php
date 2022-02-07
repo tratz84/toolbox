@@ -148,6 +148,19 @@ class ImapConnector extends BaseMailConnector {
     }
     
     
+    protected function handleCallbackItemImported( $folderName, $result, $emlfile, $changed) {
+        if ($this->callback_itemImported == null) {
+            return;
+        }
+        
+        $opts = array();
+        $opts['subject']= imap_utf8( $result->subject );
+        $opts['date'] = $result->date;
+        
+        return call_user_func($this->callback_itemImported, $folderName, $opts, $emlfile, $changed);
+    }
+    
+    
     public function importItems($folderName) {
         
         if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folderName)))
@@ -190,7 +203,7 @@ class ImapConnector extends BaseMailConnector {
                 }
                 
                 // callback (probably Solr-import)
-                call_user_func($this->callback_itemImported, $folderName, $results[$y], $emlfile, $changed);
+                $this->handleCallbackItemImported($folderName, $results[$y], $emlfile, $changed);
             }
             
             imap_gc($this->imap, IMAP_GC_ELT | IMAP_GC_ENV | IMAP_GC_TEXTS);
@@ -399,9 +412,7 @@ class ImapConnector extends BaseMailConnector {
                         
                         
                         // call callback
-                        if ($this->callback_itemImported != null) {
-                            call_user_func($this->callback_itemImported, $folderName, $results[$y], $file, true);
-                        }
+                        $this->handleCallbackItemImported($folderName, $results[$y], $emlfile, true);
                     }
                 }
             }

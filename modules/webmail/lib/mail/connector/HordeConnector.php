@@ -90,6 +90,20 @@ class HordeConnector extends BaseMailConnector {
         $this->callback_itemImported = $callback;
     }
     
+    protected function handleCallbackItemImported( $folderName, \Horde_Imap_Client_Data_Fetch $result, $emlfile, $changd) {
+        if ($this->callback_itemImported == null) {
+            return;
+        }
+        
+        $env = $result->getEnvelope();
+        
+        $opts = array();
+        $opts['subject']= $env->subject;
+        $opts['date'] = $result->getImapDate()->format('Y-m-d H:i:s');
+        
+        return call_user_func($this->callback_itemImported, $folderName, $opts, $emlfile, true);
+    }
+    
     
     public function ping() {
         if ($this->client === null) return false;
@@ -359,7 +373,7 @@ class HordeConnector extends BaseMailConnector {
                 }
                 
                 // callback (probably Solr-import)
-//                 call_user_func($this->callback_itemImported, $folderName, $results[$y], $emlfile, $changed);
+                $this->handleCallbackItemImported($folderName, $fetch, $emlfile, $changed);
             }
             
             

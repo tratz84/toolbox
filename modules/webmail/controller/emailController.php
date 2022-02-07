@@ -32,7 +32,7 @@ class emailController extends BaseController {
         $emailService = $this->oc->get(EmailService::class);
         
         $_REQUEST['orderby'] = 'email_id desc';
-        $_REQUEST['incoming'] = false;
+        $_REQUEST['connector_id_null'] = true;
         $r = $emailService->searchEmail($pageNo*$limit, $limit, $_REQUEST);
         
         $arr = array();
