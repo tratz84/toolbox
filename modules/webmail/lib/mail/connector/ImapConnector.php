@@ -29,8 +29,6 @@ class ImapConnector extends BaseMailConnector {
     
     protected $callback_itemImported = null;
     
-    protected $serverPropertyChecksums = null;
-    
     protected $imapFetchListCount = -1;
     protected $imapFetchOverviewOptions = 0;
     
@@ -204,6 +202,7 @@ class ImapConnector extends BaseMailConnector {
     }
     
     protected function determineEmailPath($overview) {
+        var_export($overview);exit;
         $dt = new \DateTime();
         $dt->setTimestamp($overview->udate);
         $dt->setTimezone(new \DateTimeZone('+0000'));
@@ -299,34 +298,6 @@ class ImapConnector extends BaseMailConnector {
         imap_gc($this->imap, IMAP_GC_ELT | IMAP_GC_ENV | IMAP_GC_TEXTS);
         
         return $file;
-    }
-    
-    public function serverPropertiesChanged($filename, MailProperties $data) {
-        $chksum = crc32_int32(serialize($data->getServerProperties()));
-        
-        if ($this->serverPropertyChecksums === null) {
-            $f = get_data_file('webmail/message-checksums');
-            if ($f) {
-                $this->serverPropertyChecksums = unserialize( file_get_contents( $f ) );
-            }
-            
-            if ($this->serverPropertyChecksums == false) {
-                $this->serverPropertyChecksums = array();
-            }
-        }
-        
-        if (isset($this->serverPropertyChecksums[ $filename ]) && $this->serverPropertyChecksums[ $filename ] == $chksum) {
-            return false;
-        }
-        
-        $this->serverPropertyChecksums[ $filename ] = $chksum;
-        
-        return true;
-    }
-    
-    public function saveServerPropertyChecksums() {
-        
-        return save_data('webmail/message-checksums', serialize($this->serverPropertyChecksums));
     }
     
     

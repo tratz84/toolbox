@@ -4,6 +4,7 @@
 namespace webmail\mail\connector;
 
 use core\exception\InvalidStateException;
+use webmail\mail\MailProperties;
 use webmail\model\Connector;
 use webmail\solr\SolrMail;
 
@@ -13,6 +14,7 @@ abstract class BaseMailConnector {
     protected $connector;
     protected $blnRunning = true;
     
+    protected $serverPropertyChecksums = null;
     
     public function __construct(Connector $connector) {
         $this->setConnector( $connector );
@@ -66,6 +68,38 @@ abstract class BaseMailConnector {
     public function lookupUid($folder, SolrMail $solrMail) { }
     
     public function appendMessage($folder, $emlMessage) { }
+    
+    
+    
+    
+    public function serverPropertiesChanged($emlfile, MailProperties $data) {
+        $chksum = crc32_int32(serialize($data->getServerProperties()));
+        
+        if ($this->serverPropertyChecksums === null) {
+            $f = get_data_file('webmail/message-checksums');
+            if ($f) {
+                $this->serverPropertyChecksums = unserialize( file_get_contents( $f ) );
+            }
+            
+            if ($this->serverPropertyChecksums == false) {
+                $this->serverPropertyChecksums = array();
+            }
+        }
+        
+        if (isset($this->serverPropertyChecksums[ $emlfile ]) && $this->serverPropertyChecksums[ $emlfile ] == $chksum) {
+            return false;
+        }
+        
+        $this->serverPropertyChecksums[ $emlfile ] = $chksum;
+        
+        return true;
+    }
+    
+    public function saveServerPropertyChecksums() {
+        
+        return save_data('webmail/message-checksums', serialize($this->serverPropertyChecksums));
+    }
+    
     
 }
 
