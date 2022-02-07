@@ -819,6 +819,14 @@ function date2unix($input)
             return intval($matches[1] / 1000);
         }
     }
+    
+    if (preg_match('/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}/', $input)) {
+        try {
+            $dt = new DateTime( $input );
+            $dt->setTimezone( new DateTimeZone( date_default_timezone_get() ) );
+            $input = $dt->format('Y-m-d H:i:s');
+        } catch (\Exception $ex) { }
+    }
 
     if (preg_match('/^\\d{8}+$/', $input)) {
         $d2uy = (int)substr($input, 0, 4);
@@ -1190,6 +1198,16 @@ function valid_date($str) {
 }
 
 function valid_datetime($str) {
+    if (preg_match('/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}/', $str)) {
+        try {
+            // try to parse DateTime
+            $dt = new DateTime( $str );
+            
+            return true;
+        } catch (\Exception $ex) {
+            return false;
+        }
+    }
     
     if ($str == '0000-00-00 00:00:00')
         return false;
