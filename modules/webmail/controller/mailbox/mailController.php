@@ -16,14 +16,16 @@ use webmail\service\ConnectorService;
 use webmail\service\EmailService;
 use webmail\solr\SolrMail;
 use webmail\solr\SolrMailQuery;
+use webmail\search\MailSearchBase;
 
 class mailController extends BaseController {
    
     
     protected function getMail($id) {
-        $smq = new SolrMailQuery();
         
-        return $smq->readById($id);
+        $ms = MailSearchBase::getInstance();
+        
+        return $ms->readById( $id );
     }
     
     /**

@@ -176,17 +176,17 @@ var t = new IndexTable('#emailheader-table-container', {
 });
 
 t.setRowClick(function(row, evt) {
-	selectedMailId = $(row).data('record').email_id;
+	selectedMailId = $(row).data('record').solr_mail_id;
 
 	viewMail( selectedMailId );
 });
 
 t.setRowDblclick(function(row, evt) {
-	window.open(appUrl('/?m=webmail&c=mailbox/mail&a=view&id=' + $(row).data('record').email_id), '_blank');
+	window.open(appUrl('/?m=webmail&c=mailbox/mail&a=view&id=' + $(row).data('record').solr_mail_id), '_blank');
 });
 
 t.setCallbackRenderRow(function(obj, row) {
-	$(row).attr('email-id', obj.email_id);
+	$(row).attr('email-id', obj.solr_mail_id);
 
 	if (obj.seen == false) {
 		$(row).addClass('unseen');
@@ -334,7 +334,7 @@ t.addColumn({
 	fieldDescription: '',
 	fieldType: 'actions',
 	render: function( record ) {
-		var email_id = record['email_id'];
+		var email_id = record['solr_mail_id'];
 
 		var btnSpam = $('<a class="fa fa-flag mark-as-spam" href="javascript:void(0);" />');
 		btnSpam.click(function() {
