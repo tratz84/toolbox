@@ -10,6 +10,7 @@ use webmail\mail\connector\BaseMailConnector;
 use webmail\model\Email;
 use webmail\service\ConnectorService;
 use webmail\service\EmailService;
+use webmail\mail\actions\MysqlMailActions;
 
 
 abstract class MailActionsBase {
@@ -21,6 +22,23 @@ abstract class MailActionsBase {
     protected $lastError = null;
     
     public function __construct() {
+        
+    }
+    
+    
+    public function getInstance() {
+        
+        $n = webmail_storage_engine();
+        
+        if ($n == 'solr') {
+            return object_container_get( SolrMailActions::class );
+        }
+        else if ($n == 'db') {
+            return object_container_get( MysqlMailActions::class );
+        }
+        else {
+            throw new InvalidStateException( 'engine not found' );
+        }
         
     }
     
