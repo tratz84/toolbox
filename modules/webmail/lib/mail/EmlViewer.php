@@ -11,12 +11,16 @@ class EmlViewer {
     
     protected $filename;
     
+    protected $fromName;
+    protected $fromEmail;
     protected $subject;
     protected $to;
     protected $cc;
     protected $bcc;
     protected $contentHtml;
     protected $contentText;
+    
+    protected $parser;
     
     protected $attachments;
     protected $parserAttachments;
@@ -31,12 +35,16 @@ class EmlViewer {
     public function getFilename() { return $this->filename; }
     public function setFilename($n) { $this->filename = $n; }
     
+    public function getFromName() { return $this->fromName; }
+    public function getFromEmail() { return $this->fromEmail; }
     public function getSubject() { return $this->subject; }
     public function getTo() { return $this->to; }
     public function getCc() { return $this->cc; }
     public function getBcc() { return $this->bcc; }
     public function getContentHtml() { return $this->contentHtml; }
     public function getContentText() { return $this->contentText; }
+    
+    public function getParser() { return $this->parser; }
     
     public function getAttachments() { return $this->attachments; }
     
@@ -56,6 +64,15 @@ class EmlViewer {
         
         $dt = new \DateTime(null, new \DateTimeZone('+0000'));
         $dt->setTimestamp(strtotime($parsedMail->getHeader('date')));
+        
+        
+        $from = $parsedMail->getAddresses('from');
+        if (count($from) > 0) {
+            if (isset($from[0]['display']) && $from[0]['display'])
+                $this->fromName = $from[0]['display'];
+            if (isset($from[0]['address']) && $from[0]['address'])
+                $this->fromEmail = $from[0]['address'];
+        }
         
         $this->subject = $parsedMail->getHeader('subject');
         
@@ -99,6 +116,8 @@ class EmlViewer {
         
         $this->contentHtml = $parsedMail->getMessageBody('html');
         $this->contentText = $parsedMail->getMessageBody('text');
+        
+        $this->parser = $parsedMail;
         
         $this->parsed = true;
     }

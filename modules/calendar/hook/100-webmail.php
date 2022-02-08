@@ -8,6 +8,9 @@ use customer\service\CustomerService;
 
 hook_eventbus_subscribe('webmail', 'mailbox-mailactions', function($actionContainer) {
     
+    // TODO: fix..
+    return;
+    
     $emailId = $actionContainer->getAttribute('data-email-id');
     
     if (!$emailId) {

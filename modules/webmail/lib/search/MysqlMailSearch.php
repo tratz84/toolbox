@@ -48,7 +48,7 @@ class MysqlMailSearch extends MailSearchBase {
             $filter = $opts['filter'];
             
             $list = array_filter($list, function($folderName) use ($filter) {
-                if (in_array( $folderName, $filter )) {
+                if (in_array( $folderName['name'], $filter )) {
                     return false;
                 }
                 else {
@@ -365,6 +365,10 @@ class MysqlMailSearch extends MailSearchBase {
         
         $eDao = new EmailDAO();
         $o = $eDao->readBySolrMailId( $id );
+
+        if (count($o) == 0) {
+            return null;
+        }
         
         $arr = $o[0]->getFields();
         

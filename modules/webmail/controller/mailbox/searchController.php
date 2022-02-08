@@ -106,7 +106,7 @@ class searchController extends BaseController {
     	    
     	    $arr['filters'] = array();
 	        $arr['filters']['folders'] = $mq_folders->getFolders( ['filter' => $listFoldersToHide] );
-    	    
+	        
     	    $this->json($arr);
 	    } catch(\Exception $ex) {
 	        $this->json([

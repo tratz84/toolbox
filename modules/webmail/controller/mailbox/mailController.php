@@ -17,6 +17,8 @@ use webmail\service\EmailService;
 use webmail\solr\SolrMail;
 use webmail\solr\SolrMailQuery;
 use webmail\search\MailSearchBase;
+use webmail\mail\EmlViewer;
+use webmail\mail\MailProperties;
 
 class mailController extends BaseController {
    
@@ -55,21 +57,26 @@ class mailController extends BaseController {
         $actionContainer->addItem('mail-forward', '<button class="btn-forward-mail" onclick="forwardMail('.esc_json_attr($emailId).');"><span class="fa fa-forward"></span>Forward</button>');
         $actionContainer->addItem('mail-reply', '<button class="btn-reply-mail" onclick="replyMail('.esc_json_attr($emailId).');"><span class="fa fa-reply"></span>Reply</button>');
         
+        $ms = MailSearchBase::getInstance();
+        $mail = $ms->readById( $emailId );
         
-        $solrMail = SolrMailQuery::readStaticById($emailId);
-        
-        if ($solrMail == null) {
+        if ($mail == null) {
             $this->setTemplateFile( module_file('webmail', 'templates/mailbox/search/not-found.php') );
             return $this->render();
         }
         
-        $mp = $solrMail->getProperties();
-        if ($mp->getSeen() == false) {
-            try {
-                $sma = new SolrMailActions();
-                $sma->markAsSeen($solrMail);
-            } catch (\Exception|\Error $ex) { }
-        }
+        $mp = new MailProperties( $emailId );
+        $mp->load();
+        
+        
+        // TODO
+//         $mp = $solrMail->getProperties();
+//         if ($mp->getSeen() == false) {
+//             try {
+//                 $sma = new SolrMailActions();
+//                 $sma->markAsSeen($solrMail);
+//             } catch (\Exception|\Error $ex) { }
+//         }
         
         
         // move to folder
@@ -120,26 +127,34 @@ class mailController extends BaseController {
         /** @var SolrMail $mail */
         $mail = $this->getMail( get_var('id') );
         
-        $this->id          = $mail->getId();
+        if (!$mail) {
+            throw new ObjectNotFoundException( 'Mail not found' );
+        }
         
-        $this->html        = $mail->getContentSafe();
-        $this->date        = format_date($mail->getDate(), 'd-m-Y H:i:s');
+        $emlviewer = new EmlViewer( get_data_file( $mail['solr_mail_id'] ));
+        $emlviewer->parse();
         
-        $this->attachments = $mail->getAttachments();
+        $this->id          = $mail['solr_mail_id'];
         
-        $this->fromName    = $mail->getFromName();
-        $this->fromEmail   = $mail->getFromEmail();
+        $this->html        = $emlviewer->getContentSafe();
+        $this->date        = format_date($mail['created'], 'd-m-Y H:i:s');
         
-        $this->to          = $mail->getTo();
-        $this->cc          = $mail->getCc();
-        $this->bcc         = $mail->getBcc();
-        $this->subject     = $mail->getSubject();
+        $this->attachments = $emlviewer->getAttachments();
+        
+        $this->fromName    = $emlviewer->getFromName();
+        $this->fromEmail   = $emlviewer->getFromEmail();
+        
+        $this->to          = $emlviewer->getTo();
+        $this->cc          = $emlviewer->getCc();
+        $this->bcc         = $emlviewer->getBcc();
+        $this->subject     = $emlviewer->getSubject();
         
         hook_htmlscriptloader_enableGroup('webmail');
 
         $this->attachmentsRendered = array();
         
-        $atts = $mail->getAttachments();
+        $parser = $emlviewer->getParser();
+        $atts = $parser->getAttachments();
         for($x=0; $x < count($atts); $x++) {
             $att = $mail->getAttachmentFile( $x );
             
