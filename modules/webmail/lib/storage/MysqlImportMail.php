@@ -145,7 +145,7 @@ class MysqlImportMail extends ImportMailBase {
                 $email->setIncoming( true );
             }
             
-//             $mp = new MailProperties( $e['file'] );
+            $mp = new MailProperties( $e['file'] );
 //             $email->setUserId( ... );
 //             $email->setCompanyId( ... );
 //             $email->setPersonId( ... );
@@ -169,14 +169,18 @@ class MysqlImportMail extends ImportMailBase {
             $email->setAttributes($att);
             
             $email->setMessageId( $e['emlMessageId'] );
+            $email->setAction( $mp->getAction() );
 //             $email->setSpam( false );
 //             $email->setIncoming( true );
             $email->setFromName( $e['fromName'] );
             $email->setFromEmail( $e['fromEmail'] );
+            
+            if (strlen($e['subject']) > 512)
+                $e['subject'] = substr($e['subject'], 0, 512);
             $email->setSubject( $e['subject'] );
             $email->setTextContent( $e['content'] );
 //             $email->setReceived( true );
-            $email->setDeleted( false );
+            $email->setDeleted( null );
             $email->setStatus( Email::STATUS_RECEIVED );
             
             if (valid_datetime($e['date']))

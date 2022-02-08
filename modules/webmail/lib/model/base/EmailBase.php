@@ -131,7 +131,7 @@ class EmailBase extends \core\db\DBObject {
   'subject' => 
   array (
     'Field' => 'subject',
-    'Type' => 'varchar(255)',
+    'Type' => 'varchar(512)',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -215,6 +215,15 @@ class EmailBase extends \core\db\DBObject {
     'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'action' => 
+  array (
+    'Field' => 'action',
+    'Type' => 'varchar(16)',
+    'Null' => 'YES',
+    'Key' => 'MUL',
     'Default' => NULL,
     'Extra' => '',
   ),
@@ -315,6 +324,10 @@ class EmailBase extends \core\db\DBObject {
 		
 	public function setServerPropertiesChecksum($p) { $this->setField('server_properties_checksum', $p); }
 	public function getServerPropertiesChecksum() { return $this->getField('server_properties_checksum'); }
+	
+		
+	public function setAction($p) { $this->setField('action', $p); }
+	public function getAction() { return $this->getField('action'); }
 	
 	
 }

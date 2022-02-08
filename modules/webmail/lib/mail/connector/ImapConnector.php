@@ -215,7 +215,6 @@ class ImapConnector extends BaseMailConnector {
     }
     
     protected function determineEmailPath($overview) {
-        var_export($overview);exit;
         $dt = new \DateTime();
         $dt->setTimestamp($overview->udate);
         $dt->setTimezone(new \DateTimeZone('+0000'));

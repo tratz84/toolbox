@@ -30,5 +30,24 @@ class ConnectorImapfolderDAO extends \core\db\DAOObject {
 	    return $this->queryList('select * from webmail__connector_imapfolder order by foldername');
 	}
 	
+	
+	public function listFolders() {
+	    $sql = "select cif.folderName, count(*) value
+                from webmail__connector_imapfolder cif
+                left join webmail__email e on (cif.connector_imapfolder_id = e.connector_imapfolder_id)
+                group by cif.connector_imapfolder_id
+                order by folderName='INBOX' desc, folderName";
+	    
+	    $l = $this->queryList( $sql );
+	    
+	    $folders = array();
+	    foreach($l as $i) {
+	        $folders[] = ['name' => $i->getField('folderName'), 'value' => $i->getField('value')];
+	    }
+	    
+	    return $folders;
+	}
+	
+	
 }
 

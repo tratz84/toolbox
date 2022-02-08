@@ -7,6 +7,7 @@ use webmail\MailTabSettings;
 use webmail\MailboxSearchSettings;
 use webmail\form\MailboxSearchSettingsForm;
 use webmail\solr\SolrMailQuery;
+use webmail\search\MailSearchBase;
 
 class searchController extends BaseController {
 
@@ -50,25 +51,25 @@ class searchController extends BaseController {
 	    }
 	    
 	    
-	    $smq = new SolrMailQuery();
+	    $mq = MailSearchBase::getInstance();
 	    
 	    $pageNo = isset($_REQUEST['pageNo']) ? (int)$_REQUEST['pageNo'] : 0;
 	    $limit = $this->ctx->getPageSize();
 	    
-	    $smq->setStart($pageNo * $limit);
-	    $smq->setRows( $limit );
+	    $mq->setStart($pageNo * $limit);
+	    $mq->setRows( $limit );
 	    
 	    if (get_var('q')) {
-	        $smq->setQuery( get_var('q') );
-            $smq->setSort('score desc, date desc');
+	        $mq->setQuery( get_var('q') );
+//             $smq->setSort('score desc, date desc');
 	    }
 	    
 	    if (get_var('action')) {
-	        $smq->addFacetSearch('action', ':', get_var('action'));
+	        $mq->setAction( get_var('action') );
 	    }
 	    
 	    if (get_var('folder')) {
-	        $smq->addFacetSearch('mailboxName', ':', get_var('folder'));
+	        $mq->setFolderName( get_var('folder') );
 	    }
 	    
 	    
@@ -76,40 +77,35 @@ class searchController extends BaseController {
 	    
 	    // TODO: hmz... this isn't the right way
 	    if ($mts) {
-	        $mts->applyFilters( $smq );
+	        $mq->applyMailTabSettings( $mts );
 	    } else {
 	        if (get_var('f')) {
     	        $mss = new MailboxSearchSettings();
-    	        $mss->applyFilters($smq);
+	            $mq->applyMailboxSearchSettings( $mss );
 	        }
 	    }
 	    
 	    try {
-    	    $lr = $smq->searchListResponse();
+    	    $lr = $mq->searchListResponse();
     	    
-    	    $smq_folders = new SolrMailQuery();
-    	    $smq_folders->setRows(0);
-    	    $smq_folders->searchListResponse();
+    	    $mq_folders = MailSearchBase::getInstance();
+    	    $mq_folders->setRows(0);
+    	    $mq_folders->searchListResponse();
     	    
     	    
     	    $arr = array();
     	    $arr['listResponse'] = $lr;
-    	    $arr['filters'] = array();
-    	    $arr['filters']['folders'] = $smq_folders->getFolders();
+    	    
     	    
     	    // MailboxSearchSettings set? => apply filters
+    	    $listFoldersToHide = array();
     	    if ($mss) {
     	        // folders to hide?
     	        $listFoldersToHide = $mss->getHideFolderNameList();
-    	        $arr['filters']['folders'] = array_filter($arr['filters']['folders'], function($f) use ($listFoldersToHide) {
-    	            if (in_array($f['name'], $listFoldersToHide)) {
-    	                return false;
-    	            }
-    	            else {
-    	                return true;
-    	            }
-    	        });
     	    }
+    	    
+    	    $arr['filters'] = array();
+	        $arr['filters']['folders'] = $mq_folders->getFolders( ['filter' => $listFoldersToHide] );
     	    
     	    $this->json($arr);
 	    } catch(\Exception $ex) {
