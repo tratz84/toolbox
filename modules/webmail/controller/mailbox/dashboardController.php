@@ -7,6 +7,8 @@ use core\controller\BaseController;
 use webmail\MailboxSearchSettings;
 use webmail\form\MailboxDashboardSettingsForm;
 use webmail\solr\SolrMailQuery;
+use webmail\search\MailSearchBase;
+use webmail\search\SolrMailSearch;
 
 class dashboardController extends BaseController {
     
@@ -22,19 +24,22 @@ class dashboardController extends BaseController {
     public function action_search( $opts = array() ) {
         if (isset($opts['render']) == false) $opts['render'] = true;
         
-        $smq = new SolrMailQuery();
-        $smq->setRows( 25 );
-        $smq->setSort('date desc');
+        $ms = MailSearchBase::getInstance();
+        $ms->setRows( 25 );
+        
+        if (is_a($ms, SolrMailSearch::class))
+            $ms->setSort('date desc');
         
         $webmailSettings = object_meta_get(User::class, ctx()->getUser()->getUserId(), 'webmail-dashboard');
+        
         $mss = new MailboxSearchSettings(null, ['data' => $webmailSettings]);
-        $mss->applyFilters($smq);
+        $ms->applyMailboxSearchSettings( $mss );
         
         $this->mails = array();
         
         $error = null;
         try {
-            $this->listResponse = $smq->searchListResponse();
+            $this->listResponse = $ms->searchListResponse();
             
             $this->mails = $this->listResponse->getObjects();
         } catch(\Exception $ex) {

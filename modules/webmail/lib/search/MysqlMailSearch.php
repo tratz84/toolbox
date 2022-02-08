@@ -15,13 +15,17 @@ use core\forms\lists\ListResponse;
 class MysqlMailSearch extends MailSearchBase {
     
     
-    protected $fromEmail = array();
-    protected $toEmail = array();
+    protected $fromEmails = array();
+    protected $toEmails = array();
     
-    protected $exclFromEmail   = array();
-    protected $exclToEmail     = array();
-    protected $exclMailboxName = array();
-    protected $exclAction      = array();
+    
+    
+    protected $exclFromEmails   = array();
+    protected $exclToEmails     = array();
+    
+    
+    protected $exclMailboxNames = array();
+    protected $exclActions      = array();
     
     
     protected $mapConnectorImapFolders = null;
@@ -65,7 +69,7 @@ class MysqlMailSearch extends MailSearchBase {
         }
         
         
-        $orderBy = 'created desc';
+        $orderBy = 'order by created desc';
         
         $e_where = array();
         $e_params = array();
@@ -74,63 +78,71 @@ class MysqlMailSearch extends MailSearchBase {
         $to_params = array();
         
         // $this->fromEmail
-        foreach( $this->fromEmail as $fe ) {
+        foreach( $this->fromEmails as $fe ) {
             $e_where[] = " from_email like ? ";
             $e_params[] = $fe;
         }
         
         
         // $this->toEmail
-        foreach( $this->toEmail as $te ) {
+        foreach( $this->toEmails as $te ) {
             $to_where[] = ' to_email like ? ';
             $to_params[] = $te;
         }
         
         // $this->exclFromEmail
-        foreach( $this->exclFromEmail as $fe ) {
+        foreach( $this->exclFromEmails as $fe ) {
             $e_where[] = " from_email not like ? ";
             $e_params[] = $fe;
         }
         
         // $this->exclToEmail
-        foreach( $this->exclToEmail as $te ) {
+        foreach( $this->exclToEmails as $te ) {
             $to_where[] = ' to_email not like ? ';
             $to_params[] = $te;
         }
         
         // $this->exclMailboxName
-        foreach($this->exclMailboxName as $e) {
+        foreach($this->exclMailboxNames as $e) {
             $ids = $this->getConnectorImapFolderIds( $e );
+            
             
             if (count($ids))
                 $e_where[] = ' e.connector_imapfolder_id NOT IN ('.implode(', ', $ids) . ') ';
         }
         
         // $this->exclAction
-        foreach( $this->exclAction as $a ) {
+        foreach( $this->exclActions as $a ) {
             $e_where[] = 'action <> ?';
             $e_params[] = $a;
         }
         
         // $this->getFolderName()
-        if ($this->getFolderName()) {
-            $ids = $this->getConnectorImapFolderIds( $this->getFolderName() );
+        $sub_where = array();
+        foreach($this->mailboxNames as $n) {
+            $ids = $this->getConnectorImapFolderIds( $n );
             
             if (count($ids))
-                $e_where[] = ' e.connector_imapfolder_id IN ('.implode(', ', $ids) . ') ';
+                $sub_where[] = ' e.connector_imapfolder_id IN ('.implode(', ', $ids) . ') ';
         }
+        if (count($sub_where) > 0)
+            $e_where[] = ' (' . implode(') OR (', $sub_where) . ') ';
         
         // $this->getAction()
-        if ($this->getAction()) {
-            $e_where[] = 'action = ?';
-            $e_params[] = $this->getAction();
+        $sub_where = array();
+        foreach($this->actions as $a) {
+            $sub_where[] = 'action = ?';
+            $e_params[] = $a;
         }
+        if (count($sub_where) > 0)
+            $e_where[] = '(' . implode(') OR (', $sub_where) . ') ';
+        
         
         // $this->getQuery
         $q = trim($this->getQuery());
         if ($q && $q != '*:*') {
             $q = DatabaseHandler::getConnection('default')->escape( $q );
-            $p = ' match(text_content) against ( '.$q.' ) ';
+            $p = ' match(text_content) against ( \''.$q.'\' ) ';
             $e_where[] = $p;
             
             $orderBy = ' order by ' . $p . ' desc';
@@ -160,6 +172,8 @@ class MysqlMailSearch extends MailSearchBase {
         if (count($to_where)) {
             $sql .= ' AND email_id IN (select email_id from webmail__email_to where ('.implode(') AND (', $to_where).')';
         }
+        if ($orderBy)
+            $sql .= " $orderBy ";
         $sql .= $limit;
         
         $params = array_merge( $e_params, $to_params );
@@ -291,13 +305,13 @@ class MysqlMailSearch extends MailSearchBase {
             if ($filter['filter_type'] == 'folder') {
                 $v = trim($filter['filter_value']);
                 
-                $this->setFolderName( $v );
+                $this->mailboxNames[] = $v;
             }
             
             if ($filter['filter_type'] == 'action') {
                 $v = trim($filter['filter_value']);
                 
-                $this->setAction( $v );
+                $this->actions[] = $v;
             }
         }
         
@@ -323,12 +337,17 @@ class MysqlMailSearch extends MailSearchBase {
                 $v = trim($filter['filter_value']);
                 
                 // query specific on mailbox? => skip exclusion
-                if ($this->getFolderName() == $v) {
-                    continue;
+                $skip = false;
+                foreach($this->mailboxNames as $mn) {
+                    if ($v == $mn) {
+                        $skip = true;
+                        continue;
+                    }
                 }
+                if ($skip) continue;
                 
                     
-                $this->exclMailboxName[] = $v;
+                $this->exclMailboxNames[] = $v;
             }
             
             if ($filter['filter_type'] == 'action') {

@@ -16,8 +16,9 @@ abstract class MailSearchBase {
     protected $rows = 25;
     protected $query = null;
     
-    protected $folderName = null;
-    protected $action = null;
+    
+    protected $mailboxNames = array();
+    protected $actions      = array();
     
     
     public function __construct() {
@@ -40,11 +41,8 @@ abstract class MailSearchBase {
     public function getQuery() { return $this->query; }
     public function setQuery($q) { $this->query = $q; }
     
-    public function getFolderName() { return $this->folderName; }
-    public function setFolderName($n) { $this->folderName = $n; }
-    
-    public function getAction() { return $this->action; }
-    public function setAction($a) { $this->action = $a; }
+    public function addMailboxName($n) { $this->mailboxNames[] = $n; }
+    public function addAction($a) { $this->actions[] = $a; }
     
     
     

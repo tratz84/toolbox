@@ -21,6 +21,10 @@ class SolrMailSearch extends MailSearchBase {
         
     }
     
+    
+    public function setSort($s) {
+        $this->smq->setSort($s);
+    }
 
     public function getFolders( $opts=array() ) {
         return $this->smq->getFolders();
