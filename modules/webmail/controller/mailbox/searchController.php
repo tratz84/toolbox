@@ -65,11 +65,11 @@ class searchController extends BaseController {
 	    }
 	    
 	    if (get_var('action')) {
-	        $mq->setAction( get_var('action') );
+	        $mq->addAction( get_var('action') );
 	    }
 	    
 	    if (get_var('folder')) {
-	        $mq->setFolderName( get_var('folder') );
+	        $mq->addMailboxName( get_var('folder') );
 	    }
 	    
 	    
