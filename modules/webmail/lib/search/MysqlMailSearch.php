@@ -1,0 +1,359 @@
+<?php
+
+
+namespace webmail\search;
+
+
+
+use webmail\MailTabSettings;
+use webmail\MailboxSearchSettings;
+use webmail\model\ConnectorImapfolderDAO;
+use core\db\DatabaseHandler;
+use webmail\model\EmailDAO;
+use core\forms\lists\ListResponse;
+
+class MysqlMailSearch extends MailSearchBase {
+    
+    
+    protected $fromEmail = array();
+    protected $toEmail = array();
+    
+    protected $exclFromEmail   = array();
+    protected $exclToEmail     = array();
+    protected $exclMailboxName = array();
+    protected $exclAction      = array();
+    
+    
+    protected $mapConnectorImapFolders = null;
+    
+    
+    public function __construct() {
+        parent::__construct();
+        
+        
+    }
+    
+    
+    
+    public function getFolders( $opts=array() ) {
+        $cifDao = new ConnectorImapfolderDAO();
+        
+        $list = $cifDao->listFolders();
+        
+        if ($opts['filter'] && is_array($opts['filter'])) {
+            $filter = $opts['filter'];
+            
+            $list = array_filter($list, function($folderName) use ($filter) {
+                if (in_array( $folderName, $filter )) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            });
+        }
+        
+        
+        return $list;
+    }
+    
+
+    public function searchListResponse() {
+        
+        if ($this->getRows() == 0) {
+            return new ListResponse(0, 0, 0, array());
+        }
+        
+        
+        $orderBy = 'created desc';
+        
+        $e_where = array();
+        $e_params = array();
+        
+        $to_where = array();
+        $to_params = array();
+        
+        // $this->fromEmail
+        foreach( $this->fromEmail as $fe ) {
+            $e_where[] = " from_email like ? ";
+            $e_params[] = $fe;
+        }
+        
+        
+        // $this->toEmail
+        foreach( $this->toEmail as $te ) {
+            $to_where[] = ' to_email like ? ';
+            $to_params[] = $te;
+        }
+        
+        // $this->exclFromEmail
+        foreach( $this->exclFromEmail as $fe ) {
+            $e_where[] = " from_email not like ? ";
+            $e_params[] = $fe;
+        }
+        
+        // $this->exclToEmail
+        foreach( $this->exclToEmail as $te ) {
+            $to_where[] = ' to_email not like ? ';
+            $to_params[] = $te;
+        }
+        
+        // $this->exclMailboxName
+        foreach($this->exclMailboxName as $e) {
+            $ids = $this->getConnectorImapFolderIds( $e );
+            
+            if (count($ids))
+                $e_where[] = ' e.connector_imapfolder_id NOT IN ('.implode(', ', $ids) . ') ';
+        }
+        
+        // $this->exclAction
+        foreach( $this->exclAction as $a ) {
+            $e_where[] = 'action <> ?';
+            $e_params[] = $a;
+        }
+        
+        // $this->getFolderName()
+        if ($this->getFolderName()) {
+            $ids = $this->getConnectorImapFolderIds( $this->getFolderName() );
+            
+            if (count($ids))
+                $e_where[] = ' e.connector_imapfolder_id IN ('.implode(', ', $ids) . ') ';
+        }
+        
+        // $this->getAction()
+        if ($this->getAction()) {
+            $e_where[] = 'action = ?';
+            $e_params[] = $this->getAction();
+        }
+        
+        // $this->getQuery
+        $q = trim($this->getQuery());
+        if ($q && $q != '*:*') {
+            $q = DatabaseHandler::getConnection('default')->escape( $q );
+            $p = ' match(text_content) against ( '.$q.' ) ';
+            $e_where[] = $p;
+            
+            $orderBy = ' order by ' . $p . ' desc';
+        }
+        
+        // $this->getStart()
+        $limit = '';
+        if ($this->getStart()) {
+            $limit = 'limit ' . intval( $this->getStart() );
+        }
+        // $this->getRows()
+        if ($this->getRows()) {
+            if ($limit == '')
+                $limit = 'limit 0';
+            
+            $limit .= ', '.intval($this->getRows());
+        }
+        
+        
+        $sql = "select e.*, e.created date, cif.folderName mailbox_name
+                from webmail__email e
+                left join webmail__connector_imapfolder cif on (cif.connector_imapfolder_id = e.connector_imapfolder_id)
+                where 1=1 ";
+        if (count($e_where)) {
+            $sql .= ' AND ('.implode(') AND (', $e_where). ') ';
+        }
+        if (count($to_where)) {
+            $sql .= ' AND email_id IN (select email_id from webmail__email_to where ('.implode(') AND (', $to_where).')';
+        }
+        $sql .= $limit;
+        
+        $params = array_merge( $e_params, $to_params );
+//         var_export($params);
+//         print $sql;exit;
+        
+        $eDao = new EmailDAO();
+        $cursor = $eDao->queryCursor( $sql, $params );
+        
+        
+        $lr = ListResponse::fillByCursor($this->getStart(), $this->getRows(), $cursor, array(
+            'email_id',
+            'user_id',
+            'company_id',
+            'person_id',
+            'identity_id',
+            'connector_id',
+            'connector_imapfolder_id',
+            'attributes',
+            'message_id',
+            'spam',
+            'incoming',
+            'from_name',
+            'from_email',
+            'subject',
+//             'text_content',
+            'received',
+            'deleted',
+            'status',
+            'created',
+            'date',
+//             'search_id',
+            'solr_mail_id',
+            'confidential',
+            'server_properties_checksum',
+            'action',
+            'mailbox_name'
+        ));
+        
+        return $lr;
+    }
+    
+    
+    protected function getConnectorImapFolderIds( $folderName ) {
+        // fill cache
+        if ($this->mapConnectorImapFolders == null) {
+            $this->mapConnectorImapFolders = array();
+            
+            $cifDao = new ConnectorImapfolderDAO();
+            $cifs = $cifDao->readAll();
+            
+            foreach($cifs as $cif) {
+                $fn = $cif->getFolderName();
+                
+                if (isset($this->mapConnectorImapFolders[$fn]) == false)
+                    $this->mapConnectorImapFolders[$fn] = array();
+                
+                $this->mapConnectorImapFolders[$fn][] = $cif;
+            }
+        }
+        
+        $ids = array();
+        
+        if (isset($this->mapConnectorImapFolders[$folderName])) foreach($this->mapConnectorImapFolders[$folderName] as $cif) {
+            $ids[] = $cif->getConnectorImapfolderId();
+        }
+     
+        return $ids;
+    }
+    
+    
+    
+
+    public function applyMailTabSettings(MailTabSettings $mts) {
+        
+        // apply default filter(s)? (e-mailadresses linked to company/person)
+        
+        $filters = $mts->getFilters();
+        
+        if ($mts->applyDefaultFilters()) {
+            $defaultFilters = $mts->getDefaultFilters();
+            $filters = array_merge($filters, $defaultFilters);
+        }
+        
+        // other filters specified?
+        foreach($filters as $filter) {
+            if ($filter['filter_type'] == 'email') {
+                $v = trim($filter['filter_value']);
+                
+                // unescape asterisks
+                $v = str_replace('\\*', '%', $v);
+                
+                // @domainname.com? => prefix with asterisk
+                if (strpos($v, '@') === 0) {
+                    $v = '%'.$v;
+                }
+                
+                $this->fromEmail[] = $v;
+                $this->toEmail[] = $v;
+            }
+            
+            if ($filter['filter_type'] == 'folder') {
+                $v = trim($filter['filter_value']);
+                $this->setFolderName( $v );
+            }
+        }
+    }
+    
+    
+    
+    public function applyMailboxSearchSettings( MailboxSearchSettings $mss ) {
+        $includeFilters = $mss->getIncludeFilters();
+        
+        foreach($includeFilters as $filter) {
+            if ($filter['filter_type'] == 'email') {
+                $v = solr_escapeTerm( trim($filter['filter_value']) );
+                // unescape asterisks
+                $v = str_replace('\\*', '%', $v);
+                
+                // @domainname.com? => prefix with asterisk
+                if (strpos($v, '@') === 0) {
+                    $v = '%'.$v;
+                }
+                
+                $this->toEmail[] = $v;
+                $this->fromEmail[] = $v;
+            }
+            
+            if ($filter['filter_type'] == 'folder') {
+                $v = trim($filter['filter_value']);
+                
+                $this->setFolderName( $v );
+            }
+            
+            if ($filter['filter_type'] == 'action') {
+                $v = trim($filter['filter_value']);
+                
+                $this->setAction( $v );
+            }
+        }
+        
+        
+        // exclude through faces
+        $excludeFilters = $mss->getExcludeFilters();
+        foreach($excludeFilters as $filter) {
+            if ($filter['filter_type'] == 'email') {
+                $v = trim($filter['filter_value']);
+                // unescape asterisks
+                $v = str_replace('\\*', '%', $v);
+                
+                // @domainname.com? => prefix with asterisk
+                if (strpos($v, '@') === 0) {
+                    $v = '%'.$v;
+                }
+                
+                $this->exclToEmail[] = $v;
+                $this->exclFromEmail[] = $v;
+            }
+            
+            if ($filter['filter_type'] == 'folder') {
+                $v = trim($filter['filter_value']);
+                
+                // query specific on mailbox? => skip exclusion
+                if ($this->getFolderName() == $v) {
+                    continue;
+                }
+                
+                    
+                $this->exclMailboxName[] = $v;
+            }
+            
+            if ($filter['filter_type'] == 'action') {
+                $v = trim($filter['filter_value']);
+                
+                $this->exclAction[] = $v;
+            }
+        }
+    }
+    
+    
+    
+    
+    public function readById($id) {
+        
+        $eDao = new EmailDAO();
+        $o = $eDao->readBySolrMailId( $id );
+        
+        $arr = $o[0]->getFields();
+        
+        return $arr;
+    }
+
+
+    
+    
+}
+
