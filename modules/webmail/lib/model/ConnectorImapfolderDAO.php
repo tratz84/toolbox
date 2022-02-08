@@ -32,7 +32,7 @@ class ConnectorImapfolderDAO extends \core\db\DAOObject {
 	
 	
 	public function listFolders() {
-	    $sql = "select cif.folderName, count(*) value
+	    $sql = "select cif.folderName, count(e.email_id) value
                 from webmail__connector_imapfolder cif
                 left join webmail__email e on (cif.connector_imapfolder_id = e.connector_imapfolder_id)
                 group by cif.connector_imapfolder_id

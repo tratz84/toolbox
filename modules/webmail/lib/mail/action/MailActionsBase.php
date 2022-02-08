@@ -26,7 +26,7 @@ abstract class MailActionsBase {
     }
     
     
-    public function getInstance() {
+    public static function getInstance() {
         
         $n = webmail_storage_engine();
         

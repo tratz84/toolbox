@@ -590,6 +590,55 @@ class HordeConnector extends BaseMailConnector {
     }
     
     
+    public function search($folder, $criteria=array()) {
+        // use current selected folder if $folder==null
+        if ($folder != null) {
+            if (imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folder)) == false) {
+                return false;
+            }
+        }
+        
+        // build search criteria
+        $str = '';
+        foreach($criteria as $crit) {
+            $key = $crit['key'];
+            
+            if ($str != '')
+                $str = $str . ' ';
+                
+                
+                if (in_array($key, ['BCC', 'BEFORE', 'BODY', 'CC', 'FROM', 'KEYWORD', 'ON', 'SINCE', 'SUBJECT', 'TEXT', 'TO', 'UNKEYWORD'])) {
+                    $str .= $key . ' "' . addslashes($crit['value']) . '"';
+                }
+                else if (in_array($key, ['ALL', 'ANSWERED', 'DELETED', 'FLAGGED', 'NEW', 'OLD', 'RECENT', 'SEEN', 'UNANSWERED', 'UNDELETED', 'UNFLAGGED', 'UNSEEN'])) {
+                    $str .= $key;
+                }
+                else {
+                    throw new \core\exception\InvalidArgumentException('Invalid search keyword: ' . $key);
+                }
+        }
+        
+        return imap_search($this->imap, $str, SE_UID, 'UTF-8');
+    }
+    
+    public function lookupUid($folder, $mail) {
+        $solrMail->parseMail();
+        
+        if ($solrMail->getParsedMail() == null) {
+            return array();
+        }
+        
+        $uids = $this->search($folder, [
+            [ 'key' => 'ON',      'value' => $solrMail->getParsedMail()->getHeader('date') ]
+            , [ 'key' => 'SUBJECT', 'value' => $solrMail->getSubject()]
+            , [ 'key' => 'FROM',    'value' => $solrMail->getFromEmail()]
+        ]);
+        
+        
+        return $uids;
+    }
+    
+    
     
     public function import() {
         $items = $this->importInbox( $this->connector );

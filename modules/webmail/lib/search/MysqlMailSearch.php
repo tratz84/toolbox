@@ -44,7 +44,7 @@ class MysqlMailSearch extends MailSearchBase {
         
         $list = $cifDao->listFolders();
         
-        if ($opts['filter'] && is_array($opts['filter'])) {
+        if (isset($opts['filter']) && is_array($opts['filter'])) {
             $filter = $opts['filter'];
             
             $list = array_filter($list, function($folderName) use ($filter) {
@@ -56,6 +56,13 @@ class MysqlMailSearch extends MailSearchBase {
                 }
             });
         }
+        
+        if (isset($opts['noempty']) && $opts['noempty']) {
+            $list = array_filter($list, function($folderName) {
+                return $folderName['value'] > 0 ? true : false;
+            });
+        }
+        
         
         
         return $list;
@@ -362,7 +369,6 @@ class MysqlMailSearch extends MailSearchBase {
     
     
     public function readById($id) {
-        
         $eDao = new EmailDAO();
         $o = $eDao->readBySolrMailId( $id );
 

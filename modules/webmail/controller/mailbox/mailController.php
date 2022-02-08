@@ -19,6 +19,7 @@ use webmail\solr\SolrMailQuery;
 use webmail\search\MailSearchBase;
 use webmail\mail\EmlViewer;
 use webmail\mail\MailProperties;
+use webmail\mail\action\MailActionsBase;
 
 class mailController extends BaseController {
    
@@ -359,10 +360,10 @@ class mailController extends BaseController {
     
     
     public function action_mark_as_spam() {
-        $smq = object_container_create(SolrMailQuery::class);
+        $ms = MailSearchBase::getInstance();
         
         try {
-            $mail = $smq->readById( get_var('email_id') );
+            $mail = $ms->readById( get_var('email_id') );
             
             if (!$mail) {
                 throw new ObjectNotFoundException('Mail not found');
@@ -371,8 +372,8 @@ class mailController extends BaseController {
             // close session to prevent hanging
             session_write_close();
             
-            $ma = new SolrMailActions();
-            $r = $ma->markAsSpam($mail);
+            $ma = MailActionsBase::getInstance();
+            $r = $ma->markAsSpam( $mail );
             $ma->closeConnection();
             
             return $this->json([
