@@ -1,7 +1,7 @@
 <?php
 
 
-namespace webmail\mail\actions;
+namespace webmail\mail\action;
 
 
 
@@ -67,6 +67,18 @@ class MysqlMailActions extends MailActionsBase {
         
         return true;
     }
+
+    public function markAsSeen(MysqlMailRender $mail) {
+        $this->markMail($mail, '\\Seen');
+        var_export($mail);exit;
+        
+        // update property
+        $mailProperties = $solrMail->getProperties();
+        $mailProperties->setSeen( true );
+        $mailProperties->save();
+        
+        $this->updateSolrFields($solrMail->getId(),[ 'isSeen' => true ]);
+    }
     
     
     public function readById( $id ) {
@@ -87,6 +99,9 @@ class MysqlMailActions extends MailActionsBase {
         
         return $m;
     }
+    public function deleteByMailboxName($n)
+    {}
+
     
     
     

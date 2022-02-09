@@ -46,6 +46,7 @@ class EmlViewer {
     
     public function getParser() { return $this->parser; }
     
+    public function getParserAttachments() { return $this->parserAttachments; }
     public function getAttachments() { return $this->attachments; }
     
     

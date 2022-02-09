@@ -423,6 +423,8 @@ class ImapConnector extends BaseMailConnector {
         
         imap_gc($this->imap, IMAP_GC_ELT | IMAP_GC_ENV | IMAP_GC_TEXTS);
         
+        $this->lastError = \imap_last_error();
+        
         return $items;
     }
     
@@ -432,7 +434,11 @@ class ImapConnector extends BaseMailConnector {
             return false;
         }
         
-        return imap_delete($this->imap, $uid, FT_UID);
+        $r = imap_delete($this->imap, $uid, FT_UID);
+        
+        $this->lastError = \imap_last_error();
+        
+        return $r;
     }
     
     
@@ -442,7 +448,11 @@ class ImapConnector extends BaseMailConnector {
         }
         
         $f = imap_utf7_encode( $targetFolder );
-        return imap_mail_move($this->imap, $uid, $f, CP_UID);
+        $r = imap_mail_move($this->imap, $uid, $f, CP_UID);
+        
+        $this->lastError = \imap_last_error();
+        
+        return $r;
     }
     
     public function markMail($uid, $folder, $flags) {
@@ -463,6 +473,8 @@ class ImapConnector extends BaseMailConnector {
         
         imap_clearflag_full($this->imap, $uid, 'NonJunk', ST_UID);
         imap_clearflag_full($this->imap, $uid, '$NonJunk', ST_UID);
+        
+        $this->lastError = \imap_last_error();
     }
     
     public function clearFlagByUid($uid, $folder, $flags) {
@@ -470,11 +482,19 @@ class ImapConnector extends BaseMailConnector {
             return false;
         }
         
-        return imap_clearflag_full($this->imap, $uid, $flags, ST_UID);
+        $r = imap_clearflag_full($this->imap, $uid, $flags, ST_UID);
+        
+        $this->lastError = \imap_last_error();
+        
+        return $r;
     }
     
     public function appendMessage($mailbox, $message, $options=null, $internal_date=null) {
-        return imap_append($this->imap, $this->mailbox.$mailbox, $message, "\\Seen");
+        $r = imap_append($this->imap, $this->mailbox.$mailbox, $message, "\\Seen");
+        
+        $this->lastError = \imap_last_error();
+        
+        return $r;
     }
     
     public function emptyFolder($folderName) {
@@ -484,12 +504,20 @@ class ImapConnector extends BaseMailConnector {
         
         $c = imap_check($this->imap);
         
-        return imap_delete($this->imap, '1:'.$c->Nmsgs);
+        $r = imap_delete($this->imap, '1:'.$c->Nmsgs);
+        
+        $this->lastError = \imap_last_error();
+        
+        return $r;
     }
     
     
     public function expunge() {
-        return imap_expunge($this->imap);
+        $r = imap_expunge($this->imap);
+        
+        $this->lastError = \imap_last_error();
+        
+        return $r;
     }
     
     

@@ -21,6 +21,8 @@ class MysqlMailRender extends MailRenderBase {
     
     public function setEmail( $email ) {
         $this->email = $email;
+        
+        $this->emlFile = $this->email->getSolrMailId();
     }
     
     public function getId() { return $this->email->getSolrMailId(); }

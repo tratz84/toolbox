@@ -7,10 +7,11 @@ use core\exception\InvalidStateException;
 use core\exception\ObjectNotFoundException;
 use webmail\mail\SendMail;
 use webmail\mail\connector\BaseMailConnector;
+use webmail\mail\render\MailRenderBase;
+use webmail\model\Connector;
 use webmail\model\Email;
 use webmail\service\ConnectorService;
 use webmail\service\EmailService;
-use webmail\mail\actions\MysqlMailActions;
 
 
 abstract class MailActionsBase {
@@ -32,10 +33,10 @@ abstract class MailActionsBase {
         $n = webmail_storage_engine();
         
         if ($n == 'solr') {
-            return object_container_get( SolrMailActions::class );
+            return new SolrMailActions();
         }
         else if ($n == 'db') {
-            return object_container_get( MysqlMailActions::class );
+            return new MysqlMailActions();
         }
         else {
             throw new InvalidStateException( 'engine not found' );
@@ -146,5 +147,102 @@ abstract class MailActionsBase {
     }
     
     
+    
+    
+    public function markMail(MailRenderBase $mail, $flag, $opts=array()) {
+        // if Connector exists, connection is imap & message is in Junk-folder? => move to inbox
+        $mailProperties = $mail->getProperties();
+        $connector = null;
+        if ($mailProperties->getConnectorId()) {
+            /** @var ConnectorService $connectorService */
+            $connectorService = object_container_get(ConnectorService::class);
+            /** @var \webmail\model\Connector $connector */
+            $connector = $connectorService->readConnector( $mailProperties->getConnectorId() );
+        }
+        
+        if (!$connector || in_array($connector->getConnectorType(), array('imap', 'horde')) == false || $connector->getActive() == false)
+            return;
+        
+        
+        // mark mail as answered
+        $mailConnector = BaseMailConnector::createMailConnector($connector);
+        if ($mailConnector->connect()) {
+            $mailConnector->markMail($mailProperties->getUid(), $mailProperties->getFolder(), $flag);
+            
+            // Move-on-reply set?
+            if (isset($opts['handle_reply']) && $opts['handle_reply'] && $connector->getReplyMoveImapfolderId()) {
+                // fetch folder
+                $targetIf = $connectorService->readImapFolder( $connector->getReplyMoveImapfolderId() );
+                if ($targetIf && $targetIf->getFolderName() != $mailProperties->getFolder()) {
+                    // move
+                    $mailConnector->moveMailByUid($mailProperties->getUid(), $mailProperties->getFolder(), $targetIf->getFolderName());
+                    
+                    // mark field to be updated
+                    $mail->setChangedField( 'mailboxName', $targetIf->getFolderName() );
+                }
+            }
+            
+            //             $ic->expunge();
+            $mailConnector->disconnect();
+        }
+    }
+    
+    
+    
+    public function moveMail(Connector $connector, MailRenderBase $mail, $imapFolderId, $opts=array()) {
+        // connector inactive?
+        if ($connector->getActive() == false) {
+            return false;
+        }
+        
+        /** @var ConnectorService $connectorService */
+        $connectorService = object_container_get(ConnectorService::class);
+        /** @var \webmail\model\ConnectorImapfolder $if */
+        $if = $connectorService->readImapFolder($imapFolderId);
+        if (!$if)
+            return false;
+        
+        $props = $mail->getProperties();
+        
+        // source same as destination?
+        if ($props->getFolder() == $if->getFolderName())
+            return false;
+        
+        $this->createMailConnector($connector);
+        
+        // try to connect
+        if (!$this->mailConnector->isConnected()) {
+            if ($this->mailConnector->connect() == false) {
+                return false;
+            }
+        }
+        
+        // spam?
+        if (isset($opts['spam']) && $opts['spam']) {
+            $this->mailConnector->markJunk($props->getUid(),   $props->getFolder());
+            
+            $mail->getProperties()->setJunk(true);
+        }
+        
+        // moved? => update properties-file
+        if ($props->getUid() && $this->mailConnector->moveMailByUid($props->getUid(), $props->getFolder(), $if->getFolderName())) {
+            $this->mailConnector->expunge();
+            
+            // moving mail is actually a copy- + delete-action. After a move
+            // the UID of the message in mailbox must be updated
+            $foundUids = $this->mailConnector->lookupUid($if->getFolderName(), $mail);
+            $newUid = is_array($foundUids) && count($foundUids) == 1 ? $foundUids[0] : null;
+            $mail->getProperties()->setUid( $newUid );
+        }
+        
+        // move might fail if mail is already moved and mailbox is not in sink
+        // just update solr? if mail is deleted, it's atleast in this mailbox in the right folder (especially in case of junk)
+        // if this move is to the wrong folder, it will get synced automatically by modules/webmail/bin/webmail_importall.php-script
+        
+        $mail->getProperties()->setFolder( $if->getFolderName() );
+        $mail->saveProperties();
+        
+        $this->updateSolrFolder($mail->getId(), $if->getFolderName());
+    }
 }
 

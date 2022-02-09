@@ -60,7 +60,6 @@ class mailController extends BaseController {
         
         $ms = MailSearchBase::getInstance();
         $mail = $ms->readById( $emailId );
-        var_export( $mail );exit;
         
         if ($mail == null) {
             $this->setTemplateFile( module_file('webmail', 'templates/mailbox/search/not-found.php') );
@@ -73,6 +72,8 @@ class mailController extends BaseController {
         
         // TODO
 //         $mp = $solrMail->getProperties();
+        $ma = MailActionsBase::getInstance();
+        $ma->markAsSeen( $mail );
         if ($mp->getSeen() == false) {
             try {
                 $ma = MailActionsBase::getInstance();
@@ -134,6 +135,7 @@ class mailController extends BaseController {
         }
         
         $mail->parseMail();
+        $emlviewer = $mail->getEmlViewer();
         
         $this->id          = $mail->getId();
         

@@ -17,6 +17,8 @@ abstract class BaseMailConnector {
     
     protected $serverPropertyChecksums = null;
     
+    protected $lastError = null;
+    
     public function __construct(Connector $connector) {
         $this->setConnector( $connector );
     }
@@ -24,6 +26,8 @@ abstract class BaseMailConnector {
     
     public function setConnector($c) { $this->connector = $c; }
     public function getConnector() { return $this->connector; }
+    
+    public function getLastError() { return $this->lastError; }
     
     
     public static function createMailConnector(Connector $connector) {
