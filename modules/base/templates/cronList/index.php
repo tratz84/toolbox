@@ -41,6 +41,9 @@
 	</tbody>
 </table>
 
+<div style="font-style: italic; font-size: 10px; margin-top: 15px;">
+	<?= t('Server time') ?>: <?= date('d-m-Y H:i:s') ?>
+</div>
 
 <script>
 
