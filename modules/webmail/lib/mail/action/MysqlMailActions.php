@@ -10,6 +10,9 @@ use webmail\mail\action\MailActionsBase;
 use webmail\service\ConnectorService;
 use webmail\service\EmailService;
 use webmail\solr\SolrImportMail;
+use webmail\model\EmailDAO;
+use webmail\mail\render\MysqlMailRender;
+use webmail\model\EmailToDAO;
 
 
 
@@ -64,6 +67,28 @@ class MysqlMailActions extends MailActionsBase {
         
         return true;
     }
+    
+    
+    public function readById( $id ) {
+        
+        $eDao = new EmailDAO();
+        $e = $eDao->readBySolrMailId( $id );
+        if (!$e) {
+            return null;
+        }
+        
+        $etDao = new EmailToDAO();
+        $ets = $etDao->readByEmail( $e->getEmailId() );
+        $e->setRecipients( $ets );
+        
+        
+        $m = new MysqlMailRender();
+        $m->setEmail( $e );
+        
+        return $m;
+    }
+    
+    
     
 }
 

@@ -13,6 +13,7 @@ use webmail\model\EmailTo;
 use webmail\service\EmailService;
 use webmail\service\EmailTemplateService;
 use webmail\solr\SolrMailQuery;
+use webmail\mail\action\MailActionsBase;
 
 class viewController extends BaseController {
     
@@ -188,7 +189,7 @@ class viewController extends BaseController {
                 $solrMail = $smq->readById($email->getSolrMailId());
                 
                 if ($solrMail) {
-                    $sma = new SolrMailActions();
+                    $sma = MailActionsBase::getInstance();
                     $sma->markAsAnswered($solrMail, ['handle_reply' => true]);
                 }
             } catch (\Exception|\Error $ex) {

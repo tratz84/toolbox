@@ -2,15 +2,11 @@
 
 namespace webmail\mail\action;
 
-use core\exception\ObjectNotFoundException;
 use webmail\mail\MailProperties;
-use webmail\mail\SendMail;
 use webmail\mail\SpamCheck;
 use webmail\mail\connector\BaseMailConnector;
 use webmail\model\Connector;
-use webmail\model\Email;
 use webmail\service\ConnectorService;
-use webmail\service\EmailService;
 use webmail\solr\SolrImportMail;
 use webmail\solr\SolrMail;
 use webmail\solr\SolrMailQuery;
@@ -378,6 +374,15 @@ class SolrMailActions extends MailActionsBase {
         
         
         return $deleteCount;
+    }
+    
+    
+    public function deleteByMailboxName( $n ) {
+        // solr-index + delete eml-files
+        $smq = new SolrMailQuery();
+        $smq->addFacetSearch('mailboxName', ':', $n);
+        
+        return $this->deleteSolrMailByQuery( $smq );
     }
     
 }

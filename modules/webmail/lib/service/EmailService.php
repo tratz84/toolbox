@@ -192,6 +192,7 @@ class EmailService extends ServiceBase {
             }
         }
         
+        $email->setAttachmentCount( count($attachments) );
         
         // TODO: bind recipients + attachments to e-mail object
         // TODO: return $this->saveEmailObject( $email ); ....
@@ -381,6 +382,10 @@ class EmailService extends ServiceBase {
         } else {
             $o->setSpam(false);
         }
+        
+        $attachmentCount = count( $p->getAttachments(false) );
+        $o->setAttachmentCount( $attachmentCount );
+        
         
         // check if mail is already imported
         $eDao = new EmailDAO();

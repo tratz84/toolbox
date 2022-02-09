@@ -16,7 +16,6 @@ use webmail\mail\actions\MysqlMailActions;
 abstract class MailActionsBase {
     
     
-    
     protected $mailConnector = null;
     
     protected $lastError = null;
@@ -26,8 +25,10 @@ abstract class MailActionsBase {
     }
     
     
+    public abstract function deleteByMailboxName( $n );
+    
+    
     public static function getInstance() {
-        
         $n = webmail_storage_engine();
         
         if ($n == 'solr') {

@@ -4,10 +4,10 @@
 
 use core\controller\BaseController;
 use webmail\form\PurgeFolderForm;
-use webmail\mail\SolrMailActions;
+use webmail\mail\action\MailActionsBase;
+use webmail\mail\connector\BaseMailConnector;
 use webmail\service\ConnectorService;
 use webmail\solr\SolrMailQuery;
-use webmail\mail\connector\BaseMailConnector;
 
 class purgefolderController extends BaseController {
     
@@ -78,12 +78,9 @@ class purgefolderController extends BaseController {
         set_time_limit(0);
         
         try {
-            // solr-index + delete eml-files
-            $smq = new SolrMailQuery();
-            $smq->addFacetSearch('mailboxName', ':', $imapFolderName);
             
-            $sma = new SolrMailActions();
-            $sma->deleteSolrMailByQuery($smq);
+            $sma = MailActionsBase::getInstance();
+            $sma->deleteByMailboxName( $imapFolderName );
             
             
             // purge imap-folder

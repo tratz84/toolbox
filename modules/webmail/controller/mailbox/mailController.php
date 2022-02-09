@@ -9,17 +9,17 @@ use core\exception\ObjectNotFoundException;
 use core\forms\SelectField;
 use webmail\WebmailSettings;
 use webmail\form\EmailForm;
-use webmail\mail\SolrMailActions;
+use webmail\mail\EmlViewer;
+use webmail\mail\MailProperties;
+use webmail\mail\action\MailActionsBase;
 use webmail\model\Connector;
 use webmail\model\Email;
+use webmail\search\MailSearchBase;
 use webmail\service\ConnectorService;
 use webmail\service\EmailService;
 use webmail\solr\SolrMail;
 use webmail\solr\SolrMailQuery;
-use webmail\search\MailSearchBase;
-use webmail\mail\EmlViewer;
-use webmail\mail\MailProperties;
-use webmail\mail\action\MailActionsBase;
+use webmail\mail\render\MailRenderBase;
 
 class mailController extends BaseController {
    
@@ -60,6 +60,7 @@ class mailController extends BaseController {
         
         $ms = MailSearchBase::getInstance();
         $mail = $ms->readById( $emailId );
+        var_export( $mail );exit;
         
         if ($mail == null) {
             $this->setTemplateFile( module_file('webmail', 'templates/mailbox/search/not-found.php') );
@@ -72,12 +73,12 @@ class mailController extends BaseController {
         
         // TODO
 //         $mp = $solrMail->getProperties();
-//         if ($mp->getSeen() == false) {
-//             try {
-//                 $sma = new SolrMailActions();
-//                 $sma->markAsSeen($solrMail);
-//             } catch (\Exception|\Error $ex) { }
-//         }
+        if ($mp->getSeen() == false) {
+            try {
+                $ma = MailActionsBase::getInstance();
+                $ma->markAsSeen( $mail );
+            } catch (\Exception|\Error $ex) { }
+        }
         
         
         // move to folder
@@ -125,20 +126,19 @@ class mailController extends BaseController {
     
     
     public function action_view() {
-        /** @var SolrMail $mail */
+        /** @var MailRenderBase $mail */
         $mail = $this->getMail( get_var('id') );
         
         if (!$mail) {
             throw new ObjectNotFoundException( 'Mail not found' );
         }
         
-        $emlviewer = new EmlViewer( get_data_file( $mail['solr_mail_id'] ));
-        $emlviewer->parse();
+        $mail->parseMail();
         
-        $this->id          = $mail['solr_mail_id'];
+        $this->id          = $mail->getId();
         
-        $this->html        = $emlviewer->getContentSafe();
-        $this->date        = format_date($mail['created'], 'd-m-Y H:i:s');
+        $this->html        = $mail->getContentSafe();
+        $this->date        = format_date($mail->getDate(), 'd-m-Y H:i:s');
         
         $this->attachments = $emlviewer->getAttachments();
         
@@ -290,7 +290,7 @@ class mailController extends BaseController {
             // close session to prevent hanging
             session_write_close();
             
-            $ma = new SolrMailActions();
+            $ma = MailActionsBase::getInstance();
             if ($connector && $imapFolderId) {
                 $ma->moveMail($connector, $mail, $imapFolderId);
             }
@@ -336,7 +336,7 @@ class mailController extends BaseController {
             $mailProperties->setAction( get_var('action') );
             $mailProperties->save();
             
-            $ma = new SolrMailActions();
+            $ma = MailActionsBase::getInstance();
             $ma->updateAction($mail->getId(), get_var('action'));
             
             
@@ -404,7 +404,7 @@ class mailController extends BaseController {
             }
             
             
-            $ma = new SolrMailActions();
+            $ma = MailActionsBase::getInstance();
             $ma->markAsHam($mail);
             $ma->closeConnection();
             
@@ -435,7 +435,7 @@ class mailController extends BaseController {
             }
             
             
-            $ma = new SolrMailActions();
+            $ma = MailActionsBase::getInstance();
             $ma->deleteMail($mail);
             $ma->closeConnection();
             

@@ -2,13 +2,11 @@
 
 
 
-use webmail\mail\SolrMailActions;
+use webmail\mail\action\MailActionsBase;
+use webmail\mail\connector\BaseMailConnector;
+use webmail\mail\render\MailRenderBase;
 use webmail\model\Connector;
 use webmail\service\ConnectorService;
-use webmail\solr\SolrImportMail;
-use webmail\solr\SolrMail;
-use core\exception\InvalidStateException;
-use webmail\mail\connector\BaseMailConnector;
 use webmail\storage\MailImportFactory;
 
 
@@ -41,14 +39,14 @@ function mapAllConnectors() {
 
 function mapMailActions() {
     $mapActions = array();
-    $mapActions[ SolrMail::ACTION_OPEN ]      = t('Open');
-    $mapActions[ SolrMail::ACTION_URGENT ]    = t('Urgent');
-    $mapActions[ SolrMail::ACTION_INPROGRESS ]= t('In progress');
-    $mapActions[ SolrMail::ACTION_POSTPONED ] = t('Postponed');
-    $mapActions[ SolrMail::ACTION_DONE ]      = t('Done');
-    $mapActions[ SolrMail::ACTION_REPLIED ]   = t('Replied');
-    $mapActions[ SolrMail::ACTION_IGNORED ]   = t('Ignored');
-    $mapActions[ SolrMail::ACTION_PENDING ]   = t('Pending');
+    $mapActions[ MailRenderBase::ACTION_OPEN ]      = t('Open');
+    $mapActions[ MailRenderBase::ACTION_URGENT ]    = t('Urgent');
+    $mapActions[ MailRenderBase::ACTION_INPROGRESS ]= t('In progress');
+    $mapActions[ MailRenderBase::ACTION_POSTPONED ] = t('Postponed');
+    $mapActions[ MailRenderBase::ACTION_DONE ]      = t('Done');
+    $mapActions[ MailRenderBase::ACTION_REPLIED ]   = t('Replied');
+    $mapActions[ MailRenderBase::ACTION_IGNORED ]   = t('Ignored');
+    $mapActions[ MailRenderBase::ACTION_PENDING ]   = t('Pending');
     
     return $mapActions;
 }
@@ -115,7 +113,7 @@ function webmail_import_connectors($updateOnly) {
                     // new mail in Sent-folder? => mark In-Reply-To-mail as REPLIED if status is OPEN
                     if ($sentImapFolder && $sentImapFolder->getFolderName() == $folderName) {
                         // TODO: fix this...
-                        $sma = new SolrMailActions();
+                        $sma = MailActionsBase::getInstance();
                         $sma->autoMarkMessageAsReplied( $mailImport->getLastInReplyTo() );
                     }
                 }

@@ -11,6 +11,8 @@ use webmail\model\ConnectorImapfolderDAO;
 use core\db\DatabaseHandler;
 use webmail\model\EmailDAO;
 use core\forms\lists\ListResponse;
+use webmail\model\EmailToDAO;
+use webmail\mail\render\MysqlMailRender;
 
 class MysqlMailSearch extends MailSearchBase {
     
@@ -376,9 +378,14 @@ class MysqlMailSearch extends MailSearchBase {
             return null;
         }
         
-        $arr = $o[0]->getFields();
+        $etDao = new EmailToDAO();
+        $ets = $etDao->readByEmail( $o[0]->getEmailId() );
+        $o[0]->setRecipients( $ets );
         
-        return $arr;
+        $r = new MysqlMailRender();
+        $r->setEmail( $o[0] );
+        
+        return $r;
     }
 
 

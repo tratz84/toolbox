@@ -227,6 +227,15 @@ class EmailBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'attachment_count' => 
+  array (
+    'Field' => 'attachment_count',
+    'Type' => 'int',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -328,6 +337,10 @@ class EmailBase extends \core\db\DBObject {
 		
 	public function setAction($p) { $this->setField('action', $p); }
 	public function getAction() { return $this->getField('action'); }
+	
+		
+	public function setAttachmentCount($p) { $this->setField('attachment_count', $p); }
+	public function getAttachmentCount() { return $this->getField('attachment_count'); }
 	
 	
 }
