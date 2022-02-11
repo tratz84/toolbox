@@ -104,6 +104,15 @@ class ListResponse {
     public function getStart() { return $this->start; }
     public function setStart($p) { $this->start = $p; }
     
+    public function hasMore() {
+        if ( $this->getStart() + $this->getPageSize() < $this->getRowCount() ) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
     /**
      * getObjectCount() - number of objects in current response
      */
