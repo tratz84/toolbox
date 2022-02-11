@@ -377,10 +377,12 @@ class SolrMailActions extends MailActionsBase {
     }
     
     
-    public function deleteByMailboxName( $n ) {
+    public function deleteByMailboxName( $folderName, $connectorId=null ) {
         // solr-index + delete eml-files
         $smq = new SolrMailQuery();
-        $smq->addFacetSearch('mailboxName', ':', $n);
+        $smq->addFacetSearch('mailboxName', ':', $folderName);
+        if ($connectorId)
+            $smq->addFacetSearch('connectorId', ':', $connectorId);
         
         return $this->deleteSolrMailByQuery( $smq );
     }

@@ -39,13 +39,7 @@ class purgefolderController extends BaseController {
                 'message' => 'Connector not found'
             ]);
         }
-
-        if (!$connector->getJunkConnectorImapfolderId()) {
-            return $this->json([
-                'error' => true,
-                'message' => 'No junk folder set'
-            ]);
-        }
+        
         
         // fetch folder
         $imapFolderName = null;
@@ -79,6 +73,7 @@ class purgefolderController extends BaseController {
         
         try {
             
+            // delete local storage
             $sma = MailActionsBase::getInstance();
             $sma->deleteByMailboxName( $imapFolderName );
             
@@ -93,7 +88,6 @@ class purgefolderController extends BaseController {
             }
             
             $mailConnector->emptyFolder($imapFolderName);
-            $mailConnector->expunge();
             
             $mailConnector->disconnect();
         }

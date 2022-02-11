@@ -13,6 +13,7 @@ use webmail\service\ConnectorService;
 use webmail\service\EmailService;
 use webmail\mail\MailProperties;
 use core\exception\FileException;
+use core\db\DatabaseHandler;
 
 
 
@@ -105,9 +106,37 @@ class MysqlMailActions extends MailActionsBase {
         
         return $m;
     }
-    public function deleteByMailboxName( $folderName ) {
+    
+    
+    public function deleteByMailboxName( $folderName, $connectorId=null ) {
         
+        $eDao = new EmailDAO();
+        $etDao = new EmailToDAO();
         
+        $dh = DatabaseHandler::getConnection('main');
+        $dh->beginTransaction();
+        
+        // webmail__email_to-records
+        $etDao->query("delete
+                        from webmail__email_to
+                        where email_id in (
+                            select e.email_id
+                            from webmail__email e
+                            left join webmail__connector_imapfolder cif on (e.connector_imapfolder_id = cif.connector_imapfolder_id)
+                            where folderName='Junk'
+                                ".($connectorId?' and e.connector_id='.intval($connectorId):'')."
+                        )
+                ", array($folderName));
+        
+        // webmail__email-records
+        $eDao->query("delete e
+                        from webmail__email e
+                        join webmail__connector_imapfolder cif on (e.connector_imapfolder_id = cif.connector_imapfolder_id)
+                        where folderName=? 
+                                ".($connectorId?' and e.connector_id='.intval($connectorId):'')
+            , array($folderName));
+        
+        $dh->commitTransaction();
         
     }
 

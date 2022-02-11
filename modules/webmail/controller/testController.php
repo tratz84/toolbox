@@ -18,25 +18,11 @@ class testController extends BaseController {
         
         $hc = BaseMailConnector::createMailConnector($c);
         
-        $r = $hc->connect();
+        $hc->connect();
         
-        $client = $hc->getClient();
-        $q = new \Horde_Imap_Client_Search_Query();
-        $q->headerText('subject', 'Account aangemaakt WebApp Bevazet Bedrijfskleding B.V.');
+//         $hc->emptyFolder( 'Junk' );
+        print 'hi';
         
-        $opts = array();
-        $opts['sort'] = array(\Horde_Imap_Client::SORT_ARRIVAL);//, \Horde_Imap_Client::SORT_REVERSE);
-        $uids = $client->search( 'stocks', $q, $opts );
-        
-        $ids = $uids['match']->ids;
-        
-        if (count($ids))
-            $hc->deleteMailByUid('stocks', $ids[0]);
-        
-//         $emldata = file_get_contents('/home/timvw/Downloads/test.eml');
-//         $hc->appendMessage('stocks', $emldata);
-        
-//         $hc->poll();
         
         $hc->disconnect();
         

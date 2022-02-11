@@ -735,8 +735,28 @@ class HordeConnector extends BaseMailConnector {
         );
         
         $this->client->append( $mailbox, $data );
-        
     }
+    
+    public function emptyFolder($folderName) {
+        // search all uid's
+        $q_all = new \Horde_Imap_Client_Search_Query();
+        $r = $this->client->search( $folderName, $q_all );
+        
+        // loop-delete
+        $ids = $r['match']->ids;
+        $count=0;
+        if (count($ids) > 0) {
+            do {
+                $idsToDelete = array_splice($ids, 0, 50);
+                $this->deleteMailByUid( $folderName, $idsToDelete);
+                
+                $count += count( $idsToDelete );
+            } while (count($ids) > 0);
+        }
+        
+        return $count;
+    }
+    
     
 }
 

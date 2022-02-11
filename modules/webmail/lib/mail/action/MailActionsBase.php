@@ -26,7 +26,7 @@ abstract class MailActionsBase {
     }
     
     
-    public abstract function deleteByMailboxName( $n );
+    public abstract function deleteByMailboxName( $folderName, $connectorId=null );
     
     
     public static function getInstance() {
