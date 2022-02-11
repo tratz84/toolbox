@@ -106,7 +106,7 @@ class SolrMailActions extends MailActionsBase {
     
     
     public function markAsSeen(SolrMail $solrMail) {
-        $this->markMail($solrMail, '\\Seen');
+        $this->setMailFlags($solrMail, '\\Seen');
         
         // update property
         $mailProperties = $solrMail->getProperties();
@@ -118,7 +118,7 @@ class SolrMailActions extends MailActionsBase {
     
     
     public function markAsAnswered(SolrMail $solrMail, $opts=array()) {
-        $this->markMail($solrMail, '\\Answered', $opts);
+        $this->setMailFlags($solrMail, '\\Answered', $opts);
         
         // update property
         $mailProperties = $solrMail->getProperties();
@@ -139,7 +139,7 @@ class SolrMailActions extends MailActionsBase {
     }
     
     
-    public function markMail(SolrMail $solrMail, $flag, $opts=array()) {
+    public function setMailFlags(SolrMail $solrMail, $flag, $opts=array()) {
         // if Connector exists, connection is imap & message is in Junk-folder? => move to inbox
         $mailProperties = $solrMail->getProperties();
         $connector = null;
@@ -157,7 +157,7 @@ class SolrMailActions extends MailActionsBase {
         // mark mail as answered
         $mailConnector = BaseMailConnector::createMailConnector($connector);
         if ($mailConnector->connect()) {
-            $mailConnector->markMail($mailProperties->getUid(), $mailProperties->getFolder(), $flag);
+            $mailConnector->setMailFlags($mailProperties->getUid(), $mailProperties->getFolder(), $flag);
             
             // Move-on-reply set?
             if (isset($opts['handle_reply']) && $opts['handle_reply'] && $connector->getReplyMoveImapfolderId()) {

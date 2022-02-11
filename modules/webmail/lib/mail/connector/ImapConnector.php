@@ -455,7 +455,7 @@ class ImapConnector extends BaseMailConnector {
         return $r;
     }
     
-    public function markMail($uid, $folder, $flags) {
+    public function setMailFlags($uid, $folder, $flags) {
         if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folder))) {
             return false;
         }

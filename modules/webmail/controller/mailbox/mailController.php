@@ -73,7 +73,6 @@ class mailController extends BaseController {
         // TODO
 //         $mp = $solrMail->getProperties();
         $ma = MailActionsBase::getInstance();
-        $ma->markAsSeen( $mail );
         if ($mp->getSeen() == false) {
             try {
                 $ma = MailActionsBase::getInstance();

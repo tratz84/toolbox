@@ -155,7 +155,9 @@ abstract class MailRenderBase {
     }
     
     
-    public function getParsedMail() { return $this->parsedMail; }
+    public function getParsedMail() {
+        return $this->emlViewer->getParser();
+    }
     
     
     public function parseMail( ) {

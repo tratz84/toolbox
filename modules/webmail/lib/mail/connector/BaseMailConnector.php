@@ -65,14 +65,14 @@ abstract class BaseMailConnector {
     public function emptyFolder($folderName) { }
     
     
-    public function markMail($uid, $folder, $flag) { }
+    public function setMailFlags($uid, $folder, $flag) { }
     public function markJunk($uid, $folder) { }
     
     public function moveMailByUid($uid, $srcFolder, $dstFolder) { }
     public function deleteMailByUid($uid, $folder) { }
-    public function lookupUid($folder, SolrMail $solrMail) { }
+    public function lookupUid($folder, $mail) { }
     
-    public function appendMessage($folder, $emlMessage) { }
+    public function appendMessage($mailbox, $message, $options=null, $internal_date=null) {}
     
     
     

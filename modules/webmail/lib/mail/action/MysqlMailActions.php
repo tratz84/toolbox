@@ -6,13 +6,11 @@ namespace webmail\mail\action;
 
 
 use webmail\mail\SpamCheck;
-use webmail\mail\action\MailActionsBase;
+use webmail\mail\render\MysqlMailRender;
+use webmail\model\EmailDAO;
+use webmail\model\EmailToDAO;
 use webmail\service\ConnectorService;
 use webmail\service\EmailService;
-use webmail\solr\SolrImportMail;
-use webmail\model\EmailDAO;
-use webmail\mail\render\MysqlMailRender;
-use webmail\model\EmailToDAO;
 
 
 
@@ -69,15 +67,21 @@ class MysqlMailActions extends MailActionsBase {
     }
 
     public function markAsSeen(MysqlMailRender $mail) {
-        $this->markMail($mail, '\\Seen');
-        var_export($mail);exit;
         
         // update property
-        $mailProperties = $solrMail->getProperties();
+        $mailProperties = $mail->getProperties();
         $mailProperties->setSeen( true );
         $mailProperties->save();
         
-        $this->updateSolrFields($solrMail->getId(),[ 'isSeen' => true ]);
+        $this->setMailFlags($mail, '\\Seen');
+        
+        // update attributes-field
+        $eDao = new EmailDAO();
+        $attributes = $mail->getEmail()->getAttributes();
+        $attributes |= \webmail\model\Email::ATTRIBUTE_SEEN;
+        $eDao->setAttributes( $mail->getEmail()->getEmailId(), $attributes );
+        
+        $mail->getEmail()->setAttributes( $attributes );
     }
     
     
@@ -99,8 +103,11 @@ class MysqlMailActions extends MailActionsBase {
         
         return $m;
     }
-    public function deleteByMailboxName($n)
-    {}
+    public function deleteByMailboxName( $folderName ) {
+        
+        
+        
+    }
 
     
     

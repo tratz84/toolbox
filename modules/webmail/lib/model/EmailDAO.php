@@ -143,6 +143,10 @@ class EmailDAO extends \core\db\DAOObject {
 	}
 	
 	
+	public function setAttributes( $emailId, $attributes ) {
+	    $this->query('update webmail__email set attribute = ? where email_id = ?', array($attributes, $emailId));
+	}
+	
 
 }
 

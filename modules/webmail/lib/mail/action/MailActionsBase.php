@@ -149,7 +149,7 @@ abstract class MailActionsBase {
     
     
     
-    public function markMail(MailRenderBase $mail, $flag, $opts=array()) {
+    public function setMailFlags(MailRenderBase $mail, $flag, $opts=array()) {
         // if Connector exists, connection is imap & message is in Junk-folder? => move to inbox
         $mailProperties = $mail->getProperties();
         $connector = null;
@@ -163,11 +163,10 @@ abstract class MailActionsBase {
         if (!$connector || in_array($connector->getConnectorType(), array('imap', 'horde')) == false || $connector->getActive() == false)
             return;
         
-        
         // mark mail as answered
         $mailConnector = BaseMailConnector::createMailConnector($connector);
         if ($mailConnector->connect()) {
-            $mailConnector->markMail($mailProperties->getUid(), $mailProperties->getFolder(), $flag);
+            $mailConnector->setMailFlags($mail, $mailProperties->getFolder(), $flag);
             
             // Move-on-reply set?
             if (isset($opts['handle_reply']) && $opts['handle_reply'] && $connector->getReplyMoveImapfolderId()) {

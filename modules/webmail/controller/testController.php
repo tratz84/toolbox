@@ -11,19 +11,22 @@ class testController extends BaseController {
     
     public function action_index() {
         
+        die('hi');
+        
         $es = object_container_get( ConnectorService::class );
         $c = $es->readConnector( 1 );
         
         $hc = BaseMailConnector::createMailConnector($c);
         
         $r = $hc->connect();
-//         $folders = $hc->listFolders();
-//         $hc->importItems('Duic');
-$hc->poll();
+        
+        $emldata = file_get_contents('/home/timvw/Downloads/test.eml');
+        
+        $hc->appendMessage('stocks', $emldata);
+        
+        $hc->poll();
         
         $hc->disconnect();
-        
-//         var_export($folders);
         
         
         

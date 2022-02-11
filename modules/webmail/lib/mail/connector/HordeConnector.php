@@ -590,58 +590,139 @@ class HordeConnector extends BaseMailConnector {
     }
     
     
-    public function search($folder, $criteria=array()) {
-        // use current selected folder if $folder==null
-        if ($folder != null) {
-            if (imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folder)) == false) {
-                return false;
+    
+    public function lookupUid($folderName, $mail) {
+        $mail->parseMail();
+        
+        
+        if ($mail->getParsedMail() == null) {
+            return array();
+        }
+
+        $q = new \Horde_Imap_Client_Search_Query();
+        
+        $date = $mail->getParsedMail()->getHeader('date');
+        if ($date)
+            $q->headerText('date', $date);
+        
+        $messageid = $mail->getParsedMail()->getHeader('message-id');
+        if ($messageid)
+            $q->headerText('message-id', $messageid);
+        
+        $subject = $mail->getParsedMail()->getHeader('subject');
+        if ($subject)
+            $q->headerText('subject', $subject);
+        
+        $from = $mail->getParsedMail()->getHeader('from');
+        if ($from)
+            $q->headerText('from', $from);
+            
+            
+        $opts = array();
+        $opts['sort'] = array(\Horde_Imap_Client::SORT_ARRIVAL);//, \Horde_Imap_Client::SORT_REVERSE);
+        $uids = $this->client->search( $folderName, $q, $opts );
+        
+        if (isset($uids['match'])) {
+            $uids = $uids['match']->ids;
+            
+            // sometimes mails are received duplicate. max it out..
+            if (count($uids) < 5) {
+                return $uids;
+            }
+            else {
+                // TODO: report for debugging
             }
         }
         
-        // build search criteria
-        $str = '';
-        foreach($criteria as $crit) {
-            $key = $crit['key'];
-            
-            if ($str != '')
-                $str = $str . ' ';
-                
-                
-                if (in_array($key, ['BCC', 'BEFORE', 'BODY', 'CC', 'FROM', 'KEYWORD', 'ON', 'SINCE', 'SUBJECT', 'TEXT', 'TO', 'UNKEYWORD'])) {
-                    $str .= $key . ' "' . addslashes($crit['value']) . '"';
-                }
-                else if (in_array($key, ['ALL', 'ANSWERED', 'DELETED', 'FLAGGED', 'NEW', 'OLD', 'RECENT', 'SEEN', 'UNANSWERED', 'UNDELETED', 'UNFLAGGED', 'UNSEEN'])) {
-                    $str .= $key;
-                }
-                else {
-                    throw new \core\exception\InvalidArgumentException('Invalid search keyword: ' . $key);
-                }
-        }
-        
-        return imap_search($this->imap, $str, SE_UID, 'UTF-8');
-    }
-    
-    public function lookupUid($folder, $mail) {
-        $solrMail->parseMail();
-        
-        if ($solrMail->getParsedMail() == null) {
-            return array();
-        }
-        
-        $uids = $this->search($folder, [
-            [ 'key' => 'ON',      'value' => $solrMail->getParsedMail()->getHeader('date') ]
-            , [ 'key' => 'SUBJECT', 'value' => $solrMail->getSubject()]
-            , [ 'key' => 'FROM',    'value' => $solrMail->getFromEmail()]
-        ]);
-        
-        
-        return $uids;
+        return array();
     }
     
     
     
     public function import() {
         $items = $this->importInbox( $this->connector );
+    }
+   
+    
+    public function unsetMailFlags($mail, $folderName, $removeFlags) {
+        $uids = $this->lookupUid( $folderName, $mail );
+   
+        if (is_array($removeFlags) == false)
+            $flags = array( $removeFlags );
+        
+        for($x=0; $x < count($flags); $x++) {
+            $f = $flags[$x];
+            if (strpos($f, '\\') === false)
+                $f = '\\'.$f;
+        }
+        
+        $options = [
+            'uids' => new \Horde_Imap_Client_Ids( $uids ),
+            'remove' => $removeFlags//['NonJunk', '$NonJunk']
+        ];
+        
+        $this->client->store( $folderName, $options );
+    }
+    public function setMailFlags($mail, $folderName, $flags) {
+        $uids = $this->lookupUid( $folderName, $mail );
+        
+        if (is_array($flags) == false)
+            $flags = array( $flags );
+        
+        $removeFlags = array();
+        for($x=0; $x < count($flags); $x++) {
+            $f = $flags[$x];
+            if (strpos($f, '\\') === false)
+                $f = '\\'.$f;
+            
+            // toggle junk
+            if (strtolower($f) == '\\junk') {
+                $removeFlags[] = '\\NonJunk';
+                $removeFlags[] = '\\$NonJunk';
+            }
+            else if (strtolower($f) == '\\nonjunk') {
+                $removeFlags[] = '\\Junk';
+                $removeFlags[] = '\\$Junk';
+            }
+            
+            else if (strtolower($f) == '\\seen') {
+                $removeFlags[] = '\\UnSeen';
+            }
+            else if (strtolower($f) == '\\unseen') {
+                $removeFlags[] = '\\Seen';
+            }
+        }
+        
+        
+        $options = [
+            'uids' => new \Horde_Imap_Client_Ids( $uids ),
+            'add' => $flags,//['Junk', '$Junk'],
+            'remove' => $removeFlags//['NonJunk', '$NonJunk']
+        ];
+        
+        $this->client->store( $folderName, $options );
+    }
+    
+    public function deleteMailByUid($uid, $folder) {
+        
+    }
+    
+    public function appendMessage($mailbox, $message, $options=null, $internal_date=null) {
+        if (trim($message) == '') {
+            throw new InvalidStateException( 'Empty message' );
+        }
+        
+        
+        $flags = array();
+        $flags[] = \Horde_Imap_Client::FLAG_SEEN;
+        
+        $data = array();
+        $data[] = array('data' => $message
+            , 'flags' => $flags
+        );
+        
+        $this->client->append( $mailbox, $data );
+        
     }
     
 }
