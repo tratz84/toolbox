@@ -190,7 +190,7 @@ class MysqlMailSearch extends MailSearchBase {
 //         print $sql;exit;
         
         $eDao = new EmailDAO();
-        $cursor = $eDao->queryCursor( "$select_fields $sql $orderBy $limit" );
+        $cursor = $eDao->queryCursor( "$select_fields $sql $orderBy $limit", $params);
         
         
         $lr = ListResponse::fillByCursor(0, $this->getRows(), $cursor, array(
@@ -224,7 +224,7 @@ class MysqlMailSearch extends MailSearchBase {
         
         // limit set? => calculate rowcount
         if ($limit) {
-            $rowCount = $eDao->queryValue("select count(*) $sql" );
+            $rowCount = $eDao->queryValue("select count(*) $sql", $params );
             $lr->setRowCount( $rowCount );
         }
         
