@@ -7,6 +7,10 @@ use webmail\form\WebmailUpdateActionForm;
 use webmail\mail\MailProperties;
 use webmail\mail\SolrMailActions;
 use webmail\solr\SolrMailQuery;
+use webmail\search\MailSearchBase;
+use webmail\mail\render\MailRenderBase;
+use webmail\mail\action\MailActionsBase;
+use core\forms\lists\ListResponse;
 
 class updateactionController extends BaseController {
     
@@ -48,32 +52,36 @@ class updateactionController extends BaseController {
         $updateCount = 0;
         
         try {
-            $smq = new SolrMailQuery();
-            $smq->addFacetSearch('action', ':', $old_action);
             
-            $sma = new SolrMailActions();
+            $mab = MailActionsBase::getInstance();
+            
+            $ms = MailSearchBase::getInstance();
+            $ms->addAction( $old_action );
+            
+            $start = 0;
+            /** @var ListResponse $lr */
+            $lr = null;
             
             // delete all documents in response
             do {
-                $r = $smq->search();
-                $smq->setStart(0);
+                $ms->setStart( $start );
+                $ms->setRows( 100 );
                 
-                // delete documents
-                $docs = $r->getDocuments();
-                foreach($docs as $doc) {
-                    // update .tbproperties-file
-                    $mp = new MailProperties( $doc->id );
-                    $mp->setAction( $new_action );
-                    $mp->save();
+                $lr = $ms->searchListResponse();
+                
+                $count = 0;
+                
+                /** @var $mail MailRenderBase */
+                foreach($lr->getObjects() as $mail) {
+                    // update Action
+                    $mab->updateAction($mail->getId(), $new_action);
                     
-                    // update solr
-                    $sma->updateAction($doc->id, $new_action);
-                    
-                    $updateCount++;
+                    $count++;
                 }
                 
-                // loop till 0 results
-            } while ($r->getNumFound() > 0);
+                // next start
+                $start += $ms->getRows();
+            } while ( $lr->hasMore() );
         } catch (\Exception|\Error $ex) {
             return $this->json([
                 'success' => false,

@@ -142,6 +142,9 @@ class EmailDAO extends \core\db\DAOObject {
 	    return $this->queryList( $sql, $ids );
 	}
 	
+	public function updateActionBySolrMailId( $solrMailId, $action ) {
+	    $this->query('update webmail__email set action = ? where solr_mail_id = ?', array($action, $solrMailId));
+	}
 	
 	public function setAttributes( $emailId, $attributes ) {
 	    $this->query('update webmail__email set attribute = ? where email_id = ?', array($attributes, $emailId));

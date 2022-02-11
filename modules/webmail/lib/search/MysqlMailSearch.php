@@ -171,8 +171,8 @@ class MysqlMailSearch extends MailSearchBase {
         }
         
         
-        $sql = "select e.*, e.created date, cif.folderName mailbox_name
-                from webmail__email e
+        $select_fields = "select e.*, e.created date, cif.folderName mailbox_name ";
+        $sql = " from webmail__email e
                 left join webmail__connector_imapfolder cif on (cif.connector_imapfolder_id = e.connector_imapfolder_id)
                 where 1=1 ";
         if (count($e_where)) {
@@ -190,7 +190,7 @@ class MysqlMailSearch extends MailSearchBase {
 //         print $sql;exit;
         
         $eDao = new EmailDAO();
-        $cursor = $eDao->queryCursor( $sql, $params );
+        $cursor = $eDao->queryCursor( "$select_fields $sql $orderBy $limit" );
         
         
         $lr = ListResponse::fillByCursor($this->getStart(), $this->getRows(), $cursor, array(
@@ -221,6 +221,12 @@ class MysqlMailSearch extends MailSearchBase {
             'action',
             'mailbox_name'
         ));
+        
+        // limit set? => calculate rowcount
+        if ($limit) {
+            $rowCount = $eDao->queryValue("select count(*) $sql" );
+            $lr->setRowCount( $rowCount );
+        }
         
         return $lr;
     }

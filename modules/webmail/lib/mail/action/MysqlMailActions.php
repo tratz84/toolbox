@@ -11,6 +11,8 @@ use webmail\model\EmailDAO;
 use webmail\model\EmailToDAO;
 use webmail\service\ConnectorService;
 use webmail\service\EmailService;
+use webmail\mail\MailProperties;
+use core\exception\FileException;
 
 
 
@@ -109,6 +111,21 @@ class MysqlMailActions extends MailActionsBase {
         
     }
 
+    public function updateAction($emailId, $action) {
+        $f = get_data_file( $emailId );
+        $check = get_data_file('/webmail/inbox');
+        if (strpos( $f, $check) !== 0) {
+            throw new FileException( 'Invalid location' );
+        }
+        
+        $mp = new MailProperties( $f );
+        $mp->setAction( $action );
+        $mp->save();
+        
+        
+        $emailDao = object_container_get( EmailDAO::class );
+        $emailDao->updateActionBySolrMailId( $emailId, $action );
+    }
     
     
     
