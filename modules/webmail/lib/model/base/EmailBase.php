@@ -241,7 +241,7 @@ class EmailBase extends \core\db\DBObject {
     'Field' => 'folderName',
     'Type' => 'varchar(64)',
     'Null' => 'YES',
-    'Key' => '',
+    'Key' => 'MUL',
     'Default' => NULL,
     'Extra' => '',
   ),
