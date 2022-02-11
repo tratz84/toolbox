@@ -226,6 +226,7 @@ class MysqlMailSearch extends MailSearchBase {
         if ($limit) {
             $rowCount = $eDao->queryValue("select count(*) $sql", $params );
             $lr->setRowCount( $rowCount );
+            $lr->setStart( $this->getStart() );
         }
         
         return $lr;
