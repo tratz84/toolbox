@@ -69,7 +69,7 @@ abstract class BaseMailConnector {
     public function markJunk($uid, $folder) { }
     
     public function moveMailByUid($uid, $srcFolder, $dstFolder) { }
-    public function deleteMailByUid($uid, $folder) { }
+    public function deleteMailByUid($folder, $uid) { }
     public function lookupUid($folder, $mail) { }
     
     public function appendMessage($mailbox, $message, $options=null, $internal_date=null) {}

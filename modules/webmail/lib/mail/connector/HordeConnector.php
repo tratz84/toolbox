@@ -78,6 +78,8 @@ class HordeConnector extends BaseMailConnector {
         return true;
     }
     
+    public function getClient() { return $this->client; }
+    
     public function isConnected() {
         if ($this->client !== null) {
             return true;
@@ -703,8 +705,13 @@ class HordeConnector extends BaseMailConnector {
         $this->client->store( $folderName, $options );
     }
     
-    public function deleteMailByUid($uid, $folder) {
+    public function deleteMailByUid($folder, $uids) {
+        if (is_array($uids) == false) {
+            $uids = array($uids);
+        }
         
+        $list = new \Horde_Imap_Client_Ids($uids);
+        $this->client->expunge($folder, array('ids' => $list, 'delete' => true));
     }
     
     public function appendMessage($mailbox, $message, $options=null, $internal_date=null) {
