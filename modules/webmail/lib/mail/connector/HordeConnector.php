@@ -78,7 +78,13 @@ class HordeConnector extends BaseMailConnector {
         return true;
     }
     
-    public function getClient() { return $this->client; }
+    /**
+     * getClient() - debug only, don't use for prod
+     * @return \Horde_Imap_Client_Socket
+     */
+    public function getClient() {
+        return $this->client;
+    }
     
     public function isConnected() {
         if ($this->client !== null) {
