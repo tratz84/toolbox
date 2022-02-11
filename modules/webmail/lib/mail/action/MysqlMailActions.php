@@ -14,18 +14,18 @@ use webmail\service\EmailService;
 use webmail\mail\MailProperties;
 use core\exception\FileException;
 use core\db\DatabaseHandler;
+use customer\model\CompanyEmailDAO;
 
 
 
 class MysqlMailActions extends MailActionsBase {
     
-    public function markAsSpam( $mail ) {
+    public function markAsSpam( MysqlMailRender $mail ) {
         /** @var EmailService $eService */
         $eService = object_container_get( EmailService::class );
         
-        $email = $eService->readEmail( $mail['email_id'] );
         
-        $fullpathEmlFile = get_data_file( $solrMail->getEmlFile() );
+        $fullpathEmlFile = get_data_file( $mail->getEmlFile() );
         
         // eml not found?
         if (!$fullpathEmlFile)
@@ -36,7 +36,7 @@ class MysqlMailActions extends MailActionsBase {
         
         
         // if Connector exists, connection is imap & Junk-folder is set? => move eml file
-        $mailProperties = $solrMail->getProperties();
+        $mailProperties = $mail->getProperties();
         $connector = null;
         if ($mailProperties->getConnectorId()) {
             /** @var ConnectorService $connectorService */
@@ -47,20 +47,19 @@ class MysqlMailActions extends MailActionsBase {
         
         // connector not found? => just throw in 'Junk'
         if (!$connector) {
-            $solrMail->getProperties()->setFolder('Junk');
-            $solrMail->getProperties()->setJunk(true);
-            $solrMail->saveProperties();
+            $mailProperties->setFolder('Junk');
+            $mailProperties->setJunk(true);
+            $mailProperties>saveProperties();
             
-            // update solr
-            $su = new SolrImportMail( );
-            $su->setSolrUrl( WEBMAIL_SOLR );
-            $su->updateDoc($solrMail->getId(), [ 'mailboxName' => 'Junk' ]);
+            // EmailDAO
+            $eDao = new EmailDAO();
+            //...
             return ['folder' => 'Junk'];
         }
         
         
         if ($connector->getConnectorType() == 'imap' && $connector->getJunkConnectorImapfolderId()) {
-            $this->moveMail($connector, $solrMail, $connector->getJunkConnectorImapfolderId(), ['spam' => true]);
+            $this->moveMail($connector, $mail, $connector->getJunkConnectorImapfolderId(), ['spam' => true]);
             
             $if = $connectorService->readImapFolder( $connector->getJunkConnectorImapfolderId() );
             return ['folder' => $if->getFolderName()];
@@ -69,6 +68,54 @@ class MysqlMailActions extends MailActionsBase {
         return true;
     }
 
+    
+    
+    
+    public function markAsHam( MysqlMailRender $mail ) {
+        $fullpathEmlFile = get_data_file( $mail->getEmlFile() );
+        
+        // eml not found?
+        if (!$fullpathEmlFile)
+            return false;
+        
+        // mark as spam
+        SpamCheck::markHam( $fullpathEmlFile );
+        
+        
+        // if Connector exists, connection is imap & message is in Junk-folder? => move to inbox
+        $mailProperties = $mail->getProperties();
+        $connector = null;
+        $junkImapFolder = null;
+        if ($mailProperties->getConnectorId()) {
+            /** @var ConnectorService $connectorService */
+            $connectorService = object_container_get(ConnectorService::class);
+            /** @var \webmail\model\Connector $connector */
+            $connector = $connectorService->readConnector( $mailProperties->getConnectorId() );
+            
+            $junkImapFolder = $connectorService->readImapFolder( $connector->getJunkConnectorImapfolderId() );
+        }
+        
+        // mark as non-junk
+        $mailProperties->setJunk(false);
+        $mailProperties->save();
+        
+        
+        // no imap?
+        if (!$connector || in_array($connector->getConnectorType(), array('horde', 'imap')) == false)
+            return;
+        
+        if (!$junkImapFolder)
+            return;
+        
+        // message already not in junk-folder?
+        if ($junkImapFolder && $junkImapFolder->getFolderName() != $mailProperties->getFolder())
+            return;
+        
+        // move message to INBOX
+        $this->moveMail($connector, $mail, 'INBOX');
+    }
+    
+    
     public function markAsSeen(MysqlMailRender $mail) {
         
         // update property
@@ -86,6 +133,27 @@ class MysqlMailActions extends MailActionsBase {
         
         $mail->getEmail()->setAttributes( $attributes );
     }
+    
+    public function markAsAnswered(MysqlMailRender $mail, $opts=array()) {
+        $this->setMailFlags($mail, '\\Answered', $opts);
+        
+        // update property
+        $mailProperties = $mail->getProperties();
+        $mailProperties->setAnswered( true );
+        
+        // mark as replied
+        if ($mail->getAction() == 'open') {
+            $mailProperties->setAction('replied');
+            
+            // update solr fields
+            $mail->setChangedField('action', 'replied');
+            
+            $this->updateAction($mail->getId(), 'replied');
+        }
+        
+        $mailProperties->save();
+    }
+    
     
     
     public function readById( $id ) {
