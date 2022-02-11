@@ -79,7 +79,7 @@ class DAOObject
         return null;
     }
     
-    protected function queryValue($query, $params=array()) {
+    public function queryValue($query, $params=array()) {
         $con = DatabaseHandler::getConnection($this->resourceName);
         
         $r = $con->queryOne($query, $params);
