@@ -36,7 +36,7 @@ class ConnectorImapfolderDAO extends \core\db\DAOObject {
                 from webmail__connector_imapfolder cif
                 left join webmail__email e on (cif.connector_imapfolder_id = e.connector_imapfolder_id)
                 group by cif.connector_imapfolder_id
-                order by folderName='INBOX' desc, folderName";
+                order by cif.folderName='INBOX' desc, cif.folderName";
 	    
 	    $l = $this->queryList( $sql );
 	    

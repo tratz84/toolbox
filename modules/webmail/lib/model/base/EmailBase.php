@@ -236,6 +236,15 @@ class EmailBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'folderName' => 
+  array (
+    'Field' => 'folderName',
+    'Type' => 'varchar(64)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -341,6 +350,10 @@ class EmailBase extends \core\db\DBObject {
 		
 	public function setAttachmentCount($p) { $this->setField('attachment_count', $p); }
 	public function getAttachmentCount() { return $this->getField('attachment_count'); }
+	
+		
+	public function setFolderName($p) { $this->setField('folderName', $p); }
+	public function getFolderName() { return $this->getField('folderName'); }
 	
 	
 }

@@ -181,9 +181,9 @@ class MysqlMailSearch extends MailSearchBase {
         if (count($to_where)) {
             $sql .= ' AND email_id IN (select email_id from webmail__email_to where ('.implode(') AND (', $to_where).')';
         }
-        if ($orderBy)
-            $sql .= " $orderBy ";
-        $sql .= $limit;
+//         if ($orderBy)
+//             $sql .= " $orderBy ";
+//         $sql .= $limit;
         
         $params = array_merge( $e_params, $to_params );
 //         var_export($params);
@@ -193,7 +193,7 @@ class MysqlMailSearch extends MailSearchBase {
         $cursor = $eDao->queryCursor( "$select_fields $sql $orderBy $limit" );
         
         
-        $lr = ListResponse::fillByCursor($this->getStart(), $this->getRows(), $cursor, array(
+        $lr = ListResponse::fillByCursor(0, $this->getRows(), $cursor, array(
             'email_id',
             'user_id',
             'company_id',

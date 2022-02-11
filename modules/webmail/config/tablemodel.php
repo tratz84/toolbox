@@ -92,6 +92,7 @@ $tb_email->addColumn('connector_id',            'int');
 $tb_email->addColumn('connector_imapfolder_id', 'int');
 $tb_email->addColumn('attributes',              'int');
 $tb_email->addColumn('message_id',              'varchar(255)');
+$tb_email->addColumn('folderName',              'varchar(64)');
 $tb_email->addColumn('action',                  'varchar(16)');
 $tb_email->addColumn('spam',                    'boolean');
 $tb_email->addColumn('incoming',                'boolean');
