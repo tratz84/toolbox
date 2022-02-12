@@ -115,7 +115,7 @@ $tb_email->addIndex('connector_imapfolder_id', array('connector_imapfolder_id'))
 $tb_email->addIndex('index_solr_mail_id',      array('solr_mail_id'));
 $tb_email->addIndex('index_action',            array('action'));
 $tb_email->addIndex('index_folderName',        array('folderName'));
-$tb_email->addIndex('text_content',            array('text_content'), ['fulltext' => true]);
+$tb_email->addIndex('text_content',            array('text_content', 'subject', 'from_name', 'from_email'), ['fulltext' => true]);
 // $tb_email->addForeignKey('webmail__email_ibfk_1', 'user_id', 'base__user', 'user_id', 'set null', 'restrict');
 $tbs[] = $tb_email;
 

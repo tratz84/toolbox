@@ -151,7 +151,7 @@ class MysqlMailSearch extends MailSearchBase {
         $q = trim($this->getQuery());
         if ($q && $q != '*:*') {
             $q = DatabaseHandler::getConnection('default')->escape( $q );
-            $p = ' match(text_content) against ( \''.$q.'\' ) ';
+            $p = ' match(text_content, subject, from_name, from_email) against ( \''.$q.'\' ) ';
             $e_where[] = $p;
             
             $orderBy = ' order by ' . $p . ' desc';
