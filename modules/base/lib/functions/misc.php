@@ -45,3 +45,14 @@ function password_strength_check($pw) {
     }
 }
 
+
+function cron_daily_start_hour() {
+    $h = (int)ctx()->getSetting( 'cron_daily_start_hour', 6 );
+    
+    if ($h < 0 || $h > 23)
+        $h = 6;
+    
+    return $h;
+}
+
+

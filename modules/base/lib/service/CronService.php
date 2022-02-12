@@ -43,7 +43,9 @@ class CronService {
             
             if ($c->isDaily()) {
                 // daily cron, not yet run today & after 05:00 ? => run cronjob
-                if ((!$timeLastRunning || date('Y-m-d') != date('Y-m-d', $timeLastRunning)) && date('G') >= 6) {
+                $daily_start_hour = cron_daily_start_hour();
+                
+                if ((!$timeLastRunning || date('Y-m-d') != date('Y-m-d', $timeLastRunning)) && date('G') >= $daily_start_hour) {
                     $dbcron->setRunning(true);
                     $dbcron->setLastStatus('started');
                     $dbcron->setLastRun(date('Y-m-d H:i:s'));
