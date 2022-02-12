@@ -1,6 +1,7 @@
 
 <div class="page-header">
 	<div class="toolbox">
+		<a href="<?= appUrl('/?m=base&c=cron/cronSettings') ?>" class="fa fa-cog"></a>
 		<a href="<?= appUrl('/?m=base&c=masterdata/index') ?>" class="fa fa-chevron-circle-left"></a>
 	</div>
 	<h1><?= t('Scheduled tasks')?></h1>
@@ -45,7 +46,7 @@
 <script>
 
 function trCron_Click(cron_id) {
-	show_popup(appUrl('/?m=base&c=cronList&a=popup&id=' + cron_id));
+	show_popup(appUrl('/?m=base&c=cron/cronList&a=popup&id=' + cron_id));
 }
 
 </script>
