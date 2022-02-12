@@ -5,11 +5,9 @@
 
 use calendar\helper\SabreVEventParser;
 use customer\service\CustomerService;
+use webmail\search\MailSearchBase;
 
 hook_eventbus_subscribe('webmail', 'mailbox-mailactions', function($actionContainer) {
-    
-    // TODO: fix..
-    return;
     
     $emailId = $actionContainer->getAttribute('data-email-id');
     
@@ -17,7 +15,10 @@ hook_eventbus_subscribe('webmail', 'mailbox-mailactions', function($actionContai
         return;
     }
     
-    $email = \webmail\solr\SolrMailQuery::readStaticById( $emailId );
+    $ms = MailSearchBase::getInstance();
+    
+    
+    $email = $ms->readById( $emailId );
     ini_set('error_reporting', E_ALL);
     
     $attachmentCount = count($email->getAttachments());
