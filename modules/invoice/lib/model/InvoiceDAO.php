@@ -78,6 +78,11 @@ class InvoiceDAO extends \core\db\DAOObject {
 	           $where[] = " i.invoice_status_id IN (" . implode(', ', $ids) . ") ";
 	        }
 	    }
+	    
+	    if (isset($opts['invoice_date']) && valid_date($opts['invoice_date'])) {
+	        $where[] = " i.invoice_date = ? ";
+	        $params[] = format_date($opts['invoice_date'], 'Y-m-d');
+	    }
 
 	    if (isset($opts['customer_name']) && trim($opts['customer_name'])) {
 	        $where[] = " concat_ws('', p.lastname, ', ', p.insert_lastname, ' ', p.firstname) LIKE ? OR c.company_name LIKE ? ";

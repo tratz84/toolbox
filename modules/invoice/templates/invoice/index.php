@@ -84,7 +84,7 @@ t.addColumn({
 	fieldName: 'invoice_date',
 	fieldDescription: 'Factuurdatum',
 	fieldType: 'date',
-	searchable: false
+	searchable: true
 });
 
 

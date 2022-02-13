@@ -18,7 +18,7 @@ class ArchiveCustomerIndexTable extends IndexTable {
         $this->setOpt('lool_links', true);
         $this->setTableClass('filesync-customer-index-table');
         
-        $this->setColumn('document_date',     ['fieldDescription' => t('Date'),      'fieldType' => 'date', 'sortField' => 'document_date']);
+        $this->setColumn('document_date',     ['fieldDescription' => t('Date'),      'fieldType' => 'date', 'sortField' => 'document_date', 'searchable' => true]);
         $this->setColumn('customer_name',     ['fieldDescription' => t('Customer name'), 'fieldType' => 'text', 'sortField' => 'customer_name', 'searchable' => true]);
         $this->setColumn('path',              ['fieldDescription' => t('Filename'), 'fieldType' => 'text', 'sortField' => 'path', 'searchable' => true]);
         $this->setColumn('subject',           ['fieldDescription' => t('Subject'),  'fieldType' => 'text', 'sortField' => 'subject', 'searchable' => true]);

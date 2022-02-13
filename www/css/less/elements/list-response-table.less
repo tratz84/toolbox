@@ -22,6 +22,32 @@ table.sublist {
 			padding: 2px 3px;
 		}
 		
+		th.widget.widget-date {
+			.datepicker-months
+			, .datepicker-years
+			, .datepicker-decades {
+				table { display: block; }
+				tbody {
+					width: 200px;
+					td {
+						width: 235px;
+						span.month
+						, span.year
+						, span.decade {
+							float: left;
+							width: 53px;
+							height: 49px;
+							line-height: 49px;
+						}
+						span.decade {
+							width: 72px;
+						}
+					}
+				}
+
+			}
+		}
+		
 		a {
 			text-decoration: none;
 			span.field-description {

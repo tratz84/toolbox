@@ -426,11 +426,15 @@ function IndexTable( container, opts ) {
 			}
 			// searchable? => add inputfield to header
 			else if (col.searchable) {
-				if (col.fieldType == 'text') {
+				if (col.fieldType == 'text' || col.fieldType == 'date') {
 					var t = $('<input type="text" />');
 					t.attr('name', col.fieldName);
 					t.attr('placeholder', col.fieldDescription);
 					t.attr('autocomplete', 'off');
+					
+					if (col.fieldType == 'date') {
+						t.addClass('input-pickadate reset-field-button');
+					}
 
 					if (typeof col.width != 'undefined') {
 						t.css('width', col.width);
@@ -441,6 +445,7 @@ function IndexTable( container, opts ) {
 						t.val(f);
 					}
 
+					td.addClass('widget widget-date');
 					td.append(t);
 				}
 
