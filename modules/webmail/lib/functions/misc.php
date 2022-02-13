@@ -8,6 +8,8 @@ use webmail\mail\render\MailRenderBase;
 use webmail\model\Connector;
 use webmail\service\ConnectorService;
 use webmail\storage\MailImportFactory;
+use webmail\model\EmailDAO;
+use webmail\model\EmailToDAO;
 
 
 
@@ -133,5 +135,32 @@ function webmail_import_connectors($updateOnly) {
         object_meta_save(Connector::class, $c->getConnectorId(), 'webmail_importall-lastrun', $start_time_run);
     }
 }
+
+
+
+function refresh_email_text_search( ){
+    
+    $eDao = new EmailDAO();
+    /** @var \core\db\Cursor $cursor */
+    $cursor = $eDao->search(array());
+    
+    $total = $cursor->numRows();
+    $cnt=1;
+    
+    /** @var \webmail\model\Email $e */
+    while($e = $cursor->next()) {
+        $e->updateTextSearch();
+        
+        if ($cnt%50 == 0) {
+            print "Updating $cnt / $total\n";
+        }
+        
+        $cnt++;
+    }
+    
+    
+}
+
+
 
 

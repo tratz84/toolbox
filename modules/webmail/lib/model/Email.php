@@ -51,5 +51,36 @@ class Email extends base\EmailBase {
         return parent::setField($key, $val);
     }
     
+    
+    public function updateTextSearch() {
+        
+        $etDao = object_container_get( EmailToDAO::class );
+        $tos = $etDao->readByEmail( $this->getEmailId() );
+        
+        $t = '';
+        $t .= format_date( $this->getCreated(), 'd-m-Y' ) . "\n";
+        $t .= format_date( $this->getCreated(), 'd-m-Y' ) . "\n";
+        $t .= format_date( $this->getCreated(), 'd-m-Y' ) . "\n";
+        $t .= format_date( $this->getCreated(), 'd-m-Y' ) . "\n";
+        $t .= " " . $this->getFromName();
+        $t .= " " . $this->getFromEmail();
+        
+        foreach($tos as $to) {
+            $t .= ' ' . $to->getToName() ;
+            $t .= ' ' . $to->getToEmail() ;
+        }
+        $t .= "\n";
+        $t .= $this->getSubject();
+        $t . "\n\n";
+        
+        $content = strip_tags( $this->getTextContent() );
+        $content = preg_replace( '/\\s+/', ' ', $content );
+        
+        $t .= $content;
+        
+        $eDao = object_container_get( EmailDAO::class );
+        $eDao->updateField( $this->getEmailId(), 'text_search', $t );
+    }
+    
 }
 

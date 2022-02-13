@@ -151,10 +151,26 @@ class MysqlMailSearch extends MailSearchBase {
         $q = trim($this->getQuery());
         if ($q && $q != '*:*') {
             $q = DatabaseHandler::getConnection('default')->escape( $q );
-            $p = ' match(text_content, subject, from_name, from_email) against ( \''.$q.'\' ) ';
+            
+            $orderByFields = array();
+            
+            $matches = array();
+            if (preg_match('/\\d{1,2}-\\d{1,2}-\\d{2,4}/', $q, $matches)) {
+                list($d, $m, $y) = explode('-', $matches[0]);
+                $creationDate = sprintf('%4d-%02d-%02d', $y, $m, $d);
+                
+                $orderByFields[] = ' date_format(e.created, "%Y-%m-%d") = "'.$creationDate.'" desc';
+                $q = str_replace( $matches[0], '', $q );
+            }
+            
+            $p = ' match(text_search) against ( \''.$q.'\' IN BOOLEAN MODE) ';
+            $orderByFields[] = $p . ' desc';
             $e_where[] = $p;
             
-            $orderBy = ' order by ' . $p . ' desc';
+            
+//             print $p;exit;
+            
+            $orderBy = ' order by ' . implode(', ', $orderByFields);
         }
         
         // $this->getStart()
@@ -187,7 +203,7 @@ class MysqlMailSearch extends MailSearchBase {
         
         $params = array_merge( $e_params, $to_params );
 //         var_export($params);
-//         print $sql;exit;
+//         print "$select_fields $sql $orderBy $limit";exit;
         
         $eDao = new EmailDAO();
         $cursor = $eDao->queryCursor( "$select_fields $sql $orderBy $limit", $params);

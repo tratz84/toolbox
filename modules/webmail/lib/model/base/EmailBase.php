@@ -142,7 +142,7 @@ class EmailBase extends \core\db\DBObject {
     'Field' => 'text_content',
     'Type' => 'mediumtext',
     'Null' => 'YES',
-    'Key' => 'MUL',
+    'Key' => '',
     'Default' => NULL,
     'Extra' => '',
   ),
@@ -227,6 +227,15 @@ class EmailBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'folderName' => 
+  array (
+    'Field' => 'folderName',
+    'Type' => 'varchar(64)',
+    'Null' => 'YES',
+    'Key' => 'MUL',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
   'attachment_count' => 
   array (
     'Field' => 'attachment_count',
@@ -236,10 +245,10 @@ class EmailBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
-  'folderName' => 
+  'text_search' => 
   array (
-    'Field' => 'folderName',
-    'Type' => 'varchar(64)',
+    'Field' => 'text_search',
+    'Type' => 'mediumtext',
     'Null' => 'YES',
     'Key' => 'MUL',
     'Default' => NULL,
@@ -348,12 +357,16 @@ class EmailBase extends \core\db\DBObject {
 	public function getAction() { return $this->getField('action'); }
 	
 		
+	public function setFolderName($p) { $this->setField('folderName', $p); }
+	public function getFolderName() { return $this->getField('folderName'); }
+	
+		
 	public function setAttachmentCount($p) { $this->setField('attachment_count', $p); }
 	public function getAttachmentCount() { return $this->getField('attachment_count'); }
 	
 		
-	public function setFolderName($p) { $this->setField('folderName', $p); }
-	public function getFolderName() { return $this->getField('folderName'); }
+	public function setTextSearch($p) { $this->setField('text_search', $p); }
+	public function getTextSearch() { return $this->getField('text_search'); }
 	
 	
 }

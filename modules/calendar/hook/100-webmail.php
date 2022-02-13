@@ -21,7 +21,9 @@ hook_eventbus_subscribe('webmail', 'mailbox-mailactions', function($actionContai
     $email = $ms->readById( $emailId );
     ini_set('error_reporting', E_ALL);
     
-    $attachmentCount = count($email->getAttachments());
+    $attachmentCount = 0;
+    if ($email && $email->getAttachments())
+        $attachmentCount = count($email->getAttachments());
     for($x=0; $x < $attachmentCount; $x++) {
         
         $att = $email->getAttachmentFile( $x );
