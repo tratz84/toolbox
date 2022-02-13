@@ -172,22 +172,7 @@ class MysqlMailSearch extends MailSearchBase {
             //     2016-10-15 "transip support" facturen
             //     3 tokens => "2016-10-15", "transip support", "facturen
             
-            $tokens = preg_split('/\\s+/', $q);
-            $q = '';
-            foreach($tokens as $t) {
-                if ($q != '') $q = $q . ' ';
-                
-                if (strpos($t, '-') === 0) {
-                    $q .= '-"'.substr($t, 1).'"';
-                }
-                else if (strpos($t, '+') === 0) {
-                    $q .= '+"'.substr($t, 1).'"';
-                }
-                else {
-                    $q .= ' "'.$t.'" ';
-                }
-            }
-            
+            $q = $this->parseSearchString( $q );
             
             $p = ' match(text_search) against ( \''.$q.'\' IN BOOLEAN MODE) ';
             $orderByFields[] = $p . ' desc';
@@ -272,6 +257,65 @@ class MysqlMailSearch extends MailSearchBase {
         }
         
         return $lr;
+    }
+    
+    protected function parseSearchString( $str ) {
+        
+        $inQuote = false;
+        $token = '';
+        $tokens = array();
+        $tokenModified = '';
+        for($x=0; $x < strlen($str); $x++) {
+            
+            if ($token == '' && $str[$x] == '+') {
+                $tokenModified = '+';
+                continue;
+            }
+            if ($token == '' && $str[$x] == '-') {
+                $tokenModified = '-';
+                continue;
+            }
+            
+            $token .= $str[$x];
+            
+            if ($str[$x] == '"') {
+                $inQuote = !$inQuote;
+                
+                if ($inQuote == false) {
+                    $tokens[] = $tokenModified.trim( $token, ' "' );
+                    $token = '';
+                    $tokenModified = '';
+                }
+            }
+            if ($inQuote == false && $str[$x] == ' ') {
+                if (trim($token)) {
+                    $tokens[] = $tokenModified.trim( $token );
+                    
+                    $token = '';
+                    $tokenModified = '';
+                }
+            }
+        }
+        if (trim($token, '" '))
+            $tokens[] = $tokenModified.trim($token, '" ');
+        
+        $searchString= '';
+        for($x=0; $x < count($tokens); $x++) {
+            if ($x > 0)
+                $searchString .= ' ';
+            
+            if (strpos($tokens[$x], '+') === 0) {
+                $searchString .= '+"' . substr($tokens[$x], 1) . '"';
+            }
+            else if (strpos($tokens[$x], '-') === 0) {
+                $searchString .= '-"' . substr($tokens[$x], 1) . '"';
+            }
+            else {
+                $searchString .= '"' . $tokens[$x] . '"';
+            }
+        }
+        
+        return $searchString;
     }
     
     
