@@ -167,11 +167,25 @@ class MysqlMailSearch extends MailSearchBase {
                 $q = str_replace( $matches[0], $creationDate, $q );
             }
             
+            
+            // TODO: support tokenization for quotes, like,
+            //     2016-10-15 "transip support" facturen
+            //     3 tokens => "2016-10-15", "transip support", "facturen
+            
             $tokens = preg_split('/\\s+/', $q);
             $q = '';
             foreach($tokens as $t) {
                 if ($q != '') $q = $q . ' ';
-                $q .= '"'.$t.'"';
+                
+                if (strpos($t, '-') === 0) {
+                    $q .= '-"'.substr($t, 1).'"';
+                }
+                else if (strpos($t, '+') === 0) {
+                    $q .= '+"'.substr($t, 1).'"';
+                }
+                else {
+                    $q .= ' "'.$t.'" ';
+                }
             }
             
             
