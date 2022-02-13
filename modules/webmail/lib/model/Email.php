@@ -54,8 +54,12 @@ class Email extends base\EmailBase {
     
     public function updateTextSearch() {
         
-        $etDao = object_container_get( EmailToDAO::class );
-        $tos = $etDao->readByEmail( $this->getEmailId() );
+        if (count($this->recipients)) {
+            $tos = $this->recipients;
+        } else {
+            $etDao = object_container_get( EmailToDAO::class );
+            $tos = $etDao->readByEmail( $this->getEmailId() );
+        }
         
         $t = '';
         $t .= format_date( $this->getCreated(), 'Y_m_d' ) . "\n";

@@ -221,6 +221,8 @@ class EmailService extends ServiceBase {
         $eDao = new EmailDAO();
         $eDao->markAsSent($emailId);
         
+        $email->updateTextSearch();
+        
         ActivityUtil::logActivity($email->getCompanyId(), $email->getPersonId(), 'webmail__email', $email->getEmailId(), 'email-sent', 'E-mail verstuurd: '.$email->getSubject(), null, $email->getFields());
     }
     

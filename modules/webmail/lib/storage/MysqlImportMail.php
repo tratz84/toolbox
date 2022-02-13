@@ -197,6 +197,7 @@ class MysqlImportMail extends ImportMailBase {
             
             // new only, recipients never change
             if ($isNew) {
+                $emailRecipients = array();
                 foreach( $e['recipients'] as $r ) {
                     $et = new EmailTo();
                     $et->setEmailId( $email->getEmailId() );
@@ -204,7 +205,13 @@ class MysqlImportMail extends ImportMailBase {
                     $et->setToName( $r['to_name'] );
                     $et->setToEmail( $r['to_email'] );
                     $et->save();
+                    
+                    $emailRecipients[] = $et;
                 }
+                
+                // set index
+                $email->setReceived($emailRecipients);
+                $email->updateTextSearch();
             }
             
         }
