@@ -154,13 +154,17 @@ class MysqlMailSearch extends MailSearchBase {
             
             $orderByFields = array();
             
+            // date detected?
             $matches = array();
+            if (preg_match('/\\d{4}-\\d{1,2}-\\d{1,2}/', $q, $matches)) {
+                list($y, $m, $d) = explode('-', $matches[0]);
+                $creationDate = sprintf('%4d_%02d_%02d', $y, $m, $d);
+                $q = str_replace( $matches[0], $creationDate, $q );
+            }
             if (preg_match('/\\d{1,2}-\\d{1,2}-\\d{2,4}/', $q, $matches)) {
                 list($d, $m, $y) = explode('-', $matches[0]);
-                $creationDate = sprintf('%4d-%02d-%02d', $y, $m, $d);
-                
-                $orderByFields[] = ' date_format(e.created, "%Y-%m-%d") = "'.$creationDate.'" desc';
-                $q = str_replace( $matches[0], '', $q );
+                $creationDate = sprintf('%4d_%02d_%02d', $y, $m, $d);
+                $q = str_replace( $matches[0], $creationDate, $q );
             }
             
             $p = ' match(text_search) against ( \''.$q.'\' IN BOOLEAN MODE) ';

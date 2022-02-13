@@ -58,10 +58,8 @@ class Email extends base\EmailBase {
         $tos = $etDao->readByEmail( $this->getEmailId() );
         
         $t = '';
-        $t .= format_date( $this->getCreated(), 'd-m-Y' ) . "\n";
-        $t .= format_date( $this->getCreated(), 'd-m-Y' ) . "\n";
-        $t .= format_date( $this->getCreated(), 'd-m-Y' ) . "\n";
-        $t .= format_date( $this->getCreated(), 'd-m-Y' ) . "\n";
+        $t .= format_date( $this->getCreated(), 'Y_m_d' ) . "\n";
+        $t .= format_date( $this->getCreated(), 'Y_m_d' ) . "\n";
         $t .= " " . $this->getFromName();
         $t .= " " . $this->getFromEmail();
         
