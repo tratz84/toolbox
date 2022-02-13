@@ -75,6 +75,12 @@ class StoreFileDAO extends \core\db\DAOObject {
             $where[] = " filesync__store_file.store_id IN ( " . implode(', ', $storeIds) . ") ";
         }
         
+        if (isset($opts['document_date']) && valid_date($opts['document_date'])) {
+            $where[] = " document_date = ? ";
+            $params[] = format_date($opts['document_date'], 'Y-m-d');
+        }
+        
+        
         if (isset($opts['archiveOnly']) && $opts['archiveOnly']) {
             $where[] = " filesync__store.store_type = 'archive' ";
         }
