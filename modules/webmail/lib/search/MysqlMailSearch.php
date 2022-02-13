@@ -167,6 +167,14 @@ class MysqlMailSearch extends MailSearchBase {
                 $q = str_replace( $matches[0], $creationDate, $q );
             }
             
+            $tokens = preg_split('/\\s+/', $q);
+            $q = '';
+            foreach($tokens as $t) {
+                if ($q != '') $q = $q . ' ';
+                $q .= '"'.$t.'"';
+            }
+            
+            
             $p = ' match(text_search) against ( \''.$q.'\' IN BOOLEAN MODE) ';
             $orderByFields[] = $p . ' desc';
             $e_where[] = $p;
