@@ -154,24 +154,6 @@ class MysqlMailSearch extends MailSearchBase {
             
             $orderByFields = array();
             
-            // date detected?
-            $matches = array();
-            if (preg_match('/\\d{4}-\\d{1,2}-\\d{1,2}/', $q, $matches)) {
-                list($y, $m, $d) = explode('-', $matches[0]);
-                $creationDate = sprintf('%4d_%02d_%02d', $y, $m, $d);
-                $q = str_replace( $matches[0], $creationDate, $q );
-            }
-            if (preg_match('/\\d{1,2}-\\d{1,2}-\\d{2,4}/', $q, $matches)) {
-                list($d, $m, $y) = explode('-', $matches[0]);
-                $creationDate = sprintf('%4d_%02d_%02d', $y, $m, $d);
-                $q = str_replace( $matches[0], $creationDate, $q );
-            }
-            
-            
-            // TODO: support tokenization for quotes, like,
-            //     2016-10-15 "transip support" facturen
-            //     3 tokens => "2016-10-15", "transip support", "facturen
-            
             $q = $this->parseSearchString( $q );
             
             $p = ' match(text_search) against ( \''.$q.'\' IN BOOLEAN MODE) ';
@@ -260,7 +242,6 @@ class MysqlMailSearch extends MailSearchBase {
     }
     
     protected function parseSearchString( $str ) {
-        
         $inQuote = false;
         $token = '';
         $tokens = array();
@@ -299,6 +280,23 @@ class MysqlMailSearch extends MailSearchBase {
         if (trim($token, '" '))
             $tokens[] = $tokenModified.trim($token, '" ');
         
+        
+        // date detected?
+        for($x=0; $x < count($tokens); $x++) {
+            $t = $tokens[$x];
+            
+            $matches = array();
+            if (preg_match('/^\\d{4}-\\d{1,2}-\\d{1,2}$/', $t, $matches)) {
+                list($y, $m, $d) = explode('-', $matches[0]);
+                $tokens[] = sprintf('%4d_%02d_%02d', $y, $m, $d);
+            }
+            else if (preg_match('/^\\d{1,2}-\\d{1,2}-\\d{2,4}$/', $t, $matches)) {
+                list($d, $m, $y) = explode('-', $matches[0]);
+                $tokens[] = sprintf('%4d_%02d_%02d', $y, $m, $d);
+            }
+        }
+        
+        // build string
         $searchString= '';
         for($x=0; $x < count($tokens); $x++) {
             if ($x > 0)
