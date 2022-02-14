@@ -57,16 +57,36 @@ class MailProperties {
         // date in mailheader
         if ($p->getHeader('date')) {
             $dt = new \DateTime(null, new \DateTimeZone('+0000'));
-            $dt->setTimestamp(strtotime($p->getHeader('date')));
+            $t = strtotime($p->getHeader('date'));
+            
+            if (!$t) {
+                // parse failed, try to fix by removing timezone-stuff
+                $date = $p->getHeader('date');
+                $date = preg_replace( '/(\\d{2}:\\d{2}:\\d{2}).*$/', '\\1', $date );
+                
+                $matches = array();
+                $matches = array();
+                if ( preg_match('/[\\+\\-]\\d{4}/', $p->getHeader('date'), $matches) ) {
+                    $t = strtotime( $date . ' ' . $matches[0] );
+                }
+                else if ( preg_match('/(\\S+)$/', $p->getHeader('date'), $matches) ) {
+                    $t = strtotime( $date . ' ' . trim($matches[0], '()') );
+                }
+                
+                if (!$t)
+                    $t = strtotime( $date );
+            }
+            
+            $dt->setTimestamp( $t );
             return $dt->format('Y-m-d').'T'.$dt->format('H:i:s').'Z';
         }
         // server date
-        else if ($this->getProperty('udate')) {
+        if ($this->getProperty('udate')) {
             $dt = new \DateTime( );
             $dt->setTimestamp( $this->getProperty('udate') );
             return $dt->format('Y-m-d').'T'.$dt->format('H:i:s').'Z';
         }
-        else if ($this->getProperty('created')) {
+        if ($this->getProperty('created')) {
             $dt = new \DateTime( $this->getProperty('created') );
             return $dt->format('Y-m-d').'T'.$dt->format('H:i:s').'Z';
         }
