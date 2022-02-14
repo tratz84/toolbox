@@ -232,7 +232,8 @@ class MysqlMailSearch extends MailSearchBase {
             'server_properties_checksum',
             'action',
             'mailbox_name',
-            'folderName'
+            'folderName',
+            'seen'
         ));
         
         $objs = $lr->getObjects();

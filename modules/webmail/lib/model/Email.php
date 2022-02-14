@@ -84,5 +84,21 @@ class Email extends base\EmailBase {
         $eDao->updateField( $this->getEmailId(), 'text_search', $t );
     }
     
+    
+    public function getAnswered() { return $this->isAnswered(); }
+    public function isAnswered() {
+        return $this->getAttributes() | \webmail\model\Email::ATTRIBUTE_REPLIED ? true : false;
+    }
+    
+    public function getSeen() { return $this->isSeen(); }
+    public function isSeen() {
+        return $this->getAttributes() | \webmail\model\Email::ATTRIBUTE_SEEN ? true : false;
+    }
+    
+    public function getJunk() { return $this->isJunk(); }
+    public function isJunk() {
+        return $this->getAttributes() | \webmail\model\Email::ATTRIBUTE_SPAM? true : false;
+    }
+    
 }
 

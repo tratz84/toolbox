@@ -59,12 +59,15 @@ class MysqlMailRender extends MailRenderBase {
     public function getUserId() { return $this->email->getUserId(); }
     public function getAction() { return $this->email->getAction(); }
     
+    public function getAnswered() { return $this->isAnswered(); }
     public function isAnswered() {
         return $this->email->getAttributes() | \webmail\model\Email::ATTRIBUTE_REPLIED ? true : false;
     }
+    public function getSeen() { return $this->isSeen(); }
     public function isSeen() {
         return $this->email->getAttributes() | \webmail\model\Email::ATTRIBUTE_SEEN ? true : false;
     }
+    public function getJunk() { return $this->isJunk(); }
     public function isJunk() {
         return $this->email->getAttributes() | \webmail\model\Email::ATTRIBUTE_SPAM? true : false;
     }
