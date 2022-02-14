@@ -64,19 +64,17 @@ class updateactionController extends BaseController {
             
             // delete all documents in response
             do {
-                $ms->setStart( $start );
+                $ms->setStart( 0 );
                 $ms->setRows( 100 );
                 
                 $lr = $ms->searchListResponse();
-                
-                $count = 0;
                 
                 /** @var $mail MailRenderBase */
                 foreach($lr->getObjects() as $mail) {
                     // update Action
                     $mab->updateAction($mail['email_id'], $new_action);
                     
-                    $count++;
+                    $updateCount++;
                 }
                 
                 // next start

@@ -40,6 +40,9 @@ function doUpdate() {
 				showAlert('Error', data.message);
 			}
 			
+		},
+		error: function() {
+			showAlert('An error has occurred, please try again');
 		}
 	});
 	
