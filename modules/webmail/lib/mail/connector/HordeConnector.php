@@ -546,6 +546,32 @@ class HordeConnector extends BaseMailConnector {
         }
     }
     
+    public function moveMail($mail, $sourceFolder, $targetFolder) {
+        $uids = $this->lookupUid( $sourceFolder, $mail );
+        
+        if (count($uids) == 0) {
+            // TODO: not found
+            return false;
+        }
+        
+        $uid = $uids[0];
+        
+        $opts = array();
+        $opts['ids']  = new \Horde_Imap_Client_Ids( $uid );
+        $opts['move'] = true;
+        
+        $r = $this->client->copy( $sourceFolder, $targetFolder, $opts );
+        
+        // copy() returns array( 'old_uid' => 'new_uid' )
+        if (isset($r[$uid]) && $r[$uid]) {
+            return $r[$uid];
+        }
+        else {
+            return false;
+        }
+    }
+    
+    
     
     /**
      * poll() - checks if there's new mail

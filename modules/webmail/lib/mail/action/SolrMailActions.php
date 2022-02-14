@@ -232,10 +232,10 @@ class SolrMailActions extends MailActionsBase {
         $solrMail->getProperties()->setFolder( $if->getFolderName() );
         $solrMail->saveProperties();
         
-        $this->updateSolrFolder($solrMail->getId(), $if->getFolderName());
+        $this->updateFolder($solrMail->getId(), $if->getFolderName());
     }
     
-    public function updateSolrFolder($emailId, $folderName) {
+    public function updateFolder($emailId, $folderName) {
         // update solr
         $su = new SolrImportMail( );
         $su->setSolrUrl( WEBMAIL_SOLR );

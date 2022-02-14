@@ -231,12 +231,14 @@ class MysqlMailSearch extends MailSearchBase {
             'confidential',
             'server_properties_checksum',
             'action',
-            'mailbox_name'
+            'mailbox_name',
+            'folderName'
         ));
         
         $objs = $lr->getObjects();
         for($x=0; $x < count($objs); $x++) {
             $objs[$x]['email_id'] = $objs[$x]['solr_mail_id'];
+            $objs[$x]['mailbox_name'] = $objs[$x]['folderName'];
         }
         $lr->setObjects( $objs );
         

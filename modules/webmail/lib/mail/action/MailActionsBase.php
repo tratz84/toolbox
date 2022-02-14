@@ -224,7 +224,7 @@ abstract class MailActionsBase {
         }
         
         // moved? => update properties-file
-        if ($props->getUid() && $this->mailConnector->moveMailByUid($props->getUid(), $props->getFolder(), $if->getFolderName())) {
+        if ($this->mailConnector->moveMail($mail, $props->getFolder(), $if->getFolderName())) {
             $this->mailConnector->expunge();
             
             // moving mail is actually a copy- + delete-action. After a move
@@ -241,7 +241,7 @@ abstract class MailActionsBase {
         $mail->getProperties()->setFolder( $if->getFolderName() );
         $mail->saveProperties();
         
-        $this->updateSolrFolder($mail->getId(), $if->getFolderName());
+        $this->updateFolder($mail->getId(), $if->getFolderName());
     }
 }
 

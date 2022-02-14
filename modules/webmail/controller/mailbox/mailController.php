@@ -257,11 +257,11 @@ class mailController extends BaseController {
     
     
     public function action_move_mail() {
-        $smq = object_container_create(SolrMailQuery::class);
+        $ms = MailSearchBase::getInstance();
         
         try {
-            /** @var \webmail\solr\SolrMail $mail */
-            $mail = $smq->readById( get_var('email_id') );
+            /** @var \webmail\search\MailSearchBase $mail */
+            $mail = $ms->readById( get_var('email_id') );
             
             if (!$mail) {
                 throw new ObjectNotFoundException('Mail not found');
@@ -296,7 +296,7 @@ class mailController extends BaseController {
                 $ma->moveMail($connector, $mail, $imapFolderId);
             }
             else {
-                $ma->updateSolrFolder($mail->getId(), $newFolder);
+                $ma->updateFolder($mail->getId(), $newFolder);
             }
             
             return $this->json([
@@ -318,11 +318,11 @@ class mailController extends BaseController {
     }
     
     public function action_mail_action() {
-        $smq = object_container_create(SolrMailQuery::class);
+        $ms = MailSearchBase::getInstance();
         
         try {
-            /** @var \webmail\solr\SolrMail $mail */
-            $mail = $smq->readById( get_var('email_id') );
+            /** @var \webmail\search\MailSearchBase $mail */
+            $mail = $ms->readById( get_var('email_id') );
             
             if (!$mail) {
                 throw new ObjectNotFoundException('Mail not found');

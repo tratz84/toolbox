@@ -439,6 +439,22 @@ class ImapConnector extends BaseMailConnector {
         return $r;
     }
     
+
+    public function moveMail($mail, $sourceFolder, $targetFolder) {
+        $uids = $this->lookupUid( $sourceFolder, $mail );
+        
+        if (count($uids) == 0) {
+            // TODO: not found
+            return false;
+        }
+        
+        $f = imap_utf7_encode( $targetFolder );
+        $r = imap_mail_move($this->imap, $uids[0], $f, CP_UID);
+        
+        $this->lastError = \imap_last_error();
+        
+        return $r;
+    }
     
     public function moveMailByUid($uid, $sourceFolder, $targetFolder) {
         if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$sourceFolder))) {

@@ -251,5 +251,18 @@ class MysqlMailActions extends MailActionsBase {
         return false;
     }
     
+    public function updateFolder($emailId, $folderName) {
+        // update solr
+        $eDao = new EmailDAO();
+        $mails = $eDao->readBySolrMailId( $emailId );
+        
+        if ( count($mails) ) {
+            $emailId = $mails[0]->getEmailId();
+            $eDao->updateField( $emailId, 'folderName', $folderName );
+        }
+
+    }
+    
+    
 }
 
