@@ -15,6 +15,7 @@ use webmail\mail\MailProperties;
 use core\exception\FileException;
 use core\db\DatabaseHandler;
 use customer\model\CompanyEmailDAO;
+use webmail\search\MysqlMailSearch;
 
 
 
@@ -225,6 +226,30 @@ class MysqlMailActions extends MailActionsBase {
     }
     
     
+    /**
+     * autoMarkMessageAsReplied() - mark message as 'REPLIED'. $emlMessageId is In-Reply-To-id of imported
+     *                              mail. This function is used in modules/webmail/bin/webmail_importall.php
+     */
+    public function autoMarkMessageAsReplied($emlMessageId) {
+        if (!$emlMessageId) {
+            return false;
+        }
+        
+        // get mail by messageId
+        $ms = new MysqlMailSearch();
+        $mail = $ms->readById( $emlMessageId );
+        
+        if ($mail) {
+            // check if mail action == 'open', yes? => update to replied
+            if ($mail->getAction() == MysqlMailRender::ACTION_OPEN) {
+                $eDao = new EmailDAO();
+                $eDao->updateField( $mail->getEmail()->getEmailId(), 'action', MysqlMailRender::ACTION_REPLIED );
+                return true;
+            }
+        }
+        
+        return false;
+    }
     
 }
 

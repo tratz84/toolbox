@@ -74,7 +74,7 @@ class updateactionController extends BaseController {
                 /** @var $mail MailRenderBase */
                 foreach($lr->getObjects() as $mail) {
                     // update Action
-                    $mab->updateAction($mail->getId(), $new_action);
+                    $mab->updateAction($mail['email_id'], $new_action);
                     
                     $count++;
                 }

@@ -153,6 +153,7 @@ class MysqlImportMail extends ImportMailBase {
 //             $email->setIdentityId( ... );
 
             $email->setConnectorId( $e['connectorId'] );
+            $email->setFolderName( $e['mailboxName'] );
             $email->setConnectorImapfolderId( $this->lookupImapFolderId($e['connectorId'], $e['mailboxName']) );
             
             // build attributes
