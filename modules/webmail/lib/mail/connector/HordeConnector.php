@@ -509,8 +509,6 @@ class HordeConnector extends BaseMailConnector {
                 continue;
             }
             
-            if ($if->getFolderName() != 'Afgehandeld') continue;
-            
             if (is_cli())
                 print_info("Importing: " . $if->getFolderName());
             
