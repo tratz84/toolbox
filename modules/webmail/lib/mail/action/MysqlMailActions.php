@@ -16,6 +16,7 @@ use core\exception\FileException;
 use core\db\DatabaseHandler;
 use customer\model\CompanyEmailDAO;
 use webmail\search\MysqlMailSearch;
+use webmail\model\ConnectorImapfolderDAO;
 
 
 
@@ -259,7 +260,19 @@ class MysqlMailActions extends MailActionsBase {
         if ( count($mails) ) {
             $emailId = $mails[0]->getEmailId();
             $eDao->updateField( $emailId, 'folderName', $folderName );
+            
+            // TODO: connector_imapfolder_id
+            $connectorId = $mails[0]->getConnectorId();
+            if ($connectorId) {
+                $cifDao = new ConnectorImapfolderDAO();
+                $cif = $cifDao->lookupFolder( $connectorId, $folderName );
+                
+                if ($cif) {
+                    $eDao->updateField( $emailId, 'connector_imapfolder_id', $cif->getConnectorImapfolderId());
+                }
+            }
         }
+        
 
     }
     
@@ -273,6 +286,7 @@ class MysqlMailActions extends MailActionsBase {
         $connectorService = object_container_get(ConnectorService::class);
         
         $connector = $connectorService->readConnector($mail->getConnectorId());
+        $trash_if = null;
         if ($connector && $connector->getConnectorType() == 'imap') {
             $this->createMailConnector($connector);
             
@@ -281,7 +295,6 @@ class MysqlMailActions extends MailActionsBase {
                 
                 // get trash-folder if available
                 $trash_ifid = $connector->getTrashConnectorImapfolderId();
-                $trash_if = null;
                 if ($trash_ifid) {
                     $trash_if = $connectorService->readImapFolder($trash_ifid);
                 }
@@ -307,8 +320,16 @@ class MysqlMailActions extends MailActionsBase {
         $mp->setMarkDeleted(true);
         $mp->save();
         
-        // update solr
-        $this->updateSolrFields($mail->getId(), ['markDeleted' => true]);
+        // update db
+        $email = $mail->getEmail();
+        
+        $attrs = $email->getAttributes() | \webmail\model\Email::ATTRIBUTE_DELETED;
+        
+        $eDao = new EmailDAO();
+        $eDao->updateField( $email->getEmailId(), 'deleted', date('Y-m-d H:i:s') );
+        $eDao->updateField( $email->getEmailId(), 'attributes', $attrs );
+        if ($trash_if)
+            $eDao->updateField( $email->getEmailId(), 'folderName', $trash_if->getFolderName() );
     }
     
 }

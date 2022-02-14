@@ -77,6 +77,7 @@ class MysqlMailSearch extends MailSearchBase {
             return new ListResponse(0, 0, 0, array());
         }
         
+        $dh = DatabaseHandler::getConnection('default');
         
         $orderBy = 'order by created desc';
         
@@ -113,11 +114,8 @@ class MysqlMailSearch extends MailSearchBase {
         
         // $this->exclMailboxName
         foreach($this->exclMailboxNames as $e) {
-            $ids = $this->getConnectorImapFolderIds( $e );
-            
-            
-            if (count($ids))
-                $e_where[] = ' e.connector_imapfolder_id NOT IN ('.implode(', ', $ids) . ') ';
+            $e_where[] = ' e.folderName <> ? ';
+            $e_params[] = $e;
         }
         
         // $this->exclAction
@@ -129,10 +127,7 @@ class MysqlMailSearch extends MailSearchBase {
         // $this->getFolderName()
         $sub_where = array();
         foreach($this->mailboxNames as $n) {
-            $ids = $this->getConnectorImapFolderIds( $n );
-            
-            if (count($ids))
-                $sub_where[] = ' e.connector_imapfolder_id IN ('.implode(', ', $ids) . ') ';
+            $sub_where[] = " e.folderName = '".$dh->escape($n)."' ";
         }
         if (count($sub_where) > 0)
             $e_where[] = ' (' . implode(') OR (', $sub_where) . ') ';

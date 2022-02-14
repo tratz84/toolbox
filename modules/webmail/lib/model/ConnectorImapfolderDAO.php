@@ -21,6 +21,10 @@ class ConnectorImapfolderDAO extends \core\db\DAOObject {
 	    return $this->queryList('select * from webmail__connector_imapfolder where connector_id = ? order by foldername', array($connectorId));
 	}
 	
+	public function lookupFolder( $connectorId, $folderName ) {
+	    return $this->queryOne('select * from webmail__connector_imapfolder where connector_id = ? and foldername = ?', array($connectorId, $folderName));
+	}
+	
 	
 	public function deleteByConnector($connectorId) {
 	    return $this->query('delete from webmail__connector_imapfolder where connector_id = ?', array($connectorId));
