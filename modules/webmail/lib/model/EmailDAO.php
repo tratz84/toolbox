@@ -90,6 +90,10 @@ class EmailDAO extends \core\db\DAOObject {
 	        $qb->addWhere( QueryBuilderWhere::whereRefByVal('webmail__email.subject', 'LIKE', '%'.$opts['subject'].'%') );
 	    }
 	    
+	    if (isset($opts['text_search_empty']) && $opts['text_search_empty']) {
+	        $qb->addWhere( QueryBuilderWhere::whereRefByVal("ifnull(webmail__email.text_search, '')", '=', '') );
+	    }
+	    
 	    if (isset($opts['status']) && $opts['status']) {
 	        $qb->addWhere( QueryBuilderWhere::whereRefByVal('webmail__email.status', '=', $opts['status']) );
 	    }
