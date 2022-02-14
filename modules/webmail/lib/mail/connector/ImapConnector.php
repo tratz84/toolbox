@@ -3,11 +3,9 @@
 
 namespace webmail\mail\connector;
 
-use core\ObjectContainer;
 use webmail\mail\MailProperties;
+use webmail\mail\render\MysqlMailRender;
 use webmail\model\Connector;
-use webmail\service\ConnectorService;
-use webmail\solr\SolrMail;
 
 
 class ImapConnector extends BaseMailConnector {
@@ -154,8 +152,8 @@ class ImapConnector extends BaseMailConnector {
         }
         
         $opts = array();
-        $opts['subject']= imap_utf8( $result->subject );
-        $opts['date'] = $result->date;
+        $opts['subject']= isset($result->subject) ? imap_utf8( $result->subject ) : null;
+        $opts['date'] = isset($result->date) ? $result->date : null;
         
         return call_user_func($this->callback_itemImported, $folderName, $opts, $emlfile, $changed);
     }
@@ -254,11 +252,11 @@ class ImapConnector extends BaseMailConnector {
         if ($mp->toolboxPropertyFileExists() == false && $mp->getProperty('action') == '') {
             if (@$overview->answered && ($mp->getAction() == '' || $mp->getAction() == 'open')) {
                 // maybe also do this for ACTION_URGENT ?
-                $mp->setAction(SolrMail::ACTION_REPLIED);
+                $mp->setAction(MysqlMailRender::ACTION_REPLIED);
             } else if ($folderName == 'Sent') {
-                $mp->setAction(SolrMail::ACTION_DONE);
+                $mp->setAction(MysqlMailRender::ACTION_DONE);
             } else {
-                $mp->setAction(SolrMail::ACTION_OPEN);
+                $mp->setAction(MysqlMailRender::ACTION_OPEN);
             }
         }
         
