@@ -10,6 +10,7 @@ use webmail\service\ConnectorService;
 use webmail\storage\MailImportFactory;
 use webmail\model\EmailDAO;
 use webmail\model\EmailToDAO;
+use core\db\DatabaseHandler;
 
 
 
@@ -139,7 +140,6 @@ function webmail_import_connectors($updateOnly) {
 
 
 function refresh_email_text_search( ){
-    
     $eDao = new EmailDAO();
     /** @var \core\db\Cursor $cursor */
     $cursor = $eDao->search(array());
@@ -157,8 +157,15 @@ function refresh_email_text_search( ){
         
         $cnt++;
     }
+}
+
+function webmail_delete_connector_mail() {
+    $db = DatabaseHandler::getConnection('default');
     
+    $db->query('delete from webmail__email where connector_id is not null');
+    $db->query('delete from webmail__email_to where email_id not in (select email_id from webmail__email)');
     
+    print_cli_info( "Done" );
 }
 
 
