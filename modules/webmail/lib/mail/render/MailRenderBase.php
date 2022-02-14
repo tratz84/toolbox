@@ -96,7 +96,14 @@ abstract class MailRenderBase {
     }
     
     
-    public function getAttachments() { $this->parseMail(); return $this->attachments; }
+    public function getAttachments() {
+        $this->parseMail();
+        
+        if ($this->attachments == null)
+            return array();
+        
+        return $this->attachments;
+    }
     public function getAttachmentFile($fileno) {
         $this->parseMail();
         

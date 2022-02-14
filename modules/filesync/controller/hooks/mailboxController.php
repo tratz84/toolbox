@@ -8,15 +8,18 @@ use core\exception\InvalidStateException;
 use filesync\service\StoreService;
 use core\forms\SelectField;
 use core\exception\FileException;
+use webmail\search\MailSearchBase;
 
 class mailboxController extends BaseController {
     
     
     
     public function action_index() {
-        $smq = new SolrMailQuery();
-        /** @var \webmail\solr\SolrMail $mail */
-        $this->mail = $smq->readById(get_var('email_id') );
+        
+        $ms = MailSearchBase::getInstance();
+        
+        /** @var \webmail\mail\render\MysqlMailRender $mail */
+        $this->mail = $ms->readById( get_var('email_id') );
         
         if ($this->mail == null) {
             throw new ObjectNotFoundException('Mail not found');
@@ -55,9 +58,11 @@ class mailboxController extends BaseController {
     
     
     public function action_import() {
-        $smq = new SolrMailQuery();
-        /** @var \webmail\solr\SolrMail $mail */
-        $this->mail = $smq->readById(get_var('email_id') );
+        
+        $ms = MailSearchBase::getInstance();
+        
+        /** @var \webmail\mail\render\MysqlMailRender $mail */
+        $this->mail = $ms->readById( get_var('email_id') );
         
         if ($this->mail == null) {
             throw new ObjectNotFoundException('Mail not found');
