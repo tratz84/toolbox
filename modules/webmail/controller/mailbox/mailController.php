@@ -24,8 +24,12 @@ use webmail\mail\render\MailRenderBase;
 class mailController extends BaseController {
    
     
+    /**
+     * getMail()
+     * 
+     * @return \webmail\mail\render\MailRenderBase
+     */
     protected function getMail($id) {
-        
         $ms = MailSearchBase::getInstance();
         
         return $ms->readById( $id );
@@ -244,7 +248,7 @@ class mailController extends BaseController {
     
     
     public function action_attachment() {
-        /** @var SolrMail $mail */
+        /** @var \webmail\mail\render\MysqlMailRender $mail */
         $mail = $this->getMail( get_var('id') );
         
         $f = $mail->getAttachmentFile( get_var('no') );
@@ -395,10 +399,10 @@ class mailController extends BaseController {
     }
 
     public function action_mark_as_ham() {
-        $smq = object_container_create(SolrMailQuery::class);
+        $ms = MailSearchBase::getInstance();
         
         try {
-            $mail = $smq->readById( get_var('email_id') );
+            $mail = $ms->readById( get_var('email_id') );
             
             if (!$mail) {
                 throw new ObjectNotFoundException('Mail not found');
@@ -426,15 +430,14 @@ class mailController extends BaseController {
     }
     
     public function action_delete_mail() {
-        $smq = object_container_create(SolrMailQuery::class);
+        $ms = MailSearchBase::getInstance();
         
         try {
-            $mail = $smq->readById( get_var('email_id') );
+            $mail = $ms->readById( get_var('email_id') );
             
             if (!$mail) {
                 throw new ObjectNotFoundException('Mail not found');
             }
-            
             
             $ma = MailActionsBase::getInstance();
             $ma->deleteMail($mail);

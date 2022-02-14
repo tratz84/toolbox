@@ -288,7 +288,7 @@ class SolrMailActions extends MailActionsBase {
         return false;
     }
     
-    public function deleteMail(SolrMail $mail) {
+    public function deleteMail($mail) {
         $mp = new MailProperties($mail->getEmlFile());
         $mp->load();
         

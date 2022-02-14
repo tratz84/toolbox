@@ -427,6 +427,18 @@ class ImapConnector extends BaseMailConnector {
     }
     
     
+    public function deleteMail($mail) {
+        $folder = $mail->getMailboxName();
+        
+        $uids = $this->lookupUid($folder, $mail);
+        
+        if (count($uids) == 0) {
+            return false;
+        }
+        
+        return $this->deleteMailByUid( $folder, $uids[0] );
+    }
+    
     public function deleteMailByUid($folder, $uid) {
         if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folder))) {
             return false;

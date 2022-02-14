@@ -51,6 +51,7 @@ abstract class BaseMailConnector {
     public abstract function connect();
     public abstract function disconnect();
     
+    public abstract function deleteMail($mail);
     
     // check if there's new mail
     public function poll() { }
@@ -179,6 +180,7 @@ abstract class BaseMailConnector {
         
         return array();
     }
+    
     
 }
 

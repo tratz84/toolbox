@@ -264,5 +264,52 @@ class MysqlMailActions extends MailActionsBase {
     }
     
     
+    public function deleteMail( $mail ) {
+        $mp = $mail->getProperties();
+        $mp->load();
+        
+        // delete mail from imap-server
+        /** @var ConnectorService $connectorService */
+        $connectorService = object_container_get(ConnectorService::class);
+        
+        $connector = $connectorService->readConnector($mail->getConnectorId());
+        if ($connector && $connector->getConnectorType() == 'imap') {
+            $this->createMailConnector($connector);
+            
+            // try to connect
+            if ($this->mailConnector->isConnected() || $this->mailConnector->connect()) {
+                
+                // get trash-folder if available
+                $trash_ifid = $connector->getTrashConnectorImapfolderId();
+                $trash_if = null;
+                if ($trash_ifid) {
+                    $trash_if = $connectorService->readImapFolder($trash_ifid);
+                }
+                
+                
+                // trash-folder exists? => move message to trash
+                if ($trash_if) {
+                    $this->mailConnector->moveMail($mail, $mail->getMailboxName(), $trash_if->getFolderName());
+                }
+                // no trash-folder? => delete
+                else {
+                    $this->mailConnector->deleteMail( $mail );
+                }
+                
+                $this->mailConnector->expunge();
+                
+                $this->mailConnector->disconnect();
+            }
+        }
+        
+        
+        // mark as deleted
+        $mp->setMarkDeleted(true);
+        $mp->save();
+        
+        // update solr
+        $this->updateSolrFields($mail->getId(), ['markDeleted' => true]);
+    }
+    
 }
 

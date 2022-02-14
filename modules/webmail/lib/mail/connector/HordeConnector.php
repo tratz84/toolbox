@@ -737,6 +737,19 @@ class HordeConnector extends BaseMailConnector {
         $this->client->store( $folderName, $options );
     }
     
+    
+    public function deleteMail($mail) {
+        $folder = $mail->getMailboxName();
+        
+        $uids = $this->lookupUid($folder, $mail);
+        
+        if (count($uids) == 0) {
+            return false;
+        }
+        
+        return $this->deleteMailByUid( $folder, $uids[0] );
+    }
+    
     public function deleteMailByUid($folder, $uids) {
         if (is_array($uids) == false) {
             $uids = array($uids);
