@@ -165,6 +165,9 @@ class MysqlMailSearch extends MailSearchBase {
             
             $orderBy = ' order by ' . implode(', ', $orderByFields);
         }
+        else {
+            $orderBy = ' order by created desc';
+        }
         
         // $this->getStart()
         $limit = '';
