@@ -61,10 +61,16 @@ function mapMailActions() {
  * @param boolean $updateOnly
  */
 function webmail_import_folder($updateOnly) {
+    
+    $db = DatabaseHandler::getConnection('default');
+    $db->beginTransaction();
+    
     $mi = MailImportFactory::getImportMail();
     $mi->setUpdateMode( $updateOnly );
     
     $mi->importFolder( ctx()->getDataDir().'/webmail/inbox' );
+    
+    $db->commitTransaction();
 }
 
 /**
@@ -139,10 +145,18 @@ function webmail_import_connectors($updateOnly) {
 
 
 
-function refresh_email_text_search( ){
+function refresh_email_text_search( $updateOnly ){
     $eDao = new EmailDAO();
+    
+    $opts = array();
+    if ($updateOnly)
+        $opts['text_search_empty'] = true;
+    
     /** @var \core\db\Cursor $cursor */
-    $cursor = $eDao->search(array());
+    $cursor = $eDao->search( $opts );
+    
+    $db = DatabaseHandler::getConnection('default');
+    $db->beginTransaction();
     
     $total = $cursor->numRows();
     $cnt=1;
@@ -157,7 +171,12 @@ function refresh_email_text_search( ){
         
         $cnt++;
     }
+    
+    $db->commitTransaction();
 }
+
+
+
 
 function webmail_delete_connector_mail() {
     $db = DatabaseHandler::getConnection('default');
