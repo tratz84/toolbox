@@ -228,7 +228,8 @@ class MysqlMailSearch extends MailSearchBase {
             'action',
             'mailbox_name',
             'folderName',
-            'seen'
+            'seen',
+            'junk'
         ));
         
         $objs = $lr->getObjects();

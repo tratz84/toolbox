@@ -204,8 +204,9 @@ abstract class MailActionsBase {
         $props = $mail->getProperties();
         
         // source same as destination?
-        if ($props->getFolder() == $if->getFolderName())
+        if ($props->getFolder() == $if->getFolderName()) {
             return false;
+        }
         
         $this->createMailConnector($connector);
         

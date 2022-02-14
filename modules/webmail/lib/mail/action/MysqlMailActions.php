@@ -17,6 +17,7 @@ use core\db\DatabaseHandler;
 use customer\model\CompanyEmailDAO;
 use webmail\search\MysqlMailSearch;
 use webmail\model\ConnectorImapfolderDAO;
+use webmail\model\Email;
 
 
 
@@ -46,24 +47,35 @@ class MysqlMailActions extends MailActionsBase {
             /** @var \webmail\model\Connector $connector */
             $connector = $connectorService->readConnector( $mailProperties->getConnectorId() );
         }
+
+        
+        // EmailDAO
+        $eDao = new EmailDAO();
+        $eDao->updateField( $mail->getEmail()->getEmailId(), 'attributes', $mail->getEmail()->getAttributes() | Email::ATTRIBUTE_SPAM );
+        $this->updateFolder( $mail->getId(), 'Junk' );
         
         // connector not found? => just throw in 'Junk'
+        $mailProperties->setJunk(true);
         if (!$connector) {
             $mailProperties->setFolder('Junk');
-            $mailProperties->setJunk(true);
             $mailProperties>saveProperties();
             
-            // EmailDAO
-            $eDao = new EmailDAO();
             //...
             return ['folder' => 'Junk'];
         }
-        
+        $mailProperties->save();
         
         if ($connector->getConnectorType() == 'imap' && $connector->getJunkConnectorImapfolderId()) {
             $this->moveMail($connector, $mail, $connector->getJunkConnectorImapfolderId(), ['spam' => true]);
             
             $if = $connectorService->readImapFolder( $connector->getJunkConnectorImapfolderId() );
+            
+            if ($if) {
+                $eDao = new EmailDAO();
+                $eDao->updateField( $mail->getEmail()->getEmailId(), 'connector_imapfolder_id', $if->getConnectorImapfolderId() );
+                $eDao->updateField( $mail->getEmail()->getEmailId(), 'folderName', $if->getFolderName() );
+            }
+            
             return ['folder' => $if->getFolderName()];
         }
         
@@ -105,16 +117,23 @@ class MysqlMailActions extends MailActionsBase {
         // no imap?
         if (!$connector || in_array($connector->getConnectorType(), array('horde', 'imap')) == false)
             return;
-        
         if (!$junkImapFolder)
             return;
         
-        // message already not in junk-folder?
-        if ($junkImapFolder && $junkImapFolder->getFolderName() != $mailProperties->getFolder())
+            
+        // message not in junk-folder?
+        if ($junkImapFolder && $junkImapFolder->getFolderName() != $mailProperties->getFolder()) {
             return;
+        }
         
         // move message to INBOX
-        $this->moveMail($connector, $mail, 'INBOX');
+        $cifInbox = $connectorService->readImapfolderInbox( $connector->getConnectorId() );
+        if ($cifInbox)
+            $this->moveMail($connector, $mail, $cifInbox->getConnectorImapfolderId());
+        
+        $eDao = new EmailDAO();
+        $eDao->updateField( $mail->getEmail()->getEmailId(), 'attributes', $mail->getEmail()->getAttributes() & ~Email::ATTRIBUTE_SPAM );
+        
     }
     
     

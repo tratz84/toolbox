@@ -186,6 +186,11 @@ class ConnectorService extends ServiceBase {
     }
     
     
+    public function readImapfolderInbox( $connectorId ) {
+        $cifDao = new ConnectorImapfolderDAO();
+        return $cifDao->readByFolderName( $connectorId, 'INBOX' );
+    }
+    
     /**
      * @return ConnectorImapfolder
      */

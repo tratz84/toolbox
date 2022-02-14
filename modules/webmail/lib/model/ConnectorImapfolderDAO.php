@@ -34,6 +34,9 @@ class ConnectorImapfolderDAO extends \core\db\DAOObject {
 	    return $this->queryList('select * from webmail__connector_imapfolder order by foldername');
 	}
 	
+	public function readByFolderName( $connectorId, $folderName ) {
+	    return $this->queryOne('select * from webmail__connector_imapfolder where connector_id = ? and foldername = ?', array($connectorId, $folderName));
+	}
 	
 	public function listFolders() {
 	    $sql = "select cif.folderName, count(e.email_id) value
