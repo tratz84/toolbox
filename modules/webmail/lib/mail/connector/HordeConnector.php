@@ -529,6 +529,15 @@ class HordeConnector extends BaseMailConnector {
         
         $this->client->store( $folderName, $options );
     }
+    public function unmarkJunk($uid, $folderName) {
+        $options = [
+            'uids' => new \Horde_Imap_Client_Ids( $uid ),
+            'add' => ['NonJunk', '$NonJunk'],
+            'remove' => ['Junk', '$Junk']
+        ];
+        
+        $this->client->store( $folderName, $options );
+    }
     
     public function moveMailByUid($uid, $srcFolder, $dstFolder) {
         $opts = array();

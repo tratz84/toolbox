@@ -502,6 +502,20 @@ class ImapConnector extends BaseMailConnector {
         
         $this->lastError = \imap_last_error();
     }
+
+    public function unmarkJunk($uid, $folder) {
+        if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folder))) {
+            return false;
+        }
+        
+        imap_clearflag_full($this->imap, $uid, 'Junk', ST_UID);
+        imap_clearflag_full($this->imap, $uid, '$Junk', ST_UID);
+        
+        imap_setflag_full($this->imap, $uid, 'NonJunk', ST_UID);
+        imap_setflag_full($this->imap, $uid, '$NonJunk', ST_UID);
+        
+        $this->lastError = \imap_last_error();
+    }
     
     public function clearFlagByUid($uid, $folder, $flags) {
         if (!imap_reopen($this->imap, imap_utf7_encode($this->mailbox.$folder))) {

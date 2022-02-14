@@ -223,6 +223,13 @@ abstract class MailActionsBase {
             
             $mail->getProperties()->setJunk(true);
         }
+        // ham?
+        if (isset($opts['ham']) && $opts['ham']) {
+            $this->mailConnector->unmarkJunk($props->getUid(),   $props->getFolder());
+            
+            $mail->getProperties()->setJunk(false);
+        }
+        
         
         // moved? => update properties-file
         if ($this->mailConnector->moveMail($mail, $props->getFolder(), $if->getFolderName())) {

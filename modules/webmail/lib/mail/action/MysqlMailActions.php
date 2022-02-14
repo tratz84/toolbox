@@ -129,7 +129,7 @@ class MysqlMailActions extends MailActionsBase {
         // move message to INBOX
         $cifInbox = $connectorService->readImapfolderInbox( $connector->getConnectorId() );
         if ($cifInbox)
-            $this->moveMail($connector, $mail, $cifInbox->getConnectorImapfolderId());
+            $this->moveMail($connector, $mail, $cifInbox->getConnectorImapfolderId(), ['ham' => true]);
         
         $eDao = new EmailDAO();
         $eDao->updateField( $mail->getEmail()->getEmailId(), 'attributes', $mail->getEmail()->getAttributes() & ~Email::ATTRIBUTE_SPAM );
