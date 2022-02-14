@@ -146,6 +146,7 @@ class MysqlImportMail extends ImportMailBase {
             }
             
             $mp = new MailProperties( $e['file'] );
+            $mp->load();
 //             $email->setUserId( ... );
 //             $email->setCompanyId( ... );
 //             $email->setPersonId( ... );

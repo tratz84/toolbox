@@ -231,6 +231,13 @@ class MysqlMailSearch extends MailSearchBase {
             'mailbox_name'
         ));
         
+        $objs = $lr->getObjects();
+        for($x=0; $x < count($objs); $x++) {
+            $objs[$x]['email_id'] = $objs[$x]['solr_mail_id'];
+        }
+        $lr->setObjects( $objs );
+        
+        
         // limit set? => calculate rowcount
         if ($limit) {
             $rowCount = $eDao->queryValue("select count(*) $sql", $params );
