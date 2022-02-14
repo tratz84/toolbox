@@ -10,12 +10,12 @@
 
 namespace webmail\mail\connector;
 
+use core\exception\InvalidStateException;
+use core\exception\OutOfBoundException;
 use Horde_Imap_Client_Socket;
 use webmail\mail\MailProperties;
+use webmail\mail\render\MysqlMailRender;
 use webmail\model\Connector;
-use webmail\solr\SolrMail;
-use core\exception\OutOfBoundException;
-use core\exception\InvalidStateException;
 
 
 class HordeConnector extends BaseMailConnector {
@@ -257,11 +257,11 @@ class HordeConnector extends BaseMailConnector {
         if ($mp->toolboxPropertyFileExists() == false && $mp->getProperty('action') == '') {
             if ($mp->getAnswered() && ($mp->getAction() == '' || $mp->getAction() == 'open')) {
                 // maybe also do this for ACTION_URGENT ?
-                $mp->setAction(SolrMail::ACTION_REPLIED);
+                $mp->setAction(MysqlMailRender::ACTION_REPLIED);
             } else if ($folderName == 'Sent') {
-                $mp->setAction(SolrMail::ACTION_DONE);
+                $mp->setAction(MysqlMailRender::ACTION_DONE);
             } else {
-                $mp->setAction(SolrMail::ACTION_OPEN);
+                $mp->setAction( MysqlMailRender::ACTION_OPEN );
             }
         }
         

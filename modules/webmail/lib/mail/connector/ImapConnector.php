@@ -581,7 +581,7 @@ class ImapConnector extends BaseMailConnector {
         return imap_search($this->imap, $str, SE_UID, 'UTF-8');
     }
     
-    public function lookupUid($folder, SolrMail $solrMail) {
+    public function lookupUid($folder, $solrMail) {
         $solrMail->parseMail();
         
         if ($solrMail->getParsedMail() == null) {
