@@ -29,8 +29,9 @@ class MysqlMailSearch extends MailSearchBase {
     protected $exclMailboxNames = array();
     protected $exclActions      = array();
     
-    
     protected $mapConnectorImapFolders = null;
+    
+    protected $searchMethod = 'AND';
     
     
     public function __construct() {
@@ -181,12 +182,12 @@ class MysqlMailSearch extends MailSearchBase {
         $select_fields = "select e.*, e.created date, cif.folderName mailbox_name ";
         $sql = " from webmail__email e
                 left join webmail__connector_imapfolder cif on (cif.connector_imapfolder_id = e.connector_imapfolder_id)
-                where 1=1 ";
+                where " . ($this->searchMethod == 'AND' ? '1=1' : '0-1');
         if (count($e_where)) {
-            $sql .= ' AND ('.implode(') AND (', $e_where). ') ';
+            $sql .= ' '.$this->searchMethod.' ('.implode(') '.$this->searchMethod.' (', $e_where). ') ';
         }
         if (count($to_where)) {
-            $sql .= ' AND email_id IN (select email_id from webmail__email_to where ('.implode(') AND (', $to_where).')';
+            $sql .= ' '.$this->searchMethod.' email_id IN (select email_id from webmail__email_to where ('.implode(') '.$this->searchMethod.' (', $to_where).')  )';
         }
 //         if ($orderBy)
 //             $sql .= " $orderBy ";
@@ -358,6 +359,8 @@ class MysqlMailSearch extends MailSearchBase {
 
     public function applyMailTabSettings(MailTabSettings $mts) {
         
+        $this->searchMethod = 'OR';
+        
         // apply default filter(s)? (e-mailadresses linked to company/person)
         
         $filters = $mts->getFilters();
@@ -380,8 +383,8 @@ class MysqlMailSearch extends MailSearchBase {
                     $v = '%'.$v;
                 }
                 
-                $this->fromEmail[] = $v;
-                $this->toEmail[] = $v;
+                $this->fromEmails[] = $v;
+                $this->toEmails[] = $v;
             }
             
             if ($filter['filter_type'] == 'folder') {
@@ -407,8 +410,8 @@ class MysqlMailSearch extends MailSearchBase {
                     $v = '%'.$v;
                 }
                 
-                $this->toEmail[] = $v;
-                $this->fromEmail[] = $v;
+                $this->toEmails[] = $v;
+                $this->fromEmails[] = $v;
             }
             
             if ($filter['filter_type'] == 'folder') {
@@ -438,8 +441,8 @@ class MysqlMailSearch extends MailSearchBase {
                     $v = '%'.$v;
                 }
                 
-                $this->exclToEmail[] = $v;
-                $this->exclFromEmail[] = $v;
+                $this->exclToEmails[] = $v;
+                $this->exclFromEmails[] = $v;
             }
             
             if ($filter['filter_type'] == 'folder') {
