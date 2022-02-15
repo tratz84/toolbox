@@ -192,7 +192,7 @@ class MysqlMailSearch extends MailSearchBase {
         $select_fields = "select e.*, e.created date, cif.folderName mailbox_name ";
         $sql = " from webmail__email e
                 left join webmail__connector_imapfolder cif on (cif.connector_imapfolder_id = e.connector_imapfolder_id)
-                where " . ($this->searchMethod == 'AND' ? '1=1' : '0-1');
+                where " . ($this->searchMethod == 'AND' ? '1=1' : '0=1');
         if (count($e_where)) {
             $sql .= ' '.$this->searchMethod.' ('.implode(') '.$this->searchMethod.' (', $e_where). ') ';
         }
