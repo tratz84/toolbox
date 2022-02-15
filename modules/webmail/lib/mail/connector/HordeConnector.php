@@ -419,6 +419,7 @@ class HordeConnector extends BaseMailConnector {
         $q->imapDate();
         
         $opts = array();
+        $opts['peek'] = true;
         
         $results = $this->client->fetch( 'INBOX', $q, $opts );
         $ids = $results->ids();
