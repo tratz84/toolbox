@@ -7,6 +7,7 @@ namespace webmail\solr;
 
 use core\db\solr\SolrQueryResponse;
 use core\exception\OutOfBoundException;
+use webmail\mail\render\SolrMailRender;
 
 class SolrMailQueryResponse extends SolrQueryResponse {
     
@@ -20,7 +21,8 @@ class SolrMailQueryResponse extends SolrQueryResponse {
     
     protected function parse() {
         foreach($this->getDocuments() as $d) {
-            $mail = new SolrMail( $d );
+            $mail = new SolrMailRender( );
+            $mail->setJsonMail( $d );
             
             $this->mails[] = $mail;
         }

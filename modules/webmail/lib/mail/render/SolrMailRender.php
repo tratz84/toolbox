@@ -25,6 +25,7 @@ class SolrMailRender extends MailRenderBase {
     }
     
     public function getId() { return $this->jsonMail->id; }
+    public function getSolrMailId() { return $this->jsonMail->id; }
     public function getEmlFile() { return $this->jsonMail->file; }
     public function getEmlMessageId() { return $this->jsonMail->emlMessageId; }
     public function getEmlThreadId() { return $this->jsonMail->emlThreadId; }

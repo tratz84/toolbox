@@ -127,6 +127,7 @@ class SolrMailQuery extends SolrQuery {
             
             $mh = array();
             $mh['email_id']     = $mail->getId();
+            $mh['solr_mail_id'] = $mail->getId();
             $mh['mailbox_name'] = $mail->getMailboxName();
             $mh['subject']      = $mail->getSubject();
             $mh['date']         = $mail->getDate();

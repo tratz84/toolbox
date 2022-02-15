@@ -13,7 +13,7 @@ class MailImportFactory {
     public static function getImportMail() {
         if (webmail_storage_engine() == 'solr') {
             $si = new SolrImportMail();
-            $si->setSolrUrl( 'WEBMAIL_SOLR' );
+            $si->setSolrUrl( WEBMAIL_SOLR );
             return $si;
         }
         else {

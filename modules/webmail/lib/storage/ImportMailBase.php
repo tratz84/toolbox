@@ -67,7 +67,7 @@ class ImportMailBase {
         return $ids;
     }
     
-    public function parseEml($emlFile) {
+    public function parseEml($emlFile, $opts=array()) {
         $mp = new MailProperties($emlFile);
         $mp->load();
         
@@ -209,6 +209,10 @@ class ImportMailBase {
                 $r['recipients'][] = $a;
         }
         
+        
+        if (isset($opts['solr_import']) && $opts['solr_import']) {
+            unset( $r['recipients'] );
+        }
         
         
         unset( $p );

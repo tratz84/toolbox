@@ -139,7 +139,7 @@ class SolrMailActions extends MailActionsBase {
     }
     
     
-    public function setMailFlags(SolrMail $solrMail, $flag, $opts=array()) {
+    public function setMailFlags( $solrMail, $flag, $opts=array() ) {
         // if Connector exists, connection is imap & message is in Junk-folder? => move to inbox
         $mailProperties = $solrMail->getProperties();
         $connector = null;
@@ -179,7 +179,7 @@ class SolrMailActions extends MailActionsBase {
     
     
     
-    public function moveMail(Connector $connector, SolrMail $solrMail, $imapFolderId, $opts=array()) {
+    public function moveMail(Connector $connector, $solrMail, $imapFolderId, $opts=array()) {
         // connector inactive?
         if ($connector->getActive() == false) {
             return false;

@@ -97,7 +97,7 @@ class SolrImportMail extends ImportMailBase {
     
     
     public function queueEml($emlFile) {
-        $r = $this->parseEml( $emlFile );
+        $r = $this->parseEml( $emlFile, ['solr_import' => true] );
         
         $this->documents[] = $r;
         $this->documentCount++;
@@ -171,9 +171,6 @@ class SolrImportMail extends ImportMailBase {
         print_cli_info('SolrImportMail::purge');
         
         // print "Purging..\n";
-        for($x=0; $x < count($this->documents); $x++) {
-            unset($this->documents[$x]['recipients']);
-        }
         $r = post_url($this->solrUrl . '/update', json_encode($this->documents), array(
             'headers' => array('Content-type: application/json')
         ));

@@ -32,6 +32,18 @@ class SolrMailSearch extends MailSearchBase {
     }
     
     
+    public function setStart($s) { $this->smq->setStart( $s ); }
+    public function getStart() { return $this->smq->getStart(); }
+    
+    public function getRows() { return $this->smq->getRows(); }
+    public function setRows($r) { $this->smq->setRows( $r ); }
+    
+    public function setQuery($q) { $this->smq->setQuery( $q ); }
+    
+    public function addMailboxName($n) { $this->smq->addFacetSearch( 'mailboxName', ':', $n); }
+    public function addAction($a) { $this->smq->addFacetSearch( 'action', ':', $a); }
+    
+    
     public function searchListResponse() {
         $this->lastResponse = $this->smq->searchListResponse();
         
