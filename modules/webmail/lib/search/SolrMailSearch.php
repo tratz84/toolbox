@@ -19,6 +19,7 @@ class SolrMailSearch extends MailSearchBase {
     public function __construct() {
         parent::__construct();
         
+        $this->smq = new \webmail\solr\SolrMailQuery();
     }
     
     
@@ -141,7 +142,7 @@ class SolrMailSearch extends MailSearchBase {
                 
                 // query specific on mailbox? => skip exclusion
                 $skip = false;
-                foreach($this->getFacetQueries() as $fq) {
+                foreach($this->smq->getFacetQueries() as $fq) {
                     if (endsWith($fq, 'mailboxName:'.$v)) {
                         $skip = true;
                         break;
@@ -151,13 +152,13 @@ class SolrMailSearch extends MailSearchBase {
                 if ($skip)
                     continue;
                     
-                $this->addFacetQuery('-mailboxName:'.$v);
+                $this->smq->addFacetQuery('-mailboxName:'.$v);
             }
             
             if ($filter['filter_type'] == 'action') {
                 $v = solr_escapePhrase( trim($filter['filter_value']) );
                 
-                $this->addFacetQuery('-action:'.$v);
+                $this->smq->addFacetQuery('-action:'.$v);
             }
             
         }
@@ -165,13 +166,13 @@ class SolrMailSearch extends MailSearchBase {
         
         // append includes to current query
         if (count($qs_inc)) {
-            $query = $this->getRawQuery();
+            $query = $this->smq->getRawQuery();
             
             $q = '(' . implode(' OR ', $qs_inc) . ')';
             if ($query != '*:*') {
                 $q .= ' AND ( ' . $query . ')';
             }
-            $this->setRawQuery( $q );
+            $this->smq->setRawQuery( $q );
         }
     }
     

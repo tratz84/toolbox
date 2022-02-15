@@ -149,6 +149,8 @@ class SolrImportMail extends ImportMailBase {
             }
             
             $this->emlFilesUpdate = array();
+            
+            print_cli_info( "Document count: " . $this->documentCount );
         }
     }
     
@@ -166,15 +168,19 @@ class SolrImportMail extends ImportMailBase {
             return false;
         }
         
+        print_cli_info('SolrImportMail::purge');
+        
         // print "Purging..\n";
+        for($x=0; $x < count($this->documents); $x++) {
+            unset($this->documents[$x]['recipients']);
+        }
         $r = post_url($this->solrUrl . '/update', json_encode($this->documents), array(
             'headers' => array('Content-type: application/json')
         ));
+        
         $json = json_decode($r);
         
-        if (is_cli()) {
-            print_info("Document no: " . $this->documentCount);
-        }
+        print_cli_info("Document no: " . $this->documentCount);
         
         $this->commit($opts);
         
