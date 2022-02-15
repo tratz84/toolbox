@@ -155,6 +155,20 @@ class EmailDAO extends \core\db\DAOObject {
 	    $this->query('update webmail__email set attribute = ? where email_id = ?', array($attributes, $emailId));
 	}
 	
+	
+	public function listFolders() {
+	    $sql = "select folderName name, count(*) value
+        	    from webmail__email
+                where folderName is not null
+        	    group by folderName
+                order by folderName";
+	    
+	    $l = queryList( $this->resourceName, $sql );
+	    
+	    
+	    return $l;
+	}
+	
 
 }
 

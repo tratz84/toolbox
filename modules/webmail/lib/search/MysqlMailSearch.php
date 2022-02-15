@@ -43,9 +43,9 @@ class MysqlMailSearch extends MailSearchBase {
     
     
     public function getFolders( $opts=array() ) {
-        $cifDao = new ConnectorImapfolderDAO();
         
-        $list = $cifDao->listFolders();
+        $eDao = new EmailDAO();
+        $list = $eDao->listFolders();
         
         if (isset($opts['filter']) && is_array($opts['filter'])) {
             $filter = $opts['filter'];
