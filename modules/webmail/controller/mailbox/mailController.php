@@ -466,10 +466,10 @@ class mailController extends BaseController {
     
     
     public function action_reply() {
-        $smq = object_container_create(SolrMailQuery::class);
+        $ms = MailSearchBase::getInstance();
         
-        /** @var \webmail\solr\SolrMail $mail */
-        $mail = $smq->readById( get_var('email_id') );
+        /** @var \webmail\mail\render\MailRenderBase $mail */
+        $mail = $ms->readById( get_var('email_id') );
         
         if (!$mail) {
             throw new ObjectNotFoundException('Mail not found');
@@ -556,7 +556,7 @@ class mailController extends BaseController {
         $form->bind( $formData );
         $form->getWidget('status')->setValue(Email::STATUS_DRAFT);
         $form->getWidget('incoming')->setValue(false);
-        $form->getWidget('solr_mail_id')->setValue($mail->getId());
+        $form->getWidget('ref_mail_id')->setValue($mail->getId());
         
         
         /** @var EmailService $emailService */
@@ -568,10 +568,10 @@ class mailController extends BaseController {
     }
     
     public function action_forward() {
-        $smq = object_container_create(SolrMailQuery::class);
+        $ms = MailSearchBase::getInstance();
         
-        /** @var \webmail\solr\SolrMail $mail */
-        $mail = $smq->readById( get_var('email_id') );
+        /** @var \webmail\mail\render\MailRenderBase $mail */
+        $mail = $ms->readById( get_var('email_id') );
         
         if (!$mail) {
             throw new ObjectNotFoundException('Mail not found');
@@ -625,7 +625,7 @@ class mailController extends BaseController {
         $form->bind( $formData );
         $form->getWidget('status')->setValue(Email::STATUS_DRAFT);
         $form->getWidget('incoming')->setValue(false);
-        $form->getWidget('solr_mail_id')->setValue($mail->getId());
+        $form->getWidget('ref_mail_id')->setValue($mail->getId());
         
 
         /** @var EmailService $emailService */

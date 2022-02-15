@@ -7,13 +7,12 @@ use core\forms\HtmlField;
 use webmail\WebmailSettings;
 use webmail\form\EmailForm;
 use webmail\mail\SendMail;
-use webmail\mail\SolrMailActions;
+use webmail\mail\action\MailActionsBase;
 use webmail\model\Email;
 use webmail\model\EmailTo;
+use webmail\search\MailSearchBase;
 use webmail\service\EmailService;
-use webmail\service\EmailTemplateService;
 use webmail\solr\SolrMailQuery;
-use webmail\mail\action\MailActionsBase;
 
 class viewController extends BaseController {
     
@@ -107,10 +106,10 @@ class viewController extends BaseController {
         
         $this->emailStatus = $email->getStatus();
         
-        if ($email->getSolrMailId()) {
-            $this->form->getWidget('solr_mail_id')->setValue( $email->getSolrMailId() );
+        if ($email->getRefMailId()) {
+            $this->form->getWidget('ref_mail_id')->setValue( $email->getRefMailId() );
             $this->form->clearKeyFields();
-            $this->form->addKeyField('solr_mail_id');
+            $this->form->addKeyField('ref_mail_id');
         }
         
         $this->render();
@@ -183,14 +182,16 @@ class viewController extends BaseController {
         }
         
         // mark mail as sent on imap-server/solr
-        if ($email->getSolrMailId()) {
+        if ($email->getRefMailId()) {
             try {
-                $smq = new SolrMailQuery();
-                $solrMail = $smq->readById($email->getSolrMailId());
+                $ms = MailSearchBase::getInstance();
                 
-                if ($solrMail) {
-                    $sma = MailActionsBase::getInstance();
-                    $sma->markAsAnswered($solrMail, ['handle_reply' => true]);
+                /** @var \webmail\mail\render\MailRenderBase $mail */
+                $mail = $ms->readById( $email->getRefMailId() );
+                
+                if ($mail) {
+                    $ma = MailActionsBase::getInstance();
+                    $ma->markAsAnswered($mail, ['handle_reply' => true]);
                 }
             } catch (\Exception|\Error $ex) {
                 // mja

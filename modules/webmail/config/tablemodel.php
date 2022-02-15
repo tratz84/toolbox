@@ -109,6 +109,7 @@ $tb_email->addColumn('status',                  'varchar(16)');
 $tb_email->addColumn('created',                 'datetime');
 $tb_email->addColumn('search_id',               'bigint');
 $tb_email->addColumn('solr_mail_id',            'varchar(255)');
+$tb_email->addColumn('ref_mail_id',             'varchar(255)');
 $tb_email->addColumn('server_properties_checksum','int');
 $tb_email->addIndex('webmail__email_ibfk_1',   array('user_id'));
 $tb_email->addIndex('id_search_id',            array('search_id'));

@@ -179,6 +179,7 @@ class EmailService extends ServiceBase {
             $email->setStatus( $form->getWidgetValue('status') );
             $email->setIncoming( $form->getWidgetValue('incoming') ? true : false );
             $email->setSolrMailId( $form->getWidgetValue('solr_mail_id') );
+            $email->setRefMailId( $form->getWidgetValue('ref_mail_id') );
         }
         
         $form->fill($email, array('email_id', 'identity_id', 'customer_id', 'subject', 'text_content', 'recipients', 'company_id', 'person_id'));

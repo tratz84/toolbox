@@ -33,7 +33,7 @@ class EmailForm extends BaseForm {
         // used for new e-mails
         $this->addWidget(new InternalField('status'));
         $this->addWidget(new InternalField('incoming'));
-        $this->addWidget(new HiddenField('solr_mail_id'));
+        $this->addWidget(new HiddenField('ref_mail_id'));
         
         
         

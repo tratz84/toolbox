@@ -10,6 +10,7 @@ use core\exception\ResourceException;
 use webmail\service\ConnectorService;
 use webmail\solr\SolrMail;
 use webmail\solr\SolrMailQuery;
+use webmail\mail\action\MailActionsBase;
 
 class SendMail {
     
@@ -203,8 +204,8 @@ class SendMail {
             if ($r && $this->getIdentityId()) {
                 // call SolrMailActions::saveSendMail()
                 // might return false if imap is not configured
-                $solrMailActions = object_container_get(SolrMailActions::class);
-                $solrMailActions->saveSendMail( $this );
+                $mailActions = MailActionsBase::getInstance();
+                $mailActions->saveSendMail( $this );
             }
             
             // mail successfully sent?
