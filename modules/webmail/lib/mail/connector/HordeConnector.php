@@ -704,7 +704,7 @@ class HordeConnector extends BaseMailConnector {
         }
         
         $options = [
-            'uids' => new \Horde_Imap_Client_Ids( $uids ),
+            'ids' => new \Horde_Imap_Client_Ids( $uids ),
             'remove' => $removeFlags//['NonJunk', '$NonJunk']
         ];
         
@@ -742,7 +742,7 @@ class HordeConnector extends BaseMailConnector {
         
         
         $options = [
-            'uids' => new \Horde_Imap_Client_Ids( $uids ),
+            'ids' => new \Horde_Imap_Client_Ids( $uids ),
             'add' => $flags,//['Junk', '$Junk'],
             'remove' => $removeFlags//['NonJunk', '$NonJunk']
         ];
