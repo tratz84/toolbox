@@ -128,7 +128,7 @@ function webmail_import_connectors($updateOnly, $opts=array()) {
                 }
             });
                 
-            $ic->doImport( $c );
+            $ic->doImport( );
             
             if (isset($opts['inbox']) && $opts['inbox'])
                 $ic->importInbox();

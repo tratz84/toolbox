@@ -487,7 +487,9 @@ class HordeConnector extends BaseMailConnector {
     }
     
     
-    public function doImport(Connector $c) {
+    public function doImport() {
+        
+        $c = $this->connector;
         
         $folders = $c->getImapfolders();
         
