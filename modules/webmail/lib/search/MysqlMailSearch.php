@@ -66,6 +66,16 @@ class MysqlMailSearch extends MailSearchBase {
             });
         }
         
+        usort($list, function($f1, $f2) {
+            if ($f1['name'] == 'INBOX') {
+                return -1;
+            }
+            else if ($f2['name'] == 'INBOX') {
+                return 1;
+            }
+            
+            return strcmp( $f1['name'], $f2['name'] );
+        });
         
         
         return $list;
