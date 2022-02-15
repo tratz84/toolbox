@@ -289,7 +289,7 @@ class HordeConnector extends BaseMailConnector {
         }
         
         $q = new \Horde_Imap_Client_Fetch_Query();
-        $q->fullText();
+        $q->fullText(array('peek' => true));            // peek = true, doesnt mark message as Seen
         $q->headerText();
 //         $q->envelope();
         
