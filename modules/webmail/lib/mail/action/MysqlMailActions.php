@@ -170,6 +170,11 @@ class MysqlMailActions extends MailActionsBase {
             $mail->setChangedField('action', 'replied');
             
             $this->updateAction($mail->getId(), 'replied');
+            
+            $changedFields = $mail->getChangedFields();
+            if (isset($changedFields['mailboxName']) && $changedFields['mailboxName']) {
+                $this->updateFolder( $mail->getId(), $changedFields['mailboxName'] );
+            }
         }
         
         $mailProperties->save();
