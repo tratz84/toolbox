@@ -62,15 +62,10 @@ function mapMailActions() {
  */
 function webmail_import_folder($updateOnly) {
     
-    $db = DatabaseHandler::getConnection('default');
-    $db->beginTransaction();
-    
     $mi = MailImportFactory::getImportMail();
     $mi->setUpdateMode( $updateOnly );
     
     $mi->importFolder( ctx()->getDataDir().'/webmail/inbox' );
-    
-    $db->commitTransaction();
 }
 
 /**
