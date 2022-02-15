@@ -686,7 +686,7 @@ class HordeConnector extends BaseMailConnector {
     
     
     public function import() {
-        $items = $this->importInbox( $this->connector );
+        $this->importInbox( );
     }
    
     
