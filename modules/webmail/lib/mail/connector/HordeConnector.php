@@ -598,7 +598,7 @@ class HordeConnector extends BaseMailConnector {
         // fetch mailbox status
         $oldCheck = $this->check;
         try {
-            $this->check = $this->client->status( 'INBOX' );
+            $this->check = $this->client->status( 'INBOX', \Horde_Imap_Client::STATUS_FORCE_REFRESH | \Horde_Imap_Client::STATUS_MESSAGES );
         } catch (\Exception $ex) {
             try {
                 // disconnect after error
