@@ -440,7 +440,7 @@ class HordeConnector extends BaseMailConnector {
                 if ($emlfile) {
                     // apply filters
                     print_info("Applying filters");
-                    $result = $this->applyFilters($this->connector, $file, $fetch->getUid());
+                    $result = $this->applyFilters($this->connector, $file, $ids[$y]);
                     
                     // update propertiesName
                     $mp = new MailProperties($emlfile);
