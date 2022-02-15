@@ -119,6 +119,11 @@ class mailController extends BaseController {
         $delete_onclick = "if (confirm('Are you sure to delete this mail?')) deleteMail(".json_encode($emailId).");";
         $actionContainer->addItem('delete-mail', '<button title="'.esc_attr(t('Delete mail')).'" onclick="' . esc_attr($delete_onclick) . '"><span class="fa fa-trash delete-mail"></span></button>');
         
+        if (get_var('embedded_view')) {
+            $openMailWindow_onclick =" openMailWindow( " . json_encode( $emailId ) . "); ";
+            $actionContainer->addItem('open-mail-window', '<button onclick="' . esc_attr($openMailWindow_onclick) . '"><span class="fa fa-external-link open-mail-window"></span></button>');
+        }
+        
         
         hook_eventbus_publish($actionContainer, 'webmail', 'mailbox-mailactions');
         

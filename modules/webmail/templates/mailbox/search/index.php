@@ -385,7 +385,8 @@ function viewMail(email_id) {
 		type: 'POST',
 		url: appUrl('/?m=webmail&c=mailbox/search&a=view'),
 		data: {
-			id: email_id
+			id: email_id,
+			embedded_view: true
 		},
 		success: function(data, xhr, textStatus) {
 			setTimeout(function() {

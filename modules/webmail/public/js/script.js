@@ -125,3 +125,12 @@ function deleteMail(email_id) {
 	});
 }
 
+
+function openMailWindow( emailId ) {
+	var u = appUrl('/?m=webmail&c=mailbox/mail&a=view&id='+ emailId);
+	
+	window.open( u, '_blank' );
+}
+
+
+
