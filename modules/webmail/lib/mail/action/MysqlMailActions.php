@@ -311,17 +311,18 @@ class MysqlMailActions extends MailActionsBase {
         
         $connector = $connectorService->readConnector($mail->getConnectorId());
         $trash_if = null;
-        if ($connector && $connector->getConnectorType() == 'imap') {
+        if ($connector && ($connector->getConnectorType() == 'imap' || $connector->getConnectorType() == 'horde')) {
             $this->createMailConnector($connector);
+            
+            // get trash-folder if available
+            $trash_ifid = $connector->getTrashConnectorImapfolderId();
+            if ($trash_ifid) {
+                $trash_if = $connectorService->readImapFolder($trash_ifid);
+            }
             
             // try to connect
             if ($this->mailConnector->isConnected() || $this->mailConnector->connect()) {
                 
-                // get trash-folder if available
-                $trash_ifid = $connector->getTrashConnectorImapfolderId();
-                if ($trash_ifid) {
-                    $trash_if = $connectorService->readImapFolder($trash_ifid);
-                }
                 
                 
                 // trash-folder exists? => move message to trash
