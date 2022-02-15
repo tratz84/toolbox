@@ -343,7 +343,6 @@ class MysqlMailActions extends MailActionsBase {
         
         // mark as deleted
         $mp->setMarkDeleted(true);
-        $mp->save();
         
         // update db
         $email = $mail->getEmail();
@@ -353,8 +352,16 @@ class MysqlMailActions extends MailActionsBase {
         $eDao = new EmailDAO();
         $eDao->updateField( $email->getEmailId(), 'deleted', date('Y-m-d H:i:s') );
         $eDao->updateField( $email->getEmailId(), 'attributes', $attrs );
-        if ($trash_if)
+        if ($trash_if) {
             $eDao->updateField( $email->getEmailId(), 'folderName', $trash_if->getFolderName() );
+            $mp->setFolder( $trash_if->getFolderName() );
+        }
+        else {
+            $mp->setFolder( 'Trash' );
+        }
+        
+        
+        $mp->save();
     }
     
 }
