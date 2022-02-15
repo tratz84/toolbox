@@ -156,7 +156,7 @@ abstract class BaseMailConnector {
                 
                 if ($moveFolderActionValue) {
                     /** @var ConnectorService $connectorService */
-                    $connectorService = object_container_getget(ConnectorService::class);
+                    $connectorService = object_container_get(ConnectorService::class);
                     $f = $connectorService->readImapFolder( $moveFolderActionValue );
                     
                     // found? => move
