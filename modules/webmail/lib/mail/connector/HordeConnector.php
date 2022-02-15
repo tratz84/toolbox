@@ -644,21 +644,24 @@ class HordeConnector extends BaseMailConnector {
 
         $q = new \Horde_Imap_Client_Search_Query();
         
-        $date = $mail->getParsedMail()->getHeader('date');
-        if ($date)
-            $q->headerText('date', $date);
-        
         $messageid = $mail->getParsedMail()->getHeader('message-id');
-        if ($messageid)
+        if ($messageid) {
             $q->headerText('message-id', $messageid);
+        }
+        else {
+            $date = $mail->getParsedMail()->getHeader('date');
+            if ($date)
+                $q->headerText('date', $date);
+                
+            $subject = $mail->getParsedMail()->getHeader('subject');
+            if ($subject)
+                $q->headerText('subject', $subject);
+            
+            $from = $mail->getParsedMail()->getHeader('from');
+            if ($from)
+                $q->headerText('from', $from);
+        }
         
-        $subject = $mail->getParsedMail()->getHeader('subject');
-        if ($subject)
-            $q->headerText('subject', $subject);
-        
-        $from = $mail->getParsedMail()->getHeader('from');
-        if ($from)
-            $q->headerText('from', $from);
             
             
         $opts = array();
