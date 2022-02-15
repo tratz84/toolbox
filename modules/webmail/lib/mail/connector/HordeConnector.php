@@ -497,10 +497,10 @@ class HordeConnector extends BaseMailConnector {
         usort($folders, function($o1, $o2) use ($c) {
             if ($o1->getConnectorImapfolderId() == $c->getSentConnectorImapfolderId())
                 return 1;
-                if ($o2->getConnectorImapfolderId() == $c->getSentConnectorImapfolderId())
-                    return -1;
-                    
-                    return strcmp($o1->getFolderName(), $o2->getFolderName());
+            if ($o2->getConnectorImapfolderId() == $c->getSentConnectorImapfolderId())
+                return -1;
+            
+            return strcmp($o1->getFolderName(), $o2->getFolderName());
         });
         
         

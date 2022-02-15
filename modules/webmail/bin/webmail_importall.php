@@ -16,7 +16,9 @@
 use core\parser\ArgumentParser;
 
 if (count($argv) < 2) {
-    print "Usage: {$argv[0]} <contextname> [-u] [--skip-folder-import] [--skip-connector-import]\n";
+    print "Usage: {$argv[0]} <contextname> [-u] [--skip-folder-import] [--skip-connector-import] [--import-inbox]\n";
+    print "\t--skip-folder-import - skip re-loading webmail folder\n";
+    print "\t--import-inbox - also imports inbox\n";
     exit;
 }
 
@@ -47,6 +49,9 @@ if ($argumentParser->hasOption('skip-folder-import') == false) {
 }
 
 if ($argumentParser->hasOption('skip-connector-import') == false) {
+    $opts = array();
+    $opts['inbox'] = $argumentParser->hasOption('import-inbox');
+    
     print_info("START Connector import");
     webmail_import_connectors($updateOnly);
     print_info("DONE Connector import");

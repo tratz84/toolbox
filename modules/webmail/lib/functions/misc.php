@@ -78,7 +78,7 @@ function webmail_import_folder($updateOnly) {
  * 
  * @param boolean $updateOnly
  */
-function webmail_import_connectors($updateOnly) {
+function webmail_import_connectors($updateOnly, $opts=array()) {
     // loop through active Connectors to sync/fetch mail
     /** @var ConnectorService $connectorService */
     $connectorService = object_container_get( ConnectorService::class );
@@ -129,6 +129,10 @@ function webmail_import_connectors($updateOnly) {
             });
                 
             $ic->doImport( $c );
+            
+            if (isset($opts['inbox']) && $opts['inbox'])
+                $ic->importInbox();
+            
             $ic->disconnect();
             $ic->saveServerPropertyChecksums();
             

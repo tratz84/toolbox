@@ -131,6 +131,13 @@ class MailProperties {
             throw new FileException('No file set');
         }
         
+        $d = dirname($this->sfile);
+        if (is_dir($d) == false) {
+            if (mkdir( $d, 0755, true ) == false) {
+                throw new FileException( 'Unable to create folder ' . $d );
+            }
+        }
+        
         if ($this->serverPropertiesChanged) {
             file_put_contents($this->sfile, json_encode($this->serverProperties));
         }
