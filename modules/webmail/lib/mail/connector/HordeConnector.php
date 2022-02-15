@@ -3,6 +3,7 @@
  * HordeConnector() - imap connector through horde-classes
  * 
  * Examples @ https://github.com/wrobel/horde/blob/master/framework/Imap_Client/test/Horde/Imap/Client/test_client.php
+ * API @ https://dev.horde.org/api/master/lib/Imap_Client/
  * 
  * 
  */
@@ -522,7 +523,7 @@ class HordeConnector extends BaseMailConnector {
     
     public function markJunk($uid, $folderName) {
         $options = [
-            'uids' => new \Horde_Imap_Client_Ids( $uid ),
+            'ids' => new \Horde_Imap_Client_Ids( $uid ),
             'add' => ['Junk', '$Junk'],
             'remove' => ['NonJunk', '$NonJunk']
         ];
@@ -531,7 +532,7 @@ class HordeConnector extends BaseMailConnector {
     }
     public function unmarkJunk($uid, $folderName) {
         $options = [
-            'uids' => new \Horde_Imap_Client_Ids( $uid ),
+            'ids' => new \Horde_Imap_Client_Ids( $uid ),
             'add' => ['NonJunk', '$NonJunk'],
             'remove' => ['Junk', '$Junk']
         ];
