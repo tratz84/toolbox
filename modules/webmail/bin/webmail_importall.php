@@ -53,7 +53,7 @@ if ($argumentParser->hasOption('skip-connector-import') == false) {
     $opts['inbox'] = $argumentParser->hasOption('import-inbox');
     
     print_info("START Connector import");
-    webmail_import_connectors($updateOnly);
+    webmail_import_connectors($updateOnly, $opts);
     print_info("DONE Connector import");
 }
 
