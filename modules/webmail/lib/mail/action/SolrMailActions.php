@@ -50,7 +50,7 @@ class SolrMailActions extends MailActionsBase {
         }
         
         
-        if ($connector->getConnectorType() == 'imap' && $connector->getJunkConnectorImapfolderId()) {
+        if (in_array($connector->getConnectorType(), ['imap', 'horde']) && $connector->getJunkConnectorImapfolderId()) {
             $this->moveMail($connector, $solrMail, $connector->getJunkConnectorImapfolderId(), ['spam' => true]);
             
             $if = $connectorService->readImapFolder( $connector->getJunkConnectorImapfolderId() );
@@ -297,7 +297,7 @@ class SolrMailActions extends MailActionsBase {
         $connectorService = object_container_get(ConnectorService::class);
         
         $connector = $connectorService->readConnector($mail->getConnectorId());
-        if ($connector && $connector->getConnectorType() == 'imap') {
+        if ($connector && in_array($connector->getConnectorType(), ['imap', 'horde'])) {
             $this->createMailConnector($connector);
             
             // try to connect
