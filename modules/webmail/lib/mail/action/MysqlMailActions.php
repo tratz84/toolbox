@@ -207,7 +207,7 @@ class MysqlMailActions extends MailActionsBase {
         $eDao = new EmailDAO();
         $etDao = new EmailToDAO();
         
-        $dh = DatabaseHandler::getConnection('main');
+        $dh = DatabaseHandler::getConnection('default');
         $dh->beginTransaction();
         
         // webmail__email_to-records
