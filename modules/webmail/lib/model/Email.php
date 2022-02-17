@@ -64,6 +64,13 @@ class Email extends base\EmailBase {
         $t = '';
         $t .= format_date( $this->getCreated(), 'Y_m_d' ) . "\n";
         $t .= format_date( $this->getCreated(), 'Y_m_d' ) . "\n";
+        
+        // full month name
+        $monthNo = format_date( $this->getCreated(), 'm' );
+        $yearNo  = format_date( $this->getCreated(), 'Y' );
+        $t .= t('month.'.$monthNo) . ' ' . $yearNo . "\n";
+        $t .= t('month-short.'.$monthNo) . ' ' . $yearNo . "\n";
+        
         $t .= " " . $this->getFromName();
         $t .= " " . $this->getFromEmail();
         
