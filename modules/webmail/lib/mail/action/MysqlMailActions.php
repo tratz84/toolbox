@@ -211,7 +211,7 @@ class MysqlMailActions extends MailActionsBase {
         $dh->beginTransaction();
         
         // webmail__email_to-records
-        $etDao->query("delete
+        $dh->query("delete
                         from webmail__email_to
                         where email_id in (
                             select e.email_id
@@ -223,7 +223,7 @@ class MysqlMailActions extends MailActionsBase {
                 ", array($folderName));
         
         // webmail__email-records
-        $eDao->query("delete e
+        $dh->query("delete e
                         from webmail__email e
                         join webmail__connector_imapfolder cif on (e.connector_imapfolder_id = cif.connector_imapfolder_id)
                         where folderName=? 
