@@ -217,7 +217,7 @@ class MysqlMailActions extends MailActionsBase {
                             select e.email_id
                             from webmail__email e
                             left join webmail__connector_imapfolder cif on (e.connector_imapfolder_id = cif.connector_imapfolder_id)
-                            where folderName=?
+                            where e.folderName=?
                                 ".($connectorId?' and e.connector_id='.intval($connectorId):'')."
                         )
                 ", array($folderName));
@@ -226,7 +226,7 @@ class MysqlMailActions extends MailActionsBase {
         $dh->query("delete e
                         from webmail__email e
                         join webmail__connector_imapfolder cif on (e.connector_imapfolder_id = cif.connector_imapfolder_id)
-                        where folderName=? 
+                        where e.folderName=? 
                                 ".($connectorId?' and e.connector_id='.intval($connectorId):'')
             , array($folderName));
         
