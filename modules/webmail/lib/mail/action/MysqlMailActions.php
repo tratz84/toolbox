@@ -210,6 +210,8 @@ class MysqlMailActions extends MailActionsBase {
         $dh = DatabaseHandler::getConnection('default');
         $dh->beginTransaction();
         
+        // TODO: delet eml-files ?
+        
         // webmail__email_to-records
         $dh->query("delete
                         from webmail__email_to
