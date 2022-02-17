@@ -65,7 +65,7 @@ class MysqlMailActions extends MailActionsBase {
         }
         $mailProperties->save();
         
-        if ($connector->getConnectorType() == 'imap' && $connector->getJunkConnectorImapfolderId()) {
+        if (in_array($connector->getConnectorType(), ['imap', 'horde']) && $connector->getJunkConnectorImapfolderId()) {
             $this->moveMail($connector, $mail, $connector->getJunkConnectorImapfolderId(), ['spam' => true]);
             
             $if = $connectorService->readImapFolder( $connector->getJunkConnectorImapfolderId() );
@@ -311,7 +311,7 @@ class MysqlMailActions extends MailActionsBase {
         
         $connector = $connectorService->readConnector($mail->getConnectorId());
         $trash_if = null;
-        if ($connector && ($connector->getConnectorType() == 'imap' || $connector->getConnectorType() == 'horde')) {
+        if ($connector && in_array($connector->getConnectorType(), ['imap', 'horde'])) {
             $this->createMailConnector($connector);
             
             // get trash-folder if available
