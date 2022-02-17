@@ -1,5 +1,9 @@
 
 
+- mail logging bij versturen, tekst te lang.. zeker als er bijlages inline zijn (!)
+
+
+
 - widget outbox
 -- settings what to show => Draft + Sent ? of just Draft..
 

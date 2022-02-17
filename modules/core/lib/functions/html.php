@@ -9,6 +9,10 @@ use core\template\HtmlScriptLoader;
 use core\security\AuthorizationCheck;
 use core\exception\AuthorizationException;
 
+function unesc_html($str) {
+    return html_entity_decode($str, ENT_HTML401, 'UTF-8');
+}
+
 function esc_html($str) {
     return htmlentities($str, ENT_COMPAT, 'UTF-8');
 }
@@ -476,5 +480,19 @@ function parse_shortcode($str) {
     }
     
     return $params;
+}
+
+
+function html2text( $html, $opts=array() ) {
+    $hp = new \core\parser\HtmlParser();
+    $hp->loadString( $html );
+    $hp->parse();
+    $txt = trim( $hp->getBodyText() );
+    
+    if (isset($opts['maxlen']) && strlen($txt) > $opts['maxlen']) {
+        $txt = substr($txt, 0, $opts['maxlen']);
+    }
+    
+    return $txt;
 }
 

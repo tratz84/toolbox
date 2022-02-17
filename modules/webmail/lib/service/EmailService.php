@@ -224,7 +224,11 @@ class EmailService extends ServiceBase {
         
         $email->updateTextSearch();
         
-        ActivityUtil::logActivity($email->getCompanyId(), $email->getPersonId(), 'webmail__email', $email->getEmailId(), 'email-sent', 'E-mail verstuurd: '.$email->getSubject(), null, $email->getFields());
+        $fields = $email->getFields();
+        $fields['text_content'] = html2text( $fields['text_content'], 30000 );
+        unset( $fields['text_search'] );
+        
+        ActivityUtil::logActivity($email->getCompanyId(), $email->getPersonId(), 'webmail__email', $email->getEmailId(), 'email-sent', 'E-mail verstuurd: '.$email->getSubject(), null, $fields);
     }
     
     
@@ -302,7 +306,10 @@ class EmailService extends ServiceBase {
             $this->addFile($email->getEmailId(), $file['filename'], $file['data']);
         }
         
-        ActivityUtil::logActivity($email->getCompanyId(), $email->getPersonId(), 'webmail__email', $email->getEmailId(), 'email-created', 'E-mail aangemaakt: '.$email->getSubject(), null, $email->getFields());
+        $fields = $email->getFields();
+        $fields['text_content'] = html2text( $fields['text_content'], 30000 );
+        
+        ActivityUtil::logActivity($email->getCompanyId(), $email->getPersonId(), 'webmail__email', $email->getEmailId(), 'email-created', 'E-mail aangemaakt: '.$email->getSubject(), null, $fields);
     }
     
     public function addFileByPath($emailId, $filename, $tmpFilePath) {
