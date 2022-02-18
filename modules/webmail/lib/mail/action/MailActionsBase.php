@@ -160,7 +160,7 @@ abstract class MailActionsBase {
             $connector = $connectorService->readConnector( $mailProperties->getConnectorId() );
         }
         
-        if (!$connector || in_array($connector->getConnectorType(), array('imap', 'horde')) == false || $connector->getActive() == false)
+        if (!$connector || $connector->getActive() == false)
             return;
         
         // mark mail as answered
