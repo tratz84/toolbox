@@ -19,9 +19,10 @@ class CronSettingsForm extends \core\forms\CodegenBaseForm {
 		
 		$w1 = new \core\forms\NumberField('cron_daily_start_hour', NULL, t('Start hour'));
 		$this->addWidget( $w1 );
-		$w1->setInfoText( t('Hour after daily-cron is run') );
+		$w1->setInfoText( t('Hour daily-cron is started') );
 		
 	}
+
 
 
 }
