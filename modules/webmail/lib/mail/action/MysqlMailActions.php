@@ -207,32 +207,35 @@ class MysqlMailActions extends MailActionsBase {
         $eDao = new EmailDAO();
         $etDao = new EmailToDAO();
         
-        $dh = DatabaseHandler::getConnection('default');
-        $dh->beginTransaction();
-        
-        // TODO: delet eml-files ?
-        
-        // webmail__email_to-records
-        $dh->query("delete
-                        from webmail__email_to
-                        where email_id in (
-                            select e.email_id
+        // delete mail
+        $pageSize = 50;
+        do {
+            $mails = $eDao->queryList("select *
                             from webmail__email e
-                            left join webmail__connector_imapfolder cif on (e.connector_imapfolder_id = cif.connector_imapfolder_id)
+                            join webmail__connector_imapfolder cif on (e.connector_imapfolder_id = cif.connector_imapfolder_id)
                             where e.folderName=?
-                                ".($connectorId?' and e.connector_id='.intval($connectorId):'')."
-                        )
-                ", array($folderName));
-        
-        // webmail__email-records
-        $dh->query("delete e
-                        from webmail__email e
-                        join webmail__connector_imapfolder cif on (e.connector_imapfolder_id = cif.connector_imapfolder_id)
-                        where e.folderName=? 
-                                ".($connectorId?' and e.connector_id='.intval($connectorId):'')
-            , array($folderName));
-        
-        $dh->commitTransaction();
+                                    ".($connectorId?' and e.connector_id='.intval($connectorId):'')."
+                        limit ".$pageSize
+                , array($folderName));
+            
+            foreach($mails as $m) {
+                // delete eml file
+                $emlfile = $m->getSolrMailId();
+                if ($emlfile) {
+                    $emlfile = get_data_file( $emlfile );
+                    if ($emlfile) {
+                        unlink( $emlfile );
+                        unlink( $emlfile . '.tbproperties' );
+                        unlink( $emlfile . '.sproperties' );
+                    }
+                }
+                
+                // delete webmail__email record
+                $m->delete();
+                $etDao->deleteByEmail( $m->getEmailId() );
+            }
+            
+        } while ( count($mails) >= $pageSize );
         
     }
 
