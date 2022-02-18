@@ -331,6 +331,10 @@ class FormGenerator {
                 $html .= $varname.'->setValue( '.to_php_string($item->data->defaultValue).' );' . PHP_EOL;
             }
             
+            if (@$item->data->{'hide-when-empty'}) {
+                $html .= $varname."->setOption('hide-when-empty', true);" . PHP_EOL;
+            }
+            
             if (isset($item->children) && count($item->children)) {
                 $html .= "\n";
                 $html .= $this->addJsonItems($item->children, $varname);
