@@ -8,8 +8,9 @@ use base\service\SettingsService;
  *
  */
 
-if (count($argv) != 2) {
-    print "Usage: {$argv[0]} <contextname>\n";
+if (count($argv) < 2) {
+    print "Usage: {$argv[0]} <contextname> [-e]\n";
+    print "       -e - exit after run\n";
     exit;
 }
 
@@ -25,6 +26,8 @@ $lastCronRun = null;
 $settingsService = object_container_get( SettingsService::class );
 $modules_sig = $settingsService->enabledModulesSignature();
 
+
+$argumentParser = new \core\parser\ArgumentParser( $argv );
 
 
 $startedProcesses = array();
@@ -160,6 +163,11 @@ while ( true ) {
         
         // log exception to db
         log_exception( $ex, ['admin_notification' => true] );
+    }
+    
+    if ($argumentParser->hasOption('e')) {
+        print_info("Done");
+        break;
     }
     
     sleep(30);
