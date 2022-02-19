@@ -31,8 +31,14 @@ class modelController extends BaseController {
     	            $tblname = substr($tblname, strpos($tblname, '.')+1);
     	        }
     	        
-    	        $schema = substr($tblname, 0, strpos($tblname, '__'));
-    	        $tbl    = substr($tblname, strpos($tblname, '__')+2);
+    	        if (strpos($tblname, '__') !== false) {
+    	           $schema = substr($tblname, 0, strpos($tblname, '__'));
+    	           $tbl    = substr($tblname, strpos($tblname, '__')+2);
+    	        }
+    	        else {
+    	            $schema = '';
+    	            $tbl = $tblname;
+    	        }
     	        
     	        
     	        $var = '$tb_'.$slug;
