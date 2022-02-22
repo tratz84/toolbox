@@ -21,14 +21,24 @@ hook_eventbus_subscribe('webmail', 'mailbox-mailactions', function($actionContai
     $email = $ms->readById( $emailId );
     ini_set('error_reporting', E_ALL);
     
+    // mail not found?
+    if (!$email)
+        return;
+    
     $attachmentCount = 0;
-    if ($email && $email->getAttachments())
-        $attachmentCount = count($email->getAttachments());
+    
+    $emlViewer = $email->getEmlViewer();
+    $pas = $emlViewer->getParserAttachments();
+    
+    
+    if (count($pas))
+        $attachmentCount = count( $pas );
     for($x=0; $x < $attachmentCount; $x++) {
         
-        $att = $email->getAttachmentFile( $x );
-        if ($att['contentType'] == 'text/calendar') {
-            $svp = new SabreVEventParser( $att['content'] );
+        $att = $pas[$x];
+        
+        if ($att->getContentType() == 'text/calendar') {
+            $svp = new SabreVEventParser( $att->getContent() );
             
             if ($svp->getEventCount()) {
                 $dtstart = $svp->getEventProperty(0, 'DTSTART');
