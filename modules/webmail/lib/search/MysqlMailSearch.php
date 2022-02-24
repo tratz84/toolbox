@@ -240,13 +240,15 @@ class MysqlMailSearch extends MailSearchBase {
             'mailbox_name',
             'folderName',
             'seen',
-            'junk'
+            'junk',
+            'attachment_count'
         ));
         
         $objs = $lr->getObjects();
         for($x=0; $x < count($objs); $x++) {
             $objs[$x]['email_id'] = $objs[$x]['solr_mail_id'];
             $objs[$x]['mailbox_name'] = $objs[$x]['folderName'];
+            $objs[$x]['has_file_attachments'] = $objs[$x]['attachment_count'] > 0 ? true : false;
         }
         $lr->setObjects( $objs );
         

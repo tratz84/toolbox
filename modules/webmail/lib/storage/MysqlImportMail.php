@@ -194,6 +194,7 @@ class MysqlImportMail extends ImportMailBase {
             $email->setConfidential( false );
             $email->setServerPropertiesChecksum( $e['server_properties_checksum'] );
             $email->setFolderName( $mp->getFolder() );
+            $email->setAttachmentCount( $e['attachmentCount'] );
             
             $isNew = $email->isNew();
             $email->save();
