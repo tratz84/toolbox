@@ -124,23 +124,16 @@ class MysqlImportMail extends ImportMailBase {
             return false;
         }
         
-        $mailIds = array();
-        foreach($this->documents as $e) {
-            $mailIds[] = $e['id'];
-        }
         $eDao = new EmailDAO();
-        $emails = $eDao->readBySolrMailId( $mailIds );
-        $mapEmails = array();
-        foreach( $emails as $e ) {
-            $mapEmails[$e->getSolrMailId()] = $e;
-        }
         
         foreach($this->documents as $e) {
             $email = null;
-            if (isset($mapEmails[ $e['id'] ])) {
-                $email = $mapEmails[ $e['id'] ];
-            }
-            else {
+            
+            $emails = $eDao->readBySolrMailId( $e['id'] );
+            if (count($emails))
+                $email = $emails[0];
+            
+            if ($email == null) {
                 $email = new Email();
                 $email->setIncoming( true );
             }
