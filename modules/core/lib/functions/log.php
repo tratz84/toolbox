@@ -69,7 +69,11 @@ function log_to_filesystem($fullpath, $message) {
 }
 
 function print_info($str) {
-    print '[' . ctx()->getContextName() . '][' . date('Y-m-d H:i:s') . '] ' . $str . "\n";
+    $contextName = ctx()->getContextName();
+    if (!$contextName)
+        $contextName = 'master';
+    
+    print '[' . $contextName . '][' . date('Y-m-d H:i:s') . '] ' . $str . "\n";
 }
 
 function print_cli_info($str) {
