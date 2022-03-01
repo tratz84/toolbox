@@ -599,7 +599,7 @@ class HordeConnector extends BaseMailConnector {
         // fetch mailbox status
         $oldCheck = $this->check;
         try {
-            $this->check = $this->client->status( 'INBOX', \Horde_Imap_Client::STATUS_FORCE_REFRESH | \Horde_Imap_Client::STATUS_MESSAGES );
+            $this->check = $this->client->status( 'INBOX', \Horde_Imap_Client::STATUS_FORCE_REFRESH | \Horde_Imap_Client::STATUS_MESSAGES | \Horde_Imap_Client::STATUS_UIDNEXT );
         } catch (\Exception $ex) {
             try {
                 // disconnect after error
@@ -618,8 +618,13 @@ class HordeConnector extends BaseMailConnector {
             $checkMailbox = true;
         }
         // ..nd-run? => compare with previous response
-        if (is_array($oldCheck) && is_array($this->check) && $oldCheck['messages'] != $this->check['messages']) {
-            $checkMailbox = true;
+        else if (is_array($oldCheck) && is_array($this->check)) {
+            if ($oldCheck['messages'] != $this->check['messages']) {
+                $checkMailbox = true;
+            }
+            else if ($oldCheck['uidnext'] != $this->check['uidnext']) {
+                $checkMailbox = true;
+            }
         }
         
         if ($checkMailbox)
