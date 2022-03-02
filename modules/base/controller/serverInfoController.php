@@ -16,6 +16,10 @@ class serverInfoController extends BaseController {
         // base info
         $this->sic->addInfo('Php version', PHP_VERSION);
         $this->sic->addInfo('Operating system', php_uname());
+        
+        if (isset($_SERVER['SERVER_SOFTWARE']))
+            $this->sic->addInfo('Server software', $_SERVER['SERVER_SOFTWARE']);
+        
         $this->sic->addInfo('https', isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] ? t('Yes') : t('No'));
         $this->sic->addInfo('Memory limit', ini_get('memory_limit'));
         $this->sic->addInfo('Max execution time (Time limit)', ini_get('max_execution_time'));
