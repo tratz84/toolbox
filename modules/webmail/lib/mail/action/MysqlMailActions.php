@@ -358,7 +358,7 @@ class MysqlMailActions extends MailActionsBase {
         $eDao->updateFieldBySolrMailId( $email->getSolrMailId(), 'deleted', date('Y-m-d H:i:s') );
         $eDao->updateFieldBySolrMailId( $email->getSolrMailId(), 'attributes', $attrs );
         if ($trash_if) {
-            $eDao->updateField( $email->getEmailId(), 'folderName', $trash_if->getFolderName() );
+            $eDao->updateFieldBySolrMailId( $email->getSolrMailId(), 'folderName', $trash_if->getFolderName() );
             $mp->setFolder( $trash_if->getFolderName() );
         }
         else {
