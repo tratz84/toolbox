@@ -146,6 +146,23 @@ class EmailDAO extends \core\db\DAOObject {
 	    return $this->queryList( $sql, $ids );
 	}
 	
+	public function updateFieldBySolrMailId( $solrMailId, $field, $value ) {
+	    
+	    $obj = new $this->objectName();
+	    $tableName = $obj->getTableName();
+	    $pk = $obj->getPrimaryKey();
+	    
+	    // validate field (prevent sql injection..)
+	    if (!$obj->hasDatabaseField($field))
+	        return false;
+	        
+        if ($value === null) {
+            return $this->query("update `{$tableName}` set `{$field}` = NULL where `solr_mail_id` = ?", array($solrMailId));
+        } else {
+            return $this->query("update `{$tableName}` set `{$field}` = ? where `solr_mail_id` = ?", array($value, $solrMailId));
+        }
+	}
+	
 	
 	public function updateActionBySolrMailId( $solrMailId, $action ) {
 	    $this->query('update webmail__email set action = ? where solr_mail_id = ?', array($action, $solrMailId));

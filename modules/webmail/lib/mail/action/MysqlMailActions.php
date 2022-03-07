@@ -355,8 +355,8 @@ class MysqlMailActions extends MailActionsBase {
         $attrs = $email->getAttributes() | \webmail\model\Email::ATTRIBUTE_DELETED;
         
         $eDao = new EmailDAO();
-        $eDao->updateField( $email->getEmailId(), 'deleted', date('Y-m-d H:i:s') );
-        $eDao->updateField( $email->getEmailId(), 'attributes', $attrs );
+        $eDao->updateFieldBySolrMailId( $email->getSolrMailId(), 'deleted', date('Y-m-d H:i:s') );
+        $eDao->updateFieldBySolrMailId( $email->getSolrMailId(), 'attributes', $attrs );
         if ($trash_if) {
             $eDao->updateField( $email->getEmailId(), 'folderName', $trash_if->getFolderName() );
             $mp->setFolder( $trash_if->getFolderName() );
