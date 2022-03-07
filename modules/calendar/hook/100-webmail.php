@@ -47,13 +47,17 @@ hook_eventbus_subscribe('webmail', 'mailbox-mailactions', function($actionContai
                 
                 $attrStart = '';
                 if ($dtstart) {
-                    $dt = new DateTime($dtstart, new DateTimeZone(date_default_timezone_get()));
+                    $dt = new DateTime( $dtstart );
+                    // set timezone to current timezone AFTER parsing
+                    $dt->setTimezone( new DateTimeZone(date_default_timezone_get()) );
                     $attrStart = $dt->format('Y-m-d H:i:s');
                 }
                 
                 $attrEnd = '';
                 if ($dtend) {
-                    $dt = new DateTime($dtend, new DateTimeZone(date_default_timezone_get()));
+                    $dt = new DateTime( $dtend );
+                    // set timezone to current timezone AFTER parsing
+                    $dt->setTimezone( new DateTimeZone(date_default_timezone_get()) );
                     $attrEnd = $dt->format('Y-m-d H:i:s');
                 }
                 
