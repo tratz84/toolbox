@@ -71,6 +71,10 @@ class MysqlMailRender extends MailRenderBase {
     public function isJunk() {
         return $this->email->getAttributes() & \webmail\model\Email::ATTRIBUTE_SPAM? true : false;
     }
+    public function getForwarded() { return $this->isForwarded(); }
+    public function isForwarded() {
+        return $this->email->getAttributes() & \webmail\model\Email::ATTRIBUTE_FORWARDED? true : false;
+    }
     
     public function hasFileAttachments() {
         return $this->email->getAttachmentCount();

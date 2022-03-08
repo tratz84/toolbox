@@ -241,6 +241,7 @@ class MysqlMailSearch extends MailSearchBase {
             'folderName',
             'seen',
             'answered',
+            'forwarded',
             'junk',
             'attachment_count'
         ));
