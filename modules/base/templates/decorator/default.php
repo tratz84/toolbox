@@ -106,10 +106,13 @@ $menuItems = $ms->listMainMenu();
         <div class="notifications-bar">
             <div class="notifications-right">
                 <span class="current-user"><?= $context->getUser() ?></span>
+                
+                <span class="action-items">
             	<?php if (DEBUG) : ?>
                 <a href="javascript:void(0);" onclick="show_debug_info();" class="fa fa-bug" title="Debug info"></a>
                 <?php endif; ?>
                 <a href="<?= appUrl('/?m=base&c=auth&a=logoff') ?>" class="fa fa-sign-out" title="Afmelden"></a>
+                </span>
             </div>
             <div class="administration-name">
 	            <a href="javascript:void(0);" class="nav-side-menu-toggle fa fa-bars" onclick="navSideMenu_toggle();"></a>
