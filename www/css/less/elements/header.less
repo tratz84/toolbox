@@ -18,15 +18,32 @@ header {
 
 	/* notifications bar */
 	.notifications-bar {
-		padding: 5px 10px 5px 0px;
+		padding: 0px;
 		font-size: 16px;
 		width: 100%;
 		background-color: #f00;
 		
 		 a { color: #fff; font-size: 18px; }
-		.administration-name .administration-name a { margin-left: 8px; }
+		> .administration-name {
+			padding: 5px 0 5px;
+			.administration-name a { margin-left: 8px; }
+		}
 		a:hover { text-decoration: none; }
-		.current-user { margin-right: 15px; font-size: 18px; color: #fff; }
+		.current-user {
+			padding: 5px 0;
+			display: block;
+			float: left;
+			margin-right: 15px; font-size: 18px; color: #fff;
+		}
+		.action-items {
+			float: right;
+			a {
+				float: left;
+				display: block;
+				padding: 10px 10px 8px;
+				border-left: 1px solid rgba(0.5, 128, 128, 128);
+			}
+		}
 		.notifications-right {
 			float: right;
 		}
