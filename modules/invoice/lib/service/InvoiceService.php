@@ -266,9 +266,10 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
         $iDao->delete($id);
 
         $f = new InvoiceForm();
-        $changes = $f->changes($invoice);
+        $f->bind( $invoice );
+        $fch = FormChangesHtml::formDeleted( $f );
 
-        ActivityUtil::logActivity($invoice->getCompanyId(), $invoice->getPersonId(), 'invoice__invoice', $invoice->getInvoiceId(), 'invoice-deleted', strOrder(1).' verwijderd '.$invoice->getInvoiceNumberText(), null, $changes);
+        ActivityUtil::logActivity($invoice->getCompanyId(), $invoice->getPersonId(), 'invoice__invoice', $invoice->getInvoiceId(), 'invoice-deleted', strOrder(1).' verwijderd '.$invoice->getInvoiceNumberText(), $fch->getHtml());
     }
 
 
@@ -608,15 +609,26 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
 
     public function saveToBill(ToBillForm $form) {
         $id = $form->getWidgetValue('to_bill_id');
+        $oldForm = null;
+        
         if ($id) {
             $tobill = $this->readToBill($id);
+            
+            $oldForm = new ToBillForm();
+            $oldForm->bind( $tobill );
         } else {
             $tobill = new ToBill();
         }
 
         $isNew = $tobill->isNew();
 
-        $changes = $form->changes($tobill);
+        if ($isNew) {
+            $fch = FormChangesHtml::formNew( $form );
+        }
+        else {
+            $fch = FormChangesHtml::formChanged( $oldForm, $form );
+        }
+        
 
         $form->fill($tobill, array('to_bill_id', 'customer_id', 'type', 'firstname', 'insert_lastname', 'lastname', 'short_description', 'long_description', 'paid', 'amount', 'price'));
 
@@ -625,9 +637,9 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
         }
 
         if ($isNew) {
-            ActivityUtil::logActivity($tobill->getCompanyId(), $tobill->getPersonId(), 'to_bill', $tobill->getToBillId(), 'to-bill-created', 'Billable aangemaakt', null, $changes);
+            ActivityUtil::logActivity($tobill->getCompanyId(), $tobill->getPersonId(), 'to_bill', $tobill->getToBillId(), 'to-bill-created', 'Billable aangemaakt', $fch->getHtml());
         } else {
-            ActivityUtil::logActivity($tobill->getCompanyId(), $tobill->getPersonId(), 'to_bill', $tobill->getToBillId(), 'to-bill-changed', 'Billable aangepast', null, $changes);
+            ActivityUtil::logActivity($tobill->getCompanyId(), $tobill->getPersonId(), 'to_bill', $tobill->getToBillId(), 'to-bill-changed', 'Billable aangepast', $fch->getHtml());
         }
     }
 
@@ -639,12 +651,14 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
         }
 
         $form = new ToBillForm();
-        $changes = $form->changes($tobill);
+        $form->bind( $tobill );
+        
+        $fch = FormChangesHtml::formDeleted( $form );
 
         $tbDao = new ToBillDAO();
         $tbDao->delete($toBillId);
 
-        ActivityUtil::logActivity($tobill->getCompanyId(), $tobill->getPersonId(), 'to_bill', $tobill->getToBillId(), 'to-bill-deleted', 'Billable verwijderd', null, $changes);
+        ActivityUtil::logActivity($tobill->getCompanyId(), $tobill->getPersonId(), 'to_bill', $tobill->getToBillId(), 'to-bill-deleted', 'Billable verwijderd', $fch->getHtml());
     }
     
     
