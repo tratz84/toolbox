@@ -111,7 +111,7 @@ $menuItems = $ms->listMainMenu();
             	<?php if (DEBUG) : ?>
                 <a href="javascript:void(0);" onclick="show_debug_info();" class="fa fa-bug" title="Debug info"></a>
                 <?php endif; ?>
-                <a href="<?= appUrl('/?m=base&c=auth&a=logoff') ?>" class="fa fa-sign-out" title="Afmelden"></a>
+                <a href="<?= appUrl('/?m=base&c=auth&a=logoff') ?>" onclick="return confirm('Weet je zeker dat je je wilt afmelden?');" class="fa fa-sign-out" title="Afmelden"></a>
                 </span>
             </div>
             <div class="administration-name">
