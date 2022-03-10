@@ -319,14 +319,13 @@ function handleFormActions(actionsContainer) {
 		node.lefw = lefw;
 	});
 	
-	$(window).on('popup-container-created', function(evt, el) {
-		handleFormActions( el );
-	});
-
-	
 	$(window).trigger('form-actions-set');
 }
 
+// call handleFormActions when show_popup() is called
+$(window).on('popup-container-created', function(evt, el) {
+	handleFormActions( el );
+});
 
 
 function ListEditFormWidget(container) {
