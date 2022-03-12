@@ -143,13 +143,13 @@ class EmailService extends ServiceBase {
     }
     
     
-    public function readEmailBySolrMailId( $mailId, $opts=array() ) {
+    public function readEmailByRefMailId( $mailId, $opts=array() ) {
         // invalid mail id? maybe throw exception?
         if (trim($mailId) == '')
             return array();
         
         $eDao = new EmailDAO();
-        $mails = $eDao->readBySolrMailId( $mailId );
+        $mails = $eDao->readByRefMailId( $mailId );
         
         $r = array();
         for($x=0; $x < count($mails); $x++) {

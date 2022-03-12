@@ -478,7 +478,7 @@ class mailController extends BaseController {
         
         /** @var EmailService $emailService */
         $emailService = object_container_get(EmailService::class);
-        $m = $emailService->readEmailBySolrMailId( $mail->getId(), ['draft_only' => true] );
+        $m = $emailService->readEmailByRefMailId( $mail->getId(), ['draft_only' => true] );
         if (count($m) > 0) {
             report_user_message( t('Existing draft loaded') );
             redirect('/?m=webmail&c=view&id='.$m[0]->getEmailId());

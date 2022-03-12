@@ -126,6 +126,28 @@ class EmailDAO extends \core\db\DAOObject {
 	}
 	
 	
+	public function readByRefMailId( $ids ) {
+	    if (is_string($ids)) {
+	        $ids = array( $ids );
+	    }
+	    
+	    if (count($ids) == 0) {
+	        return array();
+	    }
+	    
+	    $sql = "select * from webmail__email where ref_mail_id in (";
+	    for($x=0; $x < count($ids); $x++) {
+	        if ($x > 0)
+	            $sql .= ', ';
+	            $sql .= '? ';
+	    }
+	    $sql .= ')';
+	    
+	    return $this->queryList( $sql, $ids );
+	}
+	
+	
+	
 	public function readBySolrMailId( $ids ) {
 	    if (is_string($ids)) {
 	        $ids = array( $ids );
