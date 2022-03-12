@@ -209,11 +209,11 @@ class MysqlMailSearch extends MailSearchBase {
                 $sqlWhere .= $this->searchMethod;
             $sqlWhere .= " ( $w ) ";
         }
-        if (count($where) > 1)
+        if (count($where) > 0)
             $sqlWhere = " ( $sqlWhere ) AND ";
         
         // connector-received-mails only
-        $sqlWhere .= " e.connector_id IS NULL ";
+        $sqlWhere .= " e.connector_id IS NOT NULL ";
         $sql .= $sqlWhere;
         
         
