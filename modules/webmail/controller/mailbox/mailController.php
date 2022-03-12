@@ -475,6 +475,17 @@ class mailController extends BaseController {
             throw new ObjectNotFoundException('Mail not found');
         }
         
+        
+        /** @var EmailService $emailService */
+        $emailService = object_container_get(EmailService::class);
+        $m = $emailService->readEmailBySolrMailId( $mail->getId(), ['draft_only' => true] );
+        if (count($m) > 0) {
+            report_user_message( t('Existing draft loaded') );
+            redirect('/?m=webmail&c=view&id='.$m[0]->getEmailId());
+        }
+        
+        
+        
         $formData = array();
         
         
@@ -559,8 +570,6 @@ class mailController extends BaseController {
         $form->getWidget('ref_mail_id')->setValue($mail->getId());
         
         
-        /** @var EmailService $emailService */
-        $emailService = object_container_get(EmailService::class);
         $email = $emailService->saveEmail($form);
         
         report_user_message(t('E-mail created'));

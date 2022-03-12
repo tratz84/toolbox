@@ -141,6 +141,32 @@ class EmailService extends ServiceBase {
         
         return $email;
     }
+    
+    
+    public function readEmailBySolrMailId( $mailId, $opts=array() ) {
+        // invalid mail id? maybe throw exception?
+        if (trim($mailId) == '')
+            return array();
+        
+        $eDao = new EmailDAO();
+        $mails = $eDao->readBySolrMailId( $mailId );
+        
+        $r = array();
+        for($x=0; $x < count($mails); $x++) {
+            // draft only? & current mail is not a draft? => skip
+            if (isset_value( $opts['draft_only'], false ) && $mails[$x]->getStatus() != Email::STATUS_DRAFT)
+                continue;
+            
+            // read mail with all props
+            $e = $this->readEmail( $mails[$x]->getEmailId() );
+            
+            $r[] = $e;
+        }
+        
+        return $r;
+    }
+    
+    
 
     public function saveEmailObject( $email, $attachments=array() ) {
         
