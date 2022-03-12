@@ -192,13 +192,33 @@ class MysqlMailSearch extends MailSearchBase {
         $select_fields = "select e.*, e.created date, cif.folderName mailbox_name ";
         $sql = " from webmail__email e
                 left join webmail__connector_imapfolder cif on (cif.connector_imapfolder_id = e.connector_imapfolder_id)
-                where " . ($this->searchMethod == 'AND' ? '1=1' : '0=1');
+                where ";
+        
+        $where = array();
         if (count($e_where)) {
-            $sql .= ' '.$this->searchMethod.' ('.implode(') '.$this->searchMethod.' (', $e_where). ') ';
+            $where[] = '(' . implode(') '.$this->searchMethod.' (', $e_where) . ') ';
         }
         if (count($to_where)) {
-            $sql .= ' '.$this->searchMethod.' email_id IN (select email_id from webmail__email_to where ('.implode(') '.$this->searchMethod.' (', $to_where).')  )';
+            $where[] = ' email_id IN (select email_id from webmail__email_to where ('.implode(') '.$this->searchMethod.' (', $to_where).')  )';
         }
+        
+        // build where
+        $sqlWhere = "";
+        foreach($where as $w) {
+            if ($sqlWhere != '')
+                $sqlWhere .= $this->searchMethod;
+            $sqlWhere .= " ( $w ) ";
+        }
+        if (count($where) > 1)
+            $sqlWhere = " ( $sqlWhere ) AND ";
+        
+        // connector-received-mails only
+        $sqlWhere .= " e.connector_id IS NULL ";
+        $sql .= $sqlWhere;
+        
+        
+        
+        
 //         if ($orderBy)
 //             $sql .= " $orderBy ";
 //         $sql .= $limit;
