@@ -14,7 +14,7 @@ class IpSettingIndexTable extends IndexTable {
         parent::__construct();
         
         $this->setContainerId('is-container');
-        $this->autoSetItVariable('it_is');
+        $this->autoSetItVariable( );
         
         
         $this->setColumn('sort', [
