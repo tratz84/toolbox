@@ -99,8 +99,19 @@ abstract class MailRenderBase {
     public function getAttachments() {
         $this->parseMail();
         
-        if ($this->attachments == null)
-            return array();
+        $patts = $this->emlViewer->getParserAttachments();
+        
+        $files = array();
+        foreach($patts as $p) {
+            $f = array();
+            $f['filename']    = $p->getFilename();
+            $f['contentType'] = $p->getContentType();
+//             $f['content']     = $p->getContent();
+            $files[] = $f;
+        }
+        
+        return $files;
+        
         
         return $this->attachments;
     }
