@@ -61,7 +61,10 @@ class MysqlMailSearch extends MailSearchBase {
         }
         
         if (isset($opts['noempty']) && $opts['noempty']) {
-            $list = array_filter($list, function($folderName) {
+            $list = array_filter($list, function($folderName) use ($opts) {
+                if (isset_value($opts['show_inbox'], false) && $folderName['value'] == 'INBOX')
+                    return true;
+                
                 return $folderName['value'] > 0 ? true : false;
             });
         }
