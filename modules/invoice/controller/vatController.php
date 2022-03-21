@@ -45,9 +45,10 @@ class vatController extends BaseController {
             $vatForm->bind($_REQUEST);
             
             if ($vatForm->validate()) {
-                $invoiceService->saveVat($vatForm);
+                $vat = $invoiceService->saveVat($vatForm);
                 
-                redirect('/?m=invoice&c=vat');
+                report_user_message( t('Changes saved') );
+                redirect('/?m=invoice&c=vat&a=edit&id='.$vat->getVatId());
             }
             
         }
