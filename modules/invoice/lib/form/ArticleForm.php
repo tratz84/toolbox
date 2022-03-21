@@ -67,13 +67,7 @@ class ArticleForm extends BaseForm {
     
     
     protected function addVat() {
-        $invoiceService = ObjectContainer::getInstance()->get(InvoiceService::class);
-        
-        $vats = $invoiceService->readActiveVatTarifs();
-        $map = array();
-        foreach($vats as $v) {
-            $map[$v->getVatId()] = $v->getDescription();
-        }
+        $map = map_active_vat_tarifs();
         
         $this->addWidget( new SelectField('vat_id', '', $map, 'Btw') );
     }

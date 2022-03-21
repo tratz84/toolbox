@@ -1,6 +1,5 @@
 <?php
 
-
 use customer\forms\CompanyForm;
 use base\model\Menu;
 use core\Context;
@@ -15,6 +14,9 @@ use invoice\model\Invoice;
 use invoice\model\Offer;
 use invoice\service\InvoiceService;
 use invoice\service\OfferService;
+
+require_once __DIR__.'/lib/functions/misc.php';
+
 
 Context::getInstance()->enableModule('invoice');
 
