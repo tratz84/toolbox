@@ -1586,6 +1586,23 @@ function next_month(date, no) {
 	return format_date( calcDate );
 }
 
+function previous_week(date, no) {
+	return next_month( date, no*-1 );
+}
+function next_week(date, no) {
+	if (typeof date == 'string') {
+		date = str2date( date );
+	}
+
+	var calcDate = new Date( date.getFullYear(), date.getMonth() + no, 15, 12 );
+	
+	var calcDate = new Date( date.getFullYear(), date.getMonth(), date.getDate()+(7*no), 12 );
+
+	return format_date( calcDate );
+}
+
+
+
 function days_in_month( date ) { 
 	return new Date(date.getFullYear(), date.getMonth()+1, 0, 12).getDate(); 
 }
