@@ -180,6 +180,13 @@ class GeneratorHelper {
         );
         $formWidgets[] = array(
             'type' => 'widget',
+            'class' => \core\forms\PercentageField::class,
+            //             'editor' => \codegen\form\widgetoptions\NumberOptionsForm::class,
+            'label' => 'Percentage field'
+        );
+        
+        $formWidgets[] = array(
+            'type' => 'widget',
             'class' => TextField::class,
             'editor' => \codegen\form\widgetoptions\TextFieldOptionsForm::class,
             'label' => 'Textfield'
