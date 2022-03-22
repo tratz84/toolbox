@@ -127,6 +127,12 @@ class MysqlConnection extends DBConnection {
      * @param int $timeout - in seconds
      */
     public function getLock( $name, $timeout = 3600 ) {
+        if (strlen($name) > 64) {
+            // https://dev.mysql.com/doc/refman/5.7/en/locking-functions.html
+            // MySQL 5.7 and later enforces a maximum length on lock names of 64 characters. Previously, no limit was enforced.
+            throw new DatabaseException( 'Maximum lock length is 64-characters' );
+        }
+        
         $l = $this->queryValue('select get_lock( ?, '.intval($timeout).')', array($name));
         
         if ($l) {
