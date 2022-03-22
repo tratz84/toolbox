@@ -127,7 +127,7 @@ class MysqlImportMail extends ImportMailBase {
         
         $eDao = new EmailDAO();
         
-        $con = DatabaseHandler::getResource('default');
+        $con = DatabaseHandler::getConnection('default');
         
         
         foreach($this->documents as $e) {
