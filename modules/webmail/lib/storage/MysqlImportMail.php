@@ -133,7 +133,8 @@ class MysqlImportMail extends ImportMailBase {
         foreach($this->documents as $e) {
             $email = null;
             
-            $lockName = ctx()->getContextName() . '-' . $e['id'];
+            // max length = 64-chars
+            $lockName = substr( ctx()->getContextName() . '-' . md5($e['id']), 0, 64 );
             $con->getLock( $lockName, 30 );
             
             $emails = $eDao->readBySolrMailId( $e['id'] );
