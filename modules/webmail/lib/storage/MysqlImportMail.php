@@ -11,6 +11,7 @@ use webmail\model\EmailDAO;
 use core\exception\NotImplementedException;
 use webmail\model\Email;
 use webmail\model\EmailTo;
+use core\db\DatabaseHandler;
 
 
 class MysqlImportMail extends ImportMailBase {
@@ -126,8 +127,14 @@ class MysqlImportMail extends ImportMailBase {
         
         $eDao = new EmailDAO();
         
+        $con = DatabaseHandler::getResource('default');
+        
+        
         foreach($this->documents as $e) {
             $email = null;
+            
+            $lockName = ctx()->getContextName() . '-' . $e['id'];
+            $con->getLock( $lockName, 30 );
             
             $emails = $eDao->readBySolrMailId( $e['id'] );
             if (count($emails))
@@ -191,6 +198,9 @@ class MysqlImportMail extends ImportMailBase {
             
             $isNew = $email->isNew();
             $email->save();
+            
+            $con->releaseLock( $lockName );
+            
             
             // new only, recipients never change
             if ($isNew) {
