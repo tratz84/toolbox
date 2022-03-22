@@ -135,6 +135,8 @@ class MysqlImportMail extends ImportMailBase {
             
             // max length = 64-chars
             $lockName = substr( ctx()->getContextName() . '-' . md5($e['id']), 0, 64 );
+            
+            // getLock, inbox-monitor & sync-script might run at the same time
             $con->getLock( $lockName, 30 );
             
             $emails = $eDao->readBySolrMailId( $e['id'] );
