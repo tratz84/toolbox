@@ -136,6 +136,20 @@ class MysqlConnection extends DBConnection {
         return $l;
     }
     
+    public function releaseLock( $name ) {
+        $r = $this->queryValue('select release_lock(?)', array($name));
+        
+        // remove lock
+        $this->dbLocks = array_filter($this->dbLocks, function($l) use($name) {
+            if ($l == $name)
+                return false;
+            else
+                return true;
+        });
+        
+        return $r;
+    }
+    
     public function releaseLocks() {
         if ($this->transactionCount > 0) {
             return;
