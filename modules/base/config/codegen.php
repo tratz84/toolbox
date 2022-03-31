@@ -26,107 +26,47 @@ return array (
     4 => 
     array (
       'resource_name' => 'default',
-      'table_name' => 'base__menu',
+      'table_name' => 'base__lock',
     ),
     5 => 
     array (
       'resource_name' => 'default',
-      'table_name' => 'base__multiuser_lock',
+      'table_name' => 'base__menu',
     ),
     6 => 
     array (
       'resource_name' => 'default',
-      'table_name' => 'base__object_meta',
+      'table_name' => 'base__multiuser_lock',
     ),
     7 => 
     array (
       'resource_name' => 'default',
-      'table_name' => 'base__reset_password',
+      'table_name' => 'base__object_meta',
     ),
     8 => 
     array (
       'resource_name' => 'default',
-      'table_name' => 'base__setting',
+      'table_name' => 'base__reset_password',
     ),
     9 => 
     array (
       'resource_name' => 'default',
-      'table_name' => 'base__user',
+      'table_name' => 'base__setting',
     ),
     10 => 
     array (
       'resource_name' => 'default',
-      'table_name' => 'base__user_capability',
+      'table_name' => 'base__user',
     ),
     11 => 
     array (
       'resource_name' => 'default',
-      'table_name' => 'base__user_ip',
+      'table_name' => 'base__user_capability',
     ),
     12 => 
     array (
       'resource_name' => 'default',
-      'table_name' => 'customer__address',
-    ),
-    13 => 
-    array (
-      'resource_name' => 'default',
-      'table_name' => 'customer__company',
-    ),
-    14 => 
-    array (
-      'resource_name' => 'default',
-      'table_name' => 'customer__company_address',
-    ),
-    15 => 
-    array (
-      'resource_name' => 'default',
-      'table_name' => 'customer__company_email',
-    ),
-    16 => 
-    array (
-      'resource_name' => 'default',
-      'table_name' => 'customer__company_phone',
-    ),
-    17 => 
-    array (
-      'resource_name' => 'default',
-      'table_name' => 'customer__company_type',
-    ),
-    18 => 
-    array (
-      'resource_name' => 'default',
-      'table_name' => 'customer__country',
-    ),
-    19 => 
-    array (
-      'resource_name' => 'default',
-      'table_name' => 'customer__email',
-    ),
-    20 => 
-    array (
-      'resource_name' => 'default',
-      'table_name' => 'customer__person',
-    ),
-    21 => 
-    array (
-      'resource_name' => 'default',
-      'table_name' => 'customer__person_address',
-    ),
-    22 => 
-    array (
-      'resource_name' => 'default',
-      'table_name' => 'customer__person_email',
-    ),
-    23 => 
-    array (
-      'resource_name' => 'default',
-      'table_name' => 'customer__person_phone',
-    ),
-    24 => 
-    array (
-      'resource_name' => 'default',
-      'table_name' => 'customer__phone',
+      'table_name' => 'base__user_ip',
     ),
   ),
 );

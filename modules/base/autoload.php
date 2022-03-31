@@ -5,6 +5,7 @@ require_once dirname(__FILE__).'/lib/functions/misc.php';
 require_once dirname(__FILE__).'/lib/functions/user.php';
 require_once dirname(__FILE__).'/lib/functions/object_meta.php';
 require_once dirname(__FILE__).'/lib/functions/object_lock.php';
+require_once dirname(__FILE__).'/lib/functions/tb_lock.php';
 
 
 use core\Context;
@@ -15,7 +16,7 @@ use core\event\PeopleEvent;
 
 Context::getInstance()->enableModule('base');
 
-module_update_handler('base', '20211109');
+module_update_handler('base', '20220331');
 
 hook_loader(__DIR__.'/hook');
 

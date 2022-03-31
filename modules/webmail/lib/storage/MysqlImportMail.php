@@ -127,8 +127,6 @@ class MysqlImportMail extends ImportMailBase {
         
         $eDao = new EmailDAO();
         
-        $con = DatabaseHandler::getConnection('default');
-        
         
         foreach($this->documents as $e) {
             $email = null;
@@ -137,7 +135,7 @@ class MysqlImportMail extends ImportMailBase {
             $lockName = substr( ctx()->getContextName() . '-' . md5($e['id']), 0, 64 );
             
             // getLock, inbox-monitor & sync-script might run at the same time
-            if ($con->getLock( $lockName, 30 ) == false) {
+            if ( tb_lock_time( $lockName, 30, 3 ) == false ) {
                 continue;
             }
             
@@ -204,7 +202,7 @@ class MysqlImportMail extends ImportMailBase {
             $isNew = $email->isNew();
             $email->save();
             
-            $con->releaseLock( $lockName );
+            tb_release_lock( $lockName );
             
             
             // new only, recipients never change
