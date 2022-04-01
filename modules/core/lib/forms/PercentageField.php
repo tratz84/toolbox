@@ -24,6 +24,7 @@ class PercentageField extends BaseWidget {
         $html = '';
         
         $extraClass = $this->hasError() ? 'error' : '';
+        $extraClass .= ' widget-'.slugify($this->getName());
         
         $html .= '<div class="widget text-field-widget '.$extraClass.'">';
         $html .= '<label>'.esc_html($this->getLabel()).'</label>';
