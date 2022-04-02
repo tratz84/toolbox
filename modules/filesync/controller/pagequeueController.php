@@ -142,6 +142,8 @@ class pagequeueController extends BaseController {
     }
     
     public function action_pdf_generate() {
+        set_time_limit( 600 );
+        
         $pagequeueService = $this->oc->get(PagequeueService::class);
         
         $pqIds = explode(',', $_REQUEST['ids']);
