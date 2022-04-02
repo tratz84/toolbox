@@ -180,6 +180,8 @@ function generate_pdf(opts) {
 		return;
 	}
 
+	showPageLoading();
+
 	formpost('/?m=filesync&c=pagequeue&a=pdf_generate', {
 		ids: pqIds.join(','),
 		delete_files: opts.delete_files?1:0
