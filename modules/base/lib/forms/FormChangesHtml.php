@@ -12,6 +12,7 @@ use core\forms\SelectField;
 use core\forms\WidgetContainer;
 use core\forms\CheckboxField;
 use core\forms\HtmlField;
+use core\forms\PasswordField;
 
 class FormChangesHtml
 {
@@ -80,6 +81,9 @@ class FormChangesHtml
                 continue;
             if (is_a($w, HtmlField::class))
                 continue;
+            if (is_a($w, PasswordField::class))
+                continue;
+            
             
             if ($w->getLabel() == '')
                 continue;
@@ -428,6 +432,8 @@ class FormChangesHtml
         $html .= '<tbody>';
         foreach ($widgets as $w) {
             if (is_a($w, ListWidget::class))
+                continue;
+            if (is_a($w, PasswordField::class))
                 continue;
             
             if ($w->getLabel() == '')
