@@ -228,6 +228,10 @@ class EmlViewer {
                         $el->removeAttribute($attributeName);
                     }
                 }
+                else if ($el->nodeName == 'a' && $attributeName == 'href' && $val->nodeValue) {
+                    if (strpos($val->nodeValue, '://') === false && strpos($val->nodeValue, '//') !== 0)
+                        $val->nodeValue = '//'.$val->nodeValue;
+                }
                 // remove all not-allowed attrs
                 else if (in_array($attributeName, $allowedAttributes) == false) {
                     $el->removeAttribute($attributeName);
