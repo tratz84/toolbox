@@ -90,6 +90,7 @@ function decimalCount($fNumber)
 
 function strtodouble($str)
 {
+    if ($str == null) $str = '';
     $str = trim($str);
 
     if (strpos($str, ',') !== false && strpos($str, '.') !== false) { // zowel komma's als punten ? => duizendtallen weghalen

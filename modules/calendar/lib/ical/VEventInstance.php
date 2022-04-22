@@ -34,7 +34,7 @@ class VEventInstance {
     public function getStartDateFormat($f='d-m-Y') { return format_date($this->startDate, $f); }
 
     public function setStartTime($time) {
-        if (preg_match('/^\\d{2}:\\d{2}:\\d{2}$/', $time))
+        if ($time && preg_match('/^\\d{2}:\\d{2}:\\d{2}$/', $time))
             $time = substr($time, 0, 5);
         $this->startTime = $time;
     }
@@ -44,7 +44,7 @@ class VEventInstance {
     public function getEndDate() { return $this->endDate; }
     
     public function setEndTime($time) {
-        if (preg_match('/^\\d{2}:\\d{2}:\\d{2}$/', $time))
+        if ($time && preg_match('/^\\d{2}:\\d{2}:\\d{2}$/', $time))
             $time = substr($time, 0, 5);
         $this->endTime = $time;
     }

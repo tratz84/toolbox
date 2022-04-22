@@ -896,6 +896,9 @@ function date2unix($input)
 
 
 function format_date($str, $format='d-m-Y', $defaultVal='') {
+    
+    if (!$str)
+        return $defaultVal;
 
     if (strpos($str, 'Y-m') !== false || strpos($str, 'm-Y') !== false || $str == 'Ymd') {
         if (is_debug()) {
