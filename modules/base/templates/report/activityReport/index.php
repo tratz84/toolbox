@@ -1,9 +1,10 @@
 
 
-
+<?php /*
 <?= infopopup('Onderstaand overzicht benodigd technische kennis om volledig te begrijpen') ?>
 
 <br/><br/>
+*/ ?>
 
 <div id="activityreport-table-container"></div>
 

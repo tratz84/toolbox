@@ -83,6 +83,9 @@ class ImportMailBase {
         
         // use cleanup_string(), else solr might not accept document. In that case, the whole document-batch is rejected!
         $r['emlMessageId'] = cleanup_string( $p->getHeader('Message-ID') );
+        if (strlen($r['emlMessageId']) > 255)
+            $r['emlMessageId'] = substr($r['emlMessageId'], 0, 255);
+        
         $r['emlThreadId'] = cleanup_string( $p->getHeader('Thread-Index') );
         $r['refMessageId'] = $this->buildRefMessageIds( $p );
         $this->lastInReplyTo = $p->getHeader('In-Reply-To');

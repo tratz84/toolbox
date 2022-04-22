@@ -38,7 +38,16 @@ foreach($lessFiles as $lf) {
     $cmd = $cmd . ' -x ' . $lf;
 
     print "Executing command: {$cmd}\n";
-    $css .= `$cmd`;
+    $result_code = null;
+    $output = null;
+    exec( $cmd, $output, $result_code );
+    
+    // check result code
+    if ($result_code !== 0) {
+        throw new \core\exception\InvalidStateException( 'Invalid result code lessc: '.$result_code );
+    }
+    
+    $css .= $output[0];
     $css .= "\n\n";
 }
 
