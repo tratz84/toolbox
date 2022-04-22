@@ -42,7 +42,7 @@ if (is_post()) {
     		<img src="<?= BASE_HREF ?>images/itxplain-logo.png" style="max-width: 80%;" />
     
     		<br/><br/><br/><br/>
-    		Ga naar uw administratie, https://<?= $_SERVER['HTTP_HOST'] ?>/<input type="text" id="code" name="code" value="<?= htmlentities(@$_REQUEST['code'], ENT_COMPAT, 'UTF-8') ?>" /><input type="submit" value="&gt;" />
+    		Ga naar uw administratie, https://<?= $_SERVER['HTTP_HOST'] ?>/<input type="text" id="code" name="code" value="<?= isset($_REQUEST['code']) ? htmlentities(@$_REQUEST['code'], ENT_COMPAT, 'UTF-8') : '' ?>" /><input type="submit" value="&gt;" />
     		<?php if (isset($msg)) : ?>
     		<div style="color: #f00; font-style: italic; "><?= $msg ?></div>
     		<?php endif; ?>
