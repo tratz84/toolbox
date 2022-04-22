@@ -188,9 +188,12 @@ class MysqlConnection extends DBConnection {
                 // check if param is available
                 if (count($params) < $markCount+1)
                     throw new \core\exception\QueryException("Invalid ratio marks(?)/params");
-                    
-                    $str .= "'".$dbh->real_escape_string($params[$markCount])."'";
-                    $markCount++;
+
+                $paramValue = $params[$markCount];
+                if ($paramValue !== null)
+                    $paramValue = $dbh->real_escape_string( $paramValue );
+                $str .= "'".$paramValue."'";
+                $markCount++;
             } else {
                 $str .= $sql[$x];
             }

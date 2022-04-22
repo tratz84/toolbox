@@ -2,6 +2,9 @@
 
 function format_price($amount, $include_currency_sign = true, $opts=array())
 {
+    if ($amount === null)
+        $amount = '';
+    
     if (is_double($amount) == false)
         $amount = strtodouble(trim($amount));
 
