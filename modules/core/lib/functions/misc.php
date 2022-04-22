@@ -810,6 +810,10 @@ function lookupModuleFile($pathInModule) {
 
 function date2unix($input)
 {
+    if ($input === null) {
+        return null;
+    }
+    
     $input = trim($input);
 
     if (strpos($input, '/Date(') !== false) {
