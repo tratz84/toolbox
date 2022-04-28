@@ -157,7 +157,7 @@ class MysqlMailSearch extends MailSearchBase {
         
         
         // $this->getQuery
-        $q = trim($this->getQuery());
+        $q = $this->getQuery() === null ? '' : trim($this->getQuery());
         if ($q && $q != '*:*') {
             $q = DatabaseHandler::getConnection('default')->escape( $q );
             

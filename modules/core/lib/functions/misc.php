@@ -1240,10 +1240,10 @@ function valid_datetime($str) {
 }
 
 function valid_time($str) {
-    if (preg_match('/^\\d\\d:\\d\\d:\\d\\d$/', $str)) {
+    if ($str && preg_match('/^\\d\\d:\\d\\d:\\d\\d$/', $str)) {
         return true;
     }
-    if (preg_match('/^\\d\\d:\\d\\d$/', $str)) {
+    if ($str && preg_match('/^\\d\\d:\\d\\d$/', $str)) {
         return true;
     }
     

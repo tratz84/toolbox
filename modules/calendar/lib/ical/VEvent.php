@@ -345,8 +345,9 @@ class VEvent extends VEventInstance {
             
             
             // set by month / day-name & position (1-4 or -1)
-            if ($this->byMonth && $this->byDay && isset($this->daysToNum[$this->byDay])) {
+            else if ($this->byMonth && $this->byDay && isset($this->daysToNum[$this->byDay])) {
                 
+                // pos, 1=first weekday, 2=second.., 3=thirth.. 4=fourth, -1=last monday(or other) of $this->byMonth
                 $pos = in_array((int)$this->bySetPos, array(1, 2, 3, 4, -1)) ? (int)$this->bySetPos : 1;
                 
                 $dayNo = $this->daysToNum[$this->byDay];
@@ -358,7 +359,7 @@ class VEvent extends VEventInstance {
                         $dt->modify('-1 day');
                     }
                 } else {
-                    $dt->setDate($dt->format('Y'), $this->byMonth, $this->byMonthDay);
+                    $dt->setDate($dt->format('Y'), $this->byMonth, 1);
                     
                     $cnt = 0;
                     if ($dt->format('N') == $dayNo)
