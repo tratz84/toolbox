@@ -58,7 +58,7 @@ class RadioField extends BaseWidget {
         
         
         $html .= '<div class="widget radio-field-widget '.$extraClass.'">';
-        $html .= '<label class="radio-field-label">'.esc_html($this->getLabel()).'</label>';
+        $html .= '<label class="radio-field-label">'.esc_html($this->getLabel()).infopopup($this->getInfoText()).'</label>';
         
         $html .= '<span class="radio-options-container">';
         foreach($this->optionItems as $key => $val) {
