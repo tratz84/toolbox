@@ -197,7 +197,7 @@ class WidgetContainer extends BaseWidget {
                     $columnType = $obj->getColumnType( $f );
     
                     // set empty strings with type int to NULL
-                    if ($columnType && strpos($columnType, 'int') === 0 && $val === '') {
+                    if (($columnType !== null && strpos($columnType, 'int') === 0) && $val === '') {
                         $val = null;
                     }
                     
