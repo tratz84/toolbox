@@ -18,6 +18,7 @@ class FileField extends BaseWidget {
     }
     
     public function setValue($value) {
+        if ($value === null) $value = '';
         parent::setValue( trim($value) );
     }
     

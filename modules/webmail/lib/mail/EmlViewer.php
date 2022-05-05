@@ -229,7 +229,7 @@ class EmlViewer {
                     }
                 }
                 else if ($el->nodeName == 'a' && $attributeName == 'href' && $val->nodeValue) {
-                    if (strpos($val->nodeValue, '://') === false && strpos($val->nodeValue, '//') !== 0)
+                    if (strpos($val->nodeValue, '//') !== 0 && preg_match('/^(http|https|tel|mailto|ftp|sftp):/i', $val->nodeValue) == false)
                         $val->nodeValue = '//'.$val->nodeValue;
                 }
                 // remove all not-allowed attrs
