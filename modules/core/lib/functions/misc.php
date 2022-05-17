@@ -931,6 +931,56 @@ function date2number($date) {
 }
 
 
+function dayname2number( $name ) {
+    // already number given?
+    if (is_numeric($name) && $name >= 1 && $name <= 7) {
+        return $name;
+    }
+    
+    $name = strtolower($name);
+    
+    switch( $name ) {
+        case 'monday' :
+        case 'maandag' :
+        case 'ma' :
+        case 'mo' :
+            return 1;
+        case 'tuesday' :
+        case 'dinsdag' :
+        case 'di' :
+        case 'tu' :
+            return 2;
+        case 'wednesday' :
+        case 'woensdag' :
+        case 'wo' :
+        case 'we' :
+            return 3;
+        case 'thursday' :
+        case 'donderdag' :
+        case 'do' :
+        case 'th' :
+            return 4;
+        case 'friday' :
+        case 'vrijdag' :
+        case 'vr' :
+        case 'fr' :
+            return 5;
+        case 'saturday' :
+        case 'zaterdag' :
+        case 'za' :
+        case 'sa' :
+            return 6;
+        case 'sunday' :
+        case 'zondag' :
+        case 'zo' :
+        case 'su' :
+            return 7;
+    }
+    
+    return -1;
+}
+
+
 function format_datetime($str, $format='d-m-Y H:i:s', $defaultVal='') {
     
     if (valid_datetime($str)) {
