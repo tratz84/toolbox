@@ -1389,6 +1389,9 @@ function timediff_minuts($start, $end) {
 
 
 function slugify($str) {
+    // nothing to slugify? :)
+    if ($str == null)
+        return '';
     
     $str = lcfirst($str);
     $str = str_replace(['[', ']'], '-', $str);

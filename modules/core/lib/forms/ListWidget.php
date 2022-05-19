@@ -34,6 +34,11 @@ class ListWidget extends WidgetContainer {
     }
     
     protected function retrieveObjects($obj) {
+        // methodObjectList-param not set?
+        if ($this->methodObjectList == null) {
+            return array();
+        }
+        
         $get_func = 'get'.ucfirst($this->methodObjectList);
         
         $objects = array();
