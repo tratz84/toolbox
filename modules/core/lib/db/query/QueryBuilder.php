@@ -205,6 +205,11 @@ abstract class QueryBuilder {
     }
     
     public function setOrderBy($o, $filterField=true) {
+        if ($o === null) {
+            $this->orderBy = null;
+            return $this;
+        }
+        
         // accept limited characters
         if ($filterField && preg_match('/[^a-zA-Z0-9_\\.` \\(\\),]/', $o)) {
             throw new QueryException('Invalid order-by value: '.$o);
