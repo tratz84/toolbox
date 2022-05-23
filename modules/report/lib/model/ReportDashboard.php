@@ -35,5 +35,11 @@ class ReportDashboard extends base\ReportDashboardBase {
         return $d;
 	}
 	
+	public function getFormClasses() {
+	    $d = $this->getSetting( 'form_classes', array() );
+	    
+	    return $d;
+	}
+	
 }
 

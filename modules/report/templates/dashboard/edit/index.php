@@ -40,38 +40,82 @@
 
 <script type="text/javascript">
 
-
-
 var dash = null;
 var dwc = <?= json_encode($dwc) ?>;
 
 $(document).ready(function() {
 	
-	dash = new Dashboard( '#grid-report', dwc );
-
-
 	$('.form-report-dashboard-form').on('submit', function(evt) {
-		
-		var data = {};
-		
+		// get grid_data
+		var grid_data = {};
 		for(var x=0; x < dash.getGrid().grid.nodes.length; x++) {
 			var item = dash.getGrid().grid.nodes[x];
 			
 			var widgetCode = $(item.el).data('widgetCode');
 			
-			data[widgetCode] = {};
-			data[widgetCode]['x']      = item.x;
-			data[widgetCode]['y']      = item.y;
-			data[widgetCode]['width']  = item.width;
-			data[widgetCode]['height'] = item.height;
+			grid_data[widgetCode] = {};
+			grid_data[widgetCode]['x']      = item.x;
+			grid_data[widgetCode]['y']      = item.y;
+			grid_data[widgetCode]['width']  = item.width;
+			grid_data[widgetCode]['height'] = item.height;
 		}
 
-		$('[name=grid_data]').val( JSON.stringify( data ) );
+		// form-class order
+		var form_classes = [];
+		$('ul.report-forms li').each(function(index, node) {
+			form_classes.push( $(node).data('formClass') );
+		});
+		
+
+		var settings = {};
+		settings['grid_data'] = grid_data;
+		settings['form_classes'] = form_classes;
+
+		$('[name=settings]').val( JSON.stringify( settings ) );
 		
 // 		evt.preventDefault();
 	});
+
+
+	var formClasses = <?= json_encode($formClasses) ?>;
+	$('.widget-container-forms span.value').append('<ul class="report-forms" />');
+	for(var formClass in formClasses) {
+		var li = $('<li />');
+		li.text( formClasses[formClass].description );
+		$(li).data( 'formClass', formClass );
+		$(li).data( 'widgetCodes', formClasses[formClass].widgetCodes);
+		$(li).hide();
+		
+		$('.report-forms').append( li );
+	}
+	$('ul.report-forms').sortable();
+
+
+	dash = new Dashboard( '#grid-report', dwc );
 	
 });
+
+
+/**
+ * show/hide form order
+ */
+$(window).on( 'dashboard-dashboard-rendered', function() {
+	$('ul.report-forms li').hide();
+
+	console.log('wel hier');
+	$('#grid-report .widget-item').each(function(index, node) {
+		var wc = $(node).data('widgetCode');
+
+		$('ul.report-forms li').each(function(index2, node2) {
+			var wcs = $(node2).data( 'widgetCodes' );
+			if ( wcs.indexOf( $(node).data('widgetCode') ) != -1 )
+				$(node2).show();
+		});
+	});
+	
+});
+
+
 
 
 </script>

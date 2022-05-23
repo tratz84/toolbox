@@ -49,11 +49,13 @@ class editController extends BaseController {
         $this->dwc = array();
         $this->dwc['saveEnabled'] = false;
         if ($reportDashboard->getGridData())
-            $this->dwc['userWidgets'] = json_decode( $reportDashboard->getGridData() );
+            $this->dwc['userWidgets'] = $reportDashboard->getGridData();
         else
             $this->dwc['userWidgets'] = array();
         $this->dwc['widgets']     = array();
         
+        
+        $formClasses = array();
         foreach($widgets as $w) {
             $widgetCode = $w->getReportCode();
             
@@ -63,6 +65,34 @@ class editController extends BaseController {
                 'description' => $w->getReportDescription(),
                 'ajaxUrl'     => $w->getAjaxUrl()
             );
+            
+            
+            if ($w->getFormClass()) {
+                $fc = $w->getFormClass();
+                if (isset($formClasses[ $fc ]) == false) {
+                    $formClasses[ $fc ] = array();
+                    $formClasses[ $fc ][ 'widgetCodes' ] = array();
+                    $formClasses[ $fc ][ 'description' ] = $fc;
+                }
+                
+                $formClasses[ $fc ][ 'widgetCodes' ][] = $w->getReportCode();
+                
+            }
+        }
+        
+        // sort form-classes
+        $fcs = $reportDashboard->getFormClasses();
+        $fcKeys = array_keys( $formClasses );
+        usort($fcKeys, function($o1, $o2) use ($fcs) {
+            $p1 = pos_in_array($o1, $fcs);
+            $p2 = pos_in_array($o2, $fcs);
+            
+            return $p1 - $p2;
+        });
+        
+        $this->formClasses = array();
+        foreach($fcKeys as $fck) {
+            $this->formClasses[$fck] = $formClasses[$fck];
         }
         
         

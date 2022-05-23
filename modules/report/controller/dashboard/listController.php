@@ -8,7 +8,8 @@ class listController extends BaseController {
     public function action_index() {
         
         $rdService = object_container_get( ReportDashboardService::class );
-        $this->reportDashboards = $rdService->readAll();
+        
+        $this->reportDashboards = $rdService->readDashboards();
         
         
         return $this->render();

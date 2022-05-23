@@ -39,9 +39,15 @@ class ReportDashboardService extends ServiceBase {
             'name'
         ));
         
-        $grid_data = $form->getWidgetValue( 'grid_data' );
+        // decode
+        $fs = $form->getWidgetValue( 'settings' );
+        $fs = json_decode( $fs, true );
+        
+        // format
         $settings = array();
-        $settings['grid_data'] = $grid_data;
+        $settings['grid_data']    = $fs['grid_data'];
+        $settings['form_classes'] = $fs['form_classes'];
+        
         $dash->setSettings( serialize($settings) );
         
         $dash->save();
@@ -50,12 +56,17 @@ class ReportDashboardService extends ServiceBase {
     }
     
     
-    public function readAll() {
+    
+    public function readDashboards() {
         $rdDao = new ReportDashboardDAO();
         
-        return $rdDao->readAll();
+        if (hasCapability('report', 'edit-dashboard')) {
+            return $rdDao->readAll();
+        }
+        else {
+            return $rdDao->readActive();
+        }
     }
-    
     
     
     

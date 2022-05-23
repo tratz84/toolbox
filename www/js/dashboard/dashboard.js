@@ -77,6 +77,8 @@ function Dashboard( containerId, config ) {
 			$('.dashboard-widgets').prepend( c );
 		}
 
+		$(window).trigger( 'dashboard-dashboard-rendered' );
+
 	};
 	
 	this.dashboardChanged = function(evt, items) {

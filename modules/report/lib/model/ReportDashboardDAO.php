@@ -29,6 +29,13 @@ class ReportDashboardDAO extends \core\db\DAOObject {
 	    return $this->queryList( $sql );
 	}
 	
-
+	public function readActive() {
+	    $sql = "select *
+                from report__report_dashboard
+                order by name";
+	    
+	    return $this->queryList( $sql );
+	}
+	
 }
 
