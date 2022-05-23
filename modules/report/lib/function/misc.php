@@ -7,7 +7,7 @@ use core\container\ArrayContainer;
 function list_report_dashboard_widgets() {
     $ac = new ArrayContainer();
     
-    hook_eventbus_publish( $ac, 'report', 'report-dashboard-widgets' );
+    hook_eventbus_publish( $ac, 'report', 'dashboard-widgets' );
     
     $items = $ac->getItems();
     

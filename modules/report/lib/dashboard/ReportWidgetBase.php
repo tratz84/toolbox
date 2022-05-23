@@ -10,6 +10,7 @@ class ReportWidgetBase {
     
     protected $reportCode;
     protected $reportTitle;
+    protected $reportDescription;
     
     
     public function __construct() {
@@ -25,6 +26,8 @@ class ReportWidgetBase {
     public function setReportTitle( $t ) { $this->reportTitle = $t; }
     public function getReportTitle() { return $this->reportTitle; }
     
+    public function setReportDescription( $d ) { $this->reportDescription= $d; }
+    public function getReportDescription() { return $this->reportDescription; }
     
     
     

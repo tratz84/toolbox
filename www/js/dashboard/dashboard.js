@@ -13,6 +13,10 @@ function Dashboard( containerId, config ) {
 	this.init = function() {
 		this.bindEvents();
 		
+		console.log( me.config );
+		if (typeof me.config.saveUrl == 'undefined' || !me.config.saveUrl)
+			me.config.saveUrl = appUrl('/?m=base&c=dashboard&a=save');
+		
 	    $( this.containerId ).gridstack({
 	    	draggable: '.ui-draggable'
 	    });
@@ -64,11 +68,10 @@ function Dashboard( containerId, config ) {
 		}
 		
 		// no widgets? => show message
+		$('.dashboard-widgets .widgets-empty-note').remove();
 		if (jQuery.isEmptyObject( this.config.userWidgets )) {
 			var c = $('<div class="widgets-empty-note" style="font-style: italic;"><br/>'+toolbox_t('You don\'t have any widgets on your dashboard yet. Click the wheel at the top right to add widgets.')+'</div>');
 			$('.dashboard-widgets').prepend( c );
-		} else {
-			$('.dashboard-widgets .widgets-empty-note').remove();
 		}
 
 	};
@@ -182,7 +185,7 @@ function Dashboard( containerId, config ) {
 		console.log(data);
 		
 		$.ajax({
-			url: appUrl('/?m=base&c=dashboard&a=save'),
+			url: me.config.saveUrl,
 			type: 'POST',
 			data: data,
 			success: function(data, textStatus, xhr) {
