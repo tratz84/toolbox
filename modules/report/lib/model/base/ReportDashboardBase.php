@@ -65,6 +65,15 @@ class ReportDashboardBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'css' => 
+  array (
+    'Field' => 'css',
+    'Type' => 'longtext',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -94,6 +103,10 @@ class ReportDashboardBase extends \core\db\DBObject {
 		
 	public function setCreated($p) { $this->setField('created', $p); }
 	public function getCreated() { return $this->getField('created'); }
+	
+		
+	public function setCss($p) { $this->setField('css', $p); }
+	public function getCss() { return $this->getField('css'); }
 	
 	
 }
