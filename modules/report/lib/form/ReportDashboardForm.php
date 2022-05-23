@@ -10,6 +10,7 @@ class ReportDashboardForm extends \core\forms\CodegenBaseForm {
 		
 		$this->codegen();
 		
+		$this->hideSubmitButtons();
 	}
 	
 	
@@ -17,9 +18,9 @@ class ReportDashboardForm extends \core\forms\CodegenBaseForm {
 	public function codegen() {
 		
 		
-		$w1 = new \core\forms\TextField('description', NULL, t('Description'));
+		$w1 = new \core\forms\CheckboxField('active', NULL, t('Active'));
 		$this->addWidget( $w1 );
-		$w2 = new \core\forms\CheckboxField('active', NULL, t('Active'));
+		$w2 = new \core\forms\TextField('description', NULL, t('Description'));
 		$this->addWidget( $w2 );
 		$w3 = new \core\forms\HtmlDatetimeField('edited', NULL, t('Edited'));
 		$this->addWidget( $w3 );
@@ -29,6 +30,7 @@ class ReportDashboardForm extends \core\forms\CodegenBaseForm {
 		$w4->setOption( 'hide-when-invalid', true );
 		
 	}
+
 
 
 }

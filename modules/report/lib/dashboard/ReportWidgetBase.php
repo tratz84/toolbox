@@ -8,6 +8,8 @@ class ReportWidgetBase {
     
     protected $prio = 10;
     
+    protected $ajaxUrl = null;
+    
     protected $reportCode;
     protected $reportTitle;
     protected $reportDescription;
@@ -20,6 +22,9 @@ class ReportWidgetBase {
     public function setPrio($p) { $this->prio = $p; }
     public function getPrio() { return $this->prio; }
     
+    public function setAjaxUrl( $u ) { $this->ajaxUrl = $u; }
+    public function getAjaxUrl() { return $this->ajaxUrl; }
+    
     public function setReportCode( $c ) { $this->reportCode = $c; }
     public function getReportCode() { return $this->reportCode; }
     
@@ -28,7 +33,6 @@ class ReportWidgetBase {
     
     public function setReportDescription( $d ) { $this->reportDescription= $d; }
     public function getReportDescription() { return $this->reportDescription; }
-    
     
     
     public function render() {

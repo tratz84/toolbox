@@ -11,7 +11,7 @@ use core\Context;
 
 Context::getInstance()->enableModule('report');
 
-module_update_handler('report', '20220523');
+module_update_handler('report', '20220524');
 
 hook_loader( __DIR__.'/hook' );
 

@@ -183,6 +183,7 @@ function Dashboard( containerId, config ) {
 		}
 		
 		console.log(data);
+		return;
 		
 		$.ajax({
 			url: me.config.saveUrl,

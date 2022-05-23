@@ -9,6 +9,10 @@
 	<h1>Rapportage dashboard bewerken</h1>
 </div>
 
+<?= $form->render() ?>
+
+<div class="clear"></div>
+<hr />
 
 
 
@@ -43,9 +47,6 @@ var dwc = <?= json_encode($dwc) ?>;
 $(document).ready(function() {
 	
 	dash = new Dashboard( '#grid-report', dwc );
-	dash.save = function() {
-	};
-	
 	
 });
 
