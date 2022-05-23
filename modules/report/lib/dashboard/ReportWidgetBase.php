@@ -23,7 +23,12 @@ class ReportWidgetBase {
     public function getPrio() { return $this->prio; }
     
     public function setAjaxUrl( $u ) { $this->ajaxUrl = $u; }
-    public function getAjaxUrl() { return $this->ajaxUrl; }
+    public function getAjaxUrl() {
+        if ($this->ajaxUrl)
+            return $this->ajaxUrl;
+        
+        return appUrl( '/?m=report&c=dashboard/view&a=render_widget&code='. urlencode($this->getReportCode()) );
+    }
     
     public function setReportCode( $c ) { $this->reportCode = $c; }
     public function getReportCode() { return $this->reportCode; }

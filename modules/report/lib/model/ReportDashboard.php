@@ -13,5 +13,27 @@ class ReportDashboard extends base\ReportDashboardBase {
 		$this->setActive( true );
 		
 	}
+	
+	public function getSetting( $name, $defaultValue=null ) {
+	    $s = $this->getSettings();
+	    
+	    $s = @unserialize($s);
+	    if (!$s) {
+	        return $defaultValue;
+	    }
+	    
+	    if (isset($s[$name]))
+	        return $s[$name];
+	    
+        return $defaultValue;
+	}
+	
+	
+	public function getGridData() {
+	    $d = $this->getSetting( 'grid_data', array() );
+	    
+        return $d;
+	}
+	
 }
 

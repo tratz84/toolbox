@@ -17,6 +17,9 @@ function Dashboard( containerId, config ) {
 		if (typeof me.config.saveUrl == 'undefined' || !me.config.saveUrl)
 			me.config.saveUrl = appUrl('/?m=base&c=dashboard&a=save');
 		
+		if (typeof me.config.saveEnabled == 'undefined')
+			me.config.saveEnabled = true;
+		
 	    $( this.containerId ).gridstack({
 	    	draggable: '.ui-draggable'
 	    });
@@ -163,6 +166,9 @@ function Dashboard( containerId, config ) {
 	
 	
 	this.save = function() {
+		if (!me.config.saveEnabled)
+			return;
+		
 		// save enabled widgets
 		var data = { };
 		
@@ -183,7 +189,6 @@ function Dashboard( containerId, config ) {
 		}
 		
 		console.log(data);
-		return;
 		
 		$.ajax({
 			url: me.config.saveUrl,

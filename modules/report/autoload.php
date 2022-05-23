@@ -19,5 +19,6 @@ hook_loader( __DIR__.'/hook' );
 
 hook_eventbus_subscribe( 'base', 'user-capabilities', function($src) {
     $src->addCapability('report', 'show-reports', t('Reports'), t('Access to reports'));
+    $src->addCapability('report', 'edit-dashboard', t('Report dashboards'), t('Maintainer of report dashboards'));
 });
 

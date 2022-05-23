@@ -10,6 +10,12 @@ use report\model\ReportDashboard;
 
 class editController extends BaseController {
     
+    public function init() {
+        
+        checkCapability( 'report', 'edit-dashboard' );
+        
+    }
+    
     
     public function action_index() {
         
@@ -38,14 +44,16 @@ class editController extends BaseController {
         }
         
         
-        
-        
         $widgets = list_report_dashboard_widgets();
         
         $this->dwc = array();
-        $this->dwc['saveUrl'] = appUrl('/?m=report&c=dashboard/edit&a=save');
-        $this->dwc['userWidgets'] = array();
-        $this->dwc['widgets'] = array();
+        $this->dwc['saveEnabled'] = false;
+        if ($reportDashboard->getGridData())
+            $this->dwc['userWidgets'] = json_decode( $reportDashboard->getGridData() );
+        else
+            $this->dwc['userWidgets'] = array();
+        $this->dwc['widgets']     = array();
+        
         foreach($widgets as $w) {
             $widgetCode = $w->getReportCode();
             
@@ -56,6 +64,12 @@ class editController extends BaseController {
                 'ajaxUrl'     => $w->getAjaxUrl()
             );
         }
+        
+        
+        if (is_post()) {
+            $this->dwc['userWidgets'] = json_decode( $_POST['grid_data'] );
+        }
+        
         
         return $this->render();
     }
