@@ -49,6 +49,10 @@ class WeekField extends BaseWidget {
     
     
     protected function formatWeek($val) {
+        if ($val == null) {
+            return null;
+        }
+        
         // invalid value?
         if (preg_match('/^\\d{4}-\\d{1,2}$/', $val) == false) {
             return null;
