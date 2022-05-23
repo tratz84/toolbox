@@ -112,6 +112,13 @@ function appUrl($u) {
         $contextName = Context::getInstance()->getContextName();
     }
     
+    if (strpos($u, ':') !== false) {
+        $protocol = substr($u, 0, strpos($u, ':'));
+        $protocol = strtolower( $protocol );
+        if (in_array($protocol, array('javascript', 'http', 'https', 'mailto', 'tel')))
+            return $u;
+    }
+    
     // /module/-path? => rewrite to /?mpf=/module/.../
     if (strpos($u, '/module/') === 0) {
         $urlParts = explode('/', $u);
