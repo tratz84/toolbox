@@ -41,5 +41,13 @@ class ReportDashboard extends base\ReportDashboardBase {
 	    return $d;
 	}
 	
+	
+	public function getForms() {
+	    
+	    
+	    
+	}
+	
+	
 }
 

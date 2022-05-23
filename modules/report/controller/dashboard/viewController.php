@@ -3,8 +3,31 @@
 
 
 use core\controller\BaseController;
+use report\service\ReportDashboardService;
 
 class viewController extends BaseController {
+    
+    
+    
+    
+    public function action_index() {
+        
+        $reportDashService = object_container_get( ReportDashboardService::class );
+        $this->report = $reportDashService->readDashboard( get_var('id') );
+        
+        
+        $formClasses = $this->report->getFormClasses();
+        $this->forms = array();
+        foreach($formClasses as $fc) {
+            $f = new $fc();
+            
+            $this->forms[$fc] = $f;
+        }
+        
+        
+        
+        return $this->render();
+    }
     
     
     
