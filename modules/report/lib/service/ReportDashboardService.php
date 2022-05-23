@@ -36,6 +36,7 @@ class ReportDashboardService extends ServiceBase {
         }
         
         $form->fill( $dash, array(
+            'active',
             'name'
         ));
         
@@ -66,6 +67,18 @@ class ReportDashboardService extends ServiceBase {
         else {
             return $rdDao->readActive();
         }
+    }
+    
+    
+    public function deleteDashboard( $reportDashboardId ) {
+        
+        $d = $this->readDashboard($reportDashboardId);
+        
+        
+        // TODO: log?
+        
+        return $d->delete();
+        
     }
     
     

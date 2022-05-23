@@ -29,6 +29,8 @@ class editController extends BaseController {
         else {
             $reportDashboard = new ReportDashboard();
         }
+        
+        $this->reportDashboard = $reportDashboard;
         $this->form->bind( $reportDashboard );
         
         // save
@@ -102,6 +104,15 @@ class editController extends BaseController {
         
         
         return $this->render();
+    }
+    
+    
+    public function action_delete() {
+        $reportDashService = object_container_get( ReportDashboardService::class );
+        
+        $reportDashService->deleteDashboard( get_var('id') );
+        
+        redirect('/?m=report&c=dashboard/list');
     }
     
     

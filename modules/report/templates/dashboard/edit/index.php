@@ -3,6 +3,12 @@
 <div class="page-header">
 	<div class="toolbox">
 		<a href="<?= appUrl('/?m=report&c=dashboard/list') ?>" class="fa fa-chevron-circle-left"></a>
+		
+		<?php if ($reportDashboard->isNew() == false) : ?>
+		<a href="<?= appUrl('/?m=report&c=dashboard/edit&a=delete&id='.$reportDashboard->getReportDashboardId()) ?>"
+			data-confirmation-message="Weet je zeker dat je deze rapportage wilt verwijderen?" 
+			class="fa delete fa-trash"></a>
+		<?php endif; ?>
 		<a href="javascript:void(0);" id="dashboard-settings-click" class="fa fa-cog"></a>
 		<a href="javascript:void(0);" class="fa submit-form fa-save"></a>
 	</div>
@@ -39,6 +45,9 @@
 
 
 <script type="text/javascript">
+
+
+handle_deleteConfirmation();
 
 var dash = null;
 var dwc = <?= json_encode($dwc) ?>;
