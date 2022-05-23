@@ -23,8 +23,6 @@ class MenuDAO extends \core\db\DAOObject {
 	    
 	    $arr[] = array('menu_code' => 'todo',            'sort' => 800, 'visible' => 1);
 	    
-	    if (hasCapability('report', 'show-reports'))
-	        $arr[] = array('menu_code' => 'report',          'sort' => 1700, 'visible' => 1, 'icon' => 'fa-signal',    'label' => 'Rapportage',     'url' => '/?m=report&c=report');
 	    $arr[] = array('menu_code' => 'support',         'sort' => 1800, 'visible' => 1, 'icon' => 'fa-support', 'label' => 'Support', 'url' => '/?m=support&c=ticketList');
 	    
 	    if (hasCapability('base', 'edit-masterdata'))
