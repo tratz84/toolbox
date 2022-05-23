@@ -405,6 +405,9 @@ class CalendarService extends ServiceBase {
             $t1 = $e1->getStartTime();
             $t2 = $e2->getStartTime();
             
+            if ($t1 === null) $t1 = '';
+            if ($t2 === null) $t2 = '';
+            
             $c = strcmp($t1, $t2);
             if ($c != 0) {
                 return $c;
