@@ -1,4 +1,8 @@
 
+<script src="<?= BASE_HREF ?>lib/chart.js/Chart.min.js"></script>
+<script src="<?= BASE_HREF ?>?mpf=/module/report/js/chartjs-helper.js?v=<?= filemtime(module_file('report', 'public/js/chartjs-helper.js')) ?>"></script>
+
+
 <div class="page-header">
 	<div class="toolbox">
 		<?php if (get_var('show_edit') && hasCapability('report', 'edit-dashboard')) : ?>

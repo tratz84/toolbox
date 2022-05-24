@@ -6,6 +6,8 @@ namespace report\dashboard;
 
 class ReportWidgetBase {
     
+    protected $uid = null;
+    
     protected $prio = 10;
     
     protected $ajaxUrl = null;
@@ -18,6 +20,9 @@ class ReportWidgetBase {
     
     
     public function __construct() {
+        
+        $this->uid = 'report-widget-'.md5( uniqid() );
+        
         
     }
     
