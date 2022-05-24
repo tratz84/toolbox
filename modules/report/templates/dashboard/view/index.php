@@ -11,11 +11,13 @@
 	<h1><?= esc_html($report->getName()) ?></h1>
 </div>
 
+<div class="dashboard-form">
 <?php foreach($forms as $f) : ?>
 	<div class="report-form report-form-<?= slugify(get_class($f)) ?>">
 		<?= $f->render();?>
 	</div>
 <?php endforeach; ?>
+</div>
 
 <hr class="clear" />
 

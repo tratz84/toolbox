@@ -123,9 +123,11 @@ function Dashboard( containerId, config ) {
 		$( me.containerId ).on('change', me.dashboardChanged);
 		
 		
+		var postData = serialize2object( '.dashboard-form' );
 		$.ajax({
 			url: appUrl( widget.ajaxUrl ),
 			type: 'POST',
+			data: postData,
 			success: function(data, textStatus, xhr) {
 				// prevent dashboard-changed event
 				$( me.containerId ).unbind('change', me.dashboardChanged);
