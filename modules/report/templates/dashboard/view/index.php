@@ -1,7 +1,7 @@
 
 <div class="page-header">
 	<div class="toolbox">
-		<?php if (0&&hasCapability('report', 'edit-dashboard')) : ?>
+		<?php if (get_var('show_edit') && hasCapability('report', 'edit-dashboard')) : ?>
 		<a href="<?= appUrl('/?m=report&c=dashboard/edit&id='.$report->getReportDashboardId()) ?>" class="fa fa-pencil"></a>
 		<?php endif; ?>
 		

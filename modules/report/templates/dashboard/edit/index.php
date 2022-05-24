@@ -5,9 +5,11 @@
 		<a href="<?= appUrl('/?m=report&c=dashboard/list') ?>" class="fa fa-chevron-circle-left"></a>
 		
 		<?php if ($reportDashboard->isNew() == false) : ?>
-		<a href="<?= appUrl('/?m=report&c=dashboard/edit&a=delete&id='.$reportDashboard->getReportDashboardId()) ?>"
-			data-confirmation-message="Weet je zeker dat je deze rapportage wilt verwijderen?" 
-			class="fa delete fa-trash"></a>
+			<a href="<?= appUrl('/?m=report&c=dashboard/edit&a=delete&id='.$reportDashboard->getReportDashboardId()) ?>"
+				data-confirmation-message="Weet je zeker dat je deze rapportage wilt verwijderen?" 
+				class="fa delete fa-trash"></a>
+			<a href="<?= appUrl('/?m=report&c=dashboard/view&show_edit=1&id='.$reportDashboard->getReportDashboardId())?>" 
+				class="fa fa-eye"></a>
 		<?php endif; ?>
 		<a href="javascript:void(0);" id="dashboard-settings-click" class="fa fa-cog"></a>
 		<a href="javascript:void(0);" class="fa submit-form fa-save"></a>
