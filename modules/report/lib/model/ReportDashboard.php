@@ -41,13 +41,50 @@ class ReportDashboard extends base\ReportDashboardBase {
 	    return $d;
 	}
 	
-	
-	public function getForms() {
+	public function getWidgets() {
+	    $allWidgets = list_report_dashboard_widgets();
 	    
+	    $gridData = $this->getGridData();
 	    
+	    $widgets = array();
 	    
+	    foreach($allWidgets as $w) {
+	        $rc = $w->getReportCode();
+	        if (isset($gridData[$rc])) {
+	            $widgets[] = $w;
+	        }
+	    }
+	    
+	    return $widgets;
 	}
 	
 	
+	public function getForms() {
+	    $widgets = $this->getWidgets();
+	    
+	    $forms = array();
+	    $formClassesGenerated = array();
+	    foreach($widgets as $w) {
+	        $fc = $w->getFormClass();
+	        
+	        if (!$fc)
+	            continue;
+	        
+            if (in_array($fc, $formClassesGenerated))
+                continue;
+	        
+	        $form = new $fc();
+	        $form->hideSubmitButtons();
+	        $form->hideSubmitButtons();
+	        $form->disableSubmit();
+	        $forms[] = $form;
+	        
+	        $formClassesGenerated[] = $fc;
+	    }
+	    
+	    return $forms;
+	}
 }
+
+
 
