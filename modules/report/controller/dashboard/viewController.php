@@ -8,14 +8,15 @@ use report\service\ReportDashboardService;
 class viewController extends BaseController {
     
     
-    
-    
     public function action_index() {
         
         $reportDashService = object_container_get( ReportDashboardService::class );
         $this->report = $reportDashService->readDashboard( get_var('id') );
         
         $this->forms = $this->report->getForms();
+        foreach($this->forms as $f) {
+            $f->bind( $_REQUEST );
+        }
         
         
         $this->dwc = array();
