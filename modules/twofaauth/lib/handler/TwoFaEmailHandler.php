@@ -114,6 +114,9 @@ class TwoFaEmailHandler {
         // set cookie
         $tfService = object_container_get( TwoFaService::class );
         $tfc = $tfService->createCookie();
+        
+        // TODO: fix => Deprecated: setcookie(): Passing null to parameter #3 ($expires_or_options) of type array|int is deprecated in /home/timvw/projects/toolbox/workspace/toolbox/modules/twofaauth/lib/handler/TwoFaEmailHandler.php on line 117
+        
         setcookie('twofaauth', $tfc->getCookieId().':'.$tfc->getCookieValue(), null, appUrl('/'));
         
         // send mail
