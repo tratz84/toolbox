@@ -99,7 +99,10 @@ class editController extends BaseController {
         
         
         if (is_post()) {
-            $this->dwc['userWidgets'] = json_decode( $_POST['grid_data'] );
+            $postSettings = @json_decode( get_var('settings'), true );
+            
+            if (isset($postSettings['grid_data']) && $postSettings['grid_data'])
+                $this->dwc['userWidgets'] = $postSettings['grid_data'];
         }
         
         

@@ -10,6 +10,7 @@
 	<h1>Dashboard overzicht</h1>
 </div>
 
+<?php if (count($reportDashboards) > 0) : ?>
 
 <div class="col-12 col-lg-6 setting-menu-tag-container no-padding">
 
@@ -27,3 +28,11 @@
     </ul>
 
 </div>
+<?php  else : ?>
+
+	<div class="no-results-found">
+		<?= t('No dashboards created') ?>
+	</div>
+
+<?php endif; ?>
+
