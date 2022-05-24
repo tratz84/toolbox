@@ -20,11 +20,17 @@ function Dashboard( containerId, config ) {
 		if (typeof me.config.saveEnabled == 'undefined')
 			me.config.saveEnabled = true;
 		
-	    $( this.containerId ).gridstack({
-	    	draggable: '.ui-draggable'
-	    });
-	    
-	    this.renderDashboard();
+		var gridstackOpts = {};
+		gridstackOpts.draggable = '.ui-draggable';
+		console.log(me.config);
+		if (me.config.fixed) {
+			gridstackOpts.disableDrag = true;
+			gridstackOpts.disableResize = true;
+		}
+		
+		$( this.containerId ).gridstack( gridstackOpts );
+		
+		this.renderDashboard();
 	};
 	
 	this.bindEvents = function() {
