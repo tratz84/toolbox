@@ -1,0 +1,12 @@
+<?php
+
+return array (
+  'object_version' => '',
+  'treedata' => '[{"type":"container","text":"container-base: container","data":{"type":"container","class":"core\\\\forms\\\\WidgetContainer","editor":"codegen\\\\form\\\\widgetoptions\\\\ContainerOptionsForm","label":"container","name":"container-base"},"children":[{"type":"container","text":"container-left: container","data":{"type":"container","class":"core\\\\forms\\\\WidgetContainer","editor":"codegen\\\\form\\\\widgetoptions\\\\ContainerOptionsForm","label":"container","name":"container-left"},"children":[{"type":"widget","text":"report_dashboard_id","data":{"type":"widget","class":"core\\\\forms\\\\HiddenField","editor":"codegen\\\\form\\\\widgetoptions\\\\HiddenOptionsForm","label":"Hidden field","name":"report_dashboard_id"}},{"type":"widget","text":"settings","data":{"type":"widget","class":"core\\\\forms\\\\HiddenField","editor":"codegen\\\\form\\\\widgetoptions\\\\HiddenOptionsForm","label":"Hidden field","name":"settings"}},{"type":"widget","text":"active: Active","data":{"type":"widget","class":"core\\\\forms\\\\CheckboxField","editor":"codegen\\\\form\\\\widgetoptions\\\\CheckboxOptionsForm","label":"Active","name":"active"}},{"type":"widget","text":"name: Name","data":{"type":"widget","class":"core\\\\forms\\\\TextField","editor":"codegen\\\\form\\\\widgetoptions\\\\TextFieldOptionsForm","label":"Name","name":"name"}},{"type":"widget","text":"edited: Edited","data":{"type":"widget","class":"core\\\\forms\\\\HtmlDatetimeField","editor":"codegen\\\\form\\\\widgetoptions\\\\HtmlDateOptionsForm","label":"Edited","hide-when-invalid":"on","name":"edited"}},{"type":"widget","text":"created: Created","data":{"type":"widget","class":"core\\\\forms\\\\HtmlDatetimeField","editor":"codegen\\\\form\\\\widgetoptions\\\\HtmlDateOptionsForm","label":"Created","name":"created","hide-when-invalid":"on"}}]},{"type":"container","text":"container-right: container","data":{"type":"container","class":"core\\\\forms\\\\WidgetContainer","editor":"codegen\\\\form\\\\widgetoptions\\\\ContainerOptionsForm","label":"container","name":"container-right"},"children":[{"type":"widget","text":"container-forms: Forms","data":{"type":"widget","class":"core\\\\forms\\\\HtmlField","label":"Forms","editor":"codegen\\\\form\\\\widgetoptions\\\\TextOptionsForm","name":"container-forms"}}]}]}]',
+  'module_name' => 'report',
+  'form_name' => 'ReportDashboardForm',
+  'daoClass' => '',
+  'key_fields' => '',
+  'short_description' => '',
+);
+

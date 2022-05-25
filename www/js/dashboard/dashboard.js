@@ -13,11 +13,24 @@ function Dashboard( containerId, config ) {
 	this.init = function() {
 		this.bindEvents();
 		
-	    $( this.containerId ).gridstack({
-	    	draggable: '.ui-draggable'
-	    });
-	    
-	    this.renderDashboard();
+		console.log( me.config );
+		if (typeof me.config.saveUrl == 'undefined' || !me.config.saveUrl)
+			me.config.saveUrl = appUrl('/?m=base&c=dashboard&a=save');
+		
+		if (typeof me.config.saveEnabled == 'undefined')
+			me.config.saveEnabled = true;
+		
+		var gridstackOpts = {};
+		gridstackOpts.draggable = '.ui-draggable';
+		console.log(me.config);
+		if (me.config.fixed) {
+			gridstackOpts.disableDrag = true;
+			gridstackOpts.disableResize = true;
+		}
+		
+		$( this.containerId ).gridstack( gridstackOpts );
+		
+		this.renderDashboard();
 	};
 	
 	this.bindEvents = function() {
@@ -64,12 +77,13 @@ function Dashboard( containerId, config ) {
 		}
 		
 		// no widgets? => show message
+		$('.dashboard-widgets .widgets-empty-note').remove();
 		if (jQuery.isEmptyObject( this.config.userWidgets )) {
 			var c = $('<div class="widgets-empty-note" style="font-style: italic;"><br/>'+toolbox_t('You don\'t have any widgets on your dashboard yet. Click the wheel at the top right to add widgets.')+'</div>');
 			$('.dashboard-widgets').prepend( c );
-		} else {
-			$('.dashboard-widgets .widgets-empty-note').remove();
 		}
+
+		$(window).trigger( 'dashboard-dashboard-rendered' );
 
 	};
 	
@@ -109,9 +123,11 @@ function Dashboard( containerId, config ) {
 		$( me.containerId ).on('change', me.dashboardChanged);
 		
 		
+		var postData = serialize2object( '.dashboard-form' );
 		$.ajax({
 			url: appUrl( widget.ajaxUrl ),
 			type: 'POST',
+			data: postData,
 			success: function(data, textStatus, xhr) {
 				// prevent dashboard-changed event
 				$( me.containerId ).unbind('change', me.dashboardChanged);
@@ -160,6 +176,9 @@ function Dashboard( containerId, config ) {
 	
 	
 	this.save = function() {
+		if (!me.config.saveEnabled)
+			return;
+		
 		// save enabled widgets
 		var data = { };
 		
@@ -182,7 +201,7 @@ function Dashboard( containerId, config ) {
 		console.log(data);
 		
 		$.ajax({
-			url: appUrl('/?m=base&c=dashboard&a=save'),
+			url: me.config.saveUrl,
 			type: 'POST',
 			data: data,
 			success: function(data, textStatus, xhr) {

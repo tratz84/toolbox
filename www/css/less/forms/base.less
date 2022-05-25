@@ -177,8 +177,10 @@
 		}
 	}
 	
-	&.week-field-widget {
-		option.current-week { font-weight: bold; }
+	&.week-field-widget
+	, &.year-field-widget {
+		option.current-week
+		, option.current-year { font-weight: bold; }
 	}
 	
 	&.radio-field-widget {
@@ -303,18 +305,21 @@
 .popup-container-visible .select2-container { z-index: 99000; }
 .popup-container-visible .main-content .select2-container { display: none; }
 
-.month-field-prev-option
+.week-field-prev-option
+, .week-field-next-option
+, .month-field-prev-option
 , .month-field-next-option
-, .week-field-prev-option
-, .week-field-next-option {
+, .year-field-prev-option
+, .year-field-next-option {
 	padding: 5px;
 	font-size: 22px !important;
 	font-weight: bold !important;
 	position: relative;
 	top: 2px;
 }
-.month-field-prev-option
-, .week-field-prev-option { padding-left: 0; }
+.week-field-prev-option
+, .month-field-prev-option
+, .year-field-prev-option { padding-left: 0; }
 
 .handler-sortable {
 	cursor: pointer;
