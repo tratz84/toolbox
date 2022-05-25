@@ -13,7 +13,7 @@ hook_eventbus_subscribe('base', 'MenuService::listMainMenu', function($src) {
     $menuReports->setMenuCode('report');
     $menuReports->setIconLabelUrl('fa-signal', 'Rapportage', '/?m=report&c=report');
     $menuReports->setMenuAsFirstChild( false );
-    $menuReports->setWeight(20);
+    $menuReports->setWeight(1500);
     $src->add($menuReports);
     
     $widgets = list_report_dashboard_widgets();
