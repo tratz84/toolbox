@@ -17,6 +17,9 @@ class DateField extends BaseWidget {
     }
     
     public function setValue($value) {
+        if ($value == null)
+            $value = '';
+        
         parent::setValue( trim($value) );
     }
     

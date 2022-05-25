@@ -37,12 +37,13 @@ use core\forms\SelectField;
 use core\forms\TextField;
 use core\forms\TextareaField;
 use core\forms\TimePickerField;
+use core\forms\TinymceField;
 use core\forms\WeekField;
 use core\forms\WidgetContainer;
+use core\forms\YearField;
 use customer\forms\CompanySelectWidget;
 use customer\forms\CustomerSelectWidget;
 use customer\forms\CustomerSimpleSelectWidget;
-use core\forms\TinymceField;
 
 class GeneratorHelper {
     
@@ -258,6 +259,11 @@ class GeneratorHelper {
             'type' => 'widget',
             'class' => MonthField::class,
             'label' => 'MonthField'
+        );
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => YearField::class,
+            'label' => 'YearField'
         );
         $formWidgets[] = array(
             'type' => 'widget',

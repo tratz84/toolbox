@@ -467,7 +467,6 @@ function uploadFilesFieldDelete_Click(obj) {
 
 
 
-
 function weekField_prev_option(obj) {
 	var s = $(obj).parent().find('select');
 	
@@ -501,6 +500,14 @@ function weekField_next_option(obj) {
 			break;
 		}
 	}
+}
+
+function yearField_prev_option(obj) {
+	return weekField_prev_option(obj);
+}
+
+function yearField_next_option(obj) {
+	return weekField_next_option(obj);
 }
 
 
