@@ -34,6 +34,13 @@ class InvoiceDAO extends \core\db\DAOObject {
                 left join customer__company c using (company_id)
                 left join customer__person p using (person_id) ";
 
+	    // moneybird-mod specific...
+	    // TODO: rewrite function to use QueryBuilder, publish event & create hook in moneybird-mod
+	    if (isset($opts['moneybird-to-export']) && $opts['moneybird-to-export']) {
+	        $sql .= " left join base__object_meta meta_mb on (meta_mb.object_name='invoice\\\\model\\\\Invoice' and meta_mb.object_id=i.invoice_id and meta_mb.object_key='moneybird-invoice-exported') ";
+	        $where[] = " meta_mb.object_value is null ";
+	    }
+	    
 
 	    if (isset($opts['invoiceNumberText']) && trim($opts['invoiceNumberText'])) {
 	        $prefix = Context::getInstance()->getPrefixNumbers();
