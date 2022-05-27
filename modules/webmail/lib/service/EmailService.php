@@ -482,8 +482,17 @@ class EmailService extends ServiceBase {
         $sm = new SendMail();
         
         $sm->setFromName('Toolbox - Test');
-        if (validate_email($sm->getFromEmail()) == false)
+        
+        // set user's from-address
+        $id = $this->readFirstIdentity();
+        if ($id) {
+            $sm->setFromEmail( $id->getFromEmail() );
+        }
+        // else fallback
+        else if (validate_email($sm->getFromEmail()) == false) {
             $sm->setFromEmail('toolboxtest@itxplain.nl');
+        }
+        
         $sm->setSubject('Toolbox test mail');
         $sm->addTo($emailAddress);
         
