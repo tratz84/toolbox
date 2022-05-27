@@ -187,11 +187,18 @@ class SendMail {
         
         $mailer = new \Swift_Mailer($transport);
         
+//         $mailLogger = new \Swift_Plugins_Loggers_ArrayLogger();
+//         $mailer->registerPlugin(new \Swift_Plugins_LoggerPlugin($mailLogger));
+        
+        
         $ctx = object_container_get(Context::class);
         if ($ctx->getContextName() == 'demo') {
             // don't send mail in demo-environment
             return true;
         } else {
+//             $r = $mailer->send( $message );
+//             print $mailLogger->dump();exit;
+            
             try {
                 $r = $mailer->send( $message );
             } catch (\Exception $ex) {
