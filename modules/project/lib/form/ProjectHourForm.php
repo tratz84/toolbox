@@ -83,20 +83,22 @@ class ProjectHourForm extends BaseForm {
         $this->addValidator('project_id', new NotEmptyValidator());
         
         $this->addValidator('end_time', function($form) {
-            if ($form->getWidgetValue('registration_type') == 'from_to') {
-                $dtv = new DateTimeValidator();
-                if (!$dtv->validate($form->getWidget('end_time')))
-                    return $dtv->getMessage();
-                
-                $ymdEnd = (int)format_datetime($form->getWidgetValue('end_time'), 'Ymd');
-                $hisEnd = (int)format_datetime($form->getWidgetValue('end_time'), 'His');
-                $ymdStart = (int)format_datetime($form->getWidgetValue('start_time'), 'Ymd');
-                $hisStart = (int)format_datetime($form->getWidgetValue('start_time'), 'His');
-                
-                
-                if ($ymdEnd < $ymdStart || ($ymdEnd == $ymdStart && $hisEnd < $hisStart)) {
-                    return 'Eind ligt voor start';
-                }
+            if ($form->getWidgetValue('registration_type') != 'from_to') {
+                return null;
+            }
+            
+            $dtv = new DateTimeValidator();
+            if (!$dtv->validate($form->getWidget('end_time')))
+                return $dtv->getMessage();
+            
+            $ymdEnd = (int)format_datetime($form->getWidgetValue('end_time'), 'Ymd');
+            $hisEnd = (int)format_datetime($form->getWidgetValue('end_time'), 'His');
+            $ymdStart = (int)format_datetime($form->getWidgetValue('start_time'), 'Ymd');
+            $hisStart = (int)format_datetime($form->getWidgetValue('start_time'), 'His');
+            
+            
+            if ($ymdEnd < $ymdStart || ($ymdEnd == $ymdStart && $hisEnd < $hisStart)) {
+                return 'Eind ligt voor start';
             }
             
             $startTime = $form->getWidgetValue('start_time');
