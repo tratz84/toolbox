@@ -10,6 +10,10 @@ function create_chartjs( id, config ) {
 	
 	var w = $(container).width();
 	var h = parentContainer.height() - (parentContainer.find('.widget-title').outerHeight());
+	parentContainer.find('.chart-overhead').each(function(index, node) {
+		h -= $(node).outerHeight(true);
+	});
+	
 	
 	if (config.heightRatio) {
 		h *= config.heightRatio;
