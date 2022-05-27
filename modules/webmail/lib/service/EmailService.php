@@ -484,7 +484,7 @@ class EmailService extends ServiceBase {
         $sm->setFromName('Toolbox - Test');
         
         // set user's from-address
-        $id = $this->readFirstIdentity();
+        $id = $this->readSystemMessagesIdentity();
         if ($id) {
             $sm->setFromEmail( $id->getFromEmail() );
         }
