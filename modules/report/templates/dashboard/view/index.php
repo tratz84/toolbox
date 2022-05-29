@@ -15,6 +15,7 @@
 	<h1><?= esc_html($report->getName()) ?></h1>
 </div>
 
+<input type="hidden" name="report_dashboard_id" value="<?= $report->getReportDashboardId() ?>" />
 <div class="dashboard-form">
 <?php foreach($forms as $f) : ?>
 	<div class="report-form report-form-<?= slugify(get_class($f)) ?>">
