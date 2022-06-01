@@ -33,8 +33,8 @@ function create_chartjs( id, config ) {
 
 
 function report_widget_title( node, title ) {
-	if ($(node).hasClass('grid-stack-item') == false) {
-		node = $(node).closest( '.grid-stack-item' );
+	if ($(node).hasClass('widget-item-content') == false) {
+		node = $(node).closest( '.widget-item-content' );
 	}
 	
 	if ($(node).length == 1) {
