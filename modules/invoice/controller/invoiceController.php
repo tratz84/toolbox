@@ -321,14 +321,9 @@ class invoiceController extends BaseController {
         }
         
         $vars = array();
-        $vars['naam'] = '';
+        $vars = $invoice->getCustomer()->getTemplateVars();
         $vars = array_merge($invoice->getFields(), $vars);
-        if ($invoice->getCustomer()) {
-            if ($invoice->getCustomer()->getType() == 'company')
-                $vars['naam'] = $invoice->getCustomer()->getCompany()->getContactPerson();
-            else
-                $vars['naam'] = $invoice->getCustomer()->getPersonName();
-        }
+        
         $vars['betreft'] = $invoice->getSubject();
         $vars['document_no'] = $invoice->getInvoiceNumberText();
         
