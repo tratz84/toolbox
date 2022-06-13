@@ -13,6 +13,7 @@ use core\forms\WidgetContainer;
 use core\forms\CheckboxField;
 use core\forms\HtmlField;
 use core\forms\PasswordField;
+use webmail\model\EmailFile;
 
 class FormChangesHtml
 {
@@ -288,6 +289,17 @@ class FormChangesHtml
         } else {
             $v = $w->getValue();
         }
+        
+        // EmailFile?
+        if (is_array($v) && count($v) > 0 && is_a( $v[0], EmailFile::class )) {
+            $filenames = array();
+            foreach($v as $ef) {
+                $filenames[] = $ef->getName();
+            }
+            
+            $v = implode(', ', $filenames);
+        }
+        
         
         if (is_a($w, DatePickerField::class))
             $v = format_date($v, 'd-m-Y');
