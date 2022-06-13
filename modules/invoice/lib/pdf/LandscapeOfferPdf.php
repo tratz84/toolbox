@@ -383,7 +383,10 @@ class LandscapeOfferPdf extends BasePdf {
 //             if (is_numeric($linesToDraw[$x][1]) && $linesToDraw[$x][1] != 0)
 //                 $aantal = $linesToDraw[$x][1];
 
-                if (trim($l->getDescription2())) {
+                $d2 = $l->getDescription2();
+                if ($d2 === null) $d2 = '';
+
+                if (trim($d2)) {
                     $this->Cell(171.9/4,  $lh, $l->getDescription(), 'LTB', 0, 'L', true);
                     $this->Cell(171.9-(171.9/4),  $lh, $l->getDescription2(), 'RTB', 0, 'L', true);
                 } else {
