@@ -14,6 +14,7 @@ use core\forms\CheckboxField;
 use core\forms\HtmlField;
 use core\forms\PasswordField;
 use webmail\model\EmailFile;
+use core\forms\FormFileItem;
 
 class FormChangesHtml
 {
@@ -291,7 +292,7 @@ class FormChangesHtml
         }
         
         // EmailFile?
-        if (is_array($v) && count($v) > 0 && is_a( $v[0], EmailFile::class )) {
+        if (is_array($v) && count($v) > 0 && is_a( $v[0], FormFileItem::class )) {
             $filenames = array();
             foreach($v as $ef) {
                 $filenames[] = $ef->getName();
