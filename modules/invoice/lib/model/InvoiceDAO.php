@@ -181,7 +181,7 @@ class InvoiceDAO extends \core\db\DAOObject {
 	        $sql .= ' where ('.implode(') AND (', $where) . ') ';
 	    }
 
-	    $sql .= "group by i.company_id, i.person_id
+	    $sql .= "group by ifnull(i.company_id, 0), ifnull(i.person_id, 0)
                 order by sum(total_calculated_price) desc";
 	    
 	    $res = $this->query($sql, $params);

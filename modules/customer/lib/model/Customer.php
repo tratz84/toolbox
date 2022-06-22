@@ -30,9 +30,17 @@ class Customer extends \core\db\DBObject {
     public function getPhoneList() { return $this->phoneList; }
     public function setPhoneList($l) { $this->phoneList = $l; }
     
+    /**
+     * 
+     * @return Company
+     */
     public function getCompany() { return $this->company; }
     public function setCompany($c) { $this->company = $c; }
     
+    /**
+     * 
+     * @return Person
+     */
     public function getPerson() { return $this->person; }
     public function setPerson($p) { $this->person = $p; }
     
@@ -91,6 +99,63 @@ class Customer extends \core\db\DBObject {
     
     public function getCreatedFormat($f='d-m-Y H:i:s') {
         return format_datetime($this->getField('created'), $f);
+    }
+    
+    
+    public function getTemplateVars() {
+        $vars = array();
+        $vars['naam']           = '';
+        $vars['naam2']           = '';
+        $vars['bedrijfsnaam']   = '';
+        $vars['adres']          = '';
+        $vars['straat']         = '';
+        $vars['huisnummer']     = '';
+        $vars['postcode']       = '';
+        $vars['woonplaats']     = '';
+        $vars['kvk_nummer']     = '';
+        $vars['btw_nummer']     = '';
+        $vars['telefoonnummer'] = '';
+        $vars['email']          = '';
+        
+        
+        if ($this->getType() == 'company' && $this->getCompany()) {
+            $vars['naam']         = $this->getCompany()->getContactPerson();
+            $vars['naam2']        = $this->getCompany()->getContactPerson();
+            $vars['bedrijfsnaam'] = $this->getCompany()->getCompanyName();
+            $vars['kvk_nummer']   = $this->getCompany()->getCocNumber();
+            $vars['btw_nummer']   = $this->getCompany()->getVatNumber();
+        } else if ($this->getType() == 'person'){
+            $vars['naam']  = $this->getPersonName();
+            $vars['naam2'] = $this->getPersonName();
+        }
+        
+        $list = $this->getAddressList();
+        if (count($list) > 0) {
+            /** @var \customer\model\Address $address */
+            $address = $list[0];
+            $vars['straat'] = $address->getStreet();
+            $vars['huisnummer'] = $address->getStreetNo();
+            $vars['adres'] = $vars['straat'] . ' ' . $vars['huisnummer'];
+            $vars['postcode'] = $address->getZipcode();
+            $vars['woonplaats'] = $address->getCity();
+        }
+        
+        $list = $this->getPhoneList();
+        if (count($list) > 0) {
+            /** @var Phone $phone */
+            $phone = $list[0];
+            
+            $vars['telefoonnummer'] = $phone->getPhonenr();
+        }
+        
+        $list = $this->getEmailList();
+        if (count($list) > 0) {
+            /** @var Email $email */
+            $email = $list[0];
+            $vars['email'] = $email->getEmailAddress();
+        }
+        
+        return $vars;
     }
     
     

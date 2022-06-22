@@ -320,6 +320,7 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
         for($x=0; $x < count($newInvoiceLines); $x++) {
             if (isset($newInvoiceLines[$x]['price'])) {
                 $price = strtodouble( $newInvoiceLines[$x]['price'] );
+                
                 $vatAmount = myround( $price * strtodouble($newInvoiceLines[$x]['amount']) * $newInvoiceLines[$x]['vat_percentage'] / 100, 2 );
                 
                 $totalCalculatedAmount += myround( $price * $newInvoiceLines[$x]['amount'], 2 );

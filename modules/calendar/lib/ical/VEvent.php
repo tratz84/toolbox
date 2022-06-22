@@ -208,6 +208,9 @@ class VEvent extends VEventInstance {
                 if ((int)format_date($dt2, 'Ymd') < $ymdstart)
                     continue;
                 
+//                 if ((int)format_date($dt2, 'Ymd') > $ymdend)
+//                     continue;
+                
                 if ($ymditemEnd && (int)format_date($dt2, 'Ymd') > $ymditemEnd)
                     break;
                 

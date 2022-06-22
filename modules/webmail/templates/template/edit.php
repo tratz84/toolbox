@@ -29,6 +29,51 @@
 		<th>[[naam]]</th>
 		<td>Naam contactpersoon, danwel volledige naam persoon, Voornaam + tussenvoegsel + achternaam</td>
 	</tr>
+	<tr>
+		<th>[[naam2]]</th>
+		<td>Naam contactpersoon, danwel volledige naam persoon, Voornaam + tussenvoegsel + achternaam</td>
+	</tr>
+	<tr>
+		<th>[[bedrijfsnaam]]</th>
+		<td>Naam bedrijf</td>
+	</tr>
+	<tr>
+		<th>[[adres]]</th>
+		<td>1e adres (straat + huisnr)</td>
+	</tr>
+	<tr>
+		<th>[[straat]]</th>
+		<td>Straatnaam</td>
+	</tr>
+	<tr>
+		<th>[[huisnummer]]</th>
+		<td></td>
+	</tr>
+	<tr>
+		<th>[[postcode]]</th>
+		<td></td>
+	</tr>
+	<tr>
+		<th>[[woonplaats]]</th>
+		<td></td>
+	</tr>
+	
+	<tr>
+		<th>[[telefoonnummer]]</th>
+		<td>1e telefoonnummer</td>
+	</tr>
+	<tr>
+		<th>[[email]]</th>
+		<td>1e emailadres</td>
+	</tr>
+	<tr>
+		<th>[[kvk_nummer]]</th>
+		<td>KVK nummer</td>
+	</tr>
+	<tr>
+		<th>[[btw_nummer]]</th>
+		<td>Btw nr</td>
+	</tr>
 
 	<tr>
 		<th>[[betreft]]</th>

@@ -10,28 +10,28 @@ use core\security\AuthorizationCheck;
 use core\exception\AuthorizationException;
 
 function unesc_html($str) {
-    if ($str == null) return '';
+    if ($str === null) return '';
     return html_entity_decode($str, ENT_HTML401, 'UTF-8');
 }
 
 function esc_html($str) {
-    if ($str == null) return '';
+    if ($str === null) return '';
     return htmlentities($str, ENT_COMPAT, 'UTF-8');
 }
 
 function esc_attr($str) {
-    if ($str == null) return '';
+    if ($str === null) return '';
     return htmlentities($str, ENT_QUOTES, 'UTF-8');
 }
 
 function esc_json_attr($str) {
-    if ($str == null) $str = '';
+    if ($str === null) $str = '';
     return htmlentities(json_encode($str), ENT_QUOTES, 'UTF-8');
 }
 
 
 function infopopup($t) {
-    if ($t == null) return '';
+    if ($t === null) return '';
     
     $html = '';
     

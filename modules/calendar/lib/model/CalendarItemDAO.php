@@ -3,6 +3,8 @@
 
 namespace calendar\model;
 
+use core\db\DatabaseHandler;
+
 
 
 class CalendarItemDAO extends \core\db\DAOObject {
@@ -76,7 +78,8 @@ class CalendarItemDAO extends \core\db\DAOObject {
 	    $params[] = $start;
 	    $params[] = $start;
 
-	    $sql_dates .= ' OR (start_date >= ? and (end_date is null OR end_date <= ?) and recurrence_rule is not null) ';
+	    $sql_dates .= ' OR (start_date >= ? and start_date <= ? and (end_date is null OR end_date <= ?) and recurrence_rule is not null) ';
+	    $params[] = $start;
 	    $params[] = $start;
 	    $params[] = $end;
 	    

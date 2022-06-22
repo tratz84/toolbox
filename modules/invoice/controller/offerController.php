@@ -231,16 +231,11 @@ class offerController extends BaseController {
         }
         
         $vars = array();
-        $vars['naam'] = '';
+        $vars = $offer->getCustomer()->getTemplateVars();
+        
         $vars['betreft'] = $offer->getSubject();
         $vars['document_no'] = $offer->getOfferNumberText();
         $vars = array_merge($offer->getFields(), $vars);
-        if ($offer->getCustomer()) {
-            if ($offer->getCustomer()->getType() == 'company')
-                $vars['naam'] = $offer->getCustomer()->getCompany()->getContactPerson();
-            else
-                $vars['naam'] = $offer->getCustomer()->getPersonName();
-        }
         
         $html = $template->render($vars);
         $files = array();
