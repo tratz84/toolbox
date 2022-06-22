@@ -116,6 +116,8 @@ class CustomerService extends ServiceBase {
                     $cd = array_merge($cd, $e);
                 }
                 
+                $cd = apply_filter( 'customer-report-record', $cd );
+                
                 $customers[] = $cd;
             }
             
