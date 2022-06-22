@@ -5,12 +5,14 @@
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use customer\service\CustomerService;
 use core\controller\BaseReportController;
+use customer\form\CustomerReportIndexTable;
 
 class customerReportController extends BaseReportController {
     
     
     public function report($render=true) {
         
+        $this->it = new CustomerReportIndexTable();
         
         if ($render)
             return $this->renderToString();
