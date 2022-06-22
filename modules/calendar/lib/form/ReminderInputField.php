@@ -177,7 +177,7 @@ class ReminderInputField extends BaseWidget {
                 $html .= '<input type="checkbox" name="weekly_tu" value="tu" '.$this->byDayChecked('tu').' /> di &nbsp; ';
                 $html .= '<input type="checkbox" name="weekly_we" value="we" '.$this->byDayChecked('we').' /> wo &nbsp; ';
                 $html .= '<input type="checkbox" name="weekly_th" value="th" '.$this->byDayChecked('th').' /> do &nbsp; ';
-                $html .= '<input type="checkbox" name="weekly_fr" value="fr" '.$this->byDayChecked('fr').' /> fr &nbsp; ';
+                $html .= '<input type="checkbox" name="weekly_fr" value="fr" '.$this->byDayChecked('fr').' /> vr &nbsp; ';
                 $html .= '<input type="checkbox" name="weekly_sa" value="sa" '.$this->byDayChecked('sa').' /> za &nbsp; ';
                 $html .= '<input type="checkbox" name="weekly_su" value="su" '.$this->byDayChecked('su').' /> zo &nbsp; ';
             $html .= '</div>';
