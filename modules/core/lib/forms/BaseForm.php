@@ -23,6 +23,7 @@ class BaseForm extends WidgetContainer implements LockableObject {
     protected $errors = array();
     
     protected $action = "";
+    protected $method = "POST";
     protected $enctype = "application/x-www-form-urlencoded";
     
     protected $keyFields = array();
@@ -99,6 +100,15 @@ class BaseForm extends WidgetContainer implements LockableObject {
     
     public function setAction($str) { $this->action = $str; }
     public function getAction() { return $this->action; }
+    
+    public function setMethod($m) {
+        $m = trim(strtoupper($m));
+        if ($m != 'GET' && $m != 'POST') {
+            throw new InvalidStateException( 'Invalid method specified' );
+        }
+        $this->method = $m;
+    }
+    public function getMethod() { return $this->method; }
     
     protected function enctypeToMultipartFormdata() {
         $this->enctype = 'multipart/form-data';
@@ -333,7 +343,7 @@ class BaseForm extends WidgetContainer implements LockableObject {
         }
         
         
-        $html .= '<form method="POST" enctype="'.$this->enctype.'" action="'.esc_attr($this->action).'" class="form-generator form-'.slugify($className).($this->isObjectLocked()?' form-object-locked':'').'" ';
+        $html .= '<form method="'.$this->method.'" enctype="'.$this->enctype.'" action="'.esc_attr($this->action).'" class="form-generator form-'.slugify($className).($this->isObjectLocked()?' form-object-locked':'').'" ';
         
         foreach($this->htmlAttributes as $key => $val) {
             $html .= ' ' . esc_attr($key) . '="' . esc_attr($val) . '"';
