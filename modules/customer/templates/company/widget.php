@@ -37,7 +37,7 @@
     			<td>E-mail</td>
     			<td class="email"><a href="mailto:<?= esc_attr($e->getEmailAddress()) ?>"><?= esc_html($e->getEmailAddress()) ?></a></td>
     			<td class="note">
-    				<?php if (trim($e->getNote())) : ?>
+    				<?php if ($e->getNote() && trim($e->getNote())) : ?>
     					<?= esc_html($e->getNote()) ?>
     				<?php endif ?>
     			</td>
@@ -50,7 +50,7 @@
     			<td>Tel.</td>
     			<td class="phonenr">
     				<a href="tel:<?= esc_attr($p->getPhonenr()) ?>"><?= esc_html($p->getPhonenr()) ?></a>
-    				<?php if (trim($p->getNote())) : ?>
+    				<?php if ($p->getNote() && trim($p->getNote())) : ?>
     					(<?= esc_html($p->getNote()) ?>)
     				<?php endif ?>
     			</td>
