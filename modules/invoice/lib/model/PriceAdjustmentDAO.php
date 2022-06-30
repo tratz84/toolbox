@@ -37,6 +37,13 @@ class PriceAdjustmentDAO extends \core\db\DAOObject {
 	    return $this->queryOne($sql, array($refObject, $refId, $startDate));
 	}
 	
+	public function readByRefStart( $refObject, $startDate ) {
+	    $sql = 'select * from invoice__price_adjustment where ref_object = ? and start_date = ?';
+	    
+	    return $this->queryList($sql, array($refObject, $startDate));
+	}
+	
+	
 	public function readByRefPeildatum($refObject, $refId, $peildatum) {
 	    $sql = 'select *
         	    from invoice__price_adjustment
