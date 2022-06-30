@@ -48,6 +48,7 @@ class reportController extends BaseController {
             $this->addTitle($this->report->getName());
             
             $ctrl = $this->oc->getController($this->report->getModule(), $this->report->getControllerName());
+            $this->reportController = $ctrl;
             
             $this->divReportClasses[] = 'module-' . slugify($this->report->getModule());
             $this->divReportClasses[] = 'controller-' . slugify($this->report->getControllerName());

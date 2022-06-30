@@ -4,7 +4,11 @@
 <div class="page-header">
 	
 	<div class="toolbox list-toolbox">
-    	<?php if (isset($report) && $report->getExcelUrl()) : ?>
+		<?php if (method_exists($reportController, 'toolboxActions')) : ?>
+		<?= $reportController->toolboxActions() ?>
+		<?php endif; ?>
+		
+		<?php if (isset($report) && $report->getExcelUrl()) : ?>
 		<a href="javascript:void(0);" onclick="exportReportToXls();" class="fa fa-file-excel-o"></a>
 		<?php endif; ?>
 	</div>
