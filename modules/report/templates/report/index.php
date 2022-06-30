@@ -4,7 +4,7 @@
 <div class="page-header">
 	
 	<div class="toolbox list-toolbox">
-		<?php if (method_exists($reportController, 'toolboxActions')) : ?>
+		<?php if (isset($reportController) && method_exists($reportController, 'toolboxActions')) : ?>
 		<?= $reportController->toolboxActions() ?>
 		<?php endif; ?>
 		
