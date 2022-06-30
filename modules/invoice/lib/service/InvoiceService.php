@@ -555,6 +555,26 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
 
         return $pa;
     }
+    
+    public function removePriceAdjustment($companyId, $personId, $refObject, $refId, $startDate) {
+        $paDao = new PriceAdjustmentDAO();
+        $pa = $paDao->readByStart($refObject, $refId, $startDate);
+        
+        if (!$pa) {
+            return false;
+        }
+        
+        $pa->delete();
+        
+        ActivityUtil::logActivity($companyId
+            , $personId
+            , $refObject
+            , $refId
+            , 'price-adjustment-deleted'
+            , 'Prijswijziging verwijderd voor '.format_date($startDate, 'd-m-Y') . ', ' . format_price($pa->getNewPrice(), true, ['thousands' => '.']));
+        
+        return true;
+    }
 
 
 
