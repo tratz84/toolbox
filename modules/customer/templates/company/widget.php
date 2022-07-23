@@ -36,7 +36,7 @@
     		<tr>
     			<td>E-mail</td>
     			<td class="email"><a href="mailto:<?= esc_attr($e->getEmailAddress()) ?>"><?= esc_html($e->getEmailAddress()) ?></a></td>
-    			<td class="note">
+    			<td class="smallnote">
     				<?php if ($e->getNote() && trim($e->getNote())) : ?>
     					<?= esc_html($e->getNote()) ?>
     				<?php endif ?>
