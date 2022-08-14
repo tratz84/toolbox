@@ -268,6 +268,8 @@ function explode_attributes($keys) {
 
 function apply_html_vars($html, $vars) {
     foreach($vars as $key => $val) {
+        if ($val === null)
+            $val = '';
         $html = str_replace('[['.$key.']]', $val, $html);
     }
     
