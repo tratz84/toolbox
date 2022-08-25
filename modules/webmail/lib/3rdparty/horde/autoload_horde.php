@@ -11,7 +11,8 @@ spl_autoload_register(function($name) {
     $path = realpath( __DIR__.'/lib/'.$path );
     
     if ($path && is_file($path) && strpos($path, realpath( __DIR__.'/lib/')) === 0) {
-        require_once $path;
+        // TODO: fix notices..
+        @require_once $path;
     }
     
 });
