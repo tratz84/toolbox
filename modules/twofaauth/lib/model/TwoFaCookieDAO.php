@@ -61,11 +61,11 @@ class TwoFaCookieDAO extends \core\db\DAOObject {
 	    
 	    
 	    if (isset($opts['user_id']) && $opts['user_id']) {
-	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('user_id', '=', $opts['user_id']));
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('twofaauth__two_fa_cookie.user_id', '=', $opts['user_id']));
 	    }
 	    
 	    if (isset($opts['after_created_date']) && $opts['after_created_date']) {
-	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('created', '>=', $opts['after_created_date']));
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('twofaauth__two_fa_cookie.created', '>=', $opts['after_created_date']));
 	    }
 	    
 	    if (isset($opts['limit']) && $opts['limit']) {
