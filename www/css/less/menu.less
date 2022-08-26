@@ -19,20 +19,20 @@ header .notifications-bar {
 		padding-left: 14px;
 	}
 	.nav-side-menu {
-		width: 39px;
+		width: 44px;
 		
 		> .menu-list > .menu-content > .menu-item {
 			> a > span { display: none; }
 			
 			> .nav-link {
-				padding-left: 4px;
-				padding-right: 5px;
+				padding-left: 2px;
+				padding-right: 7px;
 			}
 		}
 			
 	}
 	.main-content {
-		margin-left: 58px;
+		margin-left: 71px;
 	}
 }
 
@@ -45,7 +45,6 @@ header .notifications-bar {
 	font-family: verdana;
 	font-size: 12px;
 	font-weight: 200;
-	background-color: #f5f5f5;
 	position: absolute;
 	top: 0px;
 	z-index: 1;
@@ -54,9 +53,10 @@ header .notifications-bar {
 	color: #fff;
 	box-shadow: 0px 0px 5px 0px #ccc;
 	
-	margin-left: 0px;
-	margin-top: 5px;
+	margin-left: 10px;
+	margin-top: 65px;
 	z-index: 10001;
+	padding-top: 0;
 }
 
 
@@ -92,8 +92,15 @@ header .notifications-bar {
 .nav-side-menu li:hover a {
 	background-color: #dfdfdf;
 }
+
+.nav-side-menu li a {
+	border-left: 4px solid #f5f5f5;
+}
 .nav-side-menu li a.active {
 	background-color: #dfdfdf;
+}
+.nav-side-menu li a.nav-link {
+	padding: 0.5rem calc(1rem - 4px);
 }
 
 

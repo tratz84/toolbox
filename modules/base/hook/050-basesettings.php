@@ -40,6 +40,10 @@ header .notifications-bar {
     background-color: rgba({$rgbMasterColor[0]}, {$rgbMasterColor[1]}, {$rgbMasterColor[2]}, 1) !important;
 }
 
+.nav-side-menu li a.active, .nav-side-menu li:hover > a {
+    border-color: rgba({$rgbMasterColor[0]}, {$rgbMasterColor[1]}, {$rgbMasterColor[2]}, 1) !important;
+}
+
 CSS;
         hook_add_inline_css($coreCssText);
     }
