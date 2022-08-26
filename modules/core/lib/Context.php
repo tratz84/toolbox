@@ -212,15 +212,15 @@ class Context
     
     public function isInvoiceModuleEnabled() { return $this->isModuleEnabled('invoice'); }
     
-    public function getCompanyName()      { return trim($this->getSetting('companyName')); }
-    public function getCompanyStreet()    { return trim($this->getSetting('companyStreet')); }
-    public function getCompanyZipcode()   { return trim($this->getSetting('companyZipcode')); }
-    public function getCompanyCity()      { return trim($this->getSetting('companyCity')); }
-    public function getCompanyPhone()     { return trim($this->getSetting('companyPhone')); }
-    public function getCompanyEmail()     { return trim($this->getSetting('companyEmail')); }
-    public function getCompanyCocNumber() { return trim($this->getSetting('companyCocNumber')); }
-    public function getCompanyIBAN()      { return trim($this->getSetting('companyIBAN')); }
-    public function getCompanyVat()       { return trim($this->getSetting('companyVat')); }
+    public function getCompanyName()      { return trim($this->getSetting('companyName', '')); }
+    public function getCompanyStreet()    { return trim($this->getSetting('companyStreet', '')); }
+    public function getCompanyZipcode()   { return trim($this->getSetting('companyZipcode', '')); }
+    public function getCompanyCity()      { return trim($this->getSetting('companyCity', '')); }
+    public function getCompanyPhone()     { return trim($this->getSetting('companyPhone', '')); }
+    public function getCompanyEmail()     { return trim($this->getSetting('companyEmail', '')); }
+    public function getCompanyCocNumber() { return trim($this->getSetting('companyCocNumber', '')); }
+    public function getCompanyIBAN()      { return trim($this->getSetting('companyIBAN', '')); }
+    public function getCompanyVat()       { return trim($this->getSetting('companyVat', '')); }
     
     public function getPrefixNumbers()    { return trim($this->getSetting('prefixNumbers')); }
     

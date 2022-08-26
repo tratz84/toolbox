@@ -82,10 +82,14 @@ class User extends base\UserBase {
     public function getFullname() {
         $parts = array();
         
-        if (trim($this->getFirstname()))
+        $fn = $this->getFirstname();
+        if ($fn == null) $fn = '';
+        if (trim($fn))
             $parts[] = trim($this->getFirstname());
         
-        if (trim($this->getLastname()))
+        $ln = $this->getLastname();
+        if ($ln == null) $ln = '';
+        if (trim($ln))
             $parts[] = trim($this->getLastname());
         
         return trim( implode(' ', $parts));
