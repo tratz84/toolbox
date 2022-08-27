@@ -1,9 +1,12 @@
 
+<style type="text/css">
+html, body { min-height: 100%; height: 100%; }
+</style>
 
 
 
 
-<form method="post" action="">
+<form method="post" action="" class="frm-auth">
 
 	<div class="auth-table">
 	
