@@ -20,7 +20,10 @@ $backgroundImage = $backgroundImages[0];
 		<base href="<?= BASE_HREF ?>" />
 
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-		<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" /> 
+		<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" />
+		
+		<meta name="robots" content="noindex,nofollow" />
+		 
 		
 		<style type="text/css">
 		html, body { min-height: 100%; height: 100%; }

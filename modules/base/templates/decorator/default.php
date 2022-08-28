@@ -13,6 +13,8 @@ $menuItems = $ms->listMainMenu();
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 		<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" />
 		
+		<meta name="robots" content="noindex,nofollow" />
+		
 		<script src="<?= BASE_HREF ?>lib/mobile-detect.min.js"></script>
 		<script>
 			var contextName = <?= json_encode($context->getContextName()) ?>;
