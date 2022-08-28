@@ -1,4 +1,17 @@
-<!doctype html>
+<?php 
+
+$backgroundImages = array();
+$backgroundImages[] = array(
+    'image' => BASE_HREF . 'images/login/bg-jason-hogan-unsplash.jpg'
+    , 'creditsText' => 'Big shout out & thanks to Jason for the background'
+    , 'creditsUrl' => 'https://unsplash.com/photos/YyFwUKzv5FM'
+);
+
+// TODO: some randomization when > 1
+$backgroundImage = $backgroundImages[0];
+
+
+?><!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
@@ -9,6 +22,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 		<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" /> 
 		
+		<style type="text/css">
+		html, body { min-height: 100%; height: 100%; }
+		</style>
 		
 		<script>
 			var appSettings = <?php
@@ -37,7 +53,15 @@
 		<link href="<?= BASE_HREF ?>lib/fontawesome-free-5.15.3-web/css/v4-shims.min.css" rel="stylesheet" type="text/css" />
 		<link href="<?= BASE_HREF ?>lib/fontawesome-free-5.15.3-web/css/all.min.css" rel="stylesheet" type="text/css" />
 	</head>
-<body class="auth">
+<body class="auth" style="background-image: url('<?= $backgroundImage['image'] ?>');">
+
+	<?php if (isset($backgroundImage['creditsText'])) : ?>
+	<div class="background-credits">
+		<a href="<?= esc_attr($backgroundImage['creditsUrl']) ?>" target="_blank" rel="noreferrer"><?= esc_html($backgroundImage['creditsText']) ?></a>
+	</div>
+	<?php endif; ?>
+
+
 
 	<div class="main-content">
 		<?php print $content ?>
