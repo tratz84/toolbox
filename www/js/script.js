@@ -8,7 +8,11 @@ window.onerror = function(message, source, lineno, colno, error) {
 	// <video />-playback error. Ignore this
 	if (message == 'ResizeObserver loop limit exceeded') {
 		return false;
-	} 
+	}
+	
+	// ignore TinyMCE errors
+	if (source && source.indexOf('tinymce.min.js') != -1)
+		return;
 	
 	// report..
 	$.ajax({
