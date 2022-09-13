@@ -429,6 +429,28 @@ function ListEditFormWidget(container) {
 }
 
 
+function handleCountersForSelector( listName, selector ) {
+	var rows = $( selector );
+	
+	rows.each(function(index, node) {
+		$(node).find('input, select').each(function(index2, node2) {
+			var elementName = node2.name;
+			
+			if (elementName.indexOf('[') != -1) {
+				elementName = elementName.substr(elementName.lastIndexOf('[')+1);
+				elementName = elementName.substr(0, elementName.indexOf(']'));
+			}
+			
+			elementName = listName + '[' + index + '][' + elementName + ']';
+			
+			node2.name = elementName;
+		});
+	});
+	
+}
+
+
+
 function setPopupFormErrors(container, errorList) {
 
 	// remove old errors
