@@ -114,6 +114,7 @@ class ProjectService extends ServiceBase {
             if ($objs[$x]['username'] == '') {
                 $objs[$x]['username'] = 'user-'.$objs[$x]['user_id'];
             }
+            $objs[$x]['customer_name'] = format_customername( $objs[$x] );
         }
         $r->setObjects( $objs );
         

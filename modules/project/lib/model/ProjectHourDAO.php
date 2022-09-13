@@ -89,6 +89,40 @@ class ProjectHourDAO extends \core\db\DAOObject {
 	    }
 	    
 	    
+	    if (isset($opts['username']) && trim($opts['username'])) {
+	        $username = trim($opts['username']).'%';
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('base__user.username', 'LIKE', $username));
+	    }
+	    
+	    if (isset($opts['project_name']) && trim($opts['project_name'])) {
+	        $projectName = trim($opts['project_name']).'%';
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('project__project.project_name', 'LIKE', $projectName));
+	    }
+	    
+	    if (isset($opts['short_description']) && trim($opts['short_description'])) {
+	        $shortDescription = '%' . trim($opts['short_description']) . '%';
+	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('project__project_hour.short_description', 'LIKE', $shortDescription));
+	    }
+	    
+	    
+	    if (isset($opts['customer_name']) && trim($opts['customer_name']) != '') {
+	        $customerName = trim($opts['customer_name']);
+	        $customerName = '%' . $customerName . '%';
+	        
+	        // create where
+	        $qbPerson = QueryBuilderWhere::whereRefByVal("CONCAT_WS( customer__person.firstname, ' ', customer__person.insert_lastname, ' ', customer__person.lastname, ' ', customer__person.insert_lastname, ' ', customer__person.firstname)", 'LIKE', $customerName);
+	        $qbCompany = QueryBuilderWhere::whereRefByVal("customer__company.company_name", 'LIKE', $customerName);
+	        
+	        // put in container
+	        $qcOrCustomer = new QueryBuilderWhereContainer();
+	        $qcOrCustomer->setJoinMethod( 'OR' );
+	        $qcOrCustomer->addWhere( $qbPerson );
+	        $qcOrCustomer->addWhere( $qbCompany );
+	        
+	        $qb->addWhere( $qcOrCustomer );
+	    }
+	    
+	    
 	    if (isset($opts['date']) && valid_date($opts['date'])) {
 	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('date(project__project_hour.start_time)', '=', format_date($opts['date'], 'Y-m-d')));
 	    }
