@@ -590,6 +590,31 @@ function formpost(url, data, opts) {
 	inpSubmit.remove();
 }
 
+function ajxPostFile( url, opts ) {
+	
+	var data = opts.data;
+	
+	var formData = new FormData();
+	for(var i in data) {
+		formData.append( i, data[i] );
+	}
+	formData.append( 'file', opts.file );
+
+	$.ajax({
+    	url: url,
+		data: formData,
+		type: 'POST',
+		contentType: 'multipart/form-data',
+		contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
+		processData: false, // NEEDED, DON'T OMIT THIS
+		success: opts.success,
+		error: opts.error,
+		complete: opts.complete
+	});
+}
+
+
+
 
 function focusFirstField(container) {
 	var inputs = $(container).find('input[type=text], input[type=number], input[type=tel], input[type=email]');
