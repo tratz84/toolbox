@@ -61,7 +61,7 @@ class EmlViewer {
         }
         
         $parsedMail = new \PhpMimeMailParser\Parser();
-        $parsedMail->setPath($this->getFilename());
+        @$parsedMail->setPath($this->getFilename());
         
         $dt = new \DateTime('now', new \DateTimeZone('+0000'));
         $dt->setTimestamp(strtotime($parsedMail->getHeader('date')));

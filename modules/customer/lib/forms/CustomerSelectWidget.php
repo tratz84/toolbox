@@ -125,6 +125,7 @@ class CustomerSelectWidget extends DynamicSelectField {
     
     public function fill($obj, $fields=array()) {
         $v = $this->getValue();
+        if ($v === null) $v = '';
         
         if (method_exists($obj, 'setCompanyId')) {
             $obj->setCompanyId(0);

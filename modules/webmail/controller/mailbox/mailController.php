@@ -142,7 +142,7 @@ class mailController extends BaseController {
             throw new ObjectNotFoundException( 'Mail not found' );
         }
         
-        $mail->parseMail();
+        @$mail->parseMail();
         $emlviewer = $mail->getEmlViewer();
         
         $this->id          = $mail->getId();
