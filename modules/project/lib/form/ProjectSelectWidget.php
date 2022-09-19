@@ -28,7 +28,7 @@ class ProjectSelectWidget extends DynamicSelectField {
         if (is_a($obj, ProjectHour::class)) {
             $p_id = $obj->getProjectId();
         }
-        if (method_exists($obj, 'getProjectId')) {
+        if (is_object($obj) && method_exists($obj, 'getProjectId')) {
             $p_id = $obj->getProjectId();
         }
         if (is_array($obj) && isset($obj['project_id'])) {
