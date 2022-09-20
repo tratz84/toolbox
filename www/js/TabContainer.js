@@ -19,7 +19,7 @@ $(document).ready(function() {
 	
 	// raise event when there's clicked on a TabContainer-tab
 	$('.nav.nav-tabs .nav-item.nav-link').click(function(e) {
-		$(window).trigger('tabcontainer-item-click', e.target);
+		$(window).trigger('tabcontainer-item-click', this);
 	});
 });
 
