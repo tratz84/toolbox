@@ -4,15 +4,15 @@
 
 <script>
 
-var t = new IndexTable('#project-hour-tab-table-container');
+var it_pht = new IndexTable('#project-hour-tab-table-container');
 
 
-t.setRowClick(function(row, evt) {
+it_pht.setRowClick(function(row, evt) {
 	window.location = appUrl('/?m=project&c=projectHour&a=edit&project_hour_id=' + $(row).data('record').project_hour_id);
 });
 
 
-t.setConnectorUrl( '/?m=project&c=projectHour&a=search&company_id=<?= $companyId ?>&person_id=<?= $personId ?>' );
+it_pht.setConnectorUrl( '/?m=project&c=projectHour&a=search&company_id=<?= $companyId ?>&person_id=<?= $personId ?>' );
 
 
 // t.addColumn({
@@ -22,14 +22,14 @@ t.setConnectorUrl( '/?m=project&c=projectHour&a=search&company_id=<?= $companyId
 // 	fieldType: 'text',
 // 	searchable: false
 // });
-t.addColumn({
+it_pht.addColumn({
 	fieldName: 'username',
 	fieldDescription: 'Gebruiker',
 	fieldType: 'text',
 	searchable: false
 });
 
-t.addColumn({
+it_pht.addColumn({
 	fieldName: 'project_id',
 	fieldDescription: 'Project',
 	fieldType: 'select',
@@ -39,28 +39,28 @@ t.addColumn({
 		return record.project_name;
 	}
 });
-t.addColumn({
+it_pht.addColumn({
 	fieldName: 'short_description',
 	fieldDescription: 'Omschrijving',
 	fieldType: 'text',
 	searchable: false
 });
 
-t.addColumn({
+it_pht.addColumn({
 	fieldName: 'start_time',
 	fieldDescription: 'Start',
 	fieldType: 'datetime',
 	searchable: false
 });
 
-t.addColumn({
+it_pht.addColumn({
 	fieldName: 'end_time',
 	fieldDescription: 'Eind',
 	fieldType: 'datetime',
 	searchable: false
 });
 
-t.addColumn({
+it_pht.addColumn({
 	fieldName: 'duration',
 	fieldDescription: 'Duur',
 	fieldType: 'text',
@@ -71,7 +71,7 @@ t.addColumn({
 });
 
 
-t.addColumn({
+it_pht.addColumn({
 	fieldName: 'declarable',
 	fieldDescription: 'Declarabel',
 	fieldType: 'boolean',
@@ -87,7 +87,7 @@ t.addColumn({
 	}
 });
 
-t.addColumn({
+it_pht.addColumn({
 	fieldName: 'project_hour_status_id',
 	fieldDescription: 'Status',
 	filterOptions: <?= json_encode($mapStatuses) ?>,
@@ -99,7 +99,7 @@ t.addColumn({
 });
 
 
-t.addColumn({
+it_pht.addColumn({
 	fieldName: '',
 	fieldDescription: '',
 	fieldType: 'actions',
@@ -123,7 +123,20 @@ t.addColumn({
 	}
 });
 
-t.load();
+// t.load();
+
+var projectHourTabLoaded = false;
+
+$(window).on('tabcontainer-item-click', function(evt, anchor) {
+	if ( $(anchor).data('tab-name') != 'projecturen' )
+		return;
+	if (projectHourTabLoaded)
+		return;
+
+	it_pht.load();
+	
+	projectHourTabLoaded = true;
+});
 
 </script>
 
