@@ -31,7 +31,7 @@ function esc_json_attr($str) {
 
 
 function infopopup($t) {
-    if ($t === null) return '';
+    if ($t === null || trim($t) == '') return '';
     
     $html = '';
     
