@@ -62,3 +62,12 @@ $('.form-pagequeue-upload-form').submit(function() {
 <?php endif; ?>
 
 
+<script>
+$('.form-pagequeue-upload-form').submit(function(evt) {
+	showPageLoading();
+});
+</script>
+
+
+
+
