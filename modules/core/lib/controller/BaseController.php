@@ -24,6 +24,10 @@ class BaseController {
     
     protected $pageTitle = array();
     
+    
+    protected $bodyClass = array();
+    
+    
     /**
      * @var \core\ObjectContainer
      */
@@ -92,6 +96,10 @@ class BaseController {
     public function setShowDecorator($bln) { $this->showDecorator = $bln; }
     
     public function setActionTemplate($p) { $this->actionTemplate = $p; }
+    
+    public function addBodyClass( $class ) {
+        $this->bodyClass[] = $class;
+    }
     
     
     public function renderToString() {
@@ -201,7 +209,14 @@ class BaseController {
         }
         $tplMaster->setVar( 'content', $tpl->getTemplate() );
         $tplMaster->setVar( 'context', $ctx );
-        $tplMaster->setVar( 'body_class', 'module-'.slugify($module). ' ' . slugify($module) . '-' . slugify(get_class($this)) . ' action-'.slugify($this->actionTemplate) );
+        
+        $body_class = 'module-'.slugify($module). ' ' . slugify($module) . '-' . slugify(get_class($this)) . ' action-'.slugify($this->actionTemplate);
+        if (count($this->bodyClass)) {
+            // TODO: esc_attr()?
+            $body_class .= ' ' . implode(' ', $this->bodyClass);
+        }
+        
+        $tplMaster->setVar( 'body_class', $body_class );
         
         $tplMaster->showTemplate();
     }
