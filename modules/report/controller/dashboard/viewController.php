@@ -52,6 +52,9 @@ class viewController extends BaseController {
             }
         }
         
+        $this->addBodyClass( 'report-dashboard' );
+        $this->addBodyClass( 'report-dashboard-widget-'.$this->report->getReportDashboardId() );
+        
         
         return $this->render();
     }
