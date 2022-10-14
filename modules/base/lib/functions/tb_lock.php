@@ -5,6 +5,7 @@
 
 use base\model\Lock;
 use base\model\LockDAO;
+use core\db\DatabaseHandler;
 
 function tb_lock_time( $lockname, $lock_seconds=null, $timeout=0 ) {
     $dt = date('Y-m-d H:i:s', time() + $lock_seconds);
@@ -41,5 +42,32 @@ function tb_release_lock( $lockname ) {
     
     return $ldao->deleteLock($lockname);
 }
+
+
+
+function db_lock( $lockName, $timeout = 3600 ) {
+    
+    $n = ctx()->getContextName() . '.' . $lockName;
+    
+    if (strlen($n) > 64) {
+        // generate notice.. should be fixed
+        trigger_error( 'db_lock, lockName exceeds 64 chars: ' . $lockName, E_USER_NOTICE );
+        
+        $n = substr($n, 0, 64);
+    }
+    
+    return DatabaseHandler::getInstance()->getLock( $n, $timeout );
+}
+
+function db_release_lock( $lockName ) {
+    
+    $n = ctx()->getContextName() . '.' . $lockName;
+    
+    if (strlen($n) > 64)
+        $n = substr($n, 0, 64);
+    
+    return DatabaseHandler::getInstance()->releaseLock( $n );
+}
+
 
 
