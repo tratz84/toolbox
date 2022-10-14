@@ -56,7 +56,7 @@ function db_lock( $lockName, $timeout = 3600 ) {
         $n = substr($n, 0, 64);
     }
     
-    return DatabaseHandler::getInstance()->getLock( $n, $timeout );
+    return DatabaseHandler::getInstance()->getConnection('default')->getLock( $n, $timeout );
 }
 
 function db_release_lock( $lockName ) {
@@ -66,7 +66,7 @@ function db_release_lock( $lockName ) {
     if (strlen($n) > 64)
         $n = substr($n, 0, 64);
     
-    return DatabaseHandler::getInstance()->releaseLock( $n );
+    return DatabaseHandler::getInstance()->getConnection('default')->releaseLock( $n );
 }
 
 
