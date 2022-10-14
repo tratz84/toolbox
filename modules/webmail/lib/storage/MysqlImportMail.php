@@ -135,7 +135,7 @@ class MysqlImportMail extends ImportMailBase {
             $lockName = substr( ctx()->getContextName() . '-' . md5($e['id']), 0, 64 );
             
             // getLock, inbox-monitor & sync-script might run at the same time
-            if ( tb_lock_time( $lockName, 30, 3 ) == false ) {
+            if ( tb_lock_time( $lockName, 600, 3 ) == false ) {
                 continue;
             }
             
