@@ -63,6 +63,8 @@ class viewController extends BaseController {
     
     
     public function action_render_widget() {
+        session_write_close();
+        
         $widgets = list_report_dashboard_widgets();
         
         $code = get_var('code');
