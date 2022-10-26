@@ -51,6 +51,7 @@ class DBObject {
     }
     
     protected function setDatabaseFields($arr) { $this->dbFields = $arr; }
+    public function getDatabaseFieldNames() { return array_keys( $this->dbFields ); }
     
     public function getColumnType($columnName) {
         if (isset($this->dbFields[$columnName]['Type'])) {
@@ -143,7 +144,10 @@ class DBObject {
             // cast value
             if ($val === null) {
                 
-            } else if (strpos($meta['Type'], 'int') === 0) {
+            }
+            else if (isset($meta['Type']) == false) {
+            }
+            else if (strpos($meta['Type'], 'int') === 0) {
                 $val = (int)$val;
             }
             else if (strpos($meta['Type'], 'bigint') === 0) {
@@ -176,7 +180,11 @@ class DBObject {
                 // cast value
                 if ($val === null) {
                     // null is fine :)
-                } else if (strpos($meta['Type'], 'int(') === 0) {
+                }
+                else if (isset($meta['Type']) == false) {
+                    
+                }
+                else if (strpos($meta['Type'], 'int(') === 0) {
                     $val = (int)$val;
                 }
                 else if (strpos($meta['Type'], 'bigint(') === 0) {
