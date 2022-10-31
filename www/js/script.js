@@ -590,6 +590,7 @@ function formpost(url, data, opts) {
 	inpSubmit.remove();
 }
 
+
 function ajxPostFile( url, opts ) {
 	
 	var data = opts.data;
@@ -657,6 +658,59 @@ function serialize2object( container ) {
 	
 	return obj;
 }
+
+
+
+function serialize2get( frm, opts ) {
+	opts = opts ? opts : {};
+	var params = new Array();
+	
+	$( frm ).find('input, select, textarea').each(function(index, node) {
+		var n = $(node).attr('name');
+		var v = $(node).val();
+		
+		if ($(node).attr('type') == 'checkbox' && $(node).prop('checked') == false)
+			return;
+		if ($(node).attr('type') == 'radio' && $(node).prop('checked') == false)
+			return;
+
+		if (n == 'form-name') return;
+		if (n == 'object-locked') return;
+		if (n == 'object_version') return;
+		if (v == '') return;
+
+		params.push( encodeURIComponent(n) + '=' + encodeURIComponent(v) );
+	});
+	
+	return params.join('&');
+}
+
+function submitformasget( frm ) {
+	var params = new Array();
+	
+	var oldGetParams = getUrlParams();
+	if (oldGetParams['m'])
+		params.push( 'm=' + encodeURIComponent( oldGetParams['m'] ) );
+	if (oldGetParams['c'])
+		params.push( 'c=' + oldGetParams['c'] );
+	if (oldGetParams['a'])
+		params.push( 'a=' + encodeURIComponent( oldGetParams['a'] ) );
+	
+	var url = params.join('&');
+	var get = serialize2get( frm );
+	
+	if (url != '' && get != '') {
+		url = url + '&' + get;
+	}
+	else {
+		url = url + get;
+	}
+	console.log( url );
+//	return;
+	
+	window.location = appUrl('/?' + url);
+}
+
 
 
 
