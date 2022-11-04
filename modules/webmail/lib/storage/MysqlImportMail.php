@@ -132,7 +132,7 @@ class MysqlImportMail extends ImportMailBase {
             $email = null;
             
             // max length = 64-chars
-            $lockName = substr( ctx()->getContextName() . '-' . md5($e['id']), 0, 40 );
+            $lockName = 'mail-import';//substr( md5($e['id']), 0, 40 );
             
             // getLock, inbox-monitor & sync-script might run at the same time
             if ( db_lock( $lockName, 600 ) == false ) {
