@@ -132,10 +132,10 @@ class MysqlImportMail extends ImportMailBase {
             $email = null;
             
             // max length = 64-chars
-            $lockName = substr( ctx()->getContextName() . '-' . md5($e['id']), 0, 64 );
+            $lockName = substr( ctx()->getContextName() . '-' . md5($e['id']), 0, 40 );
             
             // getLock, inbox-monitor & sync-script might run at the same time
-            if ( tb_lock_time( $lockName, 600, 3 ) == false ) {
+            if ( db_lock( $lockName, 600 ) == false ) {
                 continue;
             }
             
@@ -202,7 +202,7 @@ class MysqlImportMail extends ImportMailBase {
             $isNew = $email->isNew();
             $email->save();
             
-            tb_release_lock( $lockName );
+            db_release_lock( $lockName );
             
             
             // new only, recipients never change

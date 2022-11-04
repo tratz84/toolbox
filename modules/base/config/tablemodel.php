@@ -157,7 +157,7 @@ $tb_note->addColumn('edited',            'datetime');
 $tb_note->addColumn('created',           'datetime');
 $tbs[] = $tb_note;
 
-
+/*
 $tb_lock = new TableModel('base', 'lock');
 $tb_lock->addColumn('lock_id',     'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
 $tb_lock->addColumn('lock_name',   'varchar(128)');
@@ -165,7 +165,7 @@ $tb_lock->addColumn('expires',     'datetime');
 $tb_lock->addColumn('created',     'datetime');
 $tb_lock->addIndex('index_lock_name', ['lock_name'], ['unique' => true]);
 $tbs[] = $tb_lock;
-
+*/
 
 
 
