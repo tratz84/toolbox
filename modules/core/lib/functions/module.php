@@ -240,11 +240,15 @@ function module_update_handler($moduleName, $version, $opts=array()) {
                 }
             }
             
-            // loop through changed TableModel's to generate DBObject-base classes & DAO-classes
-            foreach($changedTableModels as $tm) {
-                $gen = new \core\generator\DAOGenerator('default', $moduleName, $tm->getSchemaName().'__'.$tm->getTableName());
-                $gen->generate();
-            }
+        }
+    }
+    
+    // tables changes & in debug-module? => generate DAO/Base
+    if (is_debug() && $ctx->isModuleEnabled('codegen') && count($changedTableModels) > 0) {
+        // loop through changed TableModel's to generate DBObject-base classes & DAO-classes
+        foreach($changedTableModels as $tm) {
+            $gen = new \core\generator\DAOGenerator('default', $moduleName, $tm->getSchemaName().'__'.$tm->getTableName());
+            $gen->generate();
         }
     }
     
