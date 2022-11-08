@@ -222,6 +222,8 @@ function get_component($module, $controller, $action, $vars=array()) {
 }
 
 function get_template($file, $vars=array()) {
+    $file = apply_filter('get_template', $file);
+    
     foreach($vars as $key => $val) {
         $$key = $val;
     }
