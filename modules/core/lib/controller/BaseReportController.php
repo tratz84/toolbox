@@ -11,6 +11,9 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 abstract class BaseReportController extends BaseController {
     
+    protected $reportTitle = null;
+    
+    
     public function __construct() {
         parent::__construct();
         
@@ -19,7 +22,10 @@ abstract class BaseReportController extends BaseController {
     }
     
     public abstract function report();
-
+    
+    public function getReportTitle() { return $this->reportTitle; }
+    public function setReportTitle($t) { $this->reportTitle = $t; }
+    
     
     public function xlsHeader($sheet, $headers, $rowno=1) {
         for($x=0; $x < count($headers); $x++) {

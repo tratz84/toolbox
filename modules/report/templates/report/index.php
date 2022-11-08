@@ -14,10 +14,14 @@
 	</div>
 	
     <h1>
-    	<?= t('report.Reports') ?>
-    	<?php if (isset($report)) : ?>
-    	- <?= esc_html($report->getName()) ?>
-    	<?php endif; ?>
+    	<?php if (isset($reportController) && $reportController->getReportTitle()) : ?>
+    		<?= $reportController->getReportTitle() ?>
+    	<?php else : ?>
+        	<?= t('report.Reports') ?>
+        	<?php if (isset($report)) : ?>
+        	- <?= esc_html($report->getName()) ?>
+        	<?php endif; ?>
+        <?php endif; ?>
     </h1>
 </div>
 
