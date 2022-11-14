@@ -5,6 +5,7 @@
 use core\Context;
 use base\service\SettingsService;
 use core\db\DatabaseHandler;
+use core\module\ModuleMeta;
 
 function module_list($forceReload=false) {
     static $modules = null;
@@ -90,18 +91,24 @@ function module_file_safe($module, $path, $subpath) {
 
 
 function meta_active_modules() {
-    $meta = array();
+    $metas = array();
     
     $modules = module_list();
     foreach($modules as $moduleName => $path) {
         if (ctx()->isModuleEnabled($moduleName)) {
             if (file_exists($path . '/meta.php')) {
-                $meta[$moduleName] = load_php_file( $path . '/meta.php' );
+                $meta = load_php_file( $path . '/meta.php' );
+                
+                // invalid response? => skip
+                if (is_a($meta, ModuleMeta::class) == false)
+                    continue;
+                
+                $metas[$moduleName] = $meta;
             }
         }
     }
     
-    return $meta;
+    return $metas;
 }
 
 

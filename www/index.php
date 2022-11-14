@@ -28,12 +28,13 @@ if (is_post()) {
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
+		<meta name="robots" content="noindex,nofollow" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		
 		<title>itxplain - Toolbox</title>
 
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" /> 
 		<link href="<?= BASE_HREF ?>css/bootstrap/bootstrap.min.css" type="text/css" rel="stylesheet" />
-
 	</head>
 <body>
 
