@@ -61,6 +61,10 @@ class reportController extends BaseController {
             $this->showIndex = true;
         }
         
+        if (isset($_REQUEST['show_decorator']) && $_REQUEST['show_decorator'] == false) {
+            $this->setShowDecorator( false );
+        }
+        
         
         $this->render();
     }
