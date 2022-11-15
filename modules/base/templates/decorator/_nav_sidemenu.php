@@ -50,7 +50,7 @@
 				</li>
     		<?php endforeach; ?>
     		
-				<li class="menu-item menu-item-sign-out">
+				<li class="menu-item menu-item-sign-out d-md-none">
 					<a class="nav-link" 
 						href="<?= appUrl('/?m=base&c=auth&a=logoff') ?>"
 						title="<?= t('Log out') ?>">
