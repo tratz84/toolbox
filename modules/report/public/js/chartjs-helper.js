@@ -3,6 +3,7 @@
 
 function create_chartjs( id, config ) {
 	var container = $( '#' + id );
+	container.addClass( 'chart-js-container' );
 	
 	var parentContainer = $(container).closest('.grid-stack-item-content');
 	
@@ -19,8 +20,11 @@ function create_chartjs( id, config ) {
 		h *= config.heightRatio;
 	}
 	
+	config.options.responsive = true;
+	config.options.maintainAspectRatio = false;
+
 	var canvas = $('<canvas />');
-	canvas.attr('width', w);
+//	canvas.attr('width', w);
 	canvas.attr('height', h);
 	container.append( canvas );
 	
@@ -28,6 +32,7 @@ function create_chartjs( id, config ) {
 	
 	var bar = new Chart( ctx, config );
 	
+	container.data( 'chartjs', bar );
 }
 
 

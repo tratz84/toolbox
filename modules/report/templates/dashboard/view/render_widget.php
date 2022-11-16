@@ -3,7 +3,7 @@
 	<?= $widget->getReportTitle() ?>
 </div>
 
-<div id="<?= $widget ? $widget->getReportCode() : 'not-found' ?>-actions-table-container">
+<div id="<?= $widget ? $widget->getReportCode() : 'not-found' ?>-actions-table-container" class="dashboard-widget-content">
 
 
 <?php if ($widget) : ?>
