@@ -132,7 +132,7 @@ class MysqlImportMail extends ImportMailBase {
         
         // getLock, inbox-monitor & sync-script might run at the same time
         if ( db_lock( $lockName, 600 ) == false ) {
-            continue;
+            return;
         }
         
         $mailsSaved = array();
