@@ -166,7 +166,7 @@ function module_less_defaults() {
     $l = array();
     
     foreach($modules as $moduleName => $path) {
-        if (file_exists($path . '/public/css/default.less')) {
+        if (ctx()->isModuleEnabled($moduleName) && file_exists($path . '/public/css/default.less')) {
             $l[] = 'module/'.$moduleName.'/css/default.less';
         }
     }
