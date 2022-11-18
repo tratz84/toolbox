@@ -10,6 +10,8 @@ class WebmailSyncJob extends CronJobBase {
     
     public function __construct() {
         $this->title = 'Webmail imap/pop3 synchroniseren';
+        
+        $this->setAutoHandleDbTransaction( false );
     }
     
     
