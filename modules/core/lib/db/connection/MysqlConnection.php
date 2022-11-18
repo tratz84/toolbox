@@ -50,6 +50,8 @@ class MysqlConnection extends DBConnection {
     public function getLastQuery() { return $this->lastQuery; }
     public function getAffectedRows() { return $this->affected_rows; }
     
+    public function getTransactionCount() { return $this->transactionCount; }
+    
     public function connect() {
         $this->mysqli = new \mysqli($this->host, $this->username, $this->password, $this->databaseName);
         
