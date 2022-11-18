@@ -135,14 +135,9 @@ class MysqlImportMail extends ImportMailBase {
             return;
         }
         
-        $mailsSaved = array();
-        
         foreach($this->documents as $e) {
             $email = null;
             
-            
-            if (isset($mailsSaved[ $e['id'] ]))
-                continue;
             
             $emails = $eDao->readBySolrMailId( $e['id'] );
             if (count($emails) > 0)
@@ -207,8 +202,6 @@ class MysqlImportMail extends ImportMailBase {
             $isNew = $email->isNew();
             $email->save();
             
-            
-            $mailsSaved[ $e['id'] ] = true;
             
             
             // new only, recipients never change
