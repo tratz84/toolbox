@@ -12,6 +12,7 @@ use core\exception\NotImplementedException;
 use webmail\model\Email;
 use webmail\model\EmailTo;
 use core\db\DatabaseHandler;
+use core\exception\InvalidStateException;
 
 
 class MysqlImportMail extends ImportMailBase {
@@ -129,6 +130,11 @@ class MysqlImportMail extends ImportMailBase {
         
         
         foreach($this->documents as $e) {
+            
+            // db lock must start before any transaction to prevent duplicate records 
+            if ( DatabaseHandler::getConnection('default')->getTransactionCount() != 0 ) {
+                throw new InvalidStateException( "Transaction not allowed at this moment" );
+            }
             
             // getLock, inbox-monitor & sync-script might run at the same time
             // lock not retrieved? => no problemo, other thread saves mail.. just skip
