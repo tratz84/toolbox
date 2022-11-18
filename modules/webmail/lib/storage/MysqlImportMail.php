@@ -127,15 +127,17 @@ class MysqlImportMail extends ImportMailBase {
         
         $eDao = new EmailDAO();
         
-        // max length = 64-chars
-        $lockName = 'mail-import';//substr( md5($e['id']), 0, 40 );
-        
-        // getLock, inbox-monitor & sync-script might run at the same time
-        if ( db_lock( $lockName, 600 ) == false ) {
-            return;
-        }
         
         foreach($this->documents as $e) {
+            
+            // getLock, inbox-monitor & sync-script might run at the same time
+            // lock not retrieved? => no problemo, other thread saves mail.. just skip
+            $lockName = md5($e['id']);
+            if ( db_lock( $lockName, 0 ) == false ) {
+                continue;
+            }
+            
+            
             $email = null;
             
             
@@ -203,6 +205,9 @@ class MysqlImportMail extends ImportMailBase {
             $email->save();
             
             
+            // release lock
+            db_release_lock( $lockName );
+            
             
             // new only, recipients never change
             if ($isNew) {
@@ -224,7 +229,6 @@ class MysqlImportMail extends ImportMailBase {
             }
         }
         
-        db_release_lock( $lockName );
         
         if (is_cli()) {
             print_info("Document no: " . $this->documentCount);
