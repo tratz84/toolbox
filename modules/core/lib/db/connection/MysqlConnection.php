@@ -50,8 +50,6 @@ class MysqlConnection extends DBConnection {
     public function getLastQuery() { return $this->lastQuery; }
     public function getAffectedRows() { return $this->affected_rows; }
     
-    public function getTransactionCount() { return $this->transactionCount; }
-    
     public function connect() {
         $this->mysqli = new \mysqli($this->host, $this->username, $this->password, $this->databaseName);
         
@@ -129,6 +127,15 @@ class MysqlConnection extends DBConnection {
      * @param int $timeout - in seconds
      */
     public function getLock( $name, $timeout = 3600 ) {
+        
+        // db lock must start before any transaction to prevent duplicate records
+        if ( $this->transactionCount > 0 ) {
+            trigger_error( 'Transaction active while calling getLock(), this will throw an exception in the future' );
+//             throw new InvalidStateException( "Transaction not allowed at this moment" );
+        }
+        
+        
+        
         if (strlen($name) > 64) {
             // https://dev.mysql.com/doc/refman/5.7/en/locking-functions.html
             // MySQL 5.7 and later enforces a maximum length on lock names of 64 characters. Previously, no limit was enforced.

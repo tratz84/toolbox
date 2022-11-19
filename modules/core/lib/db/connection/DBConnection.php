@@ -24,8 +24,6 @@ abstract class DBConnection {
     public abstract function getLock($name, $timeout=3600);
     public abstract function releaseLocks();
     
-    public abstract function getTransactionCount();
-    
     public abstract function createQueryBuilder();
     
 }

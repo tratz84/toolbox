@@ -405,14 +405,7 @@ class HordeConnector extends BaseMailConnector {
     
     
     public function importInbox() {
-        try {
-            db_lock( 'webmail_inbox' );
-            
-            return $this->_importInbox();
-        }
-        finally {
-            db_release_lock( 'webmail_inbox' );
-        }
+        return $this->_importInbox();
     }
     
     protected function _importInbox() {
