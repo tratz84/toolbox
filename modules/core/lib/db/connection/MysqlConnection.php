@@ -6,6 +6,7 @@ use core\db\DatabaseHandler;
 use core\db\query\MysqlCursor;
 use core\db\query\MysqlQueryBuilder;
 use core\exception\DatabaseException;
+use core\exception\InvalidStateException;
 use InvalidArgumentException;
 
 
@@ -130,8 +131,8 @@ class MysqlConnection extends DBConnection {
         
         // db lock must start before any transaction to prevent duplicate records
         if ( $this->transactionCount > 0 ) {
-            trigger_error( 'Transaction active while calling getLock(), this will throw an exception in the future' );
-//             throw new InvalidStateException( "Transaction not allowed at this moment" );
+//             trigger_error( 'Transaction active while calling getLock(), this will throw an exception in the future' );
+            throw new InvalidStateException( "Transaction not allowed at this moment" );
         }
         
         
