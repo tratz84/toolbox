@@ -26,7 +26,9 @@ class DatabaseTransactionProxy {
         $con = \core\db\DatabaseHandler::getInstance()->getConnection('default');
         
         // Form? => auto set lock for object
-        if (count($arguments) && is_a($arguments[0], \core\db\LockableObject::class)) {
+        if ( count($arguments) && is_a($arguments[0], \core\db\LockableObject::class) 
+            && $con->getTransactionCount() == 0 )
+        {
             $lockKey = $arguments[0]->getLockKey();
             
             if ($lockKey) {
