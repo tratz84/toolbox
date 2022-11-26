@@ -26,6 +26,22 @@
 		}
 	}
 	
-	
-	
 }
+
+
+
+body.module-report {
+	.grid-stack-item-content {
+		display: flex;
+		flex-direction: column;
+		
+		.dashboard-widget-content {
+			flex-grow: 999;
+			&>div.chart-js-container {
+				height: calc( 100% - 2px );
+			}
+		}
+	}
+}
+
+
