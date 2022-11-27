@@ -405,14 +405,7 @@ class HordeConnector extends BaseMailConnector {
     
     
     public function importInbox() {
-        try {
-            db_lock( 'webmail_inbox' );
-            
-            return $this->_importInbox();
-        }
-        finally {
-            db_release_lock( 'webmail_inbox' );
-        }
+        return $this->_importInbox();
     }
     
     protected function _importInbox() {
@@ -524,6 +517,9 @@ class HordeConnector extends BaseMailConnector {
             
             if (is_cli())
                 print_info("Importing: " . $if->getFolderName());
+            
+            // NOTE, this also handles the imports 'INBOX'. While mails from the INBOX are handled by '_importInbox'
+            //       initially and applies the filters, this call updates the state on changes (mark as read, etc..)
             
             $this->importItems( $if->getFolderName() );
         }

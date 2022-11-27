@@ -10,6 +10,9 @@ abstract class CronJobBase {
     protected $daily = false;
     protected $timeout = null;                  // timeout in seconds before next run
     
+    protected $autoHandleDbTransaction = true;
+    
+    
     // isDaily set? => run CronJobBase daily
     public function isDaily() { return $this->daily; }
     
@@ -24,6 +27,18 @@ abstract class CronJobBase {
     public function getMessage() { return ''; }
     public function getError() { return ''; }
     public function getStatus() { return ''; }
+    
+    /**
+     * setAutoHandleDbTransaction()
+     *  - non-daily CronJobs, execute job within a db-transaction?
+     *  - daily CronJob's always have to handle their own transactinos
+     * 
+     * TVW: bit mixed feelings about this..
+     */
+    public function setAutoHandleDbTransaction($bln) { $this->autoHandleDbTransaction = $bln ? true : false; }
+    public function autoHandleDbTransaction() { return $this->autoHandleDbTransaction; }
+    
+    
     
     public abstract function run();
     

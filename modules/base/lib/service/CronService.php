@@ -96,12 +96,15 @@ class CronService {
                     
                     $con = DatabaseHandler::getInstance()->getConnection('default');
                     
-                    // start transaction again
-                    $con->beginTransaction();
-                    
-                    $c->run();
-                    
-                    $con->commitTransaction();
+                    // start transaction agai
+                    if ($c->autoHandleDbTransaction()) {
+                        $con->beginTransaction();
+                        $c->run();
+                        $con->commitTransaction();
+                    }
+                    else {
+                        $c->run();
+                    }
                     
                     $cr = new CronRun();
                     $cr->setCronId($dbcron->getCronId());
