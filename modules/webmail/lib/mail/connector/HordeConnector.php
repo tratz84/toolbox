@@ -234,6 +234,7 @@ class HordeConnector extends BaseMailConnector {
         
         // $mp = message-properties
         $mp = new MailProperties($emlFile);
+        $mp->load();
         $mp->setServerProperty('connectorId',          $this->connector->getConnectorId());
         $mp->setServerProperty('connectorDescription', $this->connector->getDescription());
         
