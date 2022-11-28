@@ -132,8 +132,7 @@ class MysqlImportMail extends ImportMailBase {
             
             // getLock, inbox-monitor & sync-script might run at the same time
             // lock not retrieved? => no problemo, other thread saves mail.. just skip
-            $lockName = md5($e['id']);
-            if ( db_lock( $lockName, 0 ) == false ) {
+            if ( lock_webmail_mail( $e, 0 ) == false ) {
                 continue;
             }
             
@@ -206,7 +205,7 @@ class MysqlImportMail extends ImportMailBase {
             
             
             // release lock
-            db_release_lock( $lockName );
+            release_webmail_mail( $e );
             
             
             // new only, recipients never change

@@ -11,8 +11,42 @@ use webmail\storage\MailImportFactory;
 use webmail\model\EmailDAO;
 use webmail\model\EmailToDAO;
 use core\db\DatabaseHandler;
+use core\exception\InvalidStateException;
 
 
+function lock_webmail_mail( $mail, $timeout = 60 ) {
+    $id = null;
+    
+    if (is_a($mail, \webmail\mail\render\MysqlMailRender::class)) {
+        $id = $mail->getId();
+    }
+    else if (is_array($mail) && isset($mail['id'])) {
+        $id = $mail['id'];
+    }
+
+    if ($id == null) {
+        throw new InvalidStateException( 'Unknown mail-object' );
+    }
+    
+    $lockName = md5( $id );
+    
+    return db_lock( $lockName, $timeout );
+}
+
+function release_webmail_mail( $mail, $timeout = 60 ) {
+    $id = null;
+    
+    if (is_a($mail, \webmail\mail\render\MysqlMailRender::class)) {
+        $id = $mail->getId();
+    }
+    else if (is_array($mail) && isset($mail['id'])) {
+        $id = $mail['id'];
+    }
+    
+    $lockName = md5( $id );
+
+    return db_release_lock( $lockName );
+}
 
 
 function webmail_storage_engine() {

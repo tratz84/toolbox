@@ -20,6 +20,8 @@ use webmail\service\EmailService;
 use webmail\solr\SolrMail;
 use webmail\solr\SolrMailQuery;
 use webmail\mail\render\MailRenderBase;
+use core\exception\InvalidStateException;
+use core\exception\LockException;
 
 class mailController extends BaseController {
    
@@ -340,6 +342,12 @@ class mailController extends BaseController {
             // close session to prevent hanging
             session_write_close();
             
+            if ( lock_webmail_mail($mail, 60 ) == false ) {
+                throw new LockException( 'Unable to get lock for mail' );
+            }
+            
+            
+            
             /** @var \webmail\mail\MailProperties $mailProperties */
             $mailProperties = $mail->getProperties();
             
@@ -348,6 +356,10 @@ class mailController extends BaseController {
             
             $ma = MailActionsBase::getInstance();
             $ma->updateAction($mail->getId(), get_var('action'));
+            
+            
+            // not necessary.. exit script = release lock. Improves readability though
+            release_webmail_mail($mail);
             
             
             return $this->json([
