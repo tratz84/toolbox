@@ -247,12 +247,14 @@ class SendMail {
         
         
         foreach($email->getRecipients() as $r) {
-            if (strtolower($r->getToType()) == 'to' || $r->getToType() == null) {
-                $sm->addTo($r->getToEmail(), $r->getToName());
-            } else if (strtolower($r->getToType()) == 'cc') {
+            if (strtolower($r->getToType()) == 'cc') {
                 $sm->addCc($r->getToEmail(), $r->getToName());
             } else if (strtolower($r->getToType()) == 'bcc') {
                 $sm->addBcc($r->getToEmail(), $r->getToName());
+            }
+            // default to 'To'
+            else {
+                $sm->addTo($r->getToEmail(), $r->getToName());
             }
         }
         $sm->setContent($email->getTextContent());

@@ -357,6 +357,9 @@ class UserService extends ServiceBase {
         $email->setTextContent( $html );
         $email->save();
         
+        $et->setEmailId( $email->getEmailId() );
+        $et->save();
+        
         $sm = SendMail::createMail( $email );
         $sm->send();
         
