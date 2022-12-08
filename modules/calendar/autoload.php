@@ -135,3 +135,13 @@ hook_eventbus_subscribe('base', 'render-webmail-tabController-index', function($
     hook_htmlscriptloader_enableGroup('calendar');
 });
 
+
+// Create calendar item-icon, webmail
+hook_eventbus_subscribe('core', 'controller-created', function($controller) {
+    if ( ctx()->getModule() == 'webmail' ) {
+        hook_htmlscriptloader_enableGroup('iban');
+        hook_htmlscriptloader_enableGroup('customer-select-widget');
+    }
+});
+
+
