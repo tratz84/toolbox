@@ -165,7 +165,8 @@ class MysqlMailSearch extends MailSearchBase {
             
             $q = $this->parseSearchString( $q );
             
-            $p = ' match(text_search) against ( \''.$q.'\' IN BOOLEAN MODE) ';
+            $orderByFactorTime = ' * ( 0.02 / ( (unix_timestamp(now())-unix_timestamp(e.created)) / (unix_timestamp(e.created)+60*60*24*365) ) ) ';
+            $p = ' match(text_search) against ( \''.$q.'\' IN BOOLEAN MODE) '.$orderByFactorTime;
             $orderByFields[] = $p . ' desc';
             $e_where[] = $p;
             
