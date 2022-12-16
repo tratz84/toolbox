@@ -37,7 +37,11 @@ Er is een fout opgetreden: <?= esc_html($error) ?>
 	</div>
 <?php else : ?>
 	<div class="error">
-		Onjuist BTW nummer opgegeven
+		<?php if ( isset($vatInfo->message) ) : ?>
+			Error: <?= esc_html($vatInfo->message) ?>
+		<?php else : ?>
+			Onjuist BTW nummer opgegeven
+		<?php endif; ?>
 	</div>
 <?php endif; ?>
 

@@ -115,7 +115,6 @@ class VatCheckApiService {
         $r = curl_exec($ch);
         curl_close($ch);
         
-        
         // parse
         $xd = new \DOMDocument();
         $xd->loadXML($r);
@@ -131,6 +130,11 @@ class VatCheckApiService {
                 
                 if (is_a($el2, \DOMElement::class)) {
                     $name = $el2->nodeName;
+                    if (preg_match('/^ns\\d+:/', $name)) {
+                        $name = preg_replace('/^ns\\d+:/', '', $name);
+                    }
+                       
+                    
                     if ($name == 'valid') {
                         $r->valid = $el2->textContent == 'true' ? true : false;
                     } else {
@@ -138,6 +142,11 @@ class VatCheckApiService {
                     }
                 }
             }
+        }
+        
+        $elErr = $xd->getElementsByTagName( 'faultstring' );
+        if ($elErr->count()) {
+            $r->message = trim( $elErr->item(0)->textContent );
         }
         
         return $r;
