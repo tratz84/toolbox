@@ -2,10 +2,11 @@
 
 
 
-use core\controller\BaseController;
 use base\service\ActivityService;
+use core\controller\BaseReportController;
 
-class activityReportController extends BaseController {
+class activityReportController extends BaseReportController {
+    
     
     
     public function report($render=true) {
