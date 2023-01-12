@@ -84,6 +84,11 @@ class serverInfoController extends BaseController {
             $this->sic->addInfo('php-xdebug', $ext_xdebug==false?'Ok (Not loaded)':'Loaded(!!)', $ext_xdebug==false?'':'extension loaded, slows down system(!)');
         }
         
+        // uopz loaded? => show warning
+        if ( extension_loaded('uopz') ) {
+            $this->sic->addInfo('php-uopz', 'uopz loaded', 'This extension can cause weird problems caused by overloading of functions !');
+        }
+        
         
         hook_eventbus_publish( $this->sic, 'base', 'ServerInfoContainer' );
         
