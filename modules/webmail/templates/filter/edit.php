@@ -9,7 +9,7 @@
     <?php if ($isNew) : ?>
     <h1>Filter toevoegen</h1>
     <?php else : ?>
-    <h1>Filterbewerken</h1>
+    <h1>Filter bewerken</h1>
     <?php endif; ?>
 </div>
 

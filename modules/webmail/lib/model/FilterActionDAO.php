@@ -13,7 +13,12 @@ class FilterActionDAO extends \core\db\DAOObject {
 	
 	
 	public function readByFilter($filterId) {
-	    return $this->queryList('select * from webmail__filter_action where filter_id = ?', array($filterId));
+	    $sql = 'select * 
+                from webmail__filter_action 
+                where filter_id = ?
+                order by sort';
+	    
+	    return $this->queryList($sql, array($filterId));
 	}
 
 	public function deleteByFilter($filterId) {
