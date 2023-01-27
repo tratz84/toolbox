@@ -537,7 +537,20 @@ class EzTemplate {
         return this.partial;
     }
     
+    isTopTemplate() {
+		if (!this.parentTemplate)
+			return true;
+		else
+			return false;
+	}
+    
     update( ) {
+		// loadNode() & loadHtml not called? => lets go
+		if (this.isTopTemplate() && !this.partial) {
+			this.loadNode();
+		}
+
+	
 		// build it
 		let nodes = this.build( { update_on_templates_loaded: true });
 		
@@ -556,7 +569,7 @@ class EzTemplate {
 		}
 		
 		// trigger EzTemplate.updated-event for top template
-		if (!this.parentTemplate) {
+		if (this.isTopTemplate()) {
 			let evt = new Event('EzTemplate.updated');
 			window.dispatchEvent( evt );
 		}
