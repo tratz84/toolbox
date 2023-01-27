@@ -33,7 +33,7 @@
 
 let s = new EzTemplate('server-info-container');
 s.setVar('info', <?= $json_info ?>);
-s.update();
+s.render();
 
 
 </script>

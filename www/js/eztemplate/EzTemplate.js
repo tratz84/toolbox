@@ -394,7 +394,7 @@ class EzTemplate {
 		
 		for(let i in this.subTemplates) {
 			this.subTemplates[i].reset();
-			this.subTemplates[i].update();
+			this.subTemplates[i].render();
 		}
 		
 	}
@@ -511,7 +511,7 @@ class EzTemplate {
         // check if templates are loaded
         let r = this.checkTemplatesLoaded(function() {
 			if (opts && opts.update_on_templates_loaded) {
-				this.update();
+				this.render();
 			}
 			// rebuild
 			else {
@@ -544,7 +544,7 @@ class EzTemplate {
 			return false;
 	}
     
-    update( ) {
+    render( ) {
 		// loadNode() & loadHtml not called? => lets go
 		if (this.isTopTemplate() && !this.partial) {
 			this.loadNode();

@@ -24,7 +24,7 @@ $(document).ready(function() {
 	let json_menu = <?= json_encode( $menu ) ?>;
 	let t = new EzTemplate('menu-container');
 	t.setVar('menu', json_menu);
-	t.update();
+	t.render();
 });
 
 </script>
