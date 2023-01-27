@@ -18,6 +18,34 @@ class MasterDataMenu {
         return $this->menu;
     }
     
+    public function getMenuSorted() {
+        $sections = array_keys($this->menu);
+        
+        $me = $this;
+        
+        usort($sections, function($n1, $n2) use ($me) {
+            if ($n1 == t('Settings'))
+                return -1;
+            if ($n2 == t('Settings'))
+                return 1;
+            
+            $prio1 = $me->getSectionPrio($n1);
+            $prio2 = $me->getSectionPrio($n2);
+            if ($prio1 != $prio2) {
+                return $prio1 - $prio2;
+            }
+            
+            return strcmp($n1, $n2);
+        });
+        
+        $result = array();
+        foreach($sections as $s) {
+            $result[$s] = $this->menu[$s];
+        }
+        
+        return $result;
+    }
+    
     public function setSectionPrio($section, $prio) { $this->sections[$section]['prio'] = $prio; }
     public function getSectionPrio($section) {
         if (isset($this->sections[$section]) && isset($this->sections[$section]['prio']))

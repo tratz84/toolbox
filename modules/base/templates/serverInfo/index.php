@@ -1,5 +1,4 @@
 
-
 <div class="page-header">
 	<div class="toolbox">
 		<a href="<?= appUrl('/?m=base&c=masterdata/index') ?>" class="fa fa-chevron-circle-left"></a>
@@ -10,7 +9,7 @@
 
 
 
-<table class="list-response-table">
+<table id="server-info-container" class="list-response-table">
 	<thead>
 		<tr>
 			<th>Description</th>
@@ -19,17 +18,24 @@
 		</tr>
 	</thead>
 
-	<tbody>
-	<?php foreach($sic->getInfo() as $i) : ?>
+	<tbody ez-for="info" ez-item="i">
 	<tr>
-		<td style="width: 50%;"><?= $i['description'] ?></td>
-		<td style="<?= $i['error'] ? 'color: #f00;' : '' ?>"><?= esc_html($i['value']) ?></td>
-		<td style="width: 30%;"><?= esc_html($i['error']) ?></td>
+		<td style="width: 50%;" [contentHTML]="i.description"></td>
+		<td style="{{i.error?'color: #f00' : '' }}">{{i.value}}</td>
+		<td style="width: 30%;">{{i.error == null ? '' : i.error}}</td>
 	</tr>
-	<?php endforeach; ?>
 	</tbody>
 
 </table>
 
+
+<script>
+
+let s = new EzTemplate('server-info-container');
+s.setVar('info', <?= $json_info ?>);
+s.update();
+
+
+</script>
 
 

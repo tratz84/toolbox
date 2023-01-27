@@ -92,6 +92,8 @@ class serverInfoController extends BaseController {
         
         hook_eventbus_publish( $this->sic, 'base', 'ServerInfoContainer' );
         
+        $this->json_info = json_encode( $this->sic->getInfo() );
+        
         return $this->render();
     }
     

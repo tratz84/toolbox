@@ -17,6 +17,7 @@ class indexController extends BaseController {
         
         
         $this->mdm = MasterDataMenu::generate();
+        $this->menu = $this->mdm->getMenuSorted();
         
         $this->render();
     }
