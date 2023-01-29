@@ -11,7 +11,7 @@
 			<h2>{{ title }}</h2>
 		
 			<ul class="" ez-for="m" ez-item="mi">
-				<li><a href="javascript:window.location = appUrl( '{{ mi.url }}' );">{{ mi.title }}</a></li>
+				<li><a href="{{ appUrl(mi.url) }}">{{ mi.title }}</a></li>
 			</ul>
 		</div>
 	</div>

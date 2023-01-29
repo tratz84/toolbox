@@ -234,11 +234,10 @@ class EzTemplate {
             if (!curVar[varName]) {
                 return null;
             }
-
             curVar = curVar[varName];
         }
-
-        return curVar;
+        
+    	return curVar;
     }
     
     setVarValue( vars, path, value ) {
