@@ -439,6 +439,11 @@ class EzTemplate {
     }
     
 	serializeAsArray( varPath ) {
+		if (!varPath) {
+			console.error('no varPath');
+			return;
+		}
+		
 		let vars = this.serializeVars();
 		
 //		console.log('hmz',vars);
