@@ -177,6 +177,17 @@ class EzTemplate {
                     
                     this.subTemplates.push( sub );
                 }
+                
+                // ez-recur
+                if (attr.nodeName == 'ez-recur') {
+					// check if parent is EzTemplateFor-instance
+					if ( ! (this.parentTemplate instanceof EzTemplateFor) ) {
+						console.error( 'Error, ez-recur, parent template not an EzTemplateFor-instance', l );
+						continue;
+					}
+					
+					// TODO: implement..
+				}
 
 				// ez-if-handling => create partial
                 if (attr.nodeName == 'ez-if') {
@@ -741,6 +752,9 @@ class EzTemplateFor extends EzTemplate {
 			record = {};
 		
 		let t = new EzTemplate();
+		
+		t.setParentNode( this.parentNode );
+		t.setParentTemplate( this );
 		
 		t.setVars( this.vars );
 		
