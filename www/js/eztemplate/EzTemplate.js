@@ -220,7 +220,7 @@ class EzTemplate {
 	 * getVarValue( path ) - get template-var by path, ie: my.var[0].key
 	 * 
 	 */
-    getVarValue(path) {
+    getVarValue(path, opts) {
 		
 		// replace array's with dots, items[0].value => items.0.value
 		path = path.replace(/\[\s*(\d+)\s*\]/g, '.$1.');	// explode array's
@@ -232,8 +232,14 @@ class EzTemplate {
         let tokens = path.split('.');
 
 		// lookup
-        let curVar = this.vars;
-        
+		
+        let curVar;
+		if (opts && typeof opts.vars != 'undefined') {
+			curVar = opts.vars;
+		} else {
+			curVar = this.vars;
+		}
+		
 //        console.log( path );
 
         for (let i in tokens) {
@@ -257,7 +263,7 @@ class EzTemplate {
 		path = path.replace(/\[\s*(\d+)\s*\]/g, '.$1.');	// explode array's
 		path = path.replace(/^\./, '');						// remove leading dot
 		path = path.replace(/\.$/, '');						// remove ending dot
-		path = path.replace(/\.+/, '.')						// remove double dots
+		path = path.replace(/\.+/g, '.')						// remove double dots
 		
 //		console.log(path);
 		
@@ -431,6 +437,27 @@ class EzTemplate {
 		
 		return r;
     }
+    
+	serializeAsArray( varPath ) {
+		let vars = this.serializeVars();
+		
+//		console.log('hmz',vars);
+		let value = this.getVarValue( varPath, { vars: vars } );
+		
+		// not found?
+		if (!value)
+			return [];
+		
+		// cast 2 array
+		let arr = [];
+//		console.log('woopwoop', value);
+		for(let key in value) {
+			arr.push( value[key] );
+		}
+		
+		return arr;
+	}
+    
     _serializeVars( container, vars, opts ) {
 		
 		for(let i in container.childNodes) {
@@ -468,6 +495,7 @@ class EzTemplate {
 						this.setVarValue( vars, varname, node.textContent );
 					}
 					else if (attrName == 'value') {
+//						console.log(varname);
 						this.setVarValue( vars, varname, node.value );
 					}
 	            }
@@ -726,6 +754,7 @@ class EzTemplateFor extends EzTemplate {
 						this.setVarValue( vars, varPath, node.textContent );
 					}
 					else if (attrName == 'value') {
+//						console.log(varPath);
 						this.setVarValue( vars, varPath, node.value );
 					}
 	            }
