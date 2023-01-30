@@ -110,6 +110,9 @@ class IndexTable {
             return null;
         }
     }
+    public function unsetColumnProperty($columnName, $propName) {
+        unset( $this->columns[ $columnName ][ $propName ] );
+    }
     public function setColumnProperty($columnName, $propName, $val) {
         $this->columns[ $columnName ][ $propName ] = $val;
     }
