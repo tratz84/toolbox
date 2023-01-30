@@ -199,16 +199,33 @@ class MysqlQueryBuilder extends QueryBuilder {
                 
                 $str .= ' ' . $w->getComparisonMethod() . ' ';
                 
-                if ($w->rightIsValue()) {
-                    $v = $w->getRight();
-                    if ($v === null || is_bool($v)) {
-                        $str .= $this->sqlVal($v);
-                    } else {
-                        $this->params[] = $v;
-                        $str .= ' ? ';
+                // IN-options?
+                if ($w->getComparisonMethod() == 'IN' && $w->getRightInOptions() !== null) {
+                    $marks = '';
+                    
+                    foreach( $w->getRightInOptions() as $opt ) {
+                        $this->params[] = (string)$opt;
+                        
+                        if ($marks == '')
+                            $marks .= '( ?';
+                        else
+                            $marks .= ', ? ';
                     }
-                } else {
-                    $str .= $this->sqlVal( $w->getRight() );
+                    $str .= $marks . ')';
+                }
+                // default right
+                else {
+                    if ($w->rightIsValue()) {
+                        $v = $w->getRight();
+                        if ($v === null || is_bool($v)) {
+                            $str .= $this->sqlVal($v);
+                        } else {
+                            $this->params[] = $v;
+                            $str .= ' ? ';
+                        }
+                    } else {
+                        $str .= $this->sqlVal( $w->getRight() );
+                    }
                 }
                 
                 $sql[] = $str;

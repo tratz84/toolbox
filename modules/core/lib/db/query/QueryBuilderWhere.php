@@ -13,6 +13,7 @@ class QueryBuilderWhere {
     protected $right;
     protected $rightIsValue = true;            // is value (auto-escaped)? or is tablecolumn reference?
     
+    protected $rightInOptions = null;
     
     
     public function __construct() {
@@ -54,6 +55,16 @@ class QueryBuilderWhere {
         return $w;
     }
     
+    public static function whereRefIn( $left, $options ) {
+        $w = new QueryBuilderWhere();
+        $w->setLeft($left, false);
+        $w->setRightInOptions( $options );
+        $w->setComparisonMethod('IN');
+        
+        return $w;
+    }
+    
+    
     
     
     public function getComparisonMethod() { return $this->comparisonMethod; }
@@ -84,8 +95,18 @@ class QueryBuilderWhere {
     public function setRight($v, $isValue=true) {
         $this->right = $v;
         $this->rightIsValue = $isValue ? true : false;
+        
+        $this->rightInOptions = null;
     }
     public function setRightIsValue($bln) { $this->rightIsValue = $bln; }
+    
+    public function getRightInOptions() { return $this->rightInOptions; }
+    public function setRightInOptions( $options ) {
+        $this->rightInOptions = $options;
+        
+        $this->right = null;
+        $this->rightIsValue = null;
+    }
     
     
 }
