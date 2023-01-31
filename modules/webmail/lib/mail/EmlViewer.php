@@ -200,8 +200,13 @@ class EmlViewer {
                 $val = $attrs->item($x);
                 $attributeName = $val->nodeName;
                 
+                
+                // <body />-tag? => nothing allowed..
+                if ($el->nodeName == 'body') {
+                    $el->removeAttribute($attributeName);
+                }
                 // style-attribute special case. Removal of url's is the most important
-                if ($attributeName == 'style') {
+                else if ($attributeName == 'style') {
                     $val->value = preg_replace('/url\(.*?\)/', '', $val->value);
                     
                     // remove all '<protocol>://' (trying to be future proof? :)
