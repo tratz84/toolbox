@@ -29,8 +29,9 @@ class ObjectHookProxyExtender {
         }
         $proxyClass .= 'Proxy';
         
+        $rc = new \ReflectionClass($class);
         
-        $p = DATA_DIR . '/default/proxy/' . md5($class).'.php';
+        $p = DATA_DIR . '/default/proxy/' . md5($class).'.'.filemtime($rc->getFileName()).'.php';
         if (is_debug() || file_exists($p) == false) {
             self::createProxyClass($p, $class, $proxyClass);
         }
@@ -80,8 +81,16 @@ class ObjectHookProxyExtender {
             foreach($m->getParameters() as $p) {
                 
                 $par = '$'.$p->getName();
+                if ($p->isPassedByReference())
+                    $par = '&'.$par;
+                
                 if ($p->isDefaultValueAvailable()) {
-                    $par  = $par . ' = ' . $p->getDefaultValue();
+                    if (is_string($p->getDefaultValue()) || is_numeric($p->getDefaultValue())) {
+                        $par  = $par . ' = ' . $p->getDefaultValue();
+                    }
+                    else {
+                        $par  = $par . ' = ' . var_export($p->getDefaultValue(), true);
+                    }
                 }
                 
                 if ($params == '') {
@@ -99,12 +108,13 @@ class ObjectHookProxyExtender {
             
             
             $phpcode .= "\t\t\$ohc = new \core\container\ObjectHookCall(\$this, ".var_export($m->getName(), true).", func_get_args());".PHP_EOL;
-            $phpcode .= "\t\t\$eb = object_container_get(EventBus::class);" . PHP_EOL;
+            $phpcode .= "\t\t\$eb = object_container_get(\\core\\event\\EventBus::class);" . PHP_EOL;
             
             $eventNamePre = 'pre-call-'.$class.'::'.$m->getName();
             
             $phpcode .= "\t\t\$eb->publishEvent(\$ohc, 'core', ".var_export($eventNamePre,true).");".PHP_EOL;
             
+            $phpcode .= "\t\t\$eb->publishEvent(\$ohc, 'core', 'pre-object-hook-call');".PHP_EOL;
             
             $phpcode .= PHP_EOL;
             
@@ -112,9 +122,12 @@ class ObjectHookProxyExtender {
             
             $phpcode .= PHP_EOL;
             
-            $eventNamePost = 'post-call-'.$class.'::'.$m->getName();
             $phpcode .= "\t\t\$ohc->setReturnValue(\$r);" . PHP_EOL;
+            
+            $eventNamePost = 'post-call-'.$class.'::'.$m->getName();
             $phpcode .= "\t\t\$eb->publishEvent(\$ohc, 'core', ".var_export($eventNamePost, true).");".PHP_EOL;
+            
+            $phpcode .= "\t\t\$eb->publishEvent(\$ohc, 'core', 'post-object-hook-call');".PHP_EOL;
             
             $phpcode .= PHP_EOL;
             

@@ -13,6 +13,7 @@ use core\exception\InvalidStateException;
 use core\service\ServiceBase;
 use core\container\ObjectHookable;
 use core\container\ObjectHookProxy;
+use core\container\ObjectHookProxyExtender;
 
 class ObjectContainer {
     
@@ -33,33 +34,22 @@ class ObjectContainer {
         
         if (isset($this->objects[$className]) == false) {
             
-            if (method_exists($className, 'getInstance')) {
-                $this->objects[$className] = $className::getInstance();
-            } else {
-                $this->objects[$className] = new $className();
-                
-                if ($this->objects[$className] instanceof ServiceBase)
-                    $this->objects[$className]->setObjectContainer($this);
-                
-            }
-            
-            
-            $isObjectHookable = is_a($this->objects[$className], ObjectHookable::class);
-            $isDatabaseTransctionObject = is_a($this->objects[$className], DatabaseTransactionObject::class);
-            
+            $isObjectHookable = is_subclass_of($className, ObjectHookable::class);
+            $isDatabaseTransctionObject = is_a($className, DatabaseTransactionObject::class);
             
             if (defined('ADMIN_CONTEXT') == false && $isObjectHookable) {
-                $oh = new ObjectHookProxy($this->objects[$className]);
-                $this->objects[$className] = $oh;
+                $obj = ObjectHookProxyExtender::createProxy($className);
+                
+                $this->objects[$className] = $obj;
+                
+            }
+            else {
+                $this->objects[$className] = new $className();
             }
             
-            
-            // DatabaseTransactionObject? => wrap it in a DatabaseTransactionProxy
-            if (defined('ADMIN_CONTEXT') == false && $isDatabaseTransctionObject) {
-                $dtp = new DatabaseTransactionProxy($this->objects[$className]);
-                $this->objects[$className] = $dtp;
+            if (method_exists($this->objects[$className], 'setObjectContainer')) {
+                $this->objects[$className]->setObjectContainer( $this );
             }
-            
         }
         
         return $this->objects[$className];
