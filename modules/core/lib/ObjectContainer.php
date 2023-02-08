@@ -63,8 +63,9 @@ class ObjectContainer {
             $obj = new $className( ... $params);
         }
         
+        
+        // handle Transactions
         if (defined('ADMIN_CONTEXT') == false && $isDatabaseTransactionObject) {
-            // handle Transactions
             $obj->proxy_addFilter(function(ObjectHookCall $ohc) {
                 $con = \core\db\DatabaseHandler::getInstance()->getConnection('default');
                 
@@ -104,7 +105,7 @@ class ObjectContainer {
         
         
         
-        // handle hooks
+        // handle pre-call- & post-call- hooks
         if (defined('ADMIN_CONTEXT') == false && $isObjectHookable) {
             $obj->proxy_addFilter(function(ObjectHookCall $ohc) {
                 $eb = ObjectContainer::getInstance()->get(EventBus::class);
@@ -128,7 +129,7 @@ class ObjectContainer {
             $obj->setObjectContainer( $this );
         }
         
-        // prevent loop
+        // prevent recursive loop
         if (is_a($obj, EventBus::class)) {
             $eb = $obj;
         } else {
