@@ -92,11 +92,13 @@ class ObjectContainer {
                 $obj->proxy_addFilter(function(ObjectHookCall $ohc) {
                     $eb = ObjectContainer::getInstance()->get(EventBus::class);
                     
-                    $eb->publishEvent($ohc, 'core', 'pre-call-'.get_class($ohc->getObject()).'::'.$ohc->getFunctionName());
+                    $className = $ohc->getClassName();
+                    
+                    $eb->publishEvent($ohc, 'core', 'pre-call-'.$className.'::'.$ohc->getFunctionName());
                     
                     $r = $ohc->next();
                     
-                    $eb->publishEvent($ohc, 'core', 'post-call-'.get_class($ohc->getObject()).'::'.$ohc->getFunctionName());
+                    $eb->publishEvent($ohc, 'core', 'post-call-'.$className.'::'.$ohc->getFunctionName());
                     
                     return $r;
                 });

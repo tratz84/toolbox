@@ -16,6 +16,7 @@ class ObjectHookCall {
     protected $filterPos = 0;
     protected $filters = array();
     
+    protected $className;
     
     
     public function __construct($object, $functionName=null, $arguments=array(), $returnValue=null) {
@@ -27,6 +28,21 @@ class ObjectHookCall {
     
     public function getObject() { return $this->object; }
     public function setObject($o) { $this->object = $o; }
+    
+    public function getClassName() {
+        if ($this->className === null) {
+            if (strpos(get_class( $this->object ), 'toolbox\\proxy\\') === 0) {
+                $ro = new \ReflectionObject($this->object);
+                $this->className = $ro->getParentClass()->getName();
+            }
+            else {
+                $this->className = get_class($this->object);
+            }
+        }
+        
+        return $this->className;
+    }
+    
     
     public function getFunctionName() { return $this->functionName; }
     public function setFunctionName($n) { $this->functionName = $n; }
@@ -69,6 +85,8 @@ class ObjectHookCall {
 //         var_export($this->getFunctionName());
 //         var_export($this->getArguments());
         $result = $m->invokeArgs( $obj, $this->getArguments() );
+        
+        $this->setReturnValue( $result );
         
         return $result;
     }
