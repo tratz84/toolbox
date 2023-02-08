@@ -16,6 +16,14 @@ class ObjectHookProxy {
         $this->obj = $obj;
     }
     
+    public function getClassName() {
+        $c = get_class($this->obj);
+        
+        
+        
+        
+    }
+    
     
     public function __call($name, $arguments) {
         if (method_exists($this->obj, $name) == false) {

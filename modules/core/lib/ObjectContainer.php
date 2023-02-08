@@ -6,14 +6,14 @@ namespace core;
  * ObjectContainer - all objects should be created by ObjectContainer for future purposes (proxying/filtering)
  * 
  */
-use core\db\DatabaseTransactionObject;
-use core\db\DatabaseTransactionProxy;
-use core\event\EventBus;
-use core\exception\InvalidStateException;
-use core\service\ServiceBase;
-use core\container\ObjectHookable;
+use core\container\ObjectHookCall;
 use core\container\ObjectHookProxy;
 use core\container\ObjectHookProxyExtender;
+use core\container\ObjectHookable;
+use core\db\DatabaseTransactionObject;
+use core\event\EventBus;
+use core\exception\DatabaseException;
+use core\exception\InvalidStateException;
 
 class ObjectContainer {
     
@@ -35,17 +35,76 @@ class ObjectContainer {
         if (isset($this->objects[$className]) == false) {
             
             $isObjectHookable = is_subclass_of($className, ObjectHookable::class);
-            $isDatabaseTransctionObject = is_a($className, DatabaseTransactionObject::class);
+            $isDatabaseTransactionObject = is_a($className, DatabaseTransactionObject::class);
             
             if (defined('ADMIN_CONTEXT') == false && $isObjectHookable) {
                 $obj = ObjectHookProxyExtender::createProxy($className);
-                
-                $this->objects[$className] = $obj;
-                
             }
             else {
                 $this->objects[$className] = new $className();
             }
+            
+            
+            if (defined('ADMIN_CONTEXT') == false && $isDatabaseTransactionObject) {
+                
+                // handle Transactions
+                
+                $obj->proxy_addFilter(function(ObjectHookCall $ohc) {
+                    $con = \core\db\DatabaseHandler::getInstance()->getConnection('default');
+                    
+                    // Form? => auto set lock for object
+                    $arguments = $ohc->getArguments();
+                    if ( count($arguments) && is_a($arguments[0], \core\db\LockableObject::class)
+                        && $con->getTransactionCount() == 0 )
+                    {
+                        $lockKey = $arguments[0]->getLockKey();
+                        
+                        if ($lockKey) {
+                            if (!$con->getLock( $lockKey )) {
+                                // failed to get lock..
+                                throw new DatabaseException('Unable to get lock: ' . $lockKey);
+                            }
+                        }
+                    }
+                    
+                    // start transaction
+                    $con->beginTransaction();
+                    
+                    try {
+                        $r = $ohc->next();
+                        
+                        $con->commitTransaction();
+                    } catch (\Exception $ex) {
+                        try {
+                            $con->rollbackTransaction();
+                        } catch (\Exception $ex2) { /* not caring about rollbackTransaction-exceptions at the moment */ }
+                        
+                        throw $ex;
+                    }
+                    
+                    return $r;
+                });
+            }
+            
+            
+            
+            // handle hooks
+            if (defined('ADMIN_CONTEXT') == false && $isObjectHookable) {
+                $obj->proxy_addFilter(function(ObjectHookCall $ohc) {
+                    $eb = ObjectContainer::getInstance()->get(EventBus::class);
+                    
+                    $eb->publishEvent($ohc, 'core', 'pre-call-'.get_class($ohc->getObject()).'::'.$ohc->getFunctionName());
+                    
+                    $r = $ohc->next();
+                    
+                    $eb->publishEvent($ohc, 'core', 'post-call-'.get_class($ohc->getObject()).'::'.$ohc->getFunctionName());
+                    
+                    return $r;
+                });
+                
+                $this->objects[$className] = $obj;
+            }
+            
             
             if (method_exists($this->objects[$className], 'setObjectContainer')) {
                 $this->objects[$className]->setObjectContainer( $this );

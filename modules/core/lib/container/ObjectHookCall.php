@@ -13,6 +13,10 @@ class ObjectHookCall {
     protected $arguments;
     protected $returnValue;
     
+    protected $filterPos = 0;
+    protected $filters = array();
+    
+    
     
     public function __construct($object, $functionName=null, $arguments=array(), $returnValue=null) {
         $this->object = $object;
@@ -40,6 +44,35 @@ class ObjectHookCall {
     
     public function getReturnValue() { return $this->returnValue; }
     public function setReturnValue($v) { $this->returnValue = $v; }
+    
+    
+    public function addFilter( $func ) {
+        $this->filters[] = $func;
+    }
+    
+    public function setFilters( $f ) {
+        $this->filters = $f;
+    }
+    
+    public function next() {
+        
+        if ($this->filterPos < count($this->filters)) {
+            $func = $this->filters[ $this->filterPos ];
+            $this->filterPos++;
+            
+            return $func( $this );
+        }
+        
+        $obj = $this->getObject();
+        $ro = new \ReflectionObject($obj);
+        $m = $ro->getParentClass()->getMethod( $this->getFunctionName() );
+//         var_export($this->getFunctionName());
+//         var_export($this->getArguments());
+        $result = $m->invokeArgs( $obj, $this->getArguments() );
+        
+        return $result;
+    }
+    
     
     
 }

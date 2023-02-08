@@ -70,6 +70,8 @@ class ObjectHookProxyExtender {
         $phpcode .= PHP_EOL;
         $phpcode .= "\t".'protected $callFuncName;'.PHP_EOL;
         $phpcode .= "\t".'protected $callParams;'.PHP_EOL;
+        $phpcode .= PHP_EOL;
+        $phpcode .= "\t".'protected $proxyFilters = array();'.PHP_EOL;
         
         
         
@@ -80,7 +82,6 @@ class ObjectHookProxyExtender {
             
             
             $params = '';
-            $paramsFunc = '';
             foreach($m->getParameters() as $p) {
                 
                 $par = '$'.$p->getName();
@@ -98,10 +99,8 @@ class ObjectHookProxyExtender {
                 
                 if ($params == '') {
                     $params = $par;
-                    $paramsFunc = '$'.$p->getName();
                 } else {
                     $params .= ', '.$par;
-                    $paramsFunc .= ', $'.$p->getName();
                 }
             }
             
@@ -124,14 +123,19 @@ class ObjectHookProxyExtender {
 //             print $m->getName() . ' - ' . $m->getDeclaringClass()->getName() . "\n";
         }
         
-        $phpcode .= "\tpublic function proxy_executeFunction() {" . PHP_EOL;
-        $phpcode .= "\t\t\$f = \$this->callFuncName;".PHP_EOL;
-        $phpcode .= "\t\t\$ro = new \\ReflectionObject(\$this);".PHP_EOL;
-        $phpcode .= "\t\t\$m = \$ro->getParentClass()->getMethod( \$f );" . PHP_EOL;
-//         $phpcode .= "\t\tvar_export(\$this->callParams);" . PHP_EOL;
+        $phpcode .= "\tpublic function proxy_addFilter( \$f ) {" . PHP_EOL;
+        $phpcode .= "\t\t\$this->proxyFilters[] = \$f;" . PHP_EOL;
+        $phpcode .= "\t}" . PHP_EOL;
         
-        $phpcode .= "\t\t\$r = \$m->invokeArgs( \$this, \$this->callParams );" . PHP_EOL;
-        $phpcode .= "\t\treturn \$r;" . PHP_EOL;
+        $phpcode .= "\tpublic function proxy_executeFunction() {" . PHP_EOL;
+        
+//         $phpcode .= "var_export(get_class(\$this));";
+//         $phpcode .= "var_export(\$this->callFuncName);";
+//         $phpcode .= "var_export(\$this->callParams);";
+        $phpcode .= "\t\t\$ohc = new \\core\\container\\ObjectHookCall( \$this, \$this->callFuncName, \$this->callParams );".PHP_EOL;
+        $phpcode .= "\t\t\$ohc->setFilters( \$this->proxyFilters );".PHP_EOL;
+        $phpcode .= "\t\treturn \$ohc->next();".PHP_EOL;
+        
         $phpcode .= "\t}" . PHP_EOL;
         
         
