@@ -35,7 +35,7 @@ class ObjectContainer {
         if (isset($this->objects[$className]) == false) {
             
             $isObjectHookable = is_subclass_of($className, ObjectHookable::class);
-            $isDatabaseTransactionObject = is_a($className, DatabaseTransactionObject::class);
+            $isDatabaseTransactionObject = is_subclass_of($className, DatabaseTransactionObject::class);
             
             if (defined('ADMIN_CONTEXT') == false && $isObjectHookable) {
                 $obj = ObjectHookProxyExtender::createProxy($className);
@@ -43,7 +43,6 @@ class ObjectContainer {
             else {
                 $this->objects[$className] = new $className();
             }
-            
             
             if (defined('ADMIN_CONTEXT') == false && $isDatabaseTransactionObject) {
                 
