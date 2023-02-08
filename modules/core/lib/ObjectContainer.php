@@ -52,10 +52,12 @@ class ObjectContainer {
             $className = $this->classNameRewrite[$className];
         }
         
-        
+        // check hooks
+        // TODO: something dynamic based on annotations?
         $isObjectHookable = is_subclass_of($className, ObjectHookable::class);
         $isDatabaseTransactionObject = is_subclass_of($className, DatabaseTransactionObject::class);
         
+        // create class or proxy
         if (defined('ADMIN_CONTEXT') == false && $isObjectHookable) {
             $obj = ObjectHookProxyExtender::createProxy($className, $params);
         }
@@ -64,7 +66,7 @@ class ObjectContainer {
         }
         
         
-        // handle Transactions
+        // filter Database transactions
         if (defined('ADMIN_CONTEXT') == false && $isDatabaseTransactionObject) {
             $obj->proxy_addFilter(function(ObjectHookCall $ohc) {
                 $con = \core\db\DatabaseHandler::getInstance()->getConnection('default');
@@ -105,7 +107,7 @@ class ObjectContainer {
         
         
         
-        // handle pre-call- & post-call- hooks
+        // filter pre-call- & post-call- hooks
         if (defined('ADMIN_CONTEXT') == false && $isObjectHookable) {
             $obj->proxy_addFilter(function(ObjectHookCall $ohc) {
                 $eb = ObjectContainer::getInstance()->get(EventBus::class);
@@ -124,10 +126,11 @@ class ObjectContainer {
                 $this->objects[$className] = $obj;
         }
         
-        
+        // ->setObjectContainer( $this )
         if (method_exists($obj, 'setObjectContainer')) {
             $obj->setObjectContainer( $this );
         }
+        
         
         // prevent recursive loop
         if (is_a($obj, EventBus::class)) {
@@ -136,7 +139,7 @@ class ObjectContainer {
             $eb = ObjectContainer::getInstance()->get(EventBus::class);
         }
         
-        
+        // 
         $eb->publishEvent($obj, 'core', 'create-'.$className);
         
         return $obj;
