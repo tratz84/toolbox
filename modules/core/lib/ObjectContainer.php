@@ -57,7 +57,7 @@ class ObjectContainer {
         $isDatabaseTransactionObject = is_subclass_of($className, DatabaseTransactionObject::class);
         
         if (defined('ADMIN_CONTEXT') == false && $isObjectHookable) {
-            $obj = ObjectHookProxyExtender::createProxy($className);
+            $obj = ObjectHookProxyExtender::createProxy($className, $params);
         }
         else {
             $obj = new $className( ... $params);

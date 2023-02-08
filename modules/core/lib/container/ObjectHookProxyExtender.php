@@ -12,7 +12,7 @@ class ObjectHookProxyExtender {
     
     
     
-    public static function createProxy( $class ) {
+    public static function createProxy( $class, $params = array() ) {
         
 //         if (strpos($class, '\\') !== 0)
 //             $class = '\\'.$class;
@@ -43,7 +43,7 @@ class ObjectHookProxyExtender {
             $o = $pc::getInstance();
         }
         else {
-            $o = new $pc();
+            $o = new $pc( ... $params );
         }
         
         return $o;
