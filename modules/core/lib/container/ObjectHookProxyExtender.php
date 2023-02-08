@@ -67,6 +67,9 @@ class ObjectHookProxyExtender {
         $phpcode .= 'namespace toolbox\proxy;' . PHP_EOL;
         $phpcode .= PHP_EOL;
         $phpcode .= 'class ' . $proxyClassName.' extends \\'.$class.' {'.PHP_EOL;
+        $phpcode .= PHP_EOL;
+        $phpcode .= "\t".'protected $callFuncName;'.PHP_EOL;
+        $phpcode .= "\t".'protected $callParams;'.PHP_EOL;
         
         
         
@@ -106,37 +109,30 @@ class ObjectHookProxyExtender {
             $phpcode .= PHP_EOL;
             $phpcode .= "\tpublic function ".$m->getName()."({$params}) {" . PHP_EOL;
             
-            
-            $phpcode .= "\t\t\$ohc = new \core\container\ObjectHookCall(\$this, ".var_export($m->getName(), true).", func_get_args());".PHP_EOL;
-            $phpcode .= "\t\t\$eb = object_container_get(\\core\\event\\EventBus::class);" . PHP_EOL;
-            
-            $eventNamePre = 'pre-call-'.$class.'::'.$m->getName();
-            
-            $phpcode .= "\t\t\$eb->publishEvent(\$ohc, 'core', ".var_export($eventNamePre,true).");".PHP_EOL;
-            
-            $phpcode .= "\t\t\$eb->publishEvent(\$ohc, 'core', 'pre-object-hook-call');".PHP_EOL;
+            $phpcode .= "\t\t\$this->callFuncName = ".var_export($m->getName(), true).';' . PHP_EOL;
+            $phpcode .= "\t\t\$this->callParams = func_get_args();" . PHP_EOL;
             
             $phpcode .= PHP_EOL;
             
-            $phpcode .= "\t\t\$r = parent::".$m->getName().'( '.$paramsFunc.' );' . PHP_EOL;
-            
-            $phpcode .= PHP_EOL;
-            
-            $phpcode .= "\t\t\$ohc->setReturnValue(\$r);" . PHP_EOL;
-            
-            $eventNamePost = 'post-call-'.$class.'::'.$m->getName();
-            $phpcode .= "\t\t\$eb->publishEvent(\$ohc, 'core', ".var_export($eventNamePost, true).");".PHP_EOL;
-            
-            $phpcode .= "\t\t\$eb->publishEvent(\$ohc, 'core', 'post-object-hook-call');".PHP_EOL;
-            
-            $phpcode .= PHP_EOL;
+            $phpcode .= "\t\t\$r = \$this->proxy_executeFunction();" . PHP_EOL;
             
             $phpcode .= "\t\treturn \$r;" . PHP_EOL;
             
             $phpcode .= "\t}" . PHP_EOL;
             
+            
 //             print $m->getName() . ' - ' . $m->getDeclaringClass()->getName() . "\n";
         }
+        
+        $phpcode .= "\tpublic function proxy_executeFunction() {" . PHP_EOL;
+        $phpcode .= "\t\t\$f = \$this->callFuncName;".PHP_EOL;
+        $phpcode .= "\t\t\$ro = new \\ReflectionObject(\$this);".PHP_EOL;
+        $phpcode .= "\t\t\$m = \$ro->getParentClass()->getMethod( \$f );" . PHP_EOL;
+//         $phpcode .= "\t\tvar_export(\$this->callParams);" . PHP_EOL;
+        
+        $phpcode .= "\t\t\$r = \$m->invokeArgs( \$this, \$this->callParams );" . PHP_EOL;
+        $phpcode .= "\t\treturn \$r;" . PHP_EOL;
+        $phpcode .= "\t}" . PHP_EOL;
         
         
         
