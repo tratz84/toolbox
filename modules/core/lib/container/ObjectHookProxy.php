@@ -66,7 +66,7 @@ class ObjectHookProxy{
         $phpcode .= PHP_EOL;
         $phpcode .= 'namespace toolbox\proxy;' . PHP_EOL;
         $phpcode .= PHP_EOL;
-        $phpcode .= 'class ' . $proxyClassName.' extends \\'.$class.' {'.PHP_EOL;
+        $phpcode .= 'class ' . $proxyClassName.' extends \\'.$class.' implements \\core\\container\\ObjectHookProxyInterface {'.PHP_EOL;
         $phpcode .= PHP_EOL;
         $phpcode .= "\t".'protected $callFuncName;'.PHP_EOL;
         $phpcode .= "\t".'protected $callParams;'.PHP_EOL;

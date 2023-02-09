@@ -31,11 +31,16 @@ function is_windows() {
     return false;
 }
 
-
+/**
+ * toolbox_get_class() - get_class(), but if toolbox-proxy is used, return name parent object
+ *  
+ * @param $obj
+ * @return string
+ */
 function toolbox_get_class( $obj ) {
     $n = get_class( $obj );
     
-    if (strpos( $n, 'toolbox\\proxy\\') === 0) {
+    if (is_subclass_of($n, \core\container\ObjectHookProxyInterface::class)) {
         $ro = new \ReflectionObject($obj);
         $n = $ro->getParentClass()->getName();
     }
