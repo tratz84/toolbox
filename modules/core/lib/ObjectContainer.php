@@ -137,7 +137,7 @@ class ObjectContainer {
         
         
         // prevent recursive loop
-        if (is_a($obj, EventBus::class)) {
+        if ($obj instanceof \core\event\EventBus) {
             $eb = $obj;
         } else {
             $eb = ObjectContainer::getInstance()->get(EventBus::class);
