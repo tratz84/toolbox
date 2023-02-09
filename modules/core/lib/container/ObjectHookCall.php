@@ -31,13 +31,7 @@ class ObjectHookCall {
     
     public function getClassName() {
         if ($this->className === null) {
-            if (strpos(get_class( $this->object ), 'toolbox\\proxy\\') === 0) {
-                $ro = new \ReflectionObject($this->object);
-                $this->className = $ro->getParentClass()->getName();
-            }
-            else {
-                $this->className = get_class($this->object);
-            }
+            $this->className = toolbox_get_class( $this->object );
         }
         
         return $this->className;
