@@ -6,7 +6,6 @@ namespace core\container;
 use core\event\EventBus;
 use core\ObjectContainer;
 use core\event\PeopleEvent;
-use core\cron\CronBase;
 use core\cron\CronJobBase;
 
 class CronContainer {
