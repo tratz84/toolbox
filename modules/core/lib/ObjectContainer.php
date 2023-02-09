@@ -7,7 +7,7 @@ namespace core;
  * 
  */
 use core\container\ObjectHookCall;
-use core\container\ObjectHookProxyExtender;
+use core\container\ObjectHookProxy;
 use core\container\ObjectHookable;
 use core\db\DatabaseTransactionObject;
 use core\event\EventBus;
@@ -59,7 +59,7 @@ class ObjectContainer {
         
         // create class or proxy
         if (defined('ADMIN_CONTEXT') == false && $isObjectHookable) {
-            $obj = ObjectHookProxyExtender::createProxy($className, $params);
+            $obj = ObjectHookProxy::createProxy($className, $params);
         }
         else {
             $obj = new $className( ... $params);

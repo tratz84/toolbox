@@ -7,7 +7,7 @@ namespace core\container;
 use core\exception\ObjectNotFoundException;
 use core\exception\FileException;
 
-class ObjectHookProxyExtender {
+class ObjectHookProxy{
     
     
     
