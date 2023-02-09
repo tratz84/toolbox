@@ -75,7 +75,9 @@ class articleController extends BaseController {
             if ($aForm->validate()) {
                 $a = $articleService->saveArticle($aForm);
                 
-                redirect('/?m=invoice&c=article');
+                report_user_message( t('Changes saved') );
+                
+                redirect('/?m=invoice&c=article&a=edit&id='.$a);
             }
         }
         
