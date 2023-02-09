@@ -38,11 +38,13 @@ function is_windows() {
  * @return string
  */
 function toolbox_get_class( $obj ) {
-    $n = get_class( $obj );
     
-    if (is_subclass_of($n, \core\container\ObjectHookProxyInterface::class)) {
+    if ($obj instanceof \core\container\ObjectHookProxyInterface) {
         $ro = new \ReflectionObject($obj);
         $n = $ro->getParentClass()->getName();
+    }
+    else {
+        $n = get_class( $obj );
     }
     
     return $n;
