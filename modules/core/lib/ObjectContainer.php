@@ -93,6 +93,7 @@ class ObjectContainer {
                     $r = $ohc->next();
                     
                     $con->commitTransaction();
+                    
                 } catch (\Exception $ex) {
                     try {
                         $con->rollbackTransaction();
@@ -100,6 +101,9 @@ class ObjectContainer {
                     
                     throw $ex;
                 }
+                
+                // release locks, if set
+                $con->releaseLocks();
                 
                 return $r;
             });
