@@ -127,7 +127,7 @@ class ObjectHookProxy{
         $phpcode .= "\t\t\$this->proxyFilters[] = \$f;" . PHP_EOL;
         $phpcode .= "\t}" . PHP_EOL;
         
-        $phpcode .= "\tpublic function proxy_executeFunction() {" . PHP_EOL;
+        $phpcode .= "\tprotected function proxy_executeFunction() {" . PHP_EOL;
         
 //         $phpcode .= "var_export(get_class(\$this));";
 //         $phpcode .= "var_export(\$this->callFuncName);";
