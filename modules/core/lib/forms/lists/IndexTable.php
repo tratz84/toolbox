@@ -51,7 +51,7 @@ class IndexTable {
     
     
     protected function autoSetItVariable() {
-        $n = get_class($this);
+        $n = toolbox_get_class($this);
         
         // ucfirst to include part of namespace
         $n = ucfirst($n);

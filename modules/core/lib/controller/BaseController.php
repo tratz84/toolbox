@@ -43,7 +43,7 @@ class BaseController {
     
     protected function getModuleName() {
         if ($this->moduleName == null) {
-            $ref = new \ReflectionClass( get_class($this) );
+            $ref = new \ReflectionClass( toolbox_get_class($this) );
             
             $filename_controller = $ref->getFileName();
             
@@ -143,7 +143,7 @@ class BaseController {
         }
         $tplMaster->setVar( 'content', $tpl->getTemplate() );
         $tplMaster->setVar( 'context', $ctx );
-        $tplMaster->setVar( 'body_class', 'module-'.slugify($module). ' ' . slugify($module) . '-' . slugify(get_class($this)) . ' action-'.slugify($this->actionTemplate) );
+        $tplMaster->setVar( 'body_class', 'module-'.slugify($module). ' ' . slugify($module) . '-' . slugify(toolbox_get_class($this)) . ' action-'.slugify($this->actionTemplate) );
         
         $tplMaster->showTemplate();
         
@@ -180,7 +180,7 @@ class BaseController {
         
         // publish event
         $eb = $this->oc->get(EventBus::class);
-        $eb->publishEvent($tpl, 'base', 'render-'.$module.'-'.get_class($this).'-'.$this->actionTemplate);
+        $eb->publishEvent($tpl, 'base', 'render-'.$module.'-'.toolbox_get_class($this).'-'.$this->actionTemplate);
         
         
         if ($this->showDecorator == false) {
@@ -190,7 +190,7 @@ class BaseController {
         
         // register javascript files
         if (count($this->javascriptFiles)) {
-            $jsgroup = $module . '-' . get_class($this);
+            $jsgroup = $module . '-' . toolbox_get_class($this);
             hook_htmlscriptloader_enableGroup($jsgroup);
             
             foreach($this->javascriptFiles as $url) {
@@ -210,7 +210,7 @@ class BaseController {
         $tplMaster->setVar( 'content', $tpl->getTemplate() );
         $tplMaster->setVar( 'context', $ctx );
         
-        $body_class = 'module-'.slugify($module). ' ' . slugify($module) . '-' . slugify(get_class($this)) . ' action-'.slugify($this->actionTemplate);
+        $body_class = 'module-'.slugify($module). ' ' . slugify($module) . '-' . slugify(toolbox_get_class($this)) . ' action-'.slugify($this->actionTemplate);
         if (count($this->bodyClass)) {
             // TODO: esc_attr()?
             $body_class .= ' ' . implode(' ', $this->bodyClass);

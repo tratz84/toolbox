@@ -33,7 +33,7 @@ class BaseForm extends WidgetContainer implements LockableObject {
     
     public function __construct() {
         
-        $this->setHtmlAttribute('data-form-class', get_class($this));
+        $this->setHtmlAttribute('data-form-class', toolbox_get_class($this));
         
         $this->addButton('default-button', t('Save'));
         
@@ -293,11 +293,11 @@ class BaseForm extends WidgetContainer implements LockableObject {
     public function renderReadonly() {
         $this->sortWidgets();
         
-        $className = get_class($this);
+        $className = toolbox_get_class($this);
         
         $html = '<div class="form-generator form-readonly form-readonly-'.slugify($className).'">';
         
-        $className = get_class($this);
+        $className = toolbox_get_class($this);
         if (strrpos($className, '\\') !== false)
             $className = substr($className, strrpos($className, '\\')+1);
             
@@ -313,7 +313,7 @@ class BaseForm extends WidgetContainer implements LockableObject {
     public function render() {
         $this->sortWidgets();
         
-        $className = get_class($this);
+        $className = toolbox_get_class($this);
         if (strrpos($className, '\\') !== false)
             $className = substr($className, strrpos($className, '\\')+1);
         
@@ -397,7 +397,7 @@ class BaseForm extends WidgetContainer implements LockableObject {
     }
     public function getLockKey() {
         // start lock name
-        $lockKey = get_class( $this );
+        $lockKey = toolbox_get_class( $this );
         if (strpos($lockKey, '\\') !== false)
             $lockKey = substr($lockKey, strrpos($lockKey, '\\')+1);
         $lockKey =  str_replace('Form', '', $lockKey);

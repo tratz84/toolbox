@@ -104,7 +104,7 @@ function is_false($v) {
 
 
 function get_class_shortname( $obj ) {
-    $n = get_class($obj);
+    $n = toolbox_get_class($obj);
     
     $p = strrpos($n, '\\');
     if ($p !== false) {

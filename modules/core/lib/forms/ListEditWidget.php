@@ -104,7 +104,7 @@ abstract class ListEditWidget extends ListWidget {
     public function renderAsText() {
         $html = '';
 
-        $html = '<div class="widget list-edit-form-widget '.slugify(get_class($this)).' " >';
+        $html = '<div class="widget list-edit-form-widget '.slugify(toolbox_get_class($this)).' " >';
 
         $html .= '<table class="sublist">';
 
@@ -164,10 +164,10 @@ abstract class ListEditWidget extends ListWidget {
 
         $html = '';
 
-        $html = '<div class="widget list-edit-form-widget '.slugify(get_class($this)).' " >';
+        $html = '<div class="widget list-edit-form-widget '.slugify(toolbox_get_class($this)).' " >';
 
         $html .= '<input type="hidden" class="method-object-list" value="'.esc_attr($this->getName()).'" />';
-        $html .= '<input type="hidden" class="form-class" value="'.esc_attr(get_class($this)).'" />';
+        $html .= '<input type="hidden" class="form-class" value="'.esc_attr(toolbox_get_class($this)).'" />';
 
         $html .= '<table class="sublist">';
 

@@ -123,7 +123,7 @@ class BaseWidget {
     
     public function render() {
         $this->addContainerClass('widget');
-        $this->addContainerClass( slugify(get_class($this)) );
+        $this->addContainerClass( slugify(toolbox_get_class($this)) );
         
         // remove var/index
         $className = $this->getName();

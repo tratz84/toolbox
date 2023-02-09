@@ -35,7 +35,7 @@ function render_dbobject_lock(DBObject $o, $prefix) {
         
     $id = $o->getField( $o->getPrimaryKey() );
     
-    return render_object_lock(get_class($o), $id, $prefix);
+    return render_object_lock(toolbox_get_class($o), $id, $prefix);
 }
 
 function render_object_lock($objectName, $id, $prefix) {
@@ -61,7 +61,7 @@ function dbobject_is_locked(DBObject $o) {
         
     $id = $o->getField( $o->getPrimaryKey() );
     
-    $v = object_meta_get(get_class($o), $id, 'object_locked');
+    $v = object_meta_get(toolbox_get_class($o), $id, 'object_locked');
     
     if ($v === true) {
         return true;
@@ -101,7 +101,7 @@ function lock_dbobject(DBObject $o) {
         return false;
         
     $id = $o->getField( $o->getPrimaryKey() );
-    return lock_object(get_class($o), $id);
+    return lock_object(toolbox_get_class($o), $id);
 }
 
 function unlock_dbobject(DBObject $o) {
@@ -109,7 +109,7 @@ function unlock_dbobject(DBObject $o) {
         return false;
         
     $id = $o->getField( $o->getPrimaryKey() );
-    return unlock_object(get_class($o), $id);
+    return unlock_object(toolbox_get_class($o), $id);
 }
 
 

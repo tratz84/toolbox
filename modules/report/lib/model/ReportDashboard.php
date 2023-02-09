@@ -85,8 +85,8 @@ class ReportDashboard extends base\ReportDashboardBase {
 	    // sort
 	    $fcs = $this->getFormClasses();
 	    usort( $forms, function($o1, $o2) use ($fcs) {
-	        $p1 = pos_in_array( get_class($o1), $fcs);
-	        $p2 = pos_in_array( get_class($o2), $fcs);
+	        $p1 = pos_in_array( toolbox_get_class($o1), $fcs);
+	        $p2 = pos_in_array( toolbox_get_class($o2), $fcs);
 	        return $p1 - $p2;
 	    });
 	    

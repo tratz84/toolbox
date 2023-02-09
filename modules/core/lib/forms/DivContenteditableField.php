@@ -27,7 +27,7 @@ class DivContenteditableField extends BaseWidget {
         $extraClass = $this->hasError() ? 'error' : '';
         $extraClass .= ' widget-'.slugify($this->getName());
         
-        $html .= '<div class="widget span-textarea-field ' . slugify(get_class($this)) . '-widget ' . $extraClass . '">';
+        $html .= '<div class="widget span-textarea-field ' . slugify(toolbox_get_class($this)) . '-widget ' . $extraClass . '">';
         $html .= '<label>'.esc_html($this->getLabel()).infopopup($this->getInfoText()).'</label>';
         $html .= '<input type="hidden"  name="'.esc_attr($this->getName()).'" value="'.esc_attr($this->getValue()).'" />';
         $html .= '<div

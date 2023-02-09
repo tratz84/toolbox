@@ -126,10 +126,10 @@ class CronService {
     protected function registerCronjob($c) {
         $cDao = new CronDAO();
         
-        $cron = $cDao->readByName(get_class($c));
+        $cron = $cDao->readByName(toolbox_get_class($c));
         if (!$cron) {
             $cron = new Cron();
-            $cron->setCronName(get_class($c));
+            $cron->setCronName(toolbox_get_class($c));
 //             $cron->setCronTitle($c->getTitle());
             $cron->setLastStatus('init');
             
@@ -159,7 +159,7 @@ class CronService {
         // mja.. cron_title veld uit db halen?
         foreach($cronjobsDb as &$c) {
             foreach($cronjobs as $c2) {
-                if (get_class($c2) == $c->getCronName()) {
+                if (toolbox_get_class($c2) == $c->getCronName()) {
                     $c->setTitle( $c2->getTitle() );
                     break;
                 }
