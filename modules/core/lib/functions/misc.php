@@ -31,6 +31,19 @@ function is_windows() {
     return false;
 }
 
+
+function toolbox_get_class( $obj ) {
+    $n = get_class( $obj );
+    
+    if (strpos( $n, 'toolbox\\proxy\\') === 0) {
+        $ro = new \ReflectionObject($obj);
+        $n = $ro->getParentClass()->getName();
+    }
+    
+    return $n;
+}
+
+
 /**
  * Internet Explorer-browser? (not Edge)
  * @return boolean

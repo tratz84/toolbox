@@ -133,7 +133,7 @@ class WidgetContainer extends BaseWidget {
      */
     public function bind($obj) {
         $ohc = new ObjectHookCall($this, 'bind', array($obj));
-        hook_eventbus_publish($ohc, 'core', 'pre-call-'.get_class($this).'::bind');
+        hook_eventbus_publish($ohc, 'core', 'pre-call-'.toolbox_get_class($this).'::bind');
         
         
         $fieldCount = 0;
@@ -166,7 +166,7 @@ class WidgetContainer extends BaseWidget {
         }
         
         $ohc->setReturnValue($fieldCount);
-        hook_eventbus_publish($ohc, 'core', 'post-call-'.get_class($this).'::bind');
+        hook_eventbus_publish($ohc, 'core', 'post-call-'.toolbox_get_class($this).'::bind');
         
         return $fieldCount;
     }
@@ -178,7 +178,7 @@ class WidgetContainer extends BaseWidget {
      */
     public function fill($obj, $fields=array()) {
         $ohc = new ObjectHookCall($this, 'bind', array($obj, $fields));
-        hook_eventbus_publish($ohc, 'core', 'pre-call-'.get_class($this).'::fill');
+        hook_eventbus_publish($ohc, 'core', 'pre-call-'.toolbox_get_class($this).'::fill');
         
         foreach($fields as $f) {
             $widget = $this->getWidget($f);
@@ -215,7 +215,7 @@ class WidgetContainer extends BaseWidget {
             }
         }
         
-        hook_eventbus_publish($ohc, 'core', 'post-call-'.get_class($this).'::fill');
+        hook_eventbus_publish($ohc, 'core', 'post-call-'.toolbox_get_class($this).'::fill');
     }
     
     
