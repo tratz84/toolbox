@@ -34,7 +34,6 @@ class customerController extends BaseController {
     }
     
     public function action_select2() {
-
         $customerService = $this->oc->get(CustomerService::class);
         
         $r = $customerService->search(0, 20, $_REQUEST);
@@ -57,6 +56,44 @@ class customerController extends BaseController {
         
         
         $result = array();
+        $result['results'] = $arr;
+        
+        $this->json($result);
+    }
+    
+    public function action_select_table() {
+        $customerService = object_container_get(CustomerService::class);
+        
+        $opts = $_REQUEST;
+        $opts['fetch_addresses'] = true;
+        
+        $r = $customerService->search(0, 20, $opts);
+        
+        $arr = array();
+        
+        $result = array();
+        $result['header_fields'] = array(
+            'type'           => t('Type'),
+            'name'           => t('Name'),
+            'contact_person' => t('Contact person'),
+            'adres1'         => t('Adres'),
+        );
+        
+        foreach($r->getObjects() as $customer) {
+            $i = array(
+                'id'             => $customer['type'] . '-' . $customer['id'],
+                'name'           => $customer['name'],
+                'contact_person' => $customer['contact_person'],
+                'adres1'         => ''
+            );
+            
+            if (count($customer['addresses']) > 0)
+                $i['adres1'] = trim( $customer['addresses'][0]['street'] . ' ' . $customer['addresses'][0]['street_no'] . ' ' . $customer['addresses'][0]['city'] );
+            
+            $arr[] = $i;
+        }
+        
+        
         $result['results'] = $arr;
         
         $this->json($result);
