@@ -84,7 +84,8 @@ class customerController extends BaseController {
                 'id'             => $customer['type'] . '-' . $customer['id'],
                 'name'           => $customer['name'],
                 'contact_person' => $customer['contact_person'],
-                'adres1'         => ''
+                'adres1'         => '',
+                'default_text'   => $customer['name']
             );
             
             if (count($customer['addresses']) > 0)

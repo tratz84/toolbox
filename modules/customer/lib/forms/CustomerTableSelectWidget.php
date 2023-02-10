@@ -10,7 +10,7 @@ use core\forms\BaseWidget;
 use customer\service\CompanyService;
 use customer\service\PersonService;
 
-class CustomerSelectTableWidget extends BaseWidget {
+class CustomerTableSelectWidget extends BaseWidget {
     
     
     protected $customerDeleted = false;
@@ -32,7 +32,10 @@ class CustomerSelectTableWidget extends BaseWidget {
         $this->setLabel($label);
         
         $this->containerClasses[] = 'widget';
-        $this->containerClasses[] = 'customer-select-table-widget';
+        $this->containerClasses[] = 'table-select-widget';
+        $this->containerClasses[] = 'customer-table-select-widget';
+        
+        hook_htmlscriptloader_enableGroup( 'table-select-widget' );
     }
     
     

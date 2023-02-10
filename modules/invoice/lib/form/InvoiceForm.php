@@ -21,7 +21,7 @@ use invoice\model\Invoice;
 use invoice\service\InvoiceService;
 use core\forms\CheckboxField;
 use customer\forms\CustomerSelectWidget;
-use customer\forms\CustomerSelectTableWidget;
+use customer\forms\CustomerTableSelectWidget;
 
 class InvoiceForm extends BaseForm {
 
@@ -45,7 +45,7 @@ class InvoiceForm extends BaseForm {
         $this->addWidget( new DatePickerField('invoice_date', '', 'Datum') );
 
 //         $this->addWidget( new CustomerSelectWidget() );
-        $this->addWidget( new CustomerSelectTableWidget() );
+        $this->addWidget( new CustomerTableSelectWidget() );
 //         $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=customer&c=customer&a=select2', 'Klant') );
 
         $this->addInvoiceStatus();

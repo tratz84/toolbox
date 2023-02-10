@@ -41,6 +41,7 @@ hook_register_javascript('select-person-list-edit',  appUrl('/?mpf=/module/custo
 hook_register_javascript('select-company-list-edit', appUrl('/?mpf=/module/customer/js/select-company-edit-list.js'));
 hook_register_javascript('customer-select-widget',   appUrl('/?mpf=/module/customer/js/customer-select-widget.js'));
 
+hook_register_javascript('table-select-widget', appUrl('/?mpf=/module/customer/js/table-select-widget.js'));
 
 hook_eventbus_subscribe('report', 'menu-list', function($reportMenuList) {
     /**
