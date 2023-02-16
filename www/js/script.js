@@ -69,6 +69,15 @@ $(document).ready(function() {
 	
 	autoformat_fields( $('.main-content form') );
 	
+	// prevent auto-submit for input-fields that don't want to ;)
+	$(window).on('keydown', function(evt) {
+		if (evt.keyCode == 13 && $(evt.target).data('prevent-submit')) {
+			evt.preventDefault();
+			return false;
+		}
+	});
+	
+	
 	focusFirstField( $('body.action-index table.list-response-table th, .autofocus-first-field th, .main-content form') );
 	
 	var toolbox = $('.page-header .toolbox');
