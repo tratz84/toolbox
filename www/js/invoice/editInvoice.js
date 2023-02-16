@@ -27,19 +27,12 @@ $(document).ready(function() {
 	$('[name=customer_id]').change(function() {
 		var id = $(this).val();
 		
-		if (!id && $(this).attr('value'))
-			id = $(this).attr('value');
-
 		loadCustomerDetails( id );
 	});
 
 	if ($('[name=customer_id]').length) {
-		var i = $('[name=customer_id]');
-		var id = i.val();
+		var id = $('[name=customer_id]').val();
 		
-		if (!id && i.attr('value'))
-			id = i.attr('value');
-
 		loadCustomerDetails( id );
 	}
 

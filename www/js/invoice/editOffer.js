@@ -35,21 +35,13 @@ $(document).ready(function() {
 	$('[name=customer_id]').change(function() {
 		var id = $(this).val();
 		
-		if (!id && $(this).attr('value'))
-			id = $(this).attr('value');
-
 		loadCustomerDetails( id );
 	});
 
 	if ($('.rental-wizard-controller').length > 0) {
 		// don't show customer details in offer wizard
 	} else {
-		
-		var i = $('[name=customer_id]');
-		var id = i.val();
-		
-		if (!id && i.attr('value'))
-			id = i.attr('value');
+		var id = $('[name=customer_id]').val();
 
 		loadCustomerDetails( id );
 	}

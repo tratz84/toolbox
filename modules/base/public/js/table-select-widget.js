@@ -56,6 +56,8 @@ class TableSelectWidget {
 		this.vars['defaultText'] = $(this.container).attr('default-text');
 		this.vars['url']         = $(this.container).attr('url');
 		
+		this.setValueText( this.vars['value'], this.vars['defaultText'] );
+		
 		this.vars['results'] =  [];
 	}
 	
@@ -76,6 +78,7 @@ class TableSelectWidget {
 		$(this.container).find('.widget-value').val( id );
 		$(this.container).find('.widget-default-text').text( default_text );
 		
+		$(this.container).val(id);
 		$(this.container).attr( 'value', id );
 		$(this.container).attr( 'default-text', default_text );
 		
