@@ -21,7 +21,7 @@ class TableSelectWidget {
 			<span class="cst-selector-caret fa fa-caret-down"></span>
 		</span>
 		<div class="cst-dropdown-container">
-			<div><input type="text" name="q" data-prevent-submit="1" /></div>
+			<div><input type="text" name="q" data-prevent-submit="1" autocomplete="off" /></div>
 			<div ez-subtemplate="result-container">
 				<table ez-if="results.length > 0" class="list-response-table">
 					<thead>
