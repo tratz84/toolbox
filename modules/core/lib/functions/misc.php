@@ -32,6 +32,28 @@ function is_windows() {
 }
 
 /**
+ * toolbox_get_class() - get_class(), but if toolbox-proxy is used, return name parent object
+ *
+ * @param $obj
+ * @return string
+ */
+function toolbox_get_class( $obj ) {
+    
+    if ($obj instanceof \core\container\ObjectHookProxyInterface) {
+        $ro = new \ReflectionObject($obj);
+        $n = $ro->getParentClass()->getName();
+    }
+    else {
+        $n = get_class( $obj );
+    }
+    
+    return $n;
+}
+
+
+
+
+/**
  * Internet Explorer-browser? (not Edge)
  * @return boolean
  */
