@@ -63,11 +63,13 @@ class TableSelectWidget {
 		this.vars['value'] = record.id;
 		this.vars['defaultText'] = record.default_text;
 		
-		$(this.container).find('.widget-value').text( record.id );
+		$(this.container).find('.widget-value').val( record.id );
 		$(this.container).find('.widget-default-text').text( record.default_text );
 		
 		$(this.container).attr( 'value', record.id );
 		$(this.container).attr( 'default-text', record.default_text );
+		
+		$(this.container).trigger( 'change' );
 		
 		$('ez-table-selector').removeClass('opened');
 	}

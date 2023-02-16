@@ -91,9 +91,10 @@ class CustomerService extends ServiceBase {
                     );
                 }
             }
+            
+            $r->setObjects($objs);
         }
         
-        $r->setObjects($objs);
         
         
         $r->setStart($start);
