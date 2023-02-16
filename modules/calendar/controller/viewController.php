@@ -24,6 +24,7 @@ class viewController extends BaseController {
         hook_htmlscriptloader_enableGroup('customer-select-widget');
         hook_htmlscriptloader_enableGroup('select-person-list-edit');
         hook_htmlscriptloader_enableGroup('select-company-list-edit');
+        hook_htmlscriptloader_enableGroup( 'table-select-widget' );
         
         
         $calendarService = $this->oc->get(CalendarService::class);
