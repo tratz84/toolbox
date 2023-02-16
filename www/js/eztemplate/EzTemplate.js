@@ -113,6 +113,9 @@ class EzTemplate {
         s.childNodes.forEach(function(obj) {
             this.originalNodes.push(obj.cloneNode(true));
         }.bind(this));
+        
+//        console.log(s);
+//        console.log(this.originalNodes);
 
     }
     
@@ -589,7 +592,7 @@ class EzTemplate {
     
     render( ) {
 		// loadNode() & loadHtml not called? => lets go
-		if (this.isTopTemplate() && !this.partial) {
+		if (this.isTopTemplate() && !this.originalNodes) {
 			this.loadNode();
 		}
 
