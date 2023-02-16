@@ -10,6 +10,8 @@ class TableSelectWidget {
 	
 	vars = {};
 	
+	locked = false;
+	
 	// updateResults-vars
 	xhrRequest = null;
 	updateTimeout = null;
@@ -55,6 +57,10 @@ class TableSelectWidget {
 		this.vars['url']         = $(this.container).attr('url');
 		
 		this.vars['results'] =  [];
+	}
+	
+	setLocked(bln) {
+		this.locked = bln;
 	}
 	
 	_rowClick( r ) {
@@ -124,7 +130,14 @@ class TableSelectWidget {
 	renderWidget() {
 		this.eztemplate.render();
 		
-		this.handleEvents();
+		if (!this.locked) {
+			this.handleEvents();
+		}
+		
+		if (this.locked) {
+			$(this.container).closest('div.widget').find('.fa-plus, .cst-selector-caret').remove();
+			$(this.container).closest('div.widget').find('.cst-selector').css('cursor', 'auto');
+		}
 	}
 	
 	handleEvents() {
@@ -167,7 +180,10 @@ $(window).on('applyWidgetFields', function() {
 		if (node.tsw)
 			return;
 		
+		let locked = $(node).closest('form').find('.object-locked').val() == '1' ? 1 : 0;
+		
 		let tsw = new TableSelectWidget( node );
+		tsw.setLocked( locked );
 		tsw.init();
 		
 		node.tsw = tsw;

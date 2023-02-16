@@ -74,6 +74,8 @@ $eb->subscribe('base', 'dashboard', new CallbackPeopleEventListener(function($ev
     $dashboardWidgets = $evt->getSource();
     
     if (hasCapability('calendar', 'edit-calendar')) {
+        hook_htmlscriptloader_enableGroup('table-select-widget');
+        
         /** @var CalendarSettings $calendarSettings */
         $calendarSettings = object_container_get( CalendarSettings::class );
         
