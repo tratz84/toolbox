@@ -38,7 +38,7 @@ class TableSelectWidget {
 					</tbody>
 				</table>
 				<div ez-if="results.length == 0">
-					{{ t('No results found') }}
+					{{ toolbox_t('No results found') }}
 				</div ez-if>
 			</div>
 		</div>
