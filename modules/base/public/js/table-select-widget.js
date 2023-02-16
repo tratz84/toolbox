@@ -141,11 +141,13 @@ class TableSelectWidget {
 	}
 	
 	handleEvents() {
-		$(this.eztemplate.container).find('[name=q]').on('keyup', function(evt) {
+		$(this.eztemplate.container).find('[name=q]').on('keydown', function(evt) {
 			// escape
 			if ( evt.keyCode == 27 ) {
 				//$(evt.target).val('');
 				$('ez-table-selector').removeClass('opened');
+				
+				evt.stopPropagation();
 				
 				return;
 			}
