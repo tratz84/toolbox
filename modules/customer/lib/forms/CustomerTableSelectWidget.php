@@ -168,9 +168,10 @@ class CustomerTableSelectWidget extends BaseWidget {
         $html .= '<input type="hidden" name="'.esc_attr($this->getName()).'" value="'.esc_attr($this->getValue()).'" />';
         $html .= '<label>'.$htmlLabel.infopopup($this->getInfoText()).'</label>';
         
-        $html .= '<span class="cst-selector"><span class="cst-selector-text">'.esc_html($this->getDefaultText()).'</span><span class="cst-selector-caret fa fa-caret-down"></span></span>';
-        
-        $html .= '<div class="cst-dropdown-container"></div>';
+        $html .= '<ez-table-selector name="'.esc_attr($this->getName()).'"
+                         value="'.esc_attr($this->getValue()).'"
+                         default-text="'.esc_attr($this->getDefaultText()).'"
+                         url="'.appUrl('/?m=customer&c=customer&a=select_table').'" />';
         
         $html .= '</div>';
         
