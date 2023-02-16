@@ -11,6 +11,7 @@ use core\forms\lists\ListResponse;
 use core\service\ServiceBase;
 use customer\model\EmailDAO;
 use customer\model\CompanyDAO;
+use customer\model\AddressDAO;
 
 class CustomerService extends ServiceBase {
     
@@ -63,6 +64,39 @@ class CustomerService extends ServiceBase {
         $count = $cDao->searchCount($opts);
         
         $r = ListResponse::fillByCursor(0, $limit, $cursor, array('id', 'type', 'name', 'contact_person'));
+        
+        
+        if (isset($opts['fetch_addresses']) && $opts['fetch_addresses']) {
+            $addressDao = new AddressDAO();
+            $objs = $r->getObjects();
+            for($x=0; $x < count($objs); $x++) {
+                $id = $objs[$x]['id'];
+                
+                $addresses = array();
+                if ($objs[$x]['type'] == 'company') {
+                    $addresses = $addressDao->readByCompany( $id );
+                }
+                else if ($objs[$x]['type'] == 'person') {
+                    $addresses = $addressDao->readByPerson( $id );
+                }
+                
+                $objs[$x]['addresses'] = array();
+                foreach($addresses as $a) {
+                    $objs[$x]['addresses'][] = array(
+                        'address_id' => $a->getAddressId(),
+                        'street'     => $a->getStreet(),
+                        'street_no'  => $a->getStreetNo(),
+                        'zipcode'    => $a->getZipcode(),
+                        'city'       => $a->getCity(),
+                    );
+                }
+            }
+            
+            $r->setObjects($objs);
+        }
+        
+        
+        
         $r->setStart($start);
         $r->setRowCount($count);
         

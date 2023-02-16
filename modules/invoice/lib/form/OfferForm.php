@@ -20,7 +20,7 @@ use core\forms\validator\NotEmptyValidator;
 use invoice\model\Invoice;
 use invoice\model\Offer;
 use invoice\service\OfferService;
-use customer\forms\CustomerSelectWidget;
+use customer\forms\CustomerTableSelectWidget;
 
 class OfferForm extends BaseForm {
     
@@ -39,7 +39,7 @@ class OfferForm extends BaseForm {
         
         $this->addWidget( new DatePickerField('offer_date', '', 'Datum') );
         
-        $this->addWidget( new CustomerSelectWidget() );
+        $this->addWidget( new CustomerTableSelectWidget() );
 //         $this->addWidget( new DynamicSelectField('customer_id', '', 'Maak uw keuze', '/?m=customer&c=customer&a=select2', 'Klant') );
         
         $this->addOfferStatus();

@@ -14,7 +14,7 @@ use core\forms\TextField;
 use core\forms\TextareaField;
 use core\forms\validator\DateValidator;
 use filesync\service\StoreService;
-use customer\forms\CustomerSelectWidget;
+use customer\forms\CustomerTableSelectWidget;
 
 class ArchiveFileUploadForm extends BaseForm {
     
@@ -31,7 +31,7 @@ class ArchiveFileUploadForm extends BaseForm {
         }
         $this->addWidget(new FileField('file', '', t('File')));
         $this->addWidget(new DatePickerField('document_date', '', t('Document date')));
-        $this->addWidget(new CustomerSelectWidget());
+        $this->addWidget(new CustomerTableSelectWidget() );
         
         $this->addWidget(new TextField('subject', '', t('Subject')));
         $this->addWidget(new TextareaField('long_description', '', t('Long description')));

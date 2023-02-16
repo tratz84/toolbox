@@ -26,12 +26,21 @@ $(document).ready(function() {
 	// customer-change, change popup upper right
 	$('[name=customer_id]').change(function() {
 		var id = $(this).val();
+		
+		if (!id && $(this).attr('value'))
+			id = $(this).attr('value');
 
 		loadCustomerDetails( id );
 	});
 
 	if ($('[name=customer_id]').length) {
-		loadCustomerDetails( $('[name=customer_id]').val() );
+		var i = $('[name=customer_id]');
+		var id = i.val();
+		
+		if (!id && i.attr('value'))
+			id = i.attr('value');
+
+		loadCustomerDetails( id );
 	}
 
 	$('<th class="price-sum">Totaal</th>').insertBefore('.invoice-form-list-invoice-line-widget thead tr th:last-child');

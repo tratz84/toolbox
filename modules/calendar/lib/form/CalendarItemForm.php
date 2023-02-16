@@ -2,19 +2,18 @@
 
 namespace calendar\form;
 
+use calendar\CalendarSettings;
+use calendar\model\CalendarItem;
 use core\forms\BaseForm;
 use core\forms\CheckboxField;
 use core\forms\DatePickerField;
+use core\forms\HiddenField;
+use core\forms\SelectField;
 use core\forms\TextField;
 use core\forms\TextareaField;
-use core\forms\HiddenField;
 use core\forms\TimePickerField;
 use core\forms\validator\NotEmptyValidator;
-use core\forms\SelectField;
-use calendar\model\CalendarItem;
-use calendar\CalendarSettings;
-use customer\forms\CustomerSelectWidget;
-use core\forms\InternalField;
+use customer\forms\CustomerTableSelectWidget;
 
 class CalendarItemForm extends BaseForm {
     
@@ -35,7 +34,7 @@ class CalendarItemForm extends BaseForm {
             $this->addWidget(new SelectField('item_action', '', $map_itemActions, t('Current action')));
         }
         
-        $this->addWidget(new CustomerSelectWidget('customer_id'));
+        $this->addWidget(new CustomerTableSelectWidget());
         
         $this->addWidget(new TextField('title',    '', 'Titel'));
         $this->addWidget(new TextField('location', '', 'Locatie'));

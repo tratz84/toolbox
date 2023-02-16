@@ -6,6 +6,8 @@
 
 class EzTemplate {
 	
+	templateName = null;
+	
 	
     constructor( container ) {
 		
@@ -34,6 +36,9 @@ class EzTemplate {
         this.subTemplates = [];
 
     }
+    
+    setTemplateName(n) { this.templateName = n; }
+    getTemplateName() { return this.templateName; }
     
     
     static createInstanceSubTemplate( parentTemplate, node, templateHtml ) {
@@ -113,6 +118,9 @@ class EzTemplate {
         s.childNodes.forEach(function(obj) {
             this.originalNodes.push(obj.cloneNode(true));
         }.bind(this));
+        
+//        console.log(s);
+//        console.log(this.originalNodes);
 
     }
     
@@ -157,7 +165,19 @@ class EzTemplate {
                 this.subTemplates.push( sub );
 				
 			}.bind(this), { parentNode: node });
+			
+			return;
         }
+        
+        // subtemplate set?
+        if (node.attributes && node.getAttribute('ez-subtemplate')) {
+			let sub = EzTemplate.createInstanceSubTemplate( this, node, node.innerHTML );
+			sub.setTemplateName( node.getAttribute('ez-subtemplate') );
+			this.subTemplates.push( sub );
+			
+			return;
+		}
+        
         
         // handle attributes
         if (node.attributes) {
@@ -315,7 +335,11 @@ class EzTemplate {
 			}
             // set attribute
 			else {
-            	att.ownerElement.setAttribute(attrName, v);
+				if (attrName.indexOf('data-') === 0) {
+					att.ownerElement[attrName.substr(5)] = v;
+				} else {
+					att.ownerElement.setAttribute(attrName, v);
+				}
         	}
             
             // eztemplate? => set var
@@ -586,13 +610,27 @@ class EzTemplate {
 		else
 			return false;
 	}
+	
+	
+	renderSubTemplate( subTemplateName ) {
+		
+		for(var i in this.subTemplates) {
+			if (this.subTemplates[i].getTemplateName() == subTemplateName) {
+				console.log( this.subTemplates[i].isTopTemplate() );
+				this.subTemplates[i].setVars( this.vars );
+				this.subTemplates[i].render();
+			}
+		}
+		
+		
+	}
     
     render( ) {
+		
 		// loadNode() & loadHtml not called? => lets go
-		if (this.isTopTemplate() && !this.partial) {
+		if (this.isTopTemplate() && !this.originalNodes) {
 			this.loadNode();
 		}
-
 	
 		// build it
 		let nodes = this.build( { update_on_templates_loaded: true });

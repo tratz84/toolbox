@@ -34,6 +34,9 @@ $(document).ready(function() {
 	// customer-change, change popup upper right
 	$('[name=customer_id]').change(function() {
 		var id = $(this).val();
+		
+		if (!id && $(this).attr('value'))
+			id = $(this).attr('value');
 
 		loadCustomerDetails( id );
 	});
@@ -41,7 +44,14 @@ $(document).ready(function() {
 	if ($('.rental-wizard-controller').length > 0) {
 		// don't show customer details in offer wizard
 	} else {
-		loadCustomerDetails( $('[name=customer_id]').val() );
+		
+		var i = $('[name=customer_id]');
+		var id = i.val();
+		
+		if (!id && i.attr('value'))
+			id = i.attr('value');
+
+		loadCustomerDetails( id );
 	}
 
 	$('<th class="price-sum">Totaal</th>').insertBefore('.invoice-form-list-offer-line-widget thead tr th:last-child');

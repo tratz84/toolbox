@@ -44,6 +44,7 @@ use core\forms\YearField;
 use customer\forms\CompanySelectWidget;
 use customer\forms\CustomerSelectWidget;
 use customer\forms\CustomerSimpleSelectWidget;
+use customer\forms\CustomerTableSelectWidget;
 
 class GeneratorHelper {
     
@@ -300,6 +301,12 @@ class GeneratorHelper {
             'type' => 'widget',
             'class' => CustomerSelectWidget::class,
             'label' => 'Customer select'
+        );
+        
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => CustomerTableSelectWidget::class,
+            'label' => 'Customer table select'
         );
         
         $formWidgets[] = array(

@@ -38,7 +38,7 @@ class ProjectForm extends BaseForm {
 		$this->addWidget( $w1 );
 		$w2 = new \core\forms\CheckboxField('active', NULL, t('Active'));
 		$this->addWidget( $w2 );
-		$w3 = new \customer\forms\CustomerSelectWidget('customer_id', NULL, NULL, NULL, t('Klant'));
+		$w3 = new \customer\forms\CustomerTableSelectWidget('customer_id');
 		$this->addWidget( $w3 );
 		$w4 = new \core\forms\TextField('project_name', NULL, t('Name'));
 		$this->addWidget( $w4 );
@@ -54,6 +54,7 @@ class ProjectForm extends BaseForm {
 		$this->addWidget( $w8 );
 		
 	}
+
 
 
 

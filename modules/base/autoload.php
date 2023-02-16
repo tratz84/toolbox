@@ -24,6 +24,9 @@ hook_register_javascript('mod-base-script',   appUrl('/?mpf=/module/base/js/scri
 hook_htmlscriptloader_enableGroup('mod-base-script');
 
 
+hook_register_javascript('table-select-widget', appUrl('/?mpf=/module/base/js/table-select-widget.js'));
+
+
 
 $eb = ObjectContainer::getInstance()->get(EventBus::class);
 

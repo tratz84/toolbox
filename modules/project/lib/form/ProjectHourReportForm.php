@@ -3,17 +3,11 @@
 namespace project\form;
 
 
-use customer\service\CompanyService;
-use customer\service\PersonService;
 use core\ObjectContainer;
 use core\forms\BaseForm;
 use core\forms\DatePickerField;
-use core\forms\DynamicSelectField;
-use core\forms\HiddenField;
 use core\forms\SelectField;
-use customer\forms\CustomerSelectWidget;
-use invoice\model\Invoice;
-
+use customer\forms\CustomerTableSelectWidget;
 use project\service\ProjectService;
 
 class ProjectHourReportForm extends BaseForm {
@@ -29,7 +23,7 @@ class ProjectHourReportForm extends BaseForm {
 
         $this->addWidget(new DatePickerField('start', '', 'Startdatum'));
         $this->addWidget(new DatePickerField('end', '', 'Einddatum'));
-        $this->addWidget(new CustomerSelectWidget() );
+        $this->addWidget(new CustomerTableSelectWidget() );
         $this->addStatus();
 
     }

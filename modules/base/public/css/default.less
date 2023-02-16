@@ -17,3 +17,52 @@ div.widget.user-select-widget {
 	[name=shortNote] { width: calc(100% - 200px); }
 }
 
+
+
+div.widget.table-select-widget {
+	
+	
+	ez-table-selector {
+		position: relative;
+		overflow: visible;
+		display: inline-block;
+		margin-top: 4px;
+	
+		.cst-selector {
+			border: 1px solid #ccc;
+			padding: 1px 5px 2px 5px;
+			cursor: pointer;
+			
+			.cst-selector-text {
+				padding-right: 10px;
+				display: inline-block;
+				min-width: 150px;
+			}
+		}
+		
+		.cst-dropdown-container {
+			display: none;
+			position: absolute;
+			z-index: 9999;
+			left: 0;
+			min-width: 700px;
+			top: 24px;
+			background-color: #eee;
+			padding: 2px;
+			box-shadow: 0px 0px 5px #6c6c6c;
+			
+			tbody tr:hover {
+				cursor: pointer;
+			}
+		}
+		
+		&.opened {
+			.cst-dropdown-container {
+				display: block;
+			}
+		}
+	}
+	
+	
+}
+
