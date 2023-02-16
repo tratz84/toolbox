@@ -65,6 +65,22 @@ class HtmlScriptLoader {
     }
     
     protected function rewriteUrl($url) {
+        
+        /*
+        // set v=<filemtime>
+        if (strpos($url, '/module/') !== false && strpos($url, 'v=') === false) {
+            $p = substr($url, strpos($url, '/module/') + 8);
+            $moduleName = substr($p, 0, strpos($p, '/'));
+            $file = substr($p, strpos($p, '/')+1);
+            
+            $f = module_file( $moduleName, 'public/'.$file );
+            if ($f) {
+                $url .= strpos($url, '?') === false ? '?' : '&';
+                $url .= 'v=' . filemtime($f);
+            }
+        }*/
+        
+        
         if (strpos($url, 'https://') === 0 || strpos($url, 'https://') === 0) {
             return $url;
         } else {

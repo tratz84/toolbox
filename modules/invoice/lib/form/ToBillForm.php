@@ -20,7 +20,6 @@ use invoice\model\ToBill;
 use core\forms\DoubleField;
 use core\forms\TextareaField;
 use core\forms\SelectField;
-use customer\forms\CustomerSelectWidget;
 use customer\forms\CustomerTableSelectWidget;
 
 class ToBillForm extends BaseForm {

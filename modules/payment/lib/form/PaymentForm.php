@@ -12,7 +12,6 @@ use core\forms\SelectField;
 use core\forms\TextField;
 use core\forms\TextareaField;
 use core\forms\validator\NotEmptyValidator;
-use customer\forms\CustomerSelectWidget;
 use payment\service\PaymentService;
 use customer\forms\CustomerTableSelectWidget;
 

@@ -13,7 +13,6 @@ use core\forms\HtmlField;
 use core\forms\InternalField;
 use core\forms\TextField;
 use core\forms\TextareaField;
-use customer\forms\CustomerSelectWidget;
 use filesync\service\StoreService;
 use customer\forms\CustomerTableSelectWidget;
 

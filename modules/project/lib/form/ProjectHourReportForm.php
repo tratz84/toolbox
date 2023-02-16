@@ -3,19 +3,12 @@
 namespace project\form;
 
 
-use customer\service\CompanyService;
-use customer\service\PersonService;
 use core\ObjectContainer;
 use core\forms\BaseForm;
 use core\forms\DatePickerField;
-use core\forms\DynamicSelectField;
-use core\forms\HiddenField;
 use core\forms\SelectField;
-use customer\forms\CustomerSelectWidget;
-use invoice\model\Invoice;
-
-use project\service\ProjectService;
 use customer\forms\CustomerTableSelectWidget;
+use project\service\ProjectService;
 
 class ProjectHourReportForm extends BaseForm {
 
