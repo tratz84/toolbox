@@ -60,19 +60,25 @@ class TableSelectWidget {
 	_rowClick( r ) {
 		let record = r.record;
 		
-		this.vars['value'] = record.id;
-		this.vars['defaultText'] = record.default_text;
+		this.setValueText( record.id, record.default_text );
+	}
+	
+	setValueText( id, default_text ) {
+		this.vars['value'] = id;
+		this.vars['defaultText'] = default_text;
 		
-		$(this.container).find('.widget-value').val( record.id );
-		$(this.container).find('.widget-default-text').text( record.default_text );
+		$(this.container).find('.widget-value').val( id );
+		$(this.container).find('.widget-default-text').text( default_text );
 		
-		$(this.container).attr( 'value', record.id );
-		$(this.container).attr( 'default-text', record.default_text );
+		$(this.container).attr( 'value', id );
+		$(this.container).attr( 'default-text', default_text );
 		
 		$(this.container).trigger( 'change' );
 		
 		$('ez-table-selector').removeClass('opened');
+		
 	}
+	
 	
 	
 	updateResults( q ) {

@@ -52,14 +52,23 @@ function newCustomerPopup_handleCompanySubmit( objAnchor ) {
 			}
 			
 			if (data.success) {
-				var select = $(objAnchor).closest('div.widget').find('select');
 				
-				if (select.hasClass('select2-widget')) {
-					set_select2_val(select, data.customer_id, data.customer_name);
+				// support CustomerTableSelectWidget
+				let ezcontainer = $(objAnchor).closest('div.widget').find('ez-table-selector[name=customer_id]');
+				if (ezcontainer.length > 0) {
+					ezcontainer.get(0).tsw.setValueText( data.customer_id, data.customer_name );
 					close_popup();
 				}
 				else {
-					newCustomerPopup_reloadOptions( select, data );
+					var select = $(objAnchor).closest('div.widget').find('select');
+					
+					if (select.hasClass('select2-widget')) {
+						set_select2_val(select, data.customer_id, data.customer_name);
+						close_popup();
+					}
+					else {
+						newCustomerPopup_reloadOptions( select, data );
+					}
 				}
 			}
 			
@@ -79,14 +88,22 @@ function newCustomerPopup_handlePersonSubmit( objAnchor ) {
 			}
 			
 			if (data.success) {
-				var select = $(objAnchor).closest('div.widget').find('select');
 				
-				if (select.hasClass('select2-widget')) {
-					set_select2_val( select, data.customer_id, data.customer_name );
-					close_popup();
+				// support CustomerTableSelectWidget
+				let ezcontainer = $(objAnchor).closest('div.widget').find('ez-table-selector[name=customer_id]');
+				if (ezcontainer.length) {
+					ezcontainer.get(0).tws.setValueText( data.customer_id, data.customer_name );
 				}
 				else {
-					newCustomerPopup_reloadOptions( select, data );
+					var select = $(objAnchor).closest('div.widget').find('select');
+					
+					if (select.hasClass('select2-widget')) {
+						set_select2_val( select, data.customer_id, data.customer_name );
+						close_popup();
+					}
+					else {
+						newCustomerPopup_reloadOptions( select, data );
+					}
 				}
 			}
 			

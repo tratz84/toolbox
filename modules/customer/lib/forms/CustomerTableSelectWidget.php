@@ -35,6 +35,12 @@ class CustomerTableSelectWidget extends BaseWidget {
         $this->containerClasses[] = 'table-select-widget';
         $this->containerClasses[] = 'customer-table-select-widget';
         
+        hook_htmlscriptloader_enableGroup('iban');
+        hook_htmlscriptloader_enableGroup('select-company-list-edit');
+        hook_htmlscriptloader_enableGroup('select-person-list-edit');
+        
+        //
+        hook_htmlscriptloader_enableGroup('customer-select-widget');
         hook_htmlscriptloader_enableGroup( 'table-select-widget' );
     }
     
@@ -170,7 +176,10 @@ class CustomerTableSelectWidget extends BaseWidget {
         $html .= '<ez-table-selector name="'.esc_attr($this->getName()).'"
                          value="'.esc_attr($this->getValue()).'"
                          default-text="'.esc_attr($this->getDefaultText()).'"
-                         url="'.appUrl('/?m=customer&c=customer&a=select_table').'" />';
+                         url="'.appUrl('/?m=customer&c=customer&a=select_table').'"></ez-table-selector>';
+        
+        $opts = array();
+        $html .= '&nbsp; <a href="javascript:void(0);" onclick="newCustomerPopup_Click( this, '.esc_json_attr($opts).' );" class="fa fa-plus"></a>';
         
         $html .= '</div>';
         
