@@ -18,5 +18,10 @@ $lang['Overview companies'] = 'Overzicht bedrijven';
 
 $lang['This company is deleted'] = 'Dit bedrijf is verwijderd';
 
+$lang['customer_type.person'] = 'Particulier';
+$lang['customer_type.company'] = 'Zakelijk';
+
+
+
 return $lang;
 

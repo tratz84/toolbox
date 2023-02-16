@@ -66,6 +66,7 @@ class customerController extends BaseController {
         
         $opts = $_REQUEST;
         $opts['fetch_addresses'] = true;
+        $opts['name'] = get_var('q');
         
         $r = $customerService->search(0, 20, $opts);
         
@@ -82,6 +83,7 @@ class customerController extends BaseController {
         foreach($r->getObjects() as $customer) {
             $i = array(
                 'id'             => $customer['type'] . '-' . $customer['id'],
+                'type'           => t('customer_type.'.$customer['type']),
                 'name'           => $customer['name'],
                 'contact_person' => $customer['contact_person'],
                 'adres1'         => '',
