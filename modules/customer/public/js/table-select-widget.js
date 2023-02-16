@@ -123,7 +123,7 @@ class TableSelectWidget {
 		$(this.eztemplate.container).find('[name=q]').on('keyup', function(evt) {
 			// escape
 			if ( evt.keyCode == 27 ) {
-				$(evt.target).val('');
+				//$(evt.target).val('');
 				$('ez-table-selector').removeClass('opened');
 				
 				return;
@@ -142,7 +142,11 @@ class TableSelectWidget {
 				ets.addClass('opened');
 				ets.find('[name=q]').focus();
 				
-				this._updateResults('');
+				if (!this.initialSearchExecuted) {
+					this.initialSearchExecuted = true;
+				
+					this._updateResults('');
+				}
 			}
 		}.bind(this));
 	}
