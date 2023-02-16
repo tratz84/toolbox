@@ -81,11 +81,13 @@ class TableSelectWidget {
 	}
 	
 	_updateResults( q ) {
+		
 		this.xhrRequest = $.ajax({
 			type: 'POST',
 			url: this.vars['url'],
 			data: {
-				q: q
+				q: q,
+				value: this.vars['value']
 			},
 			success: function(data, xhr, textStatus) {
 				this.vars['header_fields'] = data['header_fields'];
@@ -112,8 +114,8 @@ class TableSelectWidget {
 			this.updateResults( $(evt.target).val() );
 		}.bind(this));
 		
-		$(this.eztemplate.container).find('.cst-selector').on('click', function() {
-			let ets = $(this).closest('ez-table-selector');
+		$(this.eztemplate.container).find('.cst-selector').on('click', function(evt) {
+			let ets = $(evt.target).closest('ez-table-selector');
 			
 			if (ets.hasClass('opened')) {
 				ets.removeClass('opened');
@@ -121,8 +123,10 @@ class TableSelectWidget {
 			else {
 				ets.addClass('opened');
 				ets.find('[name=q]').focus();
+				
+				this._updateResults('');
 			}
-		});
+		}.bind(this));
 	}
 	
 }

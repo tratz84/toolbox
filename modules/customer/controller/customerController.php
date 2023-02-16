@@ -64,7 +64,7 @@ class customerController extends BaseController {
     public function action_select_table() {
         $customerService = object_container_get(CustomerService::class);
         
-        $opts = $_REQUEST;
+        $opts = array();
         $opts['fetch_addresses'] = true;
         $opts['name'] = trim( get_var('q') );
         
@@ -79,26 +79,25 @@ class customerController extends BaseController {
             'adres1'         => t('Adres'),
         );
         
-        if ($opts['name'] == '') {
-            $result['results'] = array();
+        if (trim($opts['name']) == '') {
+            $opts['customer_id'] = get_var('value');
         }
-        else {
-            $r = $customerService->search(0, 20, $opts);
-            foreach($r->getObjects() as $customer) {
-                $i = array(
-                    'id'             => $customer['type'] . '-' . $customer['id'],
-                    'type'           => t('customer_type.'.$customer['type']),
-                    'name'           => $customer['name'],
-                    'contact_person' => $customer['contact_person'],
-                    'adres1'         => '',
-                    'default_text'   => $customer['name']
-                );
-                
-                if (count($customer['addresses']) > 0)
-                    $i['adres1'] = trim( $customer['addresses'][0]['street'] . ' ' . $customer['addresses'][0]['street_no'] . ' ' . $customer['addresses'][0]['city'] );
-                
-                $arr[] = $i;
-            }
+        
+        $r = $customerService->search(0, 20, $opts);
+        foreach($r->getObjects() as $customer) {
+            $i = array(
+                'id'             => $customer['type'] . '-' . $customer['id'],
+                'type'           => t('customer_type.'.$customer['type']),
+                'name'           => $customer['name'],
+                'contact_person' => $customer['contact_person'],
+                'adres1'         => '',
+                'default_text'   => $customer['name']
+            );
+            
+            if (count($customer['addresses']) > 0)
+                $i['adres1'] = trim( $customer['addresses'][0]['street'] . ' ' . $customer['addresses'][0]['street_no'] . ' ' . $customer['addresses'][0]['city'] );
+            
+            $arr[] = $i;
         }
         
         

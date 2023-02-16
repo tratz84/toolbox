@@ -70,6 +70,21 @@ class CustomerDAO extends \core\db\DAOObject {
             $queryPersons = true;
         }
         
+        // customer_id set?
+        if (isset($opts['customer_id']) && trim($opts['customer_id']) != '') {
+            if (strpos($opts['customer_id'], 'company-') === 0) {
+                $queryCompanies = true;
+                $queryPersons = false;
+                $opts['company_id'] = substr($opts['customer_id'], strlen('company-'));
+            }
+            if (strpos($opts['customer_id'], 'person-') === 0) {
+                $queryCompanies = false;
+                $queryPersons = true;
+                $opts['person_id'] = substr($opts['customer_id'], strlen('person-'));
+            }
+            
+        }
+        
         
         $qb1 = $qb2 = null;
         
@@ -90,6 +105,10 @@ class CustomerDAO extends \core\db\DAOObject {
             $qb1->setTable('customer__company');
             
             $qb1->addWhere(QueryBuilderWhere::whereRefByVal('deleted', '=', 'false'));
+
+            if (isset($opts['company_id']) && $opts['company_id']) {
+                $qb1->addWhere(QueryBuilderWhere::whereRefByVal('company_id', '=', $opts['company_id']));
+            }
             
             if (isset($opts['name']) && trim($opts['name'])) {
                 $qb1->addWhere(QueryBuilderWhere::whereRefByVal('company_name', 'LIKE', '%'.$opts['name'].'%'));
@@ -102,6 +121,7 @@ class CustomerDAO extends \core\db\DAOObject {
             if (isset($opts['contact_person']) && $opts['contact_person']) {
                 $qb1->addWhere(QueryBuilderWhere::whereRefByVal('contact_person', 'LIKE', '%'.$opts['contact_person'].'%'));
             }
+            
         }
         
         if (isset($opts['contact_person']) && $opts['contact_person']) {
@@ -125,6 +145,10 @@ class CustomerDAO extends \core\db\DAOObject {
             $qb2->setTable('customer__person');
             
             $qb2->addWhere(QueryBuilderWhere::whereRefByVal('deleted', '=', 'false'));
+            
+            if (isset($opts['person_id']) && $opts['person_id']) {
+                $qb2->addWhere(QueryBuilderWhere::whereRefByVal('person_id', '=', $opts['person_id']));
+            }
             
             
             if (isset($opts['name']) && trim($opts['name'])) {
