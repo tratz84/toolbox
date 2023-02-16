@@ -65,15 +65,42 @@ div.widget.customer-id-widget.customer-deleted {
 
 div.widget.table-select-widget {
 	
-	.cst-selector {
-		border: 1px solid #ccc;
-		padding: 1px 5px 1px 5px;
-		cursor: pointer;
+	
+	ez-table-selector {
+		position: relative;
+		overflow: visible;
+	
+		.cst-selector {
+			border: 1px solid #ccc;
+			padding: 1px 5px 1px 5px;
+			cursor: pointer;
+			
+			.cst-selector-text {
+				padding-right: 10px;
+			}
+		}
 		
-		.cst-selector-text {
-			padding-right: 10px;
+		.cst-dropdown-container {
+			display: none;
+			position: absolute;
+			left: 0;
+			min-width: 700px;
+			top: 24px;
+			background-color: #eee;
+			padding: 2px;
+			
+			tbody tr:hover {
+				cursor: pointer;
+			}
+		}
+		
+		&.opened {
+			.cst-dropdown-container {
+				display: block;
+			}
 		}
 	}
+	
 	
 }
 

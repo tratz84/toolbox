@@ -22,23 +22,25 @@ class TableSelectWidget {
 		</span>
 		<div class="cst-dropdown-container">
 			<div><input type="text" name="q" data-prevent-submit="1" /></div>
-			<table>
-				<thead>
-					<tr ez-for="header_fields" ez-item="hf">
-						<th>{{hf}}</th>
-					</tr>
-				</thead>
-				<tbody ez-for="results" ez-item="r">
-					<tr ez-for="header_fields" ez-key="hf">
-						<td>
-							{{ r[hf] }}
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<div ez-if="typeof results == 'undefined' || results.length == 0">
-				{{ t('No results found') }}
-			</div ez-if>
+			<div ez-subtemplate="result-container">
+				<table ez-if="results.length > 0" class="list-response-table">
+					<thead>
+						<tr ez-for="header_fields" ez-item="hf">
+							<th>{{hf}}</th>
+						</tr>
+					</thead>
+					<tbody ez-for="results" ez-item="r">
+						<tr ez-for="header_fields" ez-key="hf" [data-record]="r" onclick="$(this).closest('ez-table-selector').get(0).tsw._rowClick( this );">
+							<td>
+								{{ r[hf] }}
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div ez-if="results.length == 0">
+					{{ t('No results found') }}
+				</div ez-if>
+			</div>
 		</div>
 	`;
 	
@@ -52,6 +54,18 @@ class TableSelectWidget {
 		this.vars['defaultText'] = $(this.container).attr('default-text');
 		this.vars['url']         = $(this.container).attr('url');
 		
+		this.vars['results'] =  [];
+	}
+	
+	_rowClick( r ) {
+		let record = r.record;
+		
+		this.vars['defaultText'] = record.default_text;
+		this.vars['value'] = record.id;
+		
+		this.eztemplate.render();
+		
+		this.handleEvents();
 	}
 	
 	
@@ -76,7 +90,8 @@ class TableSelectWidget {
 			success: function(data, xhr, textStatus) {
 				this.vars['header_fields'] = data['header_fields'];
 				this.vars['results'] = data['results'];
-				this.eztemplate.render();
+				
+				this.eztemplate.renderSubTemplate( 'result-container' );
 			}.bind(this)
 		});
 	}
@@ -85,19 +100,29 @@ class TableSelectWidget {
 	
 	init() {
 		this.eztemplate = new EzTemplate( this.container );
-		
 		this.eztemplate.setVars( this.vars );
-		
-		console.log('wel hier');
-//		console.log(this.tpl);
 		this.eztemplate.loadHtml( this.tpl );
-		
 		this.eztemplate.render();
 		
-		console.log( $(this.eztemplate.container).length );
+		this.handleEvents();
+	}
+	
+	handleEvents() {
 		$(this.eztemplate.container).find('[name=q]').on('keyup', function(evt) {
 			this.updateResults( $(evt.target).val() );
 		}.bind(this));
+		
+		$(this.eztemplate.container).find('.cst-selector').on('click', function() {
+			let ets = $(this).closest('ez-table-selector');
+			
+			if (ets.hasClass('opened')) {
+				ets.removeClass('opened');
+			}
+			else {
+				ets.addClass('opened');
+				ets.find('[name=q]').focus();
+			}
+		});
 	}
 	
 }
@@ -106,14 +131,21 @@ class TableSelectWidget {
 $(document).ready(function() {
 	
 	$('ez-table-selector').each(function(index, node) {
-		console.log(node);
 		
 		let tsw = new TableSelectWidget( node );
 		tsw.init();
 		
+		node.tsw = tsw;
 	});
 	
+	$(window).on('click', function(evt) {
+		if ( $(evt.target).closest('ez-table-selector').length > 0 )
+			return;
+		
+		$('ez-table-selector').removeClass('opened');
+	});
 });
+
 
 
 
