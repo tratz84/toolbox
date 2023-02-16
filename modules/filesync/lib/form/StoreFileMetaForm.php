@@ -15,6 +15,7 @@ use core\forms\TextField;
 use core\forms\TextareaField;
 use customer\forms\CustomerSelectWidget;
 use filesync\service\StoreService;
+use customer\forms\CustomerTableSelectWidget;
 
 class StoreFileMetaForm extends BaseForm {
     
@@ -29,7 +30,7 @@ class StoreFileMetaForm extends BaseForm {
         $this->addWidget(new HiddenField('store_file_id'));
         $this->addWidget(new HtmlField('path', '', 'Pad'));
         $this->addWidget(new DatePickerField('document_date', '', 'Document datum'));
-        $this->addWidget(new CustomerSelectWidget());
+        $this->addWidget(new CustomerTableSelectWidget() );
         $this->addWidget(new TextField('subject', '', 'Onderwerp'));
         $this->addWidget(new TextareaField('long_description', '', 'Lange omschrijving'));
         

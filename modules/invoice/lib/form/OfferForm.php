@@ -20,7 +20,6 @@ use core\forms\validator\NotEmptyValidator;
 use invoice\model\Invoice;
 use invoice\model\Offer;
 use invoice\service\OfferService;
-use customer\forms\CustomerSelectWidget;
 use customer\forms\CustomerTableSelectWidget;
 
 class OfferForm extends BaseForm {

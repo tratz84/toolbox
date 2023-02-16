@@ -20,7 +20,6 @@ use DateTime;
 use invoice\model\Invoice;
 use invoice\service\InvoiceService;
 use core\forms\CheckboxField;
-use customer\forms\CustomerSelectWidget;
 use customer\forms\CustomerTableSelectWidget;
 
 class InvoiceForm extends BaseForm {

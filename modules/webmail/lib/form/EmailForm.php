@@ -44,7 +44,7 @@ class EmailForm extends BaseForm {
         $this->addWidget(new HtmlField('statusAsText', '', 'Status'));
         
         if (ctx()->isModuleEnabled('customer')) {
-            $this->addWidget( new \customer\forms\CustomerSelectWidget() );
+            $this->addWidget( new \customer\forms\CustomerTableSelectWidget() );
         }
         
         $this->addWidget(new EmailRecipientLineWidget('recipients'));

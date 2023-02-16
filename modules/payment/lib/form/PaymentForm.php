@@ -14,6 +14,7 @@ use core\forms\TextareaField;
 use core\forms\validator\NotEmptyValidator;
 use customer\forms\CustomerSelectWidget;
 use payment\service\PaymentService;
+use customer\forms\CustomerTableSelectWidget;
 
 class PaymentForm extends BaseForm {
     
@@ -25,7 +26,7 @@ class PaymentForm extends BaseForm {
         
         $this->addWidget( new HiddenField('payment_id') );
         
-        $this->addWidget( new CustomerSelectWidget() );
+        $this->addWidget( new CustomerTableSelectWidget() );
         
         $this->addWidget( new DatePickerField('payment_date', '', 'Betaaldatum'));
         

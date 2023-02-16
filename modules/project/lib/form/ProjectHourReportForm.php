@@ -15,6 +15,7 @@ use customer\forms\CustomerSelectWidget;
 use invoice\model\Invoice;
 
 use project\service\ProjectService;
+use customer\forms\CustomerTableSelectWidget;
 
 class ProjectHourReportForm extends BaseForm {
 
@@ -29,7 +30,7 @@ class ProjectHourReportForm extends BaseForm {
 
         $this->addWidget(new DatePickerField('start', '', 'Startdatum'));
         $this->addWidget(new DatePickerField('end', '', 'Einddatum'));
-        $this->addWidget(new CustomerSelectWidget() );
+        $this->addWidget(new CustomerTableSelectWidget() );
         $this->addStatus();
 
     }
