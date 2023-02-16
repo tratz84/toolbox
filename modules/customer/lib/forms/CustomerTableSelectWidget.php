@@ -165,7 +165,6 @@ class CustomerTableSelectWidget extends BaseWidget {
         
         $html = '';
         $html .= '<div class="'.implode(' ', $this->containerClasses).'">';
-        $html .= '<input type="hidden" name="'.esc_attr($this->getName()).'" value="'.esc_attr($this->getValue()).'" />';
         $html .= '<label>'.$htmlLabel.infopopup($this->getInfoText()).'</label>';
         
         $html .= '<ez-table-selector name="'.esc_attr($this->getName()).'"

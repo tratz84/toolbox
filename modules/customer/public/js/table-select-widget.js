@@ -15,9 +15,9 @@ class TableSelectWidget {
 	updateTimeout = null;
 	
 	tpl = `
-		<input type="hidden" [name]="name" [value]="value" />
+		<input type="hidden" class="widget-value" [name]="name" [value]="value" />
 		<span class="cst-selector">
-			<span class="cst-selector-text" [contentHTML]="defaultText"></span>
+			<span class="cst-selector-text widget-default-text" [contentHTML]="defaultText"></span>
 			<span class="cst-selector-caret fa fa-caret-down"></span>
 		</span>
 		<div class="cst-dropdown-container">
@@ -60,12 +60,16 @@ class TableSelectWidget {
 	_rowClick( r ) {
 		let record = r.record;
 		
-		this.vars['defaultText'] = record.default_text;
 		this.vars['value'] = record.id;
+		this.vars['defaultText'] = record.default_text;
 		
-		this.eztemplate.render();
+		$(this.container).find('.widget-value').text( record.id );
+		$(this.container).find('.widget-default-text').text( record.default_text );
 		
-		this.handleEvents();
+		$(this.container).attr( 'value', record.id );
+		$(this.container).attr( 'default-text', record.default_text );
+		
+		$('ez-table-selector').removeClass('opened');
 	}
 	
 	
@@ -104,6 +108,12 @@ class TableSelectWidget {
 		this.eztemplate = new EzTemplate( this.container );
 		this.eztemplate.setVars( this.vars );
 		this.eztemplate.loadHtml( this.tpl );
+		
+		this.renderWidget();
+	}
+	
+	// resets everything & renders widget
+	renderWidget() {
 		this.eztemplate.render();
 		
 		this.handleEvents();
@@ -111,6 +121,14 @@ class TableSelectWidget {
 	
 	handleEvents() {
 		$(this.eztemplate.container).find('[name=q]').on('keyup', function(evt) {
+			// escape
+			if ( evt.keyCode == 27 ) {
+				$(evt.target).val('');
+				$('ez-table-selector').removeClass('opened');
+				
+				return;
+			}
+			
 			this.updateResults( $(evt.target).val() );
 		}.bind(this));
 		
