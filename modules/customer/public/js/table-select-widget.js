@@ -162,9 +162,10 @@ class TableSelectWidget {
 }
 
 
-$(document).ready(function() {
-	
+$(window).on('applyWidgetFields', function() {
 	$('ez-table-selector').each(function(index, node) {
+		if (node.tsw)
+			return;
 		
 		let tsw = new TableSelectWidget( node );
 		tsw.init();
@@ -172,12 +173,12 @@ $(document).ready(function() {
 		node.tsw = tsw;
 	});
 	
-	$(window).on('click', function(evt) {
-		if ( $(evt.target).closest('ez-table-selector').length > 0 )
-			return;
-		
-		$('ez-table-selector').removeClass('opened');
-	});
+});
+$(window).on('click', function(evt) {
+	if ( $(evt.target).closest('ez-table-selector').length > 0 )
+		return;
+	
+	$('ez-table-selector').removeClass('opened');
 });
 
 
