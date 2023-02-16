@@ -33,7 +33,6 @@ function is_windows() {
 
 /**
  * toolbox_get_class() - get_class(), but if toolbox-proxy is used, return name parent object
- *  
  * @param $obj
  * @return string
  */
@@ -49,6 +48,7 @@ function toolbox_get_class( $obj ) {
     
     return $n;
 }
+
 
 
 /**
