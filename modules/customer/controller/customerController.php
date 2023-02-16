@@ -89,7 +89,7 @@ class customerController extends BaseController {
                 'id'             => $customer['type'] . '-' . $customer['id'],
                 'type'           => t('customer_type.'.$customer['type']),
                 'name'           => $customer['name'],
-                'contact_person' => $customer['contact_person'],
+                'contact_person' => $customer['contact_person'] ?? '',
                 'adres1'         => '',
                 'default_text'   => $customer['name']
             );
