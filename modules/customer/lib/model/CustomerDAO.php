@@ -6,6 +6,7 @@ namespace customer\model;
 
 
 use core\db\query\QueryBuilderWhere;
+use core\db\query\QueryBuilderWhereContainer;
 
 class CustomerDAO extends \core\db\DAOObject {
     
@@ -122,6 +123,14 @@ class CustomerDAO extends \core\db\DAOObject {
                 $qb1->addWhere(QueryBuilderWhere::whereRefByVal('contact_person', 'LIKE', '%'.$opts['contact_person'].'%'));
             }
             
+            if (isset($opts['q']) && $opts['q']) {
+                $c = new QueryBuilderWhereContainer( 'OR' );
+                $c->addWhere(QueryBuilderWhere::whereRefByVal('company_name', 'LIKE', '%'.$opts['q'].'%'));
+                $c->addWhere(QueryBuilderWhere::whereRefByVal('contact_person', 'LIKE', '%'.$opts['q'].'%'));
+                
+                $qb1->addWhere( $c );
+            }
+            
         }
         
         if (isset($opts['contact_person']) && $opts['contact_person']) {
@@ -168,6 +177,18 @@ class CustomerDAO extends \core\db\DAOObject {
                     , 'LIKE'
                     , '%'.str_replace(' ', '%', $opts['contact_person']).'%'));
             }
+            
+            if (isset($opts['q']) && $opts['q']) {
+                $c = new QueryBuilderWhereContainer( 'OR' );
+                
+                $c->addWhere(QueryBuilderWhere::whereRefByVal(
+                    " concat(ifnull(lastname, ''), ', ', ifnull(insert_lastname, ''), ' ', ifnull(firstname, '), ' ', ifnull(insert_lastname, '), ' ', lastname)"
+                    , 'LIKE'
+                    , '%'.str_replace(' ', '%', $opts['q']).'%'));
+                
+                $qb2->addWhere( $c );
+            }
+            
         }
         
         $qbs = array();

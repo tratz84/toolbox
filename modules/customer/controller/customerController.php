@@ -66,7 +66,7 @@ class customerController extends BaseController {
         
         $opts = array();
         $opts['fetch_addresses'] = true;
-        $opts['name'] = trim( get_var('q') );
+        $opts['q'] = trim( get_var('q') );
         
         
         $arr = array();
@@ -79,7 +79,7 @@ class customerController extends BaseController {
             'adres1'         => t('Adres'),
         );
         
-        if (trim($opts['name']) == '') {
+        if (trim($opts['q']) == '') {
             $opts['customer_id'] = get_var('value');
         }
         
