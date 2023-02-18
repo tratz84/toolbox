@@ -62,7 +62,12 @@ class ObjectContainer {
             $obj = ObjectHookProxy::createProxy($className, $params);
         }
         else {
-            $obj = new $className( ... $params);
+            if (method_exists($className, 'getInstance')) {
+                $obj = $className::getInstance();
+            }
+            else {
+                $obj = new $className( ... $params );
+            }
         }
         
         
