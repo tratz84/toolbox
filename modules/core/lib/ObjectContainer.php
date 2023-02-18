@@ -22,6 +22,8 @@ class ObjectContainer {
     
     protected $classNameRewrite = array();
     
+    protected $recursiveInstanceCounter = array();
+    
     
     public function get($className) {
         
@@ -62,12 +64,21 @@ class ObjectContainer {
             $obj = ObjectHookProxy::createProxy($className, $params);
         }
         else {
-            if (method_exists($className, 'getInstance')) {
+            
+            if (isset($this->recursiveInstanceCounter[ $className ]) == false)
+                $this->recursiveInstanceCounter[ $className ] = 0;
+            
+            if (method_exists($className, 'getInstance') && $this->recursiveInstanceCounter[ $className ] == 0) {
+                $this->recursiveInstanceCounter[ $className ]++;
+                
                 $obj = $className::getInstance();
+                
+                $this->recursiveInstanceCounter[ $className ]--;
             }
             else {
                 $obj = new $className( ... $params );
             }
+            
         }
         
         
