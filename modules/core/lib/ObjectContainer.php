@@ -60,25 +60,29 @@ class ObjectContainer {
         $isDatabaseTransactionObject = is_subclass_of($className, DatabaseTransactionObject::class);
         
         // create class or proxy
+        $newClazz = $className;
         if (defined('ADMIN_CONTEXT') == false && $isObjectHookable) {
-            $obj = ObjectHookProxy::createProxy($className, $params);
+            $newClazz = ObjectHookProxy::createProxy($className, $params);
         }
-        else {
-            
+        
+        $obj = null;
+        
+        // ::getInstance()-function?
+        if (method_exists($newClazz, 'getInstance')) {
+            // count $className to prevent recursive-loops
             if (isset($this->recursiveInstanceCounter[ $className ]) == false)
                 $this->recursiveInstanceCounter[ $className ] = 0;
             
-            if (method_exists($className, 'getInstance') && $this->recursiveInstanceCounter[ $className ] == 0) {
+            if ($this->recursiveInstanceCounter[ $className ] == 0) {
                 $this->recursiveInstanceCounter[ $className ]++;
-                
-                $obj = $className::getInstance();
-                
+                $obj = $newClazz::getInstance();
                 $this->recursiveInstanceCounter[ $className ]--;
             }
-            else {
-                $obj = new $className( ... $params );
-            }
-            
+        }
+        
+        
+        if ($obj == null) {
+            $obj = new $newClazz( ... $params );
         }
         
         

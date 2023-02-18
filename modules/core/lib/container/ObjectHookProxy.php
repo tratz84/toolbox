@@ -41,14 +41,8 @@ class ObjectHookProxy{
         
         
         $pc = "\\toolbox\\proxy\\".$proxyClass;
-        if (method_exists($proxyClass, 'getInstance')) {
-            $o = $pc::getInstance();
-        }
-        else {
-            $o = new $pc( ... $params );
-        }
         
-        return $o;
+        return $pc;
     }
     
     protected static function createProxyClass( $path, $class, $proxyClassName ) {
