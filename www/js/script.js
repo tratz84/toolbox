@@ -1332,9 +1332,13 @@ function showContextPopup(content, opts) {
 	var p = $('<div class="context-popup" />');
 	
 	p.html(content);
+	
+	var posTop = window.event.clientY + $(window).scrollTop();
+	var posLeft = window.event.clientX + $(window).scrollLeft();
+	
 	p.css('position', 'absolute');
-	p.css('left', window.event.clientX);
-	p.css('top', window.event.clientY);
+	p.css('left', posLeft);
+	p.css('top', posTop);
 	p.css('background-color', '#fff');
 	p.css('padding', '3px 5px');
 	p.css('border', '1px solid #aaa');
