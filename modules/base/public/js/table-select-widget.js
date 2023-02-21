@@ -32,7 +32,7 @@ class TableSelectWidget {
 						</tr>
 					</thead>
 					<tbody ez-for="results" ez-item="r">
-						<tr ez-for="header_fields" ez-key="hf" [data-record]="r" onclick="$(this).closest('ez-table-selector').get(0).tsw._rowClick( this );">
+						<tr ez-for="header_fields" ez-key="hf" [data-record]="r" onclick="$(this).closest('toolbox-table-selector').get(0).tsw._rowClick( this );">
 							<td>
 								{{ r[hf] }}
 							</td>
@@ -84,7 +84,7 @@ class TableSelectWidget {
 		
 		$(this.container).trigger( 'change' );
 		
-		$('ez-table-selector').removeClass('opened');
+		$('toolbox-table-selector').removeClass('opened');
 		
 	}
 	
@@ -148,7 +148,7 @@ class TableSelectWidget {
 			// escape
 			if ( evt.keyCode == 27 ) {
 				//$(evt.target).val('');
-				$('ez-table-selector').removeClass('opened');
+				$('toolbox-table-selector').removeClass('opened');
 				
 				evt.stopPropagation();
 				
@@ -159,7 +159,7 @@ class TableSelectWidget {
 		}.bind(this));
 		
 		$(this.eztemplate.container).find('.cst-selector').on('click', function(evt) {
-			let ets = $(evt.target).closest('ez-table-selector');
+			let ets = $(evt.target).closest('toolbox-table-selector');
 			
 			if (ets.hasClass('opened')) {
 				ets.removeClass('opened');
@@ -181,7 +181,7 @@ class TableSelectWidget {
 
 
 $(window).on('applyWidgetFields', function() {
-	$('ez-table-selector').each(function(index, node) {
+	$('toolbox-table-selector').each(function(index, node) {
 		if (node.tsw)
 			return;
 		
@@ -196,10 +196,10 @@ $(window).on('applyWidgetFields', function() {
 	
 });
 $(window).on('click', function(evt) {
-	if ( $(evt.target).closest('ez-table-selector').length > 0 )
+	if ( $(evt.target).closest('toolbox-table-selector').length > 0 )
 		return;
 	
-	$('ez-table-selector').removeClass('opened');
+	$('toolbox-table-selector').removeClass('opened');
 });
 
 

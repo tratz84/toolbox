@@ -54,7 +54,7 @@ function newCustomerPopup_handleCompanySubmit( objAnchor ) {
 			if (data.success) {
 				
 				// support CustomerTableSelectWidget
-				let ezcontainer = $(objAnchor).closest('div.widget').find('ez-table-selector[name=customer_id]');
+				let ezcontainer = $(objAnchor).closest('div.widget').find('toolbox-table-selector[name=customer_id]');
 				if (ezcontainer.length > 0) {
 					ezcontainer.get(0).tsw.setValueText( data.customer_id, data.customer_name );
 					close_popup();
@@ -90,7 +90,7 @@ function newCustomerPopup_handlePersonSubmit( objAnchor ) {
 			if (data.success) {
 				
 				// support CustomerTableSelectWidget
-				let ezcontainer = $(objAnchor).closest('div.widget').find('ez-table-selector[name=customer_id]');
+				let ezcontainer = $(objAnchor).closest('div.widget').find('toolbox-table-selector[name=customer_id]');
 				if (ezcontainer.length) {
 					ezcontainer.get(0).tws.setValueText( data.customer_id, data.customer_name );
 				}

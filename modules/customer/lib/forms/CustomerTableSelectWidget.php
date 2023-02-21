@@ -173,10 +173,10 @@ class CustomerTableSelectWidget extends BaseWidget {
         $html .= '<div class="'.implode(' ', $this->containerClasses).'">';
         $html .= '<label>'.$htmlLabel.infopopup($this->getInfoText()).'</label>';
         
-        $html .= '<ez-table-selector name="'.esc_attr($this->getName()).'"
+        $html .= '<toolbox-table-selector name="'.esc_attr($this->getName()).'"
                          value="'.esc_attr($this->getValue()).'"
                          default-text="'.esc_attr($this->getDefaultText()).'"
-                         url="'.appUrl('/?m=customer&c=customer&a=select_table').'"></ez-table-selector>';
+                         url="'.appUrl('/?m=customer&c=customer&a=select_table').'"></toolbox-table-selector>';
         
         $opts = array();
         $html .= '&nbsp; <a href="javascript:void(0);" onclick="newCustomerPopup_Click( this, '.esc_json_attr($opts).' );" class="fa fa-plus"></a>';
