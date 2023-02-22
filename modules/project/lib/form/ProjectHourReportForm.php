@@ -23,7 +23,10 @@ class ProjectHourReportForm extends BaseForm {
 
         $this->addWidget(new DatePickerField('start', '', 'Startdatum'));
         $this->addWidget(new DatePickerField('end', '', 'Einddatum'));
-        $this->addWidget(new CustomerTableSelectWidget() );
+        
+        $tsw = new CustomerTableSelectWidget();
+        $tsw->setShowNewCustomer( false );
+        $this->addWidget( $tsw );
         $this->addStatus();
 
     }

@@ -20,6 +20,9 @@ class CustomerTableSelectWidget extends BaseWidget {
     protected $defaultText;
     
     
+    protected $showNewCustomer = true;
+    
+    
     public function __construct($name='customer_id', $defaultValue=null) {
         
         $defaultText = t('Make your choice');
@@ -48,6 +51,8 @@ class CustomerTableSelectWidget extends BaseWidget {
     public function setDefaultText($t) { $this->defaultText = $t; }
     public function getDefaultText() { return $this->defaultText; }
     
+    
+    public function setShowNewCustomer($bln) { $this->showNewCustomer = $bln ? true : false; }
     
     
     public function setCustomerType( $ct ) {
@@ -179,7 +184,9 @@ class CustomerTableSelectWidget extends BaseWidget {
                          url="'.appUrl('/?m=customer&c=customer&a=select_table').'"></toolbox-table-selector>';
         
         $opts = array();
-        $html .= '&nbsp; <a href="javascript:void(0);" onclick="newCustomerPopup_Click( this, '.esc_json_attr($opts).' );" class="fa fa-plus"></a>';
+        if ($this->showNewCustomer) {
+            $html .= '&nbsp; <a href="javascript:void(0);" onclick="newCustomerPopup_Click( this, '.esc_json_attr($opts).' );" class="fa fa-plus"></a>';
+        }
         
         $html .= '</div>';
         
