@@ -94,7 +94,7 @@ $(document).ready(function() {
 	frm.find('.submit-container').remove();
 
 
-	frm.find('input, select').change(function() {
+	frm.find('input, select, [name=customer_id]').change(function() {
 		reloadReport();
 	});
 
