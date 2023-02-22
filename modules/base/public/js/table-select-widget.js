@@ -43,6 +43,9 @@ class TableSelectWidget {
 					{{ toolbox_t('No results found') }}
 				</div ez-if>
 			</div>
+			<div>
+				<a href="javascript:void(0);" class="btn-reset">{{ toolbox_t('Reset') }}</a>
+			</div>
 		</div>
 	`;
 	
@@ -82,10 +85,14 @@ class TableSelectWidget {
 		$(this.container).attr( 'value', id );
 		$(this.container).attr( 'default-text', default_text );
 		
+		console.log('trigger..');
 		$(this.container).trigger( 'change' );
 		
 		$('toolbox-table-selector').removeClass('opened');
-		
+	}
+	
+	resetValueText() {
+		this.setValueText( '', toolbox_t('Make your choice') );
 	}
 	
 	
@@ -155,6 +162,14 @@ class TableSelectWidget {
 				return;
 			}
 			
+			
+		}.bind(this));
+		
+		$(this.eztemplate.container).find('[name=q]').on('keyup', function(evt) {
+			if ( $(this.container).hasClass( 'opened' ) == false ) {
+				return;
+			}
+			
 			this.updateResults( $(evt.target).val() );
 		}.bind(this));
 		
@@ -174,6 +189,14 @@ class TableSelectWidget {
 					this._updateResults('');
 				}
 			}
+		}.bind(this));
+		
+		$(this.eztemplate.container).find('input[name=q]').on('change', function(evt) {
+			evt.stopImmediatePropagation();
+		});
+		
+		$(this.eztemplate.container).find('.btn-reset').on('click', function(evt) {
+			this.resetValueText();
 		}.bind(this));
 	}
 	

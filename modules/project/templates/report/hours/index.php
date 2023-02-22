@@ -94,8 +94,8 @@ $(document).ready(function() {
 	frm.find('.submit-container').remove();
 
 
-	frm.find('input, select, [name=customer_id]').change(function() {
-		reloadReport();
+	frm.find('input, select, [name=customer_id]').change(function( evt ) {
+		reloadReport(evt);
 	});
 
 	frm.find('[name=start], [name=end]').on('dp.change', function() {
@@ -108,10 +108,12 @@ $(document).ready(function() {
 	});
 });
 
-function reloadReport() {
+function reloadReport(evt) {
 	var u = appUrl('/?m=report&c=report&controllerName=project@report/hours');
 	var data = serialize2object('#report-html');
 	for(var key in data) {
+		if (key == 'q') continue;
+		
 		if (key == 'reportAction' || key == 'projectHourStatusId') {
 			continue;
 		}

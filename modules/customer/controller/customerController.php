@@ -83,7 +83,7 @@ class customerController extends BaseController {
             $opts['customer_id'] = get_var('value');
         }
         
-        $r = $customerService->search(0, 20, $opts);
+        $r = $customerService->search(0, 8, $opts);
         foreach($r->getObjects() as $customer) {
             $i = array(
                 'id'             => $customer['type'] . '-' . $customer['id'],
