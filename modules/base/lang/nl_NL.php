@@ -23,6 +23,8 @@ $lang['Passwords not equal']    = 'Wachtwoorden niet gelijk aan elkaar';
 $lang['Password reset requested for'] = 'Wachtwoord reset aangevraagd voor';
 
 
+$lang['Search...']              = 'Zoek...';
+
 $lang['Year']                   = 'Jaar';
 
 $lang['userType.admin']         = 'Administrator';

@@ -23,7 +23,7 @@ class TableSelectWidget {
 			<span class="cst-selector-caret fa fa-caret-down"></span>
 		</span>
 		<div class="cst-dropdown-container">
-			<div><input type="text" name="q" data-prevent-submit="1" autocomplete="off" /></div>
+			<div><input type="text" name="q" [placeholder]="txt_search" data-prevent-submit="1" autocomplete="off" /></div>
 			<div ez-subtemplate="result-container">
 				<table ez-if="results.length > 0" class="list-response-table">
 					<thead>
@@ -53,6 +53,8 @@ class TableSelectWidget {
 		this.container = container;
 		
 		this.container.tsw = this;
+		
+		this.vars['txt_search'] = toolbox_t('Search...');
 		
 		this.vars['name']        = $(this.container).attr('name');
 		this.vars['value']       = $(this.container).attr('value');
