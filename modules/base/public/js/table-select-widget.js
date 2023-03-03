@@ -76,6 +76,9 @@ class TableSelectWidget {
 	
 	setValueText( id, default_text ) {
 		
+		if (id == 'null')
+			id = '';
+		
 		if (id == '' && default_text == '')
 			default_text = toolbox_t('Make your choice');
 		
