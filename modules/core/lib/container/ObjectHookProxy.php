@@ -47,7 +47,7 @@ class ObjectHookProxy{
     
     protected static function createProxyClass( $path, $class, $proxyClassName ) {
         if (file_exists(DATA_DIR . '/default/proxy/') == false) {
-            if (!mkdir( DATA_DIR . '/default/proxy/', 0755 ))
+            if (!mkdir( DATA_DIR . '/default/proxy/', 0755, true ))
                 throw new FileException( 'Unable to create '.DATA_DIR.'/default/proxy' );
         }
         
