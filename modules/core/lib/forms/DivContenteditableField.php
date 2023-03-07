@@ -16,6 +16,8 @@ class DivContenteditableField extends BaseWidget {
     
     public function getValue() {
         $v = parent::getValue();
+        if ($v === null)
+            $v = '';
         $v = strip_tags($v, array('div', 'span', 'br', 'hr', 'b', 'i', 'em'));
         
         return $v;
