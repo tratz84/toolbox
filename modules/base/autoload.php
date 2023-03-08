@@ -48,6 +48,12 @@ $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($e
     $src = $evt->getSource();
 //     $src->addItem('Klanten', 'Bedrijfsoorten',     '/?m=base&c=masterdata/companyType');
 
+    $src->addItem(t('Settings'), t('User Management'), '/?m=base&c=user');
+    $src->addItem(t('Settings'), t('User Group Management'), '/?m=base&c=group');
+    $src->addItem(t('Settings'), t('Company settings'), '/?m=base&c=masterdata/companySettings');
+    $src->addItem(t('Settings'), t('Application settings'), '/?m=base&c=masterdata/settings');
+    
+
     $src->addItem(t('Settings'), t('Scheduled tasks'),     '/?m=base&c=cron/cronList');
     $src->addItem(t('Settings'), t('Server info'),         '/?m=base&c=serverInfo');
 }));

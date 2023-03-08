@@ -124,6 +124,16 @@ $tb_user->addColumn('activated',       'boolean');
 $tb_user->addIndex('username', array('username'), ['unique' => true]);
 $tbs[] = $tb_user;
 
+$tb_ug = new TableModel('base', 'user_group');
+$tb_ug->addColumn('user_group_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_ug->addColumn('parent_user_group_id', 'int');
+$tb_ug->addColumn('group_name',           'varchar(128)');
+$tb_ug->addColumn('sort',                 'int');
+$tb_ug->addColumn('edited',               'datetime');
+$tb_ug->addColumn('created',              'datetime');
+$tbs[] = $tb_ug;
+
+
 
 $tb_user_cap = new TableModel('base', 'user_capability');
 $tb_user_cap->addColumn('user_capability_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
