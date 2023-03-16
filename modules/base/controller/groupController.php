@@ -5,6 +5,7 @@
 use core\controller\BaseController;
 use base\service\UserService;
 use base\model\UserGroup;
+use base\form\UserGroupForm;
 
 class groupController extends BaseController {
     
@@ -30,6 +31,19 @@ class groupController extends BaseController {
         }
         
         
+        $this->form = new UserGroupForm();
+        $this->form->bind( $this->group );
+        
+        if (is_post()) {
+            $this->form->bind( $_REQUEST );
+            
+            if ($this->form->validate()) {
+                
+                
+                
+            }
+            
+        }
         
         
         
