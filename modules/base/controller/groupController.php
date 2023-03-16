@@ -20,13 +20,13 @@ class groupController extends BaseController {
     public function action_edit() {
         
         $id = get_var('id');
-        $userService = object_container( UserService::class );
+        $userService = object_container_get( UserService::class );
         
         if ($id) {
-            $group = $userService->readGroup($id);
+            $this->group = $userService->readGroup($id);
         }
         else {
-            $group = new UserGroup();
+            $this->group = new UserGroup();
         }
         
         
