@@ -24,6 +24,7 @@ use webmail\model\Email;
 use webmail\model\EmailTo;
 use core\db\DatabaseHandler;
 use webmail\service\EmailService;
+use base\model\UserGroupDAO;
 
 
 
@@ -374,6 +375,21 @@ class UserService extends ServiceBase {
         ActivityUtil::logActivityUser($user->getUserId(), $user->getUsername(), 'password-request', 'Password requested', $longdesc);
     }
     
+    
+    
+    public function readGroup( $groupId ) {
+        
+        $gDao = new UserGroupDAO();
+        $g = $gDao->read($groupId);
+        
+        if (!$g) {
+            throw new ObjectNotFoundException( 'UserGroup not found' );
+        }
+        
+        // TODO: read permissions
+        
+        return $g;
+    }
     
     
     

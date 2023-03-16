@@ -11,6 +11,11 @@ class UserGroupDAO extends \core\db\DAOObject {
 		$this->setObjectName( '\\base\\model\\UserGroup' );
 	}
 	
+	
+	public function read($id) {
+		return $this->queryOne('select * from base__user_group where user_group_id=?', array($id));
+	}
 
+	
 }
 

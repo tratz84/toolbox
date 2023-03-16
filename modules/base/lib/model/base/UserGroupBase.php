@@ -20,10 +20,28 @@ class UserGroupBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => 'auto_increment',
   ),
+  'parent_user_group_id' => 
+  array (
+    'Field' => 'parent_user_group_id',
+    'Type' => 'int',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
   'group_name' => 
   array (
     'Field' => 'group_name',
     'Type' => 'varchar(128)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'sort' => 
+  array (
+    'Field' => 'sort',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -47,24 +65,6 @@ class UserGroupBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
-  'parent_user_group_id' => 
-  array (
-    'Field' => 'parent_user_group_id',
-    'Type' => 'int',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
-  ),
-  'sort' => 
-  array (
-    'Field' => 'sort',
-    'Type' => 'int',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
-  ),
 ) );
 		
 		if ($id != null)
@@ -76,8 +76,16 @@ class UserGroupBase extends \core\db\DBObject {
 	public function getUserGroupId() { return $this->getField('user_group_id'); }
 	
 		
+	public function setParentUserGroupId($p) { $this->setField('parent_user_group_id', $p); }
+	public function getParentUserGroupId() { return $this->getField('parent_user_group_id'); }
+	
+		
 	public function setGroupName($p) { $this->setField('group_name', $p); }
 	public function getGroupName() { return $this->getField('group_name'); }
+	
+		
+	public function setSort($p) { $this->setField('sort', $p); }
+	public function getSort() { return $this->getField('sort'); }
 	
 		
 	public function setEdited($p) { $this->setField('edited', $p); }
@@ -86,14 +94,6 @@ class UserGroupBase extends \core\db\DBObject {
 		
 	public function setCreated($p) { $this->setField('created', $p); }
 	public function getCreated() { return $this->getField('created'); }
-	
-		
-	public function setParentUserGroupId($p) { $this->setField('parent_user_group_id', $p); }
-	public function getParentUserGroupId() { return $this->getField('parent_user_group_id'); }
-	
-		
-	public function setSort($p) { $this->setField('sort', $p); }
-	public function getSort() { return $this->getField('sort'); }
 	
 	
 }
