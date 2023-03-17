@@ -38,10 +38,31 @@ class UserGroupForm extends \core\forms\CodegenBaseForm {
 		    $pid = $form->getWidgetValue('parent_user_group_id');
 		    $id = $form->getWidgetValue('user_group_id');
 		    
-		    // TODO: check if parent-user_group_id is not a child of user_group_id
-		    if ($pid && $pid == $id) {
+		    if (!$pid)
+		        return null;
+		    
+	        // current group selected as parent?
+		    if ($pid == $id) {
 		        return t( 'Parent group same as current group');
 		    }
+		    
+		    
+		    // check if parent-user_group_id is not a child of user_group_id
+		    $userService = object_container_get( UserService::class );
+		    $parent = $userService->readGroup( $pid, ['null-not-found' => true] );
+		    while ($parent) {
+		        
+		        if ( $parent->getUserGroupId() == $id ) {
+		            return t('Child selected in current branche');
+		        }
+		        
+		        $pid = $parent->getParentUserGroupId();
+		        $parent = null;
+		        if ($pid) {
+		          $parent = $userService->readGroup( $pid, ['null-not-found' => true] );
+		        }
+		    }
+		    
 		});
 		
 	}

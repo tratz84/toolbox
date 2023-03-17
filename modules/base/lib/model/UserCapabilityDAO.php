@@ -11,6 +11,10 @@ class UserCapabilityDAO extends \core\db\DAOObject {
 		$this->setObjectName( '\\base\\model\\UserCapability' );
 	}
 	
+	public function read($id) {
+	    return $this->queryOne('select * from base__user_capability where user_capbility_id=?', array($id));
+	}
+	
 	
 	public function readByUser($userId) {
 	    return $this->queryList("select * from base__user_capability where user_id = ?", array($userId));

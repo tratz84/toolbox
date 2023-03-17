@@ -56,6 +56,11 @@ class UserDAO extends \core\db\DAOObject {
 	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('user_type', 'LIKE', '%'.$opts['user_type'].'%'));
 	    }
 	    
+	    if (isset($opts['user_group_id']) && $opts['user_group_id']) {
+	        $qb->join( 'base__user_group_user', 'user_id' );
+	        $qb->addWhere( QueryBuilderWhere::whereRefByVal( 'base__user_group_user.user_group_id', '=', $opts['user_group_id']) );
+	    }
+	    
 	    $qb->setOrderBy('username');
 	    
 	    return $qb->queryCursor( User::class );

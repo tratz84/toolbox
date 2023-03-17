@@ -46,9 +46,53 @@ class groupController extends BaseController {
     
     
     
+    public function action_group_summary() {
+        
+        $userService = object_container_get( UserService::class );
+        $group_id = (int)get_var('group_id');
+        
+        $this->group = $group = $userService->readGroup( $group_id );
+        
+        // fetch parents for title
+        $parentNames = array();
+        $pugid = $group->getParentUserGroupId();
+        while ($pugid) {
+            $parent = $userService->readGroup( $pugid, ['null-not-found' => true] );
+            if ($parent) {
+                $parentNames[] = $parent->getGroupName();
+                $pugid = $parent->getParentUserGroupId();
+            }
+            else {
+                break;
+            }
+        }
+        $parentNames = array_reverse($parentNames);
+        
+        
+        $this->title = implode( ' >> ', $parentNames );
+        if (!$this->title)
+            $this->title = $group->getGroupName();
+        else
+            $this->title .= ' >> ' . $group->getGroupName();
+        
+        // fetch users in group
+        $this->lrUsers = $userService->search(0, 99999, ['user_group_id' => $group_id]);
+        
+        
+        $this->allCapabilities = $userService->getCapabilities( ['as_map' => true] );
+        
+        
+        $this->setShowDecorator(false);
+        
+        return $this->render();
+    }
+    
+    
+    
+    
     public function action_edit() {
         
-        $id = get_var('id');
+        $id = (int)get_var('id');
         $userService = object_container_get( UserService::class );
         
         if ($id) {
@@ -78,6 +122,21 @@ class groupController extends BaseController {
 //         var_export($optGroupItems);exit;
         
         return $this->render();
+    }
+    
+    
+    public function action_delete() {
+        
+        $id = (int)get_var('id');
+        
+        
+        $userService = object_container_get( UserService::class );
+        
+        $userService->deleteGroup( $id );
+        
+        
+        
+        redirect('/?m=base&c=group');
     }
     
 }

@@ -249,7 +249,7 @@ class UserService extends ServiceBase {
     }
     
     
-    public function getCapabilities() {
+    public function getCapabilities( $opts = array() ) {
         
         /**
          * @var EventBus $eventBus
@@ -260,8 +260,19 @@ class UserService extends ServiceBase {
         
         $eventBus->publishEvent($ucc, 'base', 'user-capabilities');
         
-        return $ucc->getCapabilities();
+        $caps = $ucc->getCapabilities();
         
+        if (isset($opts['as_map']) && $opts['as_map']) {
+            $map = array();
+            
+            foreach($caps as $c) {
+                $map[ $c['module_name'] . '_' . $c['capability_code'] ] = $c;
+            }
+            return $map;
+        }
+        
+        
+        return $caps;
     }
     
     /**
@@ -405,18 +416,23 @@ class UserService extends ServiceBase {
     
     
     
-    public function readGroup( $groupId ) {
+    public function readGroup( $groupId, $opts=array() ) {
         $gDao = new UserGroupDAO();
         $g = $gDao->read($groupId);
         
+        
         if (!$g) {
-            throw new ObjectNotFoundException( 'UserGroup not found' );
+            if (isset($opts['null-not-found']) && $opts['null-not-found'])
+                return null;
+            else
+                throw new ObjectNotFoundException( 'UserGroup not found' );
         }
         
         // read permissions
         $ugcDao = new UserGroupCapabilityDAO();
-        $caps = $ugcDao->readByUserGroup( $groupId );
-        $g->setCapabilities( $caps );
+        $ugcs = $ugcDao->readByUserGroup( $groupId );
+        
+        $g->setCapabilities( $ugcs );
         
         return $g;
     }
@@ -547,6 +563,29 @@ class UserService extends ServiceBase {
         return $group;
     }
     
+    
+    
+    public function deleteGroup( $groupId ) {
+        
+        $g = $this->readGroup($groupId);
+        
+        $form = new UserGroupForm();
+        $form->bind( $g );
+        
+        
+        $g->delete();
+        
+        $ugcDao = new UserGroupCapabilityDAO();
+        $ugcDao->deleteByGroup( $g->getUserGroupId() );
+        
+        $uguDao = new UserGroupUserDAO();
+        $uguDao->deleteByGroup( $g->getUserGroupId() );
+        
+        
+        
+        $desc = FormChangesHtml::formDeleted( $form )->getHtml();
+        ActivityUtil::logActivityRefObject( UserGroup::class, $g->getUserGroupId(), 'user-group-deleted', 'User group deleted: ' . $g->getGroupname(), $desc);
+    }
     
 }
 
