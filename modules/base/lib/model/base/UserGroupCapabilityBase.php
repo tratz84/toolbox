@@ -20,6 +20,15 @@ class UserGroupCapabilityBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => 'auto_increment',
   ),
+  'user_group_id' => 
+  array (
+    'Field' => 'user_group_id',
+    'Type' => 'int',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
   'module_name' => 
   array (
     'Field' => 'module_name',
@@ -47,15 +56,6 @@ class UserGroupCapabilityBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
-  'user_group_id' => 
-  array (
-    'Field' => 'user_group_id',
-    'Type' => 'int',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
-  ),
 ) );
 		
 		if ($id != null)
@@ -65,6 +65,10 @@ class UserGroupCapabilityBase extends \core\db\DBObject {
 		
 	public function setUserGroupCapabilityId($p) { $this->setField('user_group_capability_id', $p); }
 	public function getUserGroupCapabilityId() { return $this->getField('user_group_capability_id'); }
+	
+		
+	public function setUserGroupId($p) { $this->setField('user_group_id', $p); }
+	public function getUserGroupId() { return $this->getField('user_group_id'); }
 	
 		
 	public function setModuleName($p) { $this->setField('module_name', $p); }
@@ -77,10 +81,6 @@ class UserGroupCapabilityBase extends \core\db\DBObject {
 		
 	public function setCreated($p) { $this->setField('created', $p); }
 	public function getCreated() { return $this->getField('created'); }
-	
-		
-	public function setUserGroupId($p) { $this->setField('user_group_id', $p); }
-	public function getUserGroupId() { return $this->getField('user_group_id'); }
 	
 	
 }

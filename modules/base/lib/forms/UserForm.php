@@ -20,6 +20,7 @@ use core\forms\TextField;
 use core\forms\WidgetContainer;
 use core\forms\validator\EmailValidator;
 use core\forms\validator\NotEmptyValidator;
+use core\forms\FieldSetContainer;
 
 class UserForm extends BaseForm {
     
@@ -48,8 +49,18 @@ class UserForm extends BaseForm {
         $this->addWidget( new HtmlDatetimeField('edited', '', t('Last modified'), array('hide-when-invalid' => true)) );
         $this->addWidget( new HtmlDatetimeField('created', '', t('Created on'), array('hide-when-invalid' => true)) );
         
-        $this->addWidget( new ListUserIpLineWidget('ips') );
-        $this->getWidget('ips')->setInfoText(t('If IP addresses are entered, the user can only log in from these addresses'));
+        
+        $fsIps = new FieldSetContainer( 'ips' );
+        $fsIps->setLabel( t('Ips') );
+        
+        $luil = new ListUserIpLineWidget('ips');
+        $luil->setInfoText(t('If IP addresses are entered, the user can only log in from these addresses'));
+        $luil->setPrio( 250 );
+        $fsIps->addWidget($luil);
+        $this->addWidget( $fsIps );
+        
+        
+        $this->addUserGroups();
         
         
         $this->addValidator('username', new NotEmptyValidator());
@@ -112,10 +123,12 @@ class UserForm extends BaseForm {
         $userService = ObjectContainer::getInstance()->get(UserService::class);
         $capabilities = $userService->getCapabilities();
         
-        $wc = new WidgetContainer();
+        $wc = new FieldSetContainer();
+        $wc->setLabel( t('Capabilities') );
         $wc->setName('user-capabilities');
+        $wc->setPrio( 200 );
         
-        $wc->addWidget(new HtmlField('', '', 'Permissies'));
+//         $wc->addWidget(new HtmlField('', '', 'Permissies'));
         
         foreach($capabilities as $c) {
             $w = new CheckboxField('capability_' . $c['module_name'].'-'.$c['capability_code'], '', t('modulename.'.$c['module_name']) . ' - ' . $c['short_description']);
@@ -136,5 +149,16 @@ class UserForm extends BaseForm {
         
         $this->addWidget($wc);
     }
+    
+    
+    protected function addUserGroups() {
+        
+        $userService = ObjectContainer::getInstance()->get(UserService::class);
+        $ugs = $userService->readGroupsAsTree();
+        
+        
+        
+    }
+    
     
 }

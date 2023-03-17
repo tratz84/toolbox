@@ -188,13 +188,31 @@
 		.widget-text { width: auto; margin-right: 15px; }
 	}
 
+	&.widget-container-ips {
+		clear: both;
+		margin-top: 10px;
+	}
+
 	&.widget-container-user-capabilities {
-		width: 325px;
+		clear: both;
+		margin-top: 10px;
+		
+		.core-forms-checkbox-field {
+			display: flex;
+			label {
+				order: 5;
+			}
+			label.checkbox-ui-placeholder {
+				order: 1;
+				margin-right: 5px;
+			}
+		}
+		
 		label {
 			width: 250px;
 		}
 		label.checkbox-ui-placeholder { float: none; }
-		input[type=checkbox] { float: left; position: relative; top: 5px; }
+//		input[type=checkbox] { float: left; position: relative; top: 5px; }
 	}
 	
 	&.color-picker-field-widget {
