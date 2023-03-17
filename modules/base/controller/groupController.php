@@ -14,6 +14,7 @@ class groupController extends BaseController {
         
         
         
+        
         return $this->render();
     }
     
@@ -39,18 +40,18 @@ class groupController extends BaseController {
             
             if ($this->form->validate()) {
                 
+                $group = $userService->saveGroup( $this->form );
+                report_user_message( t('Changes saved') );
                 
-                
+                redirect( '/?m=base&c=group&a=edit&id='.$group->getUserGroupId() );
             }
             
         }
         
-        
+//         var_export($optGroupItems);exit;
         
         return $this->render();
     }
-    
-    
     
 }
 

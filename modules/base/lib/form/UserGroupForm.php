@@ -2,6 +2,9 @@
 
 namespace base\form;
 
+use base\service\UserService;
+use core\forms\validator\NotEmptyValidator;
+
 class UserGroupForm extends \core\forms\CodegenBaseForm {
 
 	public function __construct() {
@@ -10,7 +13,58 @@ class UserGroupForm extends \core\forms\CodegenBaseForm {
 		
 		$this->codegen();
 		
+		
+		$items = $this->generateGroupItems();
+		$this->getWidget( 'parent_user_group_id' )->setOptionItems( $items );
+		
+		
+		
+		$this->addValidator('group_name', new NotEmptyValidator());
+		$this->addValidator('parent_user_group_id', function($form) {
+		    $pid = $form->getWidgetValue('parent_user_group_id');
+		    $id = $form->getWidgetValue('user_group_id');
+		    
+		    // TODO: check if parent-user_group_id is not a child of user_group_id
+		    if ($pid && $pid == $id) {
+		        return t( 'Parent group same as current group');
+		    }
+		    
+		});
+		
 	}
+	
+	protected function generateGroupItems() {
+	    
+	    $userService = object_container_get( UserService::class );
+	    $groups = $userService->readAllGroups();
+	    
+	    $items = array();
+	    $items[''] = t('Make your choice');
+	    
+	    //         var_export( $groups );exit;
+	    
+	    $items = $this->_generateGroupList( 0, $groups, $items, '' );
+	    
+	    return $items;
+	}
+	
+	protected function _generateGroupList( $currentParentGroupId, $allGroups, $items, $depth) {
+	    
+	    foreach($allGroups as $g) {
+	        $pid = (int)$g->getParentUserGroupId();
+	        
+	        if ($pid == $currentParentGroupId) {
+	            $items[ $g->getUserGroupId() ] = ($depth ? $depth . ' ' : ''). $g->getGroupName();
+	            //                 var_export($items);exit;
+	            
+	            $items = $this->_generateGroupList( $g->getUserGroupId(), $allGroups, $items, $depth . '-' );
+	        }
+	    }
+	    
+	    return $items;
+	}
+	
+	
 	
 	
 	

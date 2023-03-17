@@ -25,6 +25,9 @@ use webmail\model\EmailTo;
 use core\db\DatabaseHandler;
 use webmail\service\EmailService;
 use base\model\UserGroupDAO;
+use base\model\UserGroup;
+use base\form\UserGroupForm;
+use base\forms\FormChangesHtml;
 
 
 
@@ -378,7 +381,6 @@ class UserService extends ServiceBase {
     
     
     public function readGroup( $groupId ) {
-        
         $gDao = new UserGroupDAO();
         $g = $gDao->read($groupId);
         
@@ -391,6 +393,45 @@ class UserService extends ServiceBase {
         return $g;
     }
     
+    public function readAllGroups() {
+        $ugDao = new UserGroupDAO();
+        
+        return $ugDao->readAll();
+    }
+    
+    public function saveGroup( $form ) {
+        $id = $form->getWidgetValue('user_group_id');
+        if ($id) {
+            $group = $this->readGroup( $id );
+        }
+        else {
+            $group = new UserGroup();
+        }
+        
+        $oldForm = null;
+        if ($group->isNew() == false) {
+            $oldForm = new UserGroupForm();
+            $oldForm->bind( $group );
+        }
+        
+        $form->fill( $group, ['parent_user_group_id', 'group_name'] );
+        
+        
+        
+        $group->save();
+        
+        
+        if ($oldForm) {
+            $desc = FormChangesHtml::formChanged($oldForm, $form)->getHtml();
+            ActivityUtil::logActivityRefObject( UserGroup::class, $group->getUserGroupId(), 'user-group-edited', 'User group changed: ' . $group->getGroupname(), $desc);
+        }
+        else {
+            $desc = FormChangesHtml::formNew( $form )->getHtml();
+            ActivityUtil::logActivityRefObject( UserGroup::class, $group->getUserGroupId(), 'user-group-created', 'User group created: ' . $group->getGroupname(), $desc);
+        }
+        
+        return $group;
+    }
     
     
 }
