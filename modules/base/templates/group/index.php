@@ -27,7 +27,7 @@
 </div>
 
 
-
+<?php if ($groupsAvailable) : ?>
 
 <div class="user-group-management-tree">
 
@@ -36,6 +36,13 @@
 	<div id="group-summary"></div>
 	
 </div>
+
+<?php else : ?>
+
+<div style="font-style: italic;">
+	<?= t('No groups defined') ?>
+</div>
+<?php endif; ?>
 
 
 <script>
