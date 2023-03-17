@@ -12,6 +12,19 @@
 </div>
 
 
+<div id="tree"></div>
+
+
+<script>
+
+let json_tree = <?= json_encode( $groupTree, JSON_PRETTY_PRINT ) ?>;
+
+$('#tree').jstree( {'core': {
+	'data': json_tree
+}} );
+
+
+</script>
 
 
 

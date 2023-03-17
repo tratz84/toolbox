@@ -11,12 +11,39 @@ class groupController extends BaseController {
     
     
     public function action_index() {
+        hook_htmlscriptloader_enableGroup('jstree');
         
+        $userService = object_container_get( UserService::class );
         
+        $treeGroups = $userService->readGroupsAsTree();
+        
+        $this->groupTree = $this->treeGroup2Jstree( $treeGroups );
         
         
         return $this->render();
     }
+    
+    protected function treeGroup2Jstree( $groups ) {
+        
+        $items = array();
+        
+        foreach( $groups as $g ) {
+            $i = array();
+            $i['id'] = $g->getUserGroupId();
+            $i['text'] = $g->getGroupName();
+            $i['state'] = array();
+            $i['state']['opened'] = true;
+            
+            if ($g->hasChildren()) {
+                $i['children'] = $this->treeGroup2Jstree( $g->getChildren() );
+            }
+            
+            $items[] = $i;
+        }
+        
+        return $items;
+    }
+    
     
     
     public function action_edit() {

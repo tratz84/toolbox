@@ -26,6 +26,10 @@ hook_htmlscriptloader_enableGroup('mod-base-script');
 
 hook_register_javascript('table-select-widget', appUrl('/?mpf=/module/base/js/table-select-widget.js'));
 
+hook_register_javascript('jstree', '/lib/jstree/jstree.min.js');
+hook_register_css('jstree', '/lib/jstree/themes/default/style.min.css');
+
+
 
 
 $eb = ObjectContainer::getInstance()->get(EventBus::class);

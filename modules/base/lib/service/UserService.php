@@ -399,6 +399,43 @@ class UserService extends ServiceBase {
         return $ugDao->readAll();
     }
     
+    public function readGroupsAsTree() {
+        $ugDao = new UserGroupDAO();
+        $groups = $ugDao->readAll();
+        
+        $r = $this->_structureGroups( $groups );
+        
+        return $r;
+    }
+    protected function _structureGroups( $groups, $parentUserGroupId=0, &$setGroupIds=array() ) {
+        
+        $l = array();
+        
+        foreach( $groups as $g ) {
+            if ($parentUserGroupId == (int)$g->getParentUserGroupId()) {
+                $l[] = $g;
+                $setGroupIds[] = $g->getUserGroupId();
+                
+                $children = $this->_structureGroups( $groups, $g->getUserGroupId(), $setGroupIds );
+                
+                $g->setChildren( $children );
+            }
+        }
+        
+        // add parentless groups
+        if ($parentUserGroupId == 0) {
+            foreach($groups as $g) {
+                if (in_array( $g->getUserGroupId(), $setGroupIds) == false) {
+                    $l[] = $g;
+                }
+            }
+        }
+        
+        
+        return $l;
+    }
+    
+    
     public function saveGroup( $form ) {
         $id = $form->getWidgetValue('user_group_id');
         if ($id) {
