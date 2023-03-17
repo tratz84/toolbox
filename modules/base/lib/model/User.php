@@ -8,6 +8,8 @@ use core\event\CapabilityEvent;
 
 class User extends base\UserBase {
 
+    protected $groups = array();
+    
     protected $capabilities = null;
     protected $capabilityMap = null;
     
@@ -19,6 +21,12 @@ class User extends base\UserBase {
     
     
     public function isAdmin() { return $this->getUserType() == 'admin' ? true : false; }
+    
+    
+    public function getGroups() { return $this->groups; }
+    public function setGroups($groups) { $this->groups = $groups; }
+    public function addGroup( UserGroup $group ) { $this->groups[] = $group; }
+    
     
     public function setCapabilities($capabilities) {
         $this->capabilities = $capabilities;

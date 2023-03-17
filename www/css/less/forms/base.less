@@ -188,9 +188,22 @@
 		.widget-text { width: auto; margin-right: 15px; }
 	}
 
-	&.widget-container-ips {
+	&.widget-container-ips
+	, &.widget-container-user-groups {
 		clear: both;
 		margin-top: 10px;
+		
+		.core-forms-checkbox-field {
+			display: flex;
+			label {
+				order: 5;
+			}
+			label.checkbox-ui-placeholder {
+				order: 1;
+				margin-right: 5px;
+			}
+		}
+		
 	}
 
 	&.widget-container-user-capabilities {

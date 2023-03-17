@@ -3,33 +3,35 @@
 
 namespace base\service;
 
+use base\form\UserGroupForm;
+use base\forms\FormChangesHtml;
 use base\forms\UserForm;
+use base\model\ResetPassword;
+use base\model\ResetPasswordDAO;
 use base\model\User;
 use base\model\UserCapability;
 use base\model\UserCapabilityDAO;
 use base\model\UserDAO;
-use base\user\UserCapabilityContainer;
-use core\ObjectContainer;
-use core\event\EventBus;
-use core\forms\lists\ListResponse;
-use core\service\ServiceBase;
+use base\model\UserGroup;
+use base\model\UserGroupCapability;
+use base\model\UserGroupCapabilityDAO;
+use base\model\UserGroupDAO;
+use base\model\UserGroupUserDAO;
 use base\model\UserIpDAO;
-use base\model\ResetPassword;
-use core\exception\ObjectNotFoundException;
-use base\model\ResetPasswordDAO;
-use core\exception\SecurityException;
+use base\user\UserCapabilityContainer;
 use base\util\ActivityUtil;
+use function base\util\ActivityUtil\logActivityUser as remote_addr;
+use core\ObjectContainer;
+use function core\Context\getSelectedLang as ctx;
+use core\event\EventBus;
+use core\exception\ObjectNotFoundException;
+use core\exception\SecurityException;
+use core\service\ServiceBase;
+use function t;
 use webmail\mail\SendMail;
 use webmail\model\Email;
 use webmail\model\EmailTo;
-use core\db\DatabaseHandler;
 use webmail\service\EmailService;
-use base\model\UserGroupDAO;
-use base\model\UserGroup;
-use base\form\UserGroupForm;
-use base\forms\FormChangesHtml;
-use base\model\UserGroupCapability;
-use base\model\UserGroupCapabilityDAO;
 
 
 
@@ -54,6 +56,10 @@ class UserService extends ServiceBase {
         $user = $uDao->read($userId);
         if (!$user)
             return null;
+        
+        $ugDao = new UserGroupDAO();
+        $ugs = $ugDao->readByUser($userId);
+        $user->setGroups( $ugs );
         
         $ucDao = new UserCapabilityDAO();
         $capabilities = $ucDao->readByUser($user->getUserId());
@@ -81,12 +87,29 @@ class UserService extends ServiceBase {
         $user->save();
         
         
+        
+        // save groups
+        $ugWidgets = $form->getWidget('user-groups')->getWidgets();
+        $ugs = array();
+        foreach($ugWidgets as $w) {
+            if ( $w->getField('user_group_id') && $w->getValue() ) {
+                $ugs[] = array(
+                    'user_id' => $user->getUserId(),
+                    'user_group_id' => $w->getField('user_group_id')
+                );
+            }
+        }
+        $uguDao = new UserGroupUserDAO();
+        $uguDao->mergeFormListMTO1( 'user_id', $user->getUserId(), $ugs );
+        
+        
+        
+        // save capabilities
         $ucDao = new UserCapabilityDAO();
         
         $oldUserCapabilities = $ucDao->readByUser($user->getUserId());
         $userCapabilities = array();
         
-        // save capabilities
         $capabilities = $form->getWidget('user-capabilities');
         $capabilityWidgets = $capabilities->getWidgets();
         $cnt=0;
@@ -403,6 +426,36 @@ class UserService extends ServiceBase {
         
         return $ugDao->readAll();
     }
+    
+    
+    public function readGroupsFlat() {
+        $ugDao = new UserGroupDAO();
+        $groups = $ugDao->readAll();
+        
+        $groups = $this->_structureGroups( $groups );
+        $groups = $this->_flattenGroups($groups);
+        
+        return $groups;
+    }
+    protected function _flattenGroups( $groups, $parentNames = array() ) {
+        $r = array();
+        
+        foreach($groups as $g) {
+            $g->setField('parentNames', $parentNames);
+            
+            $r[] = $g;
+            
+            if ($g->hasChildren()) {
+                $parentNames[] = $g->getGroupName();
+                
+                $childs = $this->_flattenGroups( $g->getChildren(), $parentNames );
+                $r = array_merge($r, $childs);
+            }
+        }
+        
+        return $r;
+    }
+    
     
     public function readGroupsAsTree() {
         $ugDao = new UserGroupDAO();

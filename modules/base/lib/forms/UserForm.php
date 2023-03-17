@@ -30,32 +30,38 @@ class UserForm extends BaseForm {
         
         $this->addKeyField('user_id');
         
-        $this->addWidget( new HiddenField('user_id', '', 'Id') );
+        $fsBase = new FieldSetContainer( 'base-settings' );
+        $fsBase->setLabel( t('Base settings') );
         
-        $this->addWidget( new TextField('username', '', t('Username')) );
+        $fsBase->addWidget( new HiddenField('user_id', '', 'Id') );
         
-        $this->addWidget( new PasswordField('password', '', t('Password')) );
+        $fsBase->addWidget( new TextField('username', '', t('Username')) );
+        
+        $fsBase->addWidget( new PasswordField('password', '', t('Password')) );
         
         $mapUserTypes = mapUserTypes();
-        $this->addWidget( new SelectField('user_type', '', $mapUserTypes, t('Usertype')) );
+        $fsBase->addWidget( new SelectField('user_type', '', $mapUserTypes, t('Usertype')) );
+        
+        
+        $fsBase->addWidget( new EmailField('email', '', t('Email')) );
+        $fsBase->addWidget( new TextField('firstname', '', t('Firstname')) );
+        $fsBase->addWidget( new TextField('lastname', '', t('Lastname')) );
+        
+        
+        $fsBase->addWidget( new HtmlDatetimeField('edited', '', t('Last modified'), array('hide-when-invalid' => true)) );
+        $fsBase->addWidget( new HtmlDatetimeField('created', '', t('Created on'), array('hide-when-invalid' => true)) );
+        
+        $this->addWidget( $fsBase );
+        
         
         $this->addUserCapabilities();
         
-        $this->addWidget( new EmailField('email', '', t('Email')) );
-        $this->addWidget( new TextField('firstname', '', t('Firstname')) );
-        $this->addWidget( new TextField('lastname', '', t('Lastname')) );
-        
-        
-        $this->addWidget( new HtmlDatetimeField('edited', '', t('Last modified'), array('hide-when-invalid' => true)) );
-        $this->addWidget( new HtmlDatetimeField('created', '', t('Created on'), array('hide-when-invalid' => true)) );
-        
-        
         $fsIps = new FieldSetContainer( 'ips' );
         $fsIps->setLabel( t('Ips') );
+        $fsIps->setPrio( 250 );
         
         $luil = new ListUserIpLineWidget('ips');
         $luil->setInfoText(t('If IP addresses are entered, the user can only log in from these addresses'));
-        $luil->setPrio( 250 );
         $fsIps->addWidget($luil);
         $this->addWidget( $fsIps );
         
@@ -113,6 +119,12 @@ class UserForm extends BaseForm {
                     if ($widget)
                         $widget->setValue(true);
                 }
+                
+                foreach($user->getGroups() as $g) {
+                    $widget = $this->getWidget('ug_'.$g->getUserGroupId());
+                    if ($widget)
+                        $widget->setValue(true);
+                }
             }
         }
     }
@@ -154,10 +166,25 @@ class UserForm extends BaseForm {
     protected function addUserGroups() {
         
         $userService = ObjectContainer::getInstance()->get(UserService::class);
-        $ugs = $userService->readGroupsAsTree();
+        $ugs = $userService->readGroupsFlat();
         
+        $fs = new FieldSetContainer( 'user-groups' );
+        $fs->setLabel( t('User groups') );
         
+        foreach( $ugs as $ug ) {
+            $parentNames = $ug->getField('parentNames');
+            
+            if (count($parentNames))
+                $label = implode(' >> ', $parentNames) . ' >> ' . $ug->getGroupName();
+            else
+                $label = $ug->getGroupName();
+//             print "$label\n";
+            $chk = new CheckboxField( 'ug_'.$ug->getUserGroupId(), null, $label );
+            $chk->setField('user_group_id', $ug->getUserGroupId());
+            $fs->addWidget( $chk );
+        }
         
+        $this->addWidget($fs);
     }
     
     

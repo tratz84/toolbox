@@ -26,5 +26,14 @@ class UserGroupDAO extends \core\db\DAOObject {
 	}
 
 	
+	public function readByUser( $userId ) {
+	    $sql = "SELECT ug.*
+                FROM base__user_group ug
+                join base__user_group_user ugu on (ug.user_group_id = ugu.user_group_id)
+                where ugu.user_id=?";
+	    
+	    return $this->queryList( $sql, array($userId) );
+	}
+	
 }
 
