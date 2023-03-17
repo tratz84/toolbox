@@ -8,6 +8,8 @@ class UserGroup extends base\UserGroupBase {
     
     protected $children = array();
     
+    protected $capabilities = array();
+    
 
 	public function __construct($id=null) {
 		parent::__construct( $id );
@@ -26,6 +28,9 @@ class UserGroup extends base\UserGroupBase {
 	    return count($this->children) > 0 ? true : false;
 	}
 	
+	
+	public function getCapabilities() { return $this->capabilities; }
+	public function setCapabilities( $caps ) { $this->capabilities = $caps; }
 	
 }
 

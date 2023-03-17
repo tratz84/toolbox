@@ -134,6 +134,14 @@ $tb_ug->addColumn('created',              'datetime');
 $tbs[] = $tb_ug;
 
 
+$tb_ug_cap = new TableModel('base', 'user_group_capability');
+$tb_ug_cap->addColumn('user_group_capability_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_ug_cap->addColumn('user_group_id',      'int');
+$tb_ug_cap->addColumn('module_name',        'varchar(32)');
+$tb_ug_cap->addColumn('capability_code',    'varchar(64)');
+$tb_ug_cap->addColumn('created',            'datetime');
+$tbs[] = $tb_ug_cap;
+
 
 $tb_user_cap = new TableModel('base', 'user_capability');
 $tb_user_cap->addColumn('user_capability_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);

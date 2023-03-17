@@ -3,7 +3,9 @@
 namespace base\form;
 
 use base\service\UserService;
+use core\forms\CheckboxField;
 use core\forms\validator\NotEmptyValidator;
+use base\model\UserGroup;
 
 class UserGroupForm extends \core\forms\CodegenBaseForm {
 
@@ -17,6 +19,18 @@ class UserGroupForm extends \core\forms\CodegenBaseForm {
 		$items = $this->generateGroupItems();
 		$this->getWidget( 'parent_user_group_id' )->setOptionItems( $items );
 		
+		$userService = object_container_get(UserService::class);
+		$capabilities = $userService->getCapabilities();
+		foreach($capabilities as $c) {
+	        $w = new CheckboxField('capability_' . $c['module_name'].'-'.$c['capability_code'], '', t('modulename.'.$c['module_name']) . ' - ' . $c['short_description']);
+	        $w->addContainerClass('user-capability');
+	        
+	        $w->setInfoText($c['infotext']);
+	        $w->setField('module_name', $c['module_name']);
+	        $w->setField('capability_code', $c['capability_code']);
+	        
+	        $this->getWidget('container-permissions')->addWidget($w);
+		}
 		
 		
 		$this->addValidator('group_name', new NotEmptyValidator());
@@ -28,7 +42,6 @@ class UserGroupForm extends \core\forms\CodegenBaseForm {
 		    if ($pid && $pid == $id) {
 		        return t( 'Parent group same as current group');
 		    }
-		    
 		});
 		
 	}
@@ -65,6 +78,21 @@ class UserGroupForm extends \core\forms\CodegenBaseForm {
 	}
 	
 	
+	public function bind($obj) {
+	    parent::bind( $obj );
+	    
+	    // bind permissions
+	    if ($obj instanceof UserGroup) {
+	        foreach( $obj->getCapabilities() as $cap ) {
+	            $c = $cap->getModuleName() . '-' . $cap->getCapabilityCode();
+	            $w = $this->getWidget('capability_'.$c);
+	            if ($w) {
+	                $w->setValue( 1 );
+	            }
+	        }
+	    }
+	}
+	
 	
 	
 	
@@ -77,10 +105,12 @@ class UserGroupForm extends \core\forms\CodegenBaseForm {
 		$this->addWidget( $w2 );
 		$w3 = new \core\forms\TextField('group_name', NULL, t('Group name'));
 		$this->addWidget( $w3 );
-		$w4 = new \core\forms\WidgetContainer('container-permissions');
+		$w4 = new \core\forms\FieldSetContainer('container-permissions', t('Permissions'));
 		$this->addWidget( $w4 );
 		
 	}
+
+
 
 
 }

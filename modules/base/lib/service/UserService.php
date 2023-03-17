@@ -28,6 +28,8 @@ use base\model\UserGroupDAO;
 use base\model\UserGroup;
 use base\form\UserGroupForm;
 use base\forms\FormChangesHtml;
+use base\model\UserGroupCapability;
+use base\model\UserGroupCapabilityDAO;
 
 
 
@@ -388,7 +390,10 @@ class UserService extends ServiceBase {
             throw new ObjectNotFoundException( 'UserGroup not found' );
         }
         
-        // TODO: read permissions
+        // read permissions
+        $ugcDao = new UserGroupCapabilityDAO();
+        $caps = $ugcDao->readByUserGroup( $groupId );
+        $g->setCapabilities( $caps );
         
         return $g;
     }
@@ -453,9 +458,28 @@ class UserService extends ServiceBase {
         
         $form->fill( $group, ['parent_user_group_id', 'group_name'] );
         
-        
-        
         $group->save();
+        
+        $capWidgets = $form->getWidget('container-permissions')->getWidgets();
+        $capabilities = array();
+        foreach($capWidgets as $w) {
+            if ( $w->getValue() ) {
+                $name = $w->getField('module_name');
+                $code = $w->getField('capability_code');
+                
+                if ($name && $code) {
+                    $c = new UserGroupCapability();
+                    $c->setModuleName($name);
+                    $c->setCapabilityCode($code);
+                    $c->setUserGroupId( $group->getUserGroupId() );
+                    
+                    $capabilities[] = $c;
+                }
+            }
+        }
+        
+        $ugcDao = new UserGroupCapabilityDAO();
+        $ugcDao->mergeFormListMTO1( 'user_group_id', $group->getUserGroupId(), $capabilities );
         
         
         if ($oldForm) {
