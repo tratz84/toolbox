@@ -52,6 +52,8 @@
 		
 		<?= $checkboxSplitCustomers->render() ?>
 		
+		<?= $checkboxUserGroupsEnabled->render() ?>
+		
 		<?= $checkboxDateOnPdf->render() ?>
 		
 		<?= $selectPdfPrintPaging->render() ?>

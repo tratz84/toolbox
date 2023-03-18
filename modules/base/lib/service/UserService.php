@@ -20,14 +20,14 @@ use base\model\UserGroupUserDAO;
 use base\model\UserIpDAO;
 use base\user\UserCapabilityContainer;
 use base\util\ActivityUtil;
-use function base\util\ActivityUtil\logActivityUser as remote_addr;
+use core\Context;
 use core\ObjectContainer;
-use function core\Context\getSelectedLang as ctx;
 use core\event\EventBus;
 use core\exception\ObjectNotFoundException;
 use core\exception\SecurityException;
 use core\service\ServiceBase;
-use function t;
+use function ctx;
+use function remote_addr;
 use webmail\mail\SendMail;
 use webmail\model\Email;
 use webmail\model\EmailTo;
@@ -89,18 +89,20 @@ class UserService extends ServiceBase {
         
         
         // save groups
-        $ugWidgets = $form->getWidget('user-groups')->getWidgets();
-        $ugs = array();
-        foreach($ugWidgets as $w) {
-            if ( $w->getField('user_group_id') && $w->getValue() ) {
-                $ugs[] = array(
-                    'user_id' => $user->getUserId(),
-                    'user_group_id' => $w->getField('user_group_id')
-                );
+        if (ctx()->isUserGroupsEnabled()) {
+            $ugWidgets = $form->getWidget('user-groups')->getWidgets();
+            $ugs = array();
+            foreach($ugWidgets as $w) {
+                if ( $w->getField('user_group_id') && $w->getValue() ) {
+                    $ugs[] = array(
+                        'user_id' => $user->getUserId(),
+                        'user_group_id' => $w->getField('user_group_id')
+                    );
+                }
             }
+            $uguDao = new UserGroupUserDAO();
+            $uguDao->mergeFormListMTO1( 'user_id', $user->getUserId(), $ugs );
         }
-        $uguDao = new UserGroupUserDAO();
-        $uguDao->mergeFormListMTO1( 'user_id', $user->getUserId(), $ugs );
         
         
         

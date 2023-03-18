@@ -200,6 +200,9 @@ class Context
     }
     public function isCustomersSplit() { return $this->getSetting('customers_split', true); }
     
+    public function isUserGroupsEnabled() { return $this->getSetting('user_groups_enabled', false); }
+    
+    
     public function pdfPrintDateFooter() { return $this->getSetting('pdf_print_date_footer', true); }
     public function pdfPrintPaging() {
         $v = $this->getSetting('pdf_print_paging', 'always');

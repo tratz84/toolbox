@@ -65,8 +65,9 @@ class UserForm extends BaseForm {
         $fsIps->addWidget($luil);
         $this->addWidget( $fsIps );
         
-        
-        $this->addUserGroups();
+        if (ctx()->isUserGroupsEnabled()) {
+            $this->addUserGroups();
+        }
         
         
         $this->addValidator('username', new NotEmptyValidator());
