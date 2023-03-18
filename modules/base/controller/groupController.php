@@ -19,6 +19,7 @@ class groupController extends BaseController {
         
         $this->groupTree = $this->treeGroup2Jstree( $treeGroups );
         
+        $this->groupsAvailable = count($treeGroups) > 0 ? true : false;
         
         return $this->render();
     }
