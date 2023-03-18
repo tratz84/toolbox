@@ -589,5 +589,23 @@ class UserService extends ServiceBase {
         ActivityUtil::logActivityRefObject( UserGroup::class, $g->getUserGroupId(), 'user-group-deleted', 'User group deleted: ' . $g->getGroupname(), $desc);
     }
     
+    
+    public function mapGroupCapabilitiesForUser( $userId ) {
+        
+        $ugcDao = new UserGroupCapabilityDAO();
+        
+        $ugcs = $ugcDao->readByUser( $userId );
+        
+        
+        $map = array();
+        foreach($ugcs as $ugc) {
+            $c = $ugc->getModuleName() . '.' . $ugc->getCapabilityCode();
+            $map[$c] = true;
+        }
+        
+        return $map;
+    }
+    
+    
 }
 

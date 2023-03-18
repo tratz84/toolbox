@@ -20,5 +20,17 @@ class UserGroupCapabilityDAO extends \core\db\DAOObject {
 	public function deleteByGroup($groupId) {
 	    return $this->query('delete from base__user_group_capability where user_group_id = ?', array($groupId));
 	}
+	
+	
+	public function readByUser($userId) {
+	    $sql = "select ugc.*
+                from base__user_group_capability ugc 
+                join base__user_group_user ugu on (ugu.user_group_id = ugc.user_group_id)
+                where ugu.user_id=?";
+	    
+	    return $this->queryList($sql, array($userId));
+	}
+	
+	
 }
 
