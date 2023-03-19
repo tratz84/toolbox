@@ -7,6 +7,13 @@ use calendar\helper\SabreVEventParser;
 use customer\service\CustomerService;
 use webmail\search\MailSearchBase;
 
+hook_eventbus_subscribe('webmail', 'include-component-index', function($controller) {
+    // load's customer-table javascript
+    if (ctx()->isModuleEnabled('customer'))
+        new \customer\forms\CustomerTableSelectWidget();
+});
+
+
 hook_eventbus_subscribe('webmail', 'mailbox-mailactions', function($actionContainer) {
     
     $emailId = $actionContainer->getAttribute('data-email-id');
@@ -62,6 +69,10 @@ hook_eventbus_subscribe('webmail', 'mailbox-mailactions', function($actionContai
                 }
                 
                 hook_htmlscriptloader_enableGroup('calendar');
+                
+                // load's customer-table javascript
+                if (ctx()->isModuleEnabled('customer'))
+                    new \customer\forms\CustomerTableSelectWidget();
                 
                 $company_id = '';
                 $person_id = '';
