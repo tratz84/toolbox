@@ -225,6 +225,14 @@ class UserService extends ServiceBase {
     }
     
     
+    public function readUsersInGroup( $userGroupId ) {
+        $uDao = new UserDAO();
+        
+        return $uDao->readByGroup($userGroupId);
+    }
+    
+    
+    
     public function generateAutologinToken($user_id, $prefix=null) {
         
         $token = md5(uniqid().uniqid().uniqid().uniqid().uniqid().uniqid().uniqid().uniqid());
