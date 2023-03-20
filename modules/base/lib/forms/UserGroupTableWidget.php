@@ -97,9 +97,9 @@ class UserGroupTableWidget extends BaseWidget {
             return;
         }
         
-        // gets kinda messy ;) when widget name is 'person_id' => ignore companyId & visa versa
-        if ($this->name == 'user_id') $userId = null;
-        if ($this->name == 'user_group_id') $userGroupId = null;
+        // gets kinda messy ;) when widget name is 'user_id' => ignore userGroupId & visa versa
+        if ($this->name == 'user_id') $userGroupId = null;
+        if ($this->name == 'user_group_id') $userId = null;
         
         
         if ($userId) {
@@ -119,10 +119,11 @@ class UserGroupTableWidget extends BaseWidget {
             $this->setValue('group-'.$userGroupId);
             
             $us = object_container_get( UserService::class );
-            $group = $us->readGroup( $userId, ['null-not-found' => true] );
+            $group = $us->readGroup( $userGroupId, ['null-not-found' => true] );
             
             if ($group) {
-                $this->setDefaultText( $group->getGroupName() );
+                $n = $us->fullGroupName( $group->getUserGroupId() );
+                $this->setDefaultText( $n );
             }
             else {
                 $this->setDefaultText( 'group-'.$userGroupId );

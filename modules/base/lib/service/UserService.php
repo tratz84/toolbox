@@ -38,6 +38,9 @@ use webmail\service\EmailService;
 class UserService extends ServiceBase {
     
     
+    protected $cache_mapGroupsFlat = null;
+    
+    
     public function __construct() {
         
     }
@@ -459,15 +462,40 @@ class UserService extends ServiceBase {
         return $groups;
     }
     public function mapGroupsFlat() {
-        $m = array();
         
-        $groups = $this->readGroupsFlat();
-        foreach($groups as $g) {
-            $m[ $g->getUserGroupId() ] = $g;
+        if ($this->cache_mapGroupsFlat === null) {
+            $m = array();
+            
+            $groups = $this->readGroupsFlat();
+            foreach($groups as $g) {
+                $m[ $g->getUserGroupId() ] = $g;
+            }
+            
+            $this->cache_mapGroupsFlat = $m;
         }
         
-        return $m;
+        return $this->cache_mapGroupsFlat;
     }
+    
+    public function fullGroupName( $userGroupId ) {
+        $m = $this->mapGroupsFlat();
+        
+        if (isset( $m[$userGroupId] )) {
+            $group = $m[$userGroupId];
+            
+            $parentNames = $group->getField('parentNames');
+            $groupPath = $group->getGroupName();
+            if (count($parentNames))
+                $groupPath = implode(' >> ', $parentNames ) . ' >> ' . $groupPath;
+            
+            return $groupPath;
+        }
+        else {
+            return 'group-'.$userGroupId;
+        }
+        
+    }
+    
     protected function _flattenGroups( $groups, $parentNames = array() ) {
         $r = array();
         
@@ -622,8 +650,55 @@ class UserService extends ServiceBase {
     
     public function searchUserOrGroup( $q, $opts ) {
         
-        if (isset($opts['id']) && $opts['id']) {
+        if (!$q)
+            $q = '';
+        
+        if (trim($q) == '' && isset($opts['id']) && $opts['id']) {
             
+            if ( strpos($opts['id'], 'group-') === 0 ) {
+                $groupId = (int)substr($opts['id'], strlen('group-'));
+                
+                $ugDao = new UserGroupDAO();
+                $g = $ugDao->read( $groupId );
+                
+                if ($g) {
+                    $groupPath = $this->fullGroupName( $g->getUserGroupId() );
+                    
+                    $result = array();
+                    $result[] = array(
+                        'type'         => 'group',
+                        'id'           => 'group-'.$g->getUserGroupId(),
+                        'name'         => $groupPath,
+                        'email'        => '',
+                        'fullname'     => '',
+                        'default_text' => $groupPath
+                    );
+                    
+                    return $result;
+                }
+            }
+            
+            if ( strpos($opts['id'], 'user-') === 0 ) {
+                $userId = (int)substr($opts['id'], strlen('user-'));
+                
+                $userDao = new UserDAO();
+                $u = $userDao->read( $userId );
+                
+                if ($u) {
+                    $result = array();
+                    $result[] = array(
+                        'type'         => 'user',
+                        'id'           => 'user-'.$u->getUserId(),
+                        'name'         => $u->getUsername(),
+                        'email'        => $u->getEmail(),
+                        'fullname'     => trim($u->getFirstname() . ' ' . $u->getLastname()),
+                        'default_text' => $u->getUsername()
+                    );
+                    
+                    return $result;
+                }
+            }
+
         }
         
         
@@ -639,18 +714,15 @@ class UserService extends ServiceBase {
             
             foreach($groups as $g) {
                 
-                $parentNames = $mapGroups[ $g->getUserGroupId() ]->getField('parentNames');
-                $groupPath = $g->getGroupName();
-                if (count($parentNames))
-                    $groupPath = implode(' >> ', $parentNames ) . ' >> ' . $groupPath;
+                $groupPath = $this->fullGroupName( $g->getUserGroupId() );
                 
                 $result[] = array(
                     'type'         => 'group',
-                    'id'           => $g->getUserGroupId(),
+                    'id'           => 'group-'.$g->getUserGroupId(),
                     'name'         => $groupPath,
                     'email'        => '',
                     'fullname'     => '',
-                    'default_text' => $g->getGroupName()
+                    'default_text' => $groupPath
                 );
             }
         }
@@ -662,7 +734,7 @@ class UserService extends ServiceBase {
         foreach($users as $u) {
             $result[] = array(
                 'type'         => 'user',
-                'id'           => $u->getUserId(),
+                'id'           => 'user-'.$u->getUserId(),
                 'name'         => $u->getUsername(),
                 'email'        => $u->getEmail(),
                 'fullname'     => trim($u->getFirstname() . ' ' . $u->getLastname()),

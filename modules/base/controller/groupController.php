@@ -155,7 +155,7 @@ class groupController extends BaseController {
             'email'          => t('E-mail'),
         );
         
-        if (get_var('q') && trim(get_var('q')) != '') {
+        if (!get_var('q')) {
             $opts['id'] = get_var('value');
         }
         
