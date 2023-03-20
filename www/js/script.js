@@ -640,8 +640,6 @@ function focusFirstField(container) {
 		return false;
 	});
 	
-		console.log('autofocus, ', foundNode);
-	
 	if (foundNode) {
 		
 		// pickadate opens calendar on focus, which can be irritating
