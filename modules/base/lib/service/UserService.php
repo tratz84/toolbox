@@ -78,6 +78,14 @@ class UserService extends ServiceBase {
         return $user;
     }
     
+    public function readUserGroups( $userId ) {
+        $ugDao = new UserGroupDAO();
+        $ugs = $ugDao->readByUser($userId);
+        
+        return $ugs;
+    }
+    
+    
     public function saveUser(UserForm $form) {
         $userId = $form->getWidget('user_id')->getValue();
         
@@ -744,6 +752,20 @@ class UserService extends ServiceBase {
         
         return $result;
     }
+    
+    
+    public function getGroupIdsByUser( $userId ) {
+        $uguDao = new UserGroupUserDAO();
+        $ugus = $uguDao->readByUser($userId);
+        
+        $ids = array();
+        foreach($ugus as $ugu) {
+            $ids[] = $ugu->getUserId();
+        }
+        
+        return $ids;
+    }
+    
     
     
     

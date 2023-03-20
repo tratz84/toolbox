@@ -45,6 +45,7 @@ use customer\forms\CompanySelectWidget;
 use customer\forms\CustomerSelectWidget;
 use customer\forms\CustomerSimpleSelectWidget;
 use customer\forms\CustomerTableSelectWidget;
+use base\forms\UserGroupTableWidget;
 
 class GeneratorHelper {
     
@@ -351,6 +352,12 @@ class GeneratorHelper {
             'type' => 'widget',
             'class' => UserSelectWidget::class,
             'label' => 'User select'
+        );
+        
+        $formWidgets[] = array(
+            'type' => 'widget',
+            'class' => UserGroupTableWidget::class,
+            'label' => 'User group table widget'
         );
         $formWidgets[] = array(
             'type' => 'widget',

@@ -4,10 +4,12 @@
 namespace base\model;
 
 use core\event\CapabilityEvent;
+use base\service\UserService;
 
 
 class User extends base\UserBase {
 
+    protected $groupsLoaded = false;
     protected $groups = array();
     
     protected $capabilities = null;
@@ -24,8 +26,14 @@ class User extends base\UserBase {
     
     
     public function getGroups() { return $this->groups; }
-    public function setGroups($groups) { $this->groups = $groups; }
-    public function addGroup( UserGroup $group ) { $this->groups[] = $group; }
+    public function setGroups($groups) {
+        $this->groups = $groups;
+        $this->groupsLoaded = true;
+    }
+    public function addGroup( UserGroup $group ) {
+        $this->groups[] = $group;
+        $this->groupsLoaded = true;
+    }
     
     
     public function setCapabilities($capabilities) {
@@ -121,5 +129,23 @@ class User extends base\UserBase {
         return $this->getUsername();
     }
 
+    
+    public function inUserGroup( $userGroupId ) {
+        
+        if ($this->groupsLoaded == false) {
+            $userService = object_container_get( UserService::class );
+            $this->groups = $userService->readUserGroups( $this->getUserId() );
+            
+        }
+        
+        foreach($this->groups as $g) {
+            if ($g->getUserGroupId() == $userGroupId)
+                return true;
+        }
+        
+        return false;
+    }
+    
+    
 }
 

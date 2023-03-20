@@ -14,6 +14,15 @@ class UserGroupUserDAO extends \core\db\DAOObject {
 	public function deleteByGroup($groupId) {
 	    return $this->query('delete from base__user_group_user where user_group_id = ?', array($groupId));
 	}
+	
+	
+	public function readByUser( $userId ) {
+	    $sql = "SELECT *
+                FROM base__user_group_user
+                where user_id=?";
+	    
+	    return $this->queryList( $sql, array($userId) );
+	}
 
 }
 
