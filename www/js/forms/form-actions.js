@@ -371,7 +371,7 @@ function ListEditFormWidget(container) {
 					me.deleteRow( $(this).closest('tr') );
 				});
 				
-				$(me.container).find('tbody').append( row );
+				$(me.container).find('table.sublist > tbody').append( row );
 				
 				applyWidgetFields( row );
 				
