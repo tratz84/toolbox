@@ -629,18 +629,32 @@ function ajxPostFile( url, opts ) {
 function focusFirstField(container) {
 	var inputs = $(container).find('input[type=text], input[type=number], input[type=tel], input[type=email]');
 	
-	if (inputs.length) {
+	let foundNode = null;
+	inputs.each(function(index, node) {
+		// skip input-fields insize toolbox-table-selector
+		if ($(node).closest('toolbox-table-selector').length > 0)
+			return true;
+		
+		// found!
+		foundNode = node;
+		return false;
+	});
+	
+		console.log('autofocus, ', foundNode);
+	
+	if (foundNode) {
 		
 		// pickadate opens calendar on focus, which can be irritating
-		if ($(inputs.get(0)).hasClass('input-pickadate') || $(inputs.get(0)).hasClass('input-pickadatetime') || $(inputs.get(0)).hasClass('input-pickatime'))
+		if ($(foundNode).hasClass('input-pickadate') || $(inputs.get(0)).hasClass('input-pickadatetime') || $(inputs.get(0)).hasClass('input-pickatime'))
 			return;
 		
 		// no-auto-focus class set on widget?
-		if ($(inputs.get(0)).closest('div.widget.no-auto-focus').length > 0) {
+		if ($(foundNode).closest('div.widget.no-auto-focus').length > 0) {
 			return;
 		}
 		
-		inputs.get(0).focus();
+		
+		foundNode.focus();
 	}
 }
 
