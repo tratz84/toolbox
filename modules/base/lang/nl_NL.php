@@ -23,6 +23,7 @@ $lang['Passwords not equal']    = 'Wachtwoorden niet gelijk aan elkaar';
 $lang['Password reset requested for'] = 'Wachtwoord reset aangevraagd voor';
 
 $lang['User groups']            = 'Gebruikersgroepen';
+$lang['User group']             = 'Gebruikersgroep';
 $lang['User Group Management']  = 'Gebruikersgroepen beheer';
 $lang['User group management']  = 'Gebruikersgroepen beheer';
 $lang['Add group']              = 'Groep toevoegen';
