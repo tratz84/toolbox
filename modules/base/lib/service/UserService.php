@@ -50,12 +50,15 @@ class UserService extends ServiceBase {
     }
     
     
-    public function readUser($userId) {
+    public function readUser($userId, $opts=array()) {
         $uDao = new UserDAO();
         
         $user = $uDao->read($userId);
         if (!$user)
             return null;
+        
+        if (isset($opts['record-only']) && $opts['record-only'])
+            return $user;
         
         $ugDao = new UserGroupDAO();
         $ugs = $ugDao->readByUser($userId);
@@ -455,6 +458,16 @@ class UserService extends ServiceBase {
         
         return $groups;
     }
+    public function mapGroupsFlat() {
+        $m = array();
+        
+        $groups = $this->readGroupsFlat();
+        foreach($groups as $g) {
+            $m[ $g->getUserGroupId() ] = $g;
+        }
+        
+        return $m;
+    }
     protected function _flattenGroups( $groups, $parentNames = array() ) {
         $r = array();
         
@@ -605,6 +618,61 @@ class UserService extends ServiceBase {
         
         return $map;
     }
+    
+    
+    public function searchUserOrGroup( $q, $opts ) {
+        
+        if (isset($opts['id']) && $opts['id']) {
+            
+        }
+        
+        
+        
+        $result = array();
+        
+        $ugDao = new UserGroupDAO();
+        $groups = $ugDao->searchForSelect($q);
+        
+        if (count($groups) > 0) {
+            $mapGroups = $this->mapGroupsFlat();
+            
+            
+            foreach($groups as $g) {
+                
+                $parentNames = $mapGroups[ $g->getUserGroupId() ]->getField('parentNames');
+                $groupPath = $g->getGroupName();
+                if (count($parentNames))
+                    $groupPath = implode(' >> ', $parentNames ) . ' >> ' . $groupPath;
+                
+                $result[] = array(
+                    'type'         => 'group',
+                    'id'           => $g->getUserGroupId(),
+                    'name'         => $groupPath,
+                    'email'        => '',
+                    'fullname'     => '',
+                    'default_text' => $g->getGroupName()
+                );
+            }
+        }
+        
+        
+        $uDao = new UserDAO();
+        $users = $uDao->searchForSelect($q);
+        
+        foreach($users as $u) {
+            $result[] = array(
+                'type'         => 'user',
+                'id'           => $u->getUserId(),
+                'name'         => $u->getUsername(),
+                'email'        => $u->getEmail(),
+                'fullname'     => trim($u->getFirstname() . ' ' . $u->getLastname()),
+                'default_text' => $u->getUsername()
+            );
+        }
+        
+        return $result;
+    }
+    
     
     
 }

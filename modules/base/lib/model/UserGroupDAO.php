@@ -35,5 +35,15 @@ class UserGroupDAO extends \core\db\DAOObject {
 	    return $this->queryList( $sql, array($userId) );
 	}
 	
+	
+	public function searchForSelect( $q, $top=10 ) {
+	    $sql = "select *
+                from base__user_group g
+                where group_name like ?
+                limit ".intval($top);
+	    
+	    return $this->queryList( $sql, array('%'.$q.'%') );
+	}
+	
 }
 

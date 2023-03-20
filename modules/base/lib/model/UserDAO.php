@@ -103,5 +103,25 @@ class UserDAO extends \core\db\DAOObject {
 	    $this->query("update base__user set autologin_token = null where autologin_token = ?", array($token));
 	}
 
+	
+	public function searchForSelect( $q, $top=10 ) {
+	    $sql = "select *
+                from base__user u
+                where email like ? 
+                    OR concat(firstname, ' ', lastname) like ? 
+                    OR username like ?
+                limit ".intval($top);
+	    
+	    $params = array();
+	    $params[] = '%'.$q.'%';
+	    $params[] = '%'.$q.'%';
+	    $params[] = '%'.$q.'%';
+	    
+	    
+	    return $this->queryList( $sql, $params );
+	}
+	
+	
+	
 }
 

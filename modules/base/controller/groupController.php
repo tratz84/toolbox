@@ -2,10 +2,10 @@
 
 
 
-use core\controller\BaseController;
-use base\service\UserService;
-use base\model\UserGroup;
 use base\form\UserGroupForm;
+use base\model\UserGroup;
+use base\service\UserService;
+use core\controller\BaseController;
 
 class groupController extends BaseController {
     
@@ -140,6 +140,30 @@ class groupController extends BaseController {
         redirect('/?m=base&c=group');
     }
     
+    
+    public function action_select_table() {
+        $userService = object_container_get(UserService::class);
+        
+        $opts = array();
+        
+        
+        $result = array();
+        $result['header_fields'] = array(
+            'type'           => t('Type'),
+            'name'           => t('Username / Groupname'),
+            'fullname'       => t('Fullname'),
+            'email'          => t('E-mail'),
+        );
+        
+        if (get_var('q') && trim(get_var('q')) != '') {
+            $opts['id'] = get_var('value');
+        }
+        
+        $result['results'] = $userService->searchUserOrGroup( get_var('q'), $opts );
+        
+        $this->json($result);
+        
+    }
 }
 
 
