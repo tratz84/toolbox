@@ -3,6 +3,9 @@
 <div class="page-header">
 	<div class="toolbox">
 		<a href="<?= appUrl('/?m=base&c=user') ?>" class="fa fa-chevron-circle-left"></a>
+		<?php if ($isNew == false) : ?>
+		<a href="<?= appUrl('/?m=base&c=user&a=delete&user_id='.$form->getWidgetValue('user_id')) ?>" class="fa fa-trash delete"></a>
+		<?php endif; ?>
 		<a href="javascript:void(0);" class="fa fa-save submit-form"></a>
 	</div>
 
@@ -26,6 +29,8 @@ $(document).ready(function() {
 	});
 
 	autosetUserCapabilityContainer();
+
+	handle_deleteConfirmation();
 });
 
 function autosetUserCapabilityContainer() {
