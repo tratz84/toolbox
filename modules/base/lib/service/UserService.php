@@ -177,6 +177,9 @@ class UserService extends ServiceBase {
         $uDao = new UserDAO();
         $uDao->delete($userId);
         
+        $uguDao = new UserGroupUserDAO();
+        $uguDao->deleteByUser($userId);
+        
         return $user;
     }
 
