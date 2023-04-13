@@ -64,7 +64,7 @@
 
 <script>
 
-$(document).ready(function() {
+pageLoaded(function() {
 	jQuery('input[name=username]').focus();
 });
 
