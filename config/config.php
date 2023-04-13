@@ -19,6 +19,8 @@ if (file_exists(dirname(__FILE__).'/../vendor/autoload.php')) {
 // uopz-ext loaded? => apply settings, else it wont work right..
 if (function_exists('uopz_allow_exit')) {
     uopz_allow_exit(true);
+    
+    trigger_error( 'Warning, uopz-extension loaded!', E_USER_NOTICE );
 }
 
 
