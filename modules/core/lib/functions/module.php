@@ -181,7 +181,7 @@ function module_less_defaults() {
  *   the current (both DOWN and UPgrades!). Good place to call 
  *   this function is in the autoload.php
  */
-function module_update_handler($moduleName, $version, $opts=array()) {
+function module_update_handler($moduleName, $version=null, $opts=array()) {
     $settingsKey = 'module-'.$moduleName.'-version';
     
     $ctx = \core\Context::getInstance();
@@ -190,6 +190,22 @@ function module_update_handler($moduleName, $version, $opts=array()) {
     } else {
         $curVer = $ctx->getSetting( $settingsKey );
     }
+    
+    
+    // auto determine version based on 'update.php' & 'config/tablemodel.php';
+    if ($version === null) {
+        $updatefile = module_file($moduleName, '/update.php');
+        
+        $tablemodel_file = module_file($moduleName, '/config/tablemodel.php');
+        $version = 1;
+        $files = [ $updatefile, $tablemodel_file ];
+        
+        foreach($files as $f) {
+            if ($f && filemtime($f) > $version)
+                $version = filemtime($f);
+        }
+    }
+    
     
     $updateExecuted = false;
     $changedTableModels = array();
