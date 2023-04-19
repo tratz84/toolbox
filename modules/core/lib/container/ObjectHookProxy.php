@@ -104,7 +104,16 @@ class ObjectHookProxy{
             $phpcode .= "\tpublic function ".$m->getName()."({$params}) {" . PHP_EOL;
             
             $phpcode .= "\t\t\$this->callFuncName = ".var_export($m->getName(), true).';' . PHP_EOL;
-            $phpcode .= "\t\t\$this->callParams = func_get_args();" . PHP_EOL;
+//             $phpcode .= "\t\t\$this->callParams = func_get_args();" . PHP_EOL;
+
+            // func_get_args() doesn't work with pass-by-ref params. Set params one-by-one
+            $phpcode .= "\t\t\$this->callParams = array();" . PHP_EOL;
+            foreach($m->getParameters() as $p) {
+                $paramName = "\$".$p->getName();
+                if ($p->isPassedByReference())
+                    $paramName = "&".$paramName;
+                $phpcode .= "\t\t\$this->callParams[] = {$paramName};" . PHP_EOL;
+            }
             
             $phpcode .= PHP_EOL;
             
