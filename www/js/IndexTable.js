@@ -45,6 +45,15 @@ function IndexTable( container, opts ) {
 	this.inputPagerUsed = false;
 	
 	
+	// mobile stuff
+	this.mobileRow = null;				// html mobile row
+	this.mobileContainer = null;		// container
+	
+	this.mobileHeaderText = null;		// text header
+	this.mobileSearchEnabled = false;	// mobile search enabled?
+	this.mobileSearchPlaceHolder = toolbox_t('Search...');
+	
+	
 	/**
 	 * called before this.load()-ajax call is made
 	 * 
@@ -141,11 +150,30 @@ function IndexTable( container, opts ) {
 	};
 	
 	
+	
+	this.setMobileHeaderText = function(t) { this.mobileHeaderText = t; }
+	this.setMobileSearchEnabled = function(bln) { this.mobileSearchEnabled = bln; }
+	this.setMobileSearchPlaceHolder = function(t) { this.mobileSearchPlaceHolder = t; }
+	
+	
+	this.setMobileRow = function( tpl ) {
+		this.mobileRow = tpl;
+	}
+	
+	
 	this.buildSearchOpts = function() {
 		var searchOpts = { };
 
 		// searchopts
 		searchOpts = serialize2object(this.opts.searchContainer ? this.opts.searchContainer : this.container);
+		
+		// mobile view? => include q_mob-val
+		if ($(window).width() <= 768) {
+			let q_mob = $(this.container).find('[name=q_mob]');
+			if (q_mob.length > 0) {
+				searchOpts['q_mob'] = q_mob.val();
+			}
+		}
 
 		searchOpts['pageNo'] = this.pageNo - 1;
 		
@@ -315,6 +343,12 @@ function IndexTable( container, opts ) {
 
 		if (this.table == null) {
 			this.table = $('<table class="list-response-table" />');
+			
+			
+			if (this.hasMobileView()) {
+				this.table.addClass('hide-mobile');
+			}
+			
 			if (this.opts.tableClass) {
 				$(this.table).addClass( this.opts.tableClass );
 			}
@@ -331,6 +365,8 @@ function IndexTable( container, opts ) {
 		this.renderRows();
 
 		this.renderFooter();
+		
+		this.renderMobile();
 
 		if (this.opts.autoloadNext == false) {
 			this.renderPager();
@@ -350,6 +386,92 @@ function IndexTable( container, opts ) {
 		if (this.callback_renderDone) {
 			this.callback_renderDone();
 		}
+	}
+	
+	
+	
+	this.hasMobileView = function() {
+		if (this.mobileRow == null)
+			return false;
+		else
+			return true;
+	}
+	
+	this.renderMobile = function() {
+		if (this.hasMobileView() == false)
+			return;
+		
+		if (this.mobileContainer == null) {
+			this.mobileContainer = $('<div class="mobile-index-table" />');
+			$(this.container).append( this.mobileContainer );
+			
+			// set header text
+			let mobileHeader = $('<div class="mobile-row-header"></div>');
+			mobileHeader.text( this.mobileHeaderText );
+			this.mobileContainer.append( mobileHeader );
+			
+			// set search
+			if (this.mobileSearchEnabled) {
+				let mobileSearch = $('<div class="mobile-row-search"></div>');
+				let q = $('<input type="text" name="q_mob" />');
+				q.on('change', function() {
+					this.load();
+				}.bind(this));
+				q.attr( 'placeholder', this.mobileSearchPlaceHolder );
+				mobileSearch.append( q );
+				
+				this.mobileContainer.append( mobileSearch );
+			}
+			
+			// row-container
+			this.mobileRowContainer = $('<div class="mobile-row-container" />');
+			this.mobileContainer.append( this.mobileRowContainer );
+		}
+		
+		// render rows
+		this.mobileRowContainer.empty();
+		this.renderRowsMobile();
+		
+	}
+	this.renderRowsMobile = function() {
+		// no listResponse yet? => skip
+		if (!this.listResponse)
+			return;
+		
+		// no results?
+		if (this.listResponse.start == 0 && this.listResponse.objects.length == 0) {
+			let noResults = $('<div class="no-results-found"></div>');
+			noResults.text( toolbox_t('No results found') );
+			this.mobileRowContainer.append( noResults );
+			return;
+		}
+		
+		// loop through rows
+		for (var cnt = 0; cnt < this.listResponse.objects.length; cnt++) {
+			let obj = this.listResponse.objects[cnt];
+			
+			let tpl = new EzTemplate( );
+			tpl.loadHtml( this.mobileRow );
+			tpl.setVar( 'row', obj );
+			let row = tpl.build();
+			
+			let rowContainer = $('<div class="it-mobile-row" />');
+			
+			// handle row-click
+			if (this.callback_rowClick) {
+				rowContainer.addClass('clickable');
+				rowContainer.data( 'record', obj );
+				let me = this; 
+				rowContainer.click(function( evt ) {
+					me.callback_rowClick(this, evt);
+				});
+			}
+			
+			rowContainer.append( row );
+			
+			this.mobileRowContainer.append( rowContainer );
+		}
+		
 	}
 
 	/**
