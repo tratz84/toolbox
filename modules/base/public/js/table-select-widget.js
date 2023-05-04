@@ -16,7 +16,9 @@ class TableSelectWidget {
 	xhrRequest = null;
 	updateTimeout = null;
 	
-	tpl = `
+	recordTemplate = null;
+	
+	tplTable = `
 		<input type="hidden" class="widget-value" [name]="name" [value]="value" />
 		<span class="cst-selector">
 			<span class="cst-selector-text widget-default-text" [contentHTML]="defaultText"></span>
@@ -39,6 +41,32 @@ class TableSelectWidget {
 						</tr>
 					</tbody>
 				</table>
+				<div ez-if="results.length == 0">
+					{{ toolbox_t('No results found') }}
+				</div ez-if>
+			</div>
+			<div>
+				<a href="javascript:void(0);" class="btn-reset">{{ toolbox_t('Reset') }}</a>
+			</div>
+		</div>
+	`;
+	
+	tplRecordTemplate = `
+		<input type="hidden" class="widget-value" [name]="name" [value]="value" />
+		<span class="cst-selector">
+			<span class="cst-selector-text widget-default-text" [contentHTML]="defaultText"></span>
+			<span class="cst-selector-caret fa fa-caret-down"></span>
+		</span>
+		<div class="cst-dropdown-container">
+			<div><input type="text" name="q" placeholder="{{ toolbox_t('Search...') }}" data-prevent-submit="1" autocomplete="off" /></div>
+			<div ez-subtemplate="result-container">
+				<div ez-if="results.length > 0" class="cst-records">
+					<div class="cst-records" ez-for="results" ez-item="record">
+						<div class="cst-record" [data-record]="record" onclick="$(this).closest('toolbox-table-selector').get(0).tsw._rowClick( this );">
+						[[recordTemplate]]
+						</div>
+					</div>
+				</div>
 				<div ez-if="results.length == 0">
 					{{ toolbox_t('No results found') }}
 				</div ez-if>
@@ -72,6 +100,10 @@ class TableSelectWidget {
 		let record = r.record;
 		
 		this.setValueText( record.id, record.default_text );
+	}
+	
+	setRecordTemplate( html ) {
+		this.recordTemplate = html;
 	}
 	
 	setValueText( id, default_text ) {
@@ -138,7 +170,14 @@ class TableSelectWidget {
 	init() {
 		this.eztemplate = new EzTemplate( this.container );
 		this.eztemplate.setVars( this.vars );
-		this.eztemplate.loadHtml( this.tpl );
+		
+		if (this.recordTemplate) {
+			let t = this.tplRecordTemplate.replace('[[recordTemplate]]', this.recordTemplate);
+			this.eztemplate.loadHtml( t );
+		}
+		else {
+			this.eztemplate.loadHtml( this.tplTable );
+		}
 		
 		this.renderWidget();
 	}
@@ -219,6 +258,11 @@ $(window).on('applyWidgetFields', function() {
 		
 		let tsw = new TableSelectWidget( node );
 		tsw.setLocked( locked );
+		
+		if ( node.attributes['record-template'] ) {
+			tsw.setRecordTemplate( node.attributes['record-template'].value );
+		}
+		
 		tsw.init();
 		
 		node.tsw = tsw;

@@ -159,6 +159,12 @@ class UserGroupTableWidget extends BaseWidget {
     public function render() {
         $htmlLabel = esc_html($this->getLabel());
         
+        $renderRow = "";
+        $renderRow .= '<div class="title">{{ record.type }} - {{ record.name }}</div>';
+        $renderRow .= '<div class="fullname">{{ record.fullname }}</div>';
+        $renderRow .= '<div class="email">{{ record.email }}</div>';
+        
+        
         $html = '';
         $html .= '<div class="'.implode(' ', $this->containerClasses).'">';
         $html .= '<label>'.$htmlLabel.infopopup($this->getInfoText()).'</label>';
@@ -166,6 +172,7 @@ class UserGroupTableWidget extends BaseWidget {
         $html .= '<toolbox-table-selector name="'.esc_attr($this->getName()).'"
                          value="'.esc_attr($this->getValue()).'"
                          default-text="'.esc_attr($this->getDefaultText()).'"
+                         record-template="'.esc_attr($renderRow).'"
                          url="'.appUrl('/?m=base&c=group&a=select_table').'"></toolbox-table-selector>';
         
         $html .= '</div>';

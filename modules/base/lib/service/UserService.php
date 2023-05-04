@@ -736,7 +736,7 @@ class UserService extends ServiceBase {
                 $groupPath = $this->fullGroupName( $g->getUserGroupId() );
                 
                 $result[] = array(
-                    'type'         => 'group',
+                    'type'         => t('User group'),
                     'id'           => 'group-'.$g->getUserGroupId(),
                     'name'         => $groupPath,
                     'email'        => '',
@@ -752,7 +752,7 @@ class UserService extends ServiceBase {
         
         foreach($users as $u) {
             $result[] = array(
-                'type'         => 'user',
+                'type'         => t('User'),
                 'id'           => 'user-'.$u->getUserId(),
                 'name'         => $u->getUsername(),
                 'email'        => $u->getEmail(),
