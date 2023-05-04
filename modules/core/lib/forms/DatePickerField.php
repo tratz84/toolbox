@@ -63,7 +63,7 @@ class DatePickerField extends BaseWidget {
     public function renderTag() {
         $html = parent::renderTag();
         
-        $html .= '<div class="datepicker-widget-background"></div>';
+        $html = '<div class="datepicker-widget-background"></div>' . $html;
         
         return $html;
     }
