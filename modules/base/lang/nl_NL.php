@@ -26,6 +26,7 @@ $lang['User groups']            = 'Gebruikersgroepen';
 $lang['User group']             = 'Gebruikersgroep';
 $lang['User Group Management']  = 'Gebruikersgroepen beheer';
 $lang['User group management']  = 'Gebruikersgroepen beheer';
+$lang['User or group']          = 'Gebruiker of groep';
 $lang['Add group']              = 'Groep toevoegen';
 $lang['Edit group']             = 'Groep bewerken';
 $lang['Group name']             = 'Groep naam';
