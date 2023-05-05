@@ -39,6 +39,9 @@ $(document).ready(function() {
 	$('<th class="price-sum">Totaal</th>').insertBefore('.invoice-form-list-invoice-line-widget thead tr th:last-child');
 
 	fix_textLines();
+	
+	// update mobile view
+	$('.widget.list-edit-form-widget').get(0).lefw.updateMobileView();
 });
 
 
@@ -64,7 +67,7 @@ function fix_textLines() {
 		
 		if ($(row).find('.price-sum').length == 0) {
 			var tdAction = $(row).find('td.action');
-			$('<td class="price-sum"></td>').insertBefore( tdAction );
+			$('<td class="price-sum" widget-name="price_sum"></td>').insertBefore( tdAction );
 		}
 
 		// set events on change

@@ -347,7 +347,61 @@ function ListEditFormWidget(container) {
 		});
 		
 		this.handleCounters( );
-
+		
+		this.updateMobileView();
+	};
+	
+	
+	this.updateMobileView = function() {
+		
+		let o = $(this.container).find('.mobile-list-edit');
+		
+		let tpl = o.attr('template');
+		if (!tpl || tpl == '')
+			return;
+		
+		let itemContainer = o.find('.mobile-list-edit-items');
+		itemContainer.empty();
+		
+		$(this.container).find('table.sublist tbody tr').each(function(index, node) {
+			let rec = {};
+			
+			$(node).find('input, select').each(function(i2, n2) {
+				let n = $(n2).attr('name');
+				n = n.replace(/.*\[(.*)\]$/, '$1');
+				
+				rec[n] = $(n2).val();
+			});
+			
+			$(node).find('[widget-name]').each(function(i2, n2) {
+				let n = $(n2).attr('widget-name');
+				
+				let t;
+				if ($(n2).find('select').length > 0) {
+					t = $(n2).find('select option:selected').text();
+				} else {
+					t = $(n2).text().trim();
+				}
+				
+				n = n.replace('-', '_');
+				
+				rec[n + '_text'] = t;
+			});
+			
+			
+			console.log( rec );
+			let t = new EzTemplate();
+			t.setVar('record', rec);
+			t.loadHtml( `<div class="mobile-list-item">
+							<div class="drag-sortable"></div>` 
+							+ tpl +
+							`<div class="trash"></div>
+						</div>` );
+			let div = t.build();
+			
+			itemContainer.append( div );
+		});
+		
 	};
 	
 	
@@ -386,6 +440,8 @@ function ListEditFormWidget(container) {
 				}
 				
 				$(me).trigger('list-edit-add-record');
+				
+				this.updateMobileView();
 			}
 		});
 	};
@@ -397,6 +453,8 @@ function ListEditFormWidget(container) {
 		if (this.callback_deleteRecord) {
 			this.callback_deleteRecord( node );
 		}
+		
+		this.updateMobileView();
 	};
 	
 	// set element names for POST

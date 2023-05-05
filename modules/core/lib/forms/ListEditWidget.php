@@ -18,6 +18,10 @@ abstract class ListEditWidget extends ListWidget {
     protected $sortable = true;
     
     protected $showNoResultsMessage = false;
+    
+    protected $mobileListHeader = null;
+    protected $mobileTemplate = null;
+    
 
 
     public function __construct($methodObjectList) {
@@ -29,6 +33,13 @@ abstract class ListEditWidget extends ListWidget {
     }
     
     public function setShowNoResultsMessage($bln) { $this->showNoResultsMessage = $bln; }
+    
+    public function setMobileListHeader( $t ) { $this->mobileListHeader = $t; }
+    public function getMobileListHeader() { return $this->mobileListHeader; }
+    
+    public function setMobileTemplate( $tpl ) { $this->mobileTemplate = $tpl; }
+    public function getMobileTemplate() { return $this->mobileTemplate; }
+    
 
     public function getObjects() {
         $l = array();
@@ -127,7 +138,7 @@ abstract class ListEditWidget extends ListWidget {
         
 
         $html .= '</table>';
-
+        
         $html .= '</div>';
 
         return $html;
@@ -169,7 +180,7 @@ abstract class ListEditWidget extends ListWidget {
         $html .= '<input type="hidden" class="method-object-list" value="'.esc_attr($this->getName()).'" />';
         $html .= '<input type="hidden" class="form-class" value="'.esc_attr(toolbox_get_class($this)).'" />';
 
-        $html .= '<table class="sublist">';
+        $html .= '<table class="sublist ZZZhide-mobile">';
 
         if ($this->tableHeader) {
             $html .= $this->renderHeader();
@@ -189,6 +200,14 @@ abstract class ListEditWidget extends ListWidget {
         $html .= '<tfoot></tfoot>';
 
         $html .= '</table>';
+        
+        
+        if ($this->mobileTemplate) {
+            $html .= '<div class="mobile-list-edit show-mobile" template="'.esc_attr($this->mobileTemplate).'">';
+            $html .= '<div class="mobile-list-edit-header">'.esc_html($this->mobileListHeader).'</div>';
+            $html .= '<div class="mobile-list-edit-items"></div>';
+            $html .= '</div>';
+        }
 
 
         if ($this->getInfoText()) {
@@ -263,7 +282,7 @@ abstract class ListEditWidget extends ListWidget {
             $w = $this->widgets[$x];
             if (is_a($w, HiddenField::class)) continue;
 
-            $html .= '<td class="input-'.slugify($w->getName()).'">';
+            $html .= '<td class="input-'.slugify($w->getName()).'" widget-name="'.slugify($w->getName()).'">';
 
             // put all hidden fields in first <td>
             if ($hiddenHtml) {

@@ -20,6 +20,15 @@ class ListInvoiceLineWidget extends ListEditWidget {
         parent::__construct($methodObjectList);
         
         $this->init();
+        
+        $this->setMobileListHeader( "Factuurregels" );
+        $this->setMobileTemplate('
+                <div class="price-sum">{{ record.price_sum_text }}</div>
+                <div class="title">{{ record.short_description }}</div>
+                <div class="amount">
+                    {{ record.amount }}x {{ format_price(record.price, true) }}
+                    - {{ record.vat_percentage_text }}
+                </div>');
     }
     
     protected function init() {
