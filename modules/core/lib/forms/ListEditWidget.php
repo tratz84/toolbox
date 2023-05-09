@@ -157,7 +157,7 @@ abstract class ListEditWidget extends ListWidget {
     public function renderHeader($method='default') {
         $html = '';
         
-        $html .= '<thead>';
+        $html .= '<thead class="hide-mobile">';
         if ($this->sortable) {
             $html .= '<th></th>';
         }
@@ -188,7 +188,7 @@ abstract class ListEditWidget extends ListWidget {
         }
         
         
-        $html .= '<table class="sublist ZZZhide-mobile">';
+        $html .= '<table class="sublist">';
 
         if ($this->tableHeader) {
             $html .= $this->renderHeader();
@@ -259,7 +259,7 @@ abstract class ListEditWidget extends ListWidget {
     }
 
     public function renderRow($obj=array()) {
-        $html = '<tr>';
+        $html = '<tr class="hide-mobile">';
 
         if ($this->sortable) {
             $html .= '<td class="td-sortable"><span class="fa fa-sort handler-sortable"></span></td>';

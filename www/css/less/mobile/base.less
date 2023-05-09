@@ -1,0 +1,26 @@
+
+
+.show-mobile
+, .hide-mobile {
+	display: none;
+}
+
+@media (max-width: 768px) {
+	.show-mobile {
+		display: block;
+	}
+}
+
+@media (min-width: 768px) {
+	.hide-mobile {
+		display: block;
+	}
+	tr.hide-mobile {
+		display: table-row;
+	}
+	thead.hide-mobile {
+		display: table-header-group;
+	}
+}
+
+
