@@ -81,7 +81,7 @@ function fix_textLines() {
 		
 		if ($(row).find('.price-sum').length == 0) {
 			var tdAction = $(row).find('td.action');
-			$('<td class="price-sum"></td>').insertBefore( tdAction );
+			$('<td class="price-sum" widget-name="price_sum"></td>').insertBefore( tdAction );
 		}
 		
 		
