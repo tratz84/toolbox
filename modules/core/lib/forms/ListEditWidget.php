@@ -40,6 +40,13 @@ abstract class ListEditWidget extends ListWidget {
     public function setMobileTemplate( $tpl ) { $this->mobileTemplate = $tpl; }
     public function getMobileTemplate() { return $this->mobileTemplate; }
     
+    public function hasMobileTemplate() {
+        if ($this->mobileTemplate !== null)
+            return true;
+        else
+            return false;
+    }
+    
 
     public function getObjects() {
         $l = array();
@@ -157,7 +164,7 @@ abstract class ListEditWidget extends ListWidget {
     public function renderHeader($method='default') {
         $html = '';
         
-        $html .= '<thead class="hide-mobile">';
+        $html .= '<thead class="'.($this->hasMobileTemplate()?'hide-mobile':'').'">';
         if ($this->sortable) {
             $html .= '<th></th>';
         }
@@ -259,7 +266,7 @@ abstract class ListEditWidget extends ListWidget {
     }
 
     public function renderRow($obj=array()) {
-        $html = '<tr class="hide-mobile">';
+        $html = '<tr class="'.($this->hasMobileTemplate()?'hide-mobile':'').'">';
 
         if ($this->sortable) {
             $html .= '<td class="td-sortable"><span class="fa fa-sort handler-sortable"></span></td>';
