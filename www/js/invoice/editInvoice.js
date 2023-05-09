@@ -142,6 +142,8 @@ function invoice_calc_totals() {
 	trTotalInclVat.find('td:first-child').text('Totaal ' + format_price(totalInclVat/100, true, {'thousands': '.'}));
 	tfoot.append( trTotalInclVat );
 	
+	// update mobile view after calculating totals
+	$('.invoice-form-list-invoice-line-widget').get(0).lefw.updateMobileView();
 }
 
 function print_Click() {

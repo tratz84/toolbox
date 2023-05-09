@@ -1175,7 +1175,7 @@ function showDialog(opts) {
 	
 	// content
 	var content = $('<div class="pwdialog-content" />');
-	content.html(opts.html);
+	content.append(opts.html);
 	
 	// cancel/save buttons
 	if (opts.showCancelSave) {
@@ -1184,7 +1184,7 @@ function showDialog(opts) {
 		var btnOk = $('<input type="button" class="btn-save" value="'+toolbox_t('Save')+'" />');
 		btnOk.click(function() {
 			if (opts.callback_ok) {
-				var objDialog = $('.pwdialog-container');
+				var objDialog = $('.pwdialog-content');
 				var r = opts.callback_ok(objDialog);
 				
 				// don't close dialog if 'false' is returned

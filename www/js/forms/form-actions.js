@@ -348,7 +348,24 @@ function ListEditFormWidget(container) {
 		
 		this.handleCounters( );
 		
+		this.handleMobileEvents();
+		
 		this.updateMobileView();
+	};
+	
+	
+	this.handleMobileEvents = function() {
+		$(this.container).find('table.sublist tbody tr').each(function(index, node) {
+			if ( $(node).data('mobile-events-set') )
+				return;
+			
+			$(node).find('input, select').on('change', function() {
+				this.updateMobileView();
+			}.bind(this));
+			
+			
+			$(node).data('mobile-events-set', true)
+		}.bind(this));
 	};
 	
 	
@@ -392,17 +409,70 @@ function ListEditFormWidget(container) {
 			console.log( rec );
 			let t = new EzTemplate();
 			t.setVar('record', rec);
-			t.loadHtml( `<div class="mobile-list-item">
-							<div class="drag-sortable"></div>` 
-							+ tpl +
-							`<div class="trash"></div>
-						</div>` );
+			t.loadHtml( tpl );
 			let div = t.build();
 			
-			itemContainer.append( div );
-		});
+			let li = $('<div class="mobile-list-item" />');
+			li.append( '<div class="drag-sortable"></div>' );
+			li.append( '<div class="mobile-item-content"></div>' );
+			li.append( '<div class="trash"></div>' );
+			
+			li.find('.mobile-item-content').append( div );
+			
+			li.find('.mobile-item-content').data( 'tr', node );
+			li.find('.mobile-item-content').data( 'record', rec );
+			li.find('.mobile-item-content').on('click', function( evt ) {
+				this.popupEditRecord( evt.currentTarget );
+			}.bind(this));
+			
+			itemContainer.append( li );
+		}.bind(this));
 		
 	};
+	
+	this.popupEditRecord = function( obj ) {
+		
+		let tr = $(obj).data('tr');
+		
+		let widgets = new Array();
+		$(tr).find('.widget').each(function(index, node) {
+			let n = node.cloneNode(true);
+			widgets.push( n );
+		});
+		
+		let form = $('<div class="" />');
+		for(var i in widgets) {
+			form.append( widgets[i] );
+		}
+		
+//		console.log( form );
+		
+		showDialog({
+			title: toolbox_t('Edit') + ' - ' + $(this.container).find('.mobile-list-edit-header').text(),
+			html: form,
+			callback_ok: function(dialog) {
+				// update tr-fields
+				$(dialog).find('input, select').each(function(index, node) {
+					if ( $(node).attr('type') == 'hidden' )
+						return;
+					
+					let n = $(node).attr('name');
+					let v = $(node).val();
+					
+					let o = $(tr).find('[name="' + n + '"]');
+					o.val( v );
+					o.trigger( 'change' );
+				});
+				
+				// update mobile-view
+				this.updateMobileView();
+			}.bind(this)
+		});
+		
+//		console.log( obj );
+	};
+	
+	
 	
 	
 	this.setCallbackAddRecord = function(callback) { this.callback_addRecord = callback; }
@@ -410,39 +480,41 @@ function ListEditFormWidget(container) {
 	
 	
 	this.addRecord = function(callback) {
-		var me = this;
+		let formClassName = $(this.container).find('.form-class').val();
 		
 		$.ajax({
 			url: appUrl('/?m=core&c=form/formListEdit'),
 			type: 'POST',
 			data: {
-				formClass: $(me.container).find('.form-class').val()
+				formClass: formClassName
 			},
 			success: function(data, xhr, textStatus) {
 				var row = $(data);
 				
 				$(row).find('.row-delete').click(function() {
-					me.deleteRow( $(this).closest('tr') );
+					this.deleteRow( $(this).closest('tr') );
 				});
 				
-				$(me.container).find('table.sublist > tbody').append( row );
+				$(this.container).find('table.sublist > tbody').append( row );
 				
 				applyWidgetFields( row );
 				
-				me.handleCounters();
+				this.handleCounters();
 				
 				if (callback) {
 					callback( row );
 				}
 				
-				if (me.callback_addRecord) {
-					me.callback_addRecord( row );
+				if (this.callback_addRecord) {
+					this.callback_addRecord( row );
 				}
 				
-				$(me).trigger('list-edit-add-record');
+				$(this).trigger('list-edit-add-record');
+				
+				this.handleMobileEvents();
 				
 				this.updateMobileView();
-			}
+			}.bind(this)
 		});
 	};
 	

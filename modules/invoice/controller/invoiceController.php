@@ -85,7 +85,7 @@ class invoiceController extends BaseController {
         }
         
         
-        $invoiceForm = $this->oc->create(InvoiceForm::class);
+        $invoiceForm = object_container_create( InvoiceForm::class );
         $invoiceForm->bind($invoice);
         
         // invoice locked?
