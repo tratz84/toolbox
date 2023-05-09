@@ -470,7 +470,7 @@ function ListEditFormWidget(container) {
 			widgets.push( n );
 		});
 		
-		let form = $('<div class="" />');
+		let form = $('<div class="list-edit-widget-item-mobile-form" />');
 		for(var i in widgets) {
 			form.append( widgets[i] );
 		}
@@ -545,10 +545,8 @@ function ListEditFormWidget(container) {
 				
 				this.updateMobileView();
 				
-				
 				// mobile? open edit-popup
 				if ($(window).width() <= 768) {
-					console.log('hmz');
 					let i = $(this.container).find('.mobile-list-edit-items .mobile-list-item').last();
 					i.find('.mobile-item-content').click();
 				}
