@@ -369,6 +369,8 @@ function ListEditFormWidget(container) {
 				
 			}.bind(this)
 		});
+		$(this.container).find('.mobile-list-edit .mobile-list-edit-items').disableSelection();
+
 	};
 	
 	

@@ -61,6 +61,8 @@ $menuItems = $ms->listMainMenu();
 	<link href="<?= BASE_HREF ?>lib/jquery-ui/jquery-ui.structure.min.css" rel="stylesheet" type="text/css" />
 	<link href="<?= BASE_HREF ?>lib/jquery-ui/jquery-ui.theme.css" rel="stylesheet" type="text/css" />
 	
+	<script src="<?= BASE_HREF ?>lib/jquery.ui.touch-punch.js"></script>
+	
 	<script src="<?= BASE_HREF ?>lib/select2/js/select2.min.js"></script>
 	<link href="<?= BASE_HREF ?>lib/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
 
