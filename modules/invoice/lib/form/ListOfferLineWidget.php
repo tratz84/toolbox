@@ -20,6 +20,18 @@ class ListOfferLineWidget extends ListEditWidget {
         parent::__construct($methodObjectList);
         
         $this->init();
+        
+        $this->setMobileListHeader( "Offerte regels" );
+        $this->setMobileTemplate('
+                <div class="price-sum">{{ record.price_sum_text }}</div>
+                <div class="title" ez-if="record.line_type == \'text\'">{{ record.short_description }} - {{ record.short_description2 }}</div>
+                <div class="" ez-if="record.line_type != \'text\'">
+                    <div class="title">{{ record.short_description }}</div>
+                    <div class="amount">
+                        {{ record.amount }}x {{ format_price(record.price, true) }}
+                        - {{ record.vat_text }}
+                    </div>
+                </div>');
     }
     
     protected function init() {
