@@ -117,7 +117,7 @@ function invoice_calc_totals() {
 	var tfoot = $('.invoice-form-list-invoice-line-widget tfoot');
 	tfoot.empty();
 	
-	var trTotalExclVat = $('<tr><td></td><td></td><td class="td-foot-amount hide-mobile"></td><td class="td-foot-total-excl-vat" colspan="3" align=right></td><td></td></tr>');
+	var trTotalExclVat = $('<tr><td></td><td></td><td class="show-mobile"></td><td class="td-foot-amount hide-mobile"></td><td class="td-foot-total-excl-vat" colspan="3" align=right></td><td></td></tr>');
 	trTotalExclVat.find('.td-foot-amount').text( format_number(totalAmount) );
 	trTotalExclVat.find('td.td-foot-total-excl-vat').text('Totaal excl. btw ' + format_price(totalExclVat/100, true, {'thousands': '.'}));
 	tfoot.append( trTotalExclVat );
