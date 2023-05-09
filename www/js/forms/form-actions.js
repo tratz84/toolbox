@@ -544,6 +544,14 @@ function ListEditFormWidget(container) {
 				this.handleMobileEvents();
 				
 				this.updateMobileView();
+				
+				
+				// mobile? open edit-popup
+				if ($(window).width() <= 768) {
+					console.log('hmz');
+					let i = $(this.container).find('.mobile-list-edit-items .mobile-list-item').last();
+					i.find('.mobile-item-content').click();
+				}
 			}.bind(this)
 		});
 	};
