@@ -180,6 +180,14 @@ abstract class ListEditWidget extends ListWidget {
         $html .= '<input type="hidden" class="method-object-list" value="'.esc_attr($this->getName()).'" />';
         $html .= '<input type="hidden" class="form-class" value="'.esc_attr(toolbox_get_class($this)).'" />';
 
+        if ($this->mobileTemplate) {
+            $html .= '<div class="mobile-list-edit show-mobile" template="'.esc_attr($this->mobileTemplate).'">';
+            $html .= '<div class="mobile-list-edit-header">'.esc_html($this->mobileListHeader).'</div>';
+            $html .= '<div class="mobile-list-edit-items"></div>';
+            $html .= '</div>';
+        }
+        
+        
         $html .= '<table class="sublist ZZZhide-mobile">';
 
         if ($this->tableHeader) {
@@ -202,14 +210,6 @@ abstract class ListEditWidget extends ListWidget {
         $html .= '</table>';
         
         
-        if ($this->mobileTemplate) {
-            $html .= '<div class="mobile-list-edit show-mobile" template="'.esc_attr($this->mobileTemplate).'">';
-            $html .= '<div class="mobile-list-edit-header">'.esc_html($this->mobileListHeader).'</div>';
-            $html .= '<div class="mobile-list-edit-items"></div>';
-            $html .= '</div>';
-        }
-
-
         if ($this->getInfoText()) {
             $html .= infopopup($this->getInfoText());
         }

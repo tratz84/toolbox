@@ -351,6 +351,24 @@ function ListEditFormWidget(container) {
 		this.handleMobileEvents();
 		
 		this.updateMobileView();
+		
+		// mobile view sortable
+		$(this.container).find('.mobile-list-edit .mobile-list-edit-items').sortable({
+			handle: '.draggable',
+			stop: function() {
+//				let trs = $(this.container).find('table.sublist tbody tr').get();
+				let mobitems = $(this.container).find('.mobile-list-item .mobile-item-content');
+				
+				console.log( mobitems.length );
+				
+				mobitems.each(function(i, n) {
+					let tr = $(n).data('tr');
+					console.log(tr);
+					$(this.container).find('table.sublist tbody').append( tr );
+				}.bind(this));
+				
+			}.bind(this)
+		});
 	};
 	
 	
@@ -413,9 +431,19 @@ function ListEditFormWidget(container) {
 			let div = t.build();
 			
 			let li = $('<div class="mobile-list-item" />');
-			li.append( '<div class="drag-sortable"></div>' );
+			
+			// drag
+			li.append( '<div class="drag-sortable"><span class="fa fa-bars draggable"></span></div>' );
+			
+			// content
 			li.append( '<div class="mobile-item-content"></div>' );
-			li.append( '<div class="trash"></div>' );
+			
+			// delete rec.
+			li.append( '<div class="trash"><span class="fa fa-trash"></span></div>' );
+			li.find('div.trash span').on('click', function( evt ) {
+				let tr = $(evt.currentTarget).closest('.mobile-list-item').find('.mobile-item-content').data('tr');
+				this.deleteRow( tr );
+			}.bind(this));
 			
 			li.find('.mobile-item-content').append( div );
 			
