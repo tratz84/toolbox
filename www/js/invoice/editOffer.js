@@ -76,7 +76,7 @@ function fix_textLines() {
 			
 			var spanArticleName = $('<span class="article-name" />');
 			spanArticleName.text( inpShortDescription.val() );
-			$(row).find('.input-short-description').append( spanArticleName );
+			$(row).find('.short-description-widget').append( spanArticleName );
 		}
 		
 		if ($(row).find('.price-sum').length == 0) {
