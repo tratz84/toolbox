@@ -181,8 +181,10 @@ header .notifications-bar {
 			border-color: #dfdfdf;
 		}
 		
-		&:hover .child-menu {
-			display: block;
+		@media (min-width: 768px) {
+			&:hover .child-menu {
+				display: block;
+			}
 		}
 	}
 	
