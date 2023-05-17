@@ -169,7 +169,9 @@ header .notifications-bar {
 		.child-menu {
 			display: none;
 			position: absolute;
-			margin-top: -52px;
+			@media (min-width: 768px) {
+				margin-top: -52px;
+			}
 			left: 100%;
 			width: 200px;
 			a { background-color: #f5f5f5; }
