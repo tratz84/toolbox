@@ -41,6 +41,14 @@ class Email extends base\EmailBase {
         return t('webmail.status.' . $this->getStatus());
     }
     
+    public function setFromName($p) {
+        // If the string //IGNORE is appended, characters that cannot be represented in the target charset are silently discarded
+        // doc @ https://www.php.net/manual/en/function.iconv.php
+        $p = iconv("UTF-8", "UTF-8//IGNORE", $p);
+        
+        return parent::setFromName( $p );
+    }
+    
     
     public function setField($key, $val) {
         // don't auto-fill created-field
