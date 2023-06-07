@@ -30,6 +30,8 @@ class settingsController extends BaseController
             $settingsService->updateValue('invoice__offerTemplate', get_var('invoice__offerTemplate'));
             $settingsService->updateValue('invoice__invoiceTemplate', get_var('invoice__invoiceTemplate'));
             
+            $settingsService->updateValue('invoice__offers_enabled', get_var('invoice__offers_enabled')?1:0);
+            
             $settingsService->updateValue('invoice__intracommunautaire', get_var('invoice__intracommunautaire'));
             
             $settingsService->updateValue('invoice__prices_inc_vat', get_var('invoice__prices_inc_vat'));

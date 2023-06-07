@@ -63,7 +63,7 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
     $invoiceSettings = object_container_get(InvoiceSettings::class);
     
     
-    if (hasCapability('invoice', 'edit-offer')) {
+    if ($invoiceSettings->getOffersEnabled() && hasCapability('invoice', 'edit-offer')) {
         $menuOffers = new Menu();
         $menuOffers->setIconLabelUrl('fa-share-alt', 'Offertes', '/?m=invoice&c=offer');
         $menuOffers->setWeight(35);
