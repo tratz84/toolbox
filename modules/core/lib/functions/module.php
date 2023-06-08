@@ -141,7 +141,7 @@ function module_file2module($path) {
     $modules = module_list();
     
     foreach( $modules as $moduleName => $modulePath) {
-        if (strpos($path, $modulePath) !== false)
+        if (strpos($path, $modulePath . DIRECTORY_SEPARATOR) !== false)
             return $moduleName;
     }
     
