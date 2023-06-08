@@ -129,6 +129,10 @@ class InvoiceSettings {
         return ctx()->getSetting('invoice__offers_enabled', true) ? true : false;
     }
     
+    public function getInvoiceEnabled() {
+        return ctx()->getSetting('invoice__invoice_enabled', true) ? true : false;
+    }
+    
     
     public function getBillableEnabled() {
         $ctx = Context::getInstance();

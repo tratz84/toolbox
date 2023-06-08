@@ -71,6 +71,15 @@ use invoice\pdf\DefaultInvoicePdf;
         
         <div class="widget checkbox-field-widget">
         	<label>
+        		<?= strOrder(null) ?> actief
+    		</label>
+        	
+        	<input type="checkbox" class="checkbox-ui" id="invoice__invoice_enabled" name="invoice__invoice_enabled" <?= $invoiceSettings->getInvoiceEnabled() ? 'checked="checked"' : '' ?> />
+        	<label class="checkbox-ui-placeholder" for="invoice__invoice_enabled"></label>
+        </div>
+        
+        <div class="widget checkbox-field-widget">
+        	<label>
         		Intracommunautaire<br/>leveringen
         		
         		<?= infopopup('Voegt "Intracommunautaire" vink toe bij bedrijfsgegevens. Bij het genereren van facturen voor deze bedrijven wordt dan op de factuur gezet dat deze intracommunautair is.') ?>

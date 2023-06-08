@@ -70,7 +70,7 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
         $src->add($menuOffers);
     }
 
-    if (hasCapability('invoice', 'edit-invoice')) {
+    if ($invoiceSettings->getInvoiceEnabled() && hasCapability('invoice', 'edit-invoice')) {
         $menuInvoice = new Menu();
         $menuInvoice->setIconLabelUrl('fa-file-invoice', strOrder(3), '/?m=invoice&c=invoice');
         $menuInvoice->setWeight(36);
