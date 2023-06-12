@@ -97,5 +97,22 @@ class ActivityDAO extends \core\db\DAOObject {
 	    return $a;
 	}
 	
+	public function deleteByRefObject( $refObject, $refId ) {
+	    $sql = "delete from base__activity
+                where ref_object = ?
+                    and ref_id = ?";
+	    
+	    return $this->query( $sql, array($refObject, $refId) );
+	}
+	
+	public function emptyByRefObject( $refObject, $refId ) {
+	    $sql = "update base__activity
+                set long_description = '', changes = 'N;'
+                where ref_object = ?
+                    and ref_id = ?";
+	    
+	    return $this->query( $sql, array($refObject, $refId) );
+	}
+	
 }
 
