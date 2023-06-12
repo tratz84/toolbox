@@ -102,6 +102,8 @@ class EmailDAO extends \core\db\DAOObject {
 	        $qb->setOrderBy( $opts['orderby'] );
 	    }
 	    
+	    hook_eventbus_publish( $qb, 'webmail', 'search' );
+	    
 	    return $qb->queryCursor();
 	}
 	

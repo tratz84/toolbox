@@ -9,7 +9,6 @@ class outboxTabController extends BaseController {
     
     public function action_index() {
         
-        
         $this->wo_it = new WebmailOutboxIndexTable();
         $this->wo_it->setRenderLoad( false );
         $this->wo_it->setOption('autoloadNext', true);
@@ -21,6 +20,9 @@ class outboxTabController extends BaseController {
         }
         else if (isset($this->personId) && (int)$this->personId) {
             $this->wo_it->setPersonId( (int)$this->personId );
+        }
+        else if (isset($this->connectorUrl)) {
+            $this->wo_it->setConnectorUrl( $this->connectorUrl );
         }
         else {
             return;
