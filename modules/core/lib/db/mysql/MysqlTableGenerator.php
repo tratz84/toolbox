@@ -6,6 +6,7 @@ use core\db\TableModel;
 use core\db\DatabaseHandler;
 use core\exception\DatabaseException;
 use core\exception\InvalidStateException;
+use core\exception\InvalidArgumentException;
 
 class MysqlTableGenerator {
     
@@ -527,6 +528,14 @@ class MysqlTableGenerator {
             }
             if ($m->getColumnProperty($c, 'auto_increment')) {
                 $sql .= ' AUTO_INCREMENT';
+                
+                // check start
+                if ($m->getColumnProperty($c, 'auto_increment_value')) {
+                    if (is_numeric($m->getColumnProperty($c, 'auto_increment_value')) == false || $m->getColumnProperty($c, 'auto_increment_value') <= 0)
+                        throw new InvalidArgumentException( 'MysqlTableGenerator, auto_increment_value not a valid value: ' . $m->getColumnProperty($c, 'auto_increment_value') );
+                    
+                    $sql .= '='.$m->getColumnProperty($c, 'auto_increment_value');
+                }
             }
             
         }
