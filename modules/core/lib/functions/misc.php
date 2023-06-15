@@ -1264,6 +1264,42 @@ function week2date($year, $week) {
     return $dt->format('Y-m-d');
 }
 
+/**
+ * week2date_day() - return day in given week
+ *                 - weeks are from monday till sunday
+ *                 @param dayNo
+ *                 - 1 = monday
+ *                 - 2 = tuesday
+ *                 - 3 = wednesday
+ *                 - 4 = thursday
+ *                 - 5 = friday
+ *                 - 6 = saturday
+ *                 - 7 = sunday
+ */
+function week2date_day1($year, $week, $dayNo) {
+    
+    $date = week2date( $year, $week );
+    list ($y, $m, $d) = explode('-', $date);
+    
+    $dt = new DateTime();
+    $dt->setDate($y, $m, $d);
+    
+    $diff_days = 0;
+    if ($dayNo > $dt->format('N')) {
+        $diff_days = $dayNo - $dt->format('N');
+    }
+    else if ($dayNo < $dt->format('N')) {
+        $diff_days = $dayNo - $dt->format('N');
+    }
+    if ($diff_days != 0) {
+        $di = new DateInterval('P1D');
+        $di->d = $diff_days;
+        $dt->add( $di );
+    }
+    
+    return $dt->format('Y-m-d');
+}
+
 
 
 
