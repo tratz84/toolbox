@@ -678,11 +678,12 @@ function weekField_next_option(obj) {
 	if (s.prop('disabled')) return;
 
 	var selectedOption = s.val();
-	s.find('option').removeAttr('selected');
 	
 	var options = s.find('option');
 	for(var i=0; i < options.length; i++) {
 		if (options.get(i).value == selectedOption && i+1 < options.length) {
+//			s.find('option').removeAttr('selected');
+			
 			s.val( options.get(i+1).value );
 			s.trigger('change');
 			break;
