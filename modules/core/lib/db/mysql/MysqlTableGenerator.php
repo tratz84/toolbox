@@ -507,6 +507,8 @@ class MysqlTableGenerator {
         
         $primaryKeyColumns = array();
         
+        $autoIncrementValue = null;
+        
         $sql = 'CREATE TABLE '.$this->getTableName().' ('.PHP_EOL;
         $columns = $m->getColumns();
         for($colno=0; $colno < count($columns); $colno++) {
@@ -534,7 +536,7 @@ class MysqlTableGenerator {
                     if (is_numeric($m->getColumnProperty($c, 'auto_increment_value')) == false || $m->getColumnProperty($c, 'auto_increment_value') <= 0)
                         throw new InvalidArgumentException( 'MysqlTableGenerator, auto_increment_value not a valid value: ' . $m->getColumnProperty($c, 'auto_increment_value') );
                     
-                    $sql .= '='.$m->getColumnProperty($c, 'auto_increment_value');
+                    $autoIncrementValue = $m->getColumnProperty($c, 'auto_increment_value');
                 }
             }
             
@@ -590,7 +592,12 @@ class MysqlTableGenerator {
         }
         
         
-        $sql .= PHP_EOL.') ENGINE='.$this->tableModel->getEngine().' CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci'.PHP_EOL;
+        $sql .= PHP_EOL.') ENGINE='.$this->tableModel->getEngine().' CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci';
+        
+        if ($autoIncrementValue)
+            $sql .= ' AUTO_INCREMENT='.$autoIncrementValue;
+        
+        $sql .= PHP_EOL;
         
         return array( $sql );
     }
