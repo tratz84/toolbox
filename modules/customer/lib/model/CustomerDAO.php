@@ -37,6 +37,8 @@ class CustomerDAO extends \core\db\DAOObject {
     public function search($opts=array()) {
         $qbs = $this->searchQueries($opts);
         
+        $qbs = apply_filter( 'customer_search_queries', $qbs );
+        
         $params = array();
         $sqls = array();
         foreach($qbs as $qb) {
@@ -108,7 +110,7 @@ class CustomerDAO extends \core\db\DAOObject {
             $qb1->addWhere(QueryBuilderWhere::whereRefByVal('deleted', '=', 'false'));
 
             if (isset($opts['company_id']) && $opts['company_id']) {
-                $qb1->addWhere(QueryBuilderWhere::whereRefByVal('company_id', '=', $opts['company_id']));
+                $qb1->addWhere(QueryBuilderWhere::whereRefByVal('customer__company.company_id', '=', $opts['company_id']));
             }
             
             if (isset($opts['name']) && trim($opts['name'])) {

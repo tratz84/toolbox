@@ -66,7 +66,7 @@ class customerController extends BaseController {
         
         $opts = array();
         $opts['fetch_addresses'] = true;
-        $opts['q'] = trim( get_var('q') );
+        $opts['q'] = trim( get_var('q', '') );
         
         
         $arr = array();

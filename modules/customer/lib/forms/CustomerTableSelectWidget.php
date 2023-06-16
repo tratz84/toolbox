@@ -19,6 +19,7 @@ class CustomerTableSelectWidget extends BaseWidget {
     
     protected $defaultText;
     
+    protected $endpoint;
     
     protected $showNewCustomer = true;
     
@@ -26,13 +27,13 @@ class CustomerTableSelectWidget extends BaseWidget {
     public function __construct($name='customer_id', $defaultValue=null) {
         
         $defaultText = t('Make your choice');
-        $endpoint = '/?m=customer&c=customer&a=select_table';
         $label = t('Customer');
         
 //         parent::__construct();//$name, $defaultValue, $defaultText, $endpoint, $label);
         
         $this->setName($name);
         $this->setLabel($label);
+        $this->setEndpoint( '/?m=customer&c=customer&a=select_table' );
         
         $this->containerClasses[] = 'widget';
         $this->containerClasses[] = 'table-select-widget';
@@ -50,6 +51,9 @@ class CustomerTableSelectWidget extends BaseWidget {
     
     public function setDefaultText($t) { $this->defaultText = $t; }
     public function getDefaultText() { return $this->defaultText; }
+    
+    public function setEndpoint( $u ) { $this->endpoint = $u; }
+    public function getEndpoint( ) { return $this->endpoint; }
     
     
     public function setShowNewCustomer($bln) { $this->showNewCustomer = $bln ? true : false; }
@@ -181,7 +185,7 @@ class CustomerTableSelectWidget extends BaseWidget {
         $html .= '<toolbox-table-selector name="'.esc_attr($this->getName()).'"
                          value="'.esc_attr($this->getValue()).'"
                          default-text="'.esc_attr($this->getDefaultText()).'"
-                         url="'.appUrl('/?m=customer&c=customer&a=select_table').'"></toolbox-table-selector>';
+                         url="'.appUrl( $this->getEndpoint() ).'"></toolbox-table-selector>';
         
         $opts = array();
         if ($this->showNewCustomer) {
