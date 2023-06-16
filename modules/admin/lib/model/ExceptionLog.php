@@ -15,6 +15,12 @@ class ExceptionLog extends base\ExceptionLogBase {
         parent::setMessage( $msg );
     }
     
+    public function setStacktrace($p) {
+        $p = iconv("UTF-8", "UTF-8//IGNORE", $p);
+        return parent::setStacktrace( $p );
+    }
+    
+    
     public function skipLogging() {
         
         // skip favicon errors

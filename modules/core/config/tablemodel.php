@@ -34,7 +34,7 @@ $tb_exception_log->addColumn('contextName', 'varchar(64)');
 $tb_exception_log->addColumn('user_id',     'int');
 $tb_exception_log->addColumn('request_uri', 'varchar(255)');
 $tb_exception_log->addColumn('message',     'varchar(255)');
-$tb_exception_log->addColumn('stacktrace',  'mediumtext');
+$tb_exception_log->addColumn('stacktrace',  'longtext');
 $tb_exception_log->addColumn('parameters',  'mediumtext');
 $tb_exception_log->addColumn('created',     'datetime');
 $tbs[] = $tb_exception_log;
