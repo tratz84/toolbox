@@ -95,6 +95,7 @@ class BaseController {
     public function showDecorator() { return $this->showDecorator; }
     public function setShowDecorator($bln) { $this->showDecorator = $bln; }
     
+    public function getActionTemplate() { return $this->actionTemplate; }
     public function setActionTemplate($p) { $this->actionTemplate = $p; }
     
     public function addBodyClass( $class ) {
