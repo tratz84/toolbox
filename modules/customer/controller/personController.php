@@ -21,6 +21,8 @@ class personController extends FormController {
         if (Context::getInstance()->isPersonsEnabled() == false)
             throw new InvalidStateException('Person-module not activated');
         
+        checkCapability( 'customer', 'view' );
+        
         $this->varNameId = 'person_id';
         
         $this->formClass = PersonForm::class;
@@ -57,9 +59,17 @@ class personController extends FormController {
             $this->addTitle( t('New person') );
         }
         
+        if (hasCapability('customer', 'edit') == false)
+            $this->form->setObjectLocked(true);
+        
         $this->render();
     }
 
+    public function action_delete() {
+        checkCapability('customer', 'edit');
+        
+        return parent::action_delete();
+    }
 
 
     public function action_widget() {

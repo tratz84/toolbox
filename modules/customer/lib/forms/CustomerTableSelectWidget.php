@@ -188,8 +188,8 @@ class CustomerTableSelectWidget extends BaseWidget {
                          url="'.appUrl( $this->getEndpoint() ).'"></toolbox-table-selector>';
         
         $opts = array();
-        if ($this->showNewCustomer) {
-            $html .= '&nbsp; <a href="javascript:void(0);" onclick="newCustomerPopup_Click( this, '.esc_json_attr($opts).' );" class="fa fa-plus"></a>';
+        if ($this->showNewCustomer && hasCapability('customer', 'edit')) {
+                $html .= '&nbsp; <a href="javascript:void(0);" onclick="newCustomerPopup_Click( this, '.esc_json_attr($opts).' );" class="fa fa-plus"></a>';
         }
         
         $html .= '</div>';

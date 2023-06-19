@@ -62,6 +62,8 @@ class CustomerIndexTable extends IndexTable {
             'searchable' => true
         ]);
         
+        $deleteEnabled = hasCapability('customer', 'edit') ? 1 : 0;
+        
         $this->setColumn('actions', [
             'fieldName' => '',
             'fieldDescription' => '',
@@ -88,7 +90,9 @@ class CustomerIndexTable extends IndexTable {
                 
                 var container = $('<div />');
                 container.append(anchEdit);
-                container.append(anchDel);
+                
+                if ({$deleteEnabled} == 1)
+                    container.append(anchDel);
                 
                 return container;
             }"

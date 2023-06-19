@@ -44,6 +44,8 @@ class CompanyService extends ServiceBase implements ObjectHookable {
     }
     
     public function save(\customer\forms\CompanyForm $companyForm) {
+        checkCapability('customer', 'edit');
+        
         $fh = FormDbHandler::getHandler( CompanyForm::class );
         
         $obj = $fh->saveForm( $companyForm );
@@ -60,6 +62,7 @@ class CompanyService extends ServiceBase implements ObjectHookable {
     
     
     public function delete($companyId) {
+        checkCapability('customer', 'edit');
         // TODO: check (active) contracts
         
         

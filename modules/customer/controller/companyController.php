@@ -23,6 +23,8 @@ class companyController extends BaseController {
         if (Context::getInstance()->isCompaniesEnabled() == false)
             throw new InvalidStateException('Company-module not activated');
         
+        checkCapability( 'customer', 'view' );
+        
         $this->addTitle(t('Companies'));
     }
     
@@ -91,6 +93,9 @@ class companyController extends BaseController {
         $this->isNew = $company->isNew();
         $this->form = $companyForm;
         
+        if (hasCapability('customer', 'edit') == false)
+            $this->form->setObjectLocked(true);
+        
         $this->actionContainer = new ActionContainer('company', $company->getCompanyId());
         hook_eventbus_publish($this->actionContainer, 'company', 'company-edit');
         
@@ -99,6 +104,8 @@ class companyController extends BaseController {
     
     
     public function action_delete() {
+        checkCapability('customer', 'edit');
+        
         $id = isset($_REQUEST['company_id'])?(int)$_REQUEST['company_id']:0;
         
         $companyService = $this->oc->get(CompanyService::class);

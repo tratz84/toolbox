@@ -10,6 +10,9 @@ use customer\service\PersonService;
 
 class newCustomerController extends BaseController {
     
+    public function init() {
+        checkCapability( 'customer', 'edit' );
+    }
     
     
     public function action_index() {

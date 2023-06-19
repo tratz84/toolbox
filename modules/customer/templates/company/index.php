@@ -1,7 +1,9 @@
 
 <div class="page-header">
 	<div class="toolbox list-toolbox">
-		<a href="<?= appUrl('/?m=customer&c=company&a=edit') ?>" class="fa fa-plus"></a>
+		<?php if (hasCapability('customer', 'edit')) : ?>
+			<a href="<?= appUrl('/?m=customer&c=company&a=edit') ?>" class="fa fa-plus"></a>
+		<?php endif; ?>
 	</div>
 	
     <h1><?= t('Overview companies') ?></h1>

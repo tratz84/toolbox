@@ -107,7 +107,9 @@ class CustomerSimpleSelectWidget extends Select2Field {
     public function render() {
         $html = parent::render();
         
-        $i = ' <a href="javascript:void(0);" onclick="newCustomerPopup_Click( this );" class="fa fa-plus"></a>';
+        $i = '';
+        if (hasCapability('customer', 'edit'))
+            $i = ' <a href="javascript:void(0);" onclick="newCustomerPopup_Click( this );" class="fa fa-plus"></a>';
         
         $html = str_replace('</select>', '</select>'.$i, $html);
         

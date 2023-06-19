@@ -156,7 +156,9 @@ class CustomerSelectWidget extends DynamicSelectField {
             $opts['customer_type'] = $this->customerType;
         }
         
-        $i = ' <a href="javascript:void(0);" onclick="newCustomerPopup_Click( this, '.esc_json_attr($opts).' );" class="fa fa-plus"></a>';
+        $i = '';
+        if (hasCapability('customer', 'edit'))
+            $i = ' <a href="javascript:void(0);" onclick="newCustomerPopup_Click( this, '.esc_json_attr($opts).' );" class="fa fa-plus"></a>';
         
         $html = str_replace('</select>', '</select>'.$i, $html);
         

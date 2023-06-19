@@ -1,7 +1,9 @@
 <div class="page-header">
 
 	<div class="toolbox list-toolbox">
-		<a href="<?= appUrl('/?m=customer&c=person&a=edit') ?>" class="fa fa-plus"></a>
+		<?php if (hasCapability('customer', 'edit')) : ?>
+			<a href="<?= appUrl('/?m=customer&c=person&a=edit') ?>" class="fa fa-plus"></a>
+		<?php endif; ?>
 	</div>
 	
     <h1><?= t('Overview persons') ?></h1>
@@ -74,7 +76,9 @@ t.addColumn({
 		
 		var container = $('<div />');
 		container.append(anchEdit);
+		<?php if (hasCapability('customer', 'edit') == true) : ?>
 		container.append(anchDel);
+		<?php endif; ?>
 		
 		return container;
 	}

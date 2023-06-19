@@ -91,8 +91,9 @@ class CompanySelectWidget extends DynamicSelectField {
         
         $html = parent::render();
         
-        
-        $i = ' <a href="javascript:void(0);" onclick="newCustomerPopup_Click( this, {customer_type: \'company\'} );" class="fa fa-plus"></a>';
+        $i = '';
+        if (hasCapability('customer', 'edit'))
+            $i = ' <a href="javascript:void(0);" onclick="newCustomerPopup_Click( this, {customer_type: \'company\'} );" class="fa fa-plus"></a>';
         
         $html = str_replace('</select>', '</select>'.$i, $html);
         

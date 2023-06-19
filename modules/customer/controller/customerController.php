@@ -9,6 +9,9 @@ use customer\forms\lists\CustomerIndexTable;
 
 class customerController extends BaseController {
     
+    public function init() {
+        checkCapability( 'customer', 'view' );
+    }
     
     public function action_index() {
         
@@ -109,6 +112,7 @@ class customerController extends BaseController {
     
     
     public function action_new() {
+        checkCapability('customer', 'edit');
         
         return $this->render();
     }

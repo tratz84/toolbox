@@ -3,12 +3,15 @@
 <div class="page-header">
 	<div class="toolbox">
 		<a href="<?= appUrl('/?m=customer&c=company') ?>" class="fa fa-chevron-circle-left"></a>
-		<?php if ($isNew == false) : ?>
-		<a href="<?= appUrl('/?m=customer&c=company&a=delete&company_id='.$form->getWidgetValue('company_id')) ?>" 
-			data-confirmation-message="<?= t('Are you sure to remove this company?') ?>" 
-			class="fa delete fa-trash"></a>
+		
+		<?php if ( hasCapability('customer', 'edit')) : ?>
+			<?php if ($isNew == false) : ?>
+			<a href="<?= appUrl('/?m=customer&c=company&a=delete&company_id='.$form->getWidgetValue('company_id')) ?>" 
+					data-confirmation-message="<?= t('Are you sure to remove this company?') ?>" 
+					class="fa delete fa-trash"></a>
+			<?php endif; ?>
+			<a href="javascript:void(0);" class="fa fa-save submit-form"></a>
 		<?php endif; ?>
-		<a href="javascript:void(0);" class="fa fa-save submit-form"></a>
 	</div>
 
     <?php if ($isNew) : ?>

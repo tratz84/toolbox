@@ -5,7 +5,7 @@
 use base\model\Menu;
 
 hook_eventbus_subscribe('base', 'MenuService::listMainMenu', function($src) {
-    if (ctx()->isModuleEnabled('customer')) {
+    if (ctx()->isModuleEnabled('customer') && hasCapability('customer', 'view')) {
         if (ctx()->isCustomersSplit()) {
             $menuCompany = new Menu();
             $menuCompany->setIconLabelUrl('fa-user', t('Companies'), '/?m=customer&c=company');

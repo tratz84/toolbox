@@ -21,6 +21,10 @@ $lang['This company is deleted'] = 'Dit bedrijf is verwijderd';
 $lang['customer_type.person'] = 'Particulier';
 $lang['customer_type.company'] = 'Zakelijk';
 
+$lang['modulename.customer'] = 'Klanten';
+$lang['View Customers']      = 'Klanten bekijken';
+$lang['Edit Customers']      = 'Klanten bewerken';
+
 
 
 return $lang;
