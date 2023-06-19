@@ -10,13 +10,12 @@ use invoice\service\InvoiceService;
 class articleController extends BaseController {
     
     public function init() {
-        checkCapability('base', 'edit-masterdata');
-        
         $this->addTitle(t('Articles'));
     }
     
     
     public function action_index() {
+        checkCapability('base', 'edit-masterdata');
         
         $this->render();
     }
@@ -37,6 +36,8 @@ class articleController extends BaseController {
     }
     
     public function action_edit() {
+        checkCapability('base', 'edit-masterdata');
+        
         $id = isset($_REQUEST['id'])?(int)$_REQUEST['id']:0;
         
         /**
