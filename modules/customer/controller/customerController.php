@@ -10,7 +10,12 @@ use customer\forms\lists\CustomerIndexTable;
 class customerController extends BaseController {
     
     public function init() {
-        checkCapability( 'customer', 'view' );
+        
+        if (in_array(get_var('a'), ['select2', 'select_table'])) {
+            // TODO: quick fix, security issue.. leaks possible little bits of data
+        } else {
+            checkCapability( 'customer', 'view' );
+        }
     }
     
     public function action_index() {
