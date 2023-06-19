@@ -521,9 +521,9 @@ function ListEditFormWidget(container) {
 			success: function(data, xhr, textStatus) {
 				var row = $(data);
 				
-				$(row).find('.row-delete').click(function() {
-					this.deleteRow( $(this).closest('tr') );
-				});
+				$(row).find('.row-delete').click(function(evt) {
+					this.deleteRow( $(evt.target).closest('tr') );
+				}.bind(this));
 				
 				$(this.container).find('table.sublist > tbody').append( row );
 				
