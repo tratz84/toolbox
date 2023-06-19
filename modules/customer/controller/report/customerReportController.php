@@ -9,6 +9,10 @@ use customer\form\CustomerReportIndexTable;
 
 class customerReportController extends BaseReportController {
     
+    public function init() {
+        checkCapability( 'report', 'show-reports' );
+    }
+    
     
     public function report($render=true) {
         

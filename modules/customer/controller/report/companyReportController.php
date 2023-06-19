@@ -8,6 +8,9 @@ use core\controller\BaseReportController;
 
 class companyReportController extends BaseReportController {
     
+    public function init() {
+        checkCapability( 'report', 'show-reports' );
+    }
     
     public function report($render=true) {
         
