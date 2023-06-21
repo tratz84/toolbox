@@ -23,7 +23,11 @@ class CronRunDAO extends \core\db\DAOObject {
                                 order by created desc
                                 limit ' . $no
 	        , array($cronId));
-	    
+	}
+	
+	
+	public function deleteCreatedBefore( $date ) {
+	    $this->query('delete from base__cron_run where date < ?', array($date));
 	}
 
 }

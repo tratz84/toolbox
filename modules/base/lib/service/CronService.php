@@ -186,6 +186,16 @@ class CronService {
     }
     
     
+    public function cleanupCronRun() {
+        
+        $date = date('Y-m-d', strtotime('-1 year'));
+        
+        $crDao = new CronRunDAO();
+        $crDao->deleteCreatedBefore($date);
+        
+    }
+    
+    
 }
 
 
