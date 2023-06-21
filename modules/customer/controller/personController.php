@@ -40,6 +40,9 @@ class personController extends FormController {
     
     
     public function action_edit($opts=array()) {
+        if (is_post())
+            checkCapability('customer', 'edit');
+        
         $r = parent::action_edit(array(
             'stay_after_save' => true,
             'render' => false,

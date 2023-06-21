@@ -80,6 +80,8 @@ class companyController extends BaseController {
             $companyForm->bind($_REQUEST);
             
             if ($companyForm->validate()) {
+                checkCapability('customer', 'edit');
+                
                 $companyId = $companyService->save($companyForm);
                 
                 report_user_message(t('Changes saved'));
