@@ -34,7 +34,7 @@ class PersonService extends ServiceBase {
     }
     
     public function save(\customer\forms\PersonForm $personForm) {
-        checkCapability('customer', 'edit');
+//         checkCapability('customer', 'edit');
         
         $fh = FormDbHandler::getHandler( PersonForm::class );
         
@@ -53,7 +53,7 @@ class PersonService extends ServiceBase {
     
     
     public function delete($personId) {
-        checkCapability('customer', 'edit');
+//         checkCapability('customer', 'edit');
         
         // TODO: check (active) contracts
         
