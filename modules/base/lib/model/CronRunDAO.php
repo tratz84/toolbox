@@ -27,7 +27,7 @@ class CronRunDAO extends \core\db\DAOObject {
 	
 	
 	public function deleteCreatedBefore( $date ) {
-	    $this->query('delete from base__cron_run where date < ?', array($date));
+	    $this->query('delete from base__cron_run where created < ?', array($date));
 	}
 
 }
