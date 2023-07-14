@@ -20,7 +20,7 @@ class connectorController extends BaseController {
         $pageNo = isset($_REQUEST['pageNo']) ? (int)$_REQUEST['pageNo'] : 0;
         $limit = $this->ctx->getPageSize();
         
-        $connectorService = $this->oc->get(ConnectorService::class);
+        $connectorService = object_container_get(ConnectorService::class);
         
         $r = $connectorService->searchConnector($pageNo*$limit, $limit, $_REQUEST);
         
@@ -36,14 +36,14 @@ class connectorController extends BaseController {
         $id = isset($_REQUEST['connector_id'])?(int)$_REQUEST['connector_id']:0;
         
         /** @var ConnectorService $connectorService */
-        $connectorService = $this->oc->get(ConnectorService::class);
+        $connectorService = object_container_get(ConnectorService::class);
         if ($id) {
             $connector = $connectorService->readConnector($id);
         } else {
             $connector = new Connector();
         }
         
-        $connectorForm = $this->oc->create(ConnectorForm::class, $connector);
+        $connectorForm = object_container_create(ConnectorForm::class, $connector);
         $connectorForm->bind($connector);
         $connectorForm->getWidget('password')->setValue('');
         
@@ -74,7 +74,7 @@ class connectorController extends BaseController {
     
     
     public function action_delete() {
-        $connectorService = $this->oc->get(ConnectorService::class);
+        $connectorService = object_container_get(ConnectorService::class);
         $connector = $connectorService->readConnector((int)get_var('connector_id'));
         
         if (!$connector) {
@@ -89,7 +89,7 @@ class connectorController extends BaseController {
     
     
     public function action_fetch_folders() {
-        $connectorService = $this->oc->get(ConnectorService::class);
+        $connectorService = object_container_get(ConnectorService::class);
         
         $pw_db = '';
         if (get_var('connector_id')) {
@@ -99,7 +99,7 @@ class connectorController extends BaseController {
             $connector = new Connector();
         }
         
-        $connectorForm = $this->oc->create(ConnectorForm::class, $connector);
+        $connectorForm = object_container_create(ConnectorForm::class, $connector);
         $connectorForm->bind($_REQUEST);
         $connectorForm->fill( $connector, array_keys($_REQUEST) );
         
