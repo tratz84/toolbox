@@ -26,6 +26,7 @@ class Azure365Auth {
     
     public function __construct() {
         $this->addScope( 'IMAP.AccessAsUser.All' );
+        $this->addScope( 'SMTP.Send' );
         $this->addScope( 'offline_access' );
 //         $this->addResource( 'IMAP.AccessAsUser.All' );
 //         $this->addResource( 'offline_access' );

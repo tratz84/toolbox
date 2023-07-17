@@ -38,8 +38,6 @@ class externalTokensController extends BaseController {
             $wat = $ctService->readAzureToken( get_var('id') );
             $this->form->bind( $wat );
             $this->isNew = false;
-            
-            print $ctService->getAzureAccessToken( 1 );exit;
         }
         else {
             $this->isNew = true;
@@ -97,11 +95,18 @@ class externalTokensController extends BaseController {
             }
         }
         
-        
         $this->form->getWidget('request_token')->setValue(0);
         
-        
         return $this->render();
+    }
+    
+    
+    public function action_delete() {
+        $ctService = object_container_get( CloudTokenService::class );
+        $ctService->deleteAzureToken( get_var('id') );
+        
+        
+        redirect( '/?m=webmail&c=externalTokens' );
     }
     
     

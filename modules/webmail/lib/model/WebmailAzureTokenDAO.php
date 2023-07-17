@@ -25,6 +25,11 @@ class WebmailAzureTokenDAO extends \core\db\DAOObject {
 		return $this->queryList( $sql );
 	}
 	
+	
+	public function delete( $id ) {
+		$this->query('delete from webmail__webmail_azure_token where webmail_azure_token_id = ?', array($id));
+	}
+	
 
 }
 

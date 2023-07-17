@@ -96,6 +96,16 @@ class CloudTokenService extends ServiceBase {
         return false;
     }
     
+    
+    public function deleteAzureToken( $webmailAzureTokenId ) {
+        $wat = $this->readAzureToken($webmailAzureTokenId);
+        
+        $watDao = new WebmailAzureTokenDAO();
+        $watDao->delete( $webmailAzureTokenId );
+    }
+    
+    
+    
 }
 
 
