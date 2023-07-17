@@ -222,12 +222,18 @@ $tbs[] = $tb_identity;
 
 $tb_azure = new TableModel( 'webmail', 'webmail_azure_token' );
 $tb_azure->addColumn( 'webmail_azure_token_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
-$tb_azure->addColumn( 'connector_id',  'int' );
-$tb_azure->addColumn( 'token_type',    'varchar(16)' );
-$tb_azure->addColumn( 'description',   'varchar(255)' );
-$tb_azure->addColumn( 'request_data',  'blob' );
-$tb_azure->addColumn( 'response_data', 'blob' );
-$tb_azure->addColumn( 'created',       'datetime');
+$tb_azure->addColumn( 'connector_id',            'int' );
+$tb_azure->addColumn( 'token_type',              'varchar(16)' );
+$tb_azure->addColumn( 'description',             'varchar(255)' );
+$tb_azure->addColumn( 'request_data',            'blob' );
+$tb_azure->addColumn( 'response_data',           'mediumblob' );            // set to mediumblob, sometimes azure outputs html-page on error
+$tb_azure->addColumn( 'azure_authorization_url', 'varchar(512)' );
+$tb_azure->addColumn( 'azure_token_url',         'varchar(512)' );
+$tb_azure->addColumn( 'azure_client_id',         'varchar(128)' );
+$tb_azure->addColumn( 'azure_client_secret',     'varchar(128)' );
+$tb_azure->addColumn( 'refresh_timestamp',       'datetime');
+$tb_azure->addColumn( 'expires_in',              'int');
+$tb_azure->addColumn( 'created',                 'datetime');
 $tbs[] = $tb_azure;
 
 

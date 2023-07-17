@@ -15,3 +15,21 @@
 
 <?php print $form->render() ?>
 
+<div style="margin-top: 25px;">
+	<input id="btnRequestToken" type="button" value="<?= t('Request token') ?>" />
+</div>
+
+
+<script>
+
+$(document).ready(function() {
+	$('#btnRequestToken').on('click', function() {
+		$('[name=request_token]').val( 1 );
+		
+		$('.form-azure-token-form').submit();
+	});
+});
+
+
+</script>
+

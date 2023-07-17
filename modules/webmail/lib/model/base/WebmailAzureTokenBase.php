@@ -41,7 +41,7 @@ class WebmailAzureTokenBase extends \core\db\DBObject {
   'response_data' => 
   array (
     'Field' => 'response_data',
-    'Type' => 'blob',
+    'Type' => 'mediumblob',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -69,6 +69,60 @@ class WebmailAzureTokenBase extends \core\db\DBObject {
   array (
     'Field' => 'description',
     'Type' => 'varchar(255)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'azure_client_id' => 
+  array (
+    'Field' => 'azure_client_id',
+    'Type' => 'varchar(128)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'azure_client_secret' => 
+  array (
+    'Field' => 'azure_client_secret',
+    'Type' => 'varchar(128)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'azure_authorization_url' => 
+  array (
+    'Field' => 'azure_authorization_url',
+    'Type' => 'varchar(512)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'azure_token_url' => 
+  array (
+    'Field' => 'azure_token_url',
+    'Type' => 'varchar(512)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'refresh_timestamp' => 
+  array (
+    'Field' => 'refresh_timestamp',
+    'Type' => 'datetime',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'expires_in' => 
+  array (
+    'Field' => 'expires_in',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -107,6 +161,30 @@ class WebmailAzureTokenBase extends \core\db\DBObject {
 		
 	public function setDescription($p) { $this->setField('description', $p); }
 	public function getDescription() { return $this->getField('description'); }
+	
+		
+	public function setAzureClientId($p) { $this->setField('azure_client_id', $p); }
+	public function getAzureClientId() { return $this->getField('azure_client_id'); }
+	
+		
+	public function setAzureClientSecret($p) { $this->setField('azure_client_secret', $p); }
+	public function getAzureClientSecret() { return $this->getField('azure_client_secret'); }
+	
+		
+	public function setAzureAuthorizationUrl($p) { $this->setField('azure_authorization_url', $p); }
+	public function getAzureAuthorizationUrl() { return $this->getField('azure_authorization_url'); }
+	
+		
+	public function setAzureTokenUrl($p) { $this->setField('azure_token_url', $p); }
+	public function getAzureTokenUrl() { return $this->getField('azure_token_url'); }
+	
+		
+	public function setRefreshTimestamp($p) { $this->setField('refresh_timestamp', $p); }
+	public function getRefreshTimestamp() { return $this->getField('refresh_timestamp'); }
+	
+		
+	public function setExpiresIn($p) { $this->setField('expires_in', $p); }
+	public function getExpiresIn() { return $this->getField('expires_in'); }
 	
 	
 }

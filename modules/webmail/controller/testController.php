@@ -3,9 +3,6 @@
 
 
 use core\controller\BaseController;
-use webmail\service\ConnectorService;
-use webmail\mail\connector\BaseMailConnector;
-use webmail\office365\Office365Auth;
 
 class testController extends BaseController {
     
@@ -17,7 +14,7 @@ class testController extends BaseController {
 //         https://outlook.office.com/IMAP.AccessAsUser.All
 //         https://outlook.office.com/SMTP.SendAsApp
         
-        $oa = new Office365Auth();
+        $oa = new Azure365Auth();
         $oa->setAuthUrl('https://login.microsoftonline.com/9bb7ad20-07f5-4b43-beb8-b60c680ea51c/oauth2/v2.0/authorize');
         $oa->setClientId( '29bca4e8-2abb-4a3d-9fd4-e053c2dac4b9' );
 //         $oa->setClientSecret( 'jl38Q~FvEpfLv6hAj8oKYEyc1pIJfie26fN_3b~f' );

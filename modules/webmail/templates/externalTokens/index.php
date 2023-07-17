@@ -13,7 +13,7 @@
 
 	<thead>
 		<tr>
-			<th>Id</th>
+			<th style="width: 50px;">Id</th>
 			<th>Description</th>
 			<th>
 			</th>
@@ -22,7 +22,7 @@
 	
 	<tbody>
 		<?php foreach( $azureTokens as $t) : ?>
-		<tr>
+		<tr class="clickable" onclick="window.location = '<?= appUrl('/?m=webmail&c=externalTokens&a=edit_azure&id='.$t->getWebmailAzureTokenId()) ?>';">
 			<td><?= $t->getWebmailAzureTokenId() ?></td>
 			<td><?= esc_html($t->getDescription()) ?></td>
 			<td>

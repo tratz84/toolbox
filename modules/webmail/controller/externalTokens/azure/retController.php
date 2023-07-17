@@ -2,27 +2,43 @@
 
 
 use core\controller\BaseController;
-use webmail\office365\Office365Auth;
+use core\exception\InvalidStateException;
+use webmail\service\CloudTokenService;
+use webmail\azure\Azure365Auth;
 
 class retController extends BaseController {
     
     
     public function action_index() {
         
-        $code = get_var('code');
         $state = get_var('state');
-        $session_state = get_var('session_state');
+        if (!$state || preg_match('/^wattok\\d+$/', $state) == false) {
+            throw new InvalidStateException( 'No or invalid state-var set' );
+        }
         
-        print 'hi';
+        $watId = (int)substr( $state, strlen('wattok') );
         
-        $oa = new Office365Auth();
-        $oa->setAuthUrl( 'https://login.microsoftonline.com/9bb7ad20-07f5-4b43-beb8-b60c680ea51c/oauth2/v2.0/token' );
-        $oa->setCode( $code );
-        $oa->setClientId( '29bca4e8-2abb-4a3d-9fd4-e053c2dac4b9' );
-        $oa->setClientSecret( 'jl38Q~FvEpfLv6hAj8oKYEyc1pIJfie26fN_3b~f' );
-        $oa->setRedirectUri( 'https://portal.itxplain.nl/itxplain/?m=webmail&c=office365/ret' );
-        print $oa->requestToken();
+        $ctService = object_container_get( CloudTokenService::class );
+        $wat = $ctService->readAzureToken( $watId );
         
+        $requestData = json_decode( $wat->getRequestData() );
+        
+        if (get_var('error')) {
+            $ctService->saveAzureResponseData( $wat->getWebmailAzureTokenId(), json_encode($_GET) );
+        }
+        else {
+            $oa = new Azure365Auth();
+            $oa->loadAzureTokenById( $wat->getWebmailAzureTokenId() );
+            $oa->setEndpoint( $wat->getAzureTokenUrl() );
+            $oa->setCode( get_var('code') );
+            $oa->setCodeVerifier( $requestData->code_verifier );
+            
+            $r = $oa->requestToken();
+        }
+        
+//         print $r;ex
+        
+        redirect( '/?m=webmail&c=externalTokens&a=edit_azure&id='.$wat->getWebmailAzureTokenId() );
     }
     
     
