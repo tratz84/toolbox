@@ -23,7 +23,7 @@ Context::getInstance()->enableModule('webmail');
 // core\db\mysql\MysqlTableGenerator::updateModule('webmail', true);
 // die('done');
 
-module_update_handler('webmail', '20220207');
+module_update_handler('webmail', '20230717');
 
 hook_loader(__DIR__.'/hook/');
 
@@ -44,6 +44,8 @@ $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($e
         $src->addItem('E-mail', 'Connectors',     '/?m=webmail&c=connector');
         $src->addItem('E-mail', 'Filters',        '/?m=webmail&c=filter');
         $src->addItem('E-mail', t('Maintenance'), '/?m=webmail&c=maintenance/index');
+        
+        $src->addItem('E-mail', t('External tokens'), '/?m=webmail&c=externalTokens');
     }
 }));
 

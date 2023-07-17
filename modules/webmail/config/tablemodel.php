@@ -220,5 +220,16 @@ $tb_identity->addForeignKey('webmail__identity_ibfk_1', 'connector_id', 'webmail
 $tbs[] = $tb_identity;
 
 
+$tb_azure = new TableModel( 'webmail', 'webmail_azure_token' );
+$tb_azure->addColumn( 'webmail_azure_token_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_azure->addColumn( 'connector_id',  'int' );
+$tb_azure->addColumn( 'token_type',    'varchar(16)' );
+$tb_azure->addColumn( 'description',   'varchar(255)' );
+$tb_azure->addColumn( 'request_data',  'blob' );
+$tb_azure->addColumn( 'response_data', 'blob' );
+$tb_azure->addColumn( 'created',       'datetime');
+$tbs[] = $tb_azure;
+
+
 return $tbs;
 
