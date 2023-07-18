@@ -373,6 +373,9 @@ class HordeConnector extends BaseMailConnector {
         } catch (\Exception $ex) {
             return false;
         }
+        catch (\Error $err) {
+            return false;
+        }
 //             return false;
         
         $r = $this->client->status( $folderName );
