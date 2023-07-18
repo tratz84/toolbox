@@ -101,7 +101,7 @@ class ConnectorService extends ServiceBase {
         $changes = $form->changes($connector);
         
         
-        $form->fill($connector, array('connector_id', 'description', 'connector_type', 'hostname', 'port', 'username', 'sent_connector_imapfolder_id', 'junk_connector_imapfolder_id', 'trash_connector_imapfolder_id', 'reply_move_imapfolder_id', 'active'));
+        $form->fill($connector, array('connector_id', 'description', 'connector_type', 'hostname', 'port', 'username', 'sent_connector_imapfolder_id', 'junk_connector_imapfolder_id', 'trash_connector_imapfolder_id', 'reply_move_imapfolder_id', 'active', 'azure_token_id'));
         
         if ($form->getWidgetValue('password')) {
             $connector->setPassword($form->getWidgetValue('password'));

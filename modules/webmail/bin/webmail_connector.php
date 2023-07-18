@@ -95,7 +95,7 @@ while (true) {
                 $c->setField('last_filter_change', $lastFilterChange);
                 
                 // connect
-                if ($c->getConnectorType() == 'imap' || $c->getConnectorType() == 'horde') {
+                if (in_array($c->getConnectorType(), array('imap', 'horde', 'office365_imap'))) {
                     print_info("Starting monitor for: " . $c->getDescription());
                     $im = ImapConnector::createMailConnector( $c );
                     $im->setCallbackItemImported(function($folderName, $overview, $file, $changed) use ($c) {
