@@ -90,7 +90,7 @@ class SolrMailActions extends MailActionsBase {
         $mailProperties->save();
         
         
-        if (!$connector || $connector->getConnectorType() != 'imap')
+        if (!$connector || in_array($connector->getConnectorType(), array('imap', 'office365_imap')) == false)
             return;
         
         if (!$junkImapFolder)
