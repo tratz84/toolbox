@@ -6,13 +6,13 @@ use core\db\DBObject;
 
 
 
-abstract class ListEditWidget extends ListWidget {
-
-
+abstract class ListEditDivWidget extends ListWidget {
+    
+    
     protected $objects = array();
-
+    
     protected $widgets = array();
-
+    
     protected $tableHeader = true;
     protected $strNewEntry = 'Add line';
     protected $sortable = true;
@@ -20,15 +20,14 @@ abstract class ListEditWidget extends ListWidget {
     protected $showNoResultsMessage = false;
     
     protected $mobileListHeader = null;
-    protected $mobileTemplate = null;
     
-
-
+    
+    
     public function __construct($methodObjectList) {
         $this->strNewEntry = t('Add line');
         
         $this->setName($methodObjectList);
-
+        
         $this->methodObjectList = $methodObjectList;
     }
     
@@ -37,20 +36,11 @@ abstract class ListEditWidget extends ListWidget {
     public function setMobileListHeader( $t ) { $this->mobileListHeader = $t; }
     public function getMobileListHeader() { return $this->mobileListHeader; }
     
-    public function setMobileTemplate( $tpl ) { $this->mobileTemplate = $tpl; }
-    public function getMobileTemplate() { return $this->mobileTemplate; }
     
-    public function hasMobileTemplate() {
-        if ($this->mobileTemplate !== null)
-            return true;
-        else
-            return false;
-    }
     
-
     public function getObjects() {
         $l = array();
-
+        
         foreach($this->objects as $o) {
             // default set raw object values
             if (is_a($o, DBObject::class)) {
@@ -58,29 +48,29 @@ abstract class ListEditWidget extends ListWidget {
             } else {
                 $vals = $o;
             }
-
+            
             // bind values to widgets & get value from there
             foreach($this->widgets as $w) {
                 if ($w->bindObject($o) > 0) {
                     $vals[$w->getName()] = $w->getValue();
                 }
             }
-
+            
             $l[] = $vals;
         }
-
+        
         return $l;
     }
-
-
+    
+    
     public function bind($obj) {
         $this->objects = $this->retrieveObjects($obj);
     }
-
+    
     public function addObject($obj) {
         $this->objects[] = $obj;
     }
-
+    
     public function asArray($opts=array()) {
         $r = array();
         
@@ -117,19 +107,19 @@ abstract class ListEditWidget extends ListWidget {
         
         return $v;
     }
-
-
+    
+    
     public function renderAsText() {
         $html = '';
-
-        $html = '<div class="widget list-edit-form-widget '.slugify(toolbox_get_class($this)).' " >';
-
+        
+        $html = '<div class="widget list-edit-div-form-widget '.slugify(toolbox_get_class($this)).' " >';
+        
         $html .= '<table class="sublist">';
-
+        
         if ($this->tableHeader) {
             $html .= $this->renderHeader('text');
         }
-
+        
         $html .= '<tbody class="'.($this->sortable?'sortable-container':'').'">';
         if ($this->objects) foreach($this->objects as $o) {
             $html .= $this->renderRowAsText( $o );
@@ -143,11 +133,11 @@ abstract class ListEditWidget extends ListWidget {
         }
         $html .= '</tfoot>';
         
-
+        
         $html .= '</table>';
         
         $html .= '</div>';
-
+        
         return $html;
     }
     
@@ -164,77 +154,75 @@ abstract class ListEditWidget extends ListWidget {
     public function renderHeader($method='default') {
         $html = '';
         
-        $html .= '<thead class="'.($this->hasMobileTemplate()?'hide-mobile':'').'">';
+        $html .= '<div class="list-edit-div-header">';
         if ($this->sortable) {
-            $html .= '<th></th>';
+            $html .= '<div class="th-sortable"></div>';
         }
+        
+        $colCounter = 0;
         foreach($this->widgets as $w) {
             if (is_a($w, HiddenField::class)) continue;
-            $html .= '<th class="th-'.slugify($w->getName()).'">'.esc_html($w->getLabel()).'</th>';
+            $html .= '<div class="col-'.$colCounter.' list-edit-div-header-name list-edit-div-header-'.slugify($w->getName()).'">'.esc_html($w->getLabel()).'</div>';
+            
+            $colCounter++;
         }
-        $html .= '<th></th>';
-        $html .= '</thead>';
+        $html .= '<div></div>';
+        $html .= '</div>';
         
         return $html;
     }
-
+    
     public function render() {
-
+        
         $html = '';
-
-        $html = '<div class="widget list-edit-form-widget '.slugify(toolbox_get_class($this)).' " >';
-
+        
+        $html = '<div class="widget list-edit-div-form-widget '.slugify(toolbox_get_class($this)).' " >';
+        
         $html .= '<input type="hidden" class="method-object-list" value="'.esc_attr($this->getName()).'" />';
         $html .= '<input type="hidden" class="form-class" value="'.esc_attr(toolbox_get_class($this)).'" />';
-
-        if ($this->mobileTemplate) {
-            $html .= '<div class="mobile-list-edit show-mobile" template="'.esc_attr($this->mobileTemplate).'">';
-            $html .= '<div class="mobile-list-edit-header">'.esc_html($this->mobileListHeader).'</div>';
-            $html .= '<div class="mobile-list-edit-items"></div>';
-            $html .= '</div>';
-        }
         
+        $html .= '<div class="div-sublist">';
         
-        $html .= '<table class="sublist">';
-
         if ($this->tableHeader) {
             $html .= $this->renderHeader();
         }
-
-        $html .= '<tbody class="list-edit-widget-'.slugify($this->methodObjectList).' '.($this->sortable?'sortable-container':'').'">';
+        
+        $html .= '<div class="list-edit-div-widget-record-container list-edit-div-widget-'.slugify($this->methodObjectList).' '.($this->sortable?'sortable-container':'').'">';
         if ($this->objects) foreach($this->objects as $o) {
+            $html .= '<div class="list-edit-div-widget-record">';
             $html .= $this->renderRow( $o );
+            $html .= '</div>';
         }
         
         if ($this->showNoResultsMessage) {
-            $html .= "<tr class=\"no-results\"><td colspan=\"".$this->getColumnCount()."\">".t('No results found')."</td></tr>";
+            $html .= "<div class=\"no-results\"><td colspan=\"".$this->getColumnCount()."\">".t('No results found')."</div>";
         }
         
-        $html .= '</tbody>';
+        $html .= '</div>';
         
-        $html .= '<tfoot></tfoot>';
-
-        $html .= '</table>';
+        $html .= '<div class="div-sublist-footer"></div>';
+        
+        $html .= '</div>';      // class="div-sublist"
         
         
         if ($this->getInfoText()) {
             $html .= infopopup($this->getInfoText());
         }
-
-
+        
+        
         $html .= '<div class="add-entry-container action-box"><span><a class="add-record" href="javascript:void(0);">'.$this->strNewEntry.'</a></span></div>';
         $html .= '</div>';
-
+        
         return $html;
     }
-
+    
     public function renderRowAsText($obj=array()) {
         $html = '<tr>';
-
+        
         if ($this->sortable) {
             $html .= '<td class="td-sortable"><span class="fa fa-sort handler-sortable"></span></td>';
         }
-
+        
         $emptyFields = array();
         
         // bind values
@@ -243,91 +231,94 @@ abstract class ListEditWidget extends ListWidget {
                 $emptyFields[] = $w->getName();
             }
         }
-
+        
         // render record
         for($x=0; $x < count($this->widgets); $x++) {
             $w = $this->widgets[$x];
             if (is_a($w, HiddenField::class)) continue;
-
+            
             $html .= '<td class="input-'.slugify($w->getName()).'">';
-
+            
             if (in_array($w->getName(), $emptyFields)) {
                 
             } else {
                 $html .= $w->renderAsText();
             }
-
+            
             $html .= '</td>';
         }
-
+        
         $html .= '</tr>';
-
+        
         return $html;
     }
-
+    
     public function renderRow($obj=array()) {
-        $html = '<tr class="'.($this->hasMobileTemplate()?'hide-mobile':'').'">';
-
+        $html = '<div class="list-edit-div-record">';
+        
         if ($this->sortable) {
-            $html .= '<td class="td-sortable"><span class="fa fa-sort handler-sortable"></span></td>';
+            $html .= '<div class="td-sortable"><span class="fa fa-sort handler-sortable"></span></div>';
         }
-
+        
         // bind values
         foreach($this->widgets as $w) {
             $w->bindObject( $obj );
         }
-
+        
         // render hidden
         $hiddenHtml = '';
         foreach($this->widgets as $sw) {
             if (is_a($sw, HiddenField::class))
                 $hiddenHtml .= $sw->render();
         }
-
+        
         // render record
+        $colCounter=0;
         for($x=0; $x < count($this->widgets); $x++) {
             $w = $this->widgets[$x];
             if (is_a($w, HiddenField::class)) continue;
-
-            $html .= '<td class="input-'.slugify($w->getName()).'" widget-name="'.slugify($w->getName()).'">';
-
+            
+            $html .= '<div class="col-'.$colCounter.' input-'.slugify($w->getName()).'" widget-name="'.slugify($w->getName()).'">';
+            
             // put all hidden fields in first <td>
             if ($hiddenHtml) {
                 $html .= $hiddenHtml;
                 $hiddenHtml = '';
             }
-
-
+            
+            
             $html .= $w->render();
-
-            $html .= '</td>';
+            
+            $html .= '</div>';
+            
+            $colCounter++;
         }
-
-        $html .= '<td class="action">';
+        
+        $html .= '<div class="action">';
         $html .= '<a href="javascript:void(0);"><span class="fa fa-remove row-delete"></span></a>';
-        $html .= '</td>';
-
-        $html .= '</tr>';
-
+        $html .= '</div>';
+        
+        $html .= '</div>';
+        
         return $html;
     }
-
-
-
+    
+    
+    
     public function changes(DBObject $obj) {
-
+        
         $fields = array();
         foreach($this->widgets as $w) {
             if (is_a($w, HiddenField::class)) continue;
-
+            
             $fields[] = $w->getName();
         }
-
-
+        
+        
         $objects = $this->retrieveObjects($obj);
-
+        
         $changes = array();
-
+        
         $old = array();
         foreach($objects as $o) {
             $vals = array();
@@ -342,30 +333,30 @@ abstract class ListEditWidget extends ListWidget {
             foreach($fields as $f) {
                 if (isset($o[$f]))
                     $vals[$f] = $o[$f];
-                else
-                    $vals[$f] = null;
+                    else
+                        $vals[$f] = null;
             }
             $new[] = $vals;
         }
-
+        
         for($x=0; $x < count($old) && $x < count($new); $x++) {
             foreach($old[$x] as $f => $v) {
                 $v2 = $new[$x][$f];
-
-
+                
+                
                 // price? => compare in cents
                 if (strpos($f, 'price') !== false) {
                     $v = round(strtodouble($v) * 100);
                     $v2 = round(strtodouble($v2) * 100);
                 }
-
+                
                 if ($v == $v2) {
                     unset($old[$x][$f]);
                     unset($new[$x][$f]);
                 }
             }
         }
-
+        
         $changes = array();
         for($x=0; $x < max(count($old), count($new)); $x++) {
             if (($x < count($old) && count($old[$x])) || ($x < count($new) && count($new[$x]))) {
@@ -375,8 +366,8 @@ abstract class ListEditWidget extends ListWidget {
                 );
             }
         }
-
-
+        
+        
         if (count($changes)) {
             return array($this->methodObjectList => $changes);
         } else {

@@ -16,7 +16,7 @@ function handleFormActions(actionsContainer) {
 	
 	
 	$(actionsContainer).find('.form-generator').submit(function() {
-		$(actionsContainer).find('.list-form-widget, .list-edit-form-widget').each(function(index, node) {
+		$(actionsContainer).find('.list-form-widget, .list-edit-form-widget, list-edit-div-form-widget').each(function(index, node) {
 			handleCounters( node );
 		});
 	});
@@ -319,6 +319,11 @@ function handleFormActions(actionsContainer) {
 		node.lefw = lefw;
 	});
 	
+	$(actionsContainer).find('.widget.list-edit-div-form-widget').each(function(index, node) {
+		var lefw = new ListEditDivFormWidget( node );
+		node.lefw = lefw;
+	});
+	
 	$(window).trigger('form-actions-set');
 }
 
@@ -572,6 +577,116 @@ function ListEditFormWidget(container) {
 		var listName = $(this.container).find('.method-object-list').val();
 		
 		rows.each(function(index, node) {
+			$(node).find('input, select, textarea').each(function(index2, node2) {
+				var elementName = node2.name;
+				
+				if (elementName.indexOf('[') != -1) {
+					elementName = elementName.substr(elementName.lastIndexOf('[')+1);
+					elementName = elementName.substr(0, elementName.indexOf(']'));
+				}
+				
+				
+				elementName = listName + '[' + index + '][' + elementName + ']';
+				
+				node2.name = elementName;
+			});
+		});
+		
+		$(this.container).trigger('handleCountersExecuted');
+	};
+	
+	
+	this.init();
+}
+
+
+
+function ListEditDivFormWidget(container) {
+	this.container = container;
+	
+	this.callback_addRecord = null;
+	this.callback_deleteRecord = null;
+	
+	this.init = function() {
+		var me = this;
+		
+		$(this.container).find('.add-record').click(function() {
+			me.addRecord();
+		});
+		
+		$(this.container).find('.row-delete').click(function() {
+			me.deleteRow( $(this).closest('.list-edit-div-widget-record') );
+		});
+		
+		this.handleCounters( );
+	};
+	
+	
+	
+	this.setCallbackAddRecord = function(callback) { this.callback_addRecord = callback; }
+	this.setCallbackDeleteRecord = function(callback) { this.callback_deleteRecord = callback; }
+	
+	
+	this.addRecord = function(callback) {
+		let formClassName = $(this.container).find('.form-class').val();
+		
+		$.ajax({
+			url: appUrl('/?m=core&c=form/formListEdit'),
+			type: 'POST',
+			data: {
+				formClass: formClassName
+			},
+			success: function(data, xhr, textStatus) {
+				var row = $(data);
+				
+				$(row).find('.row-delete').click(function(evt) {
+					this.deleteRow( $(evt.target).closest('.list-edit-div-widget-record') );
+				}.bind(this));
+				
+				let rowContainer = $('<div class="list-edit-div-widget-record" />');
+				rowContainer.append( row );
+				
+				$(this.container).find('.div-sublist > .list-edit-div-widget-record-container').append( rowContainer );
+				
+				applyWidgetFields( row );
+				
+				this.handleCounters();
+				
+				if (callback) {
+					callback( row );
+				}
+				
+				if (this.callback_addRecord) {
+					this.callback_addRecord( row );
+				}
+				
+				$(this).trigger('list-edit-add-record');
+				
+			}.bind(this)
+		});
+	};
+	
+	
+	this.deleteRow = function(node) {
+		$(node).remove();
+		
+		if (this.callback_deleteRecord) {
+			this.callback_deleteRecord( node );
+		}
+		
+		this.updateMobileView();
+	};
+	
+	// set element names for POST
+	this.handleCounters = function () {
+		var rows = $(this.container).find('.list-edit-div-record');
+		
+		var listName = $(this.container).find('.method-object-list').val();
+		
+		rows.each(function(index, node) {
+			
+			node.listCounter = index;
+			
 			$(node).find('input, select, textarea').each(function(index2, node2) {
 				var elementName = node2.name;
 				
