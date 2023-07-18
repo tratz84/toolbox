@@ -14,8 +14,10 @@ class NotEmptyValidator extends BaseValidator {
     public function getMessage() { return t('Field contains no value'); }
     
     public function validate($widget) {
-        
-        $v = trim( $widget->getValue() );
+        $v = $widget->getValue();
+        if ($v === null)
+            $v = '';
+        $v = trim( $v );
         
         if ($v == '')
             return false;
