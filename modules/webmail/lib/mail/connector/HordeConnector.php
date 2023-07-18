@@ -17,6 +17,8 @@ use Horde_Imap_Client_Socket;
 use webmail\mail\MailProperties;
 use webmail\mail\render\MysqlMailRender;
 use webmail\model\Connector;
+use webmail\service\CloudTokenService;
+use webmail\model\WebmailAzureToken;
 
 
 class HordeConnector extends BaseMailConnector {
@@ -47,14 +49,43 @@ class HordeConnector extends BaseMailConnector {
     
     
     public function connect() {
-        if ($this->connector->getPort() == 993) {
-            $secure = 'ssl';
-        } else {
-            $secure = 'tls';
+        
+        if ($this->connector->getConnectorType() == 'office365_imap') {
+            $azureTokenId = $this->connector->getAzureTokenId();
+            $ctService = object_container_get( CloudTokenService::class );
+            $azureToken = $ctService->readAzureToken( $azureTokenId );
+            /** @var $azureToken WebmailAzureToken */
+            
+            if (!$azureToken) {
+                $this->errors = array(
+                    'WebmailAzureToken-object not found'
+                );
+                return false;
+            }
+            
+            $accessToken = $ctService->getAzureAccessToken( $azureToken->getWebmailAzureTokenId() );
+            if (!$accessToken) {
+                $this->errors = array(
+                    'Error fetching access token'
+                );
+                return false;
+            }
+            
+            $opts = array();
+            $opts['username'] = $azureToken->getAzureSmtpUsername();
+            $authv2 = sprintf("user=%s\x01auth=Bearer %s\x01\x01", $azureToken->getAzureSmtpUsername(), $accessToken);
+            $opts['xoauth2_token'] = base64_encode($authv2);
+            $opts['password'] = 'XOAUTH2';
+            $opts['hostspec'] = 'outlook.office365.com';
+            $opts['port']     = 993;
+            $opts['secure']   = 'ssl';
         }
-        
-        
-        try {
+        else {
+            if ($this->connector->getPort() == 993) {
+                $secure = 'ssl';
+            } else {
+                $secure = 'tls';
+            }
             
             $opts = array();
             $opts['username'] = $this->connector->getUsername();
@@ -63,9 +94,14 @@ class HordeConnector extends BaseMailConnector {
             $opts['port']     = $this->connector->getPort();
             $opts['secure']   = $secure;
             
-            if (is_debug()) {
-                $opts['debug'] = ctx()->getDataDir() . '/horde-imap.log';
-            }
+        }
+        
+        if (is_debug()) {
+            $opts['debug'] = ctx()->getDataDir() . '/horde-imap.log';
+        }
+        
+        try {
+            
             
             $this->client = new Horde_Imap_Client_Socket( $opts );
         } catch (\Exception $ex) {

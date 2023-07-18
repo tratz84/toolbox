@@ -14,6 +14,7 @@ use webmail\cron\WebmailSyncJob;
 use webmail\service\ConnectorService;
 
 require_once __DIR__.'/lib/functions/misc.php';
+require_once __DIR__.'/lib/functions/azure.php';
 
 require_once __DIR__.'/lib/3rdparty/horde/autoload_horde.php';
 

@@ -42,17 +42,28 @@ class ConnectorForm extends BaseForm {
         $twc->addTabWidget( 'base', new SelectField('connector_type', '', array(
 //             'imap'  => 'imap (native)',
             'horde' => 'imap (horde)',
-            'office365' => 'Office 365 (imap)'
+            'office365_imap' => 'Office 365 (imap)'
         ), 'Soort'));
 //             'pop3'  => 'pop3'), 'Soort'));
         
+        // host settings
+        $wcHostSettings = new WidgetContainer( 'host-settings' );
+        $wcHostSettings->addWidget( new TextField('hostname', '', 'Hostname') );
         
-        $twc->addTabWidget( 'base', new TextField('hostname', '', 'Hostname'));
+        $wcHostSettings->addWidget( new NumberField('port', '', 'Port'));
+        $wcHostSettings->addWidget( new TextField('username', '', 'Username'));
+        $wcHostSettings->addWidget( new TextField('password', '', 'Password'));
         
-        $twc->addTabWidget( 'base', new NumberField('port', '', 'Port'));
+        $twc->addTabWidget( 'base', $wcHostSettings );
         
-        $twc->addTabWidget( 'base', new TextField('username', '', 'Username'));
-        $twc->addTabWidget( 'base', new TextField('password', '', 'Password'));
+        // azure stuff
+        $mapAzureTokenIds = map_azureOptions();
+        
+        $wcAzureSettings = new WidgetContainer( 'azure-settings' );
+        $wcAzureSettings->addWidget( new SelectField('azure_token_id', '', $mapAzureTokenIds, 'Azure token'));
+        $twc->addTabWidget( 'base', $wcAzureSettings );
+        
+        
         
         $mapFolders = array();
         $mapFolders[] = 'Maak uw keuze';
@@ -69,9 +80,24 @@ class ConnectorForm extends BaseForm {
         $this->addImapFolders();
         
         $this->addValidator('description', new NotEmptyValidator());
-        $this->addValidator('hostname', new NotEmptyValidator());
-        $this->addValidator('username', new NotEmptyValidator());
+        $this->addValidator('hostname', function($form) {
+            if ( $form->getWidgetValue('connector_type') == 'office365_imap' ) return;
+            
+            $v = new NotEmptyValidator();
+            if ( $v->validate( $form->getWidget('hostname') ) == false )
+                return $v->getMessage();
+        });
+        $this->addValidator('username', function($form) {
+            if ( $form->getWidgetValue('connector_type') == 'office365_imap' ) return;
+            
+            $v = new NotEmptyValidator();
+            if ( $v->validate( $form->getWidget('username') ) == false )
+                return $v->getMessage();
+        });
+        
         $this->addValidator('port', function($form) {
+            if ( $form->getWidgetValue('connector_type') == 'office365_imap' ) return;
+            
             $p = (int)$form->getWidgetValue('port');
             
             if ($p < 1 || $p > 65535) {

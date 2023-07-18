@@ -155,6 +155,15 @@ class ConnectorBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'azure_token_id' => 
+  array (
+    'Field' => 'azure_token_id',
+    'Type' => 'int',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -224,6 +233,10 @@ class ConnectorBase extends \core\db\DBObject {
 		
 	public function setReplyMoveImapfolderId($p) { $this->setField('reply_move_imapfolder_id', $p); }
 	public function getReplyMoveImapfolderId() { return $this->getField('reply_move_imapfolder_id'); }
+	
+		
+	public function setAzureTokenId($p) { $this->setField('azure_token_id', $p); }
+	public function getAzureTokenId() { return $this->getField('azure_token_id'); }
 	
 	
 }

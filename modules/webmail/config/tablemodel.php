@@ -51,6 +51,7 @@ $tb_connector->addColumn('connector_id',                  'int', ['key' => 'PRIM
 $tb_connector->addColumn('user_id',                       'int');
 $tb_connector->addColumn('description',                   'varchar(255)');
 $tb_connector->addColumn('connector_type',                'varchar(16)');
+$tb_connector->addColumn('azure_token_id',                'int');
 $tb_connector->addColumn('hostname',                      'varchar(255)');
 $tb_connector->addColumn('port',                          'int');
 $tb_connector->addColumn('username',                      'varchar(255)');

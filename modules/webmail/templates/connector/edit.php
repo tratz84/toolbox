@@ -29,11 +29,31 @@ $(document).ready(function() {
 	if ($('[name=connector_id]').val() == '') {
 		autosetPort();
 	}
+
+	$('[name=connector_type]').on('change', function() {
+		updateFormSettings();
+	});
+	
+	updateFormSettings();
 });
 
 $('[name=connector_type]').change(function() {
 	autosetPort();
 });
+
+function updateFormSettings() {
+	let connector_type = $('[name=connector_type]').val();
+	
+	if (connector_type == 'office365_imap') {
+		$('.widget-container-host-settings').hide();
+		$('.widget-container-azure-settings').show();
+	}
+	else {
+		$('.widget-container-host-settings').show();
+		$('.widget-container-azure-settings').hide();
+	}
+}
+
 
 function autosetPort() {
 	if ($('[name=connector_type]').val() == 'imap') {

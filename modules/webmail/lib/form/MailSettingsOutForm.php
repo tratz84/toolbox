@@ -43,13 +43,7 @@ class MailSettingsOutForm extends BaseForm {
         
         // azure token stuff
         if (ctx()->isExperimental()) {
-            $ctService = object_container_get( CloudTokenService::class );
-            $azureTokens = $ctService->readAzureTokens();
-            $mapTokens = array();
-            $mapTokens[''] = t('Make your choice');
-            foreach($azureTokens as $at) {
-                $mapTokens[ $at->getWebmailAzureTokenId() ] = $at->getDescription();
-            }
+            $mapTokens = map_azureOptions();
             
             $azureSettings = new WidgetContainer( 'azure-settings' );
             $azureTokenId = new SelectField( 'azure_token_id', null, $mapTokens, 'Azure token' );

@@ -39,6 +39,10 @@ abstract class BaseMailConnector {
             $hc = new HordeConnector( $connector );
             return $hc;
         }
+        else if ($connector->getConnectorType() == 'office365_imap') {
+            $hc = new HordeConnector( $connector );
+            return $hc;
+        }
         else if ($connector->getConnectorType() == 'pop3') {
             $pc = new Pop3Connector($connector);
             return $pc;
