@@ -169,7 +169,7 @@ class SendMail {
 //                     throw new ResourceException('/usr/sbin/sendmail not found');
 //                 }
             }
-        } if ($settings['server_type'] == 'azure') {
+        } else if ($settings['server_type'] == 'azure') {
             $ctService = object_container_get( CloudTokenService::class );
             $wat = $ctService->readAzureToken( $settings['azure_token_id'] );
             
@@ -187,9 +187,9 @@ class SendMail {
             $transport->setUsername( $wat->getAzureSmtpUsername() );
             $transport->setPassword( $token );
             
-        } else {
+        } else if ($settings['server_type'] == 'smtp') {
             // TLS security for transport?
-            $transport_security = null;
+            $transport_security = '';
             if (isset($settings['mail_tls']) && $settings['mail_tls']) {
                 $transport_security = 'tls';
             }
@@ -199,11 +199,12 @@ class SendMail {
                 $transport->setUsername($settings['mail_username']);
                 $transport->setPassword($settings['mail_password']);
             }
-            
+        }
+        else {
+            throw new InvalidStateException( 'Unknown servertype' );
         }
         
         $message = $this->buildMessage();
-        
         $mailer = new \Swift_Mailer($transport);
         
 //         $mailLogger = new \Swift_Plugins_Loggers_ArrayLogger();
@@ -219,7 +220,7 @@ class SendMail {
 //             print $mailLogger->dump();exit;
             
             try {
-                $r = $mailer->send( $message );
+                $r = @$mailer->send( $message );
             } catch (\Exception $ex) {
                 $this->error = $ex->getMessage();
                 ctx()->setLastError( $ex->getMessage() );
