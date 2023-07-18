@@ -4,12 +4,13 @@
 namespace webmail\service;
 
 
-use core\service\ServiceBase;
-use webmail\model\WebmailAzureTokenDAO;
+use base\service\SettingsService;
 use core\exception\ObjectNotFoundException;
-use webmail\model\WebmailAzureToken;
-use webmail\form\AzureTokenForm;
+use core\service\ServiceBase;
 use webmail\azure\Azure365Auth;
+use webmail\form\AzureTokenForm;
+use webmail\model\WebmailAzureToken;
+use webmail\model\WebmailAzureTokenDAO;
 
 class CloudTokenService extends ServiceBase {
     
@@ -62,7 +63,7 @@ class CloudTokenService extends ServiceBase {
             $wat = new WebmailAzureToken();
         }
         
-        $form->fill( $wat, array('description', 'azure_authorization_url', 'azure_token_url', 'azure_client_id', 'azure_client_secret') );
+        $form->fill( $wat, array('description', 'azure_authorization_url', 'azure_token_url', 'azure_client_id', 'azure_client_secret', 'azure_smtp_username') );
         
         $wat->save();
         
@@ -98,10 +99,23 @@ class CloudTokenService extends ServiceBase {
     
     
     public function deleteAzureToken( $webmailAzureTokenId ) {
+        // fetch, throws exception if not exists
         $wat = $this->readAzureToken($webmailAzureTokenId);
         
+        // delete token
         $watDao = new WebmailAzureTokenDAO();
         $watDao->delete( $webmailAzureTokenId );
+        
+        // update smtp-server settings to 'local', if set to this token
+        $emailService = object_container_get(EmailService::class);
+        $mailServerSettings = $emailService->getMailServerSettings();
+        if ($mailServerSettings['server_type'] == 'azure' && $mailServerSettings['azure_token_id'] == $webmailAzureTokenId) {
+            $settingsService = object_container_get( SettingsService::class );
+            $settingsService->updateValue('webmail_server_type', 'local');
+        }
+        
+        // TODO: update connectors, if set to this token
+        
     }
     
     

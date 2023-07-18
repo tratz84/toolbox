@@ -27,12 +27,14 @@ $('[name=server_type]').change(function() { toggleForm(); });
 function toggleForm() {
 	var server_type = $('[name=server_type]').val();
 
-	var widgets = $('.mail-hostname-widget, .mail-port-widget, .mail-username-widget, .mail-password-widget');
+	var widgets = $('.widget-container-smtp-settings, .widget-container-azure-settings');
+	widgets.hide();
 	
 	if (server_type == 'local') {
-		widgets.hide();
-	} else {
-		widgets.show();
+	} else if (server_type == 'smtp') {
+		$('.widget-container-smtp-settings').show();
+	} else if (server_type == 'azure') {
+		$('.widget-container-azure-settings').show();
 	}
 }
 

@@ -42,8 +42,8 @@ class ConnectorForm extends BaseForm {
         $twc->addTabWidget( 'base', new SelectField('connector_type', '', array(
 //             'imap'  => 'imap (native)',
             'horde' => 'imap (horde)',
-            'office365' => 'Office 365 (imap/horde)'
-        )));
+            'office365' => 'Office 365 (imap)'
+        ), 'Soort'));
 //             'pop3'  => 'pop3'), 'Soort'));
         
         

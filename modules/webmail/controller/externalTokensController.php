@@ -38,6 +38,10 @@ class externalTokensController extends BaseController {
             $wat = $ctService->readAzureToken( get_var('id') );
             $this->form->bind( $wat );
             $this->isNew = false;
+            
+            
+//             print $ctService->getAzureAccessToken( get_var('id') );
+//             exit;
         }
         else {
             $this->isNew = true;
@@ -70,29 +74,7 @@ class externalTokensController extends BaseController {
         }
         
         if ($wat) {
-            $r = $wat->getResponseData();
-            
-            if ($r) {
-                $json = json_decode( $r );
-                
-                if ($json && isset($json->token_type)) {
-                    $this->form->getWidget('status')->setValue( 'OK' );
-                }
-                else if ($json) {
-                    if (isset($json->error)) {
-                        $this->form->getWidget('status')->setValue( t('Error') . ': '. $json->error . ', '. $json->error_description );
-                    }
-                    else {
-                        $this->form->getWidget('status')->setValue( t('Unknown error') );
-                    }
-                }
-                else {
-                    $this->form->getWidget('status')->setValue( t('Invalid response') );
-                }
-            }
-            else {
-                $this->form->getWidget('status')->setValue( t('Token not set') );
-            }
+            $this->form->getWidget('status')->setValue( $wat->getConnectionStatus() );
         }
         
         $this->form->getWidget('request_token')->setValue(0);
@@ -105,11 +87,8 @@ class externalTokensController extends BaseController {
         $ctService = object_container_get( CloudTokenService::class );
         $ctService->deleteAzureToken( get_var('id') );
         
-        
         redirect( '/?m=webmail&c=externalTokens' );
     }
-    
-    
     
     
 }

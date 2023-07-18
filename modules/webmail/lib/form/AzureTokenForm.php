@@ -4,6 +4,7 @@ namespace webmail\form;
 
 use core\forms\validator\NotEmptyValidator;
 use webmail\service\CloudTokenService;
+use core\forms\HtmlField;
 
 class AzureTokenForm extends \core\forms\CodegenBaseForm {
 
@@ -49,22 +50,15 @@ class AzureTokenForm extends \core\forms\CodegenBaseForm {
 		$w10 = new \core\forms\CopyToClipboardField('return_url', NULL, t('Return url'));
 		$w5->addWidget( $w10 );
 		$w10->setInfoText( t('Has to be set in Azure') );
-		$w11 = new \core\forms\FieldSetContainer('container-status', t('Status'));
-		$this->addWidget( $w11 );
+		$w11 = new \core\forms\TextField('azure_smtp_username', NULL, t('SMTP Username'));
+		$w5->addWidget( $w11 );
+		$w12 = new \core\forms\FieldSetContainer('container-status', t('Status'));
+		$this->addWidget( $w12 );
 		
-		$w12 = new \core\forms\HtmlField('status', NULL, t('Status'));
-		$w11->addWidget( $w12 );
+		$w13 = new \core\forms\HtmlField('status', NULL, t('Status'));
+		$w12->addWidget( $w13 );
 		
 	}
-
-
-
-
-
-
-
-
-
 
 
 }

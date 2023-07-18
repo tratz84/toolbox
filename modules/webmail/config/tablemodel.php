@@ -231,6 +231,7 @@ $tb_azure->addColumn( 'azure_authorization_url', 'varchar(512)' );
 $tb_azure->addColumn( 'azure_token_url',         'varchar(512)' );
 $tb_azure->addColumn( 'azure_client_id',         'varchar(128)' );
 $tb_azure->addColumn( 'azure_client_secret',     'varchar(128)' );
+$tb_azure->addColumn( 'azure_smtp_username',     'varchar(128)' );
 $tb_azure->addColumn( 'refresh_timestamp',       'datetime');
 $tb_azure->addColumn( 'expires_in',              'int');
 $tb_azure->addColumn( 'created',                 'datetime');

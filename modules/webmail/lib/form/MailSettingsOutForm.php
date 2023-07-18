@@ -8,6 +8,9 @@ use core\forms\TextField;
 use core\forms\validator\NumberValidator;
 use core\forms\HiddenField;
 use core\forms\CheckboxField;
+use core\forms\WidgetContainer;
+use webmail\service\CloudTokenService;
+use core\forms\validator\NotEmptyValidator;
 
 class MailSettingsOutForm extends BaseForm {
     
@@ -16,21 +19,53 @@ class MailSettingsOutForm extends BaseForm {
         
         $this->addWidget(new HiddenField('send_test'));
         
-        $this->addWidget(new SelectField('server_type', '', array('local' => 'Local', 'smtp' => 'SMTP Server'), t('Servertype')));
+        $serverTypes = array();
+        $serverTypes['local'] = 'Local';
+        $serverTypes['smtp']  = 'SMTP Server';
         
-        $this->addWidget(new TextField('mail_hostname', '', t('Hostname')));
-        $this->addWidget(new TextField('mail_port', '25', t('Port')));
-        $this->addWidget(new CheckboxField('mail_tls', '0', t('TLS')));
+        if (ctx()->isExperimental()) {
+            $serverTypes['azure'] = 'Office 365 / Azure';
+        }
         
-        $this->addWidget(new TextField('mail_username', '', t('Username')));
-        $this->addWidget(new TextField('mail_password', '', t('Password')));
-        $this->getWidget('mail_password')->disableAutocomplete();
+        $this->addWidget(new SelectField('server_type', '', $serverTypes, t('Servertype')));
+
+        // smtp settings
+        $smtpSettings = new WidgetContainer( 'smtp-settings' );
+        
+        $smtpSettings->addWidget(new TextField('mail_hostname', '', t('Hostname')));
+        $smtpSettings->addWidget(new TextField('mail_port', '25', t('Port')));
+        $smtpSettings->addWidget(new CheckboxField('mail_tls', '0', t('TLS')));
+        
+        $smtpSettings->addWidget(new TextField('mail_username', '', t('Username')));
+        $smtpSettings->addWidget(new TextField('mail_password', '', t('Password')));
+        $smtpSettings->getWidget('mail_password')->disableAutocomplete();
+        $this->addWidget( $smtpSettings);
+        
+        // azure token stuff
+        if (ctx()->isExperimental()) {
+            $ctService = object_container_get( CloudTokenService::class );
+            $azureTokens = $ctService->readAzureTokens();
+            $mapTokens = array();
+            $mapTokens[''] = t('Make your choice');
+            foreach($azureTokens as $at) {
+                $mapTokens[ $at->getWebmailAzureTokenId() ] = $at->getDescription();
+            }
+            
+            $azureSettings = new WidgetContainer( 'azure-settings' );
+            $azureTokenId = new SelectField( 'azure_token_id', null, $mapTokens, 'Azure token' );
+            $azureSettings->addWidget( $azureTokenId );
+            
+            $this->addWidget( $azureSettings );
+            
+            $this->addValidator( 'azure_token_id', new NotEmptyValidator() );
+        }
+        
         
         
         $this->addValidator('mail_port', function($form) {
             $st = $form->getWidgetValue('server_type');
             
-            if ($st == 'local') {
+            if ($st != 'smtp') {
                 return;
             }
             

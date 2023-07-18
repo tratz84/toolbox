@@ -128,6 +128,15 @@ class WebmailAzureTokenBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'azure_smtp_username' => 
+  array (
+    'Field' => 'azure_smtp_username',
+    'Type' => 'varchar(128)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -185,6 +194,10 @@ class WebmailAzureTokenBase extends \core\db\DBObject {
 		
 	public function setExpiresIn($p) { $this->setField('expires_in', $p); }
 	public function getExpiresIn() { return $this->getField('expires_in'); }
+	
+		
+	public function setAzureSmtpUsername($p) { $this->setField('azure_smtp_username', $p); }
+	public function getAzureSmtpUsername() { return $this->getField('azure_smtp_username'); }
 	
 	
 }

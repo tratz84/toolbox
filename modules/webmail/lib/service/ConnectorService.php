@@ -227,14 +227,27 @@ class ConnectorService extends ServiceBase {
         
         $l = $fDao->readAll();
         
+        $connectors = array();
+        
         $objs = array();
         foreach($l as $f) {
+            
+            $connector = null;
+            $connectorId = $f->getConnectorId();
+            if (isset($connectors[$connectorId])) {
+                $connector = $connectors[$connectorId];
+            }
+            else {
+                $connector = $connectors[$connectorId] = $this->readConnector( $connectorId );
+            }
+            
             $objs[] = array(
-                'filter_id' => $f->getFilterId(),
-                'name'      => $f->getFilterName(),
-                'active'    => $f->getActive(),
-                'edited'    => $f->getEdited(),
-                'created'   => $f->getCreated()
+                'filter_id'      => $f->getFilterId(),
+                'connector_name' => $connector ? $connector->getDescription() : '',
+                'name'           => $f->getFilterName(),
+                'active'         => $f->getActive(),
+                'edited'         => $f->getEdited(),
+                'created'        => $f->getCreated()
             );
         }
         

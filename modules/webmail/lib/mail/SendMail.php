@@ -11,6 +11,7 @@ use webmail\service\ConnectorService;
 use webmail\solr\SolrMail;
 use webmail\solr\SolrMailQuery;
 use webmail\mail\action\MailActionsBase;
+use webmail\service\CloudTokenService;
 
 class SendMail {
     
@@ -168,6 +169,24 @@ class SendMail {
 //                     throw new ResourceException('/usr/sbin/sendmail not found');
 //                 }
             }
+        } if ($settings['server_type'] == 'azure') {
+            $ctService = object_container_get( CloudTokenService::class );
+            $wat = $ctService->readAzureToken( $settings['azure_token_id'] );
+            
+            $token = $ctService->getAzureAccessToken( $wat->getWebmailAzureTokenId() );
+            if (!$token) {
+                $message = t('Azure access token not set');
+                $this->error = $message;
+                ctx()->setLastError( $message );
+                return false;
+            }
+            
+            $transport = new \Swift_SmtpTransport( 'smtp.office365.com', 587, 'tls' );
+            $transport->setAuthMode( 'XOAUTH2' );
+            
+            $transport->setUsername( $wat->getAzureSmtpUsername() );
+            $transport->setPassword( $token );
+            
         } else {
             // TLS security for transport?
             $transport_security = null;

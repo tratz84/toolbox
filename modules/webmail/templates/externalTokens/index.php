@@ -15,6 +15,7 @@
 		<tr>
 			<th style="width: 50px;">Id</th>
 			<th>Description</th>
+			<th style="width: 150px;">Status</th>
 			<th>
 			</th>
 		</tr>
@@ -25,6 +26,7 @@
 		<tr class="clickable" onclick="window.location = '<?= appUrl('/?m=webmail&c=externalTokens&a=edit_azure&id='.$t->getWebmailAzureTokenId()) ?>';">
 			<td><?= $t->getWebmailAzureTokenId() ?></td>
 			<td><?= esc_html($t->getDescription()) ?></td>
+			<td><?= $t->getConnectionStatus() ?></td>
 			<td>
 				
 			</td>

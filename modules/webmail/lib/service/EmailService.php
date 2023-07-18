@@ -455,6 +455,11 @@ class EmailService extends ServiceBase {
             $settingsService->updateValue('webmail_mail_password', $mail_password);
         }
         
+        if ($form->getWidget('azure_token_id')) {
+            $azure_token_id = $form->getWidgetValue('azure_token_id');
+            $settingsService->updateValue('webmail_azure_token_id', $azure_token_id);
+        }
+        
         $ctx = object_container_get(Context::class);
         $ctx->flushSettingCache();
     }
@@ -471,8 +476,10 @@ class EmailService extends ServiceBase {
         $s['mail_username'] = $ctx->getSetting('webmail_mail_username');
         $s['mail_password'] = $ctx->getSetting('webmail_mail_password');
         
+        $s['azure_token_id'] = $ctx->getSetting('webmail_azure_token_id');
+        
         // default to local
-        if ($s['server_type'] != 'local' && $s['server_type'] != 'smtp')
+        if (in_array($s['server_type'], array('local', 'smtp', 'azure')) == false)
             $s['server_type'] = 'local';
         
         return $s;

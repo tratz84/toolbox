@@ -48,6 +48,13 @@ t.setSortUpdate(function(evt) {
 // });
 
 t.addColumn({
+	fieldName: 'connector_name',
+	fieldDescription: 'Connector naam',
+	fieldType: 'text',
+	searchable: false
+});
+
+t.addColumn({
 	fieldName: 'name',
 	fieldDescription: 'Naam',
 	fieldType: 'text',
