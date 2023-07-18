@@ -34,7 +34,7 @@
 		<?php endforeach; ?>
 		<?php if (count($azureTokens) == 0) : ?>
 		<tr>
-			<td colspan="3" class="no-results-found">
+			<td colspan="4" class="no-results-found">
 				<?= t('No results found') ?>
 			</td>
 		</tr>
