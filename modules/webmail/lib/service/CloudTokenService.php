@@ -20,7 +20,7 @@ class CloudTokenService extends ServiceBase {
             $u = 'https://portal.itxplain.nl/itxplain/?m=webmail&c=externalTokens/azure/ret';
         }
         else {
-            $u = BASE_URL . appUrl('/?m=webmail&c=azure/ret');
+            $u = BASE_URL . appUrl('/?m=webmail&c=externalTokens/azure/ret');
         }
         
         return $u;
