@@ -715,7 +715,7 @@ class HordeConnector extends BaseMailConnector {
             
         $opts = array();
         $opts['sort'] = array(\Horde_Imap_Client::SORT_ARRIVAL);//, \Horde_Imap_Client::SORT_REVERSE);
-        $uids = $this->client->search( $folderName, $q, $opts );
+        $uids = @$this->client->search( $folderName, $q, $opts );
         
         if (isset($uids['match'])) {
             $uids = $uids['match']->ids;

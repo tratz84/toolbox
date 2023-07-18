@@ -44,7 +44,7 @@ class MailProperties {
     public function getParsedEml() {
         if ($this->parsedEml == null) {
             $this->parsedEml = new \PhpMimeMailParser\Parser();
-            $this->parsedEml->setPath( $this->emlFile );
+            @$this->parsedEml->setPath( $this->emlFile );
         }
         
         return $this->parsedEml;
@@ -56,7 +56,7 @@ class MailProperties {
         
         // date in mailheader
         if ($p->getHeader('date')) {
-            $dt = new \DateTime(null, new \DateTimeZone('+0000'));
+            $dt = new \DateTime('now', new \DateTimeZone('+0000'));
             $t = strtotime($p->getHeader('date'));
             
             if (!$t) {

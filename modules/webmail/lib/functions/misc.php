@@ -120,7 +120,7 @@ function webmail_import_connectors($updateOnly, $opts=array()) {
         // save last update time for incremental updates
         $start_time_run = time();
         
-        if ($c->getConnectorType() == 'imap' || $c->getConnectorType() == 'horde') {
+        if ( in_array($c->getConnectorType(), array('imap', 'horde', 'office365_imap')) ) {
             $ic = BaseMailConnector::createMailConnector($c);
             if (!$ic->connect()) {
                 print_info("Unable to connect to " . $c->getDescription());
