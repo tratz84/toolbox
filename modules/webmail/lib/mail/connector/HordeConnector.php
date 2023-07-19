@@ -246,11 +246,18 @@ class HordeConnector extends BaseMailConnector {
         $udate      = $dt->getTimestamp();
         $size       = $fetch->getSize();
         
-        $uid = @md5($size . $message_id . $from . $subject . $udate);
+        $folder = ctx()->getDataDir() . '/webmail/inbox/' . $dt->format('Y') . '/' . $dt->format('m') . '/' . $dt->format('d');
         
-        $p = ctx()->getDataDir() . '/webmail/inbox/' . $dt->format('Y') . '/' . $dt->format('m') . '/' . $dt->format('d');
-        
-        $file = $p . '/' . $uid . '.eml';
+        // old method
+        $old_uid = @md5($size . $message_id . $from . $subject . $udate);
+        if (file_exists($folder . '/' . $old_uid . '.eml')) {
+            $file = $folder . '/' . $old_uid . '.eml';
+        }
+        // Office 365 resizes size after moving folder :S
+        else {
+            $new_uid = @md5($message_id . $from . $subject . $udate);
+            $file = $folder . '/' . $new_uid . '.eml';
+        }
         
         return $file;
     }
