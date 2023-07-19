@@ -673,8 +673,6 @@ function ListEditDivFormWidget(container) {
 		if (this.callback_deleteRecord) {
 			this.callback_deleteRecord( node );
 		}
-		
-		this.updateMobileView();
 	};
 	
 	// set element names for POST

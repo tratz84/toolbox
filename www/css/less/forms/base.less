@@ -119,6 +119,12 @@
 			.list-edit-div-record {
 				display: flex;
 				flex-direction: row;
+				
+				.td-sortable, .action { visibility: hidden; }
+				
+				&:nth-child(1) .td-sortable
+				, &:nth-child(1) .action { visibility: visible; }
+				
 			}
 			label { display: none; }
 		}
