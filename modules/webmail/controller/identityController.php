@@ -57,7 +57,9 @@ class identityController extends BaseController {
             if ($identityForm->validate()) {
                 $emailService->saveIdentity( $identityForm );
                 
-                redirect('/?m=webmail&c=identity');
+                report_user_message( t('Changes saved') );
+                
+                redirect('/?m=webmail&c=identity&a=edit&id='.$identity->getIdentityId());
             }
         }
         

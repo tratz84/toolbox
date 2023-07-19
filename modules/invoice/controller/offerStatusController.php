@@ -44,9 +44,11 @@ class offerStatusController extends BaseController {
             $offerStatusForm->bind($_REQUEST);
             
             if ($offerStatusForm->validate()) {
-                $offerService->saveOfferStatus($offerStatusForm);
+                $offerStatus = $offerService->saveOfferStatus($offerStatusForm);
                 
-                redirect('/?m=invoice&c=offerStatus');
+                report_user_message( t('Changes saved') );
+                
+                redirect('/?m=invoice&c=offerStatus&a=edit&id='.$offerStatus->getOfferStatusId());
             }
             
         }

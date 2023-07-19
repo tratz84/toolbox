@@ -204,6 +204,8 @@ class ProjectService extends ServiceBase {
             $phDao = new ProjectHourTypeDAO();
             $phDao->unsetDefaultSelected($hourType->getProjectHourTypeId());
         }
+        
+        return $hourType;
     }
 
 
@@ -270,7 +272,7 @@ class ProjectService extends ServiceBase {
             $phDao = new ProjectHourStatusDAO();
             $phDao->unsetDefaultSelected($hourStatus->getProjectHourStatusId());
         }
-
+        return $hourStatus;
     }
     
     

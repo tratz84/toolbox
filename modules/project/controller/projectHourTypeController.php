@@ -34,9 +34,11 @@ class projectHourTypeController extends BaseController {
             $form->bind($_REQUEST);
             
             if ($form->validate()) {
-                $projectService->saveHourType($form);
+                $pht = $projectService->saveHourType($form);
                 
-                redirect('/?m=project&c=projectHourType');
+                report_user_message( t('Changes saved') );
+                
+                redirect('/?m=project&c=projectHourType&a=edit&id='.$pht->getProjectHourTypeId());
             }
             
         }

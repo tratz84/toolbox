@@ -35,9 +35,11 @@ class projectHourStatusController extends BaseController {
             $form->bind($_REQUEST);
             
             if ($form->validate()) {
-                $projectService->saveHourStatus($form);
+                $phs = $projectService->saveHourStatus($form);
                 
-                redirect('/?m=project&c=projectHourStatus');
+                report_user_message( t('Changes saved') );
+                
+                redirect('/?m=project&c=projectHourStatus&a=edit&id='.$phs->getProjectHourStatusId());
             }
             
         }

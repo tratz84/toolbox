@@ -64,6 +64,8 @@ class OfferService extends ServiceBase {
             $oDao = new OfferStatusDAO();
             $oDao->unsetDefaultSelected($offerStatus->getOfferStatusId());
         }
+        
+        return $offerStatus;
     }
     
     public function readDefaultOfferStatus() {

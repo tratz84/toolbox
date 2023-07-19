@@ -136,6 +136,8 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
             $isDao = new InvoiceStatusDAO();
             $isDao->unsetDefaultSelected($invoiceStatus->getInvoiceStatusId());
         }
+        
+        return $invoiceStatus;
     }
 
     public function readDefaultInvoiceStatus() {

@@ -45,9 +45,11 @@ class invoiceStatusController extends BaseController {
             $invoiceStatusForm->bind($_REQUEST);
             
             if ($invoiceStatusForm->validate()) {
-                $invoiceService->saveInvoiceStatus($invoiceStatusForm);
+                $invoiceStatus = $invoiceService->saveInvoiceStatus($invoiceStatusForm);
                 
-                redirect('/?m=invoice&c=invoiceStatus');
+                report_user_message( t('Changes saved') );
+                
+                redirect('/?m=invoice&c=invoiceStatus&a=edit&id='.$invoiceStatus->getInvoiceStatusId());
             }
             
         }
