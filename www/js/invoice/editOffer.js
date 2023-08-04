@@ -168,6 +168,17 @@ function print_Click() {
 }
 
 function sendMail_Click() {
+	if ($('[name=customer_id]').val() == '') {
+		showAlert( toolbox_t('Error'), toolbox_t('No customer set') );
+		return;
+	}
+	
+	let invoiceLines = $('.list-edit-widget-invoice-lines tr');
+	if (invoiceLines.length == 0) {
+		showAlert( toolbox_t('Error'), toolbox_t('No invoice lines set') );
+		return;
+	}
+	
 	var frm = $('.form-offer-form');
 	var data = serialize2object( frm );
 
