@@ -152,6 +152,12 @@ class MailProperties {
     public function getProperties() { return $this->serverProperties; }
     
     public function getServerProperties() { return $this->serverProperties; }
+    public function getServerProperty($name, $defaultValue=null) {
+        if (isset($this->serverProperties[$name]))
+            return $this->serverProperties[$name];
+        else
+            return null;
+    }
     public function setServerProperty($name, $val) {
         if (isset($this->serverProperties[$name]) == false || $this->serverProperties[$name] != $val) {
             $this->serverPropertiesChanged = true;
