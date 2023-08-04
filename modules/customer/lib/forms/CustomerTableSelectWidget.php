@@ -9,6 +9,7 @@ use core\exception\InvalidStateException;
 use core\forms\BaseWidget;
 use customer\service\CompanyService;
 use customer\service\PersonService;
+use customer\service\CustomerService;
 
 class CustomerTableSelectWidget extends BaseWidget {
     
@@ -201,6 +202,28 @@ class CustomerTableSelectWidget extends BaseWidget {
         return $html;
     }
     
+    
+    public function renderAsText() {
+        
+        $val = $this->getValue();
+        
+        $customerService = object_container_get( CustomerService::class );
+        $customer = $customerService->readCustomerStrId( $val );
+        
+        
+        $html = '';
+        
+        $html .= '<div class="widget html-field-widget widget-'.slugify($this->getName()).'">';
+        $html .= '<label>'.esc_html($this->getLabel()) . infopopup($this->getInfoText()) . '</label>';
+        if ($customer)
+            $html .= '<span class="widget-value">'.esc_html(format_customername($customer)).'</span>';
+        else
+            $html .= '<span class="widget-value">'.esc_html($val).'</span>';
+        $html .= '</div>';
+        
+        return $html;
+        
+    }
     
     
 }
