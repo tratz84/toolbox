@@ -139,11 +139,11 @@ class MailProperties {
         }
         
         if ($this->serverPropertiesChanged) {
-            file_put_contents($this->sfile, json_encode($this->serverProperties));
+            file_put_contents($this->sfile, json_encode($this->serverProperties, JSON_INVALID_UTF8_IGNORE));
         }
         
         if ($this->toolboxPropertiesChanged) {
-            file_put_contents($this->tbfile, json_encode($this->toolboxProperties));
+            file_put_contents($this->tbfile, json_encode($this->toolboxProperties, JSON_INVALID_UTF8_IGNORE));
         }
         
         return true;
