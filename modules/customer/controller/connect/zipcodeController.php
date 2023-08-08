@@ -34,7 +34,7 @@ class zipcodeController extends BaseController {
         $query = 'q='.urlencode($zipcode . ' ' . $nr);
         
 //         $url = 'http://geodata.nationaalgeoregister.nl/locatieserver/free?'.$query;
-        $url = 'https://geodata.nationaalgeoregister.nl/locatieserver/v3/free?fq=postcode:'.strtoupper($zipcode).'&q='.$nr;
+        $url = 'https://api.pdok.nl/bzk/locatieserver/search/v3_1/free?fq=postcode:'.strtoupper($zipcode).'&q='.$nr;
         
 //         print $url;exit;
         $resp = get_url($url);
