@@ -34,7 +34,7 @@
 					<?= $i->getStartTime() ?>
 				<?php endif; ?>
 			</td>
-			<td style="font-size: 10px;">(<?= strtolower(t('dayno.'.$i->getStartDateFormat('N'))) ?>)</td>
+			<td style="font-size: 10px;"><?= strtolower(t('dayno.'.$i->getStartDateFormat('N'))) ?></td>
 		</tr>
 		<?php endforeach; ?>
 	<?php endif; ?>
