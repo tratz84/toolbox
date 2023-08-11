@@ -427,7 +427,7 @@ class MysqlMailSearch extends MailSearchBase {
             
             if ($filter['filter_type'] == 'folder') {
                 $v = trim($filter['filter_value']);
-                $this->setFolderName( $v );
+                $this->addMailboxName( $v );
             }
         }
     }
