@@ -14,6 +14,7 @@ class User extends base\UserBase {
     
     protected $capabilities = null;
     protected $capabilityMap = null;
+    protected $mapAllowCapability = array();
     
     protected $ips = array();
     
@@ -44,12 +45,28 @@ class User extends base\UserBase {
             $this->capabilityMap[$c->getModuleName() . '.' . $c->getCapabilityCode()] = true;
         }
     }
+    
+    /**
+     * allowCapability() - override capability check. Used for cron & webhooks
+     */
+    public function allowCapability( $moduleName, $capabilityCode = null ) {
+        if ($capabilityCode === null)
+            $capabilityCode = '';
+        
+        $this->mapAllowCapability[$moduleName . '.' . $capabilityCode] = true;
+    }
+    
     public function getCapabilities() { return $this->capabilities; }
     public function hasCapability($moduleName, $capabilityCode) {
         // module disabled? => always return false
         if (ctx()->isModuleEnabled($moduleName) == false)
             return false;
         
+        // capability set?
+        $strCc = $capabilityCode === null ? '' : $capabilityCode;
+        if (isset($this->mapAllowCapability[$moduleName . '.' . $strCc])) {
+            return true;
+        }
         
         if ($this->getUserType() == 'admin')
             return true;

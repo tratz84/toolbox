@@ -27,3 +27,12 @@ function checkCapability($module, $capabilityCode) {
     }
 }
 
+
+function allowCapability( $module, $capabilityCode ) {
+    ctx()->getUser()->allowCapability( $module, $capabilityCode );
+}
+
+
+
+
+
