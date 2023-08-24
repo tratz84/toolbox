@@ -143,10 +143,13 @@ class BaseController {
         $templateFile = module_file('base', 'templates/decorator/handled_error.php');
         
         $vars = get_object_vars( $this );
-        $vars = array_merge( $vars, $this->templateVars );
         
         $tpl = new \core\template\DefaultTemplate($templateFile);
         foreach($vars as $key => $val) {
+            $tpl->setVar($key, $val);
+        }
+        
+        foreach($this->templateVars as $key => $val) {
             $tpl->setVar($key, $val);
         }
         
@@ -186,7 +189,6 @@ class BaseController {
             $this->actionTemplate = $ctx->getAction();
         
         $vars = get_object_vars( $this );
-        $vars = array_merge( $vars, $this->templateVars );
         
         // parse (sub)template
         if ($this->templateFile == null) {
@@ -195,6 +197,10 @@ class BaseController {
         $tpl = new \core\template\DefaultTemplate($this->templateFile);
         $tpl->setVar('controller', $this);
         foreach($vars as $key => $val) {
+            $tpl->setVar($key, $val);
+        }
+        
+        foreach($this->templateVars as $key => $val) {
             $tpl->setVar($key, $val);
         }
         
