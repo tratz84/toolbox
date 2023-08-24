@@ -27,6 +27,8 @@ class BaseController {
     
     protected $bodyClass = array();
     
+    protected $templateVars = array();
+    
     
     /**
      * @var \core\ObjectContainer
@@ -39,6 +41,22 @@ class BaseController {
     }
     
     public function addTitle($txt) { $this->pageTitle[] = $txt; }
+    
+    
+    public function __set(string $name, $value): void {
+        $this->templateVars[$name] = $value;
+    }
+    public function __get(string $name ) {
+        if (isset($this->templateVars[$name]))
+            return $this->templateVars[$name];
+        else
+            return null;
+    }
+    
+    public function __isset($name) { return isset( $this->templateVars[$name] ); }
+    public function __unset($name) { unset( $this->templateVars[$name] ); }
+    
+    
     
     
     protected function getModuleName() {
@@ -125,6 +143,7 @@ class BaseController {
         $templateFile = module_file('base', 'templates/decorator/handled_error.php');
         
         $vars = get_object_vars( $this );
+        $vars = array_merge( $vars, $this->templateVars );
         
         $tpl = new \core\template\DefaultTemplate($templateFile);
         foreach($vars as $key => $val) {
@@ -167,6 +186,7 @@ class BaseController {
             $this->actionTemplate = $ctx->getAction();
         
         $vars = get_object_vars( $this );
+        $vars = array_merge( $vars, $this->templateVars );
         
         // parse (sub)template
         if ($this->templateFile == null) {
