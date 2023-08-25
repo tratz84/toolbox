@@ -30,7 +30,7 @@ class Invoice extends base\InvoiceBase {
     public function setInvoiceLines($il) { $this->invoiceLines = $il; }
     
     
-    public function hasComment() { return trim($this->getComment()) != '' ? true : false; }
+    public function hasComment() { return ($this->getComment() != null && trim($this->getComment())) != '' ? true : false; }
     
     
     
