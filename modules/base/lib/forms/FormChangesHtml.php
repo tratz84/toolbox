@@ -457,7 +457,10 @@ class FormChangesHtml
             
             
             
+            
             $val = $this->getWidgetText( $w );
+            
+            if (is_array($val)) continue;
 
             $html .= '<tr><td>' . esc_html($w->getLabel()) . '</td><td>' . esc_html($val) . '</td></tr>' . "\n";
         }
