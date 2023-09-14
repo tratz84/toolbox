@@ -105,6 +105,9 @@ $(document).ready(function() {
 				return;
 		}
 		
+		if ($('.disable-ajax-progress-status').val() == '1')
+			return;
+		
 		NProgress.start();
 	});
 	$(document).ajaxComplete(function() {
