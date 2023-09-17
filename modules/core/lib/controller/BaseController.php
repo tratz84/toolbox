@@ -9,7 +9,7 @@ use core\db\DatabaseHandler;
 
 
 
-class BaseController {
+class BaseController extends \core\util\WeakMapClass {
     
     protected $templateFile = null;
     protected $decoratorFile = null;
@@ -124,7 +124,7 @@ class BaseController {
         
         $templateFile = module_file('base', 'templates/decorator/handled_error.php');
         
-        $vars = get_object_vars( $this );
+        $vars = $this->getObjectVars();
         
         $tpl = new \core\template\DefaultTemplate($templateFile);
         foreach($vars as $key => $val) {
@@ -166,7 +166,7 @@ class BaseController {
         if ($this->actionTemplate === null)
             $this->actionTemplate = $ctx->getAction();
         
-        $vars = get_object_vars( $this );
+        $vars = $this->getObjectVars();
         
         // parse (sub)template
         if ($this->templateFile == null) {
