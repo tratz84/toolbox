@@ -27,8 +27,6 @@ class BaseController {
     
     protected $bodyClass = array();
     
-    protected $templateVars = array();
-    
     
     /**
      * @var \core\ObjectContainer
@@ -41,22 +39,6 @@ class BaseController {
     }
     
     public function addTitle($txt) { $this->pageTitle[] = $txt; }
-    
-    
-    public function __set(string $name, $value): void {
-        $this->templateVars[$name] = $value;
-    }
-    public function __get(string $name ) {
-        if (isset($this->templateVars[$name]))
-            return $this->templateVars[$name];
-        else
-            return null;
-    }
-    
-    public function __isset($name) { return isset( $this->templateVars[$name] ); }
-    public function __unset($name) { unset( $this->templateVars[$name] ); }
-    
-    
     
     
     protected function getModuleName() {
@@ -149,10 +131,6 @@ class BaseController {
             $tpl->setVar($key, $val);
         }
         
-        foreach($this->templateVars as $key => $val) {
-            $tpl->setVar($key, $val);
-        }
-        
         $tpl->setVar('errorMessage', $errorMessage);
         
         // parse outer template
@@ -197,10 +175,6 @@ class BaseController {
         $tpl = new \core\template\DefaultTemplate($this->templateFile);
         $tpl->setVar('controller', $this);
         foreach($vars as $key => $val) {
-            $tpl->setVar($key, $val);
-        }
-        
-        foreach($this->templateVars as $key => $val) {
             $tpl->setVar($key, $val);
         }
         
