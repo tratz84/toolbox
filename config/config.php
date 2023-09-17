@@ -56,9 +56,5 @@ if (defined('BASE_HREF') == false)
 if (defined('DEBUG') == false)
     define('DEBUG', false);
 
-// TODO: remove..
-if (defined('CURRENCY_SYMBOL') == false)
-    define('CURRENCY_SYMBOL', '€');
-
 if (defined('TOOLBOX_CURRENCY_SYMBOL') == false)
     define('TOOLBOX_CURRENCY_SYMBOL', '€');

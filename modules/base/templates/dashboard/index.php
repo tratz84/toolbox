@@ -1,4 +1,8 @@
 
+
+<input type="hidden" class="disable-ajax-progress-status" value="1" />
+
+
 <div class="page-header">
 	<div class="toolbox">
 		<a href="javascript:void(0);" id="dashboard-settings-click"
