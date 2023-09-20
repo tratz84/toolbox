@@ -54,6 +54,14 @@ class ConnectorService extends ServiceBase {
                 return 1;
             }
             
+            if (strpos($if1->getFoldername(), 'INBOX') === 0 && strpos($if2->getFoldername(), 'INBOX') !== 0) {
+                return -1;
+            }
+            if (strpos($if1->getFoldername(), 'INBOX') !== 0 && strpos($if2->getFoldername(), 'INBOX') === 0) {
+                return 1;
+            }
+            
+            
             return strcmp($if1->getFoldername(), $if2->getFoldername());
         });
         $c->setImapfolders( $imapfolders );
