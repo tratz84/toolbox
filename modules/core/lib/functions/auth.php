@@ -1,5 +1,6 @@
 <?php
 
+// TODO: auth.php must be moved to base-module.. User-stuff is available from base on, and doesn't belong in core
 
 
 use core\Context;
