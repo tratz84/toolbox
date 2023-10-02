@@ -72,7 +72,8 @@ class viewController extends BaseController {
         $this->widget = null;
         foreach($widgets as $w) {
             if ($w->getReportCode() == $code) {
-                $w->setFormData( $_REQUEST );
+                if (method_exists($w, 'setFormData'))
+                    $w->setFormData( $_REQUEST );
                 $this->widget = $w;
                 break;
             }
