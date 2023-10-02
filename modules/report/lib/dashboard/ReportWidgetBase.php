@@ -4,7 +4,10 @@
 namespace report\dashboard;
 
 
-class ReportWidgetBase {
+use core\forms\WeekField;
+use core\util\WeakMapClass;
+
+class ReportWidgetBase extends WeakMapClass {
     
     protected $uid = null;
     
