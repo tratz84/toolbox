@@ -177,10 +177,11 @@ class ObjectHookProxy{
             fwrite( $fp, '<?php' . PHP_EOL . $phpcode );
             fflush( $fp );
             
-            require_once( $path );
+            eval( $phpcode );       // use eval() - was require_once($path) before - this works also on winnt
             
             flock( $fp, LOCK_UN );
             fclose( $fp );
+            
         }
     }
     
