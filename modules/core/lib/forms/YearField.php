@@ -5,6 +5,7 @@ namespace core\forms;
 class YearField extends BaseWidget {
     
     protected $startYear;
+    protected $startWeek;
     
     protected $endYear;
     
