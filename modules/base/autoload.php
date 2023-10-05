@@ -3,6 +3,7 @@
 
 require_once dirname(__FILE__).'/lib/functions/misc.php';
 require_once dirname(__FILE__).'/lib/functions/user.php';
+require_once dirname(__FILE__).'/lib/functions/auth.php';
 require_once dirname(__FILE__).'/lib/functions/object_meta.php';
 require_once dirname(__FILE__).'/lib/functions/object_lock.php';
 require_once dirname(__FILE__).'/lib/functions/tb_lock.php';
