@@ -91,7 +91,12 @@ function format_price_html($amount, $include_currency_sign = true, $opts=array()
     
     $a = '<span class="numbers">'.$a.'</span>';
     
-    $a .= '<span class="comma">,</span>' . '<span class="decimals">'.$right.'</span>';
+    if (isset($opts['hide-decimals']) && $opts['hide-decimals']) {
+        
+    }
+    else {
+        $a .= '<span class="comma">,</span>' . '<span class="decimals">'.$right.'</span>';
+    }
     
     
     if ($negative)
