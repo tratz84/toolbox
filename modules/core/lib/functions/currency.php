@@ -53,6 +53,56 @@ function format_price($amount, $include_currency_sign = true, $opts=array())
 //         return ($amount < 0 ? '-' : '') . str_replace('-', '', trim(money_format('%!i', $amount)));
 }
 
+function format_price_html($amount, $include_currency_sign = true, $opts=array())
+{
+    if ($amount === null)
+        $amount = '';
+    
+    if (is_double($amount) == false)
+        $amount = strtodouble(trim($amount));
+    
+    $thousands = isset($opts['thousands']) ? $opts['thousands'] : ' ';
+    
+    $amount = myround($amount, 2);
+    
+    $negative = $amount < 0 ? true : false;
+    
+    $strAmount = (string)abs($amount);
+    
+    if (strpos($strAmount, '.') !== false) {
+        $left = substr($strAmount, 0, strpos($strAmount, '.'));
+        $right = substr($strAmount, strpos($strAmount, '.')+1);
+    } else {
+        $left = $strAmount;
+        $right = '00';
+    }
+    
+    if (strlen($right) == 1)
+        $right = $right . '0';
+    
+    $a = '';
+    for($x=0; $x < strlen($left); $x++) {
+        if ($x != 0 && strlen($left) > 3 && (strlen($left) - $x) % 3 === 0) {
+            $a .= $thousands;
+        }
+        
+        $a .= $left[ $x ];
+    }
+    
+    $a = '<span class="numbers">'.$a.'</span>';
+    
+    $a .= '<span class="comma">,</span>' . '<span class="decimals">'.$right.'</span>';
+    
+    
+    if ($negative)
+        $a = '-' . $a;
+    
+    if ($include_currency_sign)
+        $a = '<span class="currency-symbol">'.TOOLBOX_CURRENCY_SYMBOL.'</span>' . " " . $a;
+    
+    return '<span class="format-price">'.$a.'</span>';
+}
+
 
 function format_number($amount) {
     return format_price($amount, false, array('thousands' => '.'));
