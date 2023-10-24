@@ -97,6 +97,10 @@ class BaseWidget {
                 $this->setValue($obj->$func());
                 $fieldCount++;
             }
+            else if (is_a($obj, DBObject::class) && $obj->hasField( $this->getName() )) {
+                $this->setValue($obj->getField( $this->getName() ));
+                $fieldCount++;
+            }
             // field set?
             else if (isset($arr[$this->getName()])) {
                 $this->setValue( $arr[$this->getName()] );
