@@ -21,6 +21,26 @@ class SelectField extends BaseWidget {
     public function setOptionItems($i) { $this->optionItems = $i; }
     public function getOptionItems() { return $this->optionItems; }
     
+    public function getValueOrFirstOption() {
+        if ( $this->getValue() )
+            return $this->getValue();
+        else
+            return $this->getFirstOptionValue();
+    }
+    
+    public function getFirstOptionValue() {
+        if (is_array($this->optionItems) == false)
+            return null;
+        
+        $k = array_keys( $this->optionItems );
+        
+        if (count($k) > 0)
+            return $k[0];
+        else
+            return null;
+    }
+    
+    
     public function renderAsText() {
         $val = $this->getValue();
         
