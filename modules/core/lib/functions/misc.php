@@ -1104,6 +1104,73 @@ function previous_week_no($year, $weekNo) {
     return sprintf('%d-%02d', $year, $weekNo);
 }
 
+/**
+ * 
+ * @param unknown $dayOccurence     upwards: 1-5
+ *                                  downwards for last-day: -1, -2, ...
+ * 
+ * @param unknown $dayName          mo/tu/we/th/fr/sa
+ * @param unknown $month            1-12
+ * @param unknown $year
+ */
+function day_in_month( $dayOccurence, $dayName, $month, $year ) {
+    
+    $dayname2no = array();
+    $dayname2no['1'] = array('mo', 'ma');
+    $dayname2no['2'] = array('tu', 'di');
+    $dayname2no['3'] = array('we', 'wo');
+    $dayname2no['4'] = array('th', 'do');
+    $dayname2no['5'] = array('fr', 'vr');
+    $dayname2no['6'] = array('sa', 'za');
+    $dayname2no['7'] = array('su', 'zo');
+    
+    $dayN = null;
+    foreach($dayname2no as $num => $names) {
+        if (in_array($dayName, $names)) {
+            $dayN = $num;
+            break;
+        }
+    }
+    
+    if (!$dayN) {
+        throw new InvalidStateException( '$dayName not found: '.$dayName );
+    }
+    
+    
+    $t = mktime( 12, 0, 0, $month, 1, $year );
+    $date = date('Y-m-d', $t);
+    
+    $daysInMonth = date('t', $t);
+    $occurrenceCount = 0;
+    
+    
+    if ($dayOccurence > 0) {
+        for($x=0; $x < $daysInMonth; $x++) {
+            $d = next_day($date, $x);
+            
+            if (format_date($d, 'N') == $dayN) {
+                $occurrenceCount++;
+                if ($dayOccurence == $occurrenceCount)
+                    return $d;
+            }
+        }
+    }
+    else {
+        $date = format_date( $date, 'Y-m-t' );
+        for($x=0; $x < $daysInMonth; $x++) {
+            $d = previous_day($date, $x);
+            
+            if (format_date($d, 'N') == $dayN) {
+                $occurrenceCount++;
+                if (abs($dayOccurence) == $occurrenceCount)
+                    return $d;
+            }
+        }
+    }
+    
+    return null;
+}
+
 
 function next_week_no($year, $weekNo) {
     $weekNo++;
