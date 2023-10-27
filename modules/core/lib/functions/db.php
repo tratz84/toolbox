@@ -19,6 +19,12 @@ function query($resourceName, $sql, $params=array()) {
     return $conn->query( $sql, $params );
 }
 
+function queryOne($resourceName, $sql, $params=array()) {
+    $conn = DatabaseHandler::getInstance()->getConnection( $resourceName );
+    
+    return $conn->queryOne( $sql, $params );
+}
+
 function queryList($resourceName, $sql, $params=array()) {
     $conn = DatabaseHandler::getInstance()->getConnection( $resourceName );
     
