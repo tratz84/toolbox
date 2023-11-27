@@ -55,7 +55,7 @@ class identityController extends BaseController {
             $identityForm->bind($_REQUEST);
             
             if ($identityForm->validate()) {
-                $emailService->saveIdentity( $identityForm );
+                $identity = $emailService->saveIdentity( $identityForm );
                 
                 report_user_message( t('Changes saved') );
                 
