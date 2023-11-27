@@ -1804,5 +1804,15 @@ function excel_daycount2date( $dayCount ) {
 
 
 
+function in_array_callback( $needle, $array, $callback ) {
+    foreach($array as $a) {
+        if ( $callback( $needle, $a ) == true ) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
 
 
