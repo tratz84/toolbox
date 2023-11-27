@@ -6,7 +6,7 @@ namespace core\util;
 class WeakMapClass
 {
 
-    protected array $classProps = [];
+    protected $classProps = [];
 
     public function &__get($name) {
         return $this->classProps[$name];
