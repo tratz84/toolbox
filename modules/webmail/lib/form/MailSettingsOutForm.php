@@ -11,6 +11,7 @@ use core\forms\CheckboxField;
 use core\forms\WidgetContainer;
 use webmail\service\CloudTokenService;
 use core\forms\validator\NotEmptyValidator;
+use Laminas\Validator\NotEmpty;
 
 class MailSettingsOutForm extends BaseForm {
     
@@ -51,7 +52,15 @@ class MailSettingsOutForm extends BaseForm {
             
             $this->addWidget( $azureSettings );
             
-            $this->addValidator( 'azure_token_id', new NotEmptyValidator() );
+            $this->addValidator( 'azure_token_id', function($form) {
+                $serverType = $form->getWidgetValue('server_type');
+                
+                if ($serverType == 'azure') {
+                    if ( trim($form->getWidgetValue('azure_token_id')) == '' ) {
+                        return t('Field contains no value');
+                    }
+                }
+            });
         }
         
         
