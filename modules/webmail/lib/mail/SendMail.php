@@ -161,6 +161,7 @@ class SendMail {
             } else {
                 // unix? => use sendmail
                 $transport = new \Swift_SendmailTransport();
+//                 $transport = new \Swift_MailTransport( );
                 
                 // skip check, just try.. some environments block this, but still work
 //                 if (file_exists('/usr/sbin/sendmail')) {
@@ -204,7 +205,7 @@ class SendMail {
             throw new InvalidStateException( 'Unknown servertype' );
         }
         
-        $message = $this->buildMessage();
+        $message = @$this->buildMessage();
         $mailer = new \Swift_Mailer($transport);
         
 //         $mailLogger = new \Swift_Plugins_Loggers_ArrayLogger();
