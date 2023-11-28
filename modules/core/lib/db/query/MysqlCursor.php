@@ -65,12 +65,18 @@ class MysqlCursor extends Cursor {
         if (!$row)
             return null;
             
-            // class instantieren en teruggeven
+        // class instantieren en teruggeven
+        if ($this->objectName) {
             $o = new $this->objectName();
             $o->setFields( $row );
             
             $this->currentObject = $o;
-            return $o;
+        }
+        else {
+            $this->currentObject = $row;
+        }
+        
+        return $this->currentObject;
     }
     
     

@@ -37,6 +37,12 @@ function queryListAsArray($resourceName, $sql, $params=array()) {
     return $conn->queryListAsArray( $sql, $params );
 }
 
+function queryCursor($resourceName, $sql, $params=array(), $objectName = null) {
+    $conn = DatabaseHandler::getInstance()->getConnection( $resourceName );
+    
+    return $conn->queryCursor( $objectName, $sql, $params );
+}
+
 
 function dbCamelCase($tableName) {
     $str = '';
