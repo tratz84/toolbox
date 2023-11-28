@@ -22,6 +22,7 @@ class MailSettingsOutForm extends BaseForm {
         
         $serverTypes = array();
         $serverTypes['local'] = 'Local';
+        $serverTypes['local_mail'] = 'Local mail()';
         $serverTypes['smtp']  = 'SMTP Server';
         
         if (ctx()->isExperimental()) {

@@ -479,7 +479,7 @@ class EmailService extends ServiceBase {
         $s['azure_token_id'] = $ctx->getSetting('webmail_azure_token_id');
         
         // default to local
-        if (in_array($s['server_type'], array('local', 'smtp', 'azure')) == false)
+        if (in_array($s['server_type'], array('local', 'local_mail', 'smtp', 'azure')) == false)
             $s['server_type'] = 'local';
         
         return $s;

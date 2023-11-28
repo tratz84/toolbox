@@ -161,7 +161,7 @@ class SendMail {
             } else {
                 // unix? => use sendmail
                 $transport = new \Swift_SendmailTransport();
-//                 $transport = new \Swift_MailTransport( );
+                
                 
                 // skip check, just try.. some environments block this, but still work
 //                 if (file_exists('/usr/sbin/sendmail')) {
@@ -170,6 +170,8 @@ class SendMail {
 //                     throw new ResourceException('/usr/sbin/sendmail not found');
 //                 }
             }
+        } else if ($settings['server_type'] == 'local_mail') {
+            $transport = new \Swift_MailTransport( );
         } else if ($settings['server_type'] == 'azure') {
             $ctService = object_container_get( CloudTokenService::class );
             $wat = $ctService->readAzureToken( $settings['azure_token_id'] );
