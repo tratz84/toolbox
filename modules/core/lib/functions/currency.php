@@ -36,7 +36,12 @@ function format_price($amount, $include_currency_sign = true, $opts=array())
         $a .= $left[ $x ];
     }
     
-    $a .= ',' . $right;
+    if (isset($opts['no_decimals']) && $opts['no_decimals']) {
+        
+    }
+    else {
+        $a .= ',' . $right;
+    }
     
     
     if ($negative)
