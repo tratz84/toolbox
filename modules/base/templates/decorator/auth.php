@@ -70,5 +70,8 @@ $backgroundImage = $backgroundImages[0];
 		<?php print $content ?>
 	</div>
 
+
+	<?php hook_eventbus_publish(null, 'base', 'auth-page-footer') ?>
+	
 </body>
 </html>
