@@ -5,6 +5,7 @@ namespace core\forms;
 class PasswordField extends BaseWidget {
     
     protected $renderEmptyValue = true;
+    protected $options = array();
     
     public function __construct($name, $value=null, $label=null) {
         
