@@ -41,7 +41,7 @@ class CronService {
                     continue;
             }
             
-            if ($c->isDaily() || $c->getForceStart()) {
+            if ($c->isDaily() || $dbcron->getForceStart()) {
                 // daily cron, not yet run today & after 05:00 ? => run cronjob
                 $daily_start_hour = cron_daily_start_hour();
                 
@@ -83,7 +83,7 @@ class CronService {
                 else if ($c->checkJob()) {
                     $runCron = true;
                 }
-                else if ($c->getForceStart()) {
+                else if ($dbcron->getForceStart()) {
                     $runCron = true;
                 }
                 
