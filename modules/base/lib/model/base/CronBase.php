@@ -56,6 +56,15 @@ class CronBase extends \core\db\DBObject {
     'Default' => '0',
     'Extra' => '',
   ),
+  'force_start' => 
+  array (
+    'Field' => 'force_start',
+    'Type' => 'tinyint(1)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -81,6 +90,10 @@ class CronBase extends \core\db\DBObject {
 		
 	public function setRunning($p) { $this->setField('running', $p); }
 	public function getRunning() { return $this->getField('running'); }
+	
+		
+	public function setForceStart($p) { $this->setField('force_start', $p); }
+	public function getForceStart() { return $this->getField('force_start'); }
 	
 	
 }

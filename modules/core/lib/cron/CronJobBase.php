@@ -12,12 +12,17 @@ abstract class CronJobBase {
     
     protected $autoHandleDbTransaction = true;
     
+    protected $forceStartAllowed = true;
+    
     
     // isDaily set? => run CronJobBase daily
     public function isDaily() { return $this->daily; }
     
     // timeout set? => check if "timeout"-seconds is elapsed since last run
     public function getTimeout() { return $this->timeout; }
+    
+    public function isForceStartAllowed() { return $this->forceStartAllowed; }
+    
     
     // can be overridden for custom business-rules
     public function checkJob() { return false; }

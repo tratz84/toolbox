@@ -16,6 +16,7 @@
 			<th><?= t('Status') ?></th>
 			<th><?= t('Run on') ?></th>
 			<th><?= t('Started') ?></th>
+			<th><?= t('Force start') ?></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -32,11 +33,20 @@
 			<td><?= esc_html($c->getLastStatus()) ?></td>
 			<td><?= format_date($c->getLastRun(), 'd-m-Y H:i:s') ?></td>
 			<td><?= $c->getRunning()?t('Yes'):t('No')?></td>
+			<td>
+				<?php if ($c->isForceStartAllowed()) : ?>
+					<?php if (!$c->getForceStart()) : ?>
+					<a href="<?= appUrl('/?m=base&c=cron/cronList&a=force_start&id='.$c->getCronId()) ?>"><i class="fa fa-play"></i></a>
+					<?php else : ?>
+					<i class="fa fa-hourglass"></i>
+					<?php endif; ?>
+				<?php endif; ?>
+			</td>
 		</tr>
 		<?php endforeach; ?>
 		<?php if (count($crons) == 0) : ?>
 		<tr>
-			<td colspan="5" style="font-style: italic; text-align: center;"><?= t('No scheduled tasks executed') ?></td>
+			<td colspan="6" style="font-style: italic; text-align: center;"><?= t('No scheduled tasks executed') ?></td>
 		</tr>
 		<?php endif; ?>
 	</tbody>

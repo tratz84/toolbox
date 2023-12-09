@@ -22,6 +22,16 @@ class cronListController extends BaseController {
         $this->render();
     }
     
+    public function action_force_start() {
+        $cs = object_container_get( CronService::class );
+        
+        $cs->forceStart( get_var('id') );
+        
+        redirect( '/?m=base&c=cron/cronList' );
+    }
+    
+    
+    
     public function action_popup() {
         $cronService = $this->oc->get(CronService::class);
         

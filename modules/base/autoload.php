@@ -17,7 +17,7 @@ use core\event\PeopleEvent;
 
 Context::getInstance()->enableModule('base');
 
-module_update_handler('base', '20230320');
+module_update_handler('base', '20231209');
 
 hook_loader(__DIR__.'/hook');
 

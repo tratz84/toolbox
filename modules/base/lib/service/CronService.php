@@ -41,7 +41,7 @@ class CronService {
                     continue;
             }
             
-            if ($c->isDaily()) {
+            if ($c->isDaily() || $c->getForceStart()) {
                 // daily cron, not yet run today & after 05:00 ? => run cronjob
                 $daily_start_hour = cron_daily_start_hour();
                 
@@ -49,6 +49,7 @@ class CronService {
                     $dbcron->setRunning(true);
                     $dbcron->setLastStatus('started');
                     $dbcron->setLastRun(date('Y-m-d H:i:s'));
+                    $dbcron->setForceStart( false );
                     $dbcron->save();
                     
                     // disconnect, start cron with fresh connection
@@ -82,6 +83,9 @@ class CronService {
                 else if ($c->checkJob()) {
                     $runCron = true;
                 }
+                else if ($c->getForceStart()) {
+                    $runCron = true;
+                }
                 
                 // daily cron, not yet run today & after 05:00 ? => run cronjob
                 if ( $runCron ) {
@@ -91,6 +95,7 @@ class CronService {
                     $dbcron->setRunning(true);
                     $dbcron->setLastStatus('started');
                     $dbcron->setLastRun(date('Y-m-d H:i:s'));
+                    $dbcron->setForceStart( false );
                     $dbcron->save();
                     
                     
@@ -161,6 +166,7 @@ class CronService {
             foreach($cronjobs as $c2) {
                 if (toolbox_get_class($c2) == $c->getCronName()) {
                     $c->setTitle( $c2->getTitle() );
+                    $c->setCronClass( $c2 );
                     break;
                 }
             }
@@ -184,6 +190,13 @@ class CronService {
         $cDao = object_container_get( CronDAO::class );
         return $cDao->readByName( $name );
     }
+    
+    
+    public function forceStart( $cronId ) {
+        $cDao = new CronDAO();
+        $cDao->updateField($cronId, 'force_start', 1);
+    }
+    
     
     
     public function cleanupCronRun() {
