@@ -8,7 +8,7 @@ class Cron extends base\CronBase {
     
     protected $title;
     
-    protected $cronClass;
+    protected $cronClass = null;
 
     public function __construct($id=null) {
         parent::__construct($id);
@@ -30,6 +30,11 @@ class Cron extends base\CronBase {
         
         return null;
     }
+    
+    public function cronClassSet() {
+        return $this->cronClass != null ? true : false;
+    }
+    
     
     public function getLastRunFormat($f='d-m-Y H:i:s') {
         

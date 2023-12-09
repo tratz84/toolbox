@@ -41,6 +41,9 @@
 					<i class="fa fa-hourglass"></i>
 					<?php endif; ?>
 				<?php endif; ?>
+				<?php if ($c->cronClassSet() == false) : ?>
+				<i class="fa fa-stop-circle" title="<?= t('Cron not found') ?>"></i>
+				<?php endif; ?>
 			</td>
 		</tr>
 		<?php endforeach; ?>
