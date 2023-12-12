@@ -170,6 +170,26 @@ function appUrl($u) {
     return $url;
 }
 
+function jsUrl( $moduleName, $publicPath ) {
+    
+    $publicPath = trim($publicPath);
+    if (strpos($publicPath, '/') === 0)
+        $publicPath = substr($publicPath, 1);
+    
+    $f = module_file( $moduleName, '/public/'.$publicPath );
+    if (file_exists( $f ) == false) {
+        return null;
+    }
+    
+    $p = 'mpf='.urlencode('/module/'.$moduleName.'/'.$publicPath).'&v='.filemtime($f);
+    
+    $u = appUrl('/?'.$p);
+    
+    return $u;
+}
+
+
+
 /**
  * app_request_uri() - returns (relative) request_uri. Filters BASE_HREF & user-contextName
  */
