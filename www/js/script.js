@@ -1469,6 +1469,8 @@ function strtodouble(str, default_val) {
 	if (str === null) return 0;
 	if (typeof str == 'undefined') return 0;
 	
+	if (typeof str == 'number') return str;
+	
 	var pow_negative = -1;
 	
 	if (str.indexOf('e-') != -1)
