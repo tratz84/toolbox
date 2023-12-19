@@ -109,6 +109,11 @@ function multiuser_checkLock(key) {
 					showInlineWarning( msg );
 					
 					if (multiuser_warningPopupShown == false) {
+						// showAlert()-popup disabled? => skip..
+						if (typeof appSettings.multiuserPopupDisabled != 'undefined' && appSettings.multiuserPopupDisabled) {
+							return;
+						}
+						
 						showAlert( toolbox_t('Other user active'), msg);
 						multiuser_warningPopupShown = true;
 					}
