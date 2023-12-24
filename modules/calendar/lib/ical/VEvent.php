@@ -236,7 +236,7 @@ class VEvent extends VEventInstance {
                 }
             }
             
-            $dt = next_week( $dt );
+            $dt = next_week( $dt, $this->interval );
         }
         
         return $instances;
