@@ -150,10 +150,15 @@ class authController extends BaseController {
         if ($f) {
             $f = get_data_file($f);
             
-            header('Content-type: ' . mime_content_type($f));
-            
-            readfile($f);
-            exit;
+            if ($f && file_exists($f)) {
+                header('Content-type: ' . mime_content_type($f));
+                
+                readfile($f);
+                exit;
+            }
+            else {
+                die('Logo file not found');
+            }
         }
         
     }
