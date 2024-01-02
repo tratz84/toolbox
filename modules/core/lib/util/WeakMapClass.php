@@ -24,6 +24,13 @@ class WeakMapClass
         unset($this->classProps[$name]);
     }
     
+    public function getObjectVar($v) {
+        if (isset($this->{$v}))
+            return $this->{$v};
+        else
+            return null;
+    }
+    
     public function getObjectVars() {
         $vars1 = get_object_vars( $this );
         $vars2 = $this->classProps;
