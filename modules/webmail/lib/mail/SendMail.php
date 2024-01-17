@@ -150,6 +150,11 @@ class SendMail {
         $emailService = object_container_get(EmailService::class);
         $settings = $emailService->getMailServerSettings();
         
+        // debug mode? => force local
+        if (is_debug()) {
+            $settings['server_type'] = 'local';
+        }
+        
         if ($settings['server_type'] == 'local') {
             // hmz..
             if (defined('SMTP_HOST') && SMTP_HOST) {
