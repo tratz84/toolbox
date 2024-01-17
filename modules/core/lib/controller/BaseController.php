@@ -208,6 +208,7 @@ class BaseController extends \core\util\WeakMapClass {
         foreach($vars as $key => $val) {
             $tplMaster->setVar($key, $val);
         }
+        $tplMaster->setVar( 'controller', $this );
         $tplMaster->setVar( 'content', $tpl->getTemplate() );
         $tplMaster->setVar( 'context', $ctx );
         
