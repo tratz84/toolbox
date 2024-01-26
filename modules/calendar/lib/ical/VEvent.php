@@ -182,25 +182,28 @@ class VEvent extends VEventInstance {
         $dt = format_date($this->getStartDate(), 'Y-m-d');
         
         // set date to start of week
-        if (format_date($dt, 'N') > 1) {
+        while (format_date($dt, 'N') > 1) {
             $dt = previous_day( $dt, 1 );
         }
         
         // move $dt to start of period
         while ((int)format_date($dt, 'Ymd') < $ymdstart) {
-            $dt = next_day( $dt );
+            $dt = next_week( $dt, $this->interval );
         }
+        
 
         while ((int)format_date($dt, 'Ymd') <= $ymdend && (!$ymditemEnd || (int)format_date($dt, 'Ymd') <= $ymditemEnd)) {
             $days = explode(',', $this->byDay);
             foreach ($days as $d) {
-                if (isset($this->daysToNum[$d]) == false) continue;
+                
+                if (isset($this->daysToNum[$d]) == false)
+                    continue;
                 
                 // move to right day
                 $dayno = $this->daysToNum[$d];
                 
                 $dt2 = $dt;
-                while (format_date($dt2, 'N') != $dayno) {
+                while ((format_date($dt2, 'N') != $dayno || $dt2 < $this->startDate) && $dt2 != $this->startDate) {
                     $dt2 = next_day($dt2);
                 }
                 
@@ -218,6 +221,7 @@ class VEvent extends VEventInstance {
                 if ($ymditemEnd && (int)format_date($dt2, 'Ymd') > $ymdend)
                     break;
                 
+                    
                 $i = new VEventInstance();
                 $i->setId($this->getId());
                 $i->setStartDate(format_date($dt2, 'Y-m-d'));
@@ -238,6 +242,7 @@ class VEvent extends VEventInstance {
             
             $dt = next_week( $dt, $this->interval );
         }
+//         var_export($instances);exit;
         
         return $instances;
     }
