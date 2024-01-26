@@ -187,8 +187,10 @@ class VEvent extends VEventInstance {
         }
         
         // move $dt to start of period
-        while ((int)format_date($dt, 'Ymd') < $ymdstart) {
+        $ymdNextPeriod = (int)format_date(next_week($dt, $this->interval), 'Ymd');
+        while ( $ymdNextPeriod < $ymdstart ) {
             $dt = next_week( $dt, $this->interval );
+            $ymdNextPeriod = (int)format_date(next_week($dt, $this->interval), 'Ymd');
         }
         
 
