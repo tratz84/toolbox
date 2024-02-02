@@ -68,7 +68,7 @@ class ArticleService extends ServiceBase implements ObjectHookable {
         }
         
         
-        $fieldsArticle = array('article_id', 'article_type', 'article_name', 'long_description1', 'long_description2', 'price', 'rentable', 'simultaneously_rentable', 'active', 'vat_id');
+        $fieldsArticle = array('article_id', 'article_type', 'article_code', 'article_name', 'long_description1', 'long_description2', 'price', 'rentable', 'simultaneously_rentable', 'active', 'vat_id');
         $this->saveForm($articleForm, Article::class, $fieldsArticle);
         
         // log activity

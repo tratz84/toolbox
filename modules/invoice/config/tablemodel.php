@@ -31,6 +31,7 @@ $tbs[] = $tb_vat;
 $tb_art = new TableModel('article', 'article');
 $tb_art->addColumn('article_id',              'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
 $tb_art->addColumn('article_type',            'varchar(32)');
+$tb_art->addColumn('article_code',            'varchar(64)');
 $tb_art->addColumn('article_name',            'varchar(255)');
 $tb_art->addColumn('long_description1',       'mediumtext');
 $tb_art->addColumn('long_description2',       'mediumtext');
