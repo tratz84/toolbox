@@ -162,7 +162,7 @@ class UserGroupTableWidget extends BaseWidget {
         $renderRow = "";
         $renderRow .= '<div class="title">{{ record.type }} - {{ record.name }}</div>';
         $renderRow .= '<div class="fullname">{{ record.fullname }}</div>';
-        $renderRow .= '<div class="email">{{ record.email }}</div>';
+        $renderRow .= '<div class="email">{{ record.email === null ? "" : record.email }}</div>';
         
         
         $html = '';
