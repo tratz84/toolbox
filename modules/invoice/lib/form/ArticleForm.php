@@ -36,6 +36,8 @@ class ArticleForm extends BaseForm {
         $this->addWidget( new TextField('article_name', '', 'Naam') );
         $this->addWidget( new EuroField('price', '', 'Prijs excl. btw') );
         $this->addVat();
+
+        $this->addWidget( new TextField('article_code', '', 'Artikel code') );
         $this->addWidget( new CheckboxField('rentable', '', 'Verhuurbaar'));
         $this->addWidget( new CheckboxField('simultaneously_rentable', '', 'Overboekbaar'));
         

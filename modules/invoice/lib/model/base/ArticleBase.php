@@ -14,7 +14,7 @@ class ArticleBase extends \core\db\DBObject {
   'article_id' => 
   array (
     'Field' => 'article_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'NO',
     'Key' => 'PRI',
     'Default' => NULL,
@@ -77,7 +77,7 @@ class ArticleBase extends \core\db\DBObject {
   'simultaneously_rentable' => 
   array (
     'Field' => 'simultaneously_rentable',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -95,7 +95,7 @@ class ArticleBase extends \core\db\DBObject {
   'vat_price' => 
   array (
     'Field' => 'vat_price',
-    'Type' => 'bigint(20)',
+    'Type' => 'bigint',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -104,7 +104,7 @@ class ArticleBase extends \core\db\DBObject {
   'vat_id' => 
   array (
     'Field' => 'vat_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => 'MUL',
     'Default' => NULL,
@@ -141,6 +141,15 @@ class ArticleBase extends \core\db\DBObject {
   array (
     'Field' => 'created',
     'Type' => 'datetime',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'article_code' => 
+  array (
+    'Field' => 'article_code',
+    'Type' => 'varchar(64)',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -211,6 +220,10 @@ class ArticleBase extends \core\db\DBObject {
 		
 	public function setCreated($p) { $this->setField('created', $p); }
 	public function getCreated() { return $this->getField('created'); }
+	
+		
+	public function setArticleCode($p) { $this->setField('article_code', $p); }
+	public function getArticleCode() { return $this->getField('article_code'); }
 	
 	
 }
