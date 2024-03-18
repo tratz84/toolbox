@@ -1701,7 +1701,7 @@ function next_month(date, no) {
 }
 
 function previous_week(date, no) {
-	return next_month( date, no*-1 );
+	return next_week( date, no*-1 );
 }
 function next_week(date, no) {
 	if (typeof date == 'string') {
