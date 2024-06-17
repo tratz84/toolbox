@@ -426,6 +426,13 @@ function get_var($key, $defaultVal=null) {
     return $ctx->getVar($key, $defaultVal);
 }
 
+function set_request_var( $key, $val ) {
+    $_REQUEST[$key] = $val;
+    $_GET[$key]     = $val;
+    $_POST[$key]    = $val;
+}
+
+
 function has_file($paramName) {
     if (isset($_FILES[$paramName]) && isset($_FILES[$paramName]['size']) && $_FILES[$paramName]['size'] > 0) {
         return true;
