@@ -170,6 +170,81 @@ function appUrl($u) {
     return $url;
 }
 
+
+
+function buildAppUrl( $url, $params ) {
+    $urlFromRequest = false;
+    
+    if ($url === null) {
+        $url = $_SERVER['REQUEST_URI'];
+        
+        $urlFromRequest = true;
+    }
+    
+    list ($path, $urlparams) = $url;
+    
+    if (strpos($url, '?') !== false) {
+        list ($path, $urlparams) = explode('?', $url, 2);
+        
+        $tokens = explode('&', $urlparams);
+        foreach($tokens as $t) {
+            list( $k, $v ) = explode('=', $t, 2);
+            
+            $k = urldecode($k);
+            $v = urldecode($v);
+            
+            if (isset($params[$k]) == false)
+                $params[$k] = $v;
+        }
+        
+    }
+    
+    if ($urlFromRequest)
+        $r = $path;
+    else
+        $r = appUrl( $path );
+    
+    if (count($params)) {
+        $r .= '?' . http_build_query($params);
+    }
+    
+    return $r;
+}
+
+function buildUrl( $url, $params ) {
+    if ($url === null) {
+        $url = $_SERVER['REQUEST_URI'];
+    }
+    
+    list ($path, $urlparams) = $url;
+    
+    if (strpos($url, '?') !== false) {
+        list ($path, $urlparams) = explode('?', $url, 2);
+        
+        $tokens = explode('&', $urlparams);
+        foreach($tokens as $t) {
+            list( $k, $v ) = explode('=', $t, 2);
+            
+            $k = urldecode($k);
+            $v = urldecode($v);
+            
+            if (isset($params[$k]) == false)
+                $params[$k] = $v;
+        }
+        
+    }
+    
+    $r = $path;
+    if (count($params)) {
+        $r .= '?' . http_build_query($params);
+    }
+    
+    return $r;
+}
+
+
+
+
 function jsUrl( $moduleName, $publicPath ) {
     
     $publicPath = trim($publicPath);
