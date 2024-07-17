@@ -2285,6 +2285,10 @@ function showFooterInfo( text ) {
 	d.text( text );
 	
 	$(document.body).append( d );
+	
+	let w = parseInt( $('.footer-info-message').outerWidth()/2 );
+//	console.log(w);
+	$(d).css('margin-left', w*-1);
 }
 
 function removeFooterInfo() {
