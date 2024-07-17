@@ -2278,5 +2278,19 @@ function getJsState(key, callback) {
 }
 
 
+function showFooterInfo( text ) {
+	$('.footer-info-message').remove();
+	
+	let d = $('<div class="footer-info-message" />');
+	d.text( text );
+	
+	$(document.body).append( d );
+}
+
+function removeFooterInfo() {
+	$('.footer-info-message').remove();
+}
+
+
 
 
