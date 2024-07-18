@@ -1741,6 +1741,24 @@ function valid_regexp($pattern) {
 }
 
 
+function minutes_between( $start, $end, $absolute=true ) {
+    
+    $dts = new DateTime( $start );
+    $dte = new DateTime( $end );
+    
+    $diff = $dts->diff( $dte );
+    $mins = 0;
+    $mins += $diff->days * 24 * 60;
+    $mins += $diff->h * 60;
+    $mins += $diff->i;
+    
+    if ($absolute && $mins < 0)
+        $mins = abs($mins);
+    
+    return $mins;
+}
+
+
 function days_between($start, $end, $absolute=true) {
     $s = date2unix($start);
     $e = date2unix($end);
