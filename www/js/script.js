@@ -2295,6 +2295,14 @@ function removeFooterInfo() {
 	$('.footer-info-message').remove();
 }
 
-
-
+$(document).ready(function() {
+	$('*[footer-info-message]').on('mouseover', function() {
+		let t = $.trim( $(this).attr('footer-info-message') );
+		
+		showFooterInfo( t );
+	});
+	$('*[footer-info-message]').on('mouseout', function() {
+		removeFooterInfo();
+	});
+});
 
