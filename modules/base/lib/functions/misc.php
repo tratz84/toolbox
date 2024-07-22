@@ -4,6 +4,7 @@
 
 
 use base\model\User;
+use base\service\SettingsService;
 
 
 function getJsState($key, $defaultValue=null, $userId=null) {
@@ -17,6 +18,17 @@ function getJsState($key, $defaultValue=null, $userId=null) {
     } else {
         return $defaultValue;
     }
+}
+
+
+function settings_update_value( $key, $val ) {
+    $setService = object_container_get( SettingsService::class );
+    $setService->updateValue( $key, $val );
+}
+
+// for consistency. Could also just call ctx()->getSetting( .... )
+function settings_get_value( $key, $defaultValue=null ) {
+    return ctx()->getSetting($key, $defaultValue);
 }
 
 
