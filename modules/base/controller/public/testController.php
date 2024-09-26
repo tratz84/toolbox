@@ -8,6 +8,7 @@ use calendar\model\base\CalendarItemBase;
 use core\container\ObjectHookProxy;
 use customer\model\Person;
 use customer\service\PersonService;
+use core\parser\SqlQueryParser;
 
 class testController extends BaseController {
     
@@ -17,9 +18,16 @@ class testController extends BaseController {
         ini_set('display_errors', 'on');
         ini_set('error_reporting', E_ALL);
         
-        $p = object_container_get( PersonService::class );
+        print 'hi';
         
-        print toolbox_get_class($p);
+        $p = new SqlQueryParser();
+        $p->parseQuery("select c.*
+                        from customer__company c
+                        left join customer__company_address ca on (c.company_id = ca.company_id)
+                        join customer__address a on (ca.address_id = a.address_id)
+                        where a.city like ?");
+        
+        var_export( $p );exit;
         
         
     }
