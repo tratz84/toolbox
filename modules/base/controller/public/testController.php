@@ -14,6 +14,7 @@ class testController extends BaseController {
     
     
     public function action_index() {
+	    die('halt');
         
         ini_set('display_errors', 'on');
         ini_set('error_reporting', E_ALL);
