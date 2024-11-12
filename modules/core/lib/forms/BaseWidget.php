@@ -25,6 +25,8 @@ class BaseWidget {
     
     protected $prio = 0;
     
+    protected $opts = array();
+    
     public function getName() { return $this->name; }
     public function setName($n) { $this->name = $n; }
     
