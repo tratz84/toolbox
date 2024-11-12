@@ -173,5 +173,14 @@ $tb_company_person->addForeignKey('fk_company', 'company_id', 'customer__company
 $tbs[] = $tb_company_person;
 
 
+$tb_user_customer = new TableModel('customer', 'user_company_person');
+$tb_user_customer->addColumn('user_company_person_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_user_customer->addColumn('user_id',         'int', ['unique' => true]);
+$tb_user_customer->addColumn('person_id',       'int');
+$tb_user_customer->addColumn('company_id',      'int');
+$tbs[] = $tb_user_customer;
+
+
+
 return $tbs;
 
