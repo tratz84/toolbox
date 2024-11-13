@@ -120,7 +120,7 @@ $menuItems = $ms->listMainMenu();
         </div>
     </header>
     
-    <?= get_template(__DIR__.'/_nav_sidemenu.php', array('controller' => $controller, 'context' => $context, 'menuItems' => $menuItems)) ?>
+    <?= get_template(__DIR__.'/_nav_sidemenu.php', array('controller' => isset($controller) ? $controller : null, 'menuItems' => $menuItems)) ?>
 	
 	<div class="main-content">
 		<?php output_user_messages() ?>
