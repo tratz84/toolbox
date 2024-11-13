@@ -38,7 +38,7 @@ try {
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Toolbox - serious error</title>
+		<title>Toolbox - internal error</title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="icon" type="image/x-icon" href="favicon.ico">
