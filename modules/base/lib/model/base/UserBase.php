@@ -14,7 +14,7 @@ class UserBase extends \core\db\DBObject {
   'user_id' => 
   array (
     'Field' => 'user_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'NO',
     'Key' => 'PRI',
     'Default' => NULL,
@@ -107,7 +107,16 @@ class UserBase extends \core\db\DBObject {
     'Type' => 'tinyint(1)',
     'Null' => 'YES',
     'Key' => '',
-    'Default' => '1',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'default_lang' => 
+  array (
+    'Field' => 'default_lang',
+    'Type' => 'varchar(5)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
     'Extra' => '',
   ),
 ) );
@@ -159,6 +168,10 @@ class UserBase extends \core\db\DBObject {
 		
 	public function setActivated($p) { $this->setField('activated', $p); }
 	public function getActivated() { return $this->getField('activated'); }
+	
+		
+	public function setDefaultLang($p) { $this->setField('default_lang', $p); }
+	public function getDefaultLang() { return $this->getField('default_lang'); }
 	
 	
 }
