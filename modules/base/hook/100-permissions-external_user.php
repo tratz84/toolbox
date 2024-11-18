@@ -13,6 +13,10 @@ hook_eventbus_subscribe('core', 'authorization-check', function($ac) {
         if ($ac->getController() == 'auth') {
             $ac->allowPermission();
         }
+        
+        if ($ac->getController() == 'multiuser') {
+            $ac->allowPermission();
+        }
     }
     
 });
