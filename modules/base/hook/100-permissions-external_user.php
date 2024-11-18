@@ -17,6 +17,9 @@ hook_eventbus_subscribe('core', 'authorization-check', function($ac) {
         if ($ac->getController() == 'multiuser') {
             $ac->allowPermission();
         }
+        if ($ac->getController() == 'ping') {
+            $ac->allowPermission();
+        }
     }
     
 });
