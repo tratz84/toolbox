@@ -14,6 +14,9 @@ hook_eventbus_subscribe('core', 'authorization-check', function($ac) {
             $ac->allowPermission();
         }
         
+        if ($ac->getController() == 'user' & $ac->getAction() == 'switchlang') {
+            $ac->allowPermission();
+        }
         if ($ac->getController() == 'multiuser') {
             $ac->allowPermission();
         }

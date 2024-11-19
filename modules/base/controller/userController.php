@@ -10,7 +10,12 @@ class userController extends FormController {
     
     
     public function init() {
-        checkCapability('base', 'edit-masterdata');
+        if (get_var('a') == 'switchlang') {
+            // no auth check for switching langs
+        }
+        else {
+            checkCapability('base', 'edit-masterdata');
+        }
         
         $this->varNameId = 'user_id';
         
@@ -83,8 +88,38 @@ class userController extends FormController {
         $result['results'] = $arr;
         
         $this->json($result);
+    }
+    
+    
+    
+    
+    public function action_switchlang() {
+        $lc = get_var('langcode');
+        
+        if (preg_match('/^[a-zA-Z]{2}_[a-zA-Z]{2}$/', $lc)) {
+            
+            $user = ctx()->getUser();
+            if ($user) {
+                $uservice = object_container_get( UserService::class );
+                $uservice->setUserLang( $user->getUserId(), $lc );
+                
+            }
+            
+            setcookie( 'toolbox_selected_lang', $lc, 60*60*24*365, appUrl('/') );
+        }
+        
+        if (get_var('ret')) {
+            header('Location: ' . get_var('ret'));
+        }
+        else {
+            redirect('/');
+        }
         
     }
+    
+    
+    
+    
 }
 
 

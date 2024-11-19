@@ -568,6 +568,18 @@ function appUrl(u) {
 	return appSettings.appRootUrl + u.substr(1);
 }
 
+
+
+function switchlang( langcode ) {
+	
+	let ret = window.location.toString();
+	
+	window.location = appUrl('/?m=base&c=user&a=switchlang&langcode=' + langcode + '&ref=' + encodeURIComponent(ret));
+}
+
+
+
+
 function formpost(url, data, opts) {
 	data = data || {};
 	opts = opts || {};
