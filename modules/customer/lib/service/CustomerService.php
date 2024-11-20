@@ -168,6 +168,9 @@ class CustomerService extends ServiceBase {
     }
 
     public function readCustomerStrId($strCustomerId) {
+        if (!$strCustomerId)
+            return null;
+        
         if (strpos($strCustomerId, 'company-') === 0) {
             $cid = substr($strCustomerId, strlen('company-'));
             return $this->readCustomerAuto($cid, null);
