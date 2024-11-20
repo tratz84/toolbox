@@ -574,7 +574,7 @@ function switchlang( langcode ) {
 	
 	let ret = window.location.toString();
 	
-	window.location = appUrl('/?m=base&c=user&a=switchlang&langcode=' + langcode + '&ref=' + encodeURIComponent(ret));
+	window.location = appUrl('/?m=base&c=user&a=switchlang&langcode=' + langcode + '&ret=' + encodeURIComponent(ret));
 }
 
 
