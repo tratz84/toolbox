@@ -152,7 +152,8 @@ class SendMail {
         
         // debug mode? => force local
         if (is_debug()) {
-            $settings['server_type'] = 'local';
+            if ( $settings['server_type'] != 'local' && $settings['server_type'] != 'local_mail' )
+                $settings['server_type'] = 'local';
         }
         
         if ($settings['server_type'] == 'local') {
