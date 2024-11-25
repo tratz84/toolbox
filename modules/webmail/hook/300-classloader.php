@@ -10,6 +10,6 @@ spl_autoload_register(function($name) {
         require_once __DIR__.'/../lib/3rdparty/Swift/Transport/MailTransport.php';
     }
     
-    print "$name\n";
+//     print "$name\n";
     
 });
