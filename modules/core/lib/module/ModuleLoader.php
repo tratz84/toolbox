@@ -4,6 +4,7 @@ namespace core\module;
 
 
 use base\model\Menu;
+use base\user\UserCapabilityContainer;
 
 class ModuleLoader {
     
@@ -59,7 +60,7 @@ class ModuleLoader {
         
         hook_eventbus_subscribe('base', 'user-capabilities', function($ucc) use ($file, $moduleName) {
             /**
-             * @var $ucc base\user\UserCapabilityContainer
+             * @var UserCapabilityContainer $ucc
              */
             
             $capabilities = include $file;

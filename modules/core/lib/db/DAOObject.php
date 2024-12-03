@@ -60,9 +60,9 @@ class DAOObject
 
     /**
      * queryOne() - return's first result or NULL
-     * @param unknown $query
+     * @param string $query
      * @param array $params
-     * @return unknown|NULL
+     * @return DBObject|NULL
      */
     public function queryOne($query, $params = array()) {
         $con = DatabaseHandler::getConnection($this->resourceName);

@@ -6,6 +6,6 @@ namespace webmail\mail\connector;
 
 
 class Pop3Connector extends BaseMailConnector {
-    
+    // TODO: implement
 }
 

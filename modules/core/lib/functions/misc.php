@@ -1208,12 +1208,12 @@ function previous_week_no($year, $weekNo) {
 
 /**
  * 
- * @param unknown $dayOccurence     upwards: 1-5
+ * @param int $dayOccurence     upwards: 1-5
  *                                  downwards for last-day: -1, -2, ...
  * 
- * @param unknown $dayName          mo/tu/we/th/fr/sa
- * @param unknown $month            1-12
- * @param unknown $year
+ * @param string $dayName          mo/tu/we/th/fr/sa
+ * @param int    $month            1-12
+ * @param int    $year
  */
 function day_in_month( $dayOccurence, $dayName, $month, $year ) {
     

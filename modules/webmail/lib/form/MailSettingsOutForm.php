@@ -3,15 +3,12 @@
 namespace webmail\form;
 
 use core\forms\BaseForm;
+use core\forms\CheckboxField;
+use core\forms\HiddenField;
 use core\forms\SelectField;
 use core\forms\TextField;
-use core\forms\validator\NumberValidator;
-use core\forms\HiddenField;
-use core\forms\CheckboxField;
 use core\forms\WidgetContainer;
-use webmail\service\CloudTokenService;
-use core\forms\validator\NotEmptyValidator;
-use Laminas\Validator\NotEmpty;
+use core\forms\validator\NumberValidator;
 
 class MailSettingsOutForm extends BaseForm {
     

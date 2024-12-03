@@ -41,7 +41,7 @@ class articleController extends BaseController {
         $id = isset($_REQUEST['id'])?(int)$_REQUEST['id']:0;
         
         /**
-         * @var LocationService
+         * @var ArticleService
          */
         $articleService = $this->oc->get(ArticleService::class);
         if ($id) {

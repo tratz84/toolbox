@@ -3,6 +3,8 @@
 namespace codegen\generator;
 
 use codegen\parser\PhpCodeParser;
+use core\exception\FileException;
+use core\exception\InvalidStateException;
 
 
 class IndexTableControllerGenerator {

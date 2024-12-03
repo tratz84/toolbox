@@ -142,7 +142,7 @@ class BaseForm extends WidgetContainer implements LockableObject {
     /**
      * 
      * @param string $name
-     * @param \core\forms\validator\BaseValidator|function $val
+     * @param \core\forms\validator\BaseValidator | function $val
      *         - function must return error message OR null on success
      */
     public function addValidator($name, $val) {

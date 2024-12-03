@@ -15,7 +15,7 @@ class dashboardController extends BaseController {
         $this->dwc = new DashboardWidgets();
         
         /**
-         * @var \event\EventBus $eb
+         * @var \core\event\EventBus $eb
          */
         $eb = $this->oc->get(\core\event\EventBus::class);
         $eb->publishEvent($this->dwc, 'base', 'dashboard');

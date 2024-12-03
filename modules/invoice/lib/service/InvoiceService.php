@@ -508,14 +508,14 @@ class InvoiceService extends ServiceBase implements ObjectHookable {
 
     /**
      * 
-     * @param unknown $companyId
-     * @param unknown $personId
-     * @param unknown $refObject
-     * @param unknown $refId
-     * @param unknown $price            - price
-     * @param unknown $discountPrice
-     * @param unknown $startDate
-     * @return \invoice\model\PriceAdjustment|\core\db\unknown|NULL
+     * @param int    $companyId
+     * @param int    $personId
+     * @param object $refObject
+     * @param int    $refId
+     * @param double $price            - price
+     * @param double $discountPrice
+     * @param string $startDate
+     * @return \invoice\model\PriceAdjustment|NULL
      */
     public function savePriceAdjustment($companyId, $personId, $refObject, $refId, $price, $discountPrice, $startDate) {
         $paDao = new PriceAdjustmentDAO();
