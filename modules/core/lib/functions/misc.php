@@ -1533,6 +1533,9 @@ function valid_time($str) {
 }
 function validate_email($email)
 {
+    if (is_string($email) == false)
+        $email = '';
+    
     $isValid = true;
     $atIndex = strrpos($email, "@");
 
