@@ -20,6 +20,12 @@
 		<?php endif; ?>
 	
     	<div>
+    		<?php if (isset($error)) : ?>
+    		<div style="padding: 10px; border: 1px solid #f00; background-color: #fcffe5; font-style: italic; color: #f00; margin-bottom: 15px;">
+    			<div class="error"><?= $error ?></div>
+    		</div>
+    		<?php endif; ?>
+    		
     		<div class="input-row">
     			<div class="label"><?= t('Username') ?></div>
     			<div><input type="text" name="username" value="<?= esc_attr($username) ?>" autofocus /></div>
@@ -29,11 +35,6 @@
     			<div class="label"><?= t('Password') ?></div>
     			<div><input type="password" name="p" value="<?= esc_attr($password) ?>" /></div>
     		</div>
-    		<?php if (isset($error)) : ?>
-    		<div>
-    			<div class="error"><?= $error ?></div>
-    		</div>
-    		<?php endif; ?>
     		<div>
     			<div>
     				<input type="submit" value="<?= t('Logon') ?>" />
