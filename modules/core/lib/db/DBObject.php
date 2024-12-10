@@ -111,6 +111,14 @@ class DBObject {
             return $this->getField($fieldName);
     }
     
+    public function setterOrField( $fieldName, $value ) {
+        $func = 'set'.dbCamelCase( $fieldName );
+        if (method_exists($this, $func))
+            return $this->$func( $value );
+        else
+            return $this->setField($fieldName, $value);
+    }
+    
     
     public function setFields($arr) {
         foreach($arr as $key => $val) {
