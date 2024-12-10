@@ -48,6 +48,19 @@ function t_loadlang() {
     return $lang;
 }
 
+function tcf($langcode, $str) {
+    $arguments = func_get_args();
+    
+    $str = tc( $arguments[0], $arguments[1] );
+    
+    // skip 2 argument
+    $params = array_splice($arguments, 2);
+    
+    // format & return
+    return vsprintf($str, $params);
+}
+
+
 function tf($str) {
     $arguments = func_get_args();
     
