@@ -26,6 +26,7 @@ RewriteRule ^([a-zA-Z0-9_-]+)$ /$1/ [R=301,L]
 
 
 # management interface administrations
+RewriteCond !-d ../admin
 RewriteRule ^admin/.*$ admin.php [L]
 
 
