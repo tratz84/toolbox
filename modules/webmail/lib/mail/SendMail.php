@@ -251,6 +251,8 @@ class SendMail {
         }
         
         $message = @$this->buildMessage();
+//         $message->setEncoder( new \Swift_Mime_ContentEncoder_PlainContentEncoder('8bit') );
+        
         $mailer = new \Swift_Mailer($transport);
         
 //         $mailLogger = new \Swift_Plugins_Loggers_ArrayLogger();
