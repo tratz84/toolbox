@@ -22,7 +22,7 @@ class WeekField extends BaseWidget {
         
         $this->startYear = $dt->format('Y');
         $this->startWeek = $dt->format('W');
-        $this->thisWeek = $dt->format('Y-W');
+        $this->thisWeek = $dt->format('o-W');
         
         $this->endYear = $dt->format('Y')+1;
         $this->endWeek = weeks_in_year($this->endYear);

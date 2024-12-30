@@ -54,7 +54,7 @@
 			     $row_week_no = $dt->format('W');
 			     
 			     $dt_now = new DateTime(null, new DateTimeZone('Europe/Amsterdam'));
-			     $row_week_no_is_current = $dt->format('Y-W') == $dt_now->format('Y-W') ? true : false;
+			     $row_week_no_is_current = $dt->format('o-W') == $dt_now->format('o-W') ? true : false;
 			 }
 			?>
 		<td class="<?= $row_week_no_is_current ? 'current-week' : '' ?> week-no-cell">

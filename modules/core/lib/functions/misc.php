@@ -1350,7 +1350,7 @@ function week_list($year, $timezone='Europe/Amsterdam') {
             
             $r[] = array(
                 'weekno' => (int)$dt->format('W'),
-                'year' => $dt->format('Y'),
+                'year' => $dt->format('o'),
                 'monday' => $dt->format('Y-m-d')
             );
         }
