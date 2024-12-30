@@ -1,6 +1,6 @@
 
 <div class="nav-side-menu">
-		<div class="mobile-menu-header d-md-none"><a href="<?= appUrl('/') ?>"><?= esc_html($context->getCompanyName()) ?></a></div>
+		<div class="mobile-menu-header d-md-none"><a href="<?= appUrl('/') ?>"><?= esc_html(ctx()->getCompanyName()) ?></a></div>
 		
 		<div class="mobile-icon-container"></div>
 		

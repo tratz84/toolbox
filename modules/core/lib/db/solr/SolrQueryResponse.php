@@ -101,7 +101,7 @@ class SolrQueryResponse {
     
     /**
      * getPage() - returns requested pageno
-     * @param unknown $pageNo
+     * @param int $pageNo
      */
     public function getPage($pageNo) {
         if ($pageNo < 0) {

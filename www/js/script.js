@@ -568,6 +568,18 @@ function appUrl(u) {
 	return appSettings.appRootUrl + u.substr(1);
 }
 
+
+
+function switchlang( langcode ) {
+	
+	let ret = window.location.toString();
+	
+	window.location = appUrl('/?m=base&c=user&a=switchlang&langcode=' + langcode + '&ret=' + encodeURIComponent(ret));
+}
+
+
+
+
 function formpost(url, data, opts) {
 	data = data || {};
 	opts = opts || {};
@@ -878,7 +890,7 @@ function showConfirmation(title, body, callback_ok) {
 	myModal.show();
 
 	$('.confirmation-dialog').on('shown.bs.modal', function() {
-		$('.confirmation-dialog').find('input[type="text"], input[type="password"]').first().focus();
+		$('.confirmation-dialog').find('input[type="text"], input[type="password"], input[type=number]').first().focus();
 	});
 }
 

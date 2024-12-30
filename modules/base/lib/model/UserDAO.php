@@ -135,6 +135,12 @@ class UserDAO extends \core\db\DAOObject {
 	}
 	
 	
+	public function setLang( $userId, $code ) {
+	    $sql = "update base__user set default_lang = ? where user_id = ?";
+	    
+	    $this->query($sql, array($code, $userId));
+	}
+	
 	
 }
 

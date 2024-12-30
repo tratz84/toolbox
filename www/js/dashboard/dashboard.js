@@ -138,6 +138,10 @@ function Dashboard( containerId, config ) {
 				
 				// prevent dashboard-changed event
 				$( me.containerId ).on('change', me.dashboardChanged);
+			},
+			error: function(xhr, textStatus, err) {
+				
+				$( me.containerId ).html(  textStatus + ': ' + err + '<br/>Url: ' + widget.ajaxUrl );
 			}
 		});
 	};

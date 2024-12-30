@@ -6,6 +6,33 @@
 use core\Context;
 
 
+function t_loadlangcode( $selectedLang ) {
+    static $cache = array();
+    
+    if (isset( $cache[$selectedLang] ))
+        return $cache[$selectedLang]['lang'];
+    
+        $lang = array();
+    
+    $modules = Context::getInstance()->getEnabledModules();
+    foreach($modules as $m) {
+        $langPath = realpath( module_path( $m ) . "/lang/" );
+        $p = realpath( module_path( $m ) . "/lang/".$selectedLang.".php" );
+        if ($p && strpos($p, $langPath) === 0) {
+            $lang_module = load_php_file($p);
+            if (is_array($lang_module)) {
+                $lang = array_merge($lang, $lang_module);
+            }
+        }
+    }
+    
+    $lang = apply_filter('langcode', ['code' => $selectedLang, 'lang' => $lang]);
+    
+    $cache[$selectedLang] = $lang;
+    
+    return $lang['lang'];
+}
+
 function t_loadlang() {
     static $lang = null;
     
@@ -13,23 +40,26 @@ function t_loadlang() {
         $lang = array();
         $selectedLang = Context::getInstance()->getSelectedLang();
         
-        $modules = Context::getInstance()->getEnabledModules();
-        foreach($modules as $m) {
-            $langPath = realpath( module_path( $m ) . "/lang/" );
-            $p = realpath( module_path( $m ) . "/lang/".$selectedLang.".php" );
-            if ($p && strpos($p, $langPath) === 0) {
-                $lang_module = load_php_file($p);
-                if (is_array($lang_module)) {
-                    $lang = array_merge($lang, $lang_module);
-                }
-            }
-        }
+        $lang = t_loadlangcode($selectedLang);
         
         $lang = apply_filter('lang', $lang);
     }
     
     return $lang;
 }
+
+function tcf($langcode, $str) {
+    $arguments = func_get_args();
+    
+    $str = tc( $arguments[0], $arguments[1] );
+    
+    // skip 2 argument
+    $params = array_splice($arguments, 2);
+    
+    // format & return
+    return vsprintf($str, $params);
+}
+
 
 function tf($str) {
     $arguments = func_get_args();
@@ -51,6 +81,18 @@ function has_t($str) {
     }
     
     return array_key_exists($str, $lang) ? true : false;
+}
+
+function tc($langcode, $str) {
+    
+    $l = t_loadlangcode( $langcode );
+    
+    if (array_key_exists($str, $l)) {
+        return $l[$str];
+    } else {
+        return $str;
+    }
+    
 }
 
 function t($str) {

@@ -34,6 +34,7 @@ class Email extends base\EmailBase {
     // webmail__email_to
     public function setRecipients($p) { $this->recipients = $p; }
     public function getRecipients() { return $this->recipients; }
+    public function recipientCount() { return count($this->recipients); }
     public function addRecipient($p) { $this->recipients[] = $p; }
 
     

@@ -13,6 +13,16 @@ hook_eventbus_subscribe('core', 'authorization-check', function($ac) {
         if ($ac->getController() == 'auth') {
             $ac->allowPermission();
         }
+        
+        if ($ac->getController() == 'user' & $ac->getAction() == 'switchlang') {
+            $ac->allowPermission();
+        }
+        if ($ac->getController() == 'multiuser') {
+            $ac->allowPermission();
+        }
+        if ($ac->getController() == 'ping') {
+            $ac->allowPermission();
+        }
     }
     
 });

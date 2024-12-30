@@ -17,7 +17,7 @@
 		<tbody>
 			<?php for($x=count($events)-1; $x >= 0; $x--) : ?>
 			<?php $e = $events[$x]; ?>
-			<tr class="clickable" onclick="show_popup(appUrl('/?m=calendar&c=view&a=edit&readonly=true&calendar_item_id=<?= $e->getId() ?>'))">
+			<tr class="clickable <?= $e->getCancelled() ? 'cancelled' : '' ?>" onclick="show_popup(appUrl('/?m=calendar&c=view&a=edit&readonly=true&calendar_item_id=<?= $e->getId() ?>'))">
 				<td>
 					<?= esc_html($e->getDescription()) ?>
 				</td>

@@ -20,7 +20,9 @@ class Template extends base\TemplateBase {
 
     
     public function render($params = array()) {
-        return apply_html_vars($this->getContent(), $params);
+        $html = apply_html_vars($this->getContent(), $params);
+        
+        return apply_filter('webmail-template-render', $html);
     }
     
 }

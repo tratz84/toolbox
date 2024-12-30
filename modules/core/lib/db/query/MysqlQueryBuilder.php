@@ -232,7 +232,13 @@ class MysqlQueryBuilder extends QueryBuilder {
             } else if (is_a($w, QueryBuilderWhereContainer::class)) {
                 
                 $sql[] = $this->buildWhere($w, false);
+            }
+            else if (is_a($w, QueryBuilderWhereRaw::class)) {
+                $sql[] = $w->getSqlWhere();
                 
+                foreach($w->getParams() as $v) {
+                    $this->params[] = $v;
+                }
             } else {
                 throw new InvalidStateException('Invalid where class given');
             }

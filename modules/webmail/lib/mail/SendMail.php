@@ -94,12 +94,41 @@ class SendMail {
         );
     }
     
-    public function addAttachmentDataFile($data, $filename) {
-        $this->attachmentDataFiles[] = array(
+    public function addAttachmentDataFile($data, $filename, $opts=array()) {
+        $df = array(
             'data' => $data,
             'filename' => $filename
         );
+        
+        if (isset($opts['id'])) {
+            $df['id'] = $opts['id'];
+        }
+        if (isset($opts['disposition'])) {
+            $df['disposition'] = $opts['disposition'];
+        }
+        if (isset($opts['content-type'])) {
+            $df['content-type'] = $opts['content-type'];
+        }
+        
+        $this->attachmentDataFiles[] = $df;
     }
+    
+    public function addAttachmentInline($data, $filename, $id, $contentType) {
+        $df = array(
+            'id' => $id,
+            'content-type' => $contentType,
+            'disposition' => 'inline',
+            'data' => $data,
+            'filename' => $filename
+        );
+        
+        
+        $this->attachmentDataFiles[] = $df;
+        
+    }
+    
+    
+    
     
     public function buildMessage() {
         $message = new \Swift_Message( $this->getSubject() );
@@ -138,6 +167,14 @@ class SendMail {
         
         foreach($this->attachmentDataFiles as $f) {
             $att = new \Swift_Attachment($f['data'], $f['filename']);
+            if (isset($f['id']))
+                $att->setId( $f['id']);
+            
+            if (isset($f['disposition']))
+                $att->setDisposition($f['disposition']);
+            if (isset($f['content-type']))
+                $att->setContentType($f['content-type']);
+            
             $message->attach($att);
         }
         
@@ -152,7 +189,8 @@ class SendMail {
         
         // debug mode? => force local
         if (is_debug()) {
-            $settings['server_type'] = 'local';
+            if ( $settings['server_type'] != 'local' && $settings['server_type'] != 'local_mail' )
+                $settings['server_type'] = 'local';
         }
         
         if ($settings['server_type'] == 'local') {
@@ -213,6 +251,8 @@ class SendMail {
         }
         
         $message = @$this->buildMessage();
+//         $message->setEncoder( new \Swift_Mime_ContentEncoder_PlainContentEncoder('8bit') );
+        
         $mailer = new \Swift_Mailer($transport);
         
 //         $mailLogger = new \Swift_Plugins_Loggers_ArrayLogger();

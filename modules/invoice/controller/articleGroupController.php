@@ -40,7 +40,7 @@ class articleGroupController extends BaseController {
         $id = isset($_REQUEST['article_group_id'])?(int)$_REQUEST['article_group_id']:0;
         
         /**
-         * @var LocationService
+         * @var ArticleService
          */
         $articleService = $this->oc->get(ArticleService::class);
         if ($id) {

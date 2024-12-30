@@ -118,6 +118,7 @@ $tb_user->addColumn('password',        'varchar(255)');
 $tb_user->addColumn('edited',          'datetime');
 $tb_user->addColumn('created',         'datetime');
 $tb_user->addColumn('user_type',       'varchar(20)');
+$tb_user->addColumn('default_lang',    'varchar(5)');
 $tb_user->addColumn('firstname',       'varchar(128)');
 $tb_user->addColumn('lastname',        'varchar(128)');
 $tb_user->addColumn('autologin_token', 'varchar(255)');

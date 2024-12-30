@@ -19,36 +19,36 @@
 		</div>
 		<?php endif; ?>
 	
-    	<table>
-    		<tr>
-    			<th><?= t('Username') ?></th>
-    			<td><input type="text" name="username" value="<?= esc_attr($username) ?>" autofocus /></td>
-    		</tr>
-    		
-    		<tr>
-    			<th><?= t('Password') ?></th>
-    			<td><input type="password" name="p" value="<?= esc_attr($password) ?>" /></td>
-    		</tr>
-    		<tr>
-    			<th></th>
-    			<td>
-    				<label>
-    					<?= t('Remember me') ?>
-    					<?= render_checkbox('rememberme', ['checked' => $remembermeChecked]) ?>
-					</label>
-    			</td>
-    		</tr>
+    	<div>
     		<?php if (isset($error)) : ?>
-    		<tr>
-    			<td colspan="2" class="error"><?= $error ?></td>
-    		</tr>
+    		<div style="padding: 10px; border: 1px solid #f00; background-color: #fcffe5; font-style: italic; color: #f00; margin-bottom: 15px;">
+    			<div class="error"><?= $error ?></div>
+    		</div>
     		<?php endif; ?>
-    		<tr>
-    			<td colspan="2" align=right>
+    		
+    		<div class="input-row">
+    			<div class="label"><?= t('Username') ?></div>
+    			<div><input type="text" name="username" value="<?= esc_attr($username) ?>" autofocus /></div>
+    		</div>
+    		
+    		<div class="input-row">
+    			<div class="label"><?= t('Password') ?></div>
+    			<div><input type="password" name="p" value="<?= esc_attr($password) ?>" /></div>
+    		</div>
+    		<div>
+    			<div>
     				<input type="submit" value="<?= t('Logon') ?>" />
-    			</td>
-    		</tr>
-    	</table>
+    			</div>
+    		</div>
+    		
+    		<div class="remember-me">
+				<label>
+					<?= render_checkbox('rememberme', ['checked' => $remembermeChecked]) ?>
+					
+					<?= t('Remember me') ?>
+				</label>
+    		</div>
+    	</div>
     	
     	<br/>
     	<br/>

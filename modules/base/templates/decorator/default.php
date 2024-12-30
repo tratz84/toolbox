@@ -26,6 +26,7 @@ $menuItems = $ms->listMainMenu();
 			     'contextName' => $context->getContextName(),
 			     'appRootUrl' => appUrl('/'),
 			     'username' => $context->getUser() ? $context->getUser()->getUsername() : '',
+			     'lang' => $context->getSelectedLang(),
 			     'multiuser_check_interval' => MULTIUSER_CHECK_INTERVAL,
 			     'standalone_installation' => is_standalone_installation(),
 			     'currency_symbol' => TOOLBOX_CURRENCY_SYMBOL
@@ -120,7 +121,7 @@ $menuItems = $ms->listMainMenu();
         </div>
     </header>
     
-    <?= get_template(__DIR__.'/_nav_sidemenu.php', array('controller' => $controller, 'context' => $context, 'menuItems' => $menuItems)) ?>
+    <?= get_template(__DIR__.'/_nav_sidemenu.php', array('controller' => isset($controller) ? $controller : null, 'menuItems' => $menuItems)) ?>
 	
 	<div class="main-content">
 		<?php output_user_messages() ?>

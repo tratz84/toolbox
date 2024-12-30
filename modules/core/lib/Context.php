@@ -68,7 +68,17 @@ class Context
     public function getUser() { return $this->user; }
     
     
-    public function getSelectedLang() { return $this->selectedLang; }
+    public function getSelectedLang() {
+        if ($this->getUser() && $this->getUser()->getDefaultLang()) {
+            return $this->getUser()->getDefaultLang();
+        }
+        else if (isset($_COOKIE['toolbox_selected_lang']) && preg_match('/[a-zA-Z]{2}_[a-zA-Z]{2}$/', $_COOKIE['toolbox_selected_lang'])) {
+            return $_COOKIE['toolbox_selected_lang'];
+        }
+        else {
+            return $this->selectedLang;
+        }
+    }
     public function setSelectedLang($p) { $this->selectedLang = $p; }
 
     public function isModuleEnabled($name) {

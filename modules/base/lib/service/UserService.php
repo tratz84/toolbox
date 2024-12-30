@@ -32,6 +32,7 @@ use webmail\mail\SendMail;
 use webmail\model\Email;
 use webmail\model\EmailTo;
 use webmail\service\EmailService;
+use core\exception\InvalidArgumentException;
 
 
 
@@ -775,6 +776,19 @@ class UserService extends ServiceBase {
         }
         
         return $ids;
+    }
+    
+    
+    
+    public function setUserLang( $userId, $langcode ) {
+        
+        if (!preg_match('/^[a-zA-Z]{2}_[a-zA-Z]{2}$/', $langcode)) {
+            throw new InvalidArgumentException( 'Invalid langcode' );
+        }
+        
+        $uDao = new UserDAO();
+        $uDao->setLang($userId, $langcode);
+        
     }
     
     

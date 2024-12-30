@@ -12,6 +12,8 @@ use core\service\ServiceBase;
 use customer\model\EmailDAO;
 use customer\model\CompanyDAO;
 use customer\model\AddressDAO;
+use customer\model\UserCustomer;
+use customer\model\UserCompanyPerson;
 
 class CustomerService extends ServiceBase {
     
@@ -166,6 +168,9 @@ class CustomerService extends ServiceBase {
     }
 
     public function readCustomerStrId($strCustomerId) {
+        if (!$strCustomerId)
+            return null;
+        
         if (strpos($strCustomerId, 'company-') === 0) {
             $cid = substr($strCustomerId, strlen('company-'));
             return $this->readCustomerAuto($cid, null);
@@ -252,5 +257,47 @@ class CustomerService extends ServiceBase {
         
         return $customers;
     }
+    
+    public function linkUser( $userId, $customerId ) {
+        $personId = null;
+        $companyId = null;
+        
+        if ($customerId) {
+            if (strpos($customerId, 'company-') === 0) {
+                $companyId = (int)substr( $customerId, 8);
+            }
+            if (strpos($customerId, 'person-') === 0) {
+                $personId = (int)substr( $customerId, 7 );
+            }
+        }
+        
+        $user_customer_id = queryValue('default', 'select user_company_person_id from customer__user_company_person where user_id = ?', array($userId));
+        
+        
+        if ($personId) {
+            $uc = new UserCompanyPerson();
+            $uc->setUserCompanyPersonId( $user_customer_id );
+            $uc->setUserId($userId);
+            $uc->setCompanyId(null);
+            $uc->setPersonId($personId);
+            $uc->save();
+        }
+        else if ($companyId) {
+            $uc = new UserCompanyPerson();
+            $uc->setUserCompanyPersonId( $user_customer_id );
+            $uc->setUserId($userId);
+            $uc->setCompanyId($companyId);
+            $uc->setPersonId(null);
+            $uc->save();
+        }
+        else {
+            if ($user_customer_id) {
+                $uc = new UserCompanyPerson();
+                $uc->setUserCompanyPersonId( $user_customer_id );
+                $uc->delete();
+            }
+        }
+    }
+    
     
 }

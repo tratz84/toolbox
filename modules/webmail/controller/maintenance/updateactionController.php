@@ -4,9 +4,6 @@
 
 use core\controller\BaseController;
 use webmail\form\WebmailUpdateActionForm;
-use webmail\mail\MailProperties;
-use webmail\mail\SolrMailActions;
-use webmail\solr\SolrMailQuery;
 use webmail\search\MailSearchBase;
 use webmail\mail\render\MailRenderBase;
 use webmail\mail\action\MailActionsBase;

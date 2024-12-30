@@ -127,7 +127,7 @@ class WidgetContainer extends BaseWidget {
     
     /**
      * bind($obj) - binds $obj to form
-     * @param unknown $obj
+     * @param object $obj
      * 
      * @return number of fields set
      */
