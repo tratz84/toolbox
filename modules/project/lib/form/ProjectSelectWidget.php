@@ -44,7 +44,8 @@ class ProjectSelectWidget extends DynamicSelectField {
             } else {
                 $customerService = object_container_get( CustomerService::class );
                 $customer = $customerService->readCustomerAuto( $project->getCompanyId(), $project->getPersonId() );
-                $name = $customer->getName() . ' - ';
+                if ($customer)
+                    $name = $customer->getName() . ' - ';
             }
             $name = $name . $project->getProjectName();
             
