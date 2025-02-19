@@ -135,7 +135,7 @@ class CustomerDAO extends \core\db\DAOObject {
             
         }
         
-        if (isset($opts['contact_person']) && $opts['contact_person']) {
+        if (isset($opts['contact_person']) && trim($opts['contact_person']) != '' && $queryCompanies == true) {
             $queryPersons = false;
         }
         
@@ -173,12 +173,12 @@ class CustomerDAO extends \core\db\DAOObject {
                 $qb2->addWhere(QueryBuilderWhere::whereRefByVal('iban', '=', $opts['iban']));
             }
             
-            if (isset($opts['contact_person']) && $opts['contact_person']) {
-                $qb2->addWhere(QueryBuilderWhere::whereRefByVal(
-                    " concat(ifnull(lastname, ''), ', ', ifnull(insert_lastname, ''), ' ', ifnull(firstname, '), ' ', ifnull(insert_lastname, '), ' ', lastname)"
-                    , 'LIKE'
-                    , '%'.str_replace(' ', '%', $opts['contact_person']).'%'));
-            }
+//             if (isset($opts['contact_person']) && $opts['contact_person']) {
+//                 $qb2->addWhere(QueryBuilderWhere::whereRefByVal(
+//                     " concat(ifnull(lastname, ''), ', ', ifnull(insert_lastname, ''), ' ', ifnull(firstname, '), ' ', ifnull(insert_lastname, '), ' ', lastname)"
+//                     , 'LIKE'
+//                     , '%'.str_replace(' ', '%', $opts['contact_person']).'%'));
+//             }
             
             if (isset($opts['q']) && $opts['q']) {
                 $c = new QueryBuilderWhereContainer( 'OR' );
