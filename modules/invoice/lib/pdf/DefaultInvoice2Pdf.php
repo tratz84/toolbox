@@ -236,6 +236,27 @@ class DefaultInvoice2Pdf extends BasePdf {
     
     
     
+    
+    
+    function Footer() {
+        $settings = object_meta_get('invoice-pdfsettings-invoice', 0, 'settings');
+        
+        if ( $settings && isset($settings['footer_note']) && trim($settings['footer_note']) != '' ) {
+            $footernote = trim($settings['footer_note']);
+            
+            $this->SetFont('Arial', 'I', '10');
+            $this->SetX(0);
+            $this->SetY(280);
+            $this->Cell(189.6, $this->lineHeight, $footernote, 0, 0, 'C');
+        }
+        // no footer note? => fallback to default
+        else {
+            parent::Footer();
+        }
+
+    }
+    
+    
 }
 
 
