@@ -23,7 +23,7 @@ class LandscapeOfferPdf extends BasePdf {
     public function __construct() {
         parent::__construct('L');
         
-        $pdfsettings = object_meta_get('invoice-pdfsettings', 0, 'color');
+        $pdfsettings = object_meta_get('invoice-pdfsettings-offer', 0, 'color');
         if ($pdfsettings) {
             if (isset($pdfsettings['color_frame'])) {
                 $c = hex2rgb($pdfsettings['color_frame']);

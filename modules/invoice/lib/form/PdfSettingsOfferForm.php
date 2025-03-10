@@ -7,7 +7,7 @@ namespace invoice\form;
 use core\forms\BaseForm;
 use core\forms\ColorPickerField;
 
-class InvoicePdfSettingsForm extends BaseForm {
+class PdfSettingsOfferForm extends BaseForm {
     
     
     

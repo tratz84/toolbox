@@ -45,7 +45,7 @@ use invoice\pdf\DefaultInvoicePdf;
         		<?php endforeach; ?>
         	</select>
         	
-        	<a href="<?= appUrl('/?m=invoice&c=pdfsettings') ?>" class="fa fa-cog"></a>
+        	<a href="<?= appUrl('/?m=invoice&c=pdfsettings&a=offer') ?>" class="fa fa-cog"></a>
         </div>
         
         <div class="widget text-field-widget">
@@ -58,6 +58,8 @@ use invoice\pdf\DefaultInvoicePdf;
         		<option value="<?= esc_attr($clazz) ?>" <?= @$settings['invoice__invoiceTemplate'] == $clazz ? 'selected=selected' : '' ?>><?= esc_html($templateDescription) ?></option>
         		<?php endforeach; ?>
         	</select>
+        	
+        	<a href="<?= appUrl('/?m=invoice&c=pdfsettings&a=invoice') ?>" class="fa fa-cog"></a>
         </div>
         
         <div class="widget checkbox-field-widget">
