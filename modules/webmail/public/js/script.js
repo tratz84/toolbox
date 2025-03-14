@@ -31,6 +31,17 @@ function markMailAsSpam( email_id ) {
 	});
 }
 
+function confirm_markMailAsSpam(email_id) {
+	showConfirmation( toolbox_t('Mark as spam'), toolbox_t('Are you sure to mark this mail as spam?'), function() {
+		markMailAsSpam( email_id );
+	});
+}
+
+
+
+
+
+
 function markMailAsHam(row, email_id) {
 	$.ajax({
 		url: appUrl('/?m=webmail&c=mailbox/mail&a=mark_as_ham'),
@@ -49,6 +60,15 @@ function markMailAsHam(row, email_id) {
 		}
 	});
 }
+
+
+function confirm_markMailAsHam(row, email_id) {
+	showConfirmation( toolbox_t('Mark as spam'), toolbox_t('Are you sure to mark this mail as ham?'), function() {
+		markMailAsHam( row, email_id );
+	});
+}
+
+
 
 function replyMail(email_id) {
 	window.open(appUrl('/?m=webmail&c=mailbox/mail&a=reply&email_id=' + email_id), '_self');
@@ -124,6 +144,15 @@ function deleteMail(email_id) {
 		}
 	});
 }
+
+
+function confirm_deleteMail( id ) {
+	showConfirmation( toolbox_t('Delete mail'), toolbox_t('Are you sure to delete this mail?'), function() {
+		deleteMail('lets go' + id);
+	});
+}
+
+
 
 
 function openMailWindow( emailId ) {

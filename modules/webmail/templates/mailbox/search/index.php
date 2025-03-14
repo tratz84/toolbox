@@ -346,10 +346,7 @@ t.addColumn({
 
 		var btnHam = $('<a class="fa fa-thumbs-o-up mark-as-ham" href="javascript:void(0);" />');
 		btnHam.click(function() {
-			var c = confirm('Are you sure to mark this mail as HAM?');
-			if (c) {
-				markMailAsHam( $(this).closest('tr'), email_id );
-			}
+			confirm_markMailAsHam( $(this).closest('tr'), email_id );
 		});
 
 		if (record.junk) {

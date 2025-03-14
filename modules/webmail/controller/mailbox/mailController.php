@@ -113,12 +113,12 @@ class mailController extends BaseController {
         
         
         if ($mp->isJunk() == false) {
-            $spam_onclick = "if (confirm('Are you sure to mark this mail as spam?')) markMailAsSpam(".json_encode($emailId).");";
+            $spam_onclick = "confirm_markMailAsSpam(".json_encode($emailId).");";
             $actionContainer->addItem('mark-as-spam', '<button title="'.esc_attr(t('Mark as spam')).'" onclick="' . esc_attr($spam_onclick) . '"><span class="fa fa-flag mark-as-spam"></span></button>');
         }
         
         // delete-button
-        $delete_onclick = "if (confirm('Are you sure to delete this mail?')) deleteMail(".json_encode($emailId).");";
+        $delete_onclick = "confirm_deleteMail(".json_encode($emailId).");";
         $actionContainer->addItem('delete-mail', '<button title="'.esc_attr(t('Delete mail')).'" onclick="' . esc_attr($delete_onclick) . '"><span class="fa fa-trash delete-mail"></span></button>');
         
         if (get_var('embedded_view')) {
