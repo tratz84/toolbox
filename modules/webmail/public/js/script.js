@@ -148,7 +148,7 @@ function deleteMail(email_id) {
 
 function confirm_deleteMail( id ) {
 	showConfirmation( toolbox_t('Delete mail'), toolbox_t('Are you sure to delete this mail?'), function() {
-		deleteMail('lets go' + id);
+		deleteMail(id);
 	});
 }
 
