@@ -890,7 +890,14 @@ function showConfirmation(title, body, callback_ok) {
 	myModal.show();
 
 	$('.confirmation-dialog').on('shown.bs.modal', function() {
-		$('.confirmation-dialog').find('input[type="text"], input[type="password"], input[type=number]').first().focus();
+		let c = $('.confirmation-dialog');
+		let inp = c.find('input[type="text"], input[type="password"], input[type=number]');
+		if (inp.length > 0) {
+			inp.first().focus();
+		}
+		else {
+			c.find('.btn-primary').focus();
+		}
 	});
 }
 
@@ -934,6 +941,10 @@ function showAlert(title, body, callback_ok) {
 	});
 
 	myModal.show();
+	
+	$('.confirmation-dialog').on('shown.bs.modal', function() {
+		$(d).find('.btn-primary').focus();
+	});
 }
 
 
