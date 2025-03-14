@@ -889,7 +889,7 @@ function showConfirmation(title, body, callback_ok) {
 
 	myModal.show();
 
-	$('.confirmation-dialog').on('show.bs.modal', function() {
+	$('.confirmation-dialog').on('shown.bs.modal', function() {
 		let c = $('.confirmation-dialog');
 		let inp = c.find('input[type="text"], input[type="password"], input[type=number]');
 		if (inp.length > 0) {
@@ -942,7 +942,7 @@ function showAlert(title, body, callback_ok) {
 
 	myModal.show();
 	
-	$('.confirmation-dialog').on('show.bs.modal', function() {
+	$('.confirmation-dialog').on('shown.bs.modal', function() {
 		$(d).find('.btn-primary').focus();
 	});
 }
