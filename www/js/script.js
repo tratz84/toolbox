@@ -2329,3 +2329,45 @@ $(document).ready(function() {
 	});
 });
 
+
+
+var itxToastTimeout = null;
+function showToastMessage( msg, opts ) {
+	opts = opts ? opts : {};
+	
+	// remove old
+	if ($('.itx-toast').length == 0) {
+		$(document.body).append('<div class="itx-toast"></div>');
+	}
+	
+	
+	let tm = $('<div class="toast-message-container"><div class="toast-message"></div></div>');
+	
+	if (opts.error) {
+		tm.addClass('error');
+	}
+	
+	
+	tm.find('.toast-message').text( msg );
+	$('.itx-toast').prepend( tm );
+	
+	itxToastTimeout = setTimeout(function() {
+		tm.animate({
+			height: 0
+		}, 500, 'swing', function() {
+			$(tm).remove();
+			if ($('.itx-toast > .toast-message').length == 0) {
+				$('.itx-toast').remove();
+			}
+		});
+	}, 2000);
+}
+
+
+function showToastError( msg, opts ) {
+	opts = opts ? opts : {};
+	opts.error = true;
+	showToastMessage(msg, opts);
+}
+
+
