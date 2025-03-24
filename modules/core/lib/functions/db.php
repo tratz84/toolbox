@@ -68,6 +68,18 @@ function dbCamelCase($tableName) {
     return $str;
 }
 
+function queryMarks( $count ) {
+    if (is_array($count)) $count = count($count);
+    
+    $arr = array();
+    
+    for($x=0; $x < $count; $x++) {
+        $arr[] = '?';
+    }
+    
+    return implode(', ', $arr);
+}
+
 
 function filterOrderBy($str) {
     return preg_replace('/[^a-zA-Z_, ]/', '', $str);
