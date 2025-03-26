@@ -18,6 +18,7 @@ class viewController extends BaseController {
             $f->bind( $_REQUEST );
         }
         
+        $this->forms = apply_filter('dasboard-view-form-'.get_var('id'), $this->forms);
         
         $this->dwc = array();
         $this->dwc['saveEnabled'] = false;

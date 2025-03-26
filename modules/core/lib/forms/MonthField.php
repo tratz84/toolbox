@@ -10,6 +10,8 @@ class MonthField extends BaseWidget {
     protected $endYear;
     protected $endMonth;
     
+    protected $blnMoveYear = false;
+    
     
     public function __construct($name, $value=null, $label=null) {
         $this->setName($name);
@@ -40,6 +42,8 @@ class MonthField extends BaseWidget {
     public function setEndYear($y) { $this->endYear = $y; }
     public function getEndMonth() { return $this->endMonth; }
     public function setEndMonth($m) { $this->endMonth = $m; }
+    
+    public function moveYear() { $this->blnMoveYear = true; }
     
     
     public function render() {
@@ -73,6 +77,10 @@ class MonthField extends BaseWidget {
         $html .= '<div class="widget month-field-widget widget-'.slugify($this->getName()).'">';
         $html .= '<label>'.esc_html($this->getLabel()).infopopup($this->getInfoText()).'</label>';
         
+        if ($this->blnMoveYear) {
+            $html .= '<a href="javascript:void(0);" class="fa fa-angle-double-left month-field-prev-year-option" onclick="monthField_prev_option(this, {skip: 12});"></a>';
+        }
+        
         $html .= '<a href="javascript:void(0);" class="fa fa-angle-left month-field-prev-option" onclick="monthField_prev_option(this);"></a>';
         
         $html .= '<select name="'.esc_attr($this->getName()).'">';
@@ -84,6 +92,10 @@ class MonthField extends BaseWidget {
         $html .= '</select>';
         
         $html .= '<a href="javascript:void(0);" class="fa fa-angle-right month-field-next-option" onclick="monthField_next_option(this);"></a>';
+        if ($this->blnMoveYear) {
+            $html .= '<a href="javascript:void(0);" class="fa fa-angle-double-right month-field-next-year-option" onclick="monthField_next_option(this, {skip: 12});"></a>';
+        }
+        
         
         $html .= '</div>';
         

@@ -814,39 +814,59 @@ function yearField_next_option(obj) {
 
 
 
-function monthField_prev_option(obj) {
+function monthField_prev_option(obj, opts) {
+	opts = opts ? opts : {};
+	
+	let skip = 1;
+	if (opts.skip) {
+		skip = opts.skip;
+	}
+	
 	var s = $(obj).parent().find('select');
 	
 	if (s.prop('disabled')) return;
 	
 	var selectedOption = s.val();
-	s.find('option').removeAttr('selected');
+//	s.find('option').removeAttr('selected');
 	
 	var options = s.find('option');
 	for(var i=0; i < options.length; i++) {
-		if (options.get(i).value == selectedOption && i-1 >= 0) {
-			s.val( options.get(i-1).value );
+		if (options.get(i).value == selectedOption && i-skip >= 0) {
+			s.val( options.get(i-skip).value );
 			s.trigger('change');
 			break;
 		}
 	}
+	
+	
 }
-function monthField_next_option(obj) {
+function monthField_next_option(obj, opts) {
+	opts = opts ? opts : {};
+	
+	let skip = 1;
+	if (opts.skip) {
+		skip = opts.skip;
+	}
+	
+	
 	var s = $(obj).parent().find('select');
 	
 	if (s.prop('disabled')) return;
 	
 	var selectedOption = s.val();
-	s.find('option').removeAttr('selected');
+//	s.find('option').removeAttr('selected');
 	
 	var options = s.find('option');
 	for(var i=0; i < options.length; i++) {
-		if (options.get(i).value == selectedOption && i+1 < options.length) {
-			s.val( options.get(i+1).value );
+		if (options.get(i).value == selectedOption && i+skip < options.length) {
+			console.log('vaag', (i+skip), options.length);
+			s.val( options.get(i+skip).value );
 			s.trigger('change');
+			hit = true;
 			break;
 		}
 	}
+	
 }
 
 
