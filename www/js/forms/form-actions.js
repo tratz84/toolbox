@@ -768,38 +768,73 @@ function uploadFilesFieldDelete_Click(obj) {
 
 
 
-function weekField_prev_option(obj) {
+function weekField_prev_option(obj, opts) {
+	opts = opts ? opts : {};
+	
 	var s = $(obj).parent().find('select');
 	
 	if (s.prop('disabled')) return;
 	
 	var selectedOption = s.val();
-	s.find('option').removeAttr('selected');
 	
-	var options = s.find('option');
-	for(var i=0; i < options.length; i++) {
-		if (options.get(i).value == selectedOption && i-1 >= 0) {
-			s.val( options.get(i-1).value );
+//	s.find('option').removeAttr('selected');
+
+	if (opts.skip == '1year') {
+		let v = s.val();
+		let yearmon = v.split('-');
+		let y = parseInt(yearmon[0]);
+		
+		y--;
+		let newYearmon = y + '-' + yearmon[1];
+		let opt = s.find('option[value="' + newYearmon + '"]');
+		if (opt.length > 0) {
+			opt.prop('selected', true);
 			s.trigger('change');
-			break;
+		}
+	}
+	else {
+		var options = s.find('option');
+		for(var i=0; i < options.length; i++) {
+			if (options.get(i).value == selectedOption && i-1 >= 0) {
+				s.val( options.get(i-1).value );
+				s.trigger('change');
+				break;
+			}
 		}
 	}
 }
-function weekField_next_option(obj) {
+function weekField_next_option(obj, opts) {
+	opts = opts ? opts : {};
+	
 	var s = $(obj).parent().find('select');
 	
 	if (s.prop('disabled')) return;
 
 	var selectedOption = s.val();
 	
-	var options = s.find('option');
-	for(var i=0; i < options.length; i++) {
-		if (options.get(i).value == selectedOption && i+1 < options.length) {
-//			s.find('option').removeAttr('selected');
-			
-			s.val( options.get(i+1).value );
+	if (opts.skip == '1year') {
+		let v = s.val();
+		let yearmon = v.split('-');
+		let y = parseInt(yearmon[0]);
+		
+		y++;
+		let newYearmon = y + '-' + yearmon[1];
+		let opt = s.find('option[value="' + newYearmon + '"]');
+		if (opt.length > 0) {
+			opt.prop('selected', true);
 			s.trigger('change');
-			break;
+		}
+	}
+	else {
+		var options = s.find('option');
+		for(var i=0; i < options.length; i++) {
+			if (options.get(i).value == selectedOption && i+1 < options.length) {
+	//			s.find('option').removeAttr('selected');
+				
+				s.val( options.get(i+1).value );
+				s.trigger('change');
+				break;
+			}
 		}
 	}
 }

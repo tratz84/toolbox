@@ -12,6 +12,8 @@ class WeekField extends BaseWidget {
     
     protected $thisWeek = null;
     
+    protected $blnMoveYear = false;
+    
     
     public function __construct($name, $value=null, $label=null) {
         $this->setName($name);
@@ -46,6 +48,8 @@ class WeekField extends BaseWidget {
     public function setEndYear($y) { $this->endYear = $y; }
     public function getEndWeek() { return $this->endWeek; }
     public function setEndWeek($w) { $this->endWeek= $w; }
+    
+    public function moveYear() { $this->blnMoveYear = true; }
     
     
     protected function formatWeek($val) {
@@ -144,6 +148,10 @@ class WeekField extends BaseWidget {
         $html .= '<div class="widget week-field-widget widget-'.slugify($this->getName()).'">';
         $html .= '<label>'.esc_html($this->getLabel()).infopopup($this->getInfoText()).'</label>';
         
+        if ($this->blnMoveYear) {
+            $html .= '<a href="javascript:void(0);" class="fa fa-angle-double-left week-field-prev-year-option" onclick="weekField_prev_option(this, {skip: &apos;1year&apos; } );"></a>';
+        }
+        
         $html .= '<a href="javascript:void(0);" class="fa fa-angle-left week-field-prev-option" onclick="weekField_prev_option(this);"></a>';
         
         $html .= '<select name="'.esc_attr($this->getName()).'">';
@@ -158,6 +166,9 @@ class WeekField extends BaseWidget {
         $html .= '</select>';
         
         $html .= '<a href="javascript:void(0);" class="fa fa-angle-right week-field-next-option" onclick="weekField_next_option(this);"></a>';
+        if ($this->blnMoveYear) {
+            $html .= '<a href="javascript:void(0);" class="fa fa-angle-double-right week-field-next-year-option" onclick="weekField_next_option(this, {skip: &apos;1year&apos; } );"></a>';
+        }
         
         $html .= '</div>';
         
