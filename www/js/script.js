@@ -2371,3 +2371,15 @@ function showToastError( msg, opts ) {
 }
 
 
+function strlpad( str, len, padding ) {
+	if (typeof str == 'undefined' || str == null) str = '';
+	str = str.toString();
+	
+	while (str.length < len) {
+		str = padding + str;
+	}
+	
+	return str;
+}
+
+
