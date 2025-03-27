@@ -24,6 +24,8 @@ $eb = ObjectContainer::getInstance()->get(EventBus::class);
 
 module_update_handler('invoice', '20240204');
 
+hook_loader(__DIR__.'/hook/');
+
 
 $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($evt) {
     $ctx = Context::getInstance();
