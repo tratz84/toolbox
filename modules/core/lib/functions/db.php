@@ -31,6 +31,25 @@ function queryList($resourceName, $sql, $params=array()) {
     return $conn->queryList( $sql, $params );
 }
 
+function queryMap($resourceName, $sql, $params=array()) {
+    $conn = DatabaseHandler::getInstance()->getConnection( $resourceName );
+    
+    $list = $conn->queryList( $sql, $params );
+    
+    $map = array();
+    if (count($list) > 0) {
+        $keys = array_keys($list[0]);
+        $fkey = $keys[0];
+        
+        foreach( $list as $l ) {
+            $map[$l[$fkey]] = $l;
+        }
+    }
+    
+    return $map;
+}
+
+
 function queryListAsArray($resourceName, $sql, $params=array()) {
     $conn = DatabaseHandler::getInstance()->getConnection( $resourceName );
     
