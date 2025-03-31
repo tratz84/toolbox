@@ -25,6 +25,7 @@ $lang['modulename.customer'] = 'Klanten';
 $lang['View Customers']      = 'Klanten bekijken';
 $lang['Edit Customers']      = 'Klanten bewerken';
 
+$lang['Month'] = 'Maand';
 
 
 return $lang;
