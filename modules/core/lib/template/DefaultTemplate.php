@@ -44,12 +44,15 @@ class DefaultTemplate
     }
     
     public function getTemplateFile() { return $this->mTpl; }
+    public function setTemplateFile($f) { $this->mTpl = $f; }
     
     public function getHtml() { return $this->html; }
     public function setHtml($h) { $this->html = $h; }
 
     function showTemplate($opts=array())
     {
+        hook_eventbus_publish($this, 'core', 'template-pre-showTemplate');
+        
         foreach ($this->mVars as $k => $v) {
             $$k = $v;
         }
