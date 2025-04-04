@@ -1543,28 +1543,28 @@ function is_numeric(val) {
 
 
 
-function roundNumber(number, decimals) {
-	// round same way as php
-	var n = strtodouble(number.toString());
-	var i = Math.round(n * 100);
-	i = i / 100;
-	
-	return i;
-	
-	// round same way as php (old)
-//	var n = strtodouble(number.toString());
-//	var i = parseInt(n * 1000);
-//	i = i / 1000;
-//	return i.toFixed(2);
-	
-	
-	// 
-//	n = n * Math.pow(10, decimals);
-//	n = Math.round(n);
-//	n = n / Math.pow(10, decimals);
-//	
-//	return n;
+function roundNumber(number, decimals = 2) {
+	let num;
+	if (typeof number === 'string') {
+		// replace comma with dot
+		if (number.indexOf(',') != -1 && number.indexOf('.') == -1) {
+			number = number.replace(',', '.');
+		}
+		
+		if (!isNaN(number)) {
+			num = parseFloat(number);
+		} else {
+			throw new Error('Invalid number provided as a string');
+		}
+	} else if (typeof number === 'number') {
+		num = number;
+	} else {
+		throw new Error('Invalid input type. Expected a number or a string representation of a number.');
+	}
+
+	return parseFloat(num.toFixed(decimals));
 }
+
 
 function format_number(number, opts) {
 	var nr = roundNumber(number, 2);
