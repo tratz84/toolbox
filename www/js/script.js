@@ -843,11 +843,9 @@ function hidePageLoading() {
 }
 
 
-
-
 function showConfirmation(title, body, callback_ok) {
 	
-	var html = '<div class="confirmation-dialog modal fade" tabindex="-1" role="dialog">';
+	var html = '<div class="confirmation-dialog modal" tabindex="-1" role="dialog">';
 	html += '<div class="modal-dialog">';
 	html += '    <div class="modal-content">';
 	html += '      <div class="modal-header">';
@@ -865,7 +863,7 @@ function showConfirmation(title, body, callback_ok) {
 	html += '  </div>';		// <!-- /.modal-dialog -->
 	html += '</div>';		// <!-- /.modal -->
 
-	$('.confirmation-dialog').remove();
+	$('.confirmation-dialog').modal('dispose');
 	
 	var d = $(html);
 	$(document.body).prepend(d);
@@ -881,6 +879,7 @@ function showConfirmation(title, body, callback_ok) {
 		
 		$('.confirmation-dialog').modal('hide');
 	});
+	
 
 	var myModal = new bootstrap.Modal( $('.confirmation-dialog').get(0), {
 		show: true,
@@ -889,21 +888,19 @@ function showConfirmation(title, body, callback_ok) {
 
 	myModal.show();
 
-	$('.confirmation-dialog').on('shown.bs.modal', function() {
-		let c = $('.confirmation-dialog');
-		let inp = c.find('input[type="text"], input[type="password"], input[type=number]');
-		if (inp.length > 0) {
-			inp.first().focus();
-		}
-		else {
-			c.find('.btn-primary').focus();
-		}
-	});
+	let c = $('.confirmation-dialog');
+	let inp = c.find('input[type="text"], input[type="password"], input[type=number]');
+	if (inp.length > 0) {
+		inp.first().focus();
+	}
+	else {
+		c.find('.btn-primary').focus();
+	}
 }
 
 function showAlert(title, body, callback_ok) {
 	
-	var html = '<div class="confirmation-dialog modal fade" tabindex="-1" role="dialog">';
+	var html = '<div class="confirmation-dialog modal" tabindex="-1" role="dialog">';
 	html += '<div class="modal-dialog">';
 	html += '    <div class="modal-content">';
 	html += '      <div class="modal-header">';
@@ -920,8 +917,7 @@ function showAlert(title, body, callback_ok) {
 	html += '</div>';		// <!-- /.modal -->
 
 	// remove old dialog = backdrop
-	$('.confirmation-dialog').remove();
-	$('.modal-backdrop').remove();
+	$('.confirmation-dialog').modal('dispose');
 	
 	var d = $(html);
 	$(document.body).prepend(d);
@@ -942,9 +938,7 @@ function showAlert(title, body, callback_ok) {
 
 	myModal.show();
 	
-	$('.confirmation-dialog').on('shown.bs.modal', function() {
-		$(d).find('.btn-primary').focus();
-	});
+	$(d).find('.btn-primary').focus();
 }
 
 
