@@ -338,10 +338,7 @@ t.addColumn({
 
 		var btnSpam = $('<a class="fa fa-flag mark-as-spam" href="javascript:void(0);" />');
 		btnSpam.click(function() {
-			var c = confirm('Are you sure to mark this mail as spam?');
-			if (c) {
-				markMailAsSpam( email_id );
-			}
+			confirm_markMailAsSpam( email_id );
 		});
 
 		var btnHam = $('<a class="fa fa-thumbs-o-up mark-as-ham" href="javascript:void(0);" />');
