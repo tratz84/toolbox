@@ -34,4 +34,14 @@ HTML;
 });
 
 
+hook_eventbus_subscribe('core', 'authorization-check', function($obj) {
+    
+    if (get_var('m') == 'base' && get_var('c') == 'webapp/manifest') {
+        if (ctx()->getUser()) {
+            $obj->allowPermission();
+        }
+    }
+});
+
+
 
