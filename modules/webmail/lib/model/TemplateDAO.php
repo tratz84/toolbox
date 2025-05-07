@@ -43,6 +43,15 @@ class TemplateDAO extends \core\db\DAOObject {
 	        return null;
 	    }
 	}
+	
+	
+	public function unsetMasterTemplateId( $id ) {
+	    $sql = "update mailing__template set master_template_id = null where master_template_id = ?";
+	    
+        $this->query($sql, array($id));
+	    
+	}
+	
 
 }
 

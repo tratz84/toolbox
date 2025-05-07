@@ -4,6 +4,8 @@
 namespace webmail\model;
 
 
+use webmail\service\EmailTemplateService;
+
 class Template extends base\TemplateBase {
 
     protected $templateTos;
@@ -23,6 +25,25 @@ class Template extends base\TemplateBase {
         $html = apply_html_vars($this->getContent(), $params);
         
         return apply_filter('webmail-template-render', $html);
+    }
+    
+    
+    public function masterRender($params = array()) {
+        $html = apply_html_vars($this->getContent(), $params);
+        $html = apply_filter('webmail-template-render', $html);
+        
+        
+        if ($this->getMasterTemplateId()) {
+            $etservice = object_container_get( EmailTemplateService::class );
+            $mt = $etservice->readMasterTemplate( $this->getMasterTemplateId() );
+            
+            $masterhtml = $mt->getContent();
+            if (strpos($masterhtml, '[[content]]') !== false) {
+                $html = str_replace('[[content]]', $html, $masterhtml);
+            }
+        }
+        
+        return $html;
     }
     
 }

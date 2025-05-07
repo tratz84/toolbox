@@ -2,6 +2,9 @@
 <div class="page-header">
 	<div class="toolbox list-toolbox">
 		<a href="<?= appUrl('/?m=base&c=masterdata/index') ?>" class="fa fa-chevron-circle-left"></a>
+		
+		<a href="<?= appUrl('/?m=webmail&c=mastertemplate') ?>" class="fa fa-file" title="<?= t('Master templates') ?>"></a>
+		
 		<a href="<?= appUrl('/?m=webmail&c=template&a=edit') ?>" class="fa fa-plus"></a>
 	</div>
 	

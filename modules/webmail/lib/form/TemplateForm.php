@@ -12,6 +12,7 @@ use core\forms\TinymceField;
 use core\forms\validator\NotEmptyValidator;
 use webmail\service\EmailTemplateService;
 use core\forms\CheckboxField;
+use core\forms\Select2Field;
 
 class TemplateForm extends BaseForm {
     
@@ -24,6 +25,23 @@ class TemplateForm extends BaseForm {
         $this->addWidget(new HiddenField('template_id'));
         
         $this->addWidget(new CheckboxField('active', '', 'Actief'));
+        
+        
+        $etservice = object_container_get( EmailTemplateService::class );
+        $mts = $etservice->listMasterTemplates();
+        if (count($mts) > 0) {
+            $mtopts = array();
+            $mtopts[''] = array('description' => t('Make your choice'));
+            foreach($mts as $mt) {
+                $mtopts[ $mt->getMasterTemplateId() ] = array('description' => $mt->getName());
+            }
+            
+            $sf_mtid = new Select2Field('master_template_id', null, $mtopts, t('Master template'));
+            
+            $this->addWidget( $sf_mtid );
+        }
+        
+        
         $this->addWidget(new TextField('template_code', '', 'Code'));
         $this->getWidget('template_code')->setInfoText('Unieke code waarmee bepaald wordt welk template te gebruiken bij het versturen van bijvoorbeeld offerte mails');
         

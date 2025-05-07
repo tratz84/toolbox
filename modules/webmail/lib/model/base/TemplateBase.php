@@ -14,7 +14,7 @@ class TemplateBase extends \core\db\DBObject {
   'template_id' => 
   array (
     'Field' => 'template_id',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'NO',
     'Key' => 'PRI',
     'Default' => NULL,
@@ -86,10 +86,10 @@ class TemplateBase extends \core\db\DBObject {
   'sort' => 
   array (
     'Field' => 'sort',
-    'Type' => 'int(11)',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
-    'Default' => '0',
+    'Default' => NULL,
     'Extra' => '',
   ),
   'edited' => 
@@ -105,6 +105,15 @@ class TemplateBase extends \core\db\DBObject {
   array (
     'Field' => 'created',
     'Type' => 'datetime',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'master_template_id' => 
+  array (
+    'Field' => 'master_template_id',
+    'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -159,6 +168,10 @@ class TemplateBase extends \core\db\DBObject {
 		
 	public function setCreated($p) { $this->setField('created', $p); }
 	public function getCreated() { return $this->getField('created'); }
+	
+		
+	public function setMasterTemplateId($p) { $this->setField('master_template_id', $p); }
+	public function getMasterTemplateId() { return $this->getField('master_template_id'); }
 	
 	
 }

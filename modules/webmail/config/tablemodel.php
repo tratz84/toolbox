@@ -21,6 +21,7 @@ $tbs[] = $tb_mlog;
 
 $tb_mtemplate = new TableModel('mailing', 'template');
 $tb_mtemplate->addColumn('template_id',   'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_mtemplate->addColumn('master_template_id', 'int');
 $tb_mtemplate->addColumn('template_code', 'varchar(64)');
 $tb_mtemplate->addColumn('name',          'varchar(255)');
 $tb_mtemplate->addColumn('from_name',     'varchar(255)');
@@ -43,6 +44,16 @@ $tb_mtemplateto->addColumn('to_name',        'varchar(255)');
 $tb_mtemplateto->addColumn('to_email',       'varchar(255)');
 $tb_mtemplateto->addColumn('sort',           'int');
 $tbs[] = $tb_mtemplateto;
+
+
+$tb_mastertemplate = new TableModel('mailing', 'master_template');
+$tb_mastertemplate->addColumn('master_template_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_mastertemplate->addColumn('name',          'varchar(255)');
+$tb_mastertemplate->addColumn('content',       'mediumtext');
+$tb_mastertemplate->addColumn('sort',          'int');
+$tb_mastertemplate->addColumn('edited',        'datetime');
+$tb_mastertemplate->addColumn('created',       'datetime');
+$tbs[] = $tb_mastertemplate;
 
 
 
