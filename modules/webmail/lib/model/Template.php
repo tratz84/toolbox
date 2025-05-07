@@ -30,7 +30,7 @@ class Template extends base\TemplateBase {
     
     public function masterRender($params = array()) {
         $html = apply_html_vars($this->getContent(), $params);
-        $html = apply_filter('webmail-template-render', $html);
+        $html = apply_filter('webmail-master-template-render', $html);
         
         
         if ($this->getMasterTemplateId()) {
