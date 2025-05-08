@@ -49,6 +49,7 @@ $tbs[] = $tb_mtemplateto;
 $tb_mastertemplate = new TableModel('mailing', 'master_template');
 $tb_mastertemplate->addColumn('master_template_id', 'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
 $tb_mastertemplate->addColumn('name',          'varchar(255)');
+$tb_mastertemplate->addColumn('filename',      'varchar(255)');
 $tb_mastertemplate->addColumn('content',       'mediumtext');
 $tb_mastertemplate->addColumn('sort',          'int');
 $tb_mastertemplate->addColumn('edited',        'datetime');

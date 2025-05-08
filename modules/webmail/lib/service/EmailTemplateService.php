@@ -118,6 +118,7 @@ class EmailTemplateService extends ServiceBase {
         
         $html = $form->getField('content');
         if ($html) {
+            $mt->setFilename( $form->getField('filename') );
             $mt->setContent( $html );
         }
         

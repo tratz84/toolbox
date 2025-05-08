@@ -28,7 +28,12 @@
 	</div>
 <?php endif; ?>
 
-<iframe src="<?= appUrl('/?m=webmail&c=mastertemplate&a=view_tpl&id='.$mt->getMasterTemplateId()) ?>" style="width: 100%; max-width: 800px; height: 700px; border: 1px solid #ccc;"></iframe>
+	<div style="width: 100%; max-width: 800px;">
+		<div style="text-align: right; margin-right: 2px;">
+			<a href="<?= appUrl('/?m=webmail&c=mastertemplate&a=download_tpl&id='.$mt->getMasterTemplateId())?>" class="fa fa-download"></a>
+		</div>
+		<iframe src="<?= appUrl('/?m=webmail&c=mastertemplate&a=view_tpl&id='.$mt->getMasterTemplateId()) ?>" style="width: 100%; height: 700px; border: 1px solid #ccc;"></iframe>
+	</div>
 
 <?php endif; ?>
 

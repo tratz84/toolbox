@@ -89,7 +89,7 @@ class TemplateBase extends \core\db\DBObject {
     'Type' => 'int',
     'Null' => 'YES',
     'Key' => '',
-    'Default' => NULL,
+    'Default' => '0',
     'Extra' => '',
   ),
   'edited' => 

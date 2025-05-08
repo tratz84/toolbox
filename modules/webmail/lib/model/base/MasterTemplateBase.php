@@ -65,6 +65,15 @@ class MasterTemplateBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'filename' => 
+  array (
+    'Field' => 'filename',
+    'Type' => 'varchar(255)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -94,6 +103,10 @@ class MasterTemplateBase extends \core\db\DBObject {
 		
 	public function setCreated($p) { $this->setField('created', $p); }
 	public function getCreated() { return $this->getField('created'); }
+	
+		
+	public function setFilename($p) { $this->setField('filename', $p); }
+	public function getFilename() { return $this->getField('filename'); }
 	
 	
 }
