@@ -33,6 +33,7 @@ use webmail\model\Email;
 use webmail\model\EmailTo;
 use webmail\service\EmailService;
 use core\exception\InvalidArgumentException;
+use webmail\model\TemplateDAO;
 
 
 
@@ -411,17 +412,31 @@ class UserService extends ServiceBase {
         $et->setToEmail( $user->getEmail() );
         $email->addRecipient( $et );
         
-        // mail
-        $mailtpl = module_file('base', 'templates/auth/_reset_password_email-'.ctx()->getSelectedLang().'.php');
-        if ($mailtpl == false) {
-            $mailtpl = module_file('base', 'templates/auth/_reset_password_email.php');
-        }
-        $html = get_template( $mailtpl, [
+        
+        $reset_link = BASE_URL.appUrl('/?m=base&c=auth&a=reset_link&id='.$rp->getResetPasswordId().'&uid='.$rp->getSecurityString());
+        $vars = [
             'reset_password_id' => $rp->getResetPasswordId(),
             'security_string'   => $rp->getSecurityString(),
             'ip'                => $rp->getRequestIp(),
-            'username'          => $rp->getUsername()
-        ]);
+            'username'          => $rp->getUsername(),
+            'link'              => $reset_link,
+            'reset_url'         => $reset_link
+        ];
+        
+        // got a RESET_PASSWORD_SITE-template?
+        $etdao = object_container_get( TemplateDAO::class );
+        $tpl = $etdao->readByCode( 'RESET_PASSWORD_SITE' );
+        if ($tpl) {
+            $html = $tpl->masterRender($vars);
+        }
+        else {
+            // mail
+            $mailtpl = module_file('base', 'templates/auth/_reset_password_email-'.ctx()->getSelectedLang().'.php');
+            if ($mailtpl == false) {
+                $mailtpl = module_file('base', 'templates/auth/_reset_password_email.php');
+            }
+            $html = get_template( $mailtpl, $vars);
+        }
         $email->setTextContent( $html );
         $email->save();
         
