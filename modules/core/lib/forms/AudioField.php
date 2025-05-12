@@ -18,7 +18,7 @@ class AudioField extends BaseWidget {
     }
     
     public function setValue($value) {
-        parent::setValue( trim($value) );
+        parent::setValue( $value === null ? null : trim($value) );
     }
     
     public function showPlaceholder() { $this->placeholder = true; }
