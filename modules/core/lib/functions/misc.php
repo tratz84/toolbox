@@ -1789,6 +1789,29 @@ function months_between($start, $end) {
 }
 
 
+function hours_between( $time1, $time2 ) {
+    if ( valid_time($time1) == false || valid_time($time2) == false )
+        return null;
+    
+    $tok1 = explode(':', $time1);
+    $tok2 = explode(':', $time2);
+    
+    $h1 = (int)$tok1[0];
+    $m1 = (int)$tok1[1];
+    
+    $h2 = (int)$tok2[0];
+    $m2 = (int)$tok2[1];
+    
+    
+    $mindiff = ($h2 - $h1) * 60;
+    $mindiff -= $m1;
+    $mindiff += $m2;
+    
+    return $mindiff;
+}
+
+
+
 function toolbox_mime_content_type($filename) {
     $mime_types = array(
         
