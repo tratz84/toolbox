@@ -308,6 +308,10 @@ function applyWidgetFields(container) {
 			opts.handle = '.handler-sortable';
 		}
 		
+		opts.stop = () => {
+			$(window).trigger('sortable-changed', [this]);
+		}
+		
 		$(node).sortable(opts);
 	});
 
