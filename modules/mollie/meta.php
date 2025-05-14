@@ -3,6 +3,7 @@
 
 use core\module\ModuleMeta;
 
-
-return new ModuleMeta('mollie', 'Mollie',   'Afhandeling betalingen');
+if (ctx()->isExperimental() || is_standalone_installation()) {
+    return new ModuleMeta('mollie', 'Mollie',   'Afhandeling betalingen');
+}
 
