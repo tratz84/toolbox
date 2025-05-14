@@ -27,6 +27,8 @@ hook_eventbus_subscribe('masterdata', 'menu', function($src) {
     
     $src->addItem('Mollie', t('Settings'),          '/?m=mollie&c=settings');
     
+    $src->addItem('Mollie', t('Payments'),          '/?m=mollie&c=paymentlist');
+    
     
 });
 

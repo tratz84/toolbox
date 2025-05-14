@@ -28,5 +28,28 @@ class MolliePaymentDAO extends \core\db\DAOObject {
 	    return $this->getAffectedRows();
 	}
 
+	
+	public function search($opts=array()) {
+	    
+	    $qb = $this->createQueryBuilder();
+	    $qb->setTable('mollie__mollie_payment')
+	    ->selectFields('*');
+	    
+	    
+	    
+	    $qb->setOrderBy('created desc');
+	    
+	    return $qb->queryCursor(MolliePayment::class);
+	}
+	
+	
+	public function readOpenPayments( ) {
+	    $sql = "select * from mollie__mollie_payment where mollie_status = ? and created >= ?";
+	    
+	    return $this->queryList( $sql, array($status, date('Y-m-d H:i:s', strtotime('-1 day'))) );
+	}
+	
+	
+	
 }
 

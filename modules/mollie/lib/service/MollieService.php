@@ -13,6 +13,7 @@ use core\exception\ObjectNotFoundException;
 use Mollie\Api\Http\Requests\GetPaymentRequest;
 use base\util\ActivityUtil;
 use core\exception\InvalidStateException;
+use core\forms\lists\ListResponse;
 
 
 
@@ -107,7 +108,18 @@ class MollieService extends ServiceBase {
             throw new InvalidStateException( 'Invalid checksum' );
         }
         
+        return $this->checkStatusPayment( $p->getMolliePaymentId() );
+    }
+    
+    
+    public function checkStatusPayment( $id ) {
         
+        $mpdao = new MolliePaymentDAO();
+        $p = $mpdao->read($id);
+        
+        if (!$p) {
+            throw new ObjectNotFoundException( 'Mollie Payment not found' );
+        }
         
         if ($p->getMollieStatus() == 'open') {
             $mollie = new MollieApiClient();
@@ -126,6 +138,19 @@ class MollieService extends ServiceBase {
         
         return $p;
     }
+    
+    
+    
+    public function searchPayments($start, $limit, $opts = array()) {
+        
+        $mpdao = new MolliePaymentDAO();
+        
+        $cursor = $mpdao->search($opts);
+        $r = ListResponse::fillByCursor($start, $limit, $cursor, array('mollie_payment_id', 'description', 'amount', 'created', 'mollie_status'));
+        
+        return $r;
+    }
+    
     
     
 }
