@@ -10,5 +10,13 @@ class MolliePayment extends base\MolliePaymentBase {
 		parent::__construct( $id );
 		
 	}
+	
+	
+	
+	public function generateUid() {
+	    $t = md5( uniqid() . time() . uniqid() );
+	    
+	    $this->setUid( $t );
+	}
 }
 

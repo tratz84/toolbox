@@ -7,12 +7,17 @@ use mollie\service\MollieService;
 class molliehookController extends BaseController {
     
     
+    public function init() {
+        $f = module_file('mollie', '/templates/decorator/decorator.php');
+        $this->setDecoratorFile( $f );
+    }
+    
     
     public function action_return() {
-        $mollie_payment_id = get_var('id');
+        $uid = get_var('uid');
         
         $mservice = object_container_get( MollieService::class );
-        $mservice->checkStatus( $mollie_payment_id );
+        $this->payment = $mservice->checkStatusByUid( $uid );
         
         $this->render();
     }
@@ -21,7 +26,7 @@ class molliehookController extends BaseController {
         $mollie_payment_id = get_var('id');
         
         $mservice = object_container_get( MollieService::class );
-        $mservice->checkStatus( $mollie_payment_id );
+        $this->payment = $mservice->checkStatus( $mollie_payment_id );
         
         $this->render();
     }

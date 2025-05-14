@@ -13,7 +13,7 @@ class MolliePaymentDAO extends \core\db\DAOObject {
 	
 	
 	
-	public function readByMolliePaymentId( $id ) {
+	public function read( $id ) {
 	    $sql = "select * from mollie__mollie_payment where mollie_payment_id = ?";
 	    
 	    return $this->queryOne( $sql, array($id) );
@@ -21,7 +21,7 @@ class MolliePaymentDAO extends \core\db\DAOObject {
 	
 	
 	public function updateStatus( $id, $newStatus ) {
-	    $sql = "update mollie__mollie_payment set status = ? where mollie_payment_id = ?";
+	    $sql = "update mollie__mollie_payment set mollie_status = ? where mollie_payment_id = ?";
 	    
 	    $this->query($sql, array($newStatus, $id));
 	    

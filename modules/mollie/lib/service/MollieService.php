@@ -12,6 +12,7 @@ use mollie\model\MolliePaymentDAO;
 use core\exception\ObjectNotFoundException;
 use Mollie\Api\Http\Requests\GetPaymentRequest;
 use base\util\ActivityUtil;
+use core\exception\InvalidStateException;
 
 
 
@@ -19,19 +20,43 @@ class MollieService extends ServiceBase {
     
     
     
-    
-    public function createPayment( $amount, $description, array $metadata=null ) {
+    /**
+     *
+     * @param array $opts [
+     *  'metadata' => ['order_id' => ...],
+     *  'return_url' => 'https://...'
+     * ]
+     */
+    public function createPayment( $amount, $description, $opts=array() ) {
         require_once __DIR__.'/../vendor/autoload.php';
         
         $mollie = new MollieApiClient();
         $mollie->setApiKey( ctx()->getSetting( 'mollie_api_key' ) );
         
+        $metadata = null;
+        
+        if (isset($opts['metadata'])) {
+            $metadata = $opts['metadata'];
+        }
+        
+        
+        $mp = new MolliePayment();
+        $mp->setAmount( $amount );
+        $mp->setDescription( $description );
+        $mp->generateUid();
+        if (isset($opts['return_url'])) {
+            $mp->setReturnUrl( $opts['return_url'] );
+        }
+        $mp->setMeta( serialize($metadata) );
+        $mp->save();
+        
+        $puid = $mp->getMolliePaymentId() . '.' . $mp->getUid();
         
         $r = new CreatePaymentRequest(
               $description                                      // description
             , new Money('EUR', $amount)                         // amount
-            , BASE_URL . appUrl( '/mollie/return' )             // redirect url
-            , BASE_URL . appUrl( '/mollie/return-cancel' )      // cancel url
+            , BASE_URL . appUrl( '/mollie/return' ).'?uid='.urlencode($puid)                // redirect url
+            , BASE_URL . appUrl( '/mollie/return-cancel' ).'?uid='.urlencode($puid)         // cancel url
             , BASE_URL . appUrl( '/mollie/webhook' )               // webhook url
             , null                                              // lines
             , null                                              // billing address
@@ -45,13 +70,9 @@ class MollieService extends ServiceBase {
 
         
         $payment = $mollie->send($r);
-        
-        $mp = new MolliePayment();
-        $mp->setAmount( $amount );
-        $mp->setDescription( $description );
-        $mp->setMolliePaymentId( $payment->id );
+
+        $mp->setMollieId( $payment->id );
         $mp->setMollieStatus( $payment->status );
-        $mp->setMeta( serialize($metadata) );
         $mp->save();
         
         
@@ -60,40 +81,47 @@ class MollieService extends ServiceBase {
         return $payment;
     }
     
-    public function startPayment( $amount, $description, array $metadata=null ) {
-        
-        $payment = $this->createPayment($amount, $description, $metadata);
-        
-        $checkoutUrl = $payment->getCheckoutUrl();
-        
-        redirect( $checkoutUrl );
-    }
+    
+//     public function startPayment( $amount, $description, $opts=null ) {
+//         $payment = $this->createPayment($amount, $description, $opts);
+//         $checkoutUrl = $payment->getCheckoutUrl();
+//         redirect( $checkoutUrl );
+//     }
     
     
     
     
-    public function checkStatus( $molliePaymentId ) {
+    public function checkStatusByUid( $pid_uid ) {
         require_once __DIR__.'/../vendor/autoload.php';
+        
+        list( $pid, $uid ) = explode('.', $pid_uid, 2);
         
         // fetch mollie_payment-record
         $mpdao = new MolliePaymentDAO();
-        $p = $mpdao->readByMolliePaymentId( $molliePaymentId );
+        $p = $mpdao->read( $pid );
         if (!$p) {
             throw new ObjectNotFoundException( 'Mollie Payment not found' );
         }
         
+        if ($p->getUid() != $uid) {
+            throw new InvalidStateException( 'Invalid checksum' );
+        }
         
-        $mollie = new MollieApiClient();
-        $mollie->setApiKey( ctx()->getSetting( 'mollie_api_key' ) );
         
-        $pr = new GetPaymentRequest( $p->getMolliePaymentId() );
-        $payment = $mollie->send( $pr );
         
-        if ($p->getMollieStatus() != $payment->status) {
-            ActivityUtil::logActivityRefObject( MolliePayment::class, $p->getMolliePaymentId(), 'payment-updatedreated', 'Payment updated', $p->getMollieStatus() . ' => ' . $payment->status );
+        if ($p->getMollieStatus() == 'open') {
+            $mollie = new MollieApiClient();
+            $mollie->setApiKey( ctx()->getSetting( 'mollie_api_key' ) );
             
-            $p->setMollieStatus( $payment->status );
-            $mpdao->updateStatus( $p->getMolliePaymentId(), $payment->status );
+            $pr = new GetPaymentRequest( $p->getMollieId() );
+            $payment = $mollie->send( $pr );
+            
+            if ($p->getMollieStatus() != $payment->status) {
+                ActivityUtil::logActivityRefObject( MolliePayment::class, $p->getMolliePaymentId(), 'payment-updatedreated', 'Payment updated', $p->getMollieStatus() . ' => ' . $payment->status );
+                
+                $p->setMollieStatus( $payment->status );
+                $mpdao->updateStatus( $p->getMolliePaymentId(), $payment->status );
+            }
         }
         
         return $p;

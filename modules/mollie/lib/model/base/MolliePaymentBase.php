@@ -14,11 +14,11 @@ class MolliePaymentBase extends \core\db\DBObject {
   'mollie_payment_id' => 
   array (
     'Field' => 'mollie_payment_id',
-    'Type' => 'varchar(512)',
+    'Type' => 'int',
     'Null' => 'NO',
     'Key' => 'PRI',
     'Default' => NULL,
-    'Extra' => '',
+    'Extra' => 'auto_increment',
   ),
   'amount' => 
   array (
@@ -38,28 +38,10 @@ class MolliePaymentBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
-  'edited' => 
+  'mollie_id' => 
   array (
-    'Field' => 'edited',
-    'Type' => 'datetime',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
-  ),
-  'created' => 
-  array (
-    'Field' => 'created',
-    'Type' => 'datetime',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
-  ),
-  'meta' => 
-  array (
-    'Field' => 'meta',
-    'Type' => 'mediumtext',
+    'Field' => 'mollie_id',
+    'Type' => 'varchar(512)',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -74,10 +56,46 @@ class MolliePaymentBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'meta' => 
+  array (
+    'Field' => 'meta',
+    'Type' => 'mediumtext',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
   'return_url' => 
   array (
     'Field' => 'return_url',
     'Type' => 'varchar(255)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'uid' => 
+  array (
+    'Field' => 'uid',
+    'Type' => 'varchar(255)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'edited' => 
+  array (
+    'Field' => 'edited',
+    'Type' => 'datetime',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'created' => 
+  array (
+    'Field' => 'created',
+    'Type' => 'datetime',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -102,24 +120,32 @@ class MolliePaymentBase extends \core\db\DBObject {
 	public function getDescription() { return $this->getField('description'); }
 	
 		
-	public function setEdited($p) { $this->setField('edited', $p); }
-	public function getEdited() { return $this->getField('edited'); }
-	
-		
-	public function setCreated($p) { $this->setField('created', $p); }
-	public function getCreated() { return $this->getField('created'); }
-	
-		
-	public function setMeta($p) { $this->setField('meta', $p); }
-	public function getMeta() { return $this->getField('meta'); }
+	public function setMollieId($p) { $this->setField('mollie_id', $p); }
+	public function getMollieId() { return $this->getField('mollie_id'); }
 	
 		
 	public function setMollieStatus($p) { $this->setField('mollie_status', $p); }
 	public function getMollieStatus() { return $this->getField('mollie_status'); }
 	
 		
+	public function setMeta($p) { $this->setField('meta', $p); }
+	public function getMeta() { return $this->getField('meta'); }
+	
+		
 	public function setReturnUrl($p) { $this->setField('return_url', $p); }
 	public function getReturnUrl() { return $this->getField('return_url'); }
+	
+		
+	public function setUid($p) { $this->setField('uid', $p); }
+	public function getUid() { return $this->getField('uid'); }
+	
+		
+	public function setEdited($p) { $this->setField('edited', $p); }
+	public function getEdited() { return $this->getField('edited'); }
+	
+		
+	public function setCreated($p) { $this->setField('created', $p); }
+	public function getCreated() { return $this->getField('created'); }
 	
 	
 }
