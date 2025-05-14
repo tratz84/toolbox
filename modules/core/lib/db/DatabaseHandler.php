@@ -41,6 +41,17 @@ class DatabaseHandler {
 	}
 	
 	
+	public function inTransaction() {
+	    foreach( $this->mDbhResources as $name => $res ) {
+	        if ( $res->getTransactionCount() > 0 ) {
+	            return true;
+	        }
+	    }
+	    
+	    return false;
+	}
+	
+	
 	public static function getResource($aHandlerName) {
 		$dh = DatabaseHandler::getInstance();
 		
@@ -95,6 +106,7 @@ class DatabaseHandler {
 	
 	public function closeAll($checkHandles=true) {
 	    // check any open transactions (shouldn't happen, would be a severe bug)
+	    // TODO: this doesn't seem to work...
 	    if ($checkHandles) foreach($this->transactionHandles as $resourceName => $cnt) {
 	        if ($cnt > 0) {
 	            throw new DatabaseException('Open transaction for "'.$resourceName.'"');

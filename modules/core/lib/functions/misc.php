@@ -6,6 +6,7 @@ use core\Context;
 use core\exception\FileException;
 use core\exception\NotForLiveException;
 use core\exception\InvalidStateException;
+use core\db\DatabaseHandler;
 
 function is_get() {
     return $_SERVER['REQUEST_METHOD'] == 'GET';
@@ -306,8 +307,12 @@ function request_uri_no_params() {
 
 function redirect($url) {
     
-    // TODO: check if $url is prefixed? & clean up?
     
+    if ( DatabaseHandler::getInstance()->inTransaction() ) {
+        throw new InvalidStateException( 'redirect() called but in a database Transaction' );
+    }
+    
+    // TODO: check if $url is prefixed? & clean up?
     header('Location: ' . appUrl($url));
     exit;
 }
