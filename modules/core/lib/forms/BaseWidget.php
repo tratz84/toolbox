@@ -127,6 +127,25 @@ class BaseWidget {
         $this->arrRenderFunctions[$fieldName] = $callback;
     }
     
+    public function renderTableRow() {
+        
+        $htmlLabel = $this->getLabel();
+        if ( $this->getEscapeLabel() )
+            $htmlLabel = esc_html( $htmlLabel );
+        $htmlLabel = $htmlLabel . infopopup($this->getInfoText());
+        
+        $htmlField = $this->render();
+        $htmlField = preg_replace('/<label.*?<\\/label>/', '', $htmlField, 1);
+        
+        $tr = '';
+        $tr .= '<tr>' . PHP_EOL;
+        $tr .= '  <td>'.$htmlLabel.'</td>' . PHP_EOL;
+        $tr .= '  <td>'.$htmlField.'</td>' . PHP_EOL;
+        $tr .= '<tr>' . PHP_EOL;
+        
+        return $tr;
+    }
+    
     public function render() {
         $this->addContainerClass('widget');
         $this->addContainerClass( slugify(toolbox_get_class($this)) );
