@@ -1,6 +1,8 @@
 <?php
 namespace core\template;
 
+use core\exception\InvalidStateException;
+
 class DefaultTemplate
 {
 
@@ -57,6 +59,10 @@ class DefaultTemplate
             $$k = $v;
         }
 
+        if (is_file($this->mTpl) == false) {
+            throw new InvalidStateException( 'Template not found: ' . $this->mTpl . ' (template file not created?)' );
+        }
+        
         ob_start();
         include $this->mTpl;
         

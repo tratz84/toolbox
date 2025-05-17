@@ -69,7 +69,7 @@ class EzTemplateLoader {
 			}
 			
 			
-			EzTemplateLoader.addCache(cacheName, xhr.responseText);
+			EzTemplateLoader.addTemplate(cacheName, xhr.responseText);
 			
 			// exec callbacks
 			let c;
@@ -96,9 +96,23 @@ class EzTemplateLoader {
 		this.callbackXhrFinished.push( callback );
 	}
 	
-	static addCache( cacheName, template ) {
+	static addTemplate( cacheName, template ) {
 		EzTemplateLoader.cacheTemplates[cacheName] = template;
 	}
+	
+	static hasTemplate( cacheName ) {
+		if (EzTemplateLoader.cacheTemplates[cacheName]) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	static getCachedTemplate( cacheName ) {
+		return EzTemplateLoader.cacheTemplates[cacheName];
+	}
+	
 	
 }
 

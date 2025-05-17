@@ -203,7 +203,7 @@ class SendMail {
                 }
             } else {
                 // unix? => use sendmail
-                $transport = new \Swift_SendmailTransport();
+                $transport = @new \Swift_SendmailTransport();
                 
                 
                 // skip check, just try.. some environments block this, but still work

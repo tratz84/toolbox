@@ -50,6 +50,8 @@ class ListWidget extends WidgetContainer {
             $objects = $obj->{$this->methodObjectList};
         } else if (is_array($obj) && isset($obj[$this->methodObjectList])) {
             $objects = $obj[$this->methodObjectList];
+        } else if ( is_a($obj, DBObject::class) && $obj->hasField($this->methodObjectList) ) {
+            $objects = $obj->getField($this->methodObjectList);
         } else {
             // might happen if field list-field is empty
             //             throw new InvalidStateException('methodObjectList not found on object - ' . $this->methodObjectList);
