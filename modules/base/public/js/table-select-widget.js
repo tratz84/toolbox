@@ -160,7 +160,7 @@ class TableSelectWidget {
 				this.vars['header_fields'] = data['header_fields'];
 				this.vars['results'] = data['results'];
 				
-				this.eztemplate.renderSubTemplate( 'result-container' );
+				this.eztemplate.renderSubTemplate( 'result-container', this.vars );
 			}.bind(this)
 		});
 	}

@@ -766,12 +766,12 @@ class EzTemplate {
 	}
 	
 	
-	renderSubTemplate( subTemplateName ) {
+	renderSubTemplate( subTemplateName, vars ) {
 		
 		for(var i in this.subTemplates) {
 			if (this.subTemplates[i].getTemplateName() == subTemplateName) {
 				console.log( this.subTemplates[i].isTopTemplate() );
-				this.subTemplates[i].setVars( this.vars );
+				this.subTemplates[i].setVars( vars ? vars : this.vars );
 				this.subTemplates[i].render();
 			}
 		}
