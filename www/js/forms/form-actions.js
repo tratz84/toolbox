@@ -253,7 +253,14 @@ function handleFormActions(actionsContainer) {
 					inp.attr('name', inputName);
 					
 					var obj = popup.find('[name='+allFields[cnt]+']');
-					inp.val( obj.val() )
+					
+					if ( obj.attr('type') == 'checkbox' ) {
+						if ( obj.prop('checked') )
+							inp.val( obj.val() )
+					}
+					else {
+						inp.val( obj.val() )
+					}
 					
 					$(td).append(inp);
 				}
