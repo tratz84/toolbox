@@ -13,6 +13,22 @@ class CheckboxField extends BaseWidget {
         
     }
     
+    
+    public function bindObject($obj) {
+        $fieldCount = parent::bindObject($obj);
+        // TVW - 2025-05-21
+        // checkbox-fields are kinda problematic, in that they don't post anything if not checked
+        // therefore, the field is not set, and no value is set..
+        // for now, if not set => setValue(0)
+        if ($fieldCount == 0 && is_a($this, CheckboxField::class)) {
+            $this->setValue(0);
+            $fieldCount++;
+        }
+        
+        return $fieldCount;
+    }
+    
+    
     public function getValue() {
         
         $v = parent::getValue();
