@@ -47,6 +47,8 @@ class mastertemplateController extends BaseController {
             if ($this->form->validate()) {
                 if (isset($_FILES['f']) && $_FILES['f']['size'] > 0) {
                     $html = file_get_contents($_FILES['f']['tmp_name']);
+                    
+                    $this->form->setField('filename', $_FILES['f']['name']);
                     $this->form->setField('content', $html);
                 }
                 
@@ -71,6 +73,21 @@ class mastertemplateController extends BaseController {
         $this->form = new MasterTemplateForm();
         
         $mt = $etservice->readMasterTemplate( get_var('id') );
+        
+        print $mt->getContent();
+    }
+    
+    public function action_download_tpl() {
+        $etservice = object_container_get( EmailTemplateService::class );
+        
+        $this->form = new MasterTemplateForm();
+        
+        $mt = $etservice->readMasterTemplate( get_var('id') );
+        
+        header('Content-type: application/octet-stream');
+        
+        $f = $mt->getFilename() ? $mt->getFilename() : 'tpl.html';
+        header('Content-Disposition: attachment; filename="'.$f.'"');
         
         print $mt->getContent();
     }

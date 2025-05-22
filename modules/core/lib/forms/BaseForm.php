@@ -30,6 +30,8 @@ class BaseForm extends WidgetContainer implements LockableObject {
     
     protected $javascript = array();
     
+    protected $renderAsTable = false;
+    
     
     public function __construct() {
         
@@ -55,6 +57,8 @@ class BaseForm extends WidgetContainer implements LockableObject {
     public function setObjectLocked($bln) { $this->objectLocked = $bln; }
     public function isObjectLocked() { return $this->objectLocked ? true : false; }
     
+    
+    public function setRenderAsTable( $bln ) { $this->renderAsTable = $bln; }
     
     public function getSubmitButton( $name ) { return $this->submitButtons[$name]; }
     public function setSubmitText($t) { $this->submitButtons['default-button']->setValue( $t ); }
@@ -354,8 +358,17 @@ class BaseForm extends WidgetContainer implements LockableObject {
         $html .= $this->renderKeyFields();
         
         
-        foreach($this->widgets as $w) {
-            $html .= $w->render() . "\n";
+        if ($this->renderAsTable) {
+            $html .= '<table class="tbl-form tbl-form-'.slugify($className).'">'."\n";
+            foreach($this->widgets as $w) {
+                $html .= $w->renderTableRow() . "\n";
+            }
+            $html .= '<table>'."\n";
+        }
+        else {
+            foreach($this->widgets as $w) {
+                $html .= $w->render() . "\n";
+            }
         }
         
         if ($this->showSubmitButtons) {
@@ -395,6 +408,12 @@ class BaseForm extends WidgetContainer implements LockableObject {
         
         return $html;
     }
+    
+    
+    
+    
+    
+    
     public function getLockKey() {
         // start lock name
         $lockKey = toolbox_get_class( $this );

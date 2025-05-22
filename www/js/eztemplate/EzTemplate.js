@@ -1,3 +1,4 @@
+
 /**
  * 
  */
@@ -7,14 +8,25 @@
 class EzTemplate {
 	
 	templateName = null;
+	container = null;
 	
 	
     constructor( container ) {
+		let originalContainer = container;
 		
-		if (typeof container == 'string')
+		if (typeof container == 'string') {
 			this.container = document.getElementById( container );
-		else
+			
+			// not found by id? => try querySelector
+			if (!this.container)
+				this.container = document.querySelector( container );
+		}
+		else if (typeof container == 'object' && container.constructor && container.constructor.name == 'jQuery') {
+			this.container = container.get(0);
+		}
+		else {
 			this.container = container;
+		}
 		
         this.reAttributeBinding = /^\[.*\]$/;
 
@@ -34,6 +46,14 @@ class EzTemplate {
         this.expressions = [];
         
         this.subTemplates = [];
+		
+		// this.container not found?
+		if (this.container == null) {
+			// originalContainer contains a value? => report as error
+			if (originalContainer !== null && originalContainer !== undefined) {
+				console.error("Container not found", originalContainer);
+			}
+		}
 
     }
     
@@ -44,11 +64,38 @@ class EzTemplate {
     static createInstanceSubTemplate( parentTemplate, node, templateHtml ) {
 		let sub = new EzTemplate( node );
         
+//        sub.tplHtml = templateHtml;
+        
         // not used, example for future usage
 		sub.setParentTemplate( this );
-		 sub.setParentNode( node );
+		sub.setParentNode( node );
         
         sub.setVars( parentTemplate.getVars() );
+        
+        // set attributes as values
+        let attrNames = node.getAttributeNames();
+        for(let i in attrNames) {
+			let an = attrNames[i];
+			let val = node.getAttribute( an );
+			
+			// binded var?
+			if (an.match(sub.reAttributeBinding)) {
+//				console.log( 'node', node, an, val );
+				an = an.substr(1, an.length-2);
+				val = parentTemplate.getVarValue( val );
+				sub.setVar(an, val);
+			}
+			else if (val.match(sub.reExpressionBinding)) {
+				val = sub.expressionStringToValue( val );
+				sub.setVar( an, val );
+			}
+			// just set val
+			else {
+				sub.setVar( an, val );
+			}
+		}
+        
+        sub.templateInnerHTML = node.innerHTML;
         
         sub.loadHtml( templateHtml );
 
@@ -66,7 +113,34 @@ class EzTemplate {
 
     setVar(key, val) { this.vars[key] = val; }
     getVars() { return this.vars; }
-    setVars(vars) { this.vars = vars; }
+    setVars(vars) {
+		// append/overwrite
+		this.vars = Object.assign( this.vars, vars );
+	}
+	resetVars() { this.vars = {}; }
+    
+    setObject( prefix, obj ) {
+		if (obj === null || obj == undefined) {
+			console.error('EzTemplate.setObject(', prefix, ', ', obj, ')');
+			return;
+		}
+
+		
+		let widgetFuncs = {};
+		
+		// 
+		let t = Object.getPrototypeOf(obj);
+		let props = Object.getOwnPropertyNames(t);
+		
+		for(let i in props) {
+			let propName = props[i];
+			
+			if (typeof obj[ propName ] == 'function')
+				widgetFuncs[ propName ] = function(evt) { obj[ propName ].bind(obj)(evt, this) };
+		}
+		
+		this.setVar( prefix, widgetFuncs );
+	}
     
     
     loadNode(node) {
@@ -99,6 +173,7 @@ class EzTemplate {
     }
     
     cloneNode() {
+//		console.log('...');
 		
 		let result = [];
 		
@@ -118,6 +193,7 @@ class EzTemplate {
         s.childNodes.forEach(function(obj) {
             this.originalNodes.push(obj.cloneNode(true));
         }.bind(this));
+
         
 //        console.log(s);
 //        console.log(this.originalNodes);
@@ -138,7 +214,7 @@ class EzTemplate {
         this.attributeVariables = [];
         this.expressions = [];
         this.subTemplates = [];
-
+        
         // TODO: parse..
         if (!this.partial.nodeType) {
             for (var i in this.partial) {
@@ -148,6 +224,7 @@ class EzTemplate {
         else {
             this._parse(this.partial);
         }
+        
     }
     
     _parse(node) {
@@ -156,33 +233,18 @@ class EzTemplate {
             this.expressions.push(node);
         }
         
-        
-		// handle ez-template
-        if (node.nodeName && node.nodeName.startsWith('EZ-')) {
-			EzTemplateLoader.loadTemplate( node.nodeName, function( tpl, opts ) {
-				let sub = EzTemplate.createInstanceSubTemplate( this, opts.parentNode, tpl );
-                
-                this.subTemplates.push( sub );
-				
-			}.bind(this), { parentNode: node });
-			
-			return;
-        }
-        
-        // subtemplate set?
-        if (node.attributes && node.getAttribute('ez-subtemplate')) {
-			let sub = EzTemplate.createInstanceSubTemplate( this, node, node.innerHTML );
-			sub.setTemplateName( node.getAttribute('ez-subtemplate') );
-			this.subTemplates.push( sub );
-			
-			return;
-		}
-        
-        
         // handle attributes
         if (node.attributes) {
             var l = node.attributes.length;
 
+
+			let ezforme = node.getAttribute('ez-forme');
+			if (ezforme != null) {
+//				console.log('jojo', this);
+				let sub = EzTemplateFor.createInstance( this, node );
+				this.subTemplates.push( sub );
+				return;
+			}
 
             for (var i = 0; i < l; i++) {
                 var attr = node.attributes.item(i);
@@ -228,9 +290,32 @@ class EzTemplate {
 
             }
         }
+        
+        
+        
+		// handle ez-template
+		if (node.nodeName && node.nodeName.startsWith('EZ-')) {
+			EzTemplateLoader.loadTemplate( node.nodeName, function( tpl, opts ) {
+				let sub = EzTemplate.createInstanceSubTemplate( this, opts.parentNode, tpl );
+                
+                this.subTemplates.push( sub );
+			}.bind(this), { parentNode: node });
+			
+			return;
+        }
+        
+        // subtemplate set?
+        if (node.attributes && node.getAttribute('ez-subtemplate')) {
+			let sub = EzTemplate.createInstanceSubTemplate( this, node, node.innerHTML );
+			sub.setTemplateName( node.getAttribute('ez-subtemplate') );
+			this.subTemplates.push( sub );
+			
+			return;
+		}
+        
 
         if (node.hasChildNodes) {
-            for (var i in node.childNodes) {
+            for (let i in node.childNodes) {
                 this._parse(node.childNodes[i]);
             }
         }
@@ -242,11 +327,16 @@ class EzTemplate {
 	 */
     getVarValue(path, opts) {
 		
+		// TODO: check expression
+		if (path.match(this.reExpressionBinding)) {
+			return this.execExpression( path, { ref: path } );
+		}
+		
 		// replace array's with dots, items[0].value => items.0.value
 		path = path.replace(/\[\s*(\d+)\s*\]/g, '.$1.');	// explode array's
 		path = path.replace(/^\./, '');						// remove leading dot
 		path = path.replace(/\.$/, '');						// remove ending dot
-		path = path.replace(/\.+/, '.')						// remove double dots
+		path = path.replace(/\.+/g, '.')					// remove double dots
 		
 		// expode to tokens
         let tokens = path.split('.');
@@ -267,8 +357,13 @@ class EzTemplate {
             var n = tokens[i];
 
             let varName = n;
+			
+			if (typeof curVar[varName] == 'undefined') {
+				console.error('EzTemplate.getVarValue, path not found, ', path);
+			}
 
-            if (!curVar[varName]) {
+
+            if (!curVar[varName] && curVar[varName] !== '') {
                 return null;
             }
             curVar = curVar[varName];
@@ -310,6 +405,7 @@ class EzTemplate {
 	 * 
 	 */
     applyVars() {
+		
         for (var i in this.attributeVariables) {
             var att = this.attributeVariables[i];
 
@@ -320,9 +416,18 @@ class EzTemplate {
 
             var varName = att.value;
             
+            
             // get value
             var v = this.getVarValue(varName);
+            
+            // null? => show empty string
+            if (v === null) {
+//				console.log(att.ownerElement, 'var not found', varName);
+            	v = '';
+        	}
 
+			att.ownerElement.ezTpl = this;
+			
 			// contenthtml? => insert html, can break stuff..
 			if (attrName == 'contenthtml') {
 				this.helper_emptyNode( att.ownerElement );
@@ -333,12 +438,44 @@ class EzTemplate {
 				this.helper_emptyNode( att.ownerElement );
 				att.ownerElement.appendChild( document.createTextNode(v) );
 			}
+			else if (attrName == 'checked') {
+				if (v) {
+					att.ownerElement.checked = true;
+				}
+			}
+			else if (attrName == 'selected') {
+				if (v) {
+					att.ownerElement.selected = true;
+				}
+			}
             // set attribute
 			else {
 				if (attrName.indexOf('data-') === 0) {
 					att.ownerElement[attrName.substr(5)] = v;
 				} else {
-					att.ownerElement.setAttribute(attrName, v);
+					if (typeof v == 'function' || typeof v == 'object') {
+						att.ownerElement[attrName] = v;
+					}
+					else {
+						
+						let owner = att.ownerElement;
+
+						owner.setAttribute(attrName, v);
+
+						// special case..
+						if (owner.nodeName == 'SELECT') {
+							owner.value = v;
+						}
+						att.ownerElement.setAttribute(attrName, v);
+						att.ownerElement.setAttribute(attrName, v);
+
+//						if (attrName == 'onclick' || attrName == 'onchange') {
+//							att.ownerElement[attrName] = function() { eval( att.value ); };
+//						}
+//						else {
+//							att.ownerElement.setAttribute(attrName, v);
+//						}
+					}
 				}
         	}
             
@@ -358,21 +495,31 @@ class EzTemplate {
             let o = this.expressions[i];
             
 	
-	        let v = o.nodeValue;
+	        let v = this.expressionStringToValue( o.nodeValue, {ref: o.ownerElement} );
 	
-	        let matches = v.match(this.reExpressionBinding);
-	        if (matches) {
-	
-	            for (let matchNo in matches) {
-	                let result = this.execExpression(matches[matchNo]);
-	
-	                v = v.replaceAll(matches[matchNo], result);
-	            }
-	
-	            o.nodeValue = v;
-	        }
+            o.nodeValue = v;
         }
     }
+    
+    expressionStringToValue( val, opts ) {
+        if (typeof val != 'string')
+            return val;
+        
+        let matches = val.match(this.reExpressionBinding);
+        
+        if (matches) {
+
+            for (let matchNo in matches) {
+                let result = this.execExpression(matches[matchNo], opts);
+
+                val = val.replaceAll(matches[matchNo], result);
+            }
+
+        }
+        
+        return val;
+	}
+    
     
     /**
 	 * _containsExpression() - checks if nodeValue contains an {{ }}-expression
@@ -391,7 +538,7 @@ class EzTemplate {
     /**
 	 * execExpression() - execute's {{ }}-expression
 	 */
-    execExpression(code) {
+    execExpression(code, opts) {
 
         // remove {{ }}
         if (code.startsWith('{{')) {
@@ -402,8 +549,11 @@ class EzTemplate {
         // code for importing tpl_vars
         let js_tplvars = '';
         for (let v in this.vars) {
+			if (v == 'class') continue;
+			
             if (typeof v == 'string' && v.match(/^[a-zA-Z_]+$/)) {
-                js_tplvars += 'let ' + v + ' = ' + JSON.stringify(this.vars[v]) + ';\n';
+//                js_tplvars += 'let ' + v + ' = ' + JSON.stringify(this.vars[v]) + ';\n';
+                js_tplvars += 'let ' + v + ' = this.vars[\'' + v + '\'];\n';
             }
         }
 
@@ -420,8 +570,13 @@ class EzTemplate {
             result = result();
         }
         catch (err) {
-            result = 'Error: ' + err.message;
-            console.error(err);
+//            result = null;//'Error: ' + err.message;
+            console.error('EzTemplate.execExpression error', err);
+            
+            if (opts && opts.ref)
+                console.error(opts.ref, 'Code: ' + code);
+            else
+                console.error('Code: ' + code);
         }
 
         return result;
@@ -430,7 +585,7 @@ class EzTemplate {
     
     applySubtemplates() {
 		
-		// console.log( this.subTemplates.length );
+//		 console.log( this.subTemplates );
 		
 		for(let i in this.subTemplates) {
 			this.subTemplates[i].reset();
@@ -592,14 +747,13 @@ class EzTemplate {
 		}
 
 		// apply's []-attributes
-        this.applyVars();
+		this.applyVars();
         
         // apply's {{ }}-vars
         this.applyExpressions();
         
         // ez-for, ez-if, ...
         this.applySubtemplates();
-        
 
         return this.partial;
     }
@@ -612,12 +766,12 @@ class EzTemplate {
 	}
 	
 	
-	renderSubTemplate( subTemplateName ) {
+	renderSubTemplate( subTemplateName, vars ) {
 		
 		for(var i in this.subTemplates) {
 			if (this.subTemplates[i].getTemplateName() == subTemplateName) {
 				console.log( this.subTemplates[i].isTopTemplate() );
-				this.subTemplates[i].setVars( this.vars );
+				this.subTemplates[i].setVars( vars ? vars : this.vars );
 				this.subTemplates[i].render();
 			}
 		}
@@ -649,6 +803,50 @@ class EzTemplate {
 			c.appendChild( nodes[i] );
 		}
 		
+		
+		if (c) {
+			let scripts = c.querySelectorAll('script');
+			if ( scripts.length ) {
+				this.container.ezTemplate = this;
+//				console.log( c );
+				for(let i=0; i < scripts.length; i++) {
+					let sc = scripts.item(i);
+					if (sc.executed)
+						continue;
+					
+					
+					let parentNode = sc.parentNode;
+					parentNode.removeChild( sc );
+					
+					// inject variables
+					let scriptText = '';
+					let varNames = Object.getOwnPropertyNames( this.vars );
+					for(let i in varNames) {
+						let v = this.expressionStringToValue( this.vars[varNames[i]], { ref: sc } );
+						
+						let vn = varNames[i];
+						vn = vn.replace('-', '');
+						
+						// skip reserved keywords
+						if (vn == 'class') continue;
+						
+						scriptText += 'let ' + vn + ' = ' + JSON.stringify( v ) + ';\n';
+					}
+					scriptText += sc.innerHTML;
+					
+					// insert script to execute
+					let script = document.createElement('script');
+					scriptText = '(function() { ' + scriptText + ' })();';
+					script.innerHTML = scriptText;
+					
+					parentNode.appendChild(script);
+					script.executed = true;
+				}
+			}
+		}
+		
+		
+		
 		// trigger EzTemplate.updated-event for top template
 		if (this.isTopTemplate()) {
 			let evt = new Event('EzTemplate.updated');
@@ -666,8 +864,18 @@ class EzTemplate {
 
 class EzTemplateFor extends EzTemplate {
 	
+	ezForMe = false;
+	loopVar = null;
+	ezForMeParent = null;
+	
+	loopName = null;
+	
+	static forCounter = 1;
+	
 	constructor() {
 		super();
+		
+		this.loopName = 'ez-for-' + (EzTemplateFor.forCounter++);
 		
 		this.counter = 0;
 		this.items = [];
@@ -683,18 +891,37 @@ class EzTemplateFor extends EzTemplate {
 	static createInstance( parentTemplate, node ) {
 		let sub = new EzTemplateFor();
 		
-		let arrayItem = node.attributes['ez-for'].value;
-                    
-        sub.setParentTemplate( parentTemplate );
-        sub.setParentNode( node );
-        
-        sub.setVars( parentTemplate.getVars() );
-        
-        sub.loadNode( node.childNodes );
+//		let arrayItem = node.attributes['ez-for'].value;
+		
+		if (node.getAttribute('ez-forme')) {
+			sub.ezForMe = true;
+			sub.loopVar = node.getAttribute('ez-forme');
+//			sub.beforeNode = node.nextSibling;
+			sub.ezForMeParent = node.parentNode;
+			
+			node.removeAttribute('ez-forme');
+		}
+		else {
+			sub.ezForMe = false;
+			sub.loopVar = node.getAttribute('ez-for');
+		}
+		
+		
+		sub.setParentTemplate( parentTemplate );
+		sub.setVars( parentTemplate.getVars() );
+		
+		if (sub.ezForMe) {
+			sub.setParentNode( node );
+			sub.loadNode( node );
+		}
+		else {
+			sub.setParentNode( node );
+			sub.loadNode( node.childNodes );
+		}
 
-        if ( node.attributes['ez-item'] ) {
-            sub.setVar(node.attributes['ez-item'], parentTemplate.getVarValue(arrayItem));
-        }
+//        if ( node.attributes['ez-item'] ) {
+//            sub.setVar(node.attributes['ez-item'], parentTemplate.getVarValue(arrayItem));
+//        }
         
         // empty node, rendering by EzTemplateFor
         parentTemplate.helper_emptyNode( node );
@@ -743,13 +970,13 @@ class EzTemplateFor extends EzTemplate {
 //		console.log( container );
 		
 		// ez-for="..."-value
-		let nameItemsCollection = null;
-		if ( this.parentNode.attributes['ez-for'] )
-			nameItemsCollection = this.parentNode.attributes['ez-for'].value;
-		
+//		let nameItemsCollection = null;
+//		if ( this.parentNode.attributes['ez-for'] )
+//			nameItemsCollection = this.parentNode.attributes['ez-for'].value;
+//		
 		
 		// not found/set? => skip
-		if (!nameItemsCollection) {
+		if (!this.loopVar) {
 			console.error( 'Error: EzTemplateFor._serializeVars, ez-for=value not found');
 			return vars;
 		}
@@ -786,7 +1013,7 @@ class EzTemplateFor extends EzTemplate {
 	            		prefix = this.nameItem + '.';
 	            		varName = varName.substr( prefix.length );
             		}
-	            	let varPath = nameItemsCollection + '['+opts.itemCounter+'].' + varName;
+	            	let varPath = this.loopVar + '['+opts.itemCounter+'].' + varName;
 	            	
 	            	
 					if (attrName == 'contenthtml') {
@@ -819,26 +1046,49 @@ class EzTemplateFor extends EzTemplate {
 		return vars;
 	}
     
+    
+    
+    updateRecord( oldRow, newRecord ) {
+		
+		let t = this.createRecord( newRecord, {
+			insertBeforeNode: oldRow
+		} );
+		
+		$(oldRow).remove();
+		
+	}
+    
+    
+    /**
+	 * record - the record
+	 * opts.iteratorKey..
+	 */
     createRecord( record, opts ) {
 		if (!record)
 			record = {};
 		
-		let t = new EzTemplate();
+		let t = new EzTemplate( );
 		
 		t.setParentNode( this.parentNode );
 		t.setParentTemplate( this );
 		
 		t.setVars( this.vars );
 		
-		if (this.nameItem)
+		if (this.nameItem) {
 			t.setVar( this.nameItem, record );
-		if (this.nameCounter)
+		}
+		if (this.nameCounter) {
 			t.setVar( this.nameCounter, this.counter );
-		
-		if (this.nameKey)
+		}
+		if (this.nameKey) {
 			t.setVar( this.nameKey, opts.iteratorKey );
+		}
 		
-		t.loadNode( this.cloneNode() );
+		let cn = this.cloneNode();
+		t.loadNode( cn );
+		
+//		console.log('nodes', this.originalNodes);
+//		return;
 		
 //		t.parse();
 //		t.applyVars();
@@ -849,17 +1099,47 @@ class EzTemplateFor extends EzTemplate {
 		for(let i in nodes) {
 			nodes[i]._itemCounter = this.counter;
 			
-			this.parentNode.appendChild(nodes[i]);
+			
+			// ez-forme=".." loop?
+			if (this.ezForMe) {
+				$(nodes[i]).attr( 'ez-loop-name', this.loopName );
+
+				let pn = this.parentNode.parentNode;
+				console.log('pn', this.parentNode);
+				
+				let lastItem = $(pn).find('[ez-loop-name="' + this.loopName + '"]').last();
+				
+				if (lastItem.length > 0) {
+					lastItem = lastItem.get(0).nextSibling;
+				} else {
+					lastItem = this.parentNode.nextSibling;
+				}
+				
+				pn.insertBefore( nodes[i], lastItem );
+			}
+			// ez-for=".." loop?
+			else {
+				if (opts && opts.insertBeforeNode) {
+					this.parentNode.insertBefore( nodes[i], opts.insertBeforeNode );
+				}
+				else {
+					this.parentNode.appendChild(nodes[i]);
+				}
+			}
 		}
 		
 		this.subTemplates.push( t );
     
 		this.counter++;
+		
+		this.checkNoResults();
+		
+		return t;
 	}
 	
     build() {
 		
-		this.items = this.parentTemplate.getVarValue( this.parentNode.attributes['ez-for'].nodeValue );
+		this.items = this.parentTemplate.getVarValue( this.loopVar );
 		if ( this.parentNode.attributes['ez-item'] )
 			this.nameItem    = this.parentNode.attributes['ez-item'].nodeValue;
 		
@@ -875,7 +1155,21 @@ class EzTemplateFor extends EzTemplate {
 			this.createRecord( this.items[i], { iteratorKey: i } );
 		}
 		
+		this.checkNoResults();
     }
+    
+    checkNoResults() {
+		let tbl = $(this.parentNode).closest('table');
+		
+		let records = tbl.find( 'tr' );
+		
+		if (records.length > 2) {
+			tbl.find('tbody.no-results').addClass('hidden');
+		}
+		else {
+			tbl.find('tbody.no-results').removeClass('hidden');
+		}
+	}
 }
 
 
@@ -912,7 +1206,7 @@ class EzTemplateIf extends EzTemplate {
 		
 		let jscode = this.parentNode.attributes['ez-if'].nodeValue;
 		
-		let r = this.execExpression( '{{'+jscode+'}}' );
+		let r = this.execExpression( '{{'+jscode+'}}', { ref: this.parentNode } );
 		
 		if (r === '1' || r === 1) {
 			r = true;
@@ -921,6 +1215,7 @@ class EzTemplateIf extends EzTemplate {
 //		console.log(r, jscode, this.vars);
 		if (r === true) {
 //			console.log( this.originalNodes );
+			$(this.parentNode).removeClass('hidden');
 			
 			if (this.parentNode.hasChildNodes() == false) {
 				this.partial = this.originalNodes;
@@ -933,6 +1228,7 @@ class EzTemplateIf extends EzTemplate {
 		else {
 			// false? => hide
 			this.helper_emptyNode( this.parentNode );
+			$(this.parentNode).addClass('hidden');
 		}
 	}
 }

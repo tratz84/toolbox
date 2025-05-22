@@ -6,6 +6,7 @@ use core\Context;
 use core\exception\FileException;
 use core\exception\NotForLiveException;
 use core\exception\InvalidStateException;
+use core\db\DatabaseHandler;
 
 function is_get() {
     return $_SERVER['REQUEST_METHOD'] == 'GET';
@@ -306,8 +307,12 @@ function request_uri_no_params() {
 
 function redirect($url) {
     
-    // TODO: check if $url is prefixed? & clean up?
     
+    if ( DatabaseHandler::getInstance()->inTransaction() ) {
+        throw new InvalidStateException( 'redirect() called but in a database Transaction' );
+    }
+    
+    // TODO: check if $url is prefixed? & clean up?
     header('Location: ' . appUrl($url));
     exit;
 }
@@ -1787,6 +1792,29 @@ function months_between($start, $end) {
     
     return $dt1->diff($dt2, true)->m;
 }
+
+
+function hours_between( $time1, $time2 ) {
+    if ( valid_time($time1) == false || valid_time($time2) == false )
+        return null;
+    
+    $tok1 = explode(':', $time1);
+    $tok2 = explode(':', $time2);
+    
+    $h1 = (int)$tok1[0];
+    $m1 = (int)$tok1[1];
+    
+    $h2 = (int)$tok2[0];
+    $m2 = (int)$tok2[1];
+    
+    
+    $mindiff = ($h2 - $h1) * 60;
+    $mindiff -= $m1;
+    $mindiff += $m2;
+    
+    return $mindiff;
+}
+
 
 
 function toolbox_mime_content_type($filename) {
