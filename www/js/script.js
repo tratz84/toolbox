@@ -304,7 +304,9 @@ function applyWidgetFields(container) {
 	$(container).find('.sortable-container').each(function(index, node) {
 		var opts = {};
 		
-		if ($(node).find('.handler-sortable').length) {
+               if ($(node).find('.handler-sortable').length
+                               || $(node).parent().hasClass('sublist')         // ListEditWidgets might start out empty..
+                       ) {
 			opts.handle = '.handler-sortable';
 		}
 		
