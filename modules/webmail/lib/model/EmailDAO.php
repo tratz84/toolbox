@@ -97,6 +97,12 @@ class EmailDAO extends \core\db\DAOObject {
 	    if (isset($opts['status']) && $opts['status']) {
 	        $qb->addWhere( QueryBuilderWhere::whereRefByVal('webmail__email.status', '=', $opts['status']) );
 	    }
+
+           if (isset($opts['to_name']) && trim($opts['to_name']) != '') {
+               $sql = "(select email_id from webmail__email_to where concat_ws(' ', to_name, to_email) like '%".$this->escape($opts['to_name'])."%')";
+               $qb->addWhere( QueryBuilderWhere::whereRefByRef('webmail__email.email_id', 'IN', $sql) );
+           }
+
 	    
 	    if (isset($opts['orderby']) && $opts['orderby']) {
 	        $qb->setOrderBy( $opts['orderby'] );
