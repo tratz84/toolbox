@@ -29,7 +29,39 @@ try {
         $el->setParameters(var_export($_REQUEST, true));
         $el->save();
     }
-} catch (\Exception $ex) { }
+} catch (\Exception $ex2) { }
+
+// json-request? => return json
+if ( isset($_SERVER['HTTP_ACCEPT']) && $_SERVER['HTTP_ACCEPT'] == 'application/json' ) {
+    $r = array();
+    $r['error'] = true;
+    $r['success'] = false;
+    $r['exception_type'] = get_class($ex);
+
+    $r['message'] = 'Er is een fout opgetreden: ';
+
+    if (is_a($ex, NotForLiveException::class) == false || DEBUG) {
+        $r['message'] .= $ex->getMessage();
+    }
+
+    if (DEBUG) {
+        if (is_a($ex, DatabaseException::class)) {
+            $r['message'] .= PHP_EOL.'Last query: '. esc_html($ex->getQuery());
+        }
+
+        $r['message'] .= PHP_EOL.$ex->getFile() . '(' . $ex->getLine() . ')';
+//         $r['message'] .= $ex->getTraceAsString();
+    }
+
+//     http_response_code(500);
+    header("HTTP/1.1 500 Internal Server Error");
+
+    header('Content-type: application/json');
+    print json_encode($r);
+
+
+    return;
+}
 
 
 
