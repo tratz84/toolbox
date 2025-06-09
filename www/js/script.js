@@ -304,7 +304,9 @@ function applyWidgetFields(container) {
 	$(container).find('.sortable-container').each(function(index, node) {
 		var opts = {};
 		
-		if ($(node).find('.handler-sortable').length) {
+               if ($(node).find('.handler-sortable').length
+                               || $(node).parent().hasClass('sublist')         // ListEditWidgets might start out empty..
+                       ) {
 			opts.handle = '.handler-sortable';
 		}
 		
@@ -1602,7 +1604,7 @@ function format_filesize(size) {
 
 function validate_email(mail)  {
 	// credits to https://www.w3resource.com/javascript/form/email-validation.php
-	if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+	if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,30})+$/.test(mail)) {
 		return true;
 	} else {
 		return false;
