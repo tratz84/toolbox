@@ -84,7 +84,7 @@ class ObjectHookProxy{
                     $par = '&'.$par;
                 
                 if ($p->isDefaultValueAvailable()) {
-                    if (is_string($p->getDefaultValue()) || is_numeric($p->getDefaultValue())) {
+                    if ( is_numeric($p->getDefaultValue()) ) {
                         $par  = $par . ' = ' . $p->getDefaultValue();
                     }
                     else {
@@ -146,7 +146,9 @@ class ObjectHookProxy{
         
         $phpcode .= '}'.PHP_EOL;
         
-//         print $phpcode;exit;
+//         if ( strpos($class, 'VisitorService') !== false) {
+//             print $phpcode;exit;
+//         }
         
         
         if (is_debug()) {
