@@ -115,8 +115,10 @@ function renderGraph(datasets) {
 
 	// determine labels
 	var labels = [];
-	for(var x=0; x < datasets[0]['data'].length; x++) {
-		labels.push( datasets[0]['data'][x]['month'] );
+	if (datasets.length > 0) {
+    	for(var x=0; x < datasets[0]['data'].length; x++) {
+    		labels.push( datasets[0]['data'][x]['month'] );
+    	}
 	}
 
 	// build datasets
@@ -217,11 +219,17 @@ function DataFetcher() {
 	this.setCallbackFinish = function(func) { this.callbackFinish = func; }
 	this.abort = function() {
 		this.isAborted = true;
-		this.ajx.abort();
+		if (this.ajx)
+			this.ajx.abort();
 	};
 
 	this.fetch = function() {
-		console.log('gogo => ' + urls[ this.loadUrlPos ]);
+// 		console.log('gogo => ' + urls[ this.loadUrlPos ]);
+		
+		if (urls.length == 0) {
+			this.callbackFinish();
+			return;
+		}
 		
 		this.ajx = $.ajax({
 			type: 'POST',
