@@ -422,6 +422,12 @@ class UserService extends ServiceBase {
             'link'              => $reset_link,
             'reset_url'         => $reset_link
         ];
+
+        $vars['naam'] = $user->getFullname();
+        if (!$vars['naam'] )
+            $vars['naam'] = $user->getUsername();
+        $vars['naam2'] = $vars['naam'];
+
         
         // got a RESET_PASSWORD_SITE-template?
         $etdao = object_container_get( TemplateDAO::class );

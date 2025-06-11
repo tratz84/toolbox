@@ -264,6 +264,27 @@ class EmailService extends ServiceBase {
         $cursor = $eDao->search($opts);
         
         $r = ListResponse::fillByCursor($start, $limit, $cursor, array('email_id', 'user_id', 'incoming', 'from_name', 'from_email', 'subject', 'deleted', 'created', 'status', 'statusAsText', 'company_name', 'firstname', 'insert_lastname', 'lastname'));
+
+	// add to_name & to_email fields
+        $objs = $r->getObjects();
+        for($x=0; $x < count($objs); $x++) {
+            $obj = $objs[$x];
+
+            $obj['to_name'] = '';
+            $obj['to_email'] = '';
+
+            $e = queryOne('default', "SELECT * FROM webmail__email_to where email_id = ? order by email_to_id asc limit 1", array($obj['email_id']));
+            if ($e) {
+                if ($e['to_name'])
+                    $obj['to_name'] = $e['to_name'];
+                if ($e['to_email'])
+                    $obj['to_email'] = $e['to_email'];
+            }
+
+            $objs[$x] = $obj;
+        }
+        $r->setObjects($objs);
+
         
         return $r;
     }

@@ -43,8 +43,8 @@
 	<script src="<?= BASE_HREF ?>lib/select2/js/select2.min.js"></script>
 	<link href="<?= BASE_HREF ?>lib/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
 
-	<script src="<?= BASE_HREF ?>js/eztemplate/EzTemplateLoader.js"></script>
-	<script src="<?= BASE_HREF ?>js/eztemplate/EzTemplate.js"></script>
+	<script src="<?= BASE_HREF ?>js/eztemplate/EzTemplateLoader.js?v=<?= filemtime(WWW_ROOT.'/js/eztemplate/EzTemplateLoader.js') ?>"></script>
+	<script src="<?= BASE_HREF ?>js/eztemplate/EzTemplate.js?v=<?= filemtime(WWW_ROOT.'/js/eztemplate/EzTemplate.js') ?>"></script>
 
 	<script src="<?= BASE_HREF ?>lib/nprogress/nprogress.js"></script>
 		
