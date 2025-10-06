@@ -46,7 +46,7 @@ class TableSelectWidget {
 				</div ez-if>
 			</div>
 			<div>
-				<a href="javascript:void(0);" class="btn-reset">{{ toolbox_t('Reset') }}</a>
+				<a href="javascript:void(0);" class="btn-reset">{{ toolbox_t('Reset input') }}</a>
 			</div>
 		</div>
 	`;
@@ -72,7 +72,7 @@ class TableSelectWidget {
 				</div ez-if>
 			</div>
 			<div>
-				<a href="javascript:void(0);" class="btn-reset">{{ toolbox_t('Reset') }}</a>
+				<a href="javascript:void(0);" class="btn-reset">{{ toolbox_t('Reset input') }}</a>
 			</div>
 		</div>
 	`;
