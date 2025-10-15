@@ -3,6 +3,8 @@
 
 $lang = array();
 
+$lang['Reset input']            = 'Reset keuze';
+
 $lang['Base settings']          = 'Basis instellingen';
 $lang['Base color']             = 'Basis kleur';
 
