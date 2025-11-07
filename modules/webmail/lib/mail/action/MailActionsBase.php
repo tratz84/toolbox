@@ -141,7 +141,7 @@ abstract class MailActionsBase {
         
         $r = $this->mailConnector->appendMessage($if_send->getFolderName(), $emlMessage);
         
-        $this->lastError = \imap_last_error();
+//         $this->lastError = \imap_last_error();
         
         return $r;
     }
