@@ -176,8 +176,9 @@ hook_eventbus_subscribe('core', 'background-jobs', function(\core\container\Arra
 
 // serverInfoController, report webmail-state
 hook_eventbus_subscribe('base', 'ServerInfoContainer', function($serverInfoContainer) {
-    $ok = function_exists('imap_open');
-    $serverInfoContainer->addInfo( 'php-imap', $ok ? 'Ok' : 'Error', $ok ? '' : 'imap extension not loaded' );
+    // deprecated.. replaced by HordeImap
+//     $ok = function_exists('imap_open');
+//     $serverInfoContainer->addInfo( 'php-imap', $ok ? 'Ok' : 'Error', $ok ? '' : 'imap extension not loaded' );
     
     $ok = function_exists('mailparse_msg_parse_file');
     $serverInfoContainer->addInfo( 'php-mailparse', $ok ? 'Ok' : 'Error', $ok ? '' : 'mailparse extension not loaded' );
