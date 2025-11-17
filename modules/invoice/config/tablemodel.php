@@ -111,6 +111,51 @@ $tb_il->addColumn('created',           'datetime');
 $tb_il->addForeignKey('invoice__invoice_line_ibfk_1', 'invoice_id', 'invoice__invoice', 'invoice_id', 'CASCADE', 'RESTRICT');
 $tbs[] = $tb_il;
 
+
+
+$tb_os = new TableModel('invoice', 'order_status');
+$tb_os->addColumn('order_status_id',   'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_os->addColumn('description',       'varchar(255)');
+$tb_os->addColumn('default_selected',  'boolean');
+$tb_os->addColumn('active',            'boolean');
+$tb_os->addColumn('sort',              'int');
+$tbs[] = $tb_os;
+
+$tb_order = new TableModel('invoice', 'order');
+$tb_order->addColumn('order_id',                      'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_order->addColumn('ref_order_id',                    'int');
+$tb_order->addColumn('company_id',                      'int');
+$tb_order->addColumn('person_id',                       'int');
+$tb_order->addColumn('order_status_id',                 'int');
+$tb_order->addColumn('order_number',                    'int');
+$tb_order->addColumn('subject',                         'varchar(255)');
+$tb_order->addColumn('comment',                         'mediumtext');
+$tb_order->addColumn('note',                            'text');
+$tb_order->addColumn('total_calculated_price',          'decimal(10,2)');
+$tb_order->addColumn('total_calculated_price_incl_vat', 'decimal(10,2)');
+$tb_order->addColumn('order_date',                      'date');
+$tb_order->addColumn('edited',                          'datetime');
+$tb_order->addColumn('created',                         'datetime');
+$tb_order->addIndex('order_number', ['order_number'], ['unique' => true]);
+$tbs[] = $tb_order;
+
+$tb_ol = new TableModel('invoice', 'order_line');
+$tb_ol->addColumn('order_line_id',     'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
+$tb_ol->addColumn('order_id',          'int');
+$tb_ol->addColumn('article_id',        'int');
+$tb_ol->addColumn('short_description', 'varchar(255)');
+$tb_ol->addColumn('amount',            'double');
+$tb_il->addColumn('price',             'decimal(10,2)');
+$tb_ol->addColumn('vat_percentage',    'double');
+$tb_ol->addColumn('vat_amount',        'decimal(10,2)');
+$tb_ol->addColumn('sort',              'int');
+$tb_ol->addColumn('edited',            'datetime');
+$tb_ol->addColumn('created',           'datetime');
+$tb_ol->addForeignKey('invoice__order_line_ibfk_1', 'order_id', 'invoice__order', 'order_id', 'CASCADE', 'RESTRICT');
+$tbs[] = $tb_ol;
+
+
+
 $tb_os = new TableModel('invoice', 'offer_status');
 $tb_os->addColumn('offer_status_id',  'int', ['key' => 'PRIMARY KEY', 'auto_increment' => true]);
 $tb_os->addColumn('description',      'varchar(255)');

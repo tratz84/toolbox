@@ -36,6 +36,8 @@ $eb->subscribe('masterdata', 'menu', new CallbackPeopleEventListener(function($e
     
     $src->addItem('Facturatie', 'Offerte statussen',     '/?m=invoice&c=offerStatus');
     
+    $src->addItem('Facturatie', 'Order statussen',     '/?m=invoice&c=orderStatus');
+    
     $src->addItem('Facturatie', strOrder(1).' statussen',     '/?m=invoice&c=invoiceStatus');
     
     $src->addItem('Facturatie', 'Btw %',     '/?m=invoice&c=vat');
