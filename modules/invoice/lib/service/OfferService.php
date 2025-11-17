@@ -311,12 +311,10 @@ class OfferService extends ServiceBase {
             $ol = $ols[$x];
             
             $orderline = new OrderLine();
+            $orderline->setLineType( $ol->getLineType() );
             $orderline->setArticleId($ol->getArticleId());
-            if ($ol->getShortDescription2()) {
-                $orderline->setShortDescription($ol->getShortDescription() . ': ' . $ol->getShortDescription2());
-            } else {
-                $orderline->setShortDescription($ol->getShortDescription());
-            }
+            $orderline->setShortDescription($ol->getShortDescription());
+            $orderline->setShortDescription2($ol->getShortDescription2());
             $orderline->setAmount($ol->getAmount());
             
             $price = myround($ol->getPrice(), 2);

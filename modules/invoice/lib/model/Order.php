@@ -59,6 +59,7 @@ class Order extends base\OrderBase {
 	        
 // 	        if (isset($l[$p]) == false)
 // 	            $l[$p]=0;
+            if ($ol->getLineType() == 'text') continue;
 	            
             $l[$ol->getVatPercentage()] += $ol->getVatAmount();
 	    }
@@ -71,11 +72,11 @@ class Order extends base\OrderBase {
 	        return intval($k2*100) - intval($k1*100);
 	    });
 	        
-	        foreach($keys as $k) {
-	            $returnList[$k] = myround($l[$k],2);
-	        }
-	        
-	        return $returnList;
+        foreach($keys as $k) {
+            $returnList[$k] = myround($l[$k],2);
+        }
+        
+        return $returnList;
 	}
 	
 	

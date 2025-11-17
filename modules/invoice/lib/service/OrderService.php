@@ -16,6 +16,7 @@ use invoice\form\InvoiceForm;
 use invoice\form\OrderForm;
 use invoice\model\Invoice;
 use invoice\model\InvoiceLine;
+use invoice\model\InvoiceStatusDAO;
 use invoice\model\Order;
 use invoice\model\OrderDAO;
 use invoice\model\OrderLine;
@@ -93,6 +94,18 @@ class OrderService extends ServiceBase {
             $os = $osDao->readFirst();
             return $os;
     }
+    
+    public function readDefaultInvoiceStatus() {
+        $isDao = new InvoiceStatusDAO();
+        
+        $is = $isDao->readByDefaultStatus();
+        if ($is)
+            return $is;
+        
+        $is = $isDao->readFirst();
+        return $is;
+    }
+    
     
     
     public function deleteOrderStatus($id) {
@@ -292,6 +305,10 @@ class OrderService extends ServiceBase {
             $i->setInvoiceStatusId( $defaultInvoiceStatus->getInvoiceStatusId() );
         }
         
+        $invoiceService = object_container_get(InvoiceService::class);
+        $default_vat = $invoiceService->readDefaultVat();
+        
+        
         
         $ols = $order->getOrderLines();
         $invoiceLines = array();
@@ -313,9 +330,16 @@ class OrderService extends ServiceBase {
             $price = myround($ol->getPrice(), 2);
             $il->setPrice($price );
             
-            $il->setVatPercentage($ol->getVat());
+            if ($ol->getLineType() == 'text') {
+                if ( $default_vat ) {
+                    $il->setVatPercentage( $default_vat->getPercentage() );
+                }
+            }
+            else {
+                $il->setVatPercentage($ol->getVatPercentage());
+            }
             
-            $vatAmount = myround($price * $ol->getAmount() * $ol->getVat()/100, 2);
+            $vatAmount = myround($price * $ol->getAmount() * $ol->getVatPercentage()/100, 2);
             $il->setVatAmount($vatAmount);
             
             $il->setInvoiceId($i->getInvoiceId());
