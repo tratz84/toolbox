@@ -34,7 +34,7 @@ class DefaultOfferPdf extends DefaultInvoicePdf {
         $this->renderCustomerData();
 
         $this->SetFont('Arial', 'B', '16');
-        $this->Cell(190, $this->lineHeight, 'Offerte');
+        $this->Cell(190, $this->lineHeight, 'Offerte '.$this->offer->getOfferNumberText());
         $this->Ln();
         $this->Ln();
         

@@ -33,7 +33,7 @@ class DefaultOrderPdf extends DefaultInvoicePdf {
         $this->renderCustomerData();
 
         $this->SetFont('Arial', 'B', '16');
-        $this->Cell(190, $this->lineHeight, 'Order');
+        $this->Cell(190, $this->lineHeight, 'Order '.$this->order->getOrderNumberText());
         $this->Ln();
         $this->Ln();
         
