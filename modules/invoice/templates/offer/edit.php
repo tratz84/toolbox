@@ -45,6 +45,7 @@
 
 	</div>
 
+	<input type="hidden" id="order_id" value="<?= esc_attr($orderId) ?>" />
 	<input type="hidden" id="invoice_id" value="<?= esc_attr($invoiceId) ?>" />
 
 	<?php print $form->render() ?>

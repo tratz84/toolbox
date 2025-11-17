@@ -6,12 +6,11 @@ use core\container\ActionContainer;
 use core\controller\BaseController;
 use core\event\EventBus;
 use core\exception\InvalidStateException;
-use core\exception\ObjectNotFoundException;
 use invoice\InvoiceSettings;
 use invoice\form\OfferForm;
 use invoice\model\Invoice;
 use invoice\model\Offer;
-use invoice\pdf\LandscapeOfferPdf;
+use invoice\model\Order;
 use invoice\service\InvoiceService;
 use invoice\service\OfferService;
 use webmail\model\EmailTo;
@@ -101,6 +100,8 @@ class offerController extends BaseController {
                 
                 if (get_var('print')) {
                     $url = '/?m=invoice&c=offer&a=print&id=' . $offerForm->getWidgetValue('offer_id');
+                } else if (get_var('generateOrder')) {
+                    $url = '/?m=invoice&c=offer&a=generate_order&id=' . $offerForm->getWidgetValue('offer_id');
                 } else if (get_var('generateInvoice')) {
                     $url = '/?m=invoice&c=offer&a=generate_invoice&id=' . $offerForm->getWidgetValue('offer_id');
                 } else if (get_var('sendmail')) {
@@ -117,9 +118,11 @@ class offerController extends BaseController {
         }
         
         
+        $this->orderId = null;
         $this->invoiceId = null;
         if ($offer->isNew() == false) {
             $metaService = $this->oc->get(MetaService::class);
+            $this->orderId = $metaService->getIdByObjectValue(Order::class, 'offer_id', $offer->getOfferId());
             $this->invoiceId = $metaService->getIdByObjectValue(Invoice::class, 'offer_id', $offer->getOfferId());
         }
         
@@ -131,7 +134,15 @@ class offerController extends BaseController {
         $eb = $this->oc->get(EventBus::class);
         $this->actionContainer = new ActionContainer('offer', $offer->getOfferId());
         
-        $this->actionContainer->addItem('create-invoice', '<a href="javascript:void(0);" onclick="generateInvoice();">'.strOrder(1).' aanmaken</a>', 5);
+        $invoiceSettings = object_container_get( InvoiceSettings::class );
+        
+        if ($invoiceSettings->getOrdersEnabled()) {
+            $this->actionContainer->addItem('create-order', '<a href="javascript:void(0);" onclick="generateOrder();">Order aanmaken</a>', 5);
+        }
+        
+        if ($invoiceSettings->getInvoiceEnabled()) {
+            $this->actionContainer->addItem('create-invoice', '<a href="javascript:void(0);" onclick="generateInvoice();">'.strOrder(1).' aanmaken</a>', 6);
+        }
         
         $eb->publishEvent($this->actionContainer, 'invoice', 'offer-edit');
         
@@ -306,6 +317,14 @@ class offerController extends BaseController {
         
         
         redirect('/?m=webmail&c=view&id='.$e->getEmailId());
+    }
+
+    
+    public function action_generate_order() {
+        $offerService = $this->oc->get(OfferService::class);
+        $order = $offerService->createOrder((int)get_var('id'));
+        
+        redirect('/?m=invoice&c=order&a=edit&id=' . $order->getOrderId());
     }
     
     

@@ -172,44 +172,46 @@ class OrderService extends ServiceBase {
         
         if ($order->getOrderStatusId() == 0)
             $order->setOrderStatusId(null);
-            
-            
-            $totalCalculatedAmount = 0;
-            $totalCalculatedAmountInclVat = 0;
-            $newOrderLines = $form->getWidget('orderLines')->getObjects();
-            for($x=0; $x < count($newOrderLines); $x++) {
-                if (isset($newOrderLines[$x]['price'])) {
-                    $price = strtodouble( $newOrderLines[$x]['price'] );
-                    $vatAmount = myround( $price * strtodouble($newOrderLines[$x]['amount']) * $newOrderLines[$x]['vat_percentage'] / 100, 2 );
-                    
-                    $totalCalculatedAmount += myround( $price * $newOrderLines[$x]['amount'], 2 );
-                    $totalCalculatedAmountInclVat += myround( $price * $newOrderLines[$x]['amount'], 2 ) + $vatAmount;
-                    
-                    $newOrderLines[$x]['price'] = $price;
-                    $newOrderLines[$x]['vat_amount'] = $vatAmount;
-                }
+        
+        
+        $totalCalculatedAmount = 0;
+        $totalCalculatedAmountInclVat = 0;
+        $newOrderLines = $form->getWidget('orderLines')->getObjects();
+        for($x=0; $x < count($newOrderLines); $x++) {
+            if (isset($newOrderLines[$x]['price'])) {
+                $price = strtodouble( $newOrderLines[$x]['price'] );
+                $vatAmount = myround( $price * strtodouble($newOrderLines[$x]['amount']) * $newOrderLines[$x]['vat_percentage'] / 100, 2 );
+                
+                $totalCalculatedAmount += myround( $price * $newOrderLines[$x]['amount'], 2 );
+                $totalCalculatedAmountInclVat += myround( $price * $newOrderLines[$x]['amount'], 2 ) + $vatAmount;
+                
+                $newOrderLines[$x]['price'] = $price;
+                $newOrderLines[$x]['vat_amount'] = $vatAmount;
             }
-            
-            $order->setTotalCalculatedPrice( myround($totalCalculatedAmount, 2) );
-            $order->setTotalCalculatedPriceInclVat( $totalCalculatedAmountInclVat );
-            
-            
-            if (!$order->save()) {
-                return false;
-            }
-            
-            $form->getWidget('order_id')->setValue($order->getOrderId());
-            
-            $olDao = new OrderLineDAO();
+        }
+        
+        $order->setTotalCalculatedPrice( myround($totalCalculatedAmount, 2) );
+        $order->setTotalCalculatedPriceInclVat( $totalCalculatedAmountInclVat );
+        
+        
+        if (!$order->save()) {
+            return false;
+        }
+        
+        $form->getWidget('order_id')->setValue($order->getOrderId());
+        
+        $olDao = new OrderLineDAO();
 //             $newOrderLines = $form->getWidget('orderLines')->getObjects();
-            $olDao->mergeFormListMTO1('order_id', $order->getOrderId(), $newOrderLines);
-            
-            
-            if ($isNew) {
-                ActivityUtil::logActivity($order->getCompanyId(), $order->getPersonId(), 'invoice__order', $order->getOrderId(), 'order-created', 'Order aangemaakt '.$order->getOrderNumberText(), $fch->getHtml());
-            } else {
-                ActivityUtil::logActivity($order->getCompanyId(), $order->getPersonId(), 'invoice__order', $order->getOrderId(), 'order-edited', 'Order aangepast '.$order->getOrderNumberText(), $fch->getHtml());
-            }
+        $olDao->mergeFormListMTO1('order_id', $order->getOrderId(), $newOrderLines);
+        
+        
+        if ($isNew) {
+            ActivityUtil::logActivity($order->getCompanyId(), $order->getPersonId(), 'invoice__order', $order->getOrderId(), 'order-created', 'Order aangemaakt '.$order->getOrderNumberText(), $fch->getHtml());
+        } else {
+            ActivityUtil::logActivity($order->getCompanyId(), $order->getPersonId(), 'invoice__order', $order->getOrderId(), 'order-edited', 'Order aangepast '.$order->getOrderNumberText(), $fch->getHtml());
+        }
+        
+        return $order;
     }
     
     

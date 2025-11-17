@@ -220,6 +220,27 @@ function loadCustomerDetails( customerCode ) {
 	});
 }
 
+
+function generateOrder() {
+	var orderId = $('#order_id').val();
+
+	var t = '';
+	if (!orderId) {
+		t = 'Weet u zeker dat u een order  wilt aanmaken voor deze offerte?';
+	} else {
+		t = 'Weet u zeker dat u <i>nogmaals</i> een order wilt aanmaken voor deze offerte?';
+		t += '<br/><br/><a href="'+appUrl('/?m=invoice&c=order&a=edit&id='+orderId)+'">Bekijk order</a>';
+	}
+	
+	showConfirmation('Order aanmaken', t, function() {
+		var frm = $('.form-offer-form');
+		var data = serialize2object( frm );
+
+		formpost('/?m=invoice&c=offer&a=edit&generateOrder=1&id=' + $('[name=offer_id]').val(), data, { target: '_blank' });
+	});
+}
+
+
 function generateInvoice() {
 	var invoiceId = $('#invoice_id').val();
 

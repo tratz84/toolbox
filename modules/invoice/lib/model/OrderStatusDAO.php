@@ -29,6 +29,18 @@ class OrderStatusDAO extends \core\db\DAOObject {
 	public function delete($id) {
 	    $this->query('delete from invoice__order_status where order_status_id = ?', array($id));
 	}
+	
+	
+	
+	public function readByDefaultStatus() {
+	    return $this->queryOne("select * from invoice__order_status where default_selected = true");
+	}
+	
+	
+	public function readFirst() {
+	    return $this->queryOne("select * from invoice__order_status order by sort limit 1");
+	}
+	
 
 }
 

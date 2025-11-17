@@ -13,6 +13,7 @@ use customer\service\CustomerService;
 use invoice\InvoiceSettings;
 use invoice\form\InvoiceForm;
 use invoice\form\OfferForm;
+use invoice\form\OrderForm;
 use invoice\model\Invoice;
 use invoice\model\InvoiceLine;
 use invoice\model\InvoiceStatusDAO;
@@ -22,6 +23,9 @@ use invoice\model\OfferLine;
 use invoice\model\OfferLineDAO;
 use invoice\model\OfferStatus;
 use invoice\model\OfferStatusDAO;
+use invoice\model\Order;
+use invoice\model\OrderLine;
+use invoice\model\OrderStatusDAO;
 
 class OfferService extends ServiceBase {
     
@@ -120,6 +124,17 @@ class OfferService extends ServiceBase {
         return $offer;
     }
     
+
+    public function readDefaultOrderStatus() {
+        $osDao = new OrderStatusDAO();
+        
+        $os = $osDao->readByDefaultStatus();
+        if ($os)
+            return $os;
+            
+        $os = $osDao->readFirst();
+        return $os;
+    }
     
     public function readDefaultInvoiceStatus() {
         $isDao = new InvoiceStatusDAO();
@@ -270,6 +285,67 @@ class OfferService extends ServiceBase {
         
         return $offerPdf;
     }
+    
+    public function createOrder($offerId) {
+        $offer = $this->readOffer($offerId);
+        
+        $o = new Order();
+        $o->setPersonId($offer->getPersonId());
+        $o->setCompanyId($offer->getCompanyId());
+        $o->setSubject($offer->getSubject());
+        $o->setComment($offer->getComment());
+        $o->setOrderDate(date('Y-m-d'));
+        
+        $defaultOrderStatus = $this->readDefaultOrderStatus();
+        if ($defaultOrderStatus) {
+            $o->setOrderStatusId( $defaultOrderStatus->getOrderStatusId() );
+        }
+        
+        
+        $ols = $offer->getOfferLines();
+        $orderLines = array();
+        for($x=0; $x < count($ols); $x++) {
+            /**
+             * @var OfferLine $ol
+             */
+            $ol = $ols[$x];
+            
+            $orderline = new OrderLine();
+            $orderline->setArticleId($ol->getArticleId());
+            if ($ol->getShortDescription2()) {
+                $orderline->setShortDescription($ol->getShortDescription() . ': ' . $ol->getShortDescription2());
+            } else {
+                $orderline->setShortDescription($ol->getShortDescription());
+            }
+            $orderline->setAmount($ol->getAmount());
+            
+            $price = myround($ol->getPrice(), 2);
+            $orderline->setPrice($price );
+            
+            $orderline->setVatPercentage($ol->getVat());
+            
+            $vatAmount = myround($price * $ol->getAmount() * $ol->getVat()/100, 2);
+            $orderline->setVatAmount($vatAmount);
+            
+            $orderline->setOrderId($o->getOrderId());
+            $orderLines[] = $orderline->getFields();
+        }
+        
+        $o->setOrderLines($orderLines);
+        
+        $of = new OrderForm();
+        $of->bind($o);
+        
+        $orderService = $this->oc->get(OrderService::class);
+        $order = $orderService->saveOrder( $of );
+        
+        $metaService = $this->oc->get(MetaService::class);
+        $metaService->saveMeta(Order::class, $order->getOrderId(), 'offer_id', $offer->getOfferId());
+        
+        return $order;
+    }
+    
+    
     
     public function createInvoice($offerId) {
         $offer = $this->readOffer($offerId);
