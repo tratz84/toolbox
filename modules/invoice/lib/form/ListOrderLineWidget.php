@@ -68,7 +68,7 @@ class ListOrderLineWidget extends ListEditWidget {
         }
         
         
-        $this->addWidget( new SelectField('vat', $defaultSelected, $options, 'Btw', array('add-unlisted' => true)));
+        $this->addWidget( new SelectField('vat_percentage', $defaultSelected, $options, 'Btw', array('add-unlisted' => true)));
     }
     
     

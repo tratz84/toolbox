@@ -180,7 +180,7 @@ class OrderService extends ServiceBase {
             for($x=0; $x < count($newOrderLines); $x++) {
                 if (isset($newOrderLines[$x]['price'])) {
                     $price = strtodouble( $newOrderLines[$x]['price'] );
-                    $vatAmount = myround( $price * strtodouble($newOrderLines[$x]['amount']) * $newOrderLines[$x]['vat'] / 100, 2 );
+                    $vatAmount = myround( $price * strtodouble($newOrderLines[$x]['amount']) * $newOrderLines[$x]['vat_percentage'] / 100, 2 );
                     
                     $totalCalculatedAmount += myround( $price * $newOrderLines[$x]['amount'], 2 );
                     $totalCalculatedAmountInclVat += myround( $price * $newOrderLines[$x]['amount'], 2 ) + $vatAmount;
@@ -194,7 +194,6 @@ class OrderService extends ServiceBase {
             $order->setTotalCalculatedPriceInclVat( $totalCalculatedAmountInclVat );
             
             
-            
             if (!$order->save()) {
                 return false;
             }
@@ -202,7 +201,7 @@ class OrderService extends ServiceBase {
             $form->getWidget('order_id')->setValue($order->getOrderId());
             
             $olDao = new OrderLineDAO();
-            $newOrderLines = $form->getWidget('orderLines')->getObjects();
+//             $newOrderLines = $form->getWidget('orderLines')->getObjects();
             $olDao->mergeFormListMTO1('order_id', $order->getOrderId(), $newOrderLines);
             
             

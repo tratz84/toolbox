@@ -49,20 +49,20 @@ class DefaultOrderPdf extends DefaultInvoicePdf {
         
         $this->renderLines();
 
-        $this->Ln();
-        $this->Ln();
-        $this->Ln();
-        $this->Ln();
-        $this->Ln();
-        $this->Cell(190, $this->lineHeight, 'Handtekening:');
-        $this->Ln();
+//         $this->Ln();
+//         $this->Ln();
+//         $this->Ln();
+//         $this->Ln();
+//         $this->Ln();
+//         $this->Cell(190, $this->lineHeight, 'Handtekening:');
+//         $this->Ln();
         
         if (trim($this->order->getComment())) {
             $this->SetFont('Arial', 'I', '8');
-            $this->Ln();
-            $this->Ln();
-            $this->Ln();
-            $this->Ln();
+//             $this->Ln();
+//             $this->Ln();
+//             $this->Ln();
+//             $this->Ln();
             $this->Ln();
 //             $this->Cell(190, $this->lineHeight, 'Notitie:');
             $this->Ln();

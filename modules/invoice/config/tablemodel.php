@@ -127,7 +127,7 @@ $tb_order->addColumn('ref_order_id',                    'int');
 $tb_order->addColumn('company_id',                      'int');
 $tb_order->addColumn('person_id',                       'int');
 $tb_order->addColumn('order_status_id',                 'int');
-$tb_order->addColumn('order_number',                    'int');
+$tb_order->addColumn('order_number',                    'varchar(16)');
 $tb_order->addColumn('subject',                         'varchar(255)');
 $tb_order->addColumn('comment',                         'mediumtext');
 $tb_order->addColumn('note',                            'text');

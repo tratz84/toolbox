@@ -58,7 +58,7 @@ function fix_textLines() {
 		var linetype = $(row).find('.hidden-field-widget-line-type input').val();
 		if (linetype == 'text') {
 
-        	$(row).find('.input-amount, .input-price, .input-vat').remove();
+        	$(row).find('.input-amount, .input-price, .input-vat-percentage').remove();
     //     	$(row).find('.input-short-description').attr('colspan', 4);
         	$(row).find('.input-short-description').find('input[type=text]').css('width', '100%');
 
@@ -87,7 +87,7 @@ function fix_textLines() {
 		
 		// set events on change
 		if (!$(row).data('price-calc-events-set')) {
-			$(row).find('.input-amount input, .input-price input, .input-vat select').change(function() {
+			$(row).find('.input-amount input, .input-price input, .input-vat-percentage select').change(function() {
 				order_calc_totals();
 			});
 			
@@ -112,7 +112,7 @@ function order_calc_totals() {
 		
 		var amount = strtodouble( $(row).find('.input-amount input[type=text]').val() );
 		var price = strtodouble( $(row).find('.input-price input[type=text]').val() );
-		var vatPercentage = strtodouble( $(row).find('.input-vat select').val() );
+		var vatPercentage = strtodouble( $(row).find('.input-vat-percentage select').val() );
 		vatPercentage = parseInt( vatPercentage * 100 );
 		
 		var p = Math.round(amount * price * 100);
@@ -197,7 +197,7 @@ function article_Click(article) {
 		$(row).find('.input-short-description input[type=text]').val( article.article_name );
 		$(row).find('.input-price input[type=text]').val( format_price(article.price, true) );
 
-		$(row).find('.input-vat select').val( article.vat_percentage );
+		$(row).find('.input-vat-percentage select').val( article.vat_percentage );
 
 		lefw.handleCounters();
 	});

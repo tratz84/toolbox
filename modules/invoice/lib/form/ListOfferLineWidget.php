@@ -146,6 +146,7 @@ class ListOfferLineWidget extends ListEditWidget {
         foreach($this->getObjects() as $o) {
             $il = new OfferLine();
             $il->setFields($o);
+            $il->calculateVatAmount();
             $ils[] = $il;
         }
         $i = new Offer();

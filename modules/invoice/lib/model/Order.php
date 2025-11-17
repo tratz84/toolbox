@@ -60,7 +60,7 @@ class Order extends base\OrderBase {
 // 	        if (isset($l[$p]) == false)
 // 	            $l[$p]=0;
 	            
-            $l[$p] += $ol->getVatAmount();
+            $l[$ol->getVatPercentage()] += $ol->getVatAmount();
 	    }
 	    
 	    $returnList = array();

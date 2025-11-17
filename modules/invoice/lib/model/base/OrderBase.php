@@ -59,7 +59,7 @@ class OrderBase extends \core\db\DBObject {
   'order_number' => 
   array (
     'Field' => 'order_number',
-    'Type' => 'int',
+    'Type' => 'varchar(16)',
     'Null' => 'YES',
     'Key' => 'UNI',
     'Default' => NULL,
