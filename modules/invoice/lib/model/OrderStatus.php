@@ -12,5 +12,10 @@ class OrderStatus extends base\OrderStatusBase {
 		$this->setActive( true );
 		
 	}
+
+	public function __toString() {
+	    return $this->getDescription();
+	}
+	
 }
 
