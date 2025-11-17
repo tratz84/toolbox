@@ -4,11 +4,12 @@
 namespace invoice;
 
 
-use invoice\pdf\DefaultInvoicePdf;
-use invoice\pdf\DefaultInvoice2Pdf;
-use invoice\pdf\LandscapeOfferPdf;
-use invoice\pdf\DefaultOfferPdf;
 use core\Context;
+use invoice\pdf\DefaultInvoice2Pdf;
+use invoice\pdf\DefaultInvoicePdf;
+use invoice\pdf\DefaultOfferPdf;
+use invoice\pdf\DefaultOrderPdf;
+use invoice\pdf\LandscapeOfferPdf;
 
 class InvoiceSettings {
     
@@ -53,6 +54,15 @@ class InvoiceSettings {
         return $t;
     }
     
+    public function getOrderPdfTemplates() {
+        $t = array();
+        
+        $t[ DefaultOrderPdf::class ] = 'Standaard opmaak';
+        
+        return $t;
+    }
+    
+    
     public function getInvoicePdfTemplates() {
         $t = array();
         
@@ -62,20 +72,6 @@ class InvoiceSettings {
         return $t;
     }
     
-    public function getInvoicePdfClass() {
-        $tpls = $this->getInvoicePdfTemplates();
-        
-        // check if template exists
-        $ctx = Context::getInstance();
-        $s = $ctx->getSetting('invoice__invoiceTemplate');
-        if (isset($tpls[$s])) {
-            return $s;
-        }
-        
-        // return first
-        $keys = array_keys($tpls);
-        return $keys[0];
-    }
     
     public function getOfferPdfClass() {
         $tpls = $this->getOfferPdfTemplates();
@@ -92,6 +88,38 @@ class InvoiceSettings {
         return $keys[0];
     }
     
+    public function getOrderPdfClass() {
+        $tpls = $this->getOrderPdfTemplates();
+        
+        // check if template exists
+        $ctx = Context::getInstance();
+        $s = $ctx->getSetting('invoice__orderTemplate');
+        if (isset($tpls[$s])) {
+            return $s;
+        }
+        
+        // return first
+        $keys = array_keys($tpls);
+        return $keys[0];
+    }
+    
+    
+    public function getInvoicePdfClass() {
+        $tpls = $this->getInvoicePdfTemplates();
+        
+        // check if template exists
+        $ctx = Context::getInstance();
+        $s = $ctx->getSetting('invoice__invoiceTemplate');
+        if (isset($tpls[$s])) {
+            return $s;
+        }
+        
+        // return first
+        $keys = array_keys($tpls);
+        return $keys[0];
+    }
+    
+
     /**
      * invoiceLocked() - business rule for checking if invoice must be locked
      *  TODO: when an accounting-module is added, invoices must be locked after it's
@@ -127,6 +155,10 @@ class InvoiceSettings {
     
     public function getOffersEnabled() {
         return ctx()->getSetting('invoice__offers_enabled', true) ? true : false;
+    }
+    
+    public function getOrdersEnabled() {
+        return ctx()->getSetting('invoice__orders_enabled', true) ? true : false;
     }
     
     public function getInvoiceEnabled() {

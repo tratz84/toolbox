@@ -10,5 +10,24 @@ class OrderLine extends base\OrderLineBase {
 		parent::__construct( $id );
 		
 	}
+	
+	
+	
+	
+	public function getVatAmount() {
+	    $a = $this->getPrice() * $this->getAmount();
+	    
+	    $v = ($a * $this->getVatPercentage());
+	    
+	    return myround($v/100, 2);
+	}
+	
+	public function getTotalPriceInclVat() {
+	    $a = $this->getPrice() * $this->getAmount();
+	    $a += myround($this->getVatAmount(),2);
+	    return $a;
+	}
+	
+	
 }
 

@@ -101,6 +101,42 @@ class OrderLineBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'short_description2' => 
+  array (
+    'Field' => 'short_description2',
+    'Type' => 'varchar(255)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'long_description' => 
+  array (
+    'Field' => 'long_description',
+    'Type' => 'mediumtext',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'line_type' => 
+  array (
+    'Field' => 'line_type',
+    'Type' => 'varchar(16)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'price' => 
+  array (
+    'Field' => 'price',
+    'Type' => 'decimal(10,2)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -146,6 +182,22 @@ class OrderLineBase extends \core\db\DBObject {
 		
 	public function setCreated($p) { $this->setField('created', $p); }
 	public function getCreated() { return $this->getField('created'); }
+	
+		
+	public function setShortDescription2($p) { $this->setField('short_description2', $p); }
+	public function getShortDescription2() { return $this->getField('short_description2'); }
+	
+		
+	public function setLongDescription($p) { $this->setField('long_description', $p); }
+	public function getLongDescription() { return $this->getField('long_description'); }
+	
+		
+	public function setLineType($p) { $this->setField('line_type', $p); }
+	public function getLineType() { return $this->getField('line_type'); }
+	
+		
+	public function setPrice($p) { $this->setField('price', $p); }
+	public function getPrice() { return $this->getField('price'); }
 	
 	
 }

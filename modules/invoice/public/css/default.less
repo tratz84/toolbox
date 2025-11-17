@@ -36,11 +36,13 @@
 
 .module-invoice {
 	&.invoice-invoice-controller
+	, &.invoice-order-controller
 	, &.invoice-offer-controller {
 		#activity-table-container { min-height: 300px; }
 	}
 	
 	.invoice-form-list-invoice-line-widget
+	, .invoice-form-list-order-line-widget
 	, .invoice-form-list-offer-line-widget {
 		.mobile-list-edit-items {
 			.mobile-item-content {

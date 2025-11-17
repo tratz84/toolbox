@@ -74,17 +74,24 @@ $eb->subscribe('base', 'MenuService::listMainMenu', new CallbackPeopleEventListe
         $src->add($menuOffers);
     }
 
+    if ($invoiceSettings->getOrdersEnabled() && hasCapability('invoice', 'edit-order')) {
+        $menuOrders = new Menu();
+        $menuOrders->setIconLabelUrl('fa-share-alt', 'Orders', '/?m=invoice&c=order');
+        $menuOrders->setWeight(36);
+        $src->add($menuOrders);
+    }
+    
     if ($invoiceSettings->getInvoiceEnabled() && hasCapability('invoice', 'edit-invoice')) {
         $menuInvoice = new Menu();
         $menuInvoice->setIconLabelUrl('fa-file-invoice', strOrder(3), '/?m=invoice&c=invoice');
-        $menuInvoice->setWeight(36);
+        $menuInvoice->setWeight(37);
         $src->add($menuInvoice);
     }
 
     if ($invoiceSettings->getBillableEnabled() && hasCapability('core', 'userType.user')) {
         $menuBillable = new Menu();
         $menuBillable->setIconLabelUrl('fa-money', 'Billable', '/?m=invoice&c=tobill');
-        $menuBillable->setWeight(37);
+        $menuBillable->setWeight(38);
         $src->add($menuBillable);
     }
     

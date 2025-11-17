@@ -70,6 +70,15 @@ use invoice\pdf\DefaultInvoicePdf;
         	<input type="checkbox" class="checkbox-ui" id="invoice__offers_enabled" name="invoice__offers_enabled" <?= $invoiceSettings->getOffersEnabled() ? 'checked="checked"' : '' ?> />
         	<label class="checkbox-ui-placeholder" for="invoice__offers_enabled"></label>
         </div>
+
+        <div class="widget checkbox-field-widget">
+        	<label>
+        		Orders actief
+    		</label>
+        	
+        	<input type="checkbox" class="checkbox-ui" id="invoice__orders_enabled" name="invoice__orders_enabled" <?= $invoiceSettings->getOrdersEnabled() ? 'checked="checked"' : '' ?> />
+        	<label class="checkbox-ui-placeholder" for="invoice__orders_enabled"></label>
+        </div>
         
         <div class="widget checkbox-field-widget">
         	<label>

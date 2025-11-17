@@ -144,10 +144,13 @@ $tb_ol->addColumn('order_line_id',     'int', ['key' => 'PRIMARY KEY', 'auto_inc
 $tb_ol->addColumn('order_id',          'int');
 $tb_ol->addColumn('article_id',        'int');
 $tb_ol->addColumn('short_description', 'varchar(255)');
+$tb_ol->addColumn('short_description2','varchar(255)');
+$tb_ol->addColumn('long_description',  'mediumtext');
 $tb_ol->addColumn('amount',            'double');
-$tb_il->addColumn('price',             'decimal(10,2)');
+$tb_ol->addColumn('price',             'decimal(10,2)');
 $tb_ol->addColumn('vat_percentage',    'double');
 $tb_ol->addColumn('vat_amount',        'decimal(10,2)');
+$tb_ol->addColumn('line_type',          'varchar(16)');
 $tb_ol->addColumn('sort',              'int');
 $tb_ol->addColumn('edited',            'datetime');
 $tb_ol->addColumn('created',           'datetime');
