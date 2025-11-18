@@ -173,9 +173,9 @@ function sendMail_Click() {
 		return;
 	}
 	
-	let invoiceLines = $('.list-edit-widget-invoice-lines tr');
+	let invoiceLines = $('.list-edit-widget-order-lines tr');
 	if (invoiceLines.length == 0) {
-		showAlert( toolbox_t('Error'), toolbox_t('No invoice lines set') );
+		showAlert( toolbox_t('Error'), toolbox_t('No order lines set') );
 		return;
 	}
 	
