@@ -158,6 +158,11 @@ class InvoiceSettings {
     }
     
     public function getOrdersEnabled() {
+        
+        if ( $this->getOrderType() == 'order' ) {
+            return false;
+        }
+        
         return ctx()->getSetting('invoice__orders_enabled', true) ? true : false;
     }
     
