@@ -165,6 +165,21 @@ function CalendarController(container, opts) {
 			
 			$('.form-calendar-item-form').find('.submit-container').hide();
 			
+			// Maps-link
+			let a_maps = $('<a href="javascript:void(0)" class="fa fa-map"></a>');
+			a_maps.click(function() {
+				let container = $(this).closest('div.widget');
+				let v = container.find('input[name=location]').val().trim();
+				
+				if (v == '') {
+					showAlert(_('Error'), _('No location set'));
+					return;
+				}
+				
+				goto_maps( v );
+				
+			});
+			$('.widget.location-widget').append(a_maps);
 			
 			$('.calendar-item-container .submit-calendar-item').click(function() { me.saveItem(); });
 			$('.calendar-item-container .delete-calendar-item').click(function() { me.deleteItem(); });
