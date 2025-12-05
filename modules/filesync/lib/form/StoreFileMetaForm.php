@@ -52,6 +52,13 @@ class StoreFileMetaForm extends BaseForm {
                 return;
             }
             
+            if (isset($_FILES['file']['error'])) {
+                // errors @ https://www.php.net/manual/en/features.file-upload.errors.php
+                //     4 => 'No file was uploaded',
+                if ( $_FILES['file']['error'] == 4 )
+                    return;
+            }
+            
             $sfid = $form->getWidgetValue('store_file_id');
             if (!$sfid) {
                 return;
