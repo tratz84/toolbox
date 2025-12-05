@@ -2382,4 +2382,12 @@ function strlpad( str, len, padding ) {
 	return str;
 }
 
+// goto_maps() - as function, centralised position if it's ever gonna change..
+function goto_maps( location ) {
+	window.open('https://maps.google.nl/?q=' + encodeURIComponent(location), '_blank');
+}
+
+
+
+
 
