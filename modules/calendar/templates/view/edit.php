@@ -38,12 +38,15 @@
 
 <?php if ($readonly) : ?>
 <script>
-var t = $('.calendar-item-container .widget-locatie .widget-value').text();
+var t = $('.calendar-item-container .location-widget input[name=location]').val();
 t = $.trim(t);
 if (t != '') {
-	anchorMaps = $('<a class="fa fa-map-marker" target="_blank" style="margin-left: 5px;"></a>');
-	anchorMaps.attr('href', 'https://www.google.com/maps/search/?api=1&query=' + encodeURI(t));
-	$('.calendar-item-container .widget-locatie .widget-value').after( anchorMaps );
+	anchorMaps = $('<a class="fa fa-map" target="_blank" style="margin-left: 5px;"></a>');
+	anchorMaps.click(function() {
+		goto_maps( t );
+	});
+	anchorMaps.attr('href', 'javascript:void(0);');
+	$('.calendar-item-container .location-widget input[name=location]').after( anchorMaps );
 }
 
 </script>
