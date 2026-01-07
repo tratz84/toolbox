@@ -83,11 +83,27 @@ function ttl_type_Change() {
 }
 
 
+let securemessage_is_deleted = <?= json_encode($sm->isDeleted() ? true : false) ?>;
+
 function delete_sm_Click() {
 	showConfirmation( t('Delete'), t('Are you sure to delete this message?'), () => {
 		let url = '/?m=securemail&c=secureMessage&a=delete&sm_id='+$('input[name=secure_message_id]').val();
 		window.location = appUrl( url );
 	});
+
+	let btnPurge = $('<button class="btn btn-danger">Purge</button>');
+	btnPurge.on('click', () => {
+		let url = '/?m=securemail&c=secureMessage&a=purge&sm_id='+$('input[name=secure_message_id]').val();
+		window.location = appUrl( url );
+	});
+	btnPurge.insertAfter('.confirmation-dialog .modal-footer .btn-default');
+
+	if ( securemessage_is_deleted ) {
+		$('.confirmation-dialog .modal-footer .btn-primary').remove();
+
+		$('.confirmation-dialog .modal-footer .btn-danger').focus();
+	}
+	
 }
 
 

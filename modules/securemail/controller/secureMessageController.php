@@ -113,6 +113,7 @@ class secureMessageController extends BaseController {
             }
         }
         
+        $this->sm = $sm;
         $this->smlogs = $smservice->readMessageLog( $sm->getSecureMessageId() );
         
         return $this->render();
@@ -120,6 +121,18 @@ class secureMessageController extends BaseController {
     
     
     public function action_delete() {
+        $id = (int)get_var('sm_id');
+        
+        
+        $smservice = object_container_get( SecureMailService::class );
+        $smservice->markDeleted( $id, remote_addr(), 'Marked deleted through admin' );
+        
+        report_user_message( t('Message marked as deleted') );
+        
+        redirect( '/?m=securemail&c=secureMessage&a=edit&sm_id='.$id );
+    }
+
+    public function action_purge() {
         $id = (int)get_var('sm_id');
         
         
