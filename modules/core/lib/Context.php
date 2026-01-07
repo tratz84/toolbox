@@ -222,6 +222,16 @@ class Context
     }
     
     public function getLogoFile() { return $this->getSetting('logoFile'); }
+    public function hasLogoFile() {
+        $f = $this->getLogoFile();
+        if (!$f) return false;
+        $f = get_data_file($f);
+        if ($f && file_exists($f))
+            return true;
+        else
+            return false;
+    }
+            
     
     public function isInvoiceModuleEnabled() { return $this->isModuleEnabled('invoice'); }
     
