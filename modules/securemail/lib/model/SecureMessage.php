@@ -7,7 +7,7 @@ namespace securemail\model;
 class SecureMessage extends base\SecureMessageBase {
     
     
-    protected $saveKey = false;
+    protected $saveKey = true;
     protected $plainMessage;
     
 
@@ -48,7 +48,13 @@ class SecureMessage extends base\SecureMessageBase {
 	
 	
 	public function isAvailable() {
+	    if ($this->isDeleted())
+	        return false;
 	    return $this->getEncryptedMessage() != '' ? true : false;
+	}
+	
+	public function isDeleted() {
+	    return valid_datetime( $this->getDeleted() ) ? true : false;
 	}
 	
 	

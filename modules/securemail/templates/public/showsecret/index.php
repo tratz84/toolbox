@@ -92,14 +92,22 @@
     					</div>
     				</div>
 				<?php else : ?>
+				
+					<div style="margin: 0 0 10px;">
+						<?= esc_html($sm->getShortDescription()) ?>
+					</div>
+				
 					<div style="font-weight: bold; margin-bottom: 5px;">
 						Bericht
 					</div>
 					
-					
 					<textarea readonly="readonly" style="width: 100%; height: 120px;"><?= esc_html($sm->getPlainMessage()) ?></textarea>
 					
-					<div style="margin: 10px 0 8px;">
+					<div style="margin-bottom: 5px;">
+						Dit bericht verloopt op: <?= format_datetime($sm->getTtlExpiresOn(), 'd-m-Y H:i') ?>
+					</div>
+					
+					<div style="margin: 10px 0 8px; border-top: 1px solid #ececec; padding-top: 15px; margin-top: 10px;">
 						<a href="javascript:void(0);" class="btn btn-remove" onclick="removeMessage_Click();">Bericht verwijderen</a>
 					</div>
 				<?php endif; ?>

@@ -92,6 +92,11 @@ class showsecretController extends BaseController {
             return t('Message removed');
         }
         
+        // expired?
+        if ($sm->getTtlType() == 'expires' && valid_datetime($sm->getTtlExpiresOn()) && $sm->getTtlExpiresOn() < date('Y-m-d H:i:s')) {
+            return t('Message expired');
+        }
+        
         $p = @base64_decode( get_var('p') );
         if ( $sm->checkPassword($p) == false ) {
             return t('Invalid secret');

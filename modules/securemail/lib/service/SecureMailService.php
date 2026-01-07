@@ -89,18 +89,25 @@ class SecureMailService extends ServiceBase {
         else {
             $msg = $secmsg->getPlainMessage();
             
-            $r = sm_encrypt_message($msg);
-            
-            $secmsg->setEncryptionAlgo($r['cipher']);
-            $secmsg->setEncryptionIv( base64_encode( $r['iv'] ) );
-            $secmsg->setEncryptedMessage( $r['ciphertext'] );
-            if ($form->getWidgetValue('save_key')) {
-                $secmsg->setPassword( $r['password'] );
+            if ($id && $form->getWidgetValue('save_key') && $secmsg->getPassword()) {
+                $tag = null;
+                $encrypted_msg = openssl_encrypt($msg, $secmsg->getEncryptionAlgo(), $secmsg->getPassword(), 0, base64_decode($secmsg->getEncryptionIv()), $tag);
+                $secmsg->setEncryptedMessage($encrypted_msg);
             }
             else {
-                $secmsg->setPassword( null );
+                $r = sm_encrypt_message($msg);
+                
+                $secmsg->setEncryptionAlgo($r['cipher']);
+                $secmsg->setEncryptionIv( base64_encode( $r['iv'] ) );
+                $secmsg->setEncryptedMessage( $r['ciphertext'] );
+                if ($form->getWidgetValue('save_key')) {
+                    $secmsg->setPassword( $r['password'] );
+                }
+                else {
+                    $secmsg->setPassword( null );
+                }
+                $secmsg->setPasswordHash( md5( $r['password'] ) );
             }
-            $secmsg->setPasswordHash( md5( $r['password'] ) );
         }
         
         $secmsg->save();

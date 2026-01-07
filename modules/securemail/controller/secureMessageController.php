@@ -82,24 +82,33 @@ class secureMessageController extends BaseController {
         }
         else {
             
-            if ($sm->getSaveKey() == true) {
-                
-                $this->form->getWidget('container-top')->getWidget('link_to_message')->setEscapeValue(false);
-                $html_link_key = '<a href="'.esc_attr($sm->getPublicLink()).'" target="_blank">Link</a>';
-                $this->form->getWidget('container-top')->getWidget('link_to_message')->setValue( $html_link_key );
-            }
-            
-            if ($sm->getSaveKey() == false) {
-                $this->form->getWidget('container-top')->getWidget('link_to_message')->setValue( 'Sleutel niet opgeslagen' );
-                
+            if ($sm->isDeleted()) {
+                $this->form->getWidget('container-top')->removeWidget('link_to_message');
                 $this->form->getWidget('container-message')->removeWidget('plain_message');
                 $this->form->getWidget('container-enc-settings')->removeWidget('save_key');
                 
-                if ($sm->isAvailable()) {
-                    $this->form->getWidget('container-message')->getWidget('notice_message')->setValue('Bericht gecodeerd opgeslagen');
+                $this->form->getWidget('container-message')->getWidget('notice_message')->setValue('Bericht verwijderd');
+            }
+            else {
+                if ($sm->getSaveKey() == true) {
+                    
+                    $this->form->getWidget('container-top')->getWidget('link_to_message')->setEscapeValue(false);
+                    $html_link_key = '<a href="'.esc_attr($sm->getPublicLink()).'" target="_blank">Link</a>';
+                    $this->form->getWidget('container-top')->getWidget('link_to_message')->setValue( $html_link_key );
                 }
-                else {
-                    $this->form->getWidget('container-message')->getWidget('notice_message')->setValue('Bericht verwijderd');
+                
+                if ($sm->getSaveKey() == false) {
+                    $this->form->getWidget('container-top')->getWidget('link_to_message')->setValue( 'Sleutel niet opgeslagen' );
+                    
+                    $this->form->getWidget('container-message')->removeWidget('plain_message');
+                    $this->form->getWidget('container-enc-settings')->removeWidget('save_key');
+                    
+                    if ($sm->isAvailable()) {
+                        $this->form->getWidget('container-message')->getWidget('notice_message')->setValue('Bericht gecodeerd opgeslagen');
+                    }
+                    else {
+                        $this->form->getWidget('container-message')->getWidget('notice_message')->setValue('Bericht verwijderd');
+                    }
                 }
             }
         }
