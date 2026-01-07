@@ -28,6 +28,39 @@
 
 
 
+<?php if ($isNew == false) : ?>
+<hr/>
+<table class="list-response-table">
+	<thead>
+		<tr>
+			<th><?= t('Message') ?></th>
+			<th><?= t('Ip') ?></th>
+			<th><?= t('Opened') ?></th>
+			<th><?= t('Created') ?></th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php if (count($smlogs) == 0) : ?>
+			<tr>
+				<td colspan="100%" class="no-results-found"><?= t('No results found') ?></td>
+			</tr>
+		<?php else : ?>
+			<?php foreach($smlogs as $sml) : ?>
+			<tr>
+				<td><?= esc_html($sml->getLogMessage()) ?></td>
+				<td><?= esc_html($sml->getIp()) ?></td>
+				<td><?= $sml->getOpened() ? t('Yes') : t('No') ?></td>
+				<td><?= format_datetime($sml->getCreated()) ?></td>
+			</tr>
+			<?php endforeach; ?>
+		<?php endif; ?>
+	</tbody>
+
+</table>
+<?php endif; ?>
+
+
+
 <script>
 
 $(document).ready(() => {

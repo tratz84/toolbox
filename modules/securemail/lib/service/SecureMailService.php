@@ -13,6 +13,7 @@ use securemail\model\SecureMessage;
 use securemail\model\SecureMessageDAO;
 use securemail\model\SecureMessageLogDAO;
 use securemail\model\SecureMessageLog;
+use core\exception\ObjectNotFoundException;
 
 class SecureMailService extends ServiceBase {
     
@@ -45,6 +46,10 @@ class SecureMailService extends ServiceBase {
         $smdao = new SecureMessageDAO();
         
         $sm = $smdao->read((int)$id);
+        
+        if (!$sm) {
+            return null;
+        }
         
         if ($sm->getPassword()) {
             $sm->setPlainMessage( $sm->getDecryptedMessage() );

@@ -6,6 +6,7 @@ use securemail\form\SecureMessageForm;
 use securemail\model\SecureMessage;
 use securemail\service\SecureMailService;
 use securemail\form\SecureMessageTable;
+use core\exception\ObjectNotFoundException;
 
 class secureMessageController extends BaseController {
     
@@ -39,6 +40,11 @@ class secureMessageController extends BaseController {
         
         if (get_var('sm_id')) {
             $sm = $smservice->readMessage( (int)get_var('sm_id') );
+            
+            if ($sm == null) {
+                throw new ObjectNotFoundException( 'SecureMessage not found' );
+            }
+            
         }
         else {
             $sm = new SecureMessage();
@@ -97,6 +103,8 @@ class secureMessageController extends BaseController {
                 }
             }
         }
+        
+        $this->smlogs = $smservice->readMessageLog( $sm->getSecureMessageId() );
         
         return $this->render();
     }

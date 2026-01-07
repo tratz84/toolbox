@@ -14,7 +14,7 @@ class SecureMessageLogDAO extends \core\db\DAOObject {
 	
 	
 	public function readByMessage($secureMessageId) {
-	    $sql = "select * from securemail__secure_message_log where secure_message_id = ? order by id desc";
+	    $sql = "select * from securemail__secure_message_log where secure_message_id = ? order by secure_message_log_id desc";
 	    
 	    return $this->queryList($sql, array($secureMessageId));
 	}

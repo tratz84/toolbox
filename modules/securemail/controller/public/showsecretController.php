@@ -25,7 +25,7 @@ class showsecretController extends BaseController {
         $this->error = $this->check_errors($sm);
         if ($this->error != null) {
             $sml = new SecureMessageLog();
-            $sml->setSecureMessageId( $sm->getSecureMessageId() );
+            $sml->setSecureMessageId( $id );//$sm->getSecureMessageId() );
             $sml->setOpened(false);
             $sml->setLogMessage('Request error: ' . $this->error);
             $sml->setIp( remote_addr() );
@@ -84,7 +84,7 @@ class showsecretController extends BaseController {
     }
     
     
-    protected function check_errors( SecureMessage $sm ) {
+    protected function check_errors( $sm ) {
         if (!$sm) {
             return t('Message not found');
         }
@@ -133,11 +133,11 @@ class showsecretController extends BaseController {
             $sml = new SecureMessageLog();
             $sml->setSecureMessageId( $sm->getSecureMessageId() );
             $sml->setOpened(true);
-            $sml->setLogMessage('Page requested');
+            $sml->setLogMessage('View-message clicked');
             $sml->setIp( remote_addr() );
             $sml->save();
             
-            $smservice->markDeleted( $sm->getSecureMessageId(), remote_addr(), 'Message requested through link' );
+            $smservice->markDeleted( $sm->getSecureMessageId(), remote_addr(), 'Message deleted, requested through link' );
         }
         
         

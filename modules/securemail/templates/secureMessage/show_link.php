@@ -1,7 +1,7 @@
 
 <div class="page-header">
 	<div class="toolbox">
-		<a href="<?= appUrl('/?m=securemail&c=secureMessage') ?>" class="fa fa-chevron-circle-left"></a>
+		<a href="<?= appUrl('/?m=securemail&c=secureMessage&a=edit&id='.$sm->getSecureMessageId()) ?>" class="fa fa-chevron-circle-left"></a>
 	</div>
 	
 	<h1><?= t('Link to secret') ?></h1>
