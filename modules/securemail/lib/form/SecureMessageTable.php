@@ -28,7 +28,25 @@ class SecureMessageTable extends IndexTable {
             'fieldDescription' => 'Korte omschrijving'
             , 'fieldType' => 'text'
         ]);
+        
+        $this->setColumn('ttl_type', [
+            'fieldDescription' => 'TTL'
+            , 'fieldType' => 'text'
+            , 'render' => "function(rec) {
+                return t('securemessage-ttl.'+rec.ttl_type);
+            }"
+        ]);
 
+        $this->setColumn('ttl_expires_on', [
+            'fieldDescription' => 'Expires'
+            , 'fieldType' => 'datetime'
+            , 'render' => "function(rec) {
+                if (rec.ttl_type != 'expires') return '';
+
+                return format_datetime_minuts( str2date(rec.ttl_expires_on, { dmy: true }) );
+            }"
+        ]);
+        
         $this->setColumn('deleted', [
             'fieldDescription' => t('Deleted')
             , 'fieldType' => 'datetime'

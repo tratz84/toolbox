@@ -34,7 +34,8 @@ class SecureMessageDAO extends \core\db\DAOObject {
 	    $qb->selectField('person_id',         'securemail__secure_message');
 	    $qb->selectField('company_id',        'securemail__secure_message');
 	    $qb->selectField('person_id',         'securemail__secure_message');
-	    $qb->selectField('password',          'securemail__secure_message');
+// 	    $qb->selectField('password',          'securemail__secure_message');
+	    $qb->selectField('deleted',           'securemail__secure_message');
 	    $qb->selectField('edited',            'securemail__secure_message');
 	    $qb->selectField('created',           'securemail__secure_message');
 	    
@@ -75,6 +76,18 @@ class SecureMessageDAO extends \core\db\DAOObject {
 	    
 	    return $qb->queryCursor( SecureMessage::class );
 	}
+	
+	
+	public function readOpenExpired() {
+	    $sql = "SELECT * 
+                FROM securemail__secure_message
+                where deleted is null 
+                    and ttl_type='expires'
+                    and ttl_expires_on < now()";
+	    
+	    return $this->queryList( $sql );
+	}
+	
 
 }
 

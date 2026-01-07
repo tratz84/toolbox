@@ -31,7 +31,8 @@ class SecureMailService extends ServiceBase {
             , 'lastname'
             , 'company_name'
             , 'short_description'
-            , 'password'
+//             , 'password'
+            , 'deleted'
             , 'edited'
             , 'created'));
         
@@ -150,6 +151,17 @@ class SecureMailService extends ServiceBase {
         );
     }
     
+    
+    public function deleteExpired() {
+        
+        $smdao = new SecureMessageDAO();
+        $sms = $smdao->readOpenExpired();
+        
+        foreach($sms as $sm) {
+            $this->markDeleted($sm->getSecureMessageId(), null, 'Auto-expiry');
+        }
+        
+    }
     
     
     

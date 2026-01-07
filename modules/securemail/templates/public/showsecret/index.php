@@ -16,7 +16,7 @@
 	}
 	
 	.btn {
-	   background-color: #ececec; padding: 5px 8px 10px;
+	   background-color: #ececec; padding: 5px 8px 8px;
 	   text-decoration: none;
 	}
 	
@@ -29,6 +29,37 @@
 
 		let delurl = <?= json_encode($delurl) ?>;
 		window.location = delurl;
+	}
+
+	async function requestMessage_Click() {
+		let r = await fetch( <?= json_encode($otcurl) ?> );
+		let json = await r.json();
+
+		console.log(json);
+		if (json.success) {
+			// empty container
+			let c = document.getElementById('otc-container');
+			c.innerHTML = '';
+			c.style = '';
+
+			let spnTitle = document.createElement('div');
+			spnTitle.style = 'font-weight: bold; margin-bottom: 5px;';
+			spnTitle.innerText = 'Bericht';
+
+			let txta = document.createElement('textarea');
+			txta.value = json.message;
+			txta.setAttribute('readonly', 'readonly');
+			txta.style = 'width: 100%; height: 120px;';
+
+			c.appendChild( spnTitle );
+			c.appendChild( txta );
+			
+		}
+		else {
+			document.getElementById('otc-container').innerHTML = 'Error: ' + json.message;
+		}
+				
+		
 	}
 	
 	</script>
@@ -52,7 +83,14 @@
 				
 			<?php else : ?>
 				<?php if ($sm->getTtlType() == 'once') : ?>
-				
+					
+					<div style="text-align: center;" id="otc-container">
+    					U kunt dit bericht 1x bekijken, daarna wordt deze verwijderd.
+    					
+    					<div style="margin: 20px 0 8px;">
+    						<a href="javascript:void(0);" class="btn btn-view" onclick="requestMessage_Click();">Bekijk bericht</a>
+    					</div>
+    				</div>
 				<?php else : ?>
 					<div style="font-weight: bold; margin-bottom: 5px;">
 						Bericht

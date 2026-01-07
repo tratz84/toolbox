@@ -2,6 +2,7 @@
 
 use base\model\Menu;
 use core\event\CallbackPeopleEventListener;
+use securemail\cron\SecretMessageCron;
 
 require_once __DIR__.'/lib/functions/encryption.php';
 
@@ -22,4 +23,11 @@ hook_eventbus_subscribe('base', 'MenuService::listMainMenu', function($ac) {
     $ac->add( $miMessage );
     
 });
+
+
+
+hook_eventbus_subscribe('croncontainer', 'init', function($cronContainer) {
+    $cronContainer->addCronjob( new SecretMessageCron() );
+});
+
 
