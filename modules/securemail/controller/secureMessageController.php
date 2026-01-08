@@ -7,12 +7,16 @@ use securemail\model\SecureMessage;
 use securemail\service\SecureMailService;
 use securemail\form\SecureMessageTable;
 use core\exception\ObjectNotFoundException;
+use securemail\form\SecureMessageSearchForm;
 
 class secureMessageController extends BaseController {
     
     
     public function action_index() {
         $this->it = new SecureMessageTable();
+        
+        
+        $this->form = new SecureMessageSearchForm();
         
         return $this->render();
     }

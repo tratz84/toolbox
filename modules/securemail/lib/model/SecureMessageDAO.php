@@ -72,6 +72,13 @@ class SecureMessageDAO extends \core\db\DAOObject {
 	        $qb->addWhere(QueryBuilderWhere::whereRefByVal('short_description', 'LIKE', '%' . $opts['short_description'] . '%'));
 	    }
 	    
+	    if (isset($opts['showdel']) && $opts['showdel']) {
+	        
+	    }
+	    else {
+	        $qb->addWhere(QueryBuilderWhere::whereRefByRef('securemail__secure_message.deleted', 'IS', 'NULL'));
+	    }
+	    
 	    $qb->setRawOrderBy("secure_message_id desc");
 	    
 	    return $qb->queryCursor( SecureMessage::class );

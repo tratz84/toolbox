@@ -11,5 +11,19 @@
 </div>
 
 
+<?= $form->render() ?>
 
-<?= $it->renderHtml() ?>
+<div class="clear"></div>
+
+<hr/>
+
+
+<div id="object-container-crit"></div>
+
+
+<script>
+
+<?= $it->render() ?>
+
+
+</script>

@@ -10,6 +10,7 @@ class SecureMessageTable extends IndexTable {
         parent::__construct();
         
         $this->setContainerId('object-container-crit');
+        $this->setOption( 'searchContainer', '.form-secure-message-search-form' );
         $this->setConnectorUrl( appUrl('/?m=securemail&c=secureMessage&a=search') );
         
         $this->setColumn('secure_message_id', [
