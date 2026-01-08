@@ -154,7 +154,7 @@
 	}
 
 	function copyToClipboard( t ) {
-		var inp = document.createElement('input');
+		var inp = document.createElement('textarea');
 		inp.type = 'text';
 		inp.value = t;
 
