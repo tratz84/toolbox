@@ -18,6 +18,9 @@ class HtmlDatetimeField extends BaseWidget {
     }
     
     
+    public function setDefaultValue( $t ) { $this->opts['default-value'] = $t; }
+    
+    
     public function renderAsText() {
         $t = '';
         $dt = date2unix($this->getValue());
@@ -38,7 +41,9 @@ class HtmlDatetimeField extends BaseWidget {
         if ($dt != null) {
             $t = date(Context::getInstance()->getDatetimeFormat(), $dt);
         } else {
-            if (isset($this->opts['hide-when-invalid']) && $this->opts['hide-when-invalid'])
+            if (isset($this->opts['default-value']) && $this->opts['default-value'])
+                $t = $this->opts['default-value'];
+            else if (isset($this->opts['hide-when-invalid']) && $this->opts['hide-when-invalid'])
                 return '';
         }
         
