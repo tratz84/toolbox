@@ -64,7 +64,7 @@ class secureMessageController extends BaseController {
                 $sm = $smservice->saveMessage( $this->form );
                 
                 report_user_message( t('Changes saved') );
-                if (!get_var('sm_id') && !$this->form->getWidgetValue('save_key')) {
+                if (!$this->form->getWidgetValue('save_key') && $sm->getPassword()) {
                     $_SESSION['secure_message_key'] = array(
                         'secure_message_id' => $sm->getSecureMessageId(),
                         'password' => $sm->getPassword()

@@ -101,10 +101,17 @@ class SecureMailService extends ServiceBase {
         else {
             $msg = $secmsg->getPlainMessage();
             
-            if ($id && $form->getWidgetValue('save_key') && $secmsg->getPassword()) {
+            if ($id && $secmsg->getPassword()) {
                 $tag = null;
                 $encrypted_msg = openssl_encrypt($msg, $secmsg->getEncryptionAlgo(), $secmsg->getPassword(), 0, base64_decode($secmsg->getEncryptionIv()), $tag);
                 $secmsg->setEncryptedMessage($encrypted_msg);
+                
+                $r = array();
+                $r['password'] = $secmsg->getPassword();
+                
+                if (!$form->getWidgetValue('save_key')) {
+                    $secmsg->setPassword( null );
+                }
             }
             else {
                 $r = sm_encrypt_message($msg);
