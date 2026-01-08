@@ -97,6 +97,7 @@ class secureMessageController extends BaseController {
                 if ($sm->getSaveKey() == true) {
                     
                     $this->form->getWidget('container-top')->getWidget('link_to_message')->setValue( $sm->getPublicLink() );
+                    $this->form->getWidget('container-message')->removeWidget('notice_message');
                 }
                 
                 if ($sm->getSaveKey() == false) {
