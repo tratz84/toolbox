@@ -137,6 +137,15 @@ class SecureMessageBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'view_method' => 
+  array (
+    'Field' => 'view_method',
+    'Type' => 'varchar(16)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -198,6 +207,10 @@ class SecureMessageBase extends \core\db\DBObject {
 		
 	public function setEncryptionIv($p) { $this->setField('encryption_iv', $p); }
 	public function getEncryptionIv() { return $this->getField('encryption_iv'); }
+	
+		
+	public function setViewMethod($p) { $this->setField('view_method', $p); }
+	public function getViewMethod() { return $this->getField('view_method'); }
 	
 	
 }

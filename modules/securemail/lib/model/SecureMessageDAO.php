@@ -81,8 +81,8 @@ class SecureMessageDAO extends \core\db\DAOObject {
 	public function readOpenExpired() {
 	    $sql = "SELECT * 
                 FROM securemail__secure_message
-                where deleted is null 
-                    and ttl_type='expires'
+                where deleted is null
+                    and ttl_expires_on is not null 
                     and ttl_expires_on < now()";
 	    
 	    return $this->queryList( $sql );

@@ -55,6 +55,9 @@ class SecureMailService extends ServiceBase {
             $sm->setPlainMessage( $sm->getDecryptedMessage() );
             $sm->setSaveKey( true );
         }
+        else {
+            $sm->setSaveKey( false );
+        }
         
         return $sm;
     }
@@ -81,6 +84,15 @@ class SecureMailService extends ServiceBase {
         
         
         $form->fill($secmsg, ['customer_id', 'short_description', 'plain_message', 'ttl_type', 'ttl_expires_on']);
+        
+        // View method dependend on expiry type
+        if ($form->getWidgetValue('ttl_type') == 'once') {
+            $secmsg->setViewMethod( 'click2watch' );
+        }
+        else {
+            $secmsg->setViewMethod( $form->getWidgetValue('view_method') );
+        }
+        
         
         $r = null;
         if ($id && trim($form->getWidgetValue('plain_message')) == '') {

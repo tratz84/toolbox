@@ -4,6 +4,8 @@
 namespace securemail\model;
 
 
+use core\exception\InvalidArgumentException;
+
 class SecureMessage extends base\SecureMessageBase {
     
     
@@ -15,7 +17,16 @@ class SecureMessage extends base\SecureMessageBase {
 		parent::__construct( $id );
 		
 		
-		$this->setTtlExpiresOn( date('Y-m-d', strtotime('+5 day')) . ' 00:00:00');
+		$this->setTtlExpiresOn( date('Y-m-d', strtotime('+30 day')) . ' 00:00:00');
+		$this->setViewMethod('click2watch');
+	}
+	
+	
+	public function setViewMethod($m) {
+	    if (in_array($m, ['click2watch', 'direct']) == false)
+	        throw new InvalidArgumentException( 'Invalid view method' );
+	    
+	    return parent::setViewMethod($m);
 	}
 	
 	

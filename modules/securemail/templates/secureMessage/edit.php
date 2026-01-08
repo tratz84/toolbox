@@ -69,16 +69,24 @@ $(document).ready(() => {
 	});
 
 	ttl_type_Change();
+
+	$('input[name=link_to_message]').attr('readonly', 'readonly');
+	let btnCopyLink = $('<a href="javascript:void(0);" class="fa fa-copy textfield-copy"></a>');
+	btnCopyLink.on('click', function() {
+		copyToClipboard( $('input[name=link_to_message]') );
+	});
+	btnCopyLink.insertAfter('input[name=link_to_message]');
 });
 
 function ttl_type_Change() {
 	let ttl_type = $('select[name=ttl_type]').val();
 
 	if (ttl_type == 'once') {
-		$('.widget-ttl-expires-on').hide();
+		$('#view-method-click2watch').prop('checked', true);
+		$('input[name=view_method]').attr('disabled', 'disabled');
 	}
 	if (ttl_type == 'expires') {
-		$('.widget-ttl-expires-on').show();
+		$('input[name=view_method]').removeAttr('disabled', '');
 	}
 }
 

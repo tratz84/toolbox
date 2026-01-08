@@ -37,7 +37,7 @@ class SecureMessageForm extends \core\forms\CodegenBaseForm {
 		$w2 = new \core\forms\WidgetContainer('container-top');
 		$this->addWidget( $w2 );
 		
-		$w3 = new \core\forms\HtmlField('link_to_message', NULL, t('Link'));
+		$w3 = new \core\forms\TextField('link_to_message', NULL, t('Link'));
 		$w2->addWidget( $w3 );
 		$w4 = new \core\forms\FieldSetContainer('container-message', t('Message'));
 		$this->addWidget( $w4 );
@@ -59,13 +59,19 @@ class SecureMessageForm extends \core\forms\CodegenBaseForm {
 		$w9->addWidget( $w10 );
 		$w11 = new \core\forms\DateTimePickerField('ttl_expires_on', NULL, t('Expires on'));
 		$w9->addWidget( $w11 );
-		$w12 = new \core\forms\CheckboxField('save_key', NULL, t('Save key'));
+		$w12 = new \core\forms\RadioField('view_method', NULL, ['click2watch' => t('Click to watch'), 
+		'direct' => t('Directly visible'), 
+		], t('View method'));
 		$w9->addWidget( $w12 );
-		$w13 = new \core\forms\HtmlDatetimeField('deleted', NULL, t('Deleted'));
+		$w13 = new \core\forms\CheckboxField('save_key', NULL, t('Save key'));
 		$w9->addWidget( $w13 );
-		$w13->setValue( "Nee" );
+		$w14 = new \core\forms\HtmlDatetimeField('deleted', NULL, t('Deleted'));
+		$w9->addWidget( $w14 );
+		$w14->setValue( "Nee" );
 		
 	}
+
+
 
 
 

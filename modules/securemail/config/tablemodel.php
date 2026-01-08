@@ -19,6 +19,7 @@ $tb_message->addColumn('password',          'varchar(128)');
 
 $tb_message->addColumn('ttl_type',          'varchar(16)');     // once, or expires
 $tb_message->addColumn('ttl_expires_on',    'datetime');
+$tb_message->addColumn('view_method',       'varchar(16)');     // click2watch, direct
 
 $tb_message->addColumn('short_description', 'text');
 $tb_message->addColumn('encrypted_message', 'longtext');

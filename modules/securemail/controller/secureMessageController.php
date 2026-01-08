@@ -92,9 +92,7 @@ class secureMessageController extends BaseController {
             else {
                 if ($sm->getSaveKey() == true) {
                     
-                    $this->form->getWidget('container-top')->getWidget('link_to_message')->setEscapeValue(false);
-                    $html_link_key = '<a href="'.esc_attr($sm->getPublicLink()).'" target="_blank">Link</a>';
-                    $this->form->getWidget('container-top')->getWidget('link_to_message')->setValue( $html_link_key );
+                    $this->form->getWidget('container-top')->getWidget('link_to_message')->setValue( $sm->getPublicLink() );
                 }
                 
                 if ($sm->getSaveKey() == false) {
@@ -146,7 +144,7 @@ class secureMessageController extends BaseController {
     
     
     public function action_show_link() {
-        $smk = $_SESSION['secure_message_key'];
+        $smk = @$_SESSION['secure_message_key'];
         unset($_SESSION['secure_message_key']);
         
         if (!$smk || get_var('sm_id') != $smk['secure_message_id']) {
