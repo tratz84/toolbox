@@ -18,7 +18,7 @@ module_update_handler('securemail', 20260107);
 hook_eventbus_subscribe('base', 'MenuService::listMainMenu', function($ac) {
         
     $miMessage = new Menu();
-    $miMessage->setIconLabelUrl('fa-list', t('Secure messages'), '/?m=securemail&c=secureMessage');
+    $miMessage->setIconLabelUrl('fa-lock', t('Secure messages'), '/?m=securemail&c=secureMessage');
     $miMessage->setWeight( 75 );
     $ac->add( $miMessage );
     
