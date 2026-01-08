@@ -763,7 +763,7 @@ function copyToClipboard( obj ) {
 		t = $(obj).val().trim();
 	}
 	
-	var inp = $('<input type="text" />');
+	var inp = $('<textarea />');
 	inp.val( t );
 	$(document.body).append( inp );
 
