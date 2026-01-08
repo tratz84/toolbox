@@ -43,7 +43,12 @@ class showsecretController extends BaseController {
             // log
             $sml = new SecureMessageLog();
             $sml->setSecureMessageId( $sm->getSecureMessageId() );
-            $sml->setOpened(true);
+            
+            if ($sm->getViewMethod() == 'direct')
+                $sml->setOpened(true);
+            else
+                $sml->setOpened(false);
+            
             $sml->setLogMessage('Page requested');
             $sml->setIp( remote_addr() );
             $sml->save();
@@ -60,7 +65,7 @@ class showsecretController extends BaseController {
         
         $this->sm = $sm;
         $this->delurl = appUrl('/?m=securemail&c=public/showsecret&a=del&smid='.$sm->getSecureMessageId().'&p='.urlencode(get_var('p')));
-        $this->otcurl = appUrl('/?m=securemail&c=public/showsecret&a=request_otc&smid='.$sm->getSecureMessageId().'&p='.urlencode(get_var('p')));
+        $this->messageurl = appUrl('/?m=securemail&c=public/showsecret&a=request_message&smid='.$sm->getSecureMessageId().'&p='.urlencode(get_var('p')));
         
         
         return $this->render();
@@ -106,7 +111,7 @@ class showsecretController extends BaseController {
     }
     
     
-    public function action_request_otc() {
+    public function action_request_message() {
         
         $id = (int)get_var('smid');
         
@@ -133,15 +138,15 @@ class showsecretController extends BaseController {
             ]);
         }
         
+        $sml = new SecureMessageLog();
+        $sml->setSecureMessageId( $sm->getSecureMessageId() );
+        $sml->setOpened(true);
+        $sml->setLogMessage('View-message clicked');
+        $sml->setIp( remote_addr() );
+        $sml->save();
+        
         // once - always the case.. might be changed in admin though
         if ($sm->getTtlType() == 'once') {
-            $sml = new SecureMessageLog();
-            $sml->setSecureMessageId( $sm->getSecureMessageId() );
-            $sml->setOpened(true);
-            $sml->setLogMessage('View-message clicked');
-            $sml->setIp( remote_addr() );
-            $sml->save();
-            
             $smservice->markDeleted( $sm->getSecureMessageId(), remote_addr(), 'Message deleted, requested through link' );
         }
         
@@ -152,6 +157,10 @@ class showsecretController extends BaseController {
         
         $r = array();
         
+        $r['short_description'] = $sm->getShortDescription();
+        $r['ttl_type'] = $sm->getTtlType();
+        $r['ttl_expires_on'] = $sm->getTtlExpiresOn();
+        $r['ttl_expires_on_format'] = format_datetime($sm->getTtlExpiresOn(), 'd-m-Y H:i');
         $r['message'] = $plainMessage;
         $r['success'] = true;
         
