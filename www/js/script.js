@@ -758,8 +758,13 @@ function submitformasget( frm ) {
 
 function copyToClipboard( obj ) {
 	
-	var inp = $('<input type="text" />');
-	inp.val( obj.text() );
+	let t = $(obj).text().trim();
+	if ( t == '' ) {
+		t = $(obj).val().trim();
+	}
+	
+	var inp = $('<textarea />');
+	inp.val( t );
 	$(document.body).append( inp );
 
 	inp.get(0).select();
@@ -770,10 +775,10 @@ function copyToClipboard( obj ) {
 	inp.remove();
 	
 	if (r) {
-		show_user_message( toolbox_t('Text copied to clipboard') );
+		showToastMessage( toolbox_t('Text copied to clipboard') );
 	}
 	else {
-		show_user_warning( toolbox_t('Failed to copy text to clipboard') );
+		showToastError( toolbox_t('Failed to copy text to clipboard') );
 	}
 
 }
