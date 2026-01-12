@@ -15,6 +15,8 @@ class SecretMessageCron extends CronJobBase {
     }
     
     
+    public function checkJob() { return true; }
+    
     
     public function run() {
         
@@ -22,6 +24,10 @@ class SecretMessageCron extends CronJobBase {
         
         $smservice->deleteExpired();
         
+    }
+
+    public function getStatus() {
+        return 'ok';
     }
     
     
