@@ -12,6 +12,8 @@ class SecureMessageForm extends \core\forms\CodegenBaseForm {
 		
 		$this->hideSubmitButtons();
 		
+		$this->getWidget('container-enc-settings')->getWidget('deleted')->setDefaultValue(t('No'));
+		
 		
 		$this->addValidator('plain_message', function($form) {
 		    

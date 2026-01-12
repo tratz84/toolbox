@@ -9,7 +9,7 @@ require_once __DIR__.'/lib/functions/encryption.php';
 
 ctx()->enableModule('securemail');
 
-hook_loader(__DIR__.'/hook/');
+// hook_loader(__DIR__.'/hook/');
 
 module_update_handler('securemail', 20260107);
 
