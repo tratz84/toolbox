@@ -39,8 +39,25 @@ class MasterDataMenu {
         });
         
         $result = array();
-        foreach($sections as $s) {
-            $result[$s] = $this->menu[$s];
+        foreach($sections as $section_name => $s) {
+            
+            $items = $this->menu[$s];
+            
+            for($x=0; $x < count($items); $x++) {
+                $items[$x]['menu_no'] = $x;
+            }
+            
+            // sort items by prio
+            usort($items, function($i1, $i2) {
+                if ($i1['prio'] != $i2['prio']) {
+                    return $i1['prio'] - $i2['prio'];
+                }
+                else {
+                    return $i1['menu_no'] - $i2['menu_no'];
+                }
+            });
+            
+            $result[$s] = $items;
         }
         
         return $result;
