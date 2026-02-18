@@ -171,12 +171,14 @@ while ( true ) {
         break;
     }
     
+    sleep(30);
+
     // auto restart every 4 hours. Handling memory leaks..
     // maybe just run once, wait 30 sec and exit always?
     if ( time() - $startTime > 3600 * 4 ) {
         exit;
     }
     
-    
-    sleep(30);
 }
+
+
