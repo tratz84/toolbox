@@ -92,6 +92,11 @@ class InvoiceDAO extends \core\db\DAOObject {
 	        $params[] = format_date($opts['invoice_date_after'], 'Y-m-d');
 	    }
 	    
+	    if (isset($opts['invoice_date_before']) && valid_date($opts['invoice_date_before'])) {
+	        $where[] = " i.invoice_date <= ? ";
+	        $params[] = format_date($opts['invoice_date_before'], 'Y-m-d');
+	    }
+	    
 	    
 	    if (isset($opts['invoice_date']) && valid_date($opts['invoice_date'])) {
 	        $where[] = " i.invoice_date = ? ";

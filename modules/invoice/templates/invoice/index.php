@@ -2,6 +2,8 @@
 
 <div class="page-header">
 	<div class="toolbox list-toolbox">
+		<a href="javascript:void(0);" class="fa fa-file-excel-o btn-export"></a>
+		
 		<a href="<?= appUrl('/?m=invoice&c=invoice&a=edit') ?>" class="fa fa-plus"></a>
 	</div>
 	
@@ -230,6 +232,26 @@ var cbu = new ContainerBulkUpdate();
 cbu.init();
 
 
+
+$('.btn-export').on('click', () => {
+	showConfirmation(_('Export'), 
+		`
+			<div>
+				<span style="display: inline-block; width: 80px;">Start datum</span> <input type="text" class="input-pickadate" name="export_sd" />
+			</div>
+			<div>
+				<span style="display: inline-block; width: 80px;">Eind datum</span> <input type="text" class="input-pickadate" name="export_ed" />
+			</div>
+		`
+		, () => {
+		let sd = $('input[name=export_sd]').val();
+		let ed = $('input[name=export_ed]').val();
+		
+		window.location = appUrl( '/?m=invoice&c=invoice&a=export_list&sd='+encodeURIComponent(sd) + '&ed=' + encodeURIComponent(ed) );
+	});
+
+	applyWidgetFields('.confirmation-dialog');
+});
 
 
 
