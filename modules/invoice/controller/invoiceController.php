@@ -421,7 +421,10 @@ class invoiceController extends BaseController {
         
         $rowno = 2;
         
-        foreach($lr->getObjects() as $inv) {
+        $invoices = $lr->getObjects();
+        $invoices = array_reverse($invoices);
+        
+        foreach($invoices as $inv) {
             $sheet->setCellValueByColumnAndRow(1, $rowno, $inv['invoiceNumberText']);
             
             if ($inv['company_id'])
