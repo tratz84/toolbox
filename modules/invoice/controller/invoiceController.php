@@ -411,13 +411,13 @@ class invoiceController extends BaseController {
         $sheet = $spreadsheet->setActiveSheetIndex(0);//->setCellValue('A1', 'Hello')
         
         
-        $sheet->setCellValueByColumnAndRow(1, 1, 'Factuur #');
+        $sheet->setCellValueByColumnAndRow(1, 1, strOrder(1).' #');
         $sheet->setCellValueByColumnAndRow(2, 1, 'Klantnaam');
         $sheet->setCellValueByColumnAndRow(3, 1, 'Omschrijving');
         $sheet->setCellValueByColumnAndRow(4, 1, 'Bedrag excl.');
         $sheet->setCellValueByColumnAndRow(5, 1, 'Bedrag incl.');
         $sheet->setCellValueByColumnAndRow(6, 1, 'Status');
-        $sheet->setCellValueByColumnAndRow(7, 1, 'Factuur datum');
+        $sheet->setCellValueByColumnAndRow(7, 1, strOrder(1).' datum');
         
         $rowno = 2;
         
@@ -445,7 +445,7 @@ class invoiceController extends BaseController {
         
         
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="factuur-export.xlsx"');
+        header('Content-Disposition: attachment;filename="'.strtolower(strOrder(1)).'-export.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

@@ -251,6 +251,9 @@ $('.btn-export').on('click', () => {
 	});
 
 	applyWidgetFields('.confirmation-dialog');
+
+	let c = $('.confirmation-dialog').find('input[type="text"], input[type="password"], input[type=number]').first().blur();
+	
 });
 
 
