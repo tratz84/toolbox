@@ -53,6 +53,9 @@ class MysqlConnection extends DBConnection {
     public function getTransactionCount() { return $this->transactionCount; }
     
     public function connect() {
+        if ($this->mysqli != null)
+            return true;
+        
         $this->mysqli = new \mysqli($this->host, $this->username, $this->password, $this->databaseName);
         
         if ($this->mysqli->connect_errno) {
@@ -68,6 +71,9 @@ class MysqlConnection extends DBConnection {
     }
     public function disconnect() {
         $this->mysqli->close();
+        
+        unset($this->mysqli);
+        $this->mysqli = null;
     }
     
     public function beginTransaction() {

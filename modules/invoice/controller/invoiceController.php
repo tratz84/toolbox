@@ -11,11 +11,15 @@ use invoice\InvoiceSettings;
 use invoice\form\InvoiceForm;
 use invoice\model\Invoice;
 use invoice\model\InvoiceLine;
-use invoice\pdf\DefaultInvoicePdf;
 use invoice\service\InvoiceService;
 use webmail\model\EmailTo;
 use webmail\service\EmailService;
 use webmail\service\EmailTemplateService;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+
 
 class invoiceController extends BaseController {
     
@@ -383,5 +387,75 @@ class invoiceController extends BaseController {
         
         redirect('/?m=webmail&c=view&id='.$e->getEmailId());
     }
+    
+    
+    public function action_export_list() {
+        
+        $sd = null;
+        $ed = null;
+        if (get_var('sd') && valid_date(get_var('sd')))
+            $sd = format_date(get_var('sd'), 'Y-m-d');
+        if (get_var('ed') && valid_date(get_var('ed')))
+            $ed = format_date(get_var('ed'), 'Y-m-d');
+        
+        $invoiceService = object_container_get(InvoiceService::class);
+        $lr = $invoiceService->searchInvoice(0, 99999, [
+            'invoice_date_after' => $sd,
+            'invoice_date_before' => $ed
+        ]);
+        
+        
+        
+        $spreadsheet = new Spreadsheet();
+        
+        $sheet = $spreadsheet->setActiveSheetIndex(0);//->setCellValue('A1', 'Hello')
+        
+        
+        $sheet->setCellValueByColumnAndRow(1, 1, 'Factuur #');
+        $sheet->setCellValueByColumnAndRow(2, 1, 'Klantnaam');
+        $sheet->setCellValueByColumnAndRow(3, 1, 'Omschrijving');
+        $sheet->setCellValueByColumnAndRow(4, 1, 'Bedrag excl.');
+        $sheet->setCellValueByColumnAndRow(5, 1, 'Bedrag incl.');
+        $sheet->setCellValueByColumnAndRow(6, 1, 'Status');
+        $sheet->setCellValueByColumnAndRow(7, 1, 'Factuur datum');
+        
+        $rowno = 2;
+        
+        foreach($lr->getObjects() as $inv) {
+            $sheet->setCellValueByColumnAndRow(1, $rowno, $inv['invoiceNumberText']);
+            
+            if ($inv['company_id'])
+                $sheet->setCellValueByColumnAndRow(2, $rowno, $inv['company_name']);
+            else
+                $sheet->setCellValueByColumnAndRow(2, $rowno, trim($inv['firstname'] . ' ' . $inv['insert_lastname'] . ' ' . $inv['lastname']));
+            
+            $sheet->setCellValueByColumnAndRow(3, $rowno, trim($inv['subject']));
+            $sheet->setCellValueByColumnAndRow(4, $rowno, trim($inv['total_calculated_price']));
+            $sheet->setCellValueByColumnAndRow(5, $rowno, trim($inv['total_calculated_price_incl_vat']));
+            $sheet->setCellValueByColumnAndRow(6, $rowno, trim($inv['invoice_status_description']));
+            $sheet->setCellValueByColumnAndRow(7, $rowno, $inv['invoice_date']);
+            
+            
+            $rowno++;
+        }
+        
+        
+        
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="factuur-export.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        
+        // If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+        
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+    }
+    
     
 }

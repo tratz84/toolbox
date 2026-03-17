@@ -95,6 +95,9 @@ class SecureMessageDAO extends \core\db\DAOObject {
 	    return $this->queryList( $sql );
 	}
 	
+	public function markDeleted($secureMessageId) {
+	    $this->query("update securemail__secure_message set deleted=now(), encrypted_message=null, password=null where secure_message_id = ?", array($secureMessageId));
+	}
 
 }
 

@@ -148,10 +148,11 @@ class SecureMailService extends ServiceBase {
             // could return here.. on the other hand, why not log it?
         }
         
+        // mark deleted
+        $smdao = new SecureMessageDAO();
+        $smdao->markDeleted($sm->getSecureMessageId());
         
-        $con = DatabaseHandler::getConnection('default');
-        $con->query("update securemail__secure_message set deleted=now(), encrypted_message=null, password=null where secure_message_id = ?", array($sm->getSecureMessageId()));
-        
+        // log
         $sml = new SecureMessageLog();
         $sml->setSecureMessageId( $sm->getSecureMessageId() );
         if ($logMessage == null) {

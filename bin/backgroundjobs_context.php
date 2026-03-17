@@ -115,8 +115,8 @@ while ( true ) {
             );
         }
         
+        // stop de-activated processes
         foreach($startedProcesses as $cmd => $settings) {
-            
             // proces running?
             if (isset($currentProcesses[$cmd])) {
                 // print "Process not ended? => skip\n";
@@ -176,6 +176,28 @@ while ( true ) {
     // auto restart every 4 hours. Handling memory leaks..
     // maybe just run once, wait 30 sec and exit always?
     if ( time() - $startTime > 3600 * 4 ) {
+        foreach($startedProcesses as $cmd => $settings) {
+            // check pid
+            $status = null;
+            $pid = $startedProcesses[$cmd]['pid'];
+            $r = pcntl_waitpid($pid, $status, WNOHANG);
+            
+            print_info("$cmd: Stopping proces..");
+            
+            if ($r === 0) {
+                posix_kill( $pid, 7 );
+            }
+            
+            $r = null;
+            do {
+                $r = pcntl_waitpid($pid, $status, WNOHANG);
+                
+                print_info("$cmd: Process still running, kill takes some time..");
+                sleep(2);
+            }
+            while( $r != 0 );
+        }
+        
         exit;
     }
     
