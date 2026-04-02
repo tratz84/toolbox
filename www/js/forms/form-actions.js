@@ -237,7 +237,7 @@ function handleFormActions(actionsContainer) {
 		var newTr = $('<tr />');
 		
 		if ($(listFormWidget).find('.sortable-container').length) {
-			newTr.append('<td><span class="fa fa-sort handler-sortable"></span></td>');
+			newTr.append('<td><span class="fa fa-bars handler-sortable"></span></td>');
 		}
 		
 		for(var i=0; i < fields.length; i++) {

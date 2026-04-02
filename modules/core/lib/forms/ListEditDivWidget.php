@@ -220,7 +220,7 @@ abstract class ListEditDivWidget extends ListWidget {
         $html = '<tr>';
         
         if ($this->sortable) {
-            $html .= '<td class="td-sortable"><span class="fa fa-sort handler-sortable"></span></td>';
+            $html .= '<td class="td-sortable"><span class="fa fa-bars handler-sortable"></span></td>';
         }
         
         $emptyFields = array();
@@ -257,7 +257,7 @@ abstract class ListEditDivWidget extends ListWidget {
         $html = '<div class="list-edit-div-record">';
         
         if ($this->sortable) {
-            $html .= '<div class="td-sortable"><span class="fa fa-sort handler-sortable"></span></div>';
+            $html .= '<div class="td-sortable"><span class="fa fa-bars handler-sortable"></span></div>';
         }
         
         // bind values

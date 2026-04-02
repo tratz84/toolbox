@@ -20,7 +20,7 @@ class IpSettingIndexTable extends IndexTable {
         $this->setColumn('sort', [
             'fieldDescription' => ''
             , 'render' => "function() {
-                var handle = $('<span class=\"fa fa-sort cursor\"></span>');
+                var handle = $('<span class=\"fa fa-bars sort-handler cursor\"></span>');
                 return handle;
             }"
         ]);

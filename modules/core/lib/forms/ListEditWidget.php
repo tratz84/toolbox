@@ -238,7 +238,7 @@ abstract class ListEditWidget extends ListWidget {
         $html = '<tr>';
 
         if ($this->sortable) {
-            $html .= '<td class="td-sortable"><span class="fa fa-sort handler-sortable"></span></td>';
+            $html .= '<td class="td-sortable"><span class="fa fa-bars handler-sortable"></span></td>';
         }
 
         $emptyFields = array();
@@ -275,7 +275,7 @@ abstract class ListEditWidget extends ListWidget {
         $html = '<tr class="'.($this->hasMobileTemplate()?'hide-mobile':'').'">';
 
         if ($this->sortable) {
-            $html .= '<td class="td-sortable"><span class="fa fa-sort handler-sortable"></span></td>';
+            $html .= '<td class="td-sortable"><span class="fa fa-bars handler-sortable"></span></td>';
         }
 
         // bind values

@@ -23,7 +23,8 @@ it_fis.setCallbackRenderRows(function() {
 	console.log( $('#is-container .list-response-table tbody tr').length );
 	
 	$('#is-container .list-response-table tbody').sortable({
-		handle: '.fa-sort',
+		handle: '.sort-handler',
+		axis: 'y',
 		update: function(evt) {
 			var ids = new Array();
 

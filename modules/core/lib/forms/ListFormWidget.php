@@ -169,7 +169,7 @@ class ListFormWidget extends ListWidget {
                 
                 $html .= '<tr class="'.($this->readonly?'':'clickable').'">';
                 if ($this->getSortable()) {
-                    $html .= '<td class="th-sortable sortable-cell"><span class="fa fa-sort handler-sortable"></span></td>';
+                    $html .= '<td class="th-sortable sortable-cell"><span class="fa fa-bars handler-sortable"></span></td>';
                 }
                 if ($this->fields && count($this->fields)) {
                     

@@ -303,6 +303,7 @@ function applyWidgetFields(container) {
 	
 	$(container).find('.sortable-container').each(function(index, node) {
 		var opts = {};
+		opts.axis = 'y';
 		
                if ($(node).find('.handler-sortable').length
                                || $(node).parent().hasClass('sublist')         // ListEditWidgets might start out empty..
