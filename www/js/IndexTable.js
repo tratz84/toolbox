@@ -616,7 +616,7 @@ function IndexTable( container, opts ) {
 				if ($(td).find('span.field-description').length) {
 					$(td).find('span.field-description').wrap('<a href="javascript:void(0);" class="field-sort"></a>');
 				}
-				$(td).append(' <a href="javascript:void(0);" class="fa fa-bars field-sort"></a>');
+				$(td).append(' <a href="javascript:void(0);" class="fa fa-sort field-sort"></a>');
 				
 				$(td).find('.field-sort').click(function() {
 					var it = $(this).closest('table').data('IndexTable');
