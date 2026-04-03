@@ -22,8 +22,13 @@ function Dashboard( containerId, config ) {
 		
 		var gridstackOpts = {};
 		gridstackOpts.draggable = '.ui-draggable';
-		console.log(me.config);
+		
+		// TODO: where is 'fixed' used?
 		if (me.config.fixed) {
+			gridstackOpts.disableDrag = true;
+			gridstackOpts.disableResize = true;
+		}
+		if (me.config.settings && me.config.settings.lockWidgets) {
 			gridstackOpts.disableDrag = true;
 			gridstackOpts.disableResize = true;
 		}
@@ -183,8 +188,27 @@ function Dashboard( containerId, config ) {
 		if (!me.config.saveEnabled)
 			return;
 		
+		
+		let c = $('.dashboard-widget-settings-popup');
+		
+		
 		// save enabled widgets
 		var data = { };
+		
+		if (c.find('input[name=lockWidgets]').length > 0) {
+			me.config.settings.lockWidgets = c.find('input[name=lockWidgets]').prop('checked') ? 1 : 0;
+		}
+		
+		let grid = this.getGrid();
+		if (me.config.settings.lockWidgets) {
+			grid.disable('drag');
+			grid.disable('resize');
+		}
+		else {
+			grid.enable('drag');
+			grid.enable('resize');
+		}
+		data.lockWidgets = me.config.settings.lockWidgets;
 		
 		data.enabledWidgets = '';
 		
@@ -221,8 +245,20 @@ function Dashboard( containerId, config ) {
 	this.renderDashboardSettings = function(data) {
 		var me = this;
 		
+		
+		let container = $('<div class="dashboard-widget-settings-popup" />');
+		
+		let csettings = $('<div class="dashboard-global-settings" />');
+		csettings.append('<label><input type="checkbox" name="lockWidgets" /> Lock widgets</label>');
+		
+		if (this.config.settings.lockWidgets) {
+			csettings.find('input[name=lockWidgets]').prop('checked', true);
+		}
+		
+		container.append( csettings );
+		
 		// render widget list
-		var container = $('<div class="dashboard-widget-settings" />');
+		var widgetContainer = $('<div class="dashboard-widget-settings" />');
 		for(var x=0; x < this.config.widgets.length; x++) {
 			var w = this.config.widgets[x];
 			
@@ -254,8 +290,10 @@ function Dashboard( containerId, config ) {
 			item.append(spanName);
 			item.append(spanDescription);
 			
-			container.append( item );
+			widgetContainer.append( item );
 		}
+		
+		container.append(widgetContainer);
 		
 		
 		showDialog({

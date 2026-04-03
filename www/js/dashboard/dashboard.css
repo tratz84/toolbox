@@ -9,6 +9,13 @@
 }
 
 
+.dashboard-widget-settings-popup {
+	.dashboard-global-settings {
+		margin-bottom: 15px;
+	}
+}
+
+
 .dashboard-widgets .widget-item {
 /* 	border: 1px solid #ccc; */
 	overflow: hidden;
