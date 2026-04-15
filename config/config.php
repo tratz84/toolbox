@@ -4,6 +4,9 @@ use core\Context;
 
 define('ROOT', realpath( dirname(__FILE__) . '/..' ));
 
+ini_set("pcre.jit", "0");
+
+
 // define('SQL_VERSION', 2019051401);
 
 require_once dirname(__FILE__).'/../modules/core/lib/Context.php';
