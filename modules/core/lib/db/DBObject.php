@@ -162,7 +162,7 @@ class DBObject {
                 $val = (int)$val;
             }
             else if ($meta['Type'] == 'double') {
-                $val = (double)$val;
+                $val = (float)$val;
             }
             else if ($meta['Type'] == 'tinyint(1)') {
                 $val = (bool)$val ? 1 : 0;
@@ -199,7 +199,7 @@ class DBObject {
                     $val = (int)$val;
                 }
                 else if ($meta['Type'] == 'double') {
-                    $val = (double)$val;
+                    $val = (float)$val;
                 }
                 else if ($meta['Type'] == 'tinyint(1)') {
                     $val = (bool)$val ? 1 : 0;

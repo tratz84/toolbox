@@ -24,6 +24,9 @@ class dashboardController extends BaseController {
         $metaService = $this->oc->get(MetaService::class);
         $userWidgets = @unserialize( $metaService->getMetaValue('user', $userId, 'dashboard_widgets') );
         
+        $lockWidgets = $metaService->getMetaValue('user', $userId, 'dashboard_lock_widgets') ? 1 : 0;
+        $this->dwc->setSetting('lockWidgets', $lockWidgets);
+        
         if ($userWidgets) foreach($userWidgets as $key => $arr) {
             $this->dwc->addUserWidget($key, $arr['x'], $arr['y'], $arr['width'], $arr['height']);
         }
@@ -51,6 +54,8 @@ class dashboardController extends BaseController {
         
         $userId = $this->ctx->getUser()->getUserId();
         $metaService = $this->oc->get(MetaService::class);
+        
+        $metaService->saveMeta('user', $userId, 'dashboard_lock_widgets', get_var('lockWidgets', 0)?1:0);
         $metaService->saveMeta('user', $userId, 'dashboard_widgets', serialize($userWidgets));
         
         print 'OK';

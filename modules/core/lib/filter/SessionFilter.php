@@ -59,7 +59,7 @@ class SessionFilter {
                 
                 // session_destroy(); <= this doesn't work in this case, because there's no access to the session-file
                 // unset PHPSESSID-cookie
-                setcookie(session_name(), null, 0, $sessionPath);
+                setcookie(session_name(), '', 0, $sessionPath);
                 
                 exit;
             }

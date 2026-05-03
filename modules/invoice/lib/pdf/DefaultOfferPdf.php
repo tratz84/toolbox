@@ -147,7 +147,7 @@ class DefaultOfferPdf extends DefaultInvoicePdf {
 //                 $this->Ln();
             }
             
-            if (trim($l->getShortDescription2())) {
+            if ($l->getShortDescription2() != null && trim($l->getShortDescription2())) {
                 $this->Cell(65, $lh, $l->getShortDescription(), $border, 0, 'L');
                 $this->Cell(65, $lh, $l->getShortDescription2(), $border, 0, 'L');
             } else {

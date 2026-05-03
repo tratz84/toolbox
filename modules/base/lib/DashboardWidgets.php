@@ -7,9 +7,15 @@ class DashboardWidgets {
     public $widgets = array();
     public $userWidgets = array();
     
+    public $settings = array();
+    
+    
     
     public function getWidgets() { return $this->widgets; }
     public function getUserWidgets() { return $this->userWidgets; }
+    
+    public function getSettings() { return $this->settings; }
+    public function setSetting($key, $val) { $this->settings[$key] = $val; }
     
     public function removeWidget( $widgetCode, $callRemoveUserWidget =true ) {
         

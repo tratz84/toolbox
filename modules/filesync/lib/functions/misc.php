@@ -60,7 +60,7 @@ function filesync_convert_to_pdf($filename) {
     }
     
     $cmd = '"'.$soffice . '"' . ' --headless --convert-to pdf --outdir '.escapeshellcmd($f).' '.escapeshellarg($filename);
-    `$cmd`;
+    shell_exec('$cmd');
     
     $pdffile = basename($filename);
     if (strpos($pdffile, '.') !== false) {

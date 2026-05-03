@@ -754,7 +754,7 @@ function IndexTable( container, opts ) {
 			}
 			
 			if (this.sortable) {
-				tr.append('<td class="td-sort"><span class="fa fa-sort sort-handle"></span></td>');
+				tr.append('<td class="td-sort"><span class="fa fa-bars sort-handle"></span></td>');
 			}
 
 			for (var colCnt = 0; colCnt < this.columns.length; colCnt++) {

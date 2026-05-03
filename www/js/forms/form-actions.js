@@ -237,7 +237,7 @@ function handleFormActions(actionsContainer) {
 		var newTr = $('<tr />');
 		
 		if ($(listFormWidget).find('.sortable-container').length) {
-			newTr.append('<td><span class="fa fa-sort handler-sortable"></span></td>');
+			newTr.append('<td><span class="fa fa-bars handler-sortable"></span></td>');
 		}
 		
 		for(var i=0; i < fields.length; i++) {
@@ -367,6 +367,7 @@ function ListEditFormWidget(container) {
 		// mobile view sortable
 		$(this.container).find('.mobile-list-edit .mobile-list-edit-items').sortable({
 			handle: '.draggable',
+			axis: 'y',
 			stop: function() {
 //				let trs = $(this.container).find('table.sublist tbody tr').get();
 				let mobitems = $(this.container).find('.mobile-list-item .mobile-item-content');
