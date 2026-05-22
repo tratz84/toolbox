@@ -92,7 +92,8 @@ function newCustomerPopup_handlePersonSubmit( objAnchor ) {
 				// support CustomerTableSelectWidget
 				let ezcontainer = $(objAnchor).closest('div.widget').find('toolbox-table-selector[name=customer_id]');
 				if (ezcontainer.length) {
-					ezcontainer.get(0).tws.setValueText( data.customer_id, data.customer_name );
+					ezcontainer.get(0).tsw.setValueText( data.customer_id, data.customer_name );
+					close_popup();
 				}
 				else {
 					var select = $(objAnchor).closest('div.widget').find('select');

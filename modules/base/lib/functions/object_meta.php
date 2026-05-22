@@ -20,14 +20,22 @@ function object_meta_get($objectName, $objectId, $objectKey, $unserialize=true) 
     }
 }
 
-function object_meta_by_object($objectName, $objectId, $unserialize=true) {
+function object_meta_by_object($objectName, $objectId) {
     $metaService = object_container_get(MetaService::class);
     
     $arr = array();
     $objs = $metaService->readByObject($objectName, $objectId);
     foreach($objs as $obj) {
         $key = $obj->getObjectKey();
-        $val = $unserialize ? unserialize($obj->getObjectValue()) : $obj->getObjectValue();
+        
+        $val = $obj->getObjectValue();
+        
+        // try to unserialize, might fail..
+        $unserialized_val = @unserialize($obj->getObjectValue());
+        if ($unserialized_val !== false) {
+            $val = $unserialized_val;
+        }
+        
         $arr[$key] = $val;
     }
     

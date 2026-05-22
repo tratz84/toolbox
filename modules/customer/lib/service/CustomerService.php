@@ -14,6 +14,7 @@ use customer\model\CompanyDAO;
 use customer\model\AddressDAO;
 use customer\model\UserCustomer;
 use customer\model\UserCompanyPerson;
+use customer\model\PersonDAO;
 
 class CustomerService extends ServiceBase {
     
@@ -180,6 +181,24 @@ class CustomerService extends ServiceBase {
             $pid = substr($strCustomerId, strlen('person-'));
             return $this->readCustomerAuto(null, $pid);
         }
+        
+        return null;
+    }
+    
+    public function getCustomerName($companyId=null, $personId=null) {
+        if ($companyId) {
+            $cdao = object_container_get(CompanyDAO::class);
+            return $cdao->getName( $companyId );
+        }
+        
+        if ($personId) {
+            $pservice = object_container_get(PersonService::class);
+            $person = $pservice->readPerson($personId, ['record-only' => true]);
+            if ($person) {
+                return $person->getFullname();
+            }
+        }
+        
         
         return null;
     }

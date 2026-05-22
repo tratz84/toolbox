@@ -68,6 +68,10 @@ class CompanyDAO extends \core\db\DAOObject {
 	    return $qb->queryUpdate();
 	}
 	
+	public function getName($companyId) {
+	    return $this->queryValue("select company_name from customer__company where company_id = ?", array($companyId));
+	}
+	
 	
 	
 	public function setCompanyTypeToNULL($companyTypeId) {

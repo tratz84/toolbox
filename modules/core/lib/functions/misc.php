@@ -111,6 +111,19 @@ function is_false($v) {
 }
 
 
+function is_serialized( $string ) {
+    $r = @unserialize($string);
+    
+    if ($r !== false) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+
+
 function get_class_shortname( $obj ) {
     $n = toolbox_get_class($obj);
     
