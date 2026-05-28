@@ -110,6 +110,15 @@ class WopiAccessBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'token_type' => 
+  array (
+    'Field' => 'token_type',
+    'Type' => 'varchar(16)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -159,6 +168,10 @@ class WopiAccessBase extends \core\db\DBObject {
 		
 	public function setLastAccessed($p) { $this->setField('last_accessed', $p); }
 	public function getLastAccessed() { return $this->getField('last_accessed'); }
+	
+		
+	public function setTokenType($p) { $this->setField('token_type', $p); }
+	public function getTokenType() { return $this->getField('token_type'); }
 	
 	
 }

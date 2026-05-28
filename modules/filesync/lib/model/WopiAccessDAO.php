@@ -31,7 +31,8 @@ class WopiAccessDAO extends \core\db\DAOObject {
 	public function cleanup() {
 	    $sql = "delete
                 from filesync__wopi_access
-                where filesync__wopi_access.access_token_ttl <= ? ";
+                where filesync__wopi_access.access_token_ttl <= ?
+                    and token_type = 'default' ";
 	    
 	    $this->query( $sql, array(time()*1000) );
 	}

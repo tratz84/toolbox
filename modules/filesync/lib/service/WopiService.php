@@ -47,6 +47,7 @@ class WopiService {
         
         if (isset($opts['guest_name']) && $opts['guest_name']) {
             $wa->setGuestName( trim($opts['guest_name']) );
+            $wa->setTokenType('guest');
         }
         
         $wa->setPath( $path );
