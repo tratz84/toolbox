@@ -62,6 +62,23 @@ class WopiAccessDAO extends \core\db\DAOObject {
 	    return $qb->queryCursor();
 	}
 	
+	
+	public function readGuestsByPath( $path ) {
+	    $sql = "select wa.*, u.username
+                from filesync__wopi_access wa
+                left join base__user u on u.user_id = wa.user_id
+                where wa.path = ?
+                    and wa.guest_name is not null
+                order by created desc";
+	    
+	    return $this->queryList($sql, array($path));
+	}
+	
+	
+	public function touch($id) {
+	    $this->query('update filesync__wopi_access set last_accessed = now() where wopi_access_id = ?', array($id));
+	}
+	
 
 }
 

@@ -92,6 +92,24 @@ class WopiAccessBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'writable' => 
+  array (
+    'Field' => 'writable',
+    'Type' => 'tinyint(1)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'last_accessed' => 
+  array (
+    'Field' => 'last_accessed',
+    'Type' => 'datetime',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -133,6 +151,14 @@ class WopiAccessBase extends \core\db\DBObject {
 		
 	public function setGuestName($p) { $this->setField('guest_name', $p); }
 	public function getGuestName() { return $this->getField('guest_name'); }
+	
+		
+	public function setWritable($p) { $this->setField('writable', $p); }
+	public function getWritable() { return $this->getField('writable'); }
+	
+		
+	public function setLastAccessed($p) { $this->setField('last_accessed', $p); }
+	public function getLastAccessed() { return $this->getField('last_accessed'); }
 	
 	
 }

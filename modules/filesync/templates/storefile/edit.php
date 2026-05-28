@@ -11,7 +11,7 @@
 </div>
 
 <div>
-	<?= $form->render() ?>
+	<?= $tc->render() ?>
 </div>
 
 <div class="clear"></div>
