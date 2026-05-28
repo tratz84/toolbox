@@ -2,25 +2,25 @@
 <div style="padding: 10px;">
 
     <div class="action-box">
-    	<span><a href="javascript:void(0);" onclick="share_wopi_click();"><?= _('Share') ?></a></span>
+    	<span><a href="javascript:void(0);" onclick="share_wopi_click();"><?= t('Share') ?></a></span>
     </div>
     <hr style="margin-top: 10px;" />
 </div>
 
 <?php if (count($was) == 0) : ?>
 	<div class="no-results-found">
-		<?= _('No results found') ?>
+		<?= t('No results found') ?>
 	</div>
 <?php else : ?>
 
 <table class="list-response-table">
 	<thead>
 		<tr>
-			<th><?= _('Guest name') ?></th>
-			<th><?= _('Writable') ?></th>
-			<th><?= _('Created') ?></th>
-			<th><?= _('Expires') ?></th>
-			<th><?= _('Last accessed') ?></th>
+			<th><?= t('Guest name') ?></th>
+			<th><?= t('Writable') ?></th>
+			<th><?= t('Created') ?></th>
+			<th><?= t('Expires') ?></th>
+			<th><?= t('Last accessed') ?></th>
 			<th></th>
 		</tr>
 	</thead>
@@ -28,7 +28,7 @@
 		<?php foreach($was as $wa) : ?>
 		<tr class="wopi-access-token-<?= $wa->getWopiAccessId() ?>">
 			<td class="guest-name"><?= esc_html($wa->getGuestName()) ?></td>
-			<td><?= $wa->getWritable() ? _('Yes') : _('No') ?></td>
+			<td><?= $wa->getWritable() ? t('Yes') : t('No') ?></td>
 			<td><?= format_datetime($wa->getCreated(), 'd-m-Y H:i:s') ?></td>
 			<td><?= date('d-m-Y H:i', intval($wa->getAccessTokenTtl()/1000)) ?></td>
 			<td>
