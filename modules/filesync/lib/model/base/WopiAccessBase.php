@@ -32,7 +32,7 @@ class WopiAccessBase extends \core\db\DBObject {
   'access_token_ttl' => 
   array (
     'Field' => 'access_token_ttl',
-    'Type' => 'int',
+    'Type' => 'bigint',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -83,6 +83,15 @@ class WopiAccessBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'guest_name' => 
+  array (
+    'Field' => 'guest_name',
+    'Type' => 'varchar(512)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -120,6 +129,10 @@ class WopiAccessBase extends \core\db\DBObject {
 		
 	public function setBasePath($p) { $this->setField('base_path', $p); }
 	public function getBasePath() { return $this->getField('base_path'); }
+	
+		
+	public function setGuestName($p) { $this->setField('guest_name', $p); }
+	public function getGuestName() { return $this->getField('guest_name'); }
 	
 	
 }

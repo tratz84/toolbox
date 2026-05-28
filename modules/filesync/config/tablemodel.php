@@ -105,6 +105,7 @@ $tb_wopi_token->addColumn('access_token_ttl', 'bigint');
 $tb_wopi_token->addColumn('base_path',        'varchar(1024)');
 $tb_wopi_token->addColumn('path',             'varchar(1024)');
 $tb_wopi_token->addColumn('user_id',          'int');
+$tb_wopi_token->addColumn('guest_name',       'varchar(512)');
 $tb_wopi_token->addColumn('edited',           'datetime');
 $tb_wopi_token->addColumn('created',          'datetime');
 $tbs[] = $tb_wopi_token;
