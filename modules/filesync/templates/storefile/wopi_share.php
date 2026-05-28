@@ -9,7 +9,7 @@
 
 <?php if (count($was) == 0) : ?>
 	<div class="no-results-found">
-		<?= __('No results found') ?>
+		<?= _('No results found') ?>
 	</div>
 <?php else : ?>
 
