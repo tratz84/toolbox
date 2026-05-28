@@ -758,12 +758,15 @@ function submitformasget( frm ) {
 
 
 function copyToClipboard( obj ) {
-	
 	let t = $(obj).text().trim();
 	if ( t == '' ) {
 		t = $(obj).val().trim();
 	}
 	
+	textToClipboard( t );
+}
+
+function textToClipboard( t  ) {
 	var inp = $('<textarea />');
 	inp.val( t );
 	$(document.body).append( inp );
