@@ -32,7 +32,7 @@ class WopiAccessBase extends \core\db\DBObject {
   'access_token_ttl' => 
   array (
     'Field' => 'access_token_ttl',
-    'Type' => 'int',
+    'Type' => 'bigint',
     'Null' => 'YES',
     'Key' => '',
     'Default' => NULL,
@@ -83,6 +83,42 @@ class WopiAccessBase extends \core\db\DBObject {
     'Default' => NULL,
     'Extra' => '',
   ),
+  'guest_name' => 
+  array (
+    'Field' => 'guest_name',
+    'Type' => 'varchar(512)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'writable' => 
+  array (
+    'Field' => 'writable',
+    'Type' => 'tinyint(1)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'last_accessed' => 
+  array (
+    'Field' => 'last_accessed',
+    'Type' => 'datetime',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
+  'token_type' => 
+  array (
+    'Field' => 'token_type',
+    'Type' => 'varchar(16)',
+    'Null' => 'YES',
+    'Key' => '',
+    'Default' => NULL,
+    'Extra' => '',
+  ),
 ) );
 		
 		if ($id != null)
@@ -120,6 +156,22 @@ class WopiAccessBase extends \core\db\DBObject {
 		
 	public function setBasePath($p) { $this->setField('base_path', $p); }
 	public function getBasePath() { return $this->getField('base_path'); }
+	
+		
+	public function setGuestName($p) { $this->setField('guest_name', $p); }
+	public function getGuestName() { return $this->getField('guest_name'); }
+	
+		
+	public function setWritable($p) { $this->setField('writable', $p); }
+	public function getWritable() { return $this->getField('writable'); }
+	
+		
+	public function setLastAccessed($p) { $this->setField('last_accessed', $p); }
+	public function getLastAccessed() { return $this->getField('last_accessed'); }
+	
+		
+	public function setTokenType($p) { $this->setField('token_type', $p); }
+	public function getTokenType() { return $this->getField('token_type'); }
 	
 	
 }

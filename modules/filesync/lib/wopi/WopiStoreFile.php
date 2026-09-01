@@ -12,6 +12,7 @@ use filesync\service\WopiService;
 use filesync\model\StoreFile;
 use filesync\model\Store;
 use base\service\UserService;
+use phpDocumentor\Reflection\Types\Null_;
 
 class WopiStoreFile extends WopiBase {
     
@@ -25,13 +26,22 @@ class WopiStoreFile extends WopiBase {
     protected $storeFile = null;
     
     
+    protected $writable = null;
+    protected $guestName = null;
+    
+    
     public function __construct() {
         
     }
     
     protected function isWritable() {
         if ($this->store->getStoreType() == 'share') {
-            return true;
+            if ($this->writable !== null) {
+                return $this->writable ? true : false;
+            }
+            else {
+                return true;
+            }
         } else {
             return false;
         }
@@ -83,11 +93,20 @@ class WopiStoreFile extends WopiBase {
         $userService = object_container_get( UserService::class );
         $this->user = $userService->readUser( $userId );
         
+        $gn = $token->getGuestName();
+        if ($gn !== null && $gn) {
+            $this->guestName = $gn;
+        }
+        
+        $this->writable = $token->getWritable() ? true : false;
+        
         if (!$this->user) {// || $this->user->getActivated() == false) {
             header('HTTP/1.1 401 Unauthorized');
             print "No access to requested file, user not found";
             return false;
         }
+        
+        $wopiService->touchTokenById( $id );
         
         return true;
     }
@@ -206,7 +225,13 @@ class WopiStoreFile extends WopiBase {
         $r['OwnerId']        = 0;
         $r['Size']           = $this->storeFile->getLastRevision()->getFilesize();
         $r['UserId']         = 0;
-        $r['UserFriendlyName'] = $this->user->getUsername();
+        
+        if ($this->guestName !== null) {
+            $r['UserFriendlyName'] = $this->guestName;
+        }
+        else {
+            $r['UserFriendlyName'] = $this->user->getUsername();
+        }
         $r['Version']        = $this->storeFile->getRev();
         $r['SupportsUpdate'] = true;
         $r['ReadOnly'] = false;

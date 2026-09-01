@@ -23,16 +23,33 @@ class WopiService {
         // set access token TTL
         $filesyncSettings = object_container_get( FilesyncSettings::class );
         $ttl = $filesyncSettings->getWopiAccessTokenTtl();
-        if ($ttl < 0) $ttl = 1;
+        if ($ttl <= 0) $ttl = 720;   // 720 = 6 hours
         
+        // hours_ttl set?
+        if (isset($opts['hours_ttl']) && is_numeric($opts['hours_ttl']) && $opts['hours_ttl'] > 0) {
+            $ttl = (int)$opts['hours_ttl']*60;
+        }
         // The access_token_ttl property tells a WOPI client when an access token expires, represented as the number of milliseconds since January 1, 1970 UTC (the date epoch in JavaScript)
         // doc @ https://wopi.readthedocs.io/projects/wopirest/en/latest/concepts.html#term-access-token-ttl
-        $wa->setAccessTokenTtl( (time() + (60 * $ttl))*1000 );
+        $wa->setAccessTokenTtl( (time() + (60 * $ttl)) * 1000 );
+        
+        
+        
+        if (isset($opts['write_access']) && (intval($opts['write_access']) === 0 || intval($opts['write_access']) === 1 || $opts['write_access'] === false)) {
+            $wa->setWritable( $opts['write_access'] ? 1 : 0 );
+        }
+        
         
         $wa->setUserId( $userId );
         if (isset($opts['base_path']) && $opts['base_path']) {
             $wa->setBasePath( $opts['base_path'] );
         }
+        
+        if (isset($opts['guest_name']) && $opts['guest_name']) {
+            $wa->setGuestName( trim($opts['guest_name']) );
+            $wa->setTokenType('guest');
+        }
+        
         $wa->setPath( $path );
         $wa->save();
         
@@ -43,6 +60,12 @@ class WopiService {
         $waDao = object_container_get( WopiAccessDAO::class );
         
         return $waDao->read( $wopiAccessId );
+    }
+    
+    
+    public function touchTokenById( $wopiAccessId ) {
+        $waDao = object_container_get( WopiAccessDAO::class );
+        $waDao->touch( $wopiAccessId );
     }
     
     
@@ -84,7 +107,18 @@ class WopiService {
         return $r;
     }
     
-    
+    public function listWopiGuests( $storeFileId ) {
+        
+        $sservice = object_container_get( StoreService::class );
+        $storeFile = $sservice->readStoreFile( $storeFileId );
+        
+        $path = 'storefile:/'.$storeFile->getStoreId() . '/' . $storeFile->getStoreFileId();
+        
+        $wadao = new WopiAccessDAO();
+        $was = $wadao->readGuestsByPath( $path );
+        
+        return $was;
+    }
     
 }
 

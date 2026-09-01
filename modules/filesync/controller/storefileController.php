@@ -3,12 +3,14 @@
 
 
 use core\container\ActionContainer;
+use core\container\TabContainer;
 use core\controller\BaseController;
 use core\exception\InvalidStateException;
 use core\exception\ObjectNotFoundException;
 use filesync\form\ArchiveCustomerIndexTable;
 use filesync\form\StoreFileUploadForm;
 use filesync\service\StoreService;
+use filesync\service\WopiService;
 
 class storefileController extends BaseController {
     
@@ -89,6 +91,16 @@ class storefileController extends BaseController {
         
         $this->revisions = $this->storeFile->getRevisions();
         $this->revisions = array_reverse($this->revisions);
+        
+        
+        $this->tc = new TabContainer( 'storefile-edit-tab' );
+        $this->tc->addTab('Base', $this->form->render());
+        
+        if ( ctx()->isModuleEnabled('lool') ) {
+            $this->tc->addTab('Share', get_component('filesync', 'storefile', 'wopi_share', [
+                'store_file_id' => $this->storeFile->getStoreFileId()
+            ]));
+        }
         
         $this->render();
     }
@@ -311,6 +323,62 @@ class storefileController extends BaseController {
         $this->setShowDecorator(false);
         
         return $this->render();
+    }
+    
+    
+    
+    
+    
+    public function action_wopi_share() {
+        
+        $storeService = $this->oc->get(StoreService::class);
+        $storeFile = $storeService->readStoreFile( get_var('store_file_id') );
+        
+        $wopiService = object_container_get(WopiService::class);
+        $this->was = $wopiService->listWopiGuests( get_var('store_file_id') );
+        
+        if (function_exists('lool_create_url')) for($x=0; $x < count($this->was); $x++) {
+            $lool_url = lool_create_url( $storeFile, $this->was[$x] );
+            $this->was[$x]->setField('lool_url', $lool_url);
+        }
+        
+        
+        
+        $this->setShowDecorator(false);
+        
+        return $this->render();
+    }
+    
+    public function action_add_wopi_access() {
+        $storeService = object_container_get( StoreService::class );
+        
+        $storeFile = $storeService->readStoreFile( get_var('store_file_id') );
+        if (!$storeFile) {
+            throw new ObjectNotFoundException('File not found');
+        }
+        
+        $wopiService = object_container_get(WopiService::class);
+        
+        $opts = array();
+        $opts['guest_name']   = get_var('guest_name');
+        $opts['write_access'] = (int)get_var('write_access', 1);
+        $opts['hours_ttl']    = (int)get_var('hours_ttl');
+        
+        $path = 'storefile:/'.$storeFile->getStoreId().'/'.$storeFile->getStoreFileId();
+        $wa = $wopiService->createToken( ctx()->getUser()->getUserId(), $path, $opts );
+        
+        $this->json([
+            'success' => true
+        ]);
+    }
+    
+    public function action_delete_wopi_access() {
+        $wopiService = object_container_get(WopiService::class);
+        $wopiService->deleteToken( get_var('wopi_access_id') );
+   
+        $this->json([
+            'success' => true
+        ]);
     }
     
     

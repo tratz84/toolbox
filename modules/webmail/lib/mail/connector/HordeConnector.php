@@ -711,10 +711,14 @@ class HordeConnector extends BaseMailConnector {
             $date = $mail->getParsedMail()->getHeader('date');
             if ($date)
                 $q->headerText('date', $date);
-                
+            
+            
             $subject = $mail->getParsedMail()->getHeader('subject');
-            if ($subject)
+            // check non-ascii... horde doesn't like that
+//             if ( $subject && preg_match("/^[[:ascii:]]+$/", $subject) ) {
+            if ( $subject ) {
                 $q->headerText('subject', $subject);
+            }
             
             $from = $mail->getParsedMail()->getHeader('from');
             if ($from)
@@ -729,6 +733,8 @@ class HordeConnector extends BaseMailConnector {
         
         if (isset($uids['match'])) {
             $uids = $uids['match']->ids;
+            
+            // TODO: check subjects or something..?
             
             // sometimes mails are received duplicate. max it out..
             if (count($uids) < 5) {
